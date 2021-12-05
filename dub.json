@@ -1,0 +1,52 @@
+{
+	"name": "dqt",
+	"description": "D bindings for Qt.",
+	"authors": ["Tim Schendekehl"],
+	"license": "LGPL-3.0",
+	"targetType": "none",
+	"dependencies": {
+		"dqt:widgets": "*",
+	},
+	"subPackages": [
+		{
+			"name": "core",
+			"targetType": "library",
+			"sourcePaths": ["core"],
+			"importPaths": ["core"],
+			"libs": ["Qt5Core"],
+			"libs-posix": ["stdc++"]
+		},
+		{
+			"name": "gui",
+			"targetType": "library",
+			"sourcePaths": ["gui"],
+			"importPaths": ["gui"],
+			"libs": ["Qt5Gui"],
+			"dependencies": {"dqt:core":"*"}
+		},
+		{
+			"name": "widgets",
+			"targetType": "library",
+			"sourcePaths": ["widgets"],
+			"importPaths": ["widgets"],
+			"libs": ["Qt5Widgets"],
+			"dependencies": {"dqt:gui":"*"}
+		},
+		{
+			"name": "helloworld",
+			"targetType": "executable",
+			"sourcePaths": ["examples/helloworld"],
+			"importPaths": ["examples/helloworld"],
+			"stringImportPaths": ["examples/helloworld"],
+			"dependencies": {"dqt:widgets":"*"}
+		},
+		{
+			"name": "examplewidgets",
+			"targetType": "executable",
+			"sourcePaths": ["examples/examplewidgets"],
+			"importPaths": ["examples/examplewidgets"],
+			"stringImportPaths": ["examples/examplewidgets"],
+			"dependencies": {"dqt:widgets":"*"}
+		}
+	]
+}

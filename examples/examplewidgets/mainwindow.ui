@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>906</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="TabSimple" name="tab">
+       <attribute name="title">
+        <string>Simple</string>
+       </attribute>
+      </widget>
+      <widget class="TabDialogs" name="tab_5">
+       <attribute name="title">
+        <string>Dialogs</string>
+       </attribute>
+      </widget>
+      <widget class="TabPainter" name="tab_6">
+       <attribute name="title">
+        <string notr="true">Painter</string>
+       </attribute>
+      </widget>
+      <widget class="TabText" name="tab_7">
+       <attribute name="title">
+        <string>Text</string>
+       </attribute>
+      </widget>
+      <widget class="TabPlainText" name="tab_8">
+       <attribute name="title">
+        <string>PlainText</string>
+       </attribute>
+      </widget>
+      <widget class="TabListWidget" name="tab_10">
+       <attribute name="title">
+        <string>ListWidget</string>
+       </attribute>
+      </widget>
+      <widget class="TabTreeWidget" name="tab_2">
+       <attribute name="title">
+        <string>TreeWidget</string>
+       </attribute>
+      </widget>
+      <widget class="TabTreeView" name="tab_3">
+       <attribute name="title">
+        <string>TreeView</string>
+       </attribute>
+      </widget>
+      <widget class="TabTableWidget" name="tab_4">
+       <attribute name="title">
+        <string>TableWidget</string>
+       </attribute>
+      </widget>
+      <widget class="TabTableView" name="tab_9">
+       <attribute name="title">
+        <string>TableView</string>
+       </attribute>
+      </widget>
+      <widget class="TabThread" name="tab_11">
+       <attribute name="title">
+        <string>Thread</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>906</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string notr="true">Help</string>
+    </property>
+    <addaction name="actionAbout_Qt"/>
+    <addaction name="actionSystem_Info"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionAbout_Qt">
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionSystem_Info">
+   <property name="text">
+    <string>System Info</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TabSimple</class>
+   <extends>QWidget</extends>
+   <header>tabsimple.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabDialogs</class>
+   <extends>QWidget</extends>
+   <header>tabdialogs.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabPainter</class>
+   <extends>QWidget</extends>
+   <header>tabpainter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabText</class>
+   <extends>QWidget</extends>
+   <header>tabtext.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabPlainText</class>
+   <extends>QWidget</extends>
+   <header>tabplaintext.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabTreeWidget</class>
+   <extends>QWidget</extends>
+   <header>tabtreewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabTreeView</class>
+   <extends>QWidget</extends>
+   <header>tabtreeview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabTableWidget</class>
+   <extends>QWidget</extends>
+   <header>tabtablewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabTableView</class>
+   <extends>QWidget</extends>
+   <header>tabtableview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabListWidget</class>
+   <extends>QWidget</extends>
+   <header>tablistwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabThread</class>
+   <extends>QWidget</extends>
+   <header>tabthread.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
