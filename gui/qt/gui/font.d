@@ -28,6 +28,7 @@ extern(C++, class) struct QFontPrivate;                                     /* d
 /+ class QStringList;
 class QVariant; +/
 
+/// Binding for C++ class [QFont](https://doc.qt.io/qt-5/qfont.html).
 @(QMetaType.Type.QFont) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFont
 {
     mixin(Q_GADGET);

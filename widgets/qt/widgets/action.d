@@ -43,6 +43,7 @@ class QActionGroup; +/
 extern(C++, class) struct QActionPrivate;
 extern(C++, class) struct QGraphicsWidget;
 
+/// Binding for C++ class [QAction](https://doc.qt.io/qt-5/qaction.html).
 class /+ Q_WIDGETS_EXPORT +/ QAction : QObject
 {
     mixin(Q_OBJECT);

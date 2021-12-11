@@ -28,6 +28,7 @@ import qt.widgets.widget;
 extern(C++, class) struct QScrollBarPrivate;
 /+ class QStyleOptionSlider; +/
 
+/// Binding for C++ class [QScrollBar](https://doc.qt.io/qt-5/qscrollbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QScrollBar : QAbstractSlider
 {
     mixin(Q_OBJECT);

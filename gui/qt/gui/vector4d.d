@@ -39,6 +39,7 @@ class QVector3D; +/
 version(QT_NO_VECTOR4D){}else
 {
 
+/// Binding for C++ class [QVector4D](https://doc.qt.io/qt-5/qvector4d.html).
 @(QMetaType.Type.QVector4D) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QVector4D
 {
 public:

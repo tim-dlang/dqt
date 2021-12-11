@@ -23,6 +23,7 @@ import qt.helpers;
 /+ QT_REQUIRE_CONFIG(itemmodel); +/
 
 
+/// Binding for C++ class [QItemSelectionRange](https://doc.qt.io/qt-5/qitemselectionrange.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelectionRange
 {
 
@@ -125,6 +126,7 @@ private:
 class QItemSelection; +/
 extern(C++, class) struct QItemSelectionModelPrivate;
 
+/// Binding for C++ class [QItemSelectionModel](https://doc.qt.io/qt-5/qitemselectionmodel.html).
 class /+ Q_CORE_EXPORT +/ QItemSelectionModel : QObject
 {
     mixin(Q_OBJECT);
@@ -237,6 +239,7 @@ inline uint qHash(const QItemSelectionRange &) { return 0; }
 Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QList<QItemSelectionRange>;
 #endif +/ // Q_CC_MSVC
 
+/// Binding for C++ class [QItemSelection](https://doc.qt.io/qt-5/qitemselection.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelection
 {
     public QList!(QItemSelectionRange) base0;

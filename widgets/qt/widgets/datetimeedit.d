@@ -38,6 +38,7 @@ extern(C++, class) struct QDateTimeEditPrivate;
 /+ class QStyleOptionSpinBox;
 class QCalendarWidget; +/
 
+/// Binding for C++ class [QDateTimeEdit](https://doc.qt.io/qt-5/qdatetimeedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QDateTimeEdit : QAbstractSpinBox
 {
     mixin(Q_OBJECT);
@@ -190,6 +191,7 @@ private:
     /+ Q_PRIVATE_SLOT(d_func(), void _q_resetButton()) +/
 }
 
+/// Binding for C++ class [QTimeEdit](https://doc.qt.io/qt-5/qtimeedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QTimeEdit : QDateTimeEdit
 {
     mixin(Q_OBJECT);
@@ -203,6 +205,7 @@ public:
     @QSignal final void userTimeChanged(ref const(QTime) time);
 }
 
+/// Binding for C++ class [QDateEdit](https://doc.qt.io/qt-5/qdateedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QDateEdit : QDateTimeEdit
 {
     mixin(Q_OBJECT);

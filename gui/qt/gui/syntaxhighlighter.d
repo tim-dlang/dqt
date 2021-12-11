@@ -37,6 +37,7 @@ class QFont;
 class QColor;
 class QTextBlockUserData; +/
 
+/// Binding for C++ class [QSyntaxHighlighter](https://doc.qt.io/qt-5/qsyntaxhighlighter.html).
 class /+ Q_GUI_EXPORT +/ QSyntaxHighlighter : QObject
 {
     mixin(Q_OBJECT);

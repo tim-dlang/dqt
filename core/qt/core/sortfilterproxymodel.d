@@ -38,6 +38,7 @@ extern(C++, class) struct QSortFilterProxyModelPrivate;
 extern(C++, class) struct QSortFilterProxyModelLessThan;
 extern(C++, class) struct QSortFilterProxyModelGreaterThan;
 
+/// Binding for C++ class [QSortFilterProxyModel](https://doc.qt.io/qt-5/qsortfilterproxymodel.html).
 class /+ Q_CORE_EXPORT +/ QSortFilterProxyModel : QAbstractProxyModel
 {
 private:

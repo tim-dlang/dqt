@@ -24,6 +24,7 @@ struct CGPoint;
 
 
 
+/// Binding for C++ class [QPoint](https://doc.qt.io/qt-5/qpoint.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QPoint) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPoint
 {
 public:
@@ -177,6 +178,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QPoint &);
 
 
 
+/// Binding for C++ class [QPointF](https://doc.qt.io/qt-5/qpointf.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QPointF) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPointF
 {
 public:

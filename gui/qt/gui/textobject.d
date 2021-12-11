@@ -36,6 +36,7 @@ class QTextBlock;
 class QTextFragment;
 class QTextList; +/
 
+/// Binding for C++ class [QTextObject](https://doc.qt.io/qt-5/qtextobject.html).
 class /+ Q_GUI_EXPORT +/ QTextObject : QObject
 {
     mixin(Q_OBJECT);
@@ -68,6 +69,7 @@ private:
 }
 
 extern(C++, class) struct QTextBlockGroupPrivate;
+/// Binding for C++ class [QTextBlockGroup](https://doc.qt.io/qt-5/qtextblockgroup.html).
 class /+ Q_GUI_EXPORT +/ QTextBlockGroup : QTextObject
 {
     mixin(Q_OBJECT);
@@ -96,6 +98,7 @@ public:
 }
 
 extern(C++, class) struct QTextFramePrivate;
+/// Binding for C++ class [QTextFrame](https://doc.qt.io/qt-5/qtextframe.html).
 class /+ Q_GUI_EXPORT +/ QTextFrame : QTextObject
 {
     mixin(Q_OBJECT);
@@ -174,11 +177,13 @@ private:
 }
 /+ Q_DECLARE_TYPEINFO(QTextFrame::iterator, Q_MOVABLE_TYPE); +/
 
+/// Binding for C++ class [QTextBlockUserData](https://doc.qt.io/qt-5/qtextblockuserdata.html).
 class /+ Q_GUI_EXPORT +/ QTextBlockUserData {
 public:
     /+ virtual +/~this();
 }
 
+/// Binding for C++ class [QTextBlock](https://doc.qt.io/qt-5/qtextblock.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextBlock
 {
 private:
@@ -318,6 +323,7 @@ private:
 Q_DECLARE_TYPEINFO(QTextBlock::iterator, Q_MOVABLE_TYPE); +/
 
 
+/// Binding for C++ class [QTextFragment](https://doc.qt.io/qt-5/qtextfragment.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFragment
 {
 public:

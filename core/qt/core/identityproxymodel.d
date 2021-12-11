@@ -28,6 +28,7 @@ import qt.helpers;
 
 extern(C++, class) struct QIdentityProxyModelPrivate;
 
+/// Binding for C++ class [QIdentityProxyModel](https://doc.qt.io/qt-5/qidentityproxymodel.html).
 class /+ Q_CORE_EXPORT +/ QIdentityProxyModel : QAbstractProxyModel
 {
     mixin(Q_OBJECT);

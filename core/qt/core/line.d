@@ -23,6 +23,7 @@ import qt.helpers;
  * class QLine
  *******************************************************************************/
 
+/// Binding for C++ class [QLine](https://doc.qt.io/qt-5/qline.html).
 @(QMetaType.Type.QLine) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLine
 {
 public:
@@ -149,6 +150,7 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLine &);
 /*******************************************************************************
  * class QLineF
  *******************************************************************************/
+/// Binding for C++ class [QLineF](https://doc.qt.io/qt-5/qlinef.html).
 @(QMetaType.Type.QLineF) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLineF {
 public:
 

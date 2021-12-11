@@ -33,6 +33,7 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSTimeZone);
 
 extern(C++, class) struct QTimeZonePrivate;
 
+/// Binding for C++ class [QTimeZone](https://doc.qt.io/qt-5/qtimezone.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTimeZone
 {
 public:

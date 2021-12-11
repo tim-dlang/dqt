@@ -47,6 +47,7 @@ struct QGlyphLayout;
 extern(C++, class) struct QTextItemInt;
 /+ class QPaintEngineState; +/
 
+/// Binding for C++ class [QTextItem](https://doc.qt.io/qt-5/qtextitem.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextItem {
 public:
     enum RenderFlag {
@@ -69,6 +70,7 @@ alias RenderFlags = QFlags!(RenderFlag);    qreal descent() const;
 /+ Q_DECLARE_TYPEINFO(QTextItem, Q_PRIMITIVE_TYPE); +/
 
 
+/// Binding for C++ class [QPaintEngine](https://doc.qt.io/qt-5/qpaintengine.html).
 class /+ Q_GUI_EXPORT +/ QPaintEngine
 {
 private:
@@ -297,6 +299,7 @@ private:
 }
 
 
+/// Binding for C++ class [QPaintEngineState](https://doc.qt.io/qt-5/qpaintenginestate.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPaintEngineState
 {
 public:

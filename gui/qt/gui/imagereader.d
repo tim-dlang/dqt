@@ -33,6 +33,7 @@ class QSize;
 class QStringList; +/
 
 extern(C++, class) struct QImageReaderPrivate;
+/// Binding for C++ class [QImageReader](https://doc.qt.io/qt-5/qimagereader.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QImageReader
 {
     /+ Q_DECLARE_TR_FUNCTIONS(QImageReader) +/

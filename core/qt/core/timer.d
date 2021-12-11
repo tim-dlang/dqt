@@ -25,6 +25,7 @@ import qt.helpers;
 
 
 
+/// Binding for C++ class [QTimer](https://doc.qt.io/qt-5/qtimer.html).
 class /+ Q_CORE_EXPORT +/ QTimer : QObject
 {
     mixin(Q_OBJECT);

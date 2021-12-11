@@ -19,6 +19,7 @@ import qt.core.objectdefs;
 import qt.helpers;
 
 extern(C++, class) struct QEventPrivate;
+/// Binding for C++ class [QEvent](https://doc.qt.io/qt-5/qevent.html).
 class /+ Q_CORE_EXPORT +/ QEvent           // event base class
 {
     mixin(Q_GADGET);
@@ -357,6 +358,7 @@ private:
         pragma(inline, true) final void setSpontaneous() { spont = true; }
 }
 
+/// Binding for C++ class [QTimerEvent](https://doc.qt.io/qt-5/qtimerevent.html).
 class /+ Q_CORE_EXPORT +/ QTimerEvent : QEvent
 {
 public:
@@ -369,6 +371,7 @@ protected:
 
 /+ class QObject; +/
 
+/// Binding for C++ class [QChildEvent](https://doc.qt.io/qt-5/qchildevent.html).
 class /+ Q_CORE_EXPORT +/ QChildEvent : QEvent
 {
 public:
@@ -382,6 +385,7 @@ protected:
     QObject c;
 }
 
+/// Binding for C++ class [QDynamicPropertyChangeEvent](https://doc.qt.io/qt-5/qdynamicpropertychangeevent.html).
 class /+ Q_CORE_EXPORT +/ QDynamicPropertyChangeEvent : QEvent
 {
 public:

@@ -34,6 +34,7 @@ class QDate;
 class QTextCharFormat; +/
 extern(C++, class) struct QCalendarWidgetPrivate;
 
+/// Binding for C++ class [QCalendarWidget](https://doc.qt.io/qt-5/qcalendarwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QCalendarWidget : QWidget
 {
     mixin(Q_OBJECT);

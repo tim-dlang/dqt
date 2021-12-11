@@ -22,6 +22,7 @@ import qt.helpers;
 
 template <class T> class QSharedDataPointer; +/
 
+/// Binding for C++ class [QSharedData](https://doc.qt.io/qt-5/qshareddata.html).
 extern(C++, class) struct
 /+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 Q_CORE_EXPORT
@@ -47,6 +48,7 @@ public:
     /+ ~QSharedData() = default; +/
 }
 
+/// Binding for C++ class [QSharedDataPointer](https://doc.qt.io/qt-5/qshareddatapointer.html).
 extern(C++, class) struct QSharedDataPointer(T)
 {
 public:
@@ -169,6 +171,7 @@ private:
     return !p1;
 }+/
 
+/// Binding for C++ class [QExplicitlySharedDataPointer](https://doc.qt.io/qt-5/qexplicitlyshareddatapointer.html).
 extern(C++, class) struct QExplicitlySharedDataPointer(T)
 {
 public:

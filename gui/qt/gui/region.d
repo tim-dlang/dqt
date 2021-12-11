@@ -41,6 +41,7 @@ struct QRegionPrivate;
 
 /+ class QBitmap; +/
 
+/// Binding for C++ class [QRegion](https://doc.qt.io/qt-5/qregion.html).
 @(QMetaType.Type.QRegion) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRegion
 {
 public:

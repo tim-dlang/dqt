@@ -27,6 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QCommandLinkButtonPrivate;
 
+/// Binding for C++ class [QCommandLinkButton](https://doc.qt.io/qt-5/qcommandlinkbutton.html).
 class /+ Q_WIDGETS_EXPORT +/ QCommandLinkButton: QPushButton
 {
     mixin(Q_OBJECT);

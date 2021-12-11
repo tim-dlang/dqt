@@ -27,6 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QFontComboBoxPrivate;
 
+/// Binding for C++ class [QFontComboBox](https://doc.qt.io/qt-5/qfontcombobox.html).
 class /+ Q_WIDGETS_EXPORT +/ QFontComboBox : QComboBox
 {
     mixin(Q_OBJECT);

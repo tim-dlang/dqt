@@ -24,6 +24,7 @@ import qt.helpers;
 extern(C++, class) struct QPageLayoutPrivate;
 /+ class QMarginsF; +/
 
+/// Binding for C++ class [QPageLayout](https://doc.qt.io/qt-5/qpagelayout.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageLayout
 {
 public:

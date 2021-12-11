@@ -29,6 +29,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QColorDialogPrivate;
 
+/// Binding for C++ class [QColorDialog](https://doc.qt.io/qt-5/qcolordialog.html).
 class /+ Q_WIDGETS_EXPORT +/ QColorDialog : QDialog
 {
     mixin(Q_OBJECT);

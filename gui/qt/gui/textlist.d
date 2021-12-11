@@ -22,6 +22,7 @@ import qt.helpers;
 extern(C++, class) struct QTextListPrivate;
 /+ class QTextCursor; +/
 
+/// Binding for C++ class [QTextList](https://doc.qt.io/qt-5/qtextlist.html).
 class /+ Q_GUI_EXPORT +/ QTextList : QTextBlockGroup
 {
     mixin(Q_OBJECT);

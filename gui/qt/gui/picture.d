@@ -33,6 +33,7 @@ version(QT_NO_PICTURE){}else
 {
 
 extern(C++, class) struct QPicturePrivate;
+/// Binding for C++ class [QPicture](https://doc.qt.io/qt-5/qpicture.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPicture
 {
 private:
@@ -124,6 +125,7 @@ alias picture_io_handler = ExternCPPFunc!(void function(QPictureIO* )); // pictu
 
 struct QPictureIOData;
 
+/// Binding for C++ class [QPictureIO](https://doc.qt.io/qt-5/qpictureio.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPictureIO
 {
 public:

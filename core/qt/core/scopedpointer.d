@@ -72,6 +72,7 @@ struct QScopedPointerObjectDeleteLater(T) if(is(T : QObject))
 alias QScopedPointerDeleteLater = QScopedPointerObjectDeleteLater!(QObject);
 /+ #endif +/
 
+/// Binding for C++ class [QScopedPointer](https://doc.qt.io/qt-5/qscopedpointer.html).
 extern(C++, class) struct QScopedPointer(T, Cleanup = QScopedPointerDeleter!T)
 {
 private:
@@ -210,6 +211,7 @@ private:
 inline void swap(QScopedPointer<T, Cleanup> &p1, QScopedPointer<T, Cleanup> &p2) noexcept
 { p1.swap(p2); } +/
 
+/// Binding for C++ class [QScopedArrayPointer](https://doc.qt.io/qt-5/qscopedarraypointer.html).
 class QScopedArrayPointer(T, Cleanup ) : QScopedPointer!(T, Cleanup)
 {
 private:

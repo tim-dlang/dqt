@@ -36,6 +36,7 @@ Q_DECLARE_METATYPE(Qt::GestureType) +/
 
 
 extern(C++, class) struct QGesturePrivate;
+/// Binding for C++ class [QGesture](https://doc.qt.io/qt-5/qgesture.html).
 class /+ Q_WIDGETS_EXPORT +/ QGesture : QObject
 {
     mixin(Q_OBJECT);
@@ -79,6 +80,7 @@ private:
 }
 
 extern(C++, class) struct QPanGesturePrivate;
+/// Binding for C++ class [QPanGesture](https://doc.qt.io/qt-5/qpangesture.html).
 class /+ Q_WIDGETS_EXPORT +/ QPanGesture : QGesture
 {
     mixin(Q_OBJECT);
@@ -109,6 +111,7 @@ public:
 }
 
 extern(C++, class) struct QPinchGesturePrivate;
+/// Binding for C++ class [QPinchGesture](https://doc.qt.io/qt-5/qpinchgesture.html).
 class /+ Q_WIDGETS_EXPORT +/ QPinchGesture : QGesture
 {
     mixin(Q_OBJECT);
@@ -182,6 +185,7 @@ Q_DECLARE_METATYPE(QPinchGesture::ChangeFlags) +/
 
 
 extern(C++, class) struct QSwipeGesturePrivate;
+/// Binding for C++ class [QSwipeGesture](https://doc.qt.io/qt-5/qswipegesture.html).
 class /+ Q_WIDGETS_EXPORT +/ QSwipeGesture : QGesture
 {
     mixin(Q_OBJECT);
@@ -209,6 +213,7 @@ public:
 }
 
 extern(C++, class) struct QTapGesturePrivate;
+/// Binding for C++ class [QTapGesture](https://doc.qt.io/qt-5/qtapgesture.html).
 class /+ Q_WIDGETS_EXPORT +/ QTapGesture : QGesture
 {
     mixin(Q_OBJECT);
@@ -227,6 +232,7 @@ public:
 }
 
 extern(C++, class) struct QTapAndHoldGesturePrivate;
+/// Binding for C++ class [QTapAndHoldGesture](https://doc.qt.io/qt-5/qtapandholdgesture.html).
 class /+ Q_WIDGETS_EXPORT +/ QTapAndHoldGesture : QGesture
 {
     mixin(Q_OBJECT);
@@ -249,7 +255,9 @@ public:
 
 /+ class QGesture; +/
 extern(C++, class) struct QGestureEventPrivate;
-/+class /+ Q_WIDGETS_EXPORT +/ QGestureEvent : QEvent
+/+
+/// Binding for C++ class [QGestureEvent](https://doc.qt.io/qt-5/qgestureevent.html).
+class /+ Q_WIDGETS_EXPORT +/ QGestureEvent : QEvent
 {
 public:
     /+ explicit +/this(ref const(QList!(QGesture)) gestures);

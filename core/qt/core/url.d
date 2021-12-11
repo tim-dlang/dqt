@@ -113,6 +113,7 @@ class QUrl;
 // qHash is a friend, but we can't use default arguments for friends (§8.3.6.4)
 Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed = 0) noexcept; +/
 
+/// Binding for C++ class [QUrl](https://doc.qt.io/qt-5/qurl.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QUrl) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QUrl
 {
 public:

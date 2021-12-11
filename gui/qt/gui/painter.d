@@ -66,6 +66,7 @@ class QStaticText; +/
 
 extern(C++, class) struct QPainterPrivateDeleter;
 
+/// Binding for C++ class [QPainter](https://doc.qt.io/qt-5/qpainter.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPainter
 {
 private:

@@ -21,6 +21,7 @@ import qt.helpers;
   QMargins class
  *****************************************************************************/
 
+/// Binding for C++ class [QMargins](https://doc.qt.io/qt-5/qmargins.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct QMargins
 {
 public:
@@ -234,6 +235,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QMargins &);
   QMarginsF class
  *****************************************************************************/
 
+/// Binding for C++ class [QMarginsF](https://doc.qt.io/qt-5/qmarginsf.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct QMarginsF
 {
 public:

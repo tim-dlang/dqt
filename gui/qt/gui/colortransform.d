@@ -24,6 +24,7 @@ class QRgba64; +/
 extern(C++, class) struct QColorSpacePrivate;
 extern(C++, class) struct QColorTransformPrivate;
 
+/// Binding for C++ class [QColorTransform](https://doc.qt.io/qt-5/qcolortransform.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct QColorTransform
 {
 public:

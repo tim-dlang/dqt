@@ -22,6 +22,7 @@ import qt.helpers;
 
 extern(C++, class) struct QStringMatcherPrivate;
 
+/// Binding for C++ class [QStringMatcher](https://doc.qt.io/qt-5/qstringmatcher.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QStringMatcher
 {
 public:

@@ -49,6 +49,7 @@ interface QLayoutItemInterface
     /+ virtual +/ /+ QSizePolicy::ControlTypes +/QSizePolicy.ControlTypes controlTypes() const;
 }
 
+/// Binding for C++ class [QLayoutItem](https://doc.qt.io/qt-5/qlayoutitem.html).
 class /+ Q_WIDGETS_EXPORT +/ QLayoutItem
 {
 public:
@@ -85,6 +86,7 @@ protected:
     /+ Qt:: +/qt.core.namespace.Alignment align_;
 }
 
+/// Binding for C++ class [QSpacerItem](https://doc.qt.io/qt-5/qspaceritem.html).
 class /+ Q_WIDGETS_EXPORT +/ QSpacerItem : QLayoutItem
 {
 public:
@@ -118,6 +120,7 @@ private:
     QRect rect;
 }
 
+/// Binding for C++ class [QWidgetItem](https://doc.qt.io/qt-5/qwidgetitem.html).
 class /+ Q_WIDGETS_EXPORT +/ QWidgetItem : QLayoutItem
 {
 private:

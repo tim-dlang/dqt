@@ -59,6 +59,7 @@ import qt.widgets.widget;
 
 class QDebug; +/
 
+/// Binding for C++ class [QStyleOption](https://doc.qt.io/qt-5/qstyleoption.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOption
 {
 public:
@@ -98,6 +99,7 @@ public:
     /+ref QStyleOption operator =(ref const(QStyleOption) other);+/
 }
 
+/// Binding for C++ class [QStyleOptionFocusRect](https://doc.qt.io/qt-5/qstyleoptionfocusrect.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionFocusRect
 {
     public QStyleOption base0;
@@ -131,6 +133,7 @@ protected:
     this(int version_);
 }
 
+/// Binding for C++ class [QStyleOptionFrame](https://doc.qt.io/qt-5/qstyleoptionframe.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionFrame
 {
     public QStyleOption base0;
@@ -181,6 +184,7 @@ protected:
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionFrameV3 = QStyleOptionFrame;
 
 /+ #if QT_CONFIG(tabwidget) +/
+/// Binding for C++ class [QStyleOptionTabWidgetFrame](https://doc.qt.io/qt-5/qstyleoptiontabwidgetframe.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTabWidgetFrame
 {
     public QStyleOption base0;
@@ -226,6 +230,7 @@ protected:
 
 
 #if QT_CONFIG(tabbar) +/
+/// Binding for C++ class [QStyleOptionTabBarBase](https://doc.qt.io/qt-5/qstyleoptiontabbarbase.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTabBarBase
 {
     public QStyleOption base0;
@@ -265,6 +270,7 @@ protected:
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionTabBarBaseV2 = QStyleOptionTabBarBase;
 /+ #endif +/ // QT_CONFIG(tabbar)
 
+/// Binding for C++ class [QStyleOptionHeader](https://doc.qt.io/qt-5/qstyleoptionheader.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionHeader
 {
     public QStyleOption base0;
@@ -312,6 +318,7 @@ protected:
     this(int version_);
 }
 
+/// Binding for C++ class [QStyleOptionButton](https://doc.qt.io/qt-5/qstyleoptionbutton.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionButton
 {
     public QStyleOption base0;
@@ -358,6 +365,7 @@ protected:
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionButton::ButtonFeatures)
 #if QT_CONFIG(tabbar) +/
+/// Binding for C++ class [QStyleOptionTab](https://doc.qt.io/qt-5/qstyleoptiontab.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTab
 {
     public QStyleOption base0;
@@ -442,6 +450,7 @@ public:
 
 #if QT_CONFIG(toolbar) +/
 
+/// Binding for C++ class [QStyleOptionToolBar](https://doc.qt.io/qt-5/qstyleoptiontoolbar.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionToolBar
 {
     public QStyleOption base0;
@@ -487,6 +496,7 @@ protected:
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionToolBar::ToolBarFeatures) +/
 /+ #endif +/ // QT_CONFIG(toolbar)
 
+/// Binding for C++ class [QStyleOptionProgressBar](https://doc.qt.io/qt-5/qstyleoptionprogressbar.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionProgressBar
 {
     public QStyleOption base0;
@@ -531,6 +541,7 @@ protected:
 
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionProgressBarV2 = QStyleOptionProgressBar;
 
+/// Binding for C++ class [QStyleOptionMenuItem](https://doc.qt.io/qt-5/qstyleoptionmenuitem.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionMenuItem
 {
     public QStyleOption base0;
@@ -579,6 +590,7 @@ protected:
     this(int version_);
 }
 
+/// Binding for C++ class [QStyleOptionDockWidget](https://doc.qt.io/qt-5/qstyleoptiondockwidget.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionDockWidget
 {
     public QStyleOption base0;
@@ -621,6 +633,7 @@ protected:
 
 /+ #if QT_CONFIG(itemviews) +/
 
+/// Binding for C++ class [QStyleOptionViewItem](https://doc.qt.io/qt-5/qstyleoptionviewitem.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionViewItem
 {
     public QStyleOption base0;
@@ -700,6 +713,7 @@ protected:
 
 /+ #endif +/ // QT_CONFIG(itemviews)
 
+/// Binding for C++ class [QStyleOptionToolBox](https://doc.qt.io/qt-5/qstyleoptiontoolbox.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionToolBox
 {
     public QStyleOption base0;
@@ -744,6 +758,7 @@ protected:
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionToolBoxV2 = QStyleOptionToolBox;
 
 /+ #if QT_CONFIG(rubberband) +/
+/// Binding for C++ class [QStyleOptionRubberBand](https://doc.qt.io/qt-5/qstyleoptionrubberband.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionRubberBand
 {
     public QStyleOption base0;
@@ -780,6 +795,7 @@ protected:
 /+ #endif +/ // QT_CONFIG(rubberband)
 
 // -------------------------- Complex style options -------------------------------
+/// Binding for C++ class [QStyleOptionComplex](https://doc.qt.io/qt-5/qstyleoptioncomplex.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionComplex
 {
     public QStyleOption base0;
@@ -804,6 +820,7 @@ public:
 }
 
 /+ #if QT_CONFIG(slider) +/
+/// Binding for C++ class [QStyleOptionSlider](https://doc.qt.io/qt-5/qstyleoptionslider.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionSlider
 {
     public QStyleOptionComplex base0;
@@ -850,6 +867,7 @@ protected:
 /+ #endif // QT_CONFIG(slider)
 
 #if QT_CONFIG(spinbox) +/
+/// Binding for C++ class [QStyleOptionSpinBox](https://doc.qt.io/qt-5/qstyleoptionspinbox.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionSpinBox
 {
     public QStyleOptionComplex base0;
@@ -886,6 +904,7 @@ protected:
 }
 /+ #endif +/ // QT_CONFIG(spinbox)
 
+/// Binding for C++ class [QStyleOptionToolButton](https://doc.qt.io/qt-5/qstyleoptiontoolbutton.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionToolButton
 {
     public QStyleOptionComplex base0;
@@ -936,6 +955,7 @@ protected:
 /+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionToolButton::ToolButtonFeatures) +/
+/// Binding for C++ class [QStyleOptionComboBox](https://doc.qt.io/qt-5/qstyleoptioncombobox.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionComboBox
 {
     public QStyleOptionComplex base0;
@@ -975,6 +995,7 @@ protected:
     this(int version_);
 }
 
+/// Binding for C++ class [QStyleOptionTitleBar](https://doc.qt.io/qt-5/qstyleoptiontitlebar.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTitleBar
 {
     public QStyleOptionComplex base0;
@@ -1012,6 +1033,7 @@ protected:
     this(int version_);
 }
 
+/// Binding for C++ class [QStyleOptionGroupBox](https://doc.qt.io/qt-5/qstyleoptiongroupbox.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionGroupBox
 {
     public QStyleOptionComplex base0;
@@ -1050,6 +1072,7 @@ protected:
     this(int version_);
 }
 
+/// Binding for C++ class [QStyleOptionSizeGrip](https://doc.qt.io/qt-5/qstyleoptionsizegrip.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionSizeGrip
 {
     public QStyleOptionComplex base0;
@@ -1082,6 +1105,7 @@ protected:
     this(int version_);
 }
 
+/// Binding for C++ class [QStyleOptionGraphicsItem](https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionGraphicsItem
 {
     public QStyleOption base0;
@@ -1140,6 +1164,7 @@ T qstyleoption_cast(T)(QStyleOption* opt)
 }
 
 // -------------------------- QStyleHintReturn -------------------------------
+/// Binding for C++ class [QStyleHintReturn](https://doc.qt.io/qt-5/qstylehintreturn.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleHintReturn {
 public:
     enum HintReturnType {
@@ -1157,7 +1182,9 @@ public:
     int type;
 }
 
-/+class /+ Q_WIDGETS_EXPORT +/ QStyleHintReturnMask : QStyleHintReturn {
+/+
+/// Binding for C++ class [QStyleHintReturnMask](https://doc.qt.io/qt-5/qstylehintreturnmask.html).
+class /+ Q_WIDGETS_EXPORT +/ QStyleHintReturnMask : QStyleHintReturn {
 public:
     enum StyleOptionType { Type = HintReturnType.SH_Mask }
     enum StyleOptionVersion { Version = 1 }
@@ -1168,6 +1195,7 @@ public:
     QRegion region;
 }
 
+/// Binding for C++ class [QStyleHintReturnVariant](https://doc.qt.io/qt-5/qstylehintreturnvariant.html).
 class /+ Q_WIDGETS_EXPORT +/ QStyleHintReturnVariant : QStyleHintReturn {
 public:
     enum StyleOptionType { Type = HintReturnType.SH_Variant }

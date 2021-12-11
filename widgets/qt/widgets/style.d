@@ -40,6 +40,7 @@ class QStyleOption;
 class QStyleOptionComplex; +/
 extern(C++, class) struct QStylePrivate;
 
+/// Binding for C++ class [QStyle](https://doc.qt.io/qt-5/qstyle.html).
 class /+ Q_WIDGETS_EXPORT +/ QStyle : QObject
 {
     mixin(Q_OBJECT);

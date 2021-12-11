@@ -26,6 +26,7 @@ import qt.helpers;
 
 #define Q_METAMETHOD_INVOKE_MAX_ARGS 10 +/
 
+/// Binding for C++ class [QMetaMethod](https://doc.qt.io/qt-5/qmetamethod.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QMetaMethod
 {
 public:
@@ -182,6 +183,7 @@ private:
 /+pragma(inline, true) bool operator !=(ref const(QMetaMethod) m1, ref const(QMetaMethod) m2)
 { return !(m1 == m2); }+/
 
+/// Binding for C++ class [QMetaEnum](https://doc.qt.io/qt-5/qmetaenum.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QMetaEnum
 {
 public:
@@ -228,6 +230,7 @@ private:
 }
 /+ Q_DECLARE_TYPEINFO(QMetaEnum, Q_MOVABLE_TYPE); +/
 
+/// Binding for C++ class [QMetaProperty](https://doc.qt.io/qt-5/qmetaproperty.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QMetaProperty
 {
 public:
@@ -296,6 +299,7 @@ private:
     /+ friend struct QMetaObjectPrivate; +/
 }
 
+/// Binding for C++ class [QMetaClassInfo](https://doc.qt.io/qt-5/qmetaclassinfo.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QMetaClassInfo
 {
 public:

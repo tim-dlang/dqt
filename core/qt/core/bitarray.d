@@ -20,6 +20,7 @@ import qt.core.typeinfo;
 import qt.helpers;
 
 /+ class QBitRef; +/
+/// Binding for C++ class [QBitArray](https://doc.qt.io/qt-5/qbitarray.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QBitArray) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QBitArray
 {
 private:

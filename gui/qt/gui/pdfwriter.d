@@ -35,6 +35,7 @@ static if(!defined!"QT_NO_PDF")
 /+ class QIODevice; +/
 extern(C++, class) struct QPdfWriterPrivate;
 
+/// Binding for C++ class [QPdfWriter](https://doc.qt.io/qt-5/qpdfwriter.html).
 class /+ Q_GUI_EXPORT +/ QPdfWriter : QObject, QPagedPaintDeviceInterface
 {
     QPagedPaintDeviceFakeInheritance baseQPagedPaintDeviceInterface;

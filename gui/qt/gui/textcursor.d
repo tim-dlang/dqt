@@ -38,6 +38,7 @@ class QTextTable;
 class QTextFrame;
 class QTextBlock; +/
 
+/// Binding for C++ class [QTextCursor](https://doc.qt.io/qt-5/qtextcursor.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextCursor
 {
 public:

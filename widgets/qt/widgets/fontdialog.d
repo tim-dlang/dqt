@@ -27,6 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QFontDialogPrivate;
 
+/// Binding for C++ class [QFontDialog](https://doc.qt.io/qt-5/qfontdialog.html).
 class /+ Q_WIDGETS_EXPORT +/ QFontDialog : QDialog
 {
     mixin(Q_OBJECT);

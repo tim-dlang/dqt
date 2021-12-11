@@ -35,6 +35,7 @@ class QTimeZone;
 #endif
 class QDateTime; +/
 
+/// Binding for C++ class [QDate](https://doc.qt.io/qt-5/qdate.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QDate) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDate // ### Qt 6: change to be used by value, not const &
 {
 public:
@@ -169,6 +170,7 @@ private:
 }
 /+ Q_DECLARE_TYPEINFO(QDate, Q_MOVABLE_TYPE); +/
 
+/// Binding for C++ class [QTime](https://doc.qt.io/qt-5/qtime.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QTime) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTime // ### Qt 6: change to be used by value, not const &
 {
 private:
@@ -245,6 +247,7 @@ private:
 
 extern(C++, class) struct QDateTimePrivate;
 
+/// Binding for C++ class [QDateTime](https://doc.qt.io/qt-5/qdatetime.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QDateTime) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDateTime
 {
 private:

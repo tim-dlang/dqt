@@ -24,6 +24,7 @@ import qt.helpers;
 /+ class QDateTime; +/
 extern(C++, class) struct QFileDevicePrivate;
 
+/// Binding for C++ class [QFileDevice](https://doc.qt.io/qt-5/qfiledevice.html).
 class /+ Q_CORE_EXPORT +/ QFileDevice : QIODevice
 {
 /+ #ifndef QT_NO_QOBJECT +/

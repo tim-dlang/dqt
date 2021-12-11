@@ -29,6 +29,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QInputDialogPrivate;
 
+/// Binding for C++ class [QInputDialog](https://doc.qt.io/qt-5/qinputdialog.html).
 class /+ Q_WIDGETS_EXPORT +/ QInputDialog : QDialog
 {
     mixin(Q_OBJECT);

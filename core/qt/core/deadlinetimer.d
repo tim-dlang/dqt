@@ -28,6 +28,7 @@ import qt.helpers;
 #endif +/
 
 
+/// Binding for C++ class [QDeadlineTimer](https://doc.qt.io/qt-5/qdeadlinetimer.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDeadlineTimer
 {
 public:

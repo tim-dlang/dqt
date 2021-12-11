@@ -27,6 +27,7 @@ version(QT_NO_TOOLTIP){}else
 version(QT_NO_TOOLTIP){}else
 {
 
+/// Binding for C++ class [QToolTip](https://doc.qt.io/qt-5/qtooltip.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QToolTip
 {
 private:

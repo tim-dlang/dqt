@@ -38,6 +38,7 @@ extern(C++, class) struct QMenuBarPrivate;
 extern(C++, class) struct QWindowsStyle;
 extern(C++, class) struct QPlatformMenuBar;
 
+/// Binding for C++ class [QMenuBar](https://doc.qt.io/qt-5/qmenubar.html).
 class /+ Q_WIDGETS_EXPORT +/ QMenuBar : QWidget
 {
     mixin(Q_OBJECT);

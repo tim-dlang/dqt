@@ -22,6 +22,7 @@ version(QT_NO_ACTION){}else
 
 version(QT_NO_ACTION){}else
 {
+/// Binding for C++ class [QActionEvent](https://doc.qt.io/qt-5/qactionevent.html).
 class /+ Q_GUI_EXPORT +/ QActionEvent : QEvent
 {
 private:

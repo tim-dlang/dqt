@@ -39,6 +39,7 @@ class QIcon;
 class QMainWindow;
 class QStyleOptionToolBar; +/
 
+/// Binding for C++ class [QToolBar](https://doc.qt.io/qt-5/qtoolbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QToolBar : QWidget
 {
     mixin(Q_OBJECT);

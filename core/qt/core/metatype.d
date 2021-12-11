@@ -411,6 +411,7 @@ struct ConverterFunctor : public AbstractConverterFunction
     struct MetaTypeSmartPointerHelper; +/
 }
 
+/// Binding for C++ class [QMetaType](https://doc.qt.io/qt-5/qmetatype.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QMetaType {
 private:
     enum ExtensionFlag { NoExtensionFlags,

@@ -25,6 +25,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QAbstractSliderPrivate;
 
+/// Binding for C++ class [QAbstractSlider](https://doc.qt.io/qt-5/qabstractslider.html).
 class /+ Q_WIDGETS_EXPORT +/ QAbstractSlider : QWidget
 {
     mixin(Q_OBJECT);

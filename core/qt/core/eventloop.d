@@ -21,6 +21,7 @@ import qt.helpers;
 
 extern(C++, class) struct QEventLoopPrivate;
 
+/// Binding for C++ class [QEventLoop](https://doc.qt.io/qt-5/qeventloop.html).
 class /+ Q_CORE_EXPORT +/ QEventLoop : QObject
 {
     mixin(Q_OBJECT);
@@ -63,6 +64,7 @@ public /+ Q_SLOTS +/:
 
 extern(C++, class) struct QEventLoopLockerPrivate;
 
+/// Binding for C++ class [QEventLoopLocker](https://doc.qt.io/qt-5/qeventlooplocker.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QEventLoopLocker
 {
 public:

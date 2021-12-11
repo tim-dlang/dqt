@@ -39,6 +39,7 @@ class QPolygonF;
 class QRegion; +/
 extern(C++, class) struct QVectorPath;
 
+/// Binding for C++ class [QPainterPath](https://doc.qt.io/qt-5/qpainterpath.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPainterPath
 {
 public:
@@ -282,6 +283,7 @@ Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
 #endif +/
 
+/// Binding for C++ class [QPainterPathStroker](https://doc.qt.io/qt-5/qpainterpathstroker.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPainterPathStroker
 {
 private:

@@ -25,6 +25,7 @@ version(D_LP64){}else
 
 class QDataStream; +/
 
+/// Binding for C++ class [QFlag](https://doc.qt.io/qt-5/qflag.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QFlag
 {
 private:
@@ -88,6 +89,7 @@ public:
 
 #ifndef Q_NO_TYPESAFE_FLAGS +/
 
+/// Binding for C++ class [QFlags](https://doc.qt.io/qt-5/qflags.html).
 extern(C++, class) struct QFlags(Enum)
 {
 private:

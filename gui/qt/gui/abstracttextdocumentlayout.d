@@ -35,6 +35,7 @@ extern(C++, class) struct QAbstractTextDocumentLayoutPrivate;
 class QTextObjectInterface;
 class QTextFrame; +/
 
+/// Binding for C++ class [QAbstractTextDocumentLayout](https://doc.qt.io/qt-5/qabstracttextdocumentlayout.html).
 abstract class /+ Q_GUI_EXPORT +/ QAbstractTextDocumentLayout : QObject
 {
     mixin(Q_OBJECT);
@@ -114,6 +115,7 @@ private:
 /+ Q_DECLARE_TYPEINFO(QAbstractTextDocumentLayout::Selection,    Q_RELOCATABLE_TYPE);
 Q_DECLARE_TYPEINFO(QAbstractTextDocumentLayout::PaintContext, Q_RELOCATABLE_TYPE); +/
 
+/// Binding for C++ class [QTextObjectInterface](https://doc.qt.io/qt-5/qtextobjectinterface.html).
 class /+ Q_GUI_EXPORT +/ QTextObjectInterface
 {
 public:

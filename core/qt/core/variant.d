@@ -128,6 +128,7 @@ extern(C++, "QtPrivate") {
     template<typename T> struct QVariantValueHelper; +/
 }
 
+/// Binding for C++ class [QVariant](https://doc.qt.io/qt-5/qvariant.html).
 @(QMetaType.Type.QVariant) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QVariant
 {
  public:
@@ -658,7 +659,9 @@ private:
 /+ #endif
 Q_DECLARE_SHARED(QVariant) +/
 
-/+extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSequentialIterable
+/+
+/// Binding for C++ class [QSequentialIterable](https://doc.qt.io/qt-5/qsequentialiterable.html).
+extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSequentialIterable
 {
 private:
     /+ QtMetaTypePrivate:: +/QSequentialIterableImpl m_impl;
@@ -714,7 +717,9 @@ public:
     bool canReverseIterate() const;
 }+/
 
-/+extern(C++, class) struct /+ Q_CORE_EXPORT +/ QAssociativeIterable
+/+
+/// Binding for C++ class [QAssociativeIterable](https://doc.qt.io/qt-5/qassociativeiterable.html).
+extern(C++, class) struct /+ Q_CORE_EXPORT +/ QAssociativeIterable
 {
 private:
     /+ QtMetaTypePrivate:: +/QAssociativeIterableImpl m_impl;

@@ -31,6 +31,7 @@ class QAbstractButton;
 class QPushButton; +/
 extern(C++, class) struct QDialogButtonBoxPrivate;
 
+/// Binding for C++ class [QDialogButtonBox](https://doc.qt.io/qt-5/qdialogbuttonbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QDialogButtonBox : QWidget
 {
     mixin(Q_OBJECT);

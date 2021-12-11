@@ -27,6 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QToolBoxPrivate;
 
+/// Binding for C++ class [QToolBox](https://doc.qt.io/qt-5/qtoolbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QToolBox : QFrame
 {
     mixin(Q_OBJECT);

@@ -20,6 +20,7 @@ import qt.core.typeinfo;
 import qt.gui.font;
 import qt.helpers;
 
+/// Binding for C++ class [QFontInfo](https://doc.qt.io/qt-5/qfontinfo.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontInfo
 {
 public:

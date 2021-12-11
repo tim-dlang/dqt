@@ -32,6 +32,7 @@ version(QT_NO_SHORTCUT){}else
 class QButtonGroup; +/
 extern(C++, class) struct QAbstractButtonPrivate;
 
+/// Binding for C++ class [QAbstractButton](https://doc.qt.io/qt-5/qabstractbutton.html).
 class /+ Q_WIDGETS_EXPORT +/ QAbstractButton : QWidget
 {
     mixin(Q_OBJECT);

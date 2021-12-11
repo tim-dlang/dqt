@@ -25,6 +25,7 @@ extern(C++, class) struct QInputMethodPrivate;
 /+ class QWindow;
 class QRectF;
 class QTransform; +/
+/// Binding for C++ class [QInputMethod](https://doc.qt.io/qt-5/qinputmethod.html).
 class /+ Q_GUI_EXPORT +/ QInputMethod : QObject
 {
     mixin(Q_OBJECT);

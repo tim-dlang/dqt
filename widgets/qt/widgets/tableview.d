@@ -34,6 +34,7 @@ import qt.widgets.widget;
 class QHeaderView; +/
 extern(C++, class) struct QTableViewPrivate;
 
+/// Binding for C++ class [QTableView](https://doc.qt.io/qt-5/qtableview.html).
 class /+ Q_WIDGETS_EXPORT +/ QTableView : QAbstractItemView
 {
     mixin(Q_OBJECT);

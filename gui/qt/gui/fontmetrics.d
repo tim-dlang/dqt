@@ -35,6 +35,7 @@ class QTextCodec;
 class QRect; +/
 
 
+/// Binding for C++ class [QFontMetrics](https://doc.qt.io/qt-5/qfontmetrics.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontMetrics
 {
 public:
@@ -130,6 +131,7 @@ private:
 
 /+ Q_DECLARE_SHARED(QFontMetrics) +/
 
+/// Binding for C++ class [QFontMetricsF](https://doc.qt.io/qt-5/qfontmetricsf.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontMetricsF
 {
 public:

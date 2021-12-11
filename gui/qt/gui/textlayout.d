@@ -44,6 +44,7 @@ class QTextFormat;
 class QPalette;
 class QPainter; +/
 
+/// Binding for C++ class [QTextInlineObject](https://doc.qt.io/qt-5/qtextinlineobject.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextInlineObject
 {
 public:
@@ -89,6 +90,7 @@ class QTextLine;
 class QTextBlock;
 class QTextOption; +/
 
+/// Binding for C++ class [QTextLayout](https://doc.qt.io/qt-5/qtextlayout.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLayout
 {
 public:
@@ -222,6 +224,7 @@ private:
 /+ Q_DECLARE_TYPEINFO(QTextLayout::FormatRange, Q_RELOCATABLE_TYPE); +/
 
 
+/// Binding for C++ class [QTextLine](https://doc.qt.io/qt-5/qtextline.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLine
 {
 public:

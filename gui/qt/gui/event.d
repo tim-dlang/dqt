@@ -47,6 +47,7 @@ class QGesture;
 #endif
 class QScreen; +/
 
+/// Binding for C++ class [QInputEvent](https://doc.qt.io/qt-5/qinputevent.html).
 class /+ Q_GUI_EXPORT +/ QInputEvent : QEvent
 {
 public:
@@ -61,6 +62,7 @@ protected:
     cpp_ulong ts;
 }
 
+/// Binding for C++ class [QEnterEvent](https://doc.qt.io/qt-5/qenterevent.html).
 class /+ Q_GUI_EXPORT +/ QEnterEvent : QEvent
 {
 public:
@@ -84,6 +86,7 @@ protected:
     QPointF l; QPointF w; QPointF s;
 }
 
+/// Binding for C++ class [QMouseEvent](https://doc.qt.io/qt-5/qmouseevent.html).
 class /+ Q_GUI_EXPORT +/ QMouseEvent : QInputEvent
 {
 public:
@@ -135,6 +138,7 @@ protected:
     /+ friend class QGuiApplicationPrivate; +/
 }
 
+/// Binding for C++ class [QHoverEvent](https://doc.qt.io/qt-5/qhoverevent.html).
 class /+ Q_GUI_EXPORT +/ QHoverEvent : QInputEvent
 {
 public:
@@ -155,6 +159,7 @@ protected:
 }
 
 /+ #if QT_CONFIG(wheelevent) +/
+/// Binding for C++ class [QWheelEvent](https://doc.qt.io/qt-5/qwheelevent.html).
 class /+ Q_GUI_EXPORT +/ QWheelEvent : QInputEvent
 {
 public:
@@ -295,6 +300,7 @@ protected:
 /+ #endif
 
 #if QT_CONFIG(tabletevent) +/
+/// Binding for C++ class [QTabletEvent](https://doc.qt.io/qt-5/qtabletevent.html).
 class /+ Q_GUI_EXPORT +/ QTabletEvent : QInputEvent
 {
     mixin(Q_GADGET);
@@ -366,6 +372,7 @@ protected:
 
 version(QT_NO_GESTURES){}else
 {
+/// Binding for C++ class [QNativeGestureEvent](https://doc.qt.io/qt-5/qnativegestureevent.html).
 class /+ Q_GUI_EXPORT +/ QNativeGestureEvent : QInputEvent
 {
 public:
@@ -402,6 +409,7 @@ protected:
 }
 }
 
+/// Binding for C++ class [QKeyEvent](https://doc.qt.io/qt-5/qkeyevent.html).
 class /+ Q_GUI_EXPORT +/ QKeyEvent : QInputEvent
 {
 public:
@@ -464,6 +472,7 @@ protected:
 }
 
 
+/// Binding for C++ class [QFocusEvent](https://doc.qt.io/qt-5/qfocusevent.html).
 class /+ Q_GUI_EXPORT +/ QFocusEvent : QEvent
 {
 public:
@@ -480,6 +489,7 @@ private:
 }
 
 
+/// Binding for C++ class [QPaintEvent](https://doc.qt.io/qt-5/qpaintevent.html).
 class /+ Q_GUI_EXPORT +/ QPaintEvent : QEvent
 {
 public:
@@ -496,6 +506,7 @@ protected:
     bool m_erased;
 }
 
+/// Binding for C++ class [QMoveEvent](https://doc.qt.io/qt-5/qmoveevent.html).
 class /+ Q_GUI_EXPORT +/ QMoveEvent : QEvent
 {
 public:
@@ -509,6 +520,7 @@ protected:
     /+ friend class QApplication; +/
 }
 
+/// Binding for C++ class [QExposeEvent](https://doc.qt.io/qt-5/qexposeevent.html).
 class /+ Q_GUI_EXPORT +/ QExposeEvent : QEvent
 {
 public:
@@ -521,6 +533,7 @@ protected:
     QRegion rgn;
 }
 
+/// Binding for C++ class [QPlatformSurfaceEvent](https://doc.qt.io/qt-5/qplatformsurfaceevent.html).
 class /+ Q_GUI_EXPORT +/ QPlatformSurfaceEvent : QEvent
 {
 public:
@@ -538,6 +551,7 @@ protected:
     SurfaceEventType m_surfaceEventType;
 }
 
+/// Binding for C++ class [QResizeEvent](https://doc.qt.io/qt-5/qresizeevent.html).
 class /+ Q_GUI_EXPORT +/ QResizeEvent : QEvent
 {
 public:
@@ -552,6 +566,7 @@ protected:
 }
 
 
+/// Binding for C++ class [QCloseEvent](https://doc.qt.io/qt-5/qcloseevent.html).
 class /+ Q_GUI_EXPORT +/ QCloseEvent : QEvent
 {
 public:
@@ -560,6 +575,7 @@ public:
 }
 
 
+/// Binding for C++ class [QIconDragEvent](https://doc.qt.io/qt-5/qicondragevent.html).
 class /+ Q_GUI_EXPORT +/ QIconDragEvent : QEvent
 {
 public:
@@ -568,6 +584,7 @@ public:
 }
 
 
+/// Binding for C++ class [QShowEvent](https://doc.qt.io/qt-5/qshowevent.html).
 class /+ Q_GUI_EXPORT +/ QShowEvent : QEvent
 {
 public:
@@ -576,6 +593,7 @@ public:
 }
 
 
+/// Binding for C++ class [QHideEvent](https://doc.qt.io/qt-5/qhideevent.html).
 class /+ Q_GUI_EXPORT +/ QHideEvent : QEvent
 {
 public:
@@ -585,6 +603,7 @@ public:
 
 version(QT_NO_CONTEXTMENU){}else
 {
+/// Binding for C++ class [QContextMenuEvent](https://doc.qt.io/qt-5/qcontextmenuevent.html).
 class /+ Q_GUI_EXPORT +/ QContextMenuEvent : QInputEvent
 {
 public:
@@ -625,6 +644,7 @@ protected:
 
 version(QT_NO_INPUTMETHOD){}else
 {
+/// Binding for C++ class [QInputMethodEvent](https://doc.qt.io/qt-5/qinputmethodevent.html).
 class /+ Q_GUI_EXPORT +/ QInputMethodEvent : QEvent
 {
 public:
@@ -680,6 +700,7 @@ private:
 }
 /+ Q_DECLARE_TYPEINFO(QInputMethodEvent::Attribute, Q_MOVABLE_TYPE); +/
 
+/// Binding for C++ class [QInputMethodQueryEvent](https://doc.qt.io/qt-5/qinputmethodqueryevent.html).
 class /+ Q_GUI_EXPORT +/ QInputMethodQueryEvent : QEvent
 {
 public:
@@ -707,6 +728,7 @@ private:
 
 /+ class QMimeData; +/
 
+/// Binding for C++ class [QDropEvent](https://doc.qt.io/qt-5/qdropevent.html).
 class /+ Q_GUI_EXPORT +/ QDropEvent : QEvent
 {
 public:
@@ -741,6 +763,7 @@ protected:
 }
 
 
+/// Binding for C++ class [QDragMoveEvent](https://doc.qt.io/qt-5/qdragmoveevent.html).
 class /+ Q_GUI_EXPORT +/ QDragMoveEvent : QDropEvent
 {
 public:
@@ -761,6 +784,7 @@ protected:
 }
 
 
+/// Binding for C++ class [QDragEnterEvent](https://doc.qt.io/qt-5/qdragenterevent.html).
 class /+ Q_GUI_EXPORT +/ QDragEnterEvent : QDragMoveEvent
 {
 public:
@@ -770,6 +794,7 @@ public:
 }
 
 
+/// Binding for C++ class [QDragLeaveEvent](https://doc.qt.io/qt-5/qdragleaveevent.html).
 class /+ Q_GUI_EXPORT +/ QDragLeaveEvent : QEvent
 {
 public:
@@ -779,6 +804,7 @@ public:
 /+ #endif +/ // QT_CONFIG(draganddrop)
 
 
+/// Binding for C++ class [QHelpEvent](https://doc.qt.io/qt-5/qhelpevent.html).
 class /+ Q_GUI_EXPORT +/ QHelpEvent : QEvent
 {
 public:
@@ -800,6 +826,7 @@ private:
 
 version(QT_NO_STATUSTIP){}else
 {
+/// Binding for C++ class [QStatusTipEvent](https://doc.qt.io/qt-5/qstatustipevent.html).
 class /+ Q_GUI_EXPORT +/ QStatusTipEvent : QEvent
 {
 public:
@@ -813,6 +840,7 @@ private:
 }
 
 /+ #if QT_CONFIG(whatsthis) +/
+/// Binding for C++ class [QWhatsThisClickedEvent](https://doc.qt.io/qt-5/qwhatsthisclickedevent.html).
 class /+ Q_GUI_EXPORT +/ QWhatsThisClickedEvent : QEvent
 {
 public:
@@ -825,6 +853,7 @@ private:
 }
 /+ #endif +/
 
+/// Binding for C++ class [QFileOpenEvent](https://doc.qt.io/qt-5/qfileopenevent.html).
 class /+ Q_GUI_EXPORT +/ QFileOpenEvent : QEvent
 {
 public:
@@ -866,6 +895,7 @@ private:
 
 version(QT_NO_SHORTCUT){}else
 {
+/// Binding for C++ class [QShortcutEvent](https://doc.qt.io/qt-5/qshortcutevent.html).
 class /+ Q_GUI_EXPORT +/ QShortcutEvent : QEvent
 {
 public:
@@ -882,6 +912,7 @@ protected:
 }
 }
 
+/// Binding for C++ class [QWindowStateChangeEvent](https://doc.qt.io/qt-5/qwindowstatechangeevent.html).
 class /+ Q_GUI_EXPORT +/ QWindowStateChangeEvent: QEvent
 {
 public:
@@ -906,6 +937,7 @@ version(QT_NO_SHORTCUT){}else
 /+pragma(inline, true) bool operator ==(QKeySequence.StandardKey key, QKeyEvent e){return (e ? e.matches(key) : false);}+/
 }
 
+/// Binding for C++ class [QPointingDeviceUniqueId](https://doc.qt.io/qt-5/qpointingdeviceuniqueid.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPointingDeviceUniqueId
 {
     mixin(Q_GADGET);
@@ -949,6 +981,7 @@ template <> class QList<QPointingDeviceUniqueId> {}; // to prevent instantiation
 
 
 extern(C++, class) struct QTouchEventTouchPointPrivate;
+/// Binding for C++ class [QTouchEvent](https://doc.qt.io/qt-5/qtouchevent.html).
 class /+ Q_GUI_EXPORT +/ QTouchEvent : QInputEvent
 {
 public:
@@ -1116,6 +1149,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QTouchEvent::TouchPoint::InfoFlags)
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTouchEvent::TouchPoint &);
 #endif +/
 
+/// Binding for C++ class [QScrollPrepareEvent](https://doc.qt.io/qt-5/qscrollprepareevent.html).
 class /+ Q_GUI_EXPORT +/ QScrollPrepareEvent : QEvent
 {
 public:
@@ -1141,6 +1175,7 @@ private:
 }
 
 
+/// Binding for C++ class [QScrollEvent](https://doc.qt.io/qt-5/qscrollevent.html).
 class /+ Q_GUI_EXPORT +/ QScrollEvent : QEvent
 {
 public:

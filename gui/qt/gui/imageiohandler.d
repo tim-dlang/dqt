@@ -30,6 +30,7 @@ class QSize;
 class QVariant; +/
 
 extern(C++, class) struct QImageIOHandlerPrivate;
+/// Binding for C++ class [QImageIOHandler](https://doc.qt.io/qt-5/qimageiohandler.html).
 class /+ Q_GUI_EXPORT +/ QImageIOHandler
 {
 private:
@@ -114,6 +115,7 @@ static if(!defined!"QT_NO_IMAGEFORMATPLUGIN")
 
 /+ #define QImageIOHandlerFactoryInterface_iid "org.qt-project.Qt.QImageIOHandlerFactoryInterface" +/
 
+/// Binding for C++ class [QImageIOPlugin](https://doc.qt.io/qt-5/qimageioplugin.html).
 class /+ Q_GUI_EXPORT +/ QImageIOPlugin : QObject
 {
     mixin(Q_OBJECT);

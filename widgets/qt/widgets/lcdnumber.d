@@ -24,6 +24,7 @@ import qt.widgets.widget;
 /+ QT_REQUIRE_CONFIG(lcdnumber); +/
 
 extern(C++, class) struct QLCDNumberPrivate;
+/// Binding for C++ class [QLCDNumber](https://doc.qt.io/qt-5/qlcdnumber.html).
 class /+ Q_WIDGETS_EXPORT +/ QLCDNumber : QFrame // LCD number widget
 {
     mixin(Q_OBJECT);

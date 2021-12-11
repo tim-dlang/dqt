@@ -97,6 +97,7 @@ extern(C++, "QtPrivate") {
 //    int lastIndexOf(V, U)(ref const(QList!(V)) list, ref const(U) u, int from);
 }
 
+/// Binding for C++ class [QList](https://doc.qt.io/qt-5/qlist.html).
 extern(C++, class) struct QList(T)
 /+ #ifndef Q_QDOC +/
 

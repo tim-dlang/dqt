@@ -28,6 +28,7 @@ import qt.widgets.widget;
 extern(C++, class) struct QRubberBandPrivate;
 /+ class QStyleOptionRubberBand; +/
 
+/// Binding for C++ class [QRubberBand](https://doc.qt.io/qt-5/qrubberband.html).
 class /+ Q_WIDGETS_EXPORT +/ QRubberBand : QWidget
 {
     mixin(Q_OBJECT);

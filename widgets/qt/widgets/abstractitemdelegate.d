@@ -38,6 +38,7 @@ class QAbstractItemView;
 class QHelpEvent; +/
 extern(C++, class) struct QAbstractItemDelegatePrivate;
 
+/// Binding for C++ class [QAbstractItemDelegate](https://doc.qt.io/qt-5/qabstractitemdelegate.html).
 class /+ Q_WIDGETS_EXPORT +/ QAbstractItemDelegate : QObject
 {
     mixin(Q_OBJECT);

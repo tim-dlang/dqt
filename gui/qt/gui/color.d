@@ -36,6 +36,7 @@ Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QColor &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
 #endif +/
 
+/// Binding for C++ class [QColor](https://doc.qt.io/qt-5/qcolor.html).
 @(QMetaType.Type.QColor) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColor
 {
 public:

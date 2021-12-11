@@ -28,6 +28,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QGridLayoutPrivate;
 
+/// Binding for C++ class [QGridLayout](https://doc.qt.io/qt-5/qgridlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QGridLayout : QLayout
 {
     mixin(Q_OBJECT);

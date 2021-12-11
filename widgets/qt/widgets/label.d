@@ -32,6 +32,7 @@ version(QT_NO_PICTURE){}else
 
 extern(C++, class) struct QLabelPrivate;
 
+/// Binding for C++ class [QLabel](https://doc.qt.io/qt-5/qlabel.html).
 class /+ Q_WIDGETS_EXPORT +/ QLabel : QFrame
 {
     mixin(Q_OBJECT);

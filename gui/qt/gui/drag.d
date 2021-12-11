@@ -30,6 +30,7 @@ class QPoint; +/
 extern(C++, class) struct QDragManager;
 
 
+/// Binding for C++ class [QDrag](https://doc.qt.io/qt-5/qdrag.html).
 class /+ Q_GUI_EXPORT +/ QDrag : QObject
 {
     mixin(Q_OBJECT);

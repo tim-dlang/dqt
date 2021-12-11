@@ -32,6 +32,7 @@ template <typename T> class QList;
 
 class QSplitterHandle; +/
 
+/// Binding for C++ class [QSplitter](https://doc.qt.io/qt-5/qsplitter.html).
 class /+ Q_WIDGETS_EXPORT +/ QSplitter : QFrame
 {
     mixin(Q_OBJECT);
@@ -115,6 +116,7 @@ Q_WIDGETS_EXPORT QTextStream& operator>>(QTextStream&, QSplitter&);
 #endif +/
 
 extern(C++, class) struct QSplitterHandlePrivate;
+/// Binding for C++ class [QSplitterHandle](https://doc.qt.io/qt-5/qsplitterhandle.html).
 class /+ Q_WIDGETS_EXPORT +/ QSplitterHandle : QWidget
 {
     mixin(Q_OBJECT);

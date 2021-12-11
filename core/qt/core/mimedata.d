@@ -25,6 +25,7 @@ import qt.helpers;
 /+ class QUrl; +/
 extern(C++, class) struct QMimeDataPrivate;
 
+/// Binding for C++ class [QMimeData](https://doc.qt.io/qt-5/qmimedata.html).
 class /+ Q_CORE_EXPORT +/ QMimeData : QObject
 {
     mixin(Q_OBJECT);

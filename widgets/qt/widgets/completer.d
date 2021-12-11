@@ -32,6 +32,7 @@ extern(C++, class) struct QCompleterPrivate;
 class QAbstractProxyModel;
 class QWidget; +/
 
+/// Binding for C++ class [QCompleter](https://doc.qt.io/qt-5/qcompleter.html).
 class /+ Q_WIDGETS_EXPORT +/ QCompleter : QObject
 {
     mixin(Q_OBJECT);

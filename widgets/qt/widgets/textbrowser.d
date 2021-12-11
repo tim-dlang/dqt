@@ -29,6 +29,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QTextBrowserPrivate;
 
+/// Binding for C++ class [QTextBrowser](https://doc.qt.io/qt-5/qtextbrowser.html).
 class /+ Q_WIDGETS_EXPORT +/ QTextBrowser : QTextEdit
 {
     mixin(Q_OBJECT);

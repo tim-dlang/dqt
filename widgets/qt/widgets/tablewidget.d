@@ -43,6 +43,7 @@ version(QT_NO_DATASTREAM){}else
 
 
 // ### Qt6 unexport the class, remove the user-defined special 3 and make it a literal type.
+/// Binding for C++ class [QTableWidgetSelectionRange](https://doc.qt.io/qt-5/qtablewidgetselectionrange.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QTableWidgetSelectionRange
 {
 public:
@@ -78,6 +79,7 @@ private:
 extern(C++, class) struct QTableModel;
 extern(C++, class) struct QTableWidgetItemPrivate;
 
+/// Binding for C++ class [QTableWidgetItem](https://doc.qt.io/qt-5/qtablewidgetitem.html).
 class /+ Q_WIDGETS_EXPORT +/ QTableWidgetItem
 {
 private:
@@ -234,6 +236,7 @@ Q_WIDGETS_EXPORT QDataStream &operator<<(QDataStream &out, const QTableWidgetIte
 
 extern(C++, class) struct QTableWidgetPrivate;
 
+/// Binding for C++ class [QTableWidget](https://doc.qt.io/qt-5/qtablewidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QTableWidget : QTableView
 {
     mixin(Q_OBJECT);

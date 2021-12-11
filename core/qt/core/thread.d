@@ -38,6 +38,7 @@ extern(C++, class) struct QThreadData;
 extern(C++, class) struct QThreadPrivate;
 /+ class QAbstractEventDispatcher; +/
 
+/// Binding for C++ class [QThread](https://doc.qt.io/qt-5/qthread.html).
 class /+ Q_CORE_EXPORT +/ QThread : QObject
 {
     mixin(Q_OBJECT);

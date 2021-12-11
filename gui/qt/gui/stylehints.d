@@ -22,6 +22,7 @@ import qt.helpers;
 /+ class QPlatformIntegration; +/
 extern(C++, class) struct QStyleHintsPrivate;
 
+/// Binding for C++ class [QStyleHints](https://doc.qt.io/qt-5/qstylehints.html).
 class /+ Q_GUI_EXPORT +/ QStyleHints : QObject
 {
     mixin(Q_OBJECT);

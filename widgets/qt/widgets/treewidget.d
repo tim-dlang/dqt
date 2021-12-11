@@ -47,6 +47,7 @@ class QTreeWidget;
 class QTreeModel; +/
 extern(C++, class) struct QTreeWidgetItemPrivate;
 
+/// Binding for C++ class [QTreeWidgetItem](https://doc.qt.io/qt-5/qtreewidgetitem.html).
 class /+ Q_WIDGETS_EXPORT +/ QTreeWidgetItem
 {
 private:
@@ -269,6 +270,7 @@ Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &in, QTreeWidgetItem &item)
 
 extern(C++, class) struct QTreeWidgetPrivate;
 
+/// Binding for C++ class [QTreeWidget](https://doc.qt.io/qt-5/qtreewidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QTreeWidget : QTreeView
 {
     mixin(Q_OBJECT);

@@ -44,6 +44,7 @@ class QDateTimeEdit;
 class QIcon;
 class QToolButton; +/
 
+/// Binding for C++ class [QLineEdit](https://doc.qt.io/qt-5/qlineedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QLineEdit : QWidget
 {
     mixin(Q_OBJECT);

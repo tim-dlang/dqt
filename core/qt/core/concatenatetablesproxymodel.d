@@ -29,6 +29,7 @@ import qt.helpers;
 
 extern(C++, class) struct QConcatenateTablesProxyModelPrivate;
 
+/// Binding for C++ class [QConcatenateTablesProxyModel](https://doc.qt.io/qt-5/qconcatenatetablesproxymodel.html).
 class /+ Q_CORE_EXPORT +/ QConcatenateTablesProxyModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);

@@ -644,6 +644,7 @@ class QMetaProperty;
 class QMetaClassInfo; +/
 
 
+/// Binding for C++ class [QGenericArgument](https://doc.qt.io/qt-5/qgenericargument.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QGenericArgument
 {
 public:
@@ -660,6 +661,7 @@ private:
     const(char)* _name = null;
 }
 
+/// Binding for C++ class [QGenericReturnArgument](https://doc.qt.io/qt-5/qgenericreturnargument.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QGenericReturnArgument
 {
     public QGenericArgument base0;
@@ -702,7 +704,9 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
 {
     /+
     extern(C++, class) struct Connection;
-    +/extern(C++, class) struct /+ Q_CORE_EXPORT +/ Connection {
+    +/
+    /// Binding for C++ class [Connection](https://doc.qt.io/qt-5/qmetaobject-connection.html).
+    extern(C++, class) struct /+ Q_CORE_EXPORT +/ Connection {
     private:
         void* d_ptr; //QObjectPrivate::Connection*
         /+ explicit +/this(void* data)

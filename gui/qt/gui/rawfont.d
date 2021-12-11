@@ -39,6 +39,7 @@ version(QT_NO_RAWFONT){}else
 
 
 extern(C++, class) struct QRawFontPrivate;
+/// Binding for C++ class [QRawFont](https://doc.qt.io/qt-5/qrawfont.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRawFont
 {
 public:

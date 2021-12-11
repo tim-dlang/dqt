@@ -17,6 +17,7 @@ import qt.core.global;
 import qt.core.typeinfo;
 import qt.helpers;
 
+/// Binding for C++ class [QPixelFormat](https://doc.qt.io/qt-5/qpixelformat.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QPixelFormat
 {
 private:

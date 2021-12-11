@@ -64,6 +64,7 @@ extern(D) alias Q_MV_WATCHOS = function string(string major, string minor)
     return mixin(interpolateMixin(q{(QSysInfo.MacVersion.MV_WATCHOS | $(major) << 4 | $(minor))}));
 };
 
+/// Binding for C++ class [QSysInfo](https://doc.qt.io/qt-5/qsysinfo.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSysInfo {
 public:
     enum Sizes {

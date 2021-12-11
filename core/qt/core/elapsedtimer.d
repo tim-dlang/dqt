@@ -16,6 +16,7 @@ import qt.config;
 import qt.core.global;
 import qt.helpers;
 
+/// Binding for C++ class [QElapsedTimer](https://doc.qt.io/qt-5/qelapsedtimer.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QElapsedTimer
 {
 public:

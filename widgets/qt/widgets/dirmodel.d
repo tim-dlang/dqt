@@ -33,6 +33,7 @@ import qt.widgets.fileiconprovider;
 
 extern(C++, class) struct QDirModelPrivate;
 
+/// Binding for C++ class [QDirModel](https://doc.qt.io/qt-5/qdirmodel.html).
 class /+ Q_WIDGETS_EXPORT +/ QDirModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);

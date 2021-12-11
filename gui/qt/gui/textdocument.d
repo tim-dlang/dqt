@@ -78,6 +78,7 @@ public:
 
 /+ class QTextDocumentPrivate; +/
 
+/// Binding for C++ class [QTextDocument](https://doc.qt.io/qt-5/qtextdocument.html).
 class /+ Q_GUI_EXPORT +/ QTextDocument : QObject
 {
     mixin(Q_OBJECT);

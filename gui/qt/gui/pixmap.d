@@ -45,6 +45,7 @@ class QColor;
 class QVariant; +/
 extern(C++, class) struct QPlatformPixmap;
 
+/// Binding for C++ class [QPixmap](https://doc.qt.io/qt-5/qpixmap.html).
 @(QMetaType.Type.QPixmap) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPixmap
 {
 private:

@@ -31,6 +31,7 @@ version(QT_NO_GESTURES){}else
 /+ class QObject;
 class QEvent;
 class QGesture; +/
+/// Binding for C++ class [QGestureRecognizer](https://doc.qt.io/qt-5/qgesturerecognizer.html).
 class /+ Q_WIDGETS_EXPORT +/ QGestureRecognizer
 {
 public:

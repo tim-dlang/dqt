@@ -37,6 +37,7 @@ class QGradient;
 class QVariant; +/
 struct QBrushDataPointerDeleter;
 
+/// Binding for C++ class [QBrush](https://doc.qt.io/qt-5/qbrush.html).
 @(QMetaType.Type.QBrush) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBrush
 {
 public:
@@ -157,6 +158,7 @@ extern(C++, class) struct QGradientPrivate;
 alias QGradientStop = QPair!(qreal, QColor);
 alias QGradientStops = QVector!(QGradientStop);
 
+/// Binding for C++ class [QGradient](https://doc.qt.io/qt-5/qgradient.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QGradient
 {
     mixin(Q_GADGET);
@@ -422,6 +424,7 @@ private:
     void* dummy; // ### Qt 6: replace with actual content (CoordinateMode, InterpolationMode, ...)
 }
 
+/// Binding for C++ class [QLinearGradient](https://doc.qt.io/qt-5/qlineargradient.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QLinearGradient
 {
     public QGradient base0;
@@ -451,6 +454,7 @@ public:
 }
 
 
+/// Binding for C++ class [QRadialGradient](https://doc.qt.io/qt-5/qradialgradient.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRadialGradient
 {
     public QGradient base0;
@@ -496,6 +500,7 @@ public:
 }
 
 
+/// Binding for C++ class [QConicalGradient](https://doc.qt.io/qt-5/qconicalgradient.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QConicalGradient
 {
     public QGradient base0;

@@ -35,6 +35,7 @@ class QLineEdit; +/
 extern(C++, class) struct QAbstractSpinBoxPrivate;
 /+ class QStyleOptionSpinBox; +/
 
+/// Binding for C++ class [QAbstractSpinBox](https://doc.qt.io/qt-5/qabstractspinbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QAbstractSpinBox : QWidget
 {
     mixin(Q_OBJECT);

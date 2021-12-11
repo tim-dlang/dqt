@@ -25,6 +25,7 @@ static if(!defined!"QT_NO_STANDARDPATHS")
 static if(!defined!"QT_NO_STANDARDPATHS")
 {
 
+/// Binding for C++ class [QStandardPaths](https://doc.qt.io/qt-5/qstandardpaths.html).
 abstract class /+ Q_CORE_EXPORT +/ QStandardPaths
 {
     mixin(Q_GADGET);

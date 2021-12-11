@@ -25,6 +25,7 @@ import qt.helpers;
 /+ class QColorSpacePrivate;
 class QPointF; +/
 
+/// Binding for C++ class [QColorSpace](https://doc.qt.io/qt-5/qcolorspace.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QColorSpace) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColorSpace
 {
     mixin(Q_GADGET);

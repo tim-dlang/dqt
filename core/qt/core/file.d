@@ -29,6 +29,7 @@ import qt.helpers;
 extern(C++, class) struct QTemporaryFile;
 extern(C++, class) struct QFilePrivate;
 
+/// Binding for C++ class [QFile](https://doc.qt.io/qt-5/qfile.html).
 class /+ Q_CORE_EXPORT +/ QFile : QFileDevice
 {
 /+ #ifndef QT_NO_QOBJECT +/

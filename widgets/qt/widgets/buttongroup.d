@@ -25,6 +25,7 @@ class QAbstractButton;
 class QAbstractButtonPrivate; +/
 extern(C++, class) struct QButtonGroupPrivate;
 
+/// Binding for C++ class [QButtonGroup](https://doc.qt.io/qt-5/qbuttongroup.html).
 class /+ Q_WIDGETS_EXPORT +/ QButtonGroup : QObject
 {
     mixin(Q_OBJECT);

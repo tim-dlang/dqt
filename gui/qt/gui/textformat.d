@@ -61,6 +61,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextLength &);
 #endif +/
 
+/// Binding for C++ class [QTextLength](https://doc.qt.io/qt-5/qtextlength.html).
 @(QMetaType.Type.QTextLength) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLength
 {
 public:
@@ -117,6 +118,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &);
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextFormat &);
 #endif +/
 
+/// Binding for C++ class [QTextFormat](https://doc.qt.io/qt-5/qtextformat.html).
 @(QMetaType.Type.QTextFormat) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFormat
 {
     mixin(Q_GADGET);
@@ -407,6 +409,7 @@ private:
 /+pragma(inline, true) QIncompatibleFlag operator |(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextFormat::PageBreakFlags) +/
+/// Binding for C++ class [QTextCharFormat](https://doc.qt.io/qt-5/qtextcharformat.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextCharFormat
 {
     public QTextFormat base0 = QTextFormat(QTextFormat.FormatType.CharFormat);
@@ -609,6 +612,7 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextCharFormat) +/
 
+/// Binding for C++ class [QTextBlockFormat](https://doc.qt.io/qt-5/qtextblockformat.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextBlockFormat
 {
     public QTextFormat base0 = QTextFormat(QTextFormat.FormatType.BlockFormat);
@@ -725,6 +729,7 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextBlockFormat) +/
 
+/// Binding for C++ class [QTextListFormat](https://doc.qt.io/qt-5/qtextlistformat.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextListFormat
 {
     public QTextFormat base0 = QTextFormat(QTextFormat.FormatType.ListFormat);
@@ -773,6 +778,7 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextListFormat) +/
 
+/// Binding for C++ class [QTextImageFormat](https://doc.qt.io/qt-5/qtextimageformat.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextImageFormat
 {
     public QTextCharFormat base0;
@@ -818,6 +824,7 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextImageFormat) +/
 
+/// Binding for C++ class [QTextFrameFormat](https://doc.qt.io/qt-5/qtextframeformat.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFrameFormat
 {
     public QTextFormat base0 = QTextFormat(QTextFormat.FormatType.FrameFormat);
@@ -922,6 +929,7 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextFrameFormat) +/
 
+/// Binding for C++ class [QTextTableFormat](https://doc.qt.io/qt-5/qtexttableformat.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextTableFormat
 {
     public QTextFrameFormat base0;
@@ -990,6 +998,7 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextTableFormat) +/
 
+/// Binding for C++ class [QTextTableCellFormat](https://doc.qt.io/qt-5/qtexttablecellformat.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextTableCellFormat
 {
     public QTextCharFormat base0;

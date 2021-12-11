@@ -26,6 +26,7 @@ class QTreeWidgetItem; +/
 extern(C++, class) struct QTreeModel;
 
 extern(C++, class) struct QTreeWidgetItemIteratorPrivate;
+/// Binding for C++ class [QTreeWidgetItemIterator](https://doc.qt.io/qt-5/qtreewidgetitemiterator.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QTreeWidgetItemIterator
 {
 private:

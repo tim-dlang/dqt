@@ -38,6 +38,7 @@ class QRect;
 class QSize; +/
 
 extern(C++, class) struct QMoviePrivate;
+/// Binding for C++ class [QMovie](https://doc.qt.io/qt-5/qmovie.html).
 class /+ Q_GUI_EXPORT +/ QMovie : QObject
 {
     mixin(Q_OBJECT);

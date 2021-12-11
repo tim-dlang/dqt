@@ -28,6 +28,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QFormLayoutPrivate;
 
+/// Binding for C++ class [QFormLayout](https://doc.qt.io/qt-5/qformlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QFormLayout : QLayout
 {
     mixin(Q_OBJECT);

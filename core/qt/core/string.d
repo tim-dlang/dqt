@@ -60,6 +60,7 @@ namespace QtPrivate {
 template <bool...B> class BoolList;
 } +/
 
+/// Binding for C++ class [QLatin1String](https://doc.qt.io/qt-5/qlatin1string.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct QLatin1String
 {
 public:
@@ -321,6 +322,7 @@ static if(!versionIsSet!("QT_COMPILING_QSTRING_COMPAT_CPP") && defined!"Q_COMPIL
 #    define Q_REQUIRED_RESULT_pushed +/
 }
 
+/// Binding for C++ class [QString](https://doc.qt.io/qt-5/qstring.html).
 @(QMetaType.Type.QString) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
 {
 public:
@@ -1757,6 +1759,7 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QString &);
 /+ Q_DECLARE_SHARED(QString)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QString::SectionFlags) +/
 
+/// Binding for C++ class [QStringRef](https://doc.qt.io/qt-5/qstringref.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QStringRef {
 private:
     static import qt.core.stringalgorithms;

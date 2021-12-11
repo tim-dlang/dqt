@@ -30,6 +30,7 @@ import qt.widgets.widget;
 class QScrollBar; +/
 extern(C++, class) struct QAbstractScrollAreaPrivate;
 
+/// Binding for C++ class [QAbstractScrollArea](https://doc.qt.io/qt-5/qabstractscrollarea.html).
 class /+ Q_WIDGETS_EXPORT +/ QAbstractScrollArea : QFrame
 {
     mixin(Q_OBJECT);

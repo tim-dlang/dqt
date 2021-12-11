@@ -42,6 +42,7 @@ interface QPagedPaintDeviceInterface : QPaintDeviceInterface
         /+ virtual +/ void setMargins(ref const(Margins) margins);
 }
 
+/// Binding for C++ class [QPagedPaintDevice](https://doc.qt.io/qt-5/qpagedpaintdevice.html).
 class /+ Q_GUI_EXPORT +/ QPagedPaintDevice : QPaintDevice
 {
 public:

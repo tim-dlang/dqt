@@ -41,6 +41,7 @@ extern(C++, class) struct QFileDialogPrivate;
 /+ class QAbstractItemDelegate;
 class QAbstractProxyModel; +/
 
+/// Binding for C++ class [QFileDialog](https://doc.qt.io/qt-5/qfiledialog.html).
 class /+ Q_WIDGETS_EXPORT +/ QFileDialog : QDialog
 {
     mixin(Q_OBJECT);

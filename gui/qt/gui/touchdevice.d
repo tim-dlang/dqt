@@ -22,6 +22,7 @@ import qt.helpers;
 /+ class QDebug; +/
 extern(C++, class) struct QTouchDevicePrivate;
 
+/// Binding for C++ class [QTouchDevice](https://doc.qt.io/qt-5/qtouchdevice.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTouchDevice
 {
     mixin(Q_GADGET);

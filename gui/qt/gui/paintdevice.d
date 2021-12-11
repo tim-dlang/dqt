@@ -36,6 +36,7 @@ protected:
     /+ virtual +/ QPainter * sharedPainter() const;
 }
 
+/// Binding for C++ class [QPaintDevice](https://doc.qt.io/qt-5/qpaintdevice.html).
 class /+ Q_GUI_EXPORT +/ QPaintDevice//: QPaintDeviceInterface                                // device for QPainter
 {
 public:

@@ -50,6 +50,7 @@ extern(C++, class) struct QApplicationPrivate;
 /+ #define qApp (static_cast<QApplication *>(QCoreApplication::instance())) +/
 enum qApp = q{(static_cast!(QApplication)(QCoreApplication.instance()))};
 
+/// Binding for C++ class [QApplication](https://doc.qt.io/qt-5/qapplication.html).
 class /+ Q_WIDGETS_EXPORT +/ QApplication : QGuiApplication
 {
     mixin(Q_OBJECT);

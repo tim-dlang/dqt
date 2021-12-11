@@ -34,6 +34,7 @@ version(QT_NO_VALIDATOR){}else
 
 extern(C++, class) struct QValidatorPrivate;
 
+/// Binding for C++ class [QValidator](https://doc.qt.io/qt-5/qvalidator.html).
 class /+ Q_GUI_EXPORT +/ QValidator : QObject
 {
     mixin(Q_OBJECT);
@@ -66,6 +67,7 @@ private:
     /+ Q_DECLARE_PRIVATE(QValidator) +/
 }
 
+/// Binding for C++ class [QIntValidator](https://doc.qt.io/qt-5/qintvalidator.html).
 class /+ Q_GUI_EXPORT +/ QIntValidator : QValidator
 {
     mixin(Q_OBJECT);
@@ -102,6 +104,7 @@ version(QT_NO_REGEXP){}else
 
 extern(C++, class) struct QDoubleValidatorPrivate;
 
+/// Binding for C++ class [QDoubleValidator](https://doc.qt.io/qt-5/qdoublevalidator.html).
 class /+ Q_GUI_EXPORT +/ QDoubleValidator : QValidator
 {
     mixin(Q_OBJECT);
@@ -149,6 +152,7 @@ private:
 }
 
 
+/// Binding for C++ class [QRegExpValidator](https://doc.qt.io/qt-5/qregexpvalidator.html).
 class /+ Q_GUI_EXPORT +/ QRegExpValidator : QValidator
 {
     mixin(Q_OBJECT);
@@ -179,6 +183,7 @@ private:
 
 extern(C++, class) struct QRegularExpressionValidatorPrivate;
 
+/// Binding for C++ class [QRegularExpressionValidator](https://doc.qt.io/qt-5/qregularexpressionvalidator.html).
 class /+ Q_GUI_EXPORT +/ QRegularExpressionValidator : QValidator
 {
     mixin(Q_OBJECT);

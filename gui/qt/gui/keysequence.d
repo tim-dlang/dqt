@@ -46,6 +46,7 @@ extern(C++, class) struct QKeySequencePrivate;
 
 /+ Q_GUI_EXPORT Q_DECL_PURE_FUNCTION uint qHash(const QKeySequence &key, uint seed = 0) noexcept; +/
 
+/// Binding for C++ class [QKeySequence](https://doc.qt.io/qt-5/qkeysequence.html).
 @(QMetaType.Type.QKeySequence) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QKeySequence
 {
     mixin(Q_GADGET);
@@ -219,6 +220,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QKeySequence &);
 version(QT_NO_SHORTCUT)
 {
 
+/// Binding for C++ class [QKeySequence](https://doc.qt.io/qt-5/qkeysequence.html).
 @(QMetaType.Type.QKeySequence) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QKeySequence
 {
 public:

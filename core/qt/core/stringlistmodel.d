@@ -24,6 +24,7 @@ import qt.helpers;
 /+ QT_REQUIRE_CONFIG(stringlistmodel); +/
 
 
+/// Binding for C++ class [QStringListModel](https://doc.qt.io/qt-5/qstringlistmodel.html).
 class /+ Q_CORE_EXPORT +/ QStringListModel : QAbstractListModel
 {
     mixin(Q_OBJECT);

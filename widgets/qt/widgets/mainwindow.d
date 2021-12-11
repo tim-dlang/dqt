@@ -45,6 +45,7 @@ class QStatusBar;
 class QToolBar;
 class QMenu; +/
 
+/// Binding for C++ class [QMainWindow](https://doc.qt.io/qt-5/qmainwindow.html).
 class /+ Q_WIDGETS_EXPORT +/ QMainWindow : QWidget
 {
     mixin(Q_OBJECT);

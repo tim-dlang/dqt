@@ -222,6 +222,7 @@ public:
 
 extern(C++, class) struct QWidgetPrivate;
 
+/// Binding for C++ class [QWidget](https://doc.qt.io/qt-5/qwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QWidget : QObject, QPaintDeviceInterface
 {
     import qt.core.namespace;

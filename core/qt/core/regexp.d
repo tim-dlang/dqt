@@ -35,6 +35,7 @@ class QRegExp;
 
 Q_CORE_EXPORT uint qHash(const QRegExp &key, uint seed = 0) noexcept; +/
 
+/// Binding for C++ class [QRegExp](https://doc.qt.io/qt-5/qregexp.html).
 @(QMetaType.Type.QRegExp) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegExp
 {
 public:

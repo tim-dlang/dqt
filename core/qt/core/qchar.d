@@ -50,6 +50,7 @@ private:
 /+pragma(inline, true) bool operator < (QLatin1Char lhs, char rhs)/+ noexcept+/ { return lhs.toLatin1() <  rhs; }+/
 /+pragma(inline, true) bool operator > (QLatin1Char lhs, char rhs)/+ noexcept+/ { return lhs.toLatin1() >  rhs; }+/
 
+/// Binding for C++ class [QChar](https://doc.qt.io/qt-5/qchar.html).
 @(QMetaType.Type.QChar) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QChar {
 public:
     enum SpecialCharacter {

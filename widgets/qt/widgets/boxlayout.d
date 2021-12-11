@@ -28,6 +28,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QBoxLayoutPrivate;
 
+/// Binding for C++ class [QBoxLayout](https://doc.qt.io/qt-5/qboxlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QBoxLayout : QLayout
 {
     mixin(Q_OBJECT);
@@ -85,6 +86,7 @@ private:
     /+ Q_DISABLE_COPY(QBoxLayout) +/
 }
 
+/// Binding for C++ class [QHBoxLayout](https://doc.qt.io/qt-5/qhboxlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QHBoxLayout : QBoxLayout
 {
     mixin(Q_OBJECT);
@@ -98,6 +100,7 @@ private:
     /+ Q_DISABLE_COPY(QHBoxLayout) +/
 }
 
+/// Binding for C++ class [QVBoxLayout](https://doc.qt.io/qt-5/qvboxlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QVBoxLayout : QBoxLayout
 {
     mixin(Q_OBJECT);

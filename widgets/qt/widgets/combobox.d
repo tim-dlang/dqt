@@ -40,6 +40,7 @@ class QLineEdit; +/
 extern(C++, class) struct QComboBoxPrivate;
 /+ class QCompleter; +/
 
+/// Binding for C++ class [QComboBox](https://doc.qt.io/qt-5/qcombobox.html).
 class /+ Q_WIDGETS_EXPORT +/ QComboBox : QWidget
 {
     mixin(Q_OBJECT);

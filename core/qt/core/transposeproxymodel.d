@@ -27,6 +27,7 @@ import qt.helpers;
 
 class QTransposeProxyModelPrivate; +/
 
+/// Binding for C++ class [QTransposeProxyModel](https://doc.qt.io/qt-5/qtransposeproxymodel.html).
 class /+ Q_CORE_EXPORT +/ QTransposeProxyModel : QAbstractProxyModel
 {
     mixin(Q_OBJECT);

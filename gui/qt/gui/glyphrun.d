@@ -31,6 +31,7 @@ version(QT_NO_RAWFONT){}else
 
 
 extern(C++, class) struct QGlyphRunPrivate;
+/// Binding for C++ class [QGlyphRun](https://doc.qt.io/qt-5/qglyphrun.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QGlyphRun
 {
 public:

@@ -207,6 +207,7 @@ template parametersSame(Params...)
     }
 }
 
+/// Binding for C++ class [QObject](https://doc.qt.io/qt-5/qobject.html).
 @(QMetaType.Type.QObjectStar) class /+ Q_CORE_EXPORT +/ QObject
 {
     mixin((){import std.array; return Q_OBJECT.replace("override", "");}());

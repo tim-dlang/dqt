@@ -23,6 +23,7 @@ import qt.helpers;
 class QTextTable; +/
 extern(C++, class) struct QTextTablePrivate;
 
+/// Binding for C++ class [QTextTableCell](https://doc.qt.io/qt-5/qtexttablecell.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextTableCell
 {
 public:
@@ -79,6 +80,7 @@ private:
     int fragment;
 }
 
+/// Binding for C++ class [QTextTable](https://doc.qt.io/qt-5/qtexttable.html).
 class /+ Q_GUI_EXPORT +/ QTextTable : QTextFrame
 {
     mixin(Q_OBJECT);

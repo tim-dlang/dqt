@@ -28,6 +28,7 @@ import qt.widgets.widget;
 class QPushButton; +/
 extern(C++, class) struct QDialogPrivate;
 
+/// Binding for C++ class [QDialog](https://doc.qt.io/qt-5/qdialog.html).
 class /+ Q_WIDGETS_EXPORT +/ QDialog : QWidget
 {
     mixin(Q_OBJECT);

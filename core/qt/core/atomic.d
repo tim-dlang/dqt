@@ -28,6 +28,7 @@ QT_WARNING_DISABLE_GCC("-Wextra")
 #endif +/
 
 // High-level atomic integer operations
+/// Binding for C++ class [QAtomicInteger](https://doc.qt.io/qt-5/qatomicinteger.html).
 extern(C++, class) struct QAtomicInteger(T)
 {
     public QBasicAtomicInteger!(T) base0;
@@ -132,6 +133,7 @@ public:
 #endif +/
 }
 
+/// Binding for C++ class [QAtomicInt](https://doc.qt.io/qt-5/qatomicint.html).
 extern(C++, class) struct QAtomicInt
 {
     public QAtomicInteger!(int) base0;
@@ -151,6 +153,7 @@ public:
 }
 
 // High-level atomic pointer operations
+/// Binding for C++ class [QAtomicPointer](https://doc.qt.io/qt-5/qatomicpointer.html).
 extern(C++, class) struct QAtomicPointer(T)
 {
     public QBasicAtomicPointer!(T) base0;

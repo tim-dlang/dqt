@@ -26,6 +26,7 @@ import qt.helpers;
 class QImage; +/
 
 extern(C++, class) struct QImageWriterPrivate;
+/// Binding for C++ class [QImageWriter](https://doc.qt.io/qt-5/qimagewriter.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QImageWriter
 {
     /+ Q_DECLARE_TR_FUNCTIONS(QImageWriter) +/

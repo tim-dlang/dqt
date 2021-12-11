@@ -22,6 +22,7 @@ import qt.helpers;
 /+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
 #endif +/
 
+/// Binding for C++ class [QVector](https://doc.qt.io/qt-5/qvector.html).
 extern(C++, class) struct QVector(T)
 {
 private:

@@ -22,6 +22,7 @@ import qt.widgets.widget;
 /+ class QApplication; +/
 extern(C++, class) struct QDesktopWidgetPrivate;
 
+/// Binding for C++ class [QDesktopWidget](https://doc.qt.io/qt-5/qdesktopwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QDesktopWidget : QWidget
 {
     mixin(Q_OBJECT);

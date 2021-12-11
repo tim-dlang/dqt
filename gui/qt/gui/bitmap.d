@@ -30,6 +30,7 @@ import qt.helpers;
 
 /+ class QVariant; +/
 
+/// Binding for C++ class [QBitmap](https://doc.qt.io/qt-5/qbitmap.html).
 @(QMetaType.Type.QBitmap) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBitmap
 {
     public QPixmap base0;

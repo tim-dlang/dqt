@@ -28,6 +28,7 @@ version(QT_NO_ACTION){}else
 
 extern(C++, class) struct QActionGroupPrivate;
 
+/// Binding for C++ class [QActionGroup](https://doc.qt.io/qt-5/qactiongroup.html).
 class /+ Q_WIDGETS_EXPORT +/ QActionGroup : QObject
 {
     mixin(Q_OBJECT);

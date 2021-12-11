@@ -38,6 +38,7 @@ import qt.helpers;
 class QAbstractItemModel;
 class QPersistentModelIndex; +/
 
+/// Binding for C++ class [QModelIndex](https://doc.qt.io/qt-5/qmodelindex.html).
 @(QMetaType.Type.QModelIndex) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QModelIndex
 {
 private:
@@ -114,6 +115,7 @@ extern(C++, class) struct QPersistentModelIndexData;
 // qHash is a friend, but we can't use default arguments for friends (§8.3.6.4)
 /+ uint qHash(const QPersistentModelIndex &index, uint seed = 0) noexcept; +/
 
+/// Binding for C++ class [QPersistentModelIndex](https://doc.qt.io/qt-5/qpersistentmodelindex.html).
 @(QMetaType.Type.QPersistentModelIndex) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPersistentModelIndex
 {
 public:
@@ -177,6 +179,7 @@ extern(C++, class) struct QTransposeProxyModelPrivate;
 /+ template <class Key, class T> class QMap; +/
 
 
+/// Binding for C++ class [QAbstractItemModel](https://doc.qt.io/qt-5/qabstractitemmodel.html).
 class /+ Q_CORE_EXPORT +/ QAbstractItemModel : QObject
 {
     mixin(Q_OBJECT);
@@ -397,6 +400,7 @@ private:
 /+pragma(inline, true) QIncompatibleFlag operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemModel::CheckIndexOptions) +/
+/// Binding for C++ class [QAbstractTableModel](https://doc.qt.io/qt-5/qabstracttablemodel.html).
 class /+ Q_CORE_EXPORT +/ QAbstractTableModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);
@@ -423,6 +427,7 @@ protected:
     override bool hasChildren(ref const(QModelIndex) parent) const;
 }
 
+/// Binding for C++ class [QAbstractListModel](https://doc.qt.io/qt-5/qabstractlistmodel.html).
 class /+ Q_CORE_EXPORT +/ QAbstractListModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);

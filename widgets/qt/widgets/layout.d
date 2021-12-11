@@ -30,6 +30,7 @@ class QSize; +/
 
 extern(C++, class) struct QLayoutPrivate;
 
+/// Binding for C++ class [QLayout](https://doc.qt.io/qt-5/qlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QLayout : QObject, QLayoutItemInterface
 {
     QLayoutItemFakeInheritance baseQLayoutItem;

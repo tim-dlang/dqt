@@ -133,6 +133,7 @@ static if(!versionIsSet!("QT_COMPILING_QSTRING_COMPAT_CPP") && defined!"Q_COMPIL
 #    define Q_REQUIRED_RESULT_pushed +/
 }
 
+/// Binding for C++ class [QByteArray](https://doc.qt.io/qt-5/qbytearray.html).
 @(QMetaType.Type.QByteArray) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QByteArray
 {
     static import qt.core.namespace;
@@ -470,7 +471,9 @@ alias Base64Options = QFlags!(Base64Option);
 
     /+
     extern(C++, class) struct FromBase64Result;
-    +/extern(C++, class) struct FromBase64Result
+    +/
+    /// Binding for C++ class [FromBase64Result](https://doc.qt.io/qt-5/qbytearray-frombase64result.html).
+    extern(C++, class) struct FromBase64Result
     {
     public:
         QByteArray decoded;

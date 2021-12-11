@@ -47,6 +47,7 @@ extern(C++, class) struct QAbstractNativeEventFilter;
 
 /+ #define qApp QCoreApplication::instance() +/
 
+/// Binding for C++ class [QCoreApplication](https://doc.qt.io/qt-5/qcoreapplication.html).
 class /+ Q_CORE_EXPORT +/ QCoreApplication
 /+ #ifndef QT_NO_QOBJECT +/
     : QObject

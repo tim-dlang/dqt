@@ -50,6 +50,7 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSUUID);
 
 
 
+/// Binding for C++ class [QUuid](https://doc.qt.io/qt-5/quuid.html).
 @(QMetaType.Type.QUuid) @Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QUuid
 {
 private:

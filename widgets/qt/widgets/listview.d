@@ -33,6 +33,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QListViewPrivate;
 
+/// Binding for C++ class [QListView](https://doc.qt.io/qt-5/qlistview.html).
 class /+ Q_WIDGETS_EXPORT +/ QListView : QAbstractItemView
 {
     mixin(Q_OBJECT);

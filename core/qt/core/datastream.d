@@ -44,6 +44,7 @@ extern(C++, class) struct QDataStreamPrivate;
 /+ namespace QtPrivate {
 class StreamStateSaver;
 } +/
+/// Binding for C++ class [QDataStream](https://doc.qt.io/qt-5/qdatastream.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDataStream
 {
 public:

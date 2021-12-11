@@ -32,6 +32,7 @@ import qt.helpers;
 class QByteArray; +/
 extern(C++, class) struct QIODevicePrivate;
 
+/// Binding for C++ class [QIODevice](https://doc.qt.io/qt-5/qiodevice.html).
 class /+ Q_CORE_EXPORT +/ QIODevice
 /+ #ifndef QT_NO_QOBJECT +/
     : QObject

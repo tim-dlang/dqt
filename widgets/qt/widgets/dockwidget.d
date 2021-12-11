@@ -32,6 +32,7 @@ extern(C++, class) struct QDockWidgetPrivate;
 /+ class QMainWindow;
 class QStyleOptionDockWidget; +/
 
+/// Binding for C++ class [QDockWidget](https://doc.qt.io/qt-5/qdockwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QDockWidget : QWidget
 {
     mixin(Q_OBJECT);

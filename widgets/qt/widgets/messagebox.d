@@ -36,6 +36,7 @@ extern(C++, class) struct QMessageBoxPrivate;
 /+ class QAbstractButton;
 class QCheckBox; +/
 
+/// Binding for C++ class [QMessageBox](https://doc.qt.io/qt-5/qmessagebox.html).
 class /+ Q_WIDGETS_EXPORT +/ QMessageBox : QDialog
 {
     mixin(Q_OBJECT);

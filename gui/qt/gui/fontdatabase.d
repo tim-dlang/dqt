@@ -29,6 +29,7 @@ extern(C++, class) struct QFontEngine;
 
 extern(C++, class) struct QFontDatabasePrivate;
 
+/// Binding for C++ class [QFontDatabase](https://doc.qt.io/qt-5/qfontdatabase.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontDatabase
 {
     mixin(Q_GADGET);

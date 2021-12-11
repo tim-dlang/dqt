@@ -51,6 +51,7 @@ extern(C++, class) struct QPlainTextEditPrivate;
 class QPagedPaintDevice;
 class QRegularExpression; +/
 
+/// Binding for C++ class [QPlainTextEdit](https://doc.qt.io/qt-5/qplaintextedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QPlainTextEdit : QAbstractScrollArea
 {
     mixin(Q_OBJECT);
@@ -303,6 +304,7 @@ private:
 
 
 extern(C++, class) struct QPlainTextDocumentLayoutPrivate;
+/// Binding for C++ class [QPlainTextDocumentLayout](https://doc.qt.io/qt-5/qplaintextdocumentlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QPlainTextDocumentLayout : QAbstractTextDocumentLayout
 {
     mixin(Q_OBJECT);

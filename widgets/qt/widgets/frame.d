@@ -26,6 +26,7 @@ import qt.widgets.widget;
 extern(C++, class) struct QFramePrivate;
 /+ class QStyleOptionFrame; +/
 
+/// Binding for C++ class [QFrame](https://doc.qt.io/qt-5/qframe.html).
 class /+ Q_WIDGETS_EXPORT +/ QFrame : QWidget
 {
     mixin(Q_OBJECT);

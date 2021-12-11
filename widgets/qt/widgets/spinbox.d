@@ -25,6 +25,7 @@ version(QT_NO_VALIDATOR){}else
 
 
 extern(C++, class) struct QSpinBoxPrivate;
+/// Binding for C++ class [QSpinBox](https://doc.qt.io/qt-5/qspinbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QSpinBox : QAbstractSpinBox
 {
     mixin(Q_OBJECT);
@@ -95,6 +96,7 @@ private:
 }
 
 extern(C++, class) struct QDoubleSpinBoxPrivate;
+/// Binding for C++ class [QDoubleSpinBox](https://doc.qt.io/qt-5/qdoublespinbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QDoubleSpinBox : QAbstractSpinBox
 {
     mixin(Q_OBJECT);

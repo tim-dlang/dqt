@@ -30,6 +30,7 @@ struct CGRect;
 #endif +/
 
 
+/// Binding for C++ class [QRect](https://doc.qt.io/qt-5/qrect.html).
 @(QMetaType.Type.QRect) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRect
 {
 public:
@@ -377,6 +378,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QRect &);
 #endif +/
 
 
+/// Binding for C++ class [QRectF](https://doc.qt.io/qt-5/qrectf.html).
 @(QMetaType.Type.QRectF) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRectF
 {
 public:

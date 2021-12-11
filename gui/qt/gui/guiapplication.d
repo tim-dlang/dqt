@@ -53,6 +53,7 @@ class QStyleHints;
 #endif
 #define qGuiApp (static_cast<QGuiApplication *>(QCoreApplication::instance())) +/
 
+/// Binding for C++ class [QGuiApplication](https://doc.qt.io/qt-5/qguiapplication.html).
 class /+ Q_GUI_EXPORT +/ QGuiApplication : QCoreApplication
 {
     mixin(Q_OBJECT);

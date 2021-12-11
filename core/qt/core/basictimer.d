@@ -20,6 +20,7 @@ import qt.helpers;
 
 /+ class QObject; +/
 
+/// Binding for C++ class [QBasicTimer](https://doc.qt.io/qt-5/qbasictimer.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QBasicTimer
 {
 private:

@@ -44,6 +44,7 @@ template <class T> class QList;
 class QStandardItemModel; +/
 
 extern(C++, class) struct QStandardItemPrivate;
+/// Binding for C++ class [QStandardItem](https://doc.qt.io/qt-5/qstandarditem.html).
 class /+ Q_GUI_EXPORT +/ QStandardItem
 {
 public:
@@ -291,6 +292,7 @@ private:
 
 extern(C++, class) struct QStandardItemModelPrivate;
 
+/// Binding for C++ class [QStandardItemModel](https://doc.qt.io/qt-5/qstandarditemmodel.html).
 class /+ Q_GUI_EXPORT +/ QStandardItemModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);

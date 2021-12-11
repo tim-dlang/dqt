@@ -28,6 +28,7 @@ typedef QMutableListIterator<QByteArray> QMutableByteArrayListIterator;
 #endif
 
 #ifndef Q_CLANG_QDOC +/
+/// Binding for C++ class [QByteArrayList](https://doc.qt.io/qt-5/qbytearraylist.html).
 alias QByteArrayList = QList!(QByteArray);
 
 extern(C++, "QtPrivate") {
@@ -66,6 +67,7 @@ private:
 
 /+ #endif +/ // QBYTEARRAYLIST_H
 
+/// Binding for C++ class [QByteArrayList](https://doc.qt.io/qt-5/qbytearraylist.html).
 alias QByteArrayList__1 = QList!(QByteArray);
 /+ typedef QList<QByteArray> QByteArrayList; +/
 

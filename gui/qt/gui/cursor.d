@@ -34,6 +34,7 @@ class QScreen; +/
 version(QT_NO_CURSOR)
 {
 
+/// Binding for C++ class [QCursor](https://doc.qt.io/qt-5/qcursor.html).
 @(QMetaType.Type.QCursor) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QCursor
 {
 public:
@@ -65,6 +66,7 @@ extern(C++, class) struct QCursorData;
 class QPixmap; +/
 
 
+/// Binding for C++ class [QCursor](https://doc.qt.io/qt-5/qcursor.html).
 @(QMetaType.Type.QCursor) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QCursor
 {
 public:

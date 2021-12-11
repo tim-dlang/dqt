@@ -35,6 +35,7 @@ struct QRegularExpressionPrivate;
 
 Q_CORE_EXPORT uint qHash(const QRegularExpression &key, uint seed = 0) noexcept; +/
 
+/// Binding for C++ class [QRegularExpression](https://doc.qt.io/qt-5/qregularexpression.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QRegularExpression) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegularExpression
 {
 public:
@@ -192,6 +193,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug debug, QRegularExpression::PatternOptions
 
 struct QRegularExpressionMatchPrivate;
 
+/// Binding for C++ class [QRegularExpressionMatch](https://doc.qt.io/qt-5/qregularexpressionmatch.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegularExpressionMatch
 {
 public:
@@ -272,6 +274,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QRegularExpressionMatch &mat
 
 struct QRegularExpressionMatchIteratorPrivate;
 
+/// Binding for C++ class [QRegularExpressionMatchIterator](https://doc.qt.io/qt-5/qregularexpressionmatchiterator.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegularExpressionMatchIterator
 {
 public:

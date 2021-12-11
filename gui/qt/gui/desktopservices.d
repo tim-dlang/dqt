@@ -30,6 +30,7 @@ static if(!defined!"QT_NO_DESKTOPSERVICES")
 class QUrl;
 class QObject; +/
 
+/// Binding for C++ class [QDesktopServices](https://doc.qt.io/qt-5/qdesktopservices.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QDesktopServices
 {
 public:

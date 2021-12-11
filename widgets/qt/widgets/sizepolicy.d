@@ -43,6 +43,7 @@ class QSizePolicy;
 
 Q_DECL_CONST_FUNCTION inline uint qHash(QSizePolicy key, uint seed = 0) noexcept; +/
 
+/// Binding for C++ class [QSizePolicy](https://doc.qt.io/qt-5/qsizepolicy.html).
 @(QMetaType.Type.QSizePolicy) @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QSizePolicy
 {
     mixin(Q_GADGET);

@@ -30,6 +30,7 @@ class QIODevice;
 class QTextDecoder;
 class QTextEncoder; +/
 
+/// Binding for C++ class [QTextCodec](https://doc.qt.io/qt-5/qtextcodec.html).
 class /+ Q_CORE_EXPORT +/ QTextCodec
 {
 private:
@@ -123,6 +124,7 @@ private:
 /+pragma(inline, true) QFlags!(QTextCodec.ConversionFlags.enum_type) operator |(QTextCodec.ConversionFlags.enum_type f1, QFlags!(QTextCodec.ConversionFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QTextCodec.ConversionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextCodec::ConversionFlags) +/
+/// Binding for C++ class [QTextEncoder](https://doc.qt.io/qt-5/qtextencoder.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTextEncoder {
 private:
     /+ Q_DISABLE_COPY(QTextEncoder) +/
@@ -147,6 +149,7 @@ private:
     QTextCodec.ConverterState state;
 }
 
+/// Binding for C++ class [QTextDecoder](https://doc.qt.io/qt-5/qtextdecoder.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTextDecoder {
 private:
     /+ Q_DISABLE_COPY(QTextDecoder) +/

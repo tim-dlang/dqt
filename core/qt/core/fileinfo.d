@@ -28,6 +28,7 @@ extern(C++, class) struct QDirIteratorPrivate;
 /+ class QDateTime; +/
 extern(C++, class) struct QFileInfoPrivate;
 
+/// Binding for C++ class [QFileInfo](https://doc.qt.io/qt-5/qfileinfo.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QFileInfo
 {
 private:

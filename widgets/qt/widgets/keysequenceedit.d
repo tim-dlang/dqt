@@ -24,6 +24,7 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QKeySequenceEditPrivate;
+/// Binding for C++ class [QKeySequenceEdit](https://doc.qt.io/qt-5/qkeysequenceedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QKeySequenceEdit : QWidget
 {
     mixin(Q_OBJECT);

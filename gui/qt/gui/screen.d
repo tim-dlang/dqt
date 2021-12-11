@@ -35,6 +35,7 @@ class QPixmap;
 class QDebug;
 #endif +/
 
+/// Binding for C++ class [QScreen](https://doc.qt.io/qt-5/qscreen.html).
 class /+ Q_GUI_EXPORT +/ QScreen : QObject
 {
     mixin(Q_OBJECT);

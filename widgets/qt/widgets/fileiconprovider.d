@@ -22,6 +22,7 @@ import qt.helpers;
 
 extern(C++, class) struct QFileIconProviderPrivate;
 
+/// Binding for C++ class [QFileIconProvider](https://doc.qt.io/qt-5/qfileiconprovider.html).
 class /+ Q_WIDGETS_EXPORT +/ QFileIconProvider
 {
 public:

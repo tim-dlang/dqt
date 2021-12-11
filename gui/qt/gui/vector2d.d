@@ -39,6 +39,7 @@ class QVariant; +/
 version(QT_NO_VECTOR2D){}else
 {
 
+/// Binding for C++ class [QVector2D](https://doc.qt.io/qt-5/qvector2d.html).
 @(QMetaType.Type.QVector2D) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QVector2D
 {
 public:

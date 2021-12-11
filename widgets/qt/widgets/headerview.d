@@ -37,6 +37,7 @@ version(QT_NO_DATASTREAM){}else
 extern(C++, class) struct QHeaderViewPrivate;
 /+ class QStyleOptionHeader; +/
 
+/// Binding for C++ class [QHeaderView](https://doc.qt.io/qt-5/qheaderview.html).
 class /+ Q_WIDGETS_EXPORT +/ QHeaderView : QAbstractItemView
 {
     mixin(Q_OBJECT);

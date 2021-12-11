@@ -27,6 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QScrollAreaPrivate;
 
+/// Binding for C++ class [QScrollArea](https://doc.qt.io/qt-5/qscrollarea.html).
 class /+ Q_WIDGETS_EXPORT +/ QScrollArea : QAbstractScrollArea
 {
     mixin(Q_OBJECT);

@@ -31,6 +31,7 @@ class QTabBar; +/
 extern(C++, class) struct QTabWidgetPrivate;
 /+ class QStyleOptionTabWidgetFrame; +/
 
+/// Binding for C++ class [QTabWidget](https://doc.qt.io/qt-5/qtabwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QTabWidget : QWidget
 {
     mixin(Q_OBJECT);

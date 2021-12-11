@@ -44,6 +44,7 @@ class QDrag;
 class QEvent; +/
 extern(C++, class) struct QAbstractItemViewPrivate;
 
+/// Binding for C++ class [QAbstractItemView](https://doc.qt.io/qt-5/qabstractitemview.html).
 class /+ Q_WIDGETS_EXPORT +/ QAbstractItemView : QAbstractScrollArea
 {
     mixin(Q_OBJECT);

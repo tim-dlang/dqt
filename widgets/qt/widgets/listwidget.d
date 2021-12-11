@@ -45,6 +45,7 @@ class QListWidget; +/
 extern(C++, class) struct QListModel;
 extern(C++, class) struct QListWidgetItemPrivate;
 
+/// Binding for C++ class [QListWidgetItem](https://doc.qt.io/qt-5/qlistwidgetitem.html).
 class /+ Q_WIDGETS_EXPORT +/ QListWidgetItem
 {
 private:
@@ -200,6 +201,7 @@ Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &in, QListWidgetItem &item)
 
 extern(C++, class) struct QListWidgetPrivate;
 
+/// Binding for C++ class [QListWidget](https://doc.qt.io/qt-5/qlistwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QListWidget : QListView
 {
     mixin(Q_OBJECT);
