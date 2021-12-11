@@ -1,11 +1,11 @@
 module helloworld.main;
-extern(C):
 
 import qt.config;
 import qt.helpers;
 
-int main(int argc, char*/+[0]+/* argv)
+int main()
 {
+    import core.runtime;
     import core.stdcpp.new_;
     import qt.core.object;
     import qt.core.string;
@@ -15,7 +15,7 @@ int main(int argc, char*/+[0]+/* argv)
     import qt.widgets.pushbutton;
     import qt.widgets.widget;
 
-    scope a = new QApplication(argc, argv);
+    scope a = new QApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
 
     QWidget window = cpp_new!QWidget();
     window.setWindowTitle(QString("Hello World"));
