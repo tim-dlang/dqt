@@ -380,7 +380,7 @@ alias qreal = double;
 // A tag to help mark stuff deprecated (cf. QStringViewLiteral)
 extern(C++, "QtPrivate") {
 enum /+ class +/ Deprecated_t {init}
-/+ constexpr +/ /+ Q_DECL_UNUSED +/ __gshared Deprecated_t Deprecated = Deprecated_t();
+/+ Q_DECL_UNUSED +/ __gshared Deprecated_t Deprecated = Deprecated_t();
 }
 /+ #endif
 
@@ -661,13 +661,13 @@ pragma(inline, true) qint64 qRound64(double d)
 pragma(inline, true) qint64 qRound64(float d)
 { return d >= 0.0f ? cast(qint64)(d + 0.5f) : cast(qint64)(d - float(cast(qint64)(d-1)) + 0.5f) + cast(qint64)(d-1); }
 
-/+ constexpr +/ pragma(inline, true) ref const(T) qMin(T)(ref const(T) a, ref const(T) b) { return (a < b) ? a : b; }
-/+ constexpr +/ pragma(inline, true) const(T)  qMin(T)(const(T) a, const(T) b) { return (a < b) ? a : b; }
-/+ constexpr +/ pragma(inline, true) ref const(T) qMax(T)(ref const(T) a, ref const(T) b) { return (a < b) ? b : a; }
-/+ constexpr +/ pragma(inline, true) const(T)  qMax(T)(const(T) a, const(T) b) { return (a < b) ? b : a; }
-/+ constexpr +/ pragma(inline, true) ref const(T) qBound(T)(ref const(T) min, ref const(T) val, ref const(T) max)
+pragma(inline, true) ref const(T) qMin(T)(ref const(T) a, ref const(T) b) { return (a < b) ? a : b; }
+pragma(inline, true) const(T)  qMin(T)(const(T) a, const(T) b) { return (a < b) ? a : b; }
+pragma(inline, true) ref const(T) qMax(T)(ref const(T) a, ref const(T) b) { return (a < b) ? b : a; }
+pragma(inline, true) const(T)  qMax(T)(const(T) a, const(T) b) { return (a < b) ? b : a; }
+pragma(inline, true) ref const(T) qBound(T)(ref const(T) min, ref const(T) val, ref const(T) max)
 { auto tmp = qMin(max, val); return qMax(min, tmp); }
-/+ constexpr +/ pragma(inline, true) const(T)  qBound(T)(const(T)  min, const(T)  val, const(T)  max)
+pragma(inline, true) const(T)  qBound(T)(const(T)  min, const(T)  val, const(T)  max)
 { auto tmp = qMin(max, val); return qMax(min, tmp); }
 
 /+ #ifndef Q_FORWARD_DECLARE_OBJC_CLASS

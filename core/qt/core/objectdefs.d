@@ -979,34 +979,34 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     struct SuperData {
         const(QMetaObject)* direct;
         /+ SuperData() = default; +/
-        /+ constexpr +/this(typeof(null))
+        this(typeof(null))
         {
             this.direct = null;
         }
-        /+ constexpr +/this(const(QMetaObject)* mo)
+        this(const(QMetaObject)* mo)
         {
             this.direct = mo;
         }
 
-        /+/+ constexpr +/ const(QMetaObject)* operator ->() const { return operator const QMetaObject *(); }+/
+        /+const(QMetaObject)* operator ->() const { return operator const QMetaObject *(); }+/
 
         version(QT_NO_DATA_RELOCATION)
         {
             alias Getter = ExternCPPFunc!(const(QMetaObject)* function());
             Getter indirect = null;
-            /+ constexpr +/this(Getter g)
+            this(Getter g)
             {
                 this.direct = null;
                 this.indirect = g;
             }
-            /+/+ constexpr +/ auto opCast(T : const(QMetaObject))() const
-            { return indirect ? cast(const(QMetaObject))(indirect()) : cast(const(QMetaObject))(direct); }+/
+            /+auto opCast(T : const(QMetaObject))() const
+            { return indirect ? indirect() : cast(const(QMetaObject))(direct); }+/
             /+ template <const QMetaObject &MO> +/ /+ static constexpr SuperData link()
             { return SuperData(QMetaObject::staticMetaObject<MO>); } +/
         }
         else
         {
-            /+/+ constexpr +/ auto opCast(T : const(QMetaObject))() const
+            /+auto opCast(T : const(QMetaObject))() const
             { return cast(const(QMetaObject))(direct); }+/
             static SuperData link(alias MO)()
             { return SuperData(QMetaObject.staticMetaObject!(MO)()); }

@@ -38,7 +38,7 @@ public:
 
 public:
     @disable this();
-    /+/+ constexpr +/this()/+ noexcept+/
+    /+this()/+ noexcept+/
     {
         this.id = {0};
     }+/

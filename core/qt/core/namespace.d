@@ -1683,7 +1683,7 @@ alias TextInteractionFlags = QFlags!(TextInteractionFlag);
     enum /+ class +/ Initialization {
         Uninitialized
     }
-    /+ constexpr +/ /+ Q_DECL_UNUSED +/ extern(D) static __gshared Initialization Uninitialized__1 = Initialization.Uninitialized;
+    /+ Q_DECL_UNUSED +/ extern(D) static __gshared Initialization Uninitialized__1 = Initialization.Uninitialized;
 /+ #else
     enum Initialization {
         Uninitialized
