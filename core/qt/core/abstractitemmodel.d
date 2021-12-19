@@ -39,7 +39,7 @@ class QAbstractItemModel;
 class QPersistentModelIndex; +/
 
 /// Binding for C++ class [QModelIndex](https://doc.qt.io/qt-5/qmodelindex.html).
-@(QMetaType.Type.QModelIndex) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QModelIndex
+@Q_MOVABLE_TYPE @(QMetaType.Type.QModelIndex) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QModelIndex
 {
 private:
     /+ friend class QAbstractItemModel; +/
@@ -116,7 +116,7 @@ extern(C++, class) struct QPersistentModelIndexData;
 /+ uint qHash(const QPersistentModelIndex &index, uint seed = 0) noexcept; +/
 
 /// Binding for C++ class [QPersistentModelIndex](https://doc.qt.io/qt-5/qpersistentmodelindex.html).
-@(QMetaType.Type.QPersistentModelIndex) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPersistentModelIndex
+@Q_MOVABLE_TYPE @(QMetaType.Type.QPersistentModelIndex) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPersistentModelIndex
 {
 public:
 

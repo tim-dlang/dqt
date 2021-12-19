@@ -119,7 +119,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextFormat &);
 #endif +/
 
 /// Binding for C++ class [QTextFormat](https://doc.qt.io/qt-5/qtextformat.html).
-@(QMetaType.Type.QTextFormat) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFormat
+@Q_MOVABLE_TYPE @(QMetaType.Type.QTextFormat) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFormat
 {
     mixin(Q_GADGET);
 public:

@@ -34,7 +34,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
 #endif +/
 
 /// Binding for C++ class [QPen](https://doc.qt.io/qt-5/qpen.html).
-@(QMetaType.Type.QPen) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPen
+@Q_MOVABLE_TYPE @(QMetaType.Type.QPen) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPen
 {
 public:
     @disable this();

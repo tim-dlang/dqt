@@ -27,7 +27,7 @@ struct CGSize;
 
 
 /// Binding for C++ class [QSize](https://doc.qt.io/qt-5/qsize.html).
-@(QMetaType.Type.QSize) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSize
+@Q_MOVABLE_TYPE @(QMetaType.Type.QSize) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSize
 {
 public:
     /+pragma(inline, true) this()/+ noexcept+/
@@ -163,7 +163,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QSize &);
 
 
 /// Binding for C++ class [QSizeF](https://doc.qt.io/qt-5/qsizef.html).
-@(QMetaType.Type.QSizeF) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSizeF
+@Q_MOVABLE_TYPE @(QMetaType.Type.QSizeF) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSizeF
 {
 public:
     @disable this();

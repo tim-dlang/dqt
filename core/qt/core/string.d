@@ -323,7 +323,7 @@ static if(!versionIsSet!("QT_COMPILING_QSTRING_COMPAT_CPP") && defined!"Q_COMPIL
 }
 
 /// Binding for C++ class [QString](https://doc.qt.io/qt-5/qstring.html).
-@(QMetaType.Type.QString) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
+@Q_MOVABLE_TYPE @(QMetaType.Type.QString) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
 {
 public:
     static import qt.core.stringalgorithms;

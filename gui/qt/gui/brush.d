@@ -38,7 +38,7 @@ class QVariant; +/
 struct QBrushDataPointerDeleter;
 
 /// Binding for C++ class [QBrush](https://doc.qt.io/qt-5/qbrush.html).
-@(QMetaType.Type.QBrush) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBrush
+@Q_MOVABLE_TYPE @(QMetaType.Type.QBrush) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBrush
 {
 public:
     @disable this();

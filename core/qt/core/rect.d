@@ -31,7 +31,7 @@ struct CGRect;
 
 
 /// Binding for C++ class [QRect](https://doc.qt.io/qt-5/qrect.html).
-@(QMetaType.Type.QRect) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRect
+@Q_MOVABLE_TYPE @(QMetaType.Type.QRect) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRect
 {
 public:
     /+this()/+ noexcept+/
@@ -379,7 +379,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QRect &);
 
 
 /// Binding for C++ class [QRectF](https://doc.qt.io/qt-5/qrectf.html).
-@(QMetaType.Type.QRectF) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRectF
+@Q_MOVABLE_TYPE @(QMetaType.Type.QRectF) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRectF
 {
 public:
     /+this()/+ noexcept+/

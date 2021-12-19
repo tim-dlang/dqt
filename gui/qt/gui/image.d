@@ -83,7 +83,7 @@ private:
 alias QImageCleanupFunction = ExternCPPFunc!(void function(void*));
 
 /// Binding for C++ class [QImage](https://doc.qt.io/qt-5/qimage.html).
-@(QMetaType.Type.QImage) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QImage
+@Q_MOVABLE_TYPE @(QMetaType.Type.QImage) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QImage
 {
 private:
     immutable void *vtbl;

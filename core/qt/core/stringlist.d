@@ -87,7 +87,7 @@ private:
 
 // ### Qt6: check if there's a better way
 /// Binding for C++ class [QStringList](https://doc.qt.io/qt-5/qstringlist.html).
-@(QMetaType.Type.QStringList) @Q_MOVABLE_TYPE extern(C++, class) struct QStringList
+@Q_MOVABLE_TYPE @(QMetaType.Type.QStringList) extern(C++, class) struct QStringList
 {
     public QList!(QString) base0;
     alias base0 this;
