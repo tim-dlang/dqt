@@ -98,7 +98,7 @@ private /+ slots +/:
 
         QColor color = QColor.fromRgb(ui.spinBoxRed.value(), ui.spinBoxGreen.value(), ui.spinBoxBlue.value());
         QPalette palette = QPalette(color);
-        palette.setColor(QPalette.ColorRole.Background, color);
+        palette.setColor(QPalette.ColorRole.Window, color);
         ui.widgetColor.setPalette(palette);
         ui.widgetColor.update();
     }
