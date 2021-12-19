@@ -11,6 +11,10 @@
  */
 module qt.core.typeinfo;
 
+import qt.core.flags;
+import qt.core.list;
+import qt.core.pair;
+import qt.core.vector;
 import std.traits;
 import std.meta;
 
@@ -59,11 +63,36 @@ template QTypeInfo(T)
         enum isComplex = false;
         enum isStatic = false;
     }
+    else static if(is(T == void))
+    {
+        enum isRelocatable = false;
+        enum isComplex = false;
+        enum isStatic = false;
+    }
     else static if(is(T == enum))
     {
         enum isRelocatable = true;
         enum isComplex = false;
         enum isStatic = true;
+    }
+    else static if(is(T == QPair!P, P...))
+    {
+        static assert(P.length == 2);
+        enum isRelocatable = QTypeInfo!(P[0]).isRelocatable && QTypeInfo!(P[1]).isRelocatable;
+        enum isComplex = QTypeInfo!(P[0]).isComplex || QTypeInfo!(P[1]).isComplex;
+        enum isStatic = QTypeInfo!(P[0]).isStatic || QTypeInfo!(P[1]).isStatic;
+    }
+    else static if(is(T == QList!P, P...) || is(T == QVector!P, P...))
+    {
+        enum isRelocatable = true;
+        enum isComplex = true;
+        enum isStatic = false;
+    }
+    else static if(is(T == QFlags!P, P...))
+    {
+        enum isRelocatable = true;
+        enum isComplex = false;
+        enum isStatic = false;
     }
     else static if(getUDAs!(T, QTypeInfoFlags).length)
     {
