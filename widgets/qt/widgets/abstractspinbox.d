@@ -27,13 +27,11 @@ import qt.widgets.widget;
 version(QT_NO_VALIDATOR){}else
     import qt.gui.validator;
 
-/+ QT_REQUIRE_CONFIG(spinbox);
+/+ QT_REQUIRE_CONFIG(spinbox); +/
 
 
-class QLineEdit; +/
 
 extern(C++, class) struct QAbstractSpinBoxPrivate;
-/+ class QStyleOptionSpinBox; +/
 
 /// Binding for C++ class [QAbstractSpinBox](https://doc.qt.io/qt-5/qabstractspinbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QAbstractSpinBox : QWidget

@@ -38,7 +38,6 @@ QT_REQUIRE_CONFIG(menu); +/
 
 
 extern(C++, class) struct QMenuPrivate;
-/+ class QStyleOptionMenuItem; +/
 extern(C++, class) struct QPlatformMenu;
 
 /// Binding for C++ class [QMenu](https://doc.qt.io/qt-5/qmenu.html).

@@ -17,10 +17,9 @@ import qt.core.atomic;
 import qt.helpers;
 
 /+ #if QT_DEPRECATED_SINCE(5, 6)
-#endif
+#endif +/
 
 
-template <class T> class QSharedDataPointer; +/
 
 /// Binding for C++ class [QSharedData](https://doc.qt.io/qt-5/qshareddata.html).
 extern(C++, class) struct

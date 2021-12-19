@@ -25,8 +25,6 @@ import qt.gui.paintdevice;
 import qt.helpers;
 
 extern(C++, class) struct QFontPrivate;                                     /* don't touch */
-/+ class QStringList;
-class QVariant; +/
 
 /// Binding for C++ class [QFont](https://doc.qt.io/qt-5/qfont.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QFont) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFont

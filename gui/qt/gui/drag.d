@@ -20,13 +20,10 @@ import qt.core.point;
 import qt.gui.pixmap;
 import qt.helpers;
 
-/+ QT_REQUIRE_CONFIG(draganddrop);
+/+ QT_REQUIRE_CONFIG(draganddrop); +/
 
 
-class QMimeData; +/
 extern(C++, class) struct QDragPrivate;
-/+ class QPixmap;
-class QPoint; +/
 extern(C++, class) struct QDragManager;
 
 

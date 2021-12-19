@@ -44,8 +44,7 @@ version(QT_NO_SHORTCUT){}else
 
 /+ #ifndef QT_NO_GESTURES
 class QGesture;
-#endif
-class QScreen; +/
+#endif +/
 
 /// Binding for C++ class [QInputEvent](https://doc.qt.io/qt-5/qinputevent.html).
 class /+ Q_GUI_EXPORT +/ QInputEvent : QEvent
@@ -726,7 +725,6 @@ private:
 
 /+ #if QT_CONFIG(draganddrop) +/
 
-/+ class QMimeData; +/
 
 /// Binding for C++ class [QDropEvent](https://doc.qt.io/qt-5/qdropevent.html).
 class /+ Q_GUI_EXPORT +/ QDropEvent : QEvent
@@ -1222,7 +1220,6 @@ public:
 private:
     /+ Qt:: +/qt.core.namespace.ApplicationState m_applicationState;
 }
-
 version(QT_NO_INPUTMETHOD)
 {
 extern(C++, class) struct QInputMethodQueryEvent;

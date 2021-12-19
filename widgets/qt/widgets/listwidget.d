@@ -38,10 +38,9 @@ import qt.widgets.widget;
 version(QT_NO_DATASTREAM){}else
     import qt.core.datastream;
 
-/+ QT_REQUIRE_CONFIG(listwidget);
+/+ QT_REQUIRE_CONFIG(listwidget); +/
 
 
-class QListWidget; +/
 extern(C++, class) struct QListModel;
 extern(C++, class) struct QListWidgetItemPrivate;
 

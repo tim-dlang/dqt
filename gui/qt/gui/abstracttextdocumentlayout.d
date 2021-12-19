@@ -31,9 +31,6 @@ import qt.gui.textobject;
 import qt.helpers;
 
 extern(C++, class) struct QAbstractTextDocumentLayoutPrivate;
-/+ class QTextBlock;
-class QTextObjectInterface;
-class QTextFrame; +/
 
 /// Binding for C++ class [QAbstractTextDocumentLayout](https://doc.qt.io/qt-5/qabstracttextdocumentlayout.html).
 abstract class /+ Q_GUI_EXPORT +/ QAbstractTextDocumentLayout : QObject

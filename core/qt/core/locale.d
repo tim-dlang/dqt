@@ -30,14 +30,7 @@ import qt.core.stringview;
 import qt.core.typeinfo;
 import qt.helpers;
 
-/+ class QCalendar;
-class QDataStream;
-class QDate;
-class QDateTime;
-class QLocale;
-class QTime;
-class QVariant;
-class QTextStream;
+/+ class QTextStream;
 class QTextStreamPrivate; +/
 
 extern(C++, class) struct QLocalePrivate;

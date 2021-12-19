@@ -29,12 +29,6 @@ version(QT_NO_RAWFONT){}else
     import qt.gui.glyphrun;
 
 extern(C++, class) struct QTextObjectPrivate;
-/+ class QTextDocument;
-class QTextDocumentPrivate;
-class QTextCursor;
-class QTextBlock;
-class QTextFragment;
-class QTextList; +/
 
 /// Binding for C++ class [QTextObject](https://doc.qt.io/qt-5/qtextobject.html).
 class /+ Q_GUI_EXPORT +/ QTextObject : QObject
@@ -45,7 +39,7 @@ protected:
     /+ explicit +/this(QTextDocument doc);
     mixin(mangleWindows("??1QTextObject@@MEAA@XZ", q{
     public ~this();
-	}));
+    }));
 
     final void setFormat(ref const(QTextFormat) format);
 

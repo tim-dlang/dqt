@@ -26,7 +26,6 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QProgressBarPrivate;
-/+ class QStyleOptionProgressBar; +/
 
 /// Binding for C++ class [QProgressBar](https://doc.qt.io/qt-5/qprogressbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QProgressBar : QWidget

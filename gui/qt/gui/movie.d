@@ -26,16 +26,9 @@ import qt.gui.imagereader;
 import qt.gui.pixmap;
 import qt.helpers;
 
-/+ QT_REQUIRE_CONFIG(movie);
+/+ QT_REQUIRE_CONFIG(movie); +/
 
 
-class QByteArray;
-class QColor;
-class QIODevice;
-class QImage;
-class QPixmap;
-class QRect;
-class QSize; +/
 
 extern(C++, class) struct QMoviePrivate;
 /// Binding for C++ class [QMovie](https://doc.qt.io/qt-5/qmovie.html).

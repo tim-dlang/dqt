@@ -35,8 +35,6 @@ version(QT_NO_VALIDATOR){}else
 
 
 extern(C++, class) struct QDateTimeEditPrivate;
-/+ class QStyleOptionSpinBox;
-class QCalendarWidget; +/
 
 /// Binding for C++ class [QDateTimeEdit](https://doc.qt.io/qt-5/qdatetimeedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QDateTimeEdit : QAbstractSpinBox

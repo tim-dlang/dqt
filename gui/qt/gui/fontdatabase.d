@@ -22,8 +22,6 @@ import qt.gui.font;
 import qt.gui.fontinfo;
 import qt.helpers;
 
-/+ class QStringList;
-template <class T> class QList; +/
 struct QFontDef;
 extern(C++, class) struct QFontEngine;
 

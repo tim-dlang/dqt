@@ -30,16 +30,12 @@ version(QT_NO_DATASTREAM){}else
 }
 
 /+ #ifndef QT_NO_DATASTREAM
-#endif
+#endif +/
 
 
-
-template <class T> class QVector;
-class QVariant; +/
 
 struct QRegionPrivate;
 
-/+ class QBitmap; +/
 
 /// Binding for C++ class [QRegion](https://doc.qt.io/qt-5/qregion.html).
 @(QMetaType.Type.QRegion) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRegion

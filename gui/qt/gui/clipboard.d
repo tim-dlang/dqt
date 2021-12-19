@@ -26,9 +26,6 @@ version(QT_NO_CLIPBOARD){}else
 version(QT_NO_CLIPBOARD){}else
 {
 
-/+ class QMimeData;
-class QImage;
-class QPixmap; +/
 
 /// Binding for C++ class [QClipboard](https://doc.qt.io/qt-5/qclipboard.html).
 class /+ Q_GUI_EXPORT +/ QClipboard : QObject

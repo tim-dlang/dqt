@@ -23,11 +23,6 @@ import qt.widgets.widget;
 
 /+ Q_DECL_UNUSED +/ extern(D) static __gshared const(int) QLAYOUTSIZE_MAX = int.max/256/16;
 
-/+ class QLayout;
-class QLayoutItem;
-class QSpacerItem;
-class QWidget;
-class QSize; +/
 
 interface QLayoutItemInterface
 {

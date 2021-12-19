@@ -28,10 +28,9 @@ import qt.widgets.headerview;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
 
-/+ QT_REQUIRE_CONFIG(tableview);
+/+ QT_REQUIRE_CONFIG(tableview); +/
 
 
-class QHeaderView; +/
 extern(C++, class) struct QTableViewPrivate;
 
 /// Binding for C++ class [QTableView](https://doc.qt.io/qt-5/qtableview.html).

@@ -22,7 +22,6 @@ import qt.core.stringlist;
 import qt.core.typeinfo;
 import qt.helpers;
 
-/+ class QDirIterator; +/
 extern(C++, class) struct QDirPrivate;
 
 /// Binding for C++ class [QDir](https://doc.qt.io/qt-5/qdir.html).

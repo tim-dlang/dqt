@@ -28,7 +28,6 @@ import qt.helpers;
 
 
 extern(C++, class) struct QAbstractProxyModelPrivate;
-/+ class QItemSelection; +/
 
 /// Binding for C++ class [QAbstractProxyModel](https://doc.qt.io/qt-5/qabstractproxymodel.html).
 class /+ Q_CORE_EXPORT +/ QAbstractProxyModel : QAbstractItemModel

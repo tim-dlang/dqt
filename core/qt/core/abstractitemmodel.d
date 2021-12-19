@@ -31,12 +31,10 @@ import qt.core.variant;
 import qt.core.vector;
 import qt.helpers;
 
-/+ QT_REQUIRE_CONFIG(itemmodel);
+/+ QT_REQUIRE_CONFIG(itemmodel); +/
 
 
 
-class QAbstractItemModel;
-class QPersistentModelIndex; +/
 
 /// Binding for C++ class [QModelIndex](https://doc.qt.io/qt-5/qmodelindex.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QModelIndex) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QModelIndex
@@ -168,15 +166,12 @@ inline uint qHash(const QPersistentModelIndex &index, uint seed) noexcept
 
 #ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QPersistentModelIndex &);
-#endif
+#endif +/
 
-template<typename T> class QList; +/
 alias QModelIndexList = QList!(QModelIndex);
 
-/+ class QMimeData; +/
 extern(C++, class) struct QAbstractItemModelPrivate;
 extern(C++, class) struct QTransposeProxyModelPrivate;
-/+ template <class Key, class T> class QMap; +/
 
 
 /// Binding for C++ class [QAbstractItemModel](https://doc.qt.io/qt-5/qabstractitemmodel.html).

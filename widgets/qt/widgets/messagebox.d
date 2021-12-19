@@ -28,13 +28,10 @@ import qt.widgets.dialog;
 import qt.widgets.pushbutton;
 import qt.widgets.widget;
 
-/+ QT_REQUIRE_CONFIG(messagebox);
+/+ QT_REQUIRE_CONFIG(messagebox); +/
 
 
-class QLabel; +/
 extern(C++, class) struct QMessageBoxPrivate;
-/+ class QAbstractButton;
-class QCheckBox; +/
 
 /// Binding for C++ class [QMessageBox](https://doc.qt.io/qt-5/qmessagebox.html).
 class /+ Q_WIDGETS_EXPORT +/ QMessageBox : QDialog

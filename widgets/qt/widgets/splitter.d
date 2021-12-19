@@ -27,10 +27,8 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QSplitterPrivate;
-/+ class QTextStream;
-template <typename T> class QList;
+/+ class QTextStream; +/
 
-class QSplitterHandle; +/
 
 /// Binding for C++ class [QSplitter](https://doc.qt.io/qt-5/qsplitter.html).
 class /+ Q_WIDGETS_EXPORT +/ QSplitter : QFrame

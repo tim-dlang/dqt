@@ -34,7 +34,6 @@ version(QT_NO_ACTION){}else
 
 
 extern(C++, class) struct QMenuBarPrivate;
-/+ class QStyleOptionMenuItem; +/
 extern(C++, class) struct QWindowsStyle;
 extern(C++, class) struct QPlatformMenuBar;
 

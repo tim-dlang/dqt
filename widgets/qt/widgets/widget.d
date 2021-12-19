@@ -56,44 +56,20 @@ version(QT_NO_CURSOR){}else
 version(QT_NO_SHORTCUT){}else
     import qt.gui.keysequence;
 
-
 alias QWidgetList = QList!(QWidget);
 /+ #ifdef QT_INCLUDE_COMPAT
-#endif
+#endif +/
 
 
 
-class QLayout; +/
 extern(C++, class) struct QWSRegionManager;
-/+ class QStyle;
-class QVariant;
-class QWindow;class QMouseEvent;
-class QWheelEvent;
-class QHoverEvent;
-class QKeyEvent;
-class QFocusEvent;
-class QPaintEvent;
-class QMoveEvent;
-class QResizeEvent;
-class QCloseEvent;
-class QTabletEvent;
-class QDragEnterEvent;
-class QDragMoveEvent;
-class QDragLeaveEvent;
-class QDropEvent;
-class QScreen;
-class QShowEvent;
-class QHideEvent;
-class QIcon; +/
 extern(C++, class) struct QBackingStore;
 extern(C++, class) struct QPlatformWindow;
-/+ class QLocale; +/
 extern(C++, class) struct QGraphicsProxyWidget;
 extern(C++, class) struct QGraphicsEffect;
 extern(C++, class) struct QRasterWindowSurface;
 extern(C++, class) struct QUnifiedToolbarSurface;
-/+ class QPixmap;
-#ifndef QT_NO_DEBUG_STREAM
+/+ #ifndef QT_NO_DEBUG_STREAM
 class QDebug;
 #endif +/
 

@@ -24,8 +24,6 @@ import qt.widgets.layoutitem;
 import qt.widgets.sizepolicy;
 import qt.widgets.widget;
 
-/+ class QLayout;
-class QSize; +/
 
 
 extern(C++, class) struct QLayoutPrivate;

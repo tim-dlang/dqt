@@ -40,16 +40,10 @@ import qt.widgets.widget;
 version(QT_NO_CONTEXTMENU){}else
     import qt.widgets.menu;
 
-/+ QT_REQUIRE_CONFIG(textedit);
+/+ QT_REQUIRE_CONFIG(textedit); +/
 
 
-class QStyleSheet;
-class QTextDocument;
-class QMenu; +/
 extern(C++, class) struct QPlainTextEditPrivate;
-/+ class QMimeData;
-class QPagedPaintDevice;
-class QRegularExpression; +/
 
 /// Binding for C++ class [QPlainTextEdit](https://doc.qt.io/qt-5/qplaintextedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QPlainTextEdit : QAbstractScrollArea

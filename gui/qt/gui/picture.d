@@ -119,8 +119,6 @@ public:
 
 static if(!defined!"QT_NO_PICTUREIO")
 {
-/+ class QIODevice;
-class QPictureIO; +/
 alias picture_io_handler = ExternCPPFunc!(void function(QPictureIO* )); // picture IO handler
 
 struct QPictureIOData;

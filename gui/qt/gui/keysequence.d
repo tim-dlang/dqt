@@ -27,21 +27,19 @@ version(QT_NO_SHORTCUT){}else
 version(QT_NO_SHORTCUT){}else
 {
 
-/+ class QKeySequence;
 
 /*****************************************************************************
   QKeySequence stream functions
  *****************************************************************************/
-#if !defined(QT_NO_DATASTREAM) || defined(Q_CLANG_QDOC)
+/+ #if !defined(QT_NO_DATASTREAM) || defined(Q_CLANG_QDOC)
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QKeySequence &ks);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &out, QKeySequence &ks);
 #endif
 
 #if defined(Q_CLANG_QDOC)
 void qt_set_sequence_auto_mnemonic(bool b);
-#endif
+#endif +/
 
-class QVariant; +/
 extern(C++, class) struct QKeySequencePrivate;
 
 /+ Q_GUI_EXPORT Q_DECL_PURE_FUNCTION uint qHash(const QKeySequence &key, uint seed = 0) noexcept; +/

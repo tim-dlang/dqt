@@ -29,7 +29,6 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QCheckBoxPrivate;
-/+ class QStyleOptionButton; +/
 
 /// Binding for C++ class [QCheckBox](https://doc.qt.io/qt-5/qcheckbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QCheckBox : QAbstractButton

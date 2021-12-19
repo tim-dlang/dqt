@@ -39,11 +39,8 @@ extern(C++, class) struct QSessionManager;
 extern(C++, class) struct QGuiApplicationPrivate;
 extern(C++, class) struct QPlatformNativeInterface;
 extern(C++, class) struct QPlatformIntegration;
-/+ class QPalette;
-class QScreen;
-class QStyleHints;
 
-#if defined(qApp)
+/+ #if defined(qApp)
 #undef qApp
 #endif
 #define qApp (static_cast<QGuiApplication *>(QCoreApplication::instance()))

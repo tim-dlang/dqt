@@ -26,11 +26,6 @@ import qt.gui.image;
 import qt.gui.imageiohandler;
 import qt.helpers;
 
-/+ class QColor;
-class QIODevice;
-class QRect;
-class QSize;
-class QStringList; +/
 
 extern(C++, class) struct QImageReaderPrivate;
 /// Binding for C++ class [QImageReader](https://doc.qt.io/qt-5/qimagereader.html).

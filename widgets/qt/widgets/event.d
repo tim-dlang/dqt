@@ -35,7 +35,6 @@ public:
     pragma(inline, true) final QAction before() const { return cast(QAction)bef; }
 }
 }
-
 version(QT_NO_ACTION)
 {
 class QActionEvent;

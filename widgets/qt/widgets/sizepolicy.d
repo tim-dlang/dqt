@@ -38,8 +38,6 @@ import qt.helpers;
 # define QT_SIZEPOLICY_CONSTEXPR_AND_UNIFORM_INIT
 #endif
 
-class QVariant;
-class QSizePolicy;
 
 Q_DECL_CONST_FUNCTION inline uint qHash(QSizePolicy key, uint seed = 0) noexcept; +/
 

@@ -36,7 +36,6 @@ import qt.widgets.fileiconprovider;
 
 extern(C++, class) struct ExtendedInformation;
 extern(C++, class) struct QFileSystemModelPrivate;
-/+ class QFileIconProvider; +/
 
 /// Binding for C++ class [QFileSystemModel](https://doc.qt.io/qt-5/qfilesystemmodel.html).
 class /+ Q_WIDGETS_EXPORT +/ QFileSystemModel : QAbstractItemModel

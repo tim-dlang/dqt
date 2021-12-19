@@ -34,11 +34,6 @@ version(QT_NO_ACTION){}else
 
 extern(C++, class) struct QToolBarPrivate;
 
-/+ class QAction;
-class QIcon;
-class QMainWindow;
-class QStyleOptionToolBar; +/
-
 /// Binding for C++ class [QToolBar](https://doc.qt.io/qt-5/qtoolbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QToolBar : QWidget
 {

@@ -22,18 +22,12 @@ import qt.core.stringview;
 import qt.core.typeinfo;
 import qt.helpers;
 
-/+ QT_REQUIRE_CONFIG(regularexpression);
+/+ QT_REQUIRE_CONFIG(regularexpression); +/
 
 
-class QStringList;
-class QLatin1String;
-
-class QRegularExpressionMatch;
-class QRegularExpressionMatchIterator; +/
 struct QRegularExpressionPrivate;
-/+ class QRegularExpression;
 
-Q_CORE_EXPORT uint qHash(const QRegularExpression &key, uint seed = 0) noexcept; +/
+/+ Q_CORE_EXPORT uint qHash(const QRegularExpression &key, uint seed = 0) noexcept; +/
 
 /// Binding for C++ class [QRegularExpression](https://doc.qt.io/qt-5/qregularexpression.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QRegularExpression) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegularExpression

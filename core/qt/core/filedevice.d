@@ -21,7 +21,6 @@ import qt.core.object;
 import qt.core.string;
 import qt.helpers;
 
-/+ class QDateTime; +/
 extern(C++, class) struct QFileDevicePrivate;
 
 /// Binding for C++ class [QFileDevice](https://doc.qt.io/qt-5/qfiledevice.html).

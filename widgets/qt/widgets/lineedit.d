@@ -33,16 +33,9 @@ version(QT_NO_CONTEXTMENU){}else
 version(QT_NO_VALIDATOR){}else
     import qt.gui.validator;
 
-/+ QT_REQUIRE_CONFIG(lineedit);
+/+ QT_REQUIRE_CONFIG(lineedit); +/
 
-class QMenu; +/
 extern(C++, class) struct QLineEditPrivate;
-/+ class QCompleter;
-class QStyleOptionFrame;
-class QAbstractSpinBox;
-class QDateTimeEdit;
-class QIcon;
-class QToolButton; +/
 
 /// Binding for C++ class [QLineEdit](https://doc.qt.io/qt-5/qlineedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QLineEdit : QWidget

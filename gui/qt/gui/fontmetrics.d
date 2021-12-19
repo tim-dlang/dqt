@@ -26,13 +26,11 @@ import qt.gui.paintdevice;
 import qt.helpers;
 
 /+ #ifndef QT_INCLUDE_COMPAT
-#endif
+#endif +/
 
 
 
 
-class QTextCodec;
-class QRect; +/
 
 
 /// Binding for C++ class [QFontMetrics](https://doc.qt.io/qt-5/qfontmetrics.html).

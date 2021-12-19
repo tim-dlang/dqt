@@ -19,7 +19,6 @@ import qt.gui.paintengine;
 import qt.gui.painter;
 import qt.helpers;
 
-/+ class QPaintEngine; +/
 extern(C++, class) struct QPaintDevicePrivate;
 
 interface QPaintDeviceInterface

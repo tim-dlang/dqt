@@ -23,10 +23,6 @@ import qt.gui.textdocumentfragment;
 import qt.helpers;
 
 extern(C++, class) struct QTextDocumentWriterPrivate;
-/+ class QIODevice;
-class QByteArray;
-class QTextDocument;
-class QTextDocumentFragment; +/
 
 /// Binding for C++ class [QTextDocumentWriter](https://doc.qt.io/qt-5/qtextdocumentwriter.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextDocumentWriter

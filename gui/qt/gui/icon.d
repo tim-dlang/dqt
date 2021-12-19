@@ -30,7 +30,6 @@ import qt.helpers;
 
 extern(C++, class) struct QIconPrivate;
 extern(C++, class) struct QIconEngine;
-/+ class QPainter; +/
 
 /// Binding for C++ class [QIcon](https://doc.qt.io/qt-5/qicon.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QIcon) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QIcon

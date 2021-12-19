@@ -27,12 +27,10 @@ import qt.helpers;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
 
-/+ QT_REQUIRE_CONFIG(tabbar);
+/+ QT_REQUIRE_CONFIG(tabbar); +/
 
 
-class QIcon; +/
 extern(C++, class) struct QTabBarPrivate;
-/+ class QStyleOptionTab; +/
 
 /// Binding for C++ class [QTabBar](https://doc.qt.io/qt-5/qtabbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QTabBar: QWidget

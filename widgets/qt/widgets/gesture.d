@@ -253,7 +253,6 @@ public:
     /+ friend class QTapAndHoldGestureRecognizer; +/
 }
 
-/+ class QGesture; +/
 extern(C++, class) struct QGestureEventPrivate;
 /+
 /// Binding for C++ class [QGestureEvent](https://doc.qt.io/qt-5/qgestureevent.html).

@@ -19,8 +19,6 @@ import qt.gui.rgb;
 import qt.gui.rgba64;
 import qt.helpers;
 
-/+ class QColor;
-class QRgba64; +/
 extern(C++, class) struct QColorSpacePrivate;
 extern(C++, class) struct QColorTransformPrivate;
 

@@ -32,9 +32,6 @@ version(QT_NO_VECTOR2D)
 {
 extern(C++, class) struct QVector2D;
 }
-/+ class QVector3D;
-class QVector4D;
-class QVariant; +/
 
 version(QT_NO_VECTOR2D){}else
 {

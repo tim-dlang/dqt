@@ -19,6 +19,8 @@ import qt.core.list;
 import qt.core.typeinfo;
 import qt.helpers;
 
+
+
 /+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0)
 #endif +/
 
@@ -1106,4 +1108,6 @@ QT_END_INCLUDE_NAMESPACE
 extern template class Q_CORE_EXPORT QVector<QPointF>;
 extern template class Q_CORE_EXPORT QVector<QPoint>;
 #endif +/
+
+
 

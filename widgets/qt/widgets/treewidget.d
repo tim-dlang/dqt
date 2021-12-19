@@ -40,11 +40,9 @@ import qt.widgets.widgetitemdata;
 version(QT_NO_DATASTREAM){}else
     import qt.core.datastream;
 
-/+ QT_REQUIRE_CONFIG(treewidget);
+/+ QT_REQUIRE_CONFIG(treewidget); +/
 
 
-class QTreeWidget;
-class QTreeModel; +/
 extern(C++, class) struct QTreeWidgetItemPrivate;
 
 /// Binding for C++ class [QTreeWidgetItem](https://doc.qt.io/qt-5/qtreewidgetitem.html).

@@ -29,11 +29,9 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSDate);
 #endif
 
 
-class QCalendar;
 #if QT_CONFIG(timezone)
 class QTimeZone;
-#endif
-class QDateTime; +/
+#endif +/
 
 /// Binding for C++ class [QDate](https://doc.qt.io/qt-5/qdate.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QDate) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDate // ### Qt 6: change to be used by value, not const &

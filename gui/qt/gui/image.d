@@ -43,19 +43,10 @@ import qt.helpers;
 
 #if defined(Q_OS_DARWIN) || defined(Q_QDOC)
 Q_FORWARD_DECLARE_MUTABLE_CG_TYPE(CGImage);
-#endif
+#endif +/
 
 
 
-class QColorSpace;
-class QColorTransform;
-class QIODevice;
-class QMatrix;
-class QStringList;
-class QTransform;
-class QVariant;
-template <class T> class QList;
-template <class T> class QVector; +/
 
 struct QImageData;
 extern(C++, class) struct QImageDataMisc; // internal

@@ -36,12 +36,10 @@ version(QT_NO_DATASTREAM){}else
 /+ #ifndef QT_NO_DATASTREAM
 #endif
 
-QT_REQUIRE_CONFIG(standarditemmodel);
+QT_REQUIRE_CONFIG(standarditemmodel); +/
 
 
-template <class T> class QList;
 
-class QStandardItemModel; +/
 
 extern(C++, class) struct QStandardItemPrivate;
 /// Binding for C++ class [QStandardItem](https://doc.qt.io/qt-5/qstandarditem.html).

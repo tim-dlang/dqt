@@ -18,11 +18,9 @@ import qt.core.object;
 import qt.helpers;
 import qt.widgets.abstractbutton;
 
-/+ QT_REQUIRE_CONFIG(buttongroup);
+/+ QT_REQUIRE_CONFIG(buttongroup); +/
 
 
-class QAbstractButton;
-class QAbstractButtonPrivate; +/
 extern(C++, class) struct QButtonGroupPrivate;
 
 /// Binding for C++ class [QButtonGroup](https://doc.qt.io/qt-5/qbuttongroup.html).

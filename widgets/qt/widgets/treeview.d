@@ -31,13 +31,11 @@ import qt.widgets.headerview;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
 
-/+ class tst_QTreeView;
 
-QT_REQUIRE_CONFIG(treeview); +/
+/+ QT_REQUIRE_CONFIG(treeview); +/
 
 
 extern(C++, class) struct QTreeViewPrivate;
-/+ class QHeaderView; +/
 
 /// Binding for C++ class [QTreeView](https://doc.qt.io/qt-5/qtreeview.html).
 class /+ Q_WIDGETS_EXPORT +/ QTreeView : QAbstractItemView

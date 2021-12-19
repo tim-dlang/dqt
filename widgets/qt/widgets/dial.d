@@ -26,7 +26,6 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QDialPrivate;
-/+ class QStyleOptionSlider; +/
 
 /// Binding for C++ class [QDial](https://doc.qt.io/qt-5/qdial.html).
 class /+ Q_WIDGETS_EXPORT +/ QDial: QAbstractSlider

@@ -26,8 +26,6 @@ import qt.widgets.widget;
 
 /+ #if QT_CONFIG(scrollarea) +/
 
-/+ class QMargins;
-class QScrollBar; +/
 extern(C++, class) struct QAbstractScrollAreaPrivate;
 
 /// Binding for C++ class [QAbstractScrollArea](https://doc.qt.io/qt-5/qabstractscrollarea.html).

@@ -37,26 +37,7 @@ import qt.helpers;
 version(QT_NO_PRINTER){}else
     import qt.gui.pagedpaintdevice;
 
-
 extern(C++, class) struct QTextDocumentPrivate;
-extern(C++, class) struct QTextFormatCollection;
-/+ class QTextListFormat;
-class QRect;
-class QPainter;
-class QPagedPaintDevice;
-class QAbstractTextDocumentLayout;
-class QPoint;
-class QTextObject;
-class QTextFormat;
-class QTextFrame;
-class QTextBlock;
-class QTextCodec;
-class QVariant;
-class QRectF;
-class QTextOption;
-class QTextCursor;
-
-template<typename T> class QVector; +/
 
 extern(C++, "Qt")
 {
@@ -76,7 +57,6 @@ public:
     /+ virtual +/ abstract void redo();
 }
 
-/+ class QTextDocumentPrivate; +/
 
 /// Binding for C++ class [QTextDocument](https://doc.qt.io/qt-5/qtextdocument.html).
 class /+ Q_GUI_EXPORT +/ QTextDocument : QObject

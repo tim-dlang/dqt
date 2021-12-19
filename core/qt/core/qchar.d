@@ -20,7 +20,6 @@ import qt.core.string;
 import qt.core.typeinfo;
 import qt.helpers;
 
-/+ class QString; +/
 
 struct QLatin1Char
 {

@@ -36,12 +36,9 @@ import qt.widgets.widget;
 extern(C++, class) struct tst_QAbstractItemView;
 extern(C++, class) struct tst_QTreeView;
 
-/+ QT_REQUIRE_CONFIG(itemviews);
+/+ QT_REQUIRE_CONFIG(itemviews); +/
 
 
-class QMenu;
-class QDrag;
-class QEvent; +/
 extern(C++, class) struct QAbstractItemViewPrivate;
 
 /// Binding for C++ class [QAbstractItemView](https://doc.qt.io/qt-5/qabstractitemview.html).

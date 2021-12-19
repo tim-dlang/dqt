@@ -28,14 +28,9 @@ import qt.widgets.abstractitemview;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
 
-/+ QT_REQUIRE_CONFIG(itemviews);
+/+ QT_REQUIRE_CONFIG(itemviews); +/
 
 
-class QPainter;
-class QModelIndex;
-class QAbstractItemModel;
-class QAbstractItemView;
-class QHelpEvent; +/
 extern(C++, class) struct QAbstractItemDelegatePrivate;
 
 /// Binding for C++ class [QAbstractItemDelegate](https://doc.qt.io/qt-5/qabstractitemdelegate.html).

@@ -25,19 +25,19 @@ import qt.helpers;
 version(QT_NO_REGEXP){}else
     import qt.core.regexp;
 
+version(QT_NO_REGEXP){}else
+{
+}
+
 /+ #ifndef QSTRINGLIST_H +/
 /+ #define QSTRINGLIST_H
 
-
-class QRegExp;
-class QRegularExpression;
 
 #if !defined(QT_NO_JAVA_STYLE_ITERATORS)
 typedef QListIterator<QString> QStringListIterator;
 typedef QMutableListIterator<QString> QMutableStringListIterator;
 #endif
 
-class QStringList;
 
 #ifdef Q_QDOC
 class QStringList : public QList<QString>
@@ -285,4 +285,8 @@ version(QT_NO_REGEXP){}else
 
 
 /+ #endif +/ // QSTRINGLIST_H
+static if(!defined!"QT_NO_DESKTOPSERVICES")
+{
+
+}
 

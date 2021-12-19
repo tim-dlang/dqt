@@ -47,22 +47,11 @@ version(QT_NO_RAWFONT){}else
     import qt.gui.glyphrun;
 
 /+ #ifndef QT_INCLUDE_COMPAT
-#endif
+#endif +/
 
 
 
-class QBrush;
-class QFontInfo;
-class QFontMetrics;
-class QPaintDevice;
-class QPainterPath; +/
 extern(C++, class) struct QPainterPrivate;
-/+ class QPen;
-class QPolygon;
-class QTextItem; +/
-extern(C++, class) struct QTextEngine;
-/+ class QTransform;
-class QStaticText; +/
 
 extern(C++, class) struct QPainterPrivateDeleter;
 

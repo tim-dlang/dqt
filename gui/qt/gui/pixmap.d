@@ -39,10 +39,6 @@ import qt.gui.transform;
 import qt.gui.windowdefs;
 import qt.helpers;
 
-/+ class QImageWriter;
-class QImageReader;
-class QColor;
-class QVariant; +/
 extern(C++, class) struct QPlatformPixmap;
 
 /// Binding for C++ class [QPixmap](https://doc.qt.io/qt-5/qpixmap.html).

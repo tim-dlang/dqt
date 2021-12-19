@@ -25,18 +25,7 @@ import qt.gui.textobject;
 import qt.gui.texttable;
 import qt.helpers;
 
-/+ class QTextDocument; +/
 extern(C++, class) struct QTextCursorPrivate;
-/+ class QTextDocumentFragment;
-class QTextCharFormat;
-class QTextBlockFormat;
-class QTextListFormat;
-class QTextTableFormat;
-class QTextFrameFormat;
-class QTextImageFormat;class QTextList;
-class QTextTable;
-class QTextFrame;
-class QTextBlock; +/
 
 /// Binding for C++ class [QTextCursor](https://doc.qt.io/qt-5/qtextcursor.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextCursor

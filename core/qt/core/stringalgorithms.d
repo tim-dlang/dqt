@@ -23,14 +23,9 @@ import qt.helpers;
 
 /+ #if 0
 #pragma qt_class(QStringAlgorithms)
-#endif
+#endif +/
 
 
-class QByteArray;
-class QLatin1String;
-class QStringView;
-class QChar;
-template <typename T> class QVector; +/
 
 extern(C++, "QtPrivate") {
 

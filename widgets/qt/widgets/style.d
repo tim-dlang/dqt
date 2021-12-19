@@ -31,13 +31,8 @@ import qt.widgets.sizepolicy;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
 
-/+ class QAction;
-class QDebug; +/
+/+ class QDebug; +/
 extern(C++, class) struct QTab;
-/+ class QFontMetrics;
-class QStyleHintReturn;
-class QStyleOption;
-class QStyleOptionComplex; +/
 extern(C++, class) struct QStylePrivate;
 
 /// Binding for C++ class [QStyle](https://doc.qt.io/qt-5/qstyle.html).

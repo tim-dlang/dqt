@@ -68,7 +68,6 @@ struct QScopedPointerObjectDeleteLater(T) if(is(T : QObject))
     pragma(inline, true) static void cleanup(T pointer) { if (pointer) pointer.deleteLater(); }
 }
 
-/+ class QObject; +/
 alias QScopedPointerDeleteLater = QScopedPointerObjectDeleteLater!(QObject);
 /+ #endif +/
 

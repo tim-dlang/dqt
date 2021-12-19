@@ -121,9 +121,8 @@ public:
 private:
     QPersistentModelIndex tl; QPersistentModelIndex br;
 }
-/+ Q_DECLARE_TYPEINFO(QItemSelectionRange, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QItemSelectionRange, Q_MOVABLE_TYPE); +/
 
-class QItemSelection; +/
 extern(C++, class) struct QItemSelectionModelPrivate;
 
 /// Binding for C++ class [QItemSelectionModel](https://doc.qt.io/qt-5/qitemselectionmodel.html).

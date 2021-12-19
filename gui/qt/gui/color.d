@@ -24,11 +24,9 @@ import qt.gui.rgb;
 import qt.gui.rgba64;
 import qt.helpers;
 
-/+ class QColor; +/
 extern(C++, class) struct QColormap;
-/+ class QVariant;
 
-#ifndef QT_NO_DEBUG_STREAM
+/+ #ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QColor &);
 #endif
 #ifndef QT_NO_DATASTREAM

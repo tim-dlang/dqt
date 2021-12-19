@@ -24,7 +24,6 @@ import qt.gui.color;
 import qt.helpers;
 
 extern(C++, class) struct QPalettePrivate;
-/+ class QVariant; +/
 
 /// Binding for C++ class [QPalette](https://doc.qt.io/qt-5/qpalette.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QPalette) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPalette

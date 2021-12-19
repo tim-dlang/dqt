@@ -58,37 +58,14 @@ namespace std { template<typename...> struct variant; }
 
 
 
-class QBitArray;
-class QDataStream;
-class QDate;
-class QDateTime;
 #if QT_CONFIG(easingcurve)
 class QEasingCurve;
 #endif
-class QLine;
-class QLineF;
-class QLocale;
-class QMatrix;
-class QTransform;
-class QStringList;
-class QTime;
-class QPoint;
-class QPointF;
-class QSize;
-class QSizeF;
-class QRect;
-class QRectF;
 #ifndef QT_NO_REGEXP
-class QRegExp;
 #endif // QT_NO_REGEXP
 #if QT_CONFIG(regularexpression)
 class QRegularExpression;
-#endif // QT_CONFIG(regularexpression)
-class QTextFormat;
-class QTextLength;
-class QUrl;
-class QVariant;
-class QVariantComparisonHelper; +/
+#endif +/ // QT_CONFIG(regularexpression)
 
 version(QT_MOC)
 {

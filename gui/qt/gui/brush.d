@@ -31,10 +31,6 @@ import qt.gui.pixmap;
 import qt.gui.transform;
 import qt.helpers;
 
-/+ struct QBrushData;
-class QPixmap;
-class QGradient;
-class QVariant; +/
 struct QBrushDataPointerDeleter;
 
 /// Binding for C++ class [QBrush](https://doc.qt.io/qt-5/qbrush.html).

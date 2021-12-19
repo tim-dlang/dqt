@@ -20,10 +20,8 @@ import qt.helpers;
 version(QT_NO_TEXTHTMLPARSER){}else
     import qt.core.bytearray;
 
-/+ class QTextStream;
-class QTextDocument; +/
+/+ class QTextStream; +/
 extern(C++, class) struct QTextDocumentFragmentPrivate;
-/+ class QTextCursor; +/
 
 /// Binding for C++ class [QTextDocumentFragment](https://doc.qt.io/qt-5/qtextdocumentfragment.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextDocumentFragment

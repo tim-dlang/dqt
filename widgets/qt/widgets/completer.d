@@ -28,9 +28,6 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QCompleterPrivate;
-/+ class QAbstractItemView;
-class QAbstractProxyModel;
-class QWidget; +/
 
 /// Binding for C++ class [QCompleter](https://doc.qt.io/qt-5/qcompleter.html).
 class /+ Q_WIDGETS_EXPORT +/ QCompleter : QObject

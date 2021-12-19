@@ -23,9 +23,7 @@ import qt.core.string;
 import qt.core.typeinfo;
 import qt.helpers;
 
-/+ class QDir; +/
 extern(C++, class) struct QDirIteratorPrivate;
-/+ class QDateTime; +/
 extern(C++, class) struct QFileInfoPrivate;
 
 /// Binding for C++ class [QFileInfo](https://doc.qt.io/qt-5/qfileinfo.html).

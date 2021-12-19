@@ -30,9 +30,6 @@ import qt.helpers;
 #endif
 
 
-class QString;
-class QStringRef;
-class QRegularExpression;
 
 namespace QtPrivate {
 template <typename Char>

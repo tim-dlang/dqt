@@ -29,14 +29,10 @@ import qt.gui.region;
 import qt.gui.transform;
 import qt.helpers;
 
-/+ class QFont; +/
 extern(C++, class) struct QPainterPathPrivate;
 struct QPainterPathPrivateDeleter;
 extern(C++, class) struct QPainterPathData;
 extern(C++, class) struct QPainterPathStrokerPrivate;
-/+ class QPen;
-class QPolygonF;
-class QRegion; +/
 extern(C++, class) struct QVectorPath;
 
 /// Binding for C++ class [QPainterPath](https://doc.qt.io/qt-5/qpainterpath.html).

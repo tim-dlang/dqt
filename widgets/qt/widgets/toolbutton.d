@@ -31,8 +31,6 @@ version(QT_NO_ACTION){}else
 
 
 extern(C++, class) struct QToolButtonPrivate;
-/+ class QMenu;
-class QStyleOptionToolButton; +/
 
 /// Binding for C++ class [QToolButton](https://doc.qt.io/qt-5/qtoolbutton.html).
 class /+ Q_WIDGETS_EXPORT +/ QToolButton : QAbstractButton

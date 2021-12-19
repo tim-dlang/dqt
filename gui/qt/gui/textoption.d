@@ -20,7 +20,6 @@ import qt.core.namespace;
 import qt.core.qchar;
 import qt.helpers;
 
-/+ template <typename T> class QList; +/
 struct QTextOptionPrivate;
 
 /// Binding for C++ class [QTextOption](https://doc.qt.io/qt-5/qtextoption.html).

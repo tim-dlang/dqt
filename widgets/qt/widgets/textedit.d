@@ -42,12 +42,7 @@ version(QT_NO_CONTEXTMENU){}else
 
 
 extern(C++, class) struct QStyleSheet;
-/+ class QTextDocument;
-class QMenu; +/
 extern(C++, class) struct QTextEditPrivate;
-/+ class QMimeData;
-class QPagedPaintDevice;
-class QRegularExpression; +/
 
 /// Binding for C++ class [QTextEdit](https://doc.qt.io/qt-5/qtextedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QTextEdit : QAbstractScrollArea

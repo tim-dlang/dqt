@@ -369,7 +369,6 @@ protected:
     int id;
 }
 
-/+ class QObject; +/
 
 /// Binding for C++ class [QChildEvent](https://doc.qt.io/qt-5/qchildevent.html).
 class /+ Q_CORE_EXPORT +/ QChildEvent : QEvent

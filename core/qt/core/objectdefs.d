@@ -31,10 +31,7 @@ version(QT_NO_TRANSLATION){}else
 
 
 
-class QByteArray;
-struct QArrayData;
 
-class QString;
 #ifndef Q_MOC_OUTPUT_REVISION
 #define Q_MOC_OUTPUT_REVISION 67
 #endif
@@ -635,13 +632,8 @@ extern(D) alias SIGNAL = function string(string a)
 /+ #endif // QT_NO_META_MACROS
 
 #define Q_ARG(type, data) QArgument<type >(#type, data)
-#define Q_RETURN_ARG(type, data) QReturnArgument<type >(#type, data)
+#define Q_RETURN_ARG(type, data) QReturnArgument<type >(#type, data) +/
 
-class QObject;
-class QMetaMethod;
-class QMetaEnum;
-class QMetaProperty;
-class QMetaClassInfo; +/
 
 
 /// Binding for C++ class [QGenericArgument](https://doc.qt.io/qt-5/qgenericargument.html).

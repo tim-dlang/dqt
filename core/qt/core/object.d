@@ -39,22 +39,13 @@ version(QT_NO_PROPERTIES){}else
 /+ #ifdef QT_INCLUDE_COMPAT
 #endif
 #if __has_include(<chrono>)
-#endif
+#endif +/
 
 
 
-class QEvent;
-class QTimerEvent;
-class QChildEvent;
-struct QMetaObject;
-class QVariant; +/
 extern(C++, class) struct QObjectPrivate;
-/+ class QObject;
-class QThread;
-class QWidget; +/
 extern(C++, class) struct QAccessibleWidget;
 /+ #ifndef QT_NO_REGEXP
-class QRegExp;
 #endif
 #if QT_CONFIG(regularexpression)
 class QRegularExpression;

@@ -35,15 +35,10 @@ version(QT_NO_CONTEXTMENU){}else
 /+ #if QT_CONFIG(tabwidget)
 #endif
 
-QT_REQUIRE_CONFIG(mainwindow);
+QT_REQUIRE_CONFIG(mainwindow); +/
 
 
-class QDockWidget; +/
 extern(C++, class) struct QMainWindowPrivate;
-/+ class QMenuBar;
-class QStatusBar;
-class QToolBar;
-class QMenu; +/
 
 /// Binding for C++ class [QMainWindow](https://doc.qt.io/qt-5/qmainwindow.html).
 class /+ Q_WIDGETS_EXPORT +/ QMainWindow : QWidget

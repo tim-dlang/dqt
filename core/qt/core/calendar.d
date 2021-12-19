@@ -56,7 +56,6 @@ import qt.helpers;
 
 
 extern(C++, class) struct QCalendarBackend;
-/+ class QDate; +/
 
 /// Binding for C++ class [QCalendar](https://doc.qt.io/qt-5/qcalendar.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QCalendar

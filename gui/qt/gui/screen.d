@@ -28,10 +28,7 @@ import qt.helpers;
 
 extern(C++, class) struct QPlatformScreen;
 extern(C++, class) struct QScreenPrivate;
-/+ class QWindow;
-class QRect;
-class QPixmap;
-#ifndef QT_NO_DEBUG_STREAM
+/+ #ifndef QT_NO_DEBUG_STREAM
 class QDebug;
 #endif +/
 

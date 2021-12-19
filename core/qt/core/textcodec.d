@@ -21,14 +21,10 @@ import qt.core.string;
 import qt.core.stringview;
 import qt.helpers;
 
-/+ QT_REQUIRE_CONFIG(textcodec);
+/+ QT_REQUIRE_CONFIG(textcodec); +/
 
 
-class QTextCodec;
-class QIODevice;
 
-class QTextDecoder;
-class QTextEncoder; +/
 
 /// Binding for C++ class [QTextCodec](https://doc.qt.io/qt-5/qtextcodec.html).
 class /+ Q_CORE_EXPORT +/ QTextCodec

@@ -21,11 +21,10 @@ import qt.gui.event;
 import qt.helpers;
 import qt.widgets.widget;
 
-/+ QT_REQUIRE_CONFIG(dialog);
+/+ QT_REQUIRE_CONFIG(dialog); +/
 
 
 
-class QPushButton; +/
 extern(C++, class) struct QDialogPrivate;
 
 /// Binding for C++ class [QDialog](https://doc.qt.io/qt-5/qdialog.html).

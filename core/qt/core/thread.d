@@ -36,7 +36,6 @@ import qt.helpers;
 
 extern(C++, class) struct QThreadData;
 extern(C++, class) struct QThreadPrivate;
-/+ class QAbstractEventDispatcher; +/
 
 /// Binding for C++ class [QThread](https://doc.qt.io/qt-5/qthread.html).
 class /+ Q_CORE_EXPORT +/ QThread : QObject
@@ -182,7 +181,6 @@ QThread *QThread::create(Function &&f)
 static if(!defined!"QTHREAD_HAS_VARIADIC_CREATE")
 {
 // C++11: same as C++14, but with a workaround for not having generalized lambda captures
-}
 extern(C++, "QtPrivate") {
 struct Callable(Function)
 {
@@ -207,10 +205,7 @@ struct Callable(Function)
 
     /+ typename std::decay<Function>::type +/decay.type m_function;
 }
-}
-static if(!defined!"QTHREAD_HAS_VARIADIC_CREATE")
-{
- // namespace QtPrivate
+} // namespace QtPrivate
 
 /+ template <typename Function>
 QThread *QThread::create(Function &&f)

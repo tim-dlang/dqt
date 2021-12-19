@@ -25,11 +25,10 @@ import qt.widgets.widget;
 version(QT_NO_SHORTCUT){}else
     import qt.gui.keysequence;
 
-/+ QT_REQUIRE_CONFIG(abstractbutton);
+/+ QT_REQUIRE_CONFIG(abstractbutton); +/
 
 
 
-class QButtonGroup; +/
 extern(C++, class) struct QAbstractButtonPrivate;
 
 /// Binding for C++ class [QAbstractButton](https://doc.qt.io/qt-5/qabstractbutton.html).

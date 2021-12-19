@@ -26,8 +26,6 @@ import qt.gui.polygon;
 import qt.gui.region;
 import qt.helpers;
 
-/+ class QPainterPath;
-class QVariant; +/
 
 /// Binding for C++ class [QMatrix](https://doc.qt.io/qt-5/qmatrix.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QMatrix) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QMatrix // 2D transform matrix

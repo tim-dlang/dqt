@@ -26,7 +26,6 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QGroupBoxPrivate;
-/+ class QStyleOptionGroupBox; +/
 /// Binding for C++ class [QGroupBox](https://doc.qt.io/qt-5/qgroupbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QGroupBox : QWidget
 {

@@ -22,9 +22,8 @@ import qt.core.typeinfo;
 import qt.core.variant;
 import qt.helpers;
 
-/+ template <typename T> class QList;
 
-#define Q_METAMETHOD_INVOKE_MAX_ARGS 10 +/
+/+ #define Q_METAMETHOD_INVOKE_MAX_ARGS 10 +/
 
 /// Binding for C++ class [QMetaMethod](https://doc.qt.io/qt-5/qmetamethod.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QMetaMethod

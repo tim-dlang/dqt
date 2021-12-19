@@ -47,14 +47,6 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSString);
 #endif
 
 
-class QCharRef;
-class QRegularExpression;
-class QRegularExpressionMatch;
-class QString;
-class QStringList;
-class QTextCodec;
-class QStringRef;
-template <typename T> class QVector;
 
 namespace QtPrivate {
 template <bool...B> class BoolList;

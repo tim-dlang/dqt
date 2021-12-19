@@ -204,11 +204,8 @@ inline int qMetaTypeId();
 #define QT_FOR_EACH_AUTOMATIC_TEMPLATE_SMART_POINTER(F) \
     F(QSharedPointer) \
     F(QWeakPointer) \
-    F(QPointer)
-
-class QDataStream; +/
+    F(QPointer) +/
 extern(C++, class) struct QMetaTypeInterface;
-/+ struct QMetaObject; +/
 
 extern(C++, "QtPrivate")
 {
@@ -1546,8 +1543,6 @@ struct QPairVariantInterfaceConvertFunctor<std::pair<T, U> >
 
 }
 
-class QObject;
-class QWidget;
 
 #define QT_FORWARD_DECLARE_SHARED_POINTER_TYPES_ITER(Name) \
     template <class T> class Name; \
@@ -1891,10 +1886,8 @@ extern(C++, "QtPrivate") {
 
     // hack to delay name lookup to instantiation time by making
     // EnableInternalData a dependent name:
-    /+ template <typename T>
-    struct EnableInternalDataWrap;
 
-    template<typename T>
+    /+ template<typename T>
     struct QSmartPointerConvertFunctor<QWeakPointer<T> >
     {
         QObject* operator()(const QWeakPointer<T> &p) const
@@ -2350,8 +2343,8 @@ Q_DECLARE_SEQUENTIAL_CONTAINER_METATYPE(std::list)
     template <class T1, class T2> CPPTYPE TEMPLATENAME; \
     QT_END_NAMESPACE \
 
-QT_FOR_EACH_AUTOMATIC_TEMPLATE_2ARG(Q_FORWARD_DECLARE_METATYPE_TEMPLATE_2ARG_ITER)
 
+QT_FOR_EACH_AUTOMATIC_TEMPLATE_2ARG(Q_FORWARD_DECLARE_METATYPE_TEMPLATE_2ARG_ITER)
 #undef Q_DECLARE_METATYPE_TEMPLATE_2ARG_ITER
 
 #define Q_DECLARE_ASSOCIATIVE_CONTAINER_METATYPE(TEMPLATENAME) \

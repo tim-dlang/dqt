@@ -18,11 +18,9 @@ import qt.core.scopedpointer;
 import qt.helpers;
 import qt.widgets.treewidget;
 
-/+ QT_REQUIRE_CONFIG(treewidget);
+/+ QT_REQUIRE_CONFIG(treewidget); +/
 
 
-class QTreeWidget;
-class QTreeWidgetItem; +/
 extern(C++, class) struct QTreeModel;
 
 extern(C++, class) struct QTreeWidgetItemIteratorPrivate;

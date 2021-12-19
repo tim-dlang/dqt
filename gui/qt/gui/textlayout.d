@@ -33,16 +33,10 @@ version(QT_NO_RAWFONT){}else
     import qt.gui.rawfont;
 }
 
-/+ class QTextEngine;
-class QFont;
-#ifndef QT_NO_RAWFONT
+extern(C++, class) struct QTextEngine;
+/+ #ifndef QT_NO_RAWFONT
 class QRawFont;
-#endif
-class QRect;
-class QRegion;
-class QTextFormat;
-class QPalette;
-class QPainter; +/
+#endif +/
 
 /// Binding for C++ class [QTextInlineObject](https://doc.qt.io/qt-5/qtextinlineobject.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextInlineObject
@@ -84,11 +78,6 @@ private:
     QTextEngine* eng = null;
 }
 
-/+ class QPaintDevice;
-class QTextFormat;
-class QTextLine;
-class QTextBlock;
-class QTextOption; +/
 
 /// Binding for C++ class [QTextLayout](https://doc.qt.io/qt-5/qtextlayout.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLayout

@@ -85,10 +85,6 @@ pragma(inline, true) int qstrncmp(const(char)* str1, const(char)* str2, uint len
 /+ Q_CORE_EXPORT +/ quint16 qChecksum(const(char)* s, uint len);                            // ### Qt 6: Remove
 /+ Q_CORE_EXPORT +/ quint16 qChecksum(const(char)* s, uint len, /+ Qt:: +/qt.core.namespace.ChecksumType standard); // ### Qt 6: Use Qt::ChecksumType standard = Qt::ChecksumIso3309
 
-/+ class QByteRef;
-class QString;
-class QDataStream;
-template <typename T> class QList; +/
 
 alias QByteArrayData = QArrayData;
 

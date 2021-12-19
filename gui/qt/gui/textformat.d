@@ -33,26 +33,11 @@ import qt.gui.pen;
 import qt.gui.textoption;
 import qt.helpers;
 
-/+ class QString;
-class QVariant;
-class QFont;
 
-class QTextFormatCollection; +/
+extern(C++, class) struct QTextFormatCollection;
 extern(C++, class) struct QTextFormatPrivate;
-/+ class QTextBlockFormat;
-class QTextCharFormat;
-class QTextListFormat;
-class QTextTableFormat;
-class QTextFrameFormat;
-class QTextImageFormat;
-class QTextTableCellFormat;
-class QTextFormat;
-class QTextObject;
-class QTextCursor;
-class QTextDocument;
-class QTextLength;
 
-#ifndef QT_NO_DATASTREAM
+/+ #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextLength &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
 #endif

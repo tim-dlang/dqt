@@ -24,10 +24,6 @@ import qt.helpers;
 static if(!defined!"QT_NO_IMAGEFORMATPLUGIN")
     import qt.core.object;
 
-/+ class QImage;
-class QRect;
-class QSize;
-class QVariant; +/
 
 extern(C++, class) struct QImageIOHandlerPrivate;
 /// Binding for C++ class [QImageIOHandler](https://doc.qt.io/qt-5/qimageiohandler.html).

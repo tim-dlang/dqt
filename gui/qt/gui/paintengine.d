@@ -35,17 +35,9 @@ import qt.gui.region;
 import qt.gui.transform;
 import qt.helpers;
 
-/+ class QFontEngine;
-class QLineF;
-class QPaintDevice; +/
 extern(C++, class) struct QPaintEnginePrivate;
-/+ class QPainterPath;
-class QPointF;
-class QPolygonF;
-class QRectF; +/
 struct QGlyphLayout;
 extern(C++, class) struct QTextItemInt;
-/+ class QPaintEngineState; +/
 
 /// Binding for C++ class [QTextItem](https://doc.qt.io/qt-5/qtextitem.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextItem {

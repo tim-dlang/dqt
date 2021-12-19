@@ -143,11 +143,11 @@ template QT_VERSION_CHECK(params...) if(params.length == 3)
 #  define Q_STATIC_ASSERT_X(Condition, Message) Q_STATIC_ASSERT(Condition)
 #endif
 
-#ifdef __cplusplus +/
+#ifdef __cplusplus
 
-/+ #if !defined(QT_NAMESPACE) || defined(Q_MOC_RUN) +/ /* user namespace */
+#if !defined(QT_NAMESPACE) || defined(Q_MOC_RUN) /* user namespace */
 
-/+ # define QT_PREPEND_NAMESPACE(name) ::name
+# define QT_PREPEND_NAMESPACE(name) ::name
 # define QT_USE_NAMESPACE
 # define QT_BEGIN_NAMESPACE
 # define QT_END_NAMESPACE
@@ -160,14 +160,10 @@ template QT_VERSION_CHECK(params...) if(params.length == 3)
 # define QT_END_MOC_NAMESPACE
 #endif
 # define QT_FORWARD_DECLARE_CLASS(name) class name;
-# define QT_FORWARD_DECLARE_STRUCT(name) struct name; +/
-/+ # define QT_MANGLE_NAMESPACE(name) name +/
-extern(D) alias QT_MANGLE_NAMESPACE = function string(string name)
-{
-    return mixin(interpolateMixin(q{$(name)}));
-};
+# define QT_FORWARD_DECLARE_STRUCT(name) struct name;
+# define QT_MANGLE_NAMESPACE(name) name
 
-/+ #else /* user namespace */
+#else /* user namespace */
 
 # define QT_PREPEND_NAMESPACE(name) ::QT_NAMESPACE::name
 # define QT_USE_NAMESPACE using namespace ::QT_NAMESPACE;
@@ -209,9 +205,9 @@ namespace QT_NAMESPACE {}
 # endif
 # endif
 
-#endif +/ /* user namespace */
+#endif /* user namespace */
 
-/+ #else /* __cplusplus */
+#else /* __cplusplus */
 
 # define QT_BEGIN_NAMESPACE
 # define QT_END_NAMESPACE
@@ -850,9 +846,8 @@ enum QT_RETHROW = q{throw};
 #ifndef qUtf16Printable
 #  define qUtf16Printable(string) \
     static_cast<const wchar_t*>(static_cast<const void*>(QString(string).utf16()))
-#endif
+#endif +/
 
-class QString; +/
 /+ Q_DECL_COLD_FUNCTION +/
 /+ Q_CORE_EXPORT +/ QString qt_error_string(int errorCode = -1);
 
@@ -1276,10 +1271,9 @@ template <typename... Args> Q_DECL_UNUSED QConstOverload<Args...> qConstOverload
 template <typename... Args> Q_DECL_UNUSED QNonConstOverload<Args...> qNonConstOverload = {};
 #endif
 
-#endif
+#endif +/
 
 
-class QByteArray; +/
 /+ Q_CORE_EXPORT +/ QByteArray qgetenv(const(char)* varName);
 // need it as two functions because QString is only forward-declared here
 /+ Q_CORE_EXPORT +/ QString qEnvironmentVariable(const(char)* varName);

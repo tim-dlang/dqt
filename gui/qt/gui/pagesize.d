@@ -25,9 +25,6 @@ import qt.helpers;
 #endif +/
 
 extern(C++, class) struct QPageSizePrivate;
-/+ class QString;
-class QSize;
-class QSizeF; +/
 
 /// Binding for C++ class [QPageSize](https://doc.qt.io/qt-5/qpagesize.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageSize

@@ -27,8 +27,6 @@ import qt.gui.polygon;
 import qt.gui.region;
 import qt.helpers;
 
-/+ class QVariant;
-class QPainterPath; +/
 
 /// Binding for C++ class [QTransform](https://doc.qt.io/qt-5/qtransform.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QTransform) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTransform

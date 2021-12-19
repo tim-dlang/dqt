@@ -19,8 +19,6 @@ import qt.gui.textformat;
 import qt.gui.textobject;
 import qt.helpers;
 
-/+ class QTextCursor;
-class QTextTable; +/
 extern(C++, class) struct QTextTablePrivate;
 
 /// Binding for C++ class [QTextTableCell](https://doc.qt.io/qt-5/qtexttablecell.html).

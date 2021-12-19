@@ -23,12 +23,10 @@ import qt.widgets.abstractbutton;
 import qt.widgets.pushbutton;
 import qt.widgets.widget;
 
-/+ QT_REQUIRE_CONFIG(dialogbuttonbox);
+/+ QT_REQUIRE_CONFIG(dialogbuttonbox); +/
 
 
 
-class QAbstractButton;
-class QPushButton; +/
 extern(C++, class) struct QDialogButtonBoxPrivate;
 
 /// Binding for C++ class [QDialogButtonBox](https://doc.qt.io/qt-5/qdialogbuttonbox.html).

@@ -22,7 +22,6 @@ import qt.core.url;
 import qt.core.variant;
 import qt.helpers;
 
-/+ class QUrl; +/
 extern(C++, class) struct QMimeDataPrivate;
 
 /// Binding for C++ class [QMimeData](https://doc.qt.io/qt-5/qmimedata.html).

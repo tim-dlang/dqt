@@ -24,9 +24,8 @@ import qt.helpers;
 #if 0
 #pragma qt_sync_skip_header_check
 #pragma qt_sync_stop_processing
-#endif
+#endif +/
 
-class QObject; +/
 
 extern(C++, "QtPrivate") {
     /+ template <typename T> struct RemoveRef { typedef T Type; };

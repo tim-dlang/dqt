@@ -19,41 +19,13 @@ import qt.helpers;
 
 // Class forward definitions
 
-/+ class QPaintDevice;
-class QWidget; +/
 extern(C++, class) struct QWindow;
-/+ class QDialog;
-class QColor;
-class QPalette;
-class QCursor;
-class QPoint;
-class QSize;
-class QRect;
-class QPolygon;
-class QPainter;
-class QRegion;
-class QFont;
-class QFontMetrics;
-class QFontInfo;
-class QPen;
-class QBrush;
-class QMatrix;
-class QPixmap;
-class QBitmap;
-class QMovie;
-class QImage;
-class QTimer;
-class QTime; +/
 version(QT_NO_CLIPBOARD)
 {
 extern(C++, class) struct QClipboard;
 }
 
-/+ class QString;
-class QByteArray;
-class QApplication;
 
-template<typename T> class QList; +/
 alias QWindowList = QList!(QWindow*);
 
 
@@ -71,8 +43,7 @@ alias QWindowList = QList!(QWindow*);
 
 
 
-/+ template<class K, class V> class QHash;
-typedef QHash<WId, QWidget *> QWidgetMapper;
+/+ typedef QHash<WId, QWidget *> QWidgetMapper;
 
 template<class V> class QSet;
 typedef QSet<QWidget *> QWidgetSet;

@@ -40,9 +40,8 @@ import qt.helpers;
 #define QT_SYSINFO_DEPRECATED_X(x)
 #else
 #define QT_SYSINFO_DEPRECATED_X(x) QT_DEPRECATED_X(x)
-#endif
+#endif +/
 
-class QString; +/
 /+ #define Q_MV_OSX(major, minor) (major == 10 ? minor + 2 : (major == 9 ? 1 : 0)) +/
 extern(D) alias Q_MV_OSX = function string(string major, string minor)
 {
@@ -63,7 +62,6 @@ extern(D) alias Q_MV_WATCHOS = function string(string major, string minor)
 {
     return mixin(interpolateMixin(q{(QSysInfo.MacVersion.MV_WATCHOS | $(major) << 4 | $(minor))}));
 };
-
 /// Binding for C++ class [QSysInfo](https://doc.qt.io/qt-5/qsysinfo.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSysInfo {
 public:

@@ -21,7 +21,6 @@ import qt.core.string;
 import qt.core.stringlist;
 import qt.helpers;
 
-/+ class QDirIteratorPrivate; +/
 /// Binding for C++ class [QDirIterator](https://doc.qt.io/qt-5/qdiriterator.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDirIterator {
 public:

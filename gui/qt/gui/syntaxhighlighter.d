@@ -30,12 +30,7 @@ static if(!defined!"QT_NO_SYNTAXHIGHLIGHTER")
 
 
 
-/+ class QTextDocument; +/
 extern(C++, class) struct QSyntaxHighlighterPrivate;
-/+ class QTextCharFormat;
-class QFont;
-class QColor;
-class QTextBlockUserData; +/
 
 /// Binding for C++ class [QSyntaxHighlighter](https://doc.qt.io/qt-5/qsyntaxhighlighter.html).
 class /+ Q_GUI_EXPORT +/ QSyntaxHighlighter : QObject

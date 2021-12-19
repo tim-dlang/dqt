@@ -38,8 +38,6 @@ class QAction;
 version(QT_NO_ACTION){}else
 {
 
-/+ class QMenu;
-class QActionGroup; +/
 extern(C++, class) struct QActionPrivate;
 extern(C++, class) struct QGraphicsWidget;
 
@@ -215,5 +213,5 @@ QT_BEGIN_INCLUDE_NAMESPACE
 QT_END_INCLUDE_NAMESPACE +/
 
 }
-/+ class QAction; +/
+
 

@@ -23,10 +23,6 @@ import qt.core.variant;
 import qt.core.vector;
 import qt.helpers;
 
-/+ class QMatrix;
-class QTransform;
-class QRect;
-class QVariant; +/
 
 /// Binding for C++ class [QPolygon](https://doc.qt.io/qt-5/qpolygon.html).
 @(QMetaType.Type.QPolygon) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygon
@@ -104,13 +100,12 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QPolygon &);
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPolygon &polygon);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPolygon &polygon);
-#endif
+#endif +/
 
 /*****************************************************************************
   Misc. QPolygon functions
  *****************************************************************************/
 
-class QRectF; +/
 
 /// Binding for C++ class [QPolygonF](https://doc.qt.io/qt-5/qpolygonf.html).
 @(QMetaType.Type.QPolygonF) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygonF

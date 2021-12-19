@@ -66,7 +66,6 @@ private:
 
 
 /+ #endif +/ // QBYTEARRAYLIST_H
-
 /// Binding for C++ class [QByteArrayList](https://doc.qt.io/qt-5/qbytearraylist.html).
 alias QByteArrayList__1 = QList!(QByteArray);
 /+ typedef QList<QByteArray> QByteArrayList; +/

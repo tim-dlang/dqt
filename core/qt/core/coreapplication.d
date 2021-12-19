@@ -38,10 +38,8 @@ alias MSG = tagMSG;
 
 
 extern(C++, class) struct QCoreApplicationPrivate;
-/+ class QTextCodec; +/
 extern(C++, class) struct QTranslator;
 extern(C++, class) struct QPostEventList;
-/+ class QStringList; +/
 extern(C++, class) struct QAbstractEventDispatcher;
 extern(C++, class) struct QAbstractNativeEventFilter;
 

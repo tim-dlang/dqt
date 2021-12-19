@@ -20,10 +20,8 @@ version(D_LP64){}else
     import core.stdc.config;
 
 /+ #ifndef QFLAGS_H +/
-/+ #define QFLAGS_H
+/+ #define QFLAGS_H +/
 
-
-class QDataStream; +/
 
 /// Binding for C++ class [QFlag](https://doc.qt.io/qt-5/qflag.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QFlag

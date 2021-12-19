@@ -30,16 +30,11 @@ import qt.widgets.dialog;
 import qt.widgets.fileiconprovider;
 import qt.widgets.widget;
 
-/+ QT_REQUIRE_CONFIG(filedialog);
+/+ QT_REQUIRE_CONFIG(filedialog); +/
 
 
-class QModelIndex;
-class QItemSelection; +/
 struct QFileDialogArgs;
-/+ class QFileIconProvider; +/
 extern(C++, class) struct QFileDialogPrivate;
-/+ class QAbstractItemDelegate;
-class QAbstractProxyModel; +/
 
 /// Binding for C++ class [QFileDialog](https://doc.qt.io/qt-5/qfiledialog.html).
 class /+ Q_WIDGETS_EXPORT +/ QFileDialog : QDialog

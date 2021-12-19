@@ -23,12 +23,9 @@ import qt.gui.brush;
 import qt.gui.color;
 import qt.helpers;
 
-/+ class QVariant; +/
 extern(C++, class) struct QPenPrivate;
-/+ class QBrush;
-class QPen;
 
-#ifndef QT_NO_DATASTREAM
+/+ #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPen &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
 #endif +/

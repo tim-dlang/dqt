@@ -32,13 +32,10 @@ import qt.widgets.widget;
 version(QT_NO_VALIDATOR){}else
     import qt.gui.validator;
 
-/+ QT_REQUIRE_CONFIG(combobox);
+/+ QT_REQUIRE_CONFIG(combobox); +/
 
 
-class QAbstractItemView;
-class QLineEdit; +/
 extern(C++, class) struct QComboBoxPrivate;
-/+ class QCompleter; +/
 
 /// Binding for C++ class [QComboBox](https://doc.qt.io/qt-5/qcombobox.html).
 class /+ Q_WIDGETS_EXPORT +/ QComboBox : QWidget

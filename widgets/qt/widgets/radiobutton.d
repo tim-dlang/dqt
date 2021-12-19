@@ -28,7 +28,6 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QRadioButtonPrivate;
-/+ class QStyleOptionButton; +/
 
 /// Binding for C++ class [QRadioButton](https://doc.qt.io/qt-5/qradiobutton.html).
 class /+ Q_WIDGETS_EXPORT +/ QRadioButton : QAbstractButton

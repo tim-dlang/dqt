@@ -25,11 +25,10 @@ import qt.helpers;
 #endif
 #ifdef open
 #error qiodevice.h must be included before any header file that defines open
-#endif
+#endif +/
 
 
 
-class QByteArray; +/
 extern(C++, class) struct QIODevicePrivate;
 
 /// Binding for C++ class [QIODevice](https://doc.qt.io/qt-5/qiodevice.html).

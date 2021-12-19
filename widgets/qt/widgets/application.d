@@ -31,24 +31,15 @@ import qt.widgets.style;
 import qt.widgets.widget;
 
 /+ #ifdef QT_INCLUDE_COMPAT
-#endif
+#endif +/
 
 
-class QDesktopWidget;
-class QStyle;
-class QEventLoop;
-class QIcon;
-template <typename T> class QList;
-class QLocale;
-class QPlatformNativeInterface;
 
-class QApplication; +/
 extern(C++, class) struct QApplicationPrivate;
 /+ #if defined(qApp)
 #undef qApp
-#endif +/
-/+ #define qApp (static_cast<QApplication *>(QCoreApplication::instance())) +/
-enum qApp = q{(static_cast!(QApplication)(QCoreApplication.instance()))};
+#endif
+#define qApp (static_cast<QApplication *>(QCoreApplication::instance())) +/
 
 /// Binding for C++ class [QApplication](https://doc.qt.io/qt-5/qapplication.html).
 class /+ Q_WIDGETS_EXPORT +/ QApplication : QGuiApplication

@@ -31,7 +31,6 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSURL);
 
 extern(C++, class) struct QUrlQuery;
 extern(C++, class) struct QUrlPrivate;
-/+ class QDataStream; +/
 
 extern(C++, class) struct QUrlTwoFlags(E1, E2)
 {
@@ -109,7 +108,6 @@ public:
 /+ template<typename E1, typename E2>
 class QTypeInfo<QUrlTwoFlags<E1, E2> > : public QTypeInfoMerger<QUrlTwoFlags<E1, E2>, E1, E2> {};
 
-class QUrl;
 // qHash is a friend, but we can't use default arguments for friends (§8.3.6.4)
 Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed = 0) noexcept; +/
 

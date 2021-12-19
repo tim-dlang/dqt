@@ -26,14 +26,15 @@ version(QT_NO_REGEXP){}else
 
 version(QT_NO_REGEXP){}else
 {
+}
+version(QT_NO_REGEXP){}else
+{
 
 
 
 struct QRegExpPrivate;
-/+ class QStringList;
-class QRegExp;
 
-Q_CORE_EXPORT uint qHash(const QRegExp &key, uint seed = 0) noexcept; +/
+/+ Q_CORE_EXPORT uint qHash(const QRegExp &key, uint seed = 0) noexcept; +/
 
 /// Binding for C++ class [QRegExp](https://doc.qt.io/qt-5/qregexp.html).
 @(QMetaType.Type.QRegExp) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegExp
@@ -126,4 +127,8 @@ version(QT_NO_REGEXP)
 extern(C++, class) struct QRegExp;
 }
 
+
+version(QT_NO_REGEXP){}else
+{
+}
 

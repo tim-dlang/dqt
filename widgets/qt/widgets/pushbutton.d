@@ -30,8 +30,6 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QPushButtonPrivate;
-/+ class QMenu;
-class QStyleOptionButton; +/
 
 /// Binding for C++ class [QPushButton](https://doc.qt.io/qt-5/qpushbutton.html).
 class /+ Q_WIDGETS_EXPORT +/ QPushButton : QAbstractButton

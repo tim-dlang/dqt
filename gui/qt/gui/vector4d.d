@@ -32,9 +32,6 @@ version(QT_NO_VECTOR4D)
 {
 extern(C++, class) struct QVector4D;
 }
-/+ class QMatrix4x4;
-class QVector2D;
-class QVector3D; +/
 
 version(QT_NO_VECTOR4D){}else
 {

@@ -22,10 +22,9 @@ import qt.core.size;
 import qt.core.variant;
 import qt.helpers;
 
-/+ QT_REQUIRE_CONFIG(transposeproxymodel);
+/+ QT_REQUIRE_CONFIG(transposeproxymodel); +/
 
 
-class QTransposeProxyModelPrivate; +/
 
 /// Binding for C++ class [QTransposeProxyModel](https://doc.qt.io/qt-5/qtransposeproxymodel.html).
 class /+ Q_CORE_EXPORT +/ QTransposeProxyModel : QAbstractProxyModel

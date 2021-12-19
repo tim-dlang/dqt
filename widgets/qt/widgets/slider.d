@@ -26,7 +26,6 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QSliderPrivate;
-/+ class QStyleOptionSlider; +/
 /// Binding for C++ class [QSlider](https://doc.qt.io/qt-5/qslider.html).
 class /+ Q_WIDGETS_EXPORT +/ QSlider : QAbstractSlider
 {

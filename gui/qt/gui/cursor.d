@@ -25,8 +25,6 @@ version(QT_NO_CURSOR){}else
     import qt.gui.pixmap;
 }
 
-/+ class QVariant;
-class QScreen; +/
 
 /*
   ### The fake cursor has to go first with old qdoc.
@@ -62,8 +60,6 @@ version(QT_NO_CURSOR){}else
 {
 
 extern(C++, class) struct QCursorData;
-/+ class QBitmap;
-class QPixmap; +/
 
 
 /// Binding for C++ class [QCursor](https://doc.qt.io/qt-5/qcursor.html).

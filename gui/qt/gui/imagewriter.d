@@ -22,8 +22,6 @@ import qt.gui.image;
 import qt.gui.imageiohandler;
 import qt.helpers;
 
-/+ class QIODevice;
-class QImage; +/
 
 extern(C++, class) struct QImageWriterPrivate;
 /// Binding for C++ class [QImageWriter](https://doc.qt.io/qt-5/qimagewriter.html).

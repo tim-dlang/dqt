@@ -28,8 +28,6 @@ import qt.helpers;
 #endif
 
 
-
-template <typename T> class QVector;
 template <typename T> class QSet; +/
 
 struct QListSpecialMethods(T)

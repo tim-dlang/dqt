@@ -75,7 +75,6 @@ private:
     int top; int left; int bottom; int right;
 }
 
-/+ class QTableWidget; +/
 extern(C++, class) struct QTableModel;
 extern(C++, class) struct QTableWidgetItemPrivate;
 

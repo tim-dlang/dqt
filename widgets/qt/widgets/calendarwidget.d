@@ -27,11 +27,9 @@ import qt.gui.textformat;
 import qt.helpers;
 import qt.widgets.widget;
 
-/+ QT_REQUIRE_CONFIG(calendarwidget);
+/+ QT_REQUIRE_CONFIG(calendarwidget); +/
 
 
-class QDate;
-class QTextCharFormat; +/
 extern(C++, class) struct QCalendarWidgetPrivate;
 
 /// Binding for C++ class [QCalendarWidget](https://doc.qt.io/qt-5/qcalendarwidget.html).
