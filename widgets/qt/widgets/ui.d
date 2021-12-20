@@ -952,11 +952,39 @@ private struct UICodeWriter()
     }
 }
 
+
+/++
+    Generates code from *.ui file created with [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html).
+
+    The generated code contains multiple declarations:
+    Every widget in the *.ui file is declared as a variable.
+    The function `setupUi` is created, which creates and configures all
+    widgets.
+    The function `retranslateUi` sets all translatable strings.
+
+    Params:
+        xml        = Content of *.ui file.
+        customWidgetPackage = Package for custom widgets used in *.ui file.
+
+    Returns:
+        D code for use in mixin.
++/
 string generateUICode()(string xml, string customWidgetPackage = "")
 {
     return UICodeWriter!()().convert(xml, customWidgetPackage);
 }
 
+/++
+    Struct for using a *.ui file created with [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html).
+
+    The *.ui file is read at compile time with the [import expression](https://dlang.org/spec/expression.html#import_expressions).
+    Use the dmd option -J for setting the search path for those files.
+    The members of the struct are created with `generateUICode`.
+
+    Params:
+        filename   = Filename of *.ui file.
+        customWidgetPackage = Package for custom widgets used in *.ui file.
++/
 struct UIStruct(string filename, string customWidgetPackage = "")
 {
     mixin(generateUICode(import(filename), customWidgetPackage));

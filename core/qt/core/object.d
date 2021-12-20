@@ -211,12 +211,58 @@ public:
     /+ virtual +/~this();
 
 protected:
+    /++
+        UDA for marking member functions as signals.
+
+        Meta data for marked member functions will be collected by
+        `Q_OBJECT_D` for use at runtime. Signals can be connected to
+        slots or delegates with `connect`. Signals for classes
+        implemented in D also need a body with mixin `Q_SIGNAL_IMPL_D`.
+    +/
     struct QSignal{}
+
+    /++
+        UDA for marking member functions as slots.
+
+        Meta data for marked member functions will be collected by
+        `Q_OBJECT_D` for use at runtime. Signals can be connected to
+        slots with `connect`.
+    +/
     struct QSlot{}
+
+    /++
+        UDA for marking member functions as invokable.
+
+        Meta data for marked member functions will be collected by
+        `Q_OBJECT_D` for use at runtime.
+    +/
     struct QInvokable{}
+
+    /++
+        UDA for marking member functions as scriptable.
+
+        Meta data for marked member functions will be collected by
+        `Q_OBJECT_D` for use at runtime.
+    +/
     struct QScriptable{}
+
+    /++
+        String constant for mixin in every class inheriting `QObject`.
+
+        This is equivalent to the C++ macro [Q_OBJECT](https://doc.qt.io/qt-5/qobject.html#Q_OBJECT).
+        Every class inheriting `QObject` should mixin `Q_OBJECT` or
+        `Q_OBJECT_D`. Bindings to classes implemented in C++ should use
+        `Q_OBJECT`, while classes implemented in D should use `Q_OBJECT_D`.
+        Both mixins will add declarations for meta data about the class.
+        `Q_OBJECT_D` will also collect the the meta data itself, which
+        is done by the [Meta-Object Compiler](https://doc.qt.io/qt-5/moc.html)
+        for C++ classes.
+    +/
     enum Q_OBJECT = qt.core.objectdefs.Q_OBJECT;
+    /// ditto
     enum Q_OBJECT_D = qt.core.objectdefs.Q_OBJECT_D;
+
+    /// String constant for mixin in every signal in classes implemnted in D.
     enum Q_SIGNAL_IMPL_D = qt.core.objectdefs.Q_SIGNAL_IMPL_D;
 
 public:
@@ -491,6 +537,18 @@ public:
     } +/
 /+ #endif +/ //Q_CLANG_QDOC
 
+    /++
+        Returns the set of signals with given name and optionally filtered
+        by parameter types. All signals are used, if no parameter types are
+        given. Otherwise the parameter types have to match.
+
+        Params:
+            name       = The signal name.
+            Params     = Parameter types for the signal.
+
+        Returns:
+            Set of signals, which can be used with `connect`.
+    +/
     template signal(string name, Params...)
     {
         extern(D) auto signal(this T)()
@@ -502,6 +560,19 @@ public:
                 return DQtMember!(T, __traits(getOverloads, T, name))(cast(T)this);
         }
     }
+
+    /++
+        Returns the set of slots with given name and optionally filtered
+        by parameter types. All slots are used, if no parameter types are
+        given. Otherwise the parameter types have to match.
+
+        Params:
+            name       = The slot name.
+            Params     = Parameter types for the slot.
+
+        Returns:
+            Set of slots, which can be used with `connect`.
+    +/
     template slot(string name, Params...)
     {
         extern(D) auto slot(this T)()
@@ -520,10 +591,19 @@ public:
             connect(const typename QtPrivate::FunctionPointer<Func1>::Object *sender, Func1 signal, const QObject *context, Func2 slot,
                     Qt::ConnectionType type = Qt::AutoConnection)
 +/
-    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if(is(Signal: DQtMember!P, P...) && !is(Dg: DQtMember!P2, P2...))
-    {
-        return connect(sender, sender.obj, dg, type);
-    }
+
+    /++
+        Connects a signal to a delegate.
+
+        Params:
+            sender     = Signal to be connected.
+            context    = Optional object used for lifetime of delegate.
+            dg         = Delegate to be connected.
+            type       = Type of connection.
+
+        Returns:
+            Connection.
+    +/
     static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, QObject context, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if(is(Signal: DQtMember!P, P...) && !is(Dg: DQtMember!P2, P2...))
     {
         import core.stdcpp.new_;
@@ -566,7 +646,23 @@ public:
                            &slotObj.base,
                            type, types, mo);
     }
+    /// ditto
+    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if(is(Signal: DQtMember!P, P...) && !is(Dg: DQtMember!P2, P2...))
+    {
+        return connect(sender, sender.obj, dg, type);
+    }
 
+    /++
+        Connects a signal to a slot.
+
+        Params:
+            sender     = Signal to be connected.
+            receiver   = Slot to be connected.
+            type       = Type of connection.
+
+        Returns:
+            Connection.
+    +/
     static extern(D) QMetaObject.Connection connect(Signal, Slot)(Signal sender, Slot receiver, ConnectionType type = ConnectionType.AutoConnection) if(is(Signal: DQtMember!P, P...) && is(Slot: DQtMember!P2, P2...))
     {
        import core.stdcpp.new_;
