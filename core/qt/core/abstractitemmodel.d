@@ -206,12 +206,8 @@ public:
     /+ virtual +/ bool setHeaderData(int section, /+ Qt:: +/qt.core.namespace.Orientation orientation, ref const(QVariant) value,
                                    int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.EditRole);
 
-    mixin(mangleWindows("?itemData@QAbstractItemModel@@UEBA?AV?$QMap@HVQVariant@@@@AEBVQModelIndex@@@Z", q{
     /+ virtual +/ QMap!(int, QVariant) itemData(ref const(QModelIndex) index) const;
-    }));
-    mixin(mangleWindows("?setItemData@QAbstractItemModel@@UEAA_NAEBVQModelIndex@@AEBV?$QMap@HVQVariant@@@@@Z", q{
     /+ virtual +/ bool setItemData(ref const(QModelIndex) index, ref const(QMap!(int, QVariant)) roles);
-    }));
 /+ #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     virtual bool clearItemData(const QModelIndex &index);
 #endif +/
@@ -269,9 +265,7 @@ public:
                                                   /+ Qt:: +/qt.core.namespace.MatchFlags(/+ Qt:: +/qt.core.namespace.MatchFlag.MatchStartsWith|/+ Qt:: +/qt.core.namespace.MatchFlag.MatchWrap)) const;
     /+ virtual +/ QSize span(ref const(QModelIndex) index) const;
 
-    mixin(mangleWindows("?roleNames@QAbstractItemModel@@UEBA?AV?$QHash@HVQByteArray@@@@XZ", q{
     /+ virtual +/ QHash!(int,QByteArray) roleNames() const;
-    }));
 
     /+ using QObject::parent; +/
 

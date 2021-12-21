@@ -17,7 +17,7 @@ import qt.core.global;
 import qt.core.list;
 import qt.core.refcount;
 
-struct QMap(Key, T)
+extern(C++, class) struct QMap(Key, T)
 {
 private:
     void * d;

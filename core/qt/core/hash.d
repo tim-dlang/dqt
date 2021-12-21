@@ -12,11 +12,7 @@
 module qt.core.hash;
 extern(C++):
 
-// QHash
-// ⊤
-// Type
-// /usr/include/qt/QtCore/qhash.h:225:7
-struct QHash(Key, T)
+extern(C++, class) struct QHash(Key, T)
 {
 private:
     void *d;
