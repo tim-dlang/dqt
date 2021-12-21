@@ -232,7 +232,11 @@ public:
     /+ Q_REQUIRED_RESULT +/ QColor lighter(int f = 150) const/+ noexcept+/;
     /+ Q_REQUIRED_RESULT +/ QColor darker(int f = 200) const/+ noexcept+/;
 
-    /+bool operator ==(ref const(QColor) c) const/+ noexcept+/;+/
+    bool opEquals(ref const(QColor) c) const/+ noexcept+/;
+    bool opEquals(const(QColor) c) const/+ noexcept+/
+    {
+        return opEquals(c);
+    }
     /+bool operator !=(ref const(QColor) c) const/+ noexcept+/;+/
 
     /+auto opCast(T : QVariant)() const;+/
