@@ -193,12 +193,32 @@ struct CPPMemberFunctionPointer(T)
     uint adj;
 }
 
+private alias parentOf(alias sym) = __traits(parent, sym);
+private alias parentOf(alias sym : T!Args, alias T, Args...) = __traits(parent, T);
+
+// Like std.traits.packageName, but allows modules without package.
+private template packageName(alias T)
+{
+    import std.algorithm.searching : startsWith;
+
+    enum bool isNotFunc = !isSomeFunction!(T);
+
+    static if (__traits(compiles, parentOf!T))
+        enum parent = packageName!(parentOf!T);
+    else
+        enum string parent = null;
+
+    static if (isNotFunc && T.stringof.startsWith("package "))
+        enum packageName = (parent.length ? parent ~ '.' : "") ~ T.stringof[8 .. $];
+    else static if (parent)
+        enum packageName = parent;
+    else
+        enum packageName = "";
+}
+
 private template IsInQtPackage(alias S)
 {
-    static if (!__traits(compiles, __traits(parent, S)))
-        enum IsInQtPackage = false;
-    else
-        enum IsInQtPackage = packageName!(S).length > 3 && packageName!(S)[0..3] == "qt.";
+    enum IsInQtPackage = packageName!(S).length > 3 && packageName!(S)[0..3] == "qt.";
 }
 
 template memberFunctionExternDeclaration(alias F)
