@@ -193,12 +193,20 @@ struct CPPMemberFunctionPointer(T)
     uint adj;
 }
 
+private template IsInQtPackage(alias S)
+{
+    static if (!__traits(compiles, __traits(parent, S)))
+        enum IsInQtPackage = false;
+    else
+        enum IsInQtPackage = packageName!(S).length > 3 && packageName!(S)[0..3] == "qt.";
+}
+
 template memberFunctionExternDeclaration(alias F)
 {
     mixin((){
             string code;
             version(Windows)
-                static if(packageName!(F).length > 3 && packageName!(F)[0..3] == "qt.")
+                static if(IsInQtPackage!(F))
                     code ~= "export ";
             code ~= "extern(" ~ functionLinkage!F ~ ")";
             code ~= q{pragma(mangle, F.mangleof) ReturnType!F memberFunctionExternDeclaration(__traits(parent, F), Parameters!F);};
