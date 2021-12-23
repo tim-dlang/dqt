@@ -13,7 +13,6 @@ module qt.core.flags;
 extern(C++):
 
 import qt.config;
-import qt.core.global;
 import qt.core.typeinfo;
 import qt.helpers;
 version(D_LP64){}else
@@ -91,10 +90,10 @@ public:
 extern(C++, class) struct QFlags(Enum)
 {
 private:
-    mixin(Q_STATIC_ASSERT_X(q{(Enum.sizeof <= int.sizeof)},
-                          q{"QFlags uses an int as storage, so an enum with underlying " ~
-                          "long long will overflow."}));
-    mixin(Q_STATIC_ASSERT_X(q{is(Enum == enum)}, q{"QFlags is only usable on enumeration types."}));
+    static assert(Enum.sizeof <= int.sizeof,
+                          "QFlags uses an int as storage, so an enum with underlying " ~
+                          "long long will overflow.");
+    static assert(is(Enum == enum), "QFlags is only usable on enumeration types.");
 
 /+ #if QT_DEPRECATED_SINCE(5,15) +/
     struct Private;

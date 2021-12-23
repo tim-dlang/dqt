@@ -11,10 +11,7 @@
  */
 module qt.core.typeinfo;
 
-import qt.core.flags;
-import qt.core.list;
-import qt.core.pair;
-import qt.core.vector;
+import std.algorithm;
 import std.traits;
 import std.meta;
 
@@ -75,20 +72,19 @@ template QTypeInfo(T)
         enum isComplex = false;
         enum isStatic = true;
     }
-    else static if(is(T == QPair!P, P...))
+    else static if(fullyQualifiedName!T.startsWith("qt.core.pair.QPair!"))
     {
-        static assert(P.length == 2);
-        enum isRelocatable = QTypeInfo!(P[0]).isRelocatable && QTypeInfo!(P[1]).isRelocatable;
-        enum isComplex = QTypeInfo!(P[0]).isComplex || QTypeInfo!(P[1]).isComplex;
-        enum isStatic = QTypeInfo!(P[0]).isStatic || QTypeInfo!(P[1]).isStatic;
+        enum isRelocatable = QTypeInfo!(T.first_type).isRelocatable && QTypeInfo!(T.second_type).isRelocatable;
+        enum isComplex = QTypeInfo!(T.first_type).isComplex || QTypeInfo!(T.second_type).isComplex;
+        enum isStatic = QTypeInfo!(T.first_type).isStatic || QTypeInfo!(T.second_type).isStatic;
     }
-    else static if(is(T == QList!P, P...) || is(T == QVector!P, P...))
+    else static if(fullyQualifiedName!T.startsWith("qt.core.list.QList!") || fullyQualifiedName!T.startsWith("qt.core.vector.QVector!"))
     {
         enum isRelocatable = true;
         enum isComplex = true;
         enum isStatic = false;
     }
-    else static if(is(T == QFlags!P, P...))
+    else static if(fullyQualifiedName!T.startsWith("qt.core.flags.QFlags!"))
     {
         enum isRelocatable = true;
         enum isComplex = false;
