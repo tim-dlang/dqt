@@ -45,6 +45,32 @@ protected:
         p.drawPixmap(0, 200, pixmap);
         p.drawPicture(0, 300, picture);
     }
+    override extern(C++) void contextMenuEvent(QContextMenuEvent event)
+    {
+        import qt.widgets.action;
+        import qt.widgets.filedialog;
+        import qt.widgets.menu;
+        import qt.gui.pagesize;
+        import qt.gui.pdfwriter;
+
+        scope menu = new QMenu(this);
+        QAction pdfAction = menu.addAction(QString("Create PDF"));
+        QAction selected = menu.exec(event.globalPos());
+
+        if(selected == pdfAction)
+        {
+            QString filter = QString("*.pdf");
+            QString filename = QFileDialog.getSaveFileName(this, globalInitVar!QString, globalInitVar!QString, filter);
+            if(!filename.isEmpty())
+            {
+                scope writer = new QPdfWriter(filename);
+                writer.setPageSize(QPdfWriter.PageSize.A4);
+                writer.setResolution(50);
+                auto p = QPainter(writer);
+                drawImage(&p, QString("QPainter(QPdfWriter)"));
+            }
+        }
+    }
 
 private:
     QTimer timer;
