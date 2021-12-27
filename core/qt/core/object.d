@@ -20,8 +20,6 @@ import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.objectdefs;
 import qt.core.objectdefs_impl;
-import qt.core.regexp;
-import qt.core.regularexpression;
 import qt.core.scopedpointer;
 import qt.core.string;
 import qt.core.thread;
@@ -60,13 +58,13 @@ struct QDynamicMetaObjectData;
 
 alias QObjectList = QList!(QObject);
 
-/+ Q_CORE_EXPORT +/ void qt_qFindChildren_helper(const(QObject) parent, ref const(QString) name,
-                                           ref const(QMetaObject) mo, QList!(void*)* list, /+ Qt:: +/qt.core.namespace.FindChildOptions options);
-/+ Q_CORE_EXPORT +/ void qt_qFindChildren_helper(const(QObject) parent, ref const(QRegExp) re,
-                                           ref const(QMetaObject) mo, QList!(void*)* list, /+ Qt:: +/qt.core.namespace.FindChildOptions options);
-/+ Q_CORE_EXPORT +/ void qt_qFindChildren_helper(const(QObject) parent, ref const(QRegularExpression) re,
-                                           ref const(QMetaObject) mo, QList!(void*)* list, /+ Qt:: +/qt.core.namespace.FindChildOptions options);
-/+ Q_CORE_EXPORT +/ QObject qt_qFindChild_helper(const(QObject) parent, ref const(QString) name, ref const(QMetaObject) mo, /+ Qt:: +/qt.core.namespace.FindChildOptions options);
+/+ Q_CORE_EXPORT void qt_qFindChildren_helper(const QObject *parent, const QString &name,
+                                           const QMetaObject &mo, QList<void *> *list, Qt::FindChildOptions options);
+Q_CORE_EXPORT void qt_qFindChildren_helper(const QObject *parent, const QRegExp &re,
+                                           const QMetaObject &mo, QList<void *> *list, Qt::FindChildOptions options);
+Q_CORE_EXPORT void qt_qFindChildren_helper(const QObject *parent, const QRegularExpression &re,
+                                           const QMetaObject &mo, QList<void *> *list, Qt::FindChildOptions options);
+Q_CORE_EXPORT QObject *qt_qFindChild_helper(const QObject *parent, const QString &name, const QMetaObject &mo, Qt::FindChildOptions options); +/
 
 class /+ Q_CORE_EXPORT +/ QObjectData {
 private:
