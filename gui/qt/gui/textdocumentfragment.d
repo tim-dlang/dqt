@@ -37,7 +37,9 @@ public:
         return r;
     }
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ explicit +/this(const(QTextDocument) document);
+    }));
     /+ explicit +/this(ref const(QTextCursor) range);
     @disable this(this);
     this(ref const(QTextDocumentFragment) rhs);

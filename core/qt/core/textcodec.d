@@ -131,7 +131,9 @@ private:
         this.c = codec;
         this.state = typeof(this.state)();
     }
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ explicit +/this(const(QTextCodec) codec, QTextCodec.ConversionFlags flags);
+    }));
     ~this();
     static if(QT_STRINGVIEW_LEVEL < 2)
     {
@@ -156,7 +158,9 @@ private:
         this.c = codec;
         this.state = typeof(this.state)();
     }
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ explicit +/this(const(QTextCodec) codec, QTextCodec.ConversionFlags flags);
+    }));
     ~this();
     QString toUnicode(const(char)* chars, int len);
     QString toUnicode(ref const(QByteArray) ba);

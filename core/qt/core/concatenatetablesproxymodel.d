@@ -57,8 +57,12 @@ public:
     override int columnCount(ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override QStringList mimeTypes() const;
     override QMimeData mimeData(ref const(QModelIndexList) indexes) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool canDropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action, int row, int column, ref const(QModelIndex) parent) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool dropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action, int row, int column, ref const(QModelIndex) parent);
+    }));
     override QSize span(ref const(QModelIndex) index) const;
 
 private:

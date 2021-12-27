@@ -280,7 +280,7 @@ protected:
 
     /+ virtual +/ bool edit(ref const(QModelIndex) index, EditTrigger trigger, QEvent event);
 
-    mixin(mangleWindows("?selectionCommand@QAbstractItemView@@MEBA?AV?$QFlags@W4SelectionFlag@QItemSelectionModel@@@@AEBVQModelIndex@@PEBVQEvent@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ QItemSelectionModel.SelectionFlags selectionCommand(ref const(QModelIndex) index,
                                                                      const(QEvent) event = null) const;
     }));

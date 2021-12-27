@@ -50,7 +50,9 @@ public:
     void setFileName (ref const(QString) fileName);
     QString fileName () const;
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     bool write(const(QTextDocument) document);
+    }));
     bool write(ref const(QTextDocumentFragment) fragment);
 
 /+ #if QT_CONFIG(textcodec) +/

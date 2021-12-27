@@ -565,7 +565,7 @@ private: \
     /*end*/ +/
 enum Q_GADGET =
 q{    public:
-        extern static __gshared const(imported!q{qt.core.objectdefs}.QMetaObject) staticMetaObject;
+        extern(C++) extern } ~ exportOnWindows ~ q{static __gshared const(imported!q{qt.core.objectdefs}.QMetaObject) staticMetaObject;
         /+ void qt_check_for_QGADGET_macro(); +/
         alias QtGadgetHelper = void;
     private:
@@ -806,8 +806,10 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     // internal index-based disconnect
     /+ static bool disconnect(const QObject *sender, int signal_index,
                            const QObject *receiver, int method_index); +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static bool disconnectOne(const(QObject) sender, int signal_index,
                                   const(QObject) receiver, int method_index);
+    }));
     // internal slot-name based connect
     static void connectSlotsByName(QObject o);
 

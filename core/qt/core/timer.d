@@ -52,8 +52,12 @@ public:
     pragma(inline, true) final void setSingleShot(bool asingleShot) { single = asingleShot; }
     pragma(inline, true) final bool isSingleShot() const { return (single) != 0; }
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static void singleShot(int msec, const(QObject) receiver, const(char)* member);
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static void singleShot(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType, const(QObject) receiver, const(char)* member);
+    }));
 
 /+ #ifdef Q_CLANG_QDOC
     template<typename PointerToMemberFunction>
@@ -192,8 +196,10 @@ private:
 
     static /+ Qt:: +/qt.core.namespace.TimerType defaultTypeFor(int msecs)/+ noexcept+/
     { return msecs >= 2000 ? /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer : /+ Qt:: +/qt.core.namespace.TimerType.PreciseTimer; }
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static void singleShotImpl(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType,
                                    const(QObject) receiver, /+ QtPrivate:: +/imported!q{qt.core.objectdefs_impl}.QSlotObjectBase* slotObj);
+    }));
 
 /+ #if __has_include(<chrono>) +/
 /+    static /+ Qt:: +/qt.core.namespace.TimerType defaultTypeFor(/+ std::chrono:: +/milliseconds interval)

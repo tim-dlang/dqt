@@ -52,7 +52,9 @@ public:
     /+ using QWidget::addAction; +/
     alias addAction = QWidget.addAction;
     final QAction addAction(ref const(QString) text);
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QAction addAction(ref const(QString) text, const(QObject) receiver, const(char)* member);
+    }));
 
 /+ #ifdef Q_CLANG_QDOC
     template<typename Obj, typename PointerToMemberFunctionOrFunctor>
@@ -138,7 +140,9 @@ protected:
     override void timerEvent(QTimerEvent );
     override bool eventFilter(QObject , QEvent );
     override bool event(QEvent );
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final void initStyleOption(QStyleOptionMenuItem* option, const(QAction) action) const;
+    }));
 
 private:
     /+ Q_DECLARE_PRIVATE(QMenuBar) +/

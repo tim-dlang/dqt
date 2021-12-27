@@ -72,10 +72,14 @@ public:
     override QModelIndex sibling(int row, int column, ref const(QModelIndex) idx) const;
 
     override QMimeData mimeData(ref const(QModelIndexList) indexes) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool canDropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action,
                              int row, int column, ref const(QModelIndex) parent) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool dropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action,
                           int row, int column, ref const(QModelIndex) parent);
+    }));
     override QStringList mimeTypes() const;
     override /+ Qt:: +/qt.core.namespace.DropActions supportedDragActions() const;
     override /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;

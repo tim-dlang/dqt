@@ -34,6 +34,13 @@ static if(!defined!"QT_NO_PDF")
 
 extern(C++, class) struct QPdfWriterPrivate;
 
+private class QPdfWriterDummy : QPagedPaintDevice
+{
+    override void initPainter(QPainter* painter) const;
+    override QPaintDevice redirected(QPoint* offset) const;
+    override QPainter* sharedPainter() const;
+}
+
 /// Binding for C++ class [QPdfWriter](https://doc.qt.io/qt-5/qpdfwriter.html).
 class /+ Q_GUI_EXPORT +/ QPdfWriter : QObject, QPagedPaintDeviceInterface
 {
@@ -42,22 +49,22 @@ class /+ Q_GUI_EXPORT +/ QPdfWriter : QObject, QPagedPaintDeviceInterface
     int devType() const
     {
         const QPagedPaintDeviceInterface base1 = this;
-        return (cast(QPagedPaintDevice)cast(void*)base1).devType();
+        return (cast(QPdfWriterDummy)cast(void*)base1).devType();
     }
     void initPainter(QPainter * painter) const
     {
         const QPagedPaintDeviceInterface base1 = this;
-        return (cast(QPagedPaintDevice)cast(void*)base1).initPainter(painter);
+        return (cast(QPdfWriterDummy)cast(void*)base1).initPainter(painter);
     }
     QPaintDevice redirected(QPoint* offset) const
     {
         const QPagedPaintDeviceInterface base1 = this;
-        return (cast(QPagedPaintDevice)cast(void*)base1).redirected(offset);
+        return (cast(QPdfWriterDummy)cast(void*)base1).redirected(offset);
     }
     QPainter* sharedPainter() const
     {
         const QPagedPaintDeviceInterface base1 = this;
-        return (cast(QPagedPaintDevice)cast(void*)base1).sharedPainter();
+        return (cast(QPdfWriterDummy)cast(void*)base1).sharedPainter();
     }
 
     mixin(Q_OBJECT);

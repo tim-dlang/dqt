@@ -44,7 +44,9 @@ public:
     /+ using QObject::parent; +/
     override int rowCount(ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override QVariant headerData(int section, /+ Qt:: +/qt.core.namespace.Orientation orientation, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool dropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action, int row, int column, ref const(QModelIndex) parent);
+    }));
     override QModelIndex sibling(int row, int column, ref const(QModelIndex) idx) const;
 
     override QItemSelection mapSelectionFromSource(ref const(QItemSelection) selection) const;

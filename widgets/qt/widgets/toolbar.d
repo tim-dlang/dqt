@@ -70,9 +70,13 @@ public:
     /+ using QWidget::addAction; +/
     final QAction addAction(ref const(QString) text);
     final QAction addAction(ref const(QIcon) icon, ref const(QString) text);
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QAction addAction(ref const(QString) text, const(QObject) receiver, const(char)* member);
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QAction addAction(ref const(QIcon) icon, ref const(QString) text,
                            const(QObject) receiver, const(char)* member);
+    }));
 /+ #ifdef Q_CLANG_QDOC
     template<typename Functor>
     QAction *addAction(const QString &text, Functor functor);

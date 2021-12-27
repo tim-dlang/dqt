@@ -83,11 +83,15 @@ public:
 #endif +/
 
     /+ using QGuiApplication::palette; +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static QPalette palette(const(QWidget) );
+    }));
     static QPalette palette(const(char)* className);
     static void setPalette(ref const(QPalette) , const(char)* className = null);
     static QFont font();
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static QFont font(const(QWidget));
+    }));
     static QFont font(const(char)* className);
     static void setFont(ref const(QFont) , const(char)* className = null);
     static QFontMetrics fontMetrics();

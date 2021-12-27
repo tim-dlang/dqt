@@ -147,8 +147,10 @@ public:
                 ref const(QVariant) value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.EditRole);
 
     override QMimeData mimeData(ref const(QModelIndexList) indexes) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool dropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action,
                           int row, int column, ref const(QModelIndex) parent);
+    }));
 
     override bool insertRows(int row, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);
     override bool insertColumns(int column, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);

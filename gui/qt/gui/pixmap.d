@@ -94,10 +94,14 @@ public:
 
     void fill(ref const(QColor) fillColor /+ = Qt::white +/);
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X("Use QPainter or fill(QColor)") +/
         void fill(const(QPaintDevice) device, ref const(QPoint) ofs);
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X("Use QPainter or fill(QColor)") +/
         void fill(const(QPaintDevice) device, int xofs, int yofs);
+    }));
 /+ #endif +/
 
     QBitmap mask() const;

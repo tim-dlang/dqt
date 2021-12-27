@@ -329,10 +329,10 @@ protected:
 /+ #endif +/
 
     /+ virtual +/ QMimeData createMimeDataFromSelection() const;
-    mixin(mangleWindows("?canInsertFromMimeData@QTextEdit@@MEBA_NPEBVQMimeData@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ bool canInsertFromMimeData(const(QMimeData) source) const;
     }));
-    mixin(mangleWindows("?insertFromMimeData@QTextEdit@@MEAAXPEBVQMimeData@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ void insertFromMimeData(const(QMimeData) source);
     }));
 

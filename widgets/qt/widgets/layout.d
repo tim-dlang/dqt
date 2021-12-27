@@ -116,7 +116,9 @@ public:
     final bool isEnabled() const;
 
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static QSize closestAcceptableSize(const(QWidget) w, ref const(QSize) s);
+    }));
 
     override QSize sizeHint() const
     {

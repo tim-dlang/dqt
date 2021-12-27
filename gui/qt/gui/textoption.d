@@ -33,7 +33,8 @@ public:
         DelimiterTab
     }
 
-    struct /+ Q_GUI_EXPORT +/ Tab {
+    // Workaround for https://issues.dlang.org/show_bug.cgi?id=20701
+    extern(C++, struct) struct /+ Q_GUI_EXPORT +/ Tab {
         @disable this();
         /+pragma(inline, true) this()
         {

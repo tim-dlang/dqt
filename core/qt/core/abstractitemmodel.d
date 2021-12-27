@@ -147,7 +147,7 @@ public:
 /+ #endif +/
     QVariant data(int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) const;
     /+ Qt:: +/qt.core.namespace.ItemFlags flags() const;
-    mixin(mangleWindows("?model@QPersistentModelIndex@@QEBAPEBVQAbstractItemModel@@XZ", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     const(QAbstractItemModel) model() const;
     }));
     bool isValid() const;
@@ -214,11 +214,11 @@ public:
 
     /+ virtual +/ QStringList mimeTypes() const;
     /+ virtual +/ QMimeData mimeData(ref const(QModelIndexList) indexes) const;
-    mixin(mangleWindows("?canDropMimeData@QAbstractItemModel@@UEBA_NPEBVQMimeData@@W4DropAction@Qt@@HHAEBVQModelIndex@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ bool canDropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action,
                                      int row, int column, ref const(QModelIndex) parent) const;
     }));
-    mixin(mangleWindows("?dropMimeData@QAbstractItemModel@@UEAA_NPEBVQMimeData@@W4DropAction@Qt@@HHAEBVQModelIndex@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ bool dropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action,
                                   int row, int column, ref const(QModelIndex) parent);
     }));
@@ -400,8 +400,10 @@ public:
 
     override QModelIndex index(int row, int column, ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override QModelIndex sibling(int row, int column, ref const(QModelIndex) idx) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool dropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action,
                           int row, int column, ref const(QModelIndex) parent);
+    }));
 
     override /+ Qt:: +/qt.core.namespace.ItemFlags flags(ref const(QModelIndex) index) const;
 
@@ -427,8 +429,10 @@ public:
 
     override QModelIndex index(int row, int column = 0, ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override QModelIndex sibling(int row, int column, ref const(QModelIndex) idx) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool dropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action,
                           int row, int column, ref const(QModelIndex) parent);
+    }));
 
     override /+ Qt:: +/qt.core.namespace.ItemFlags flags(ref const(QModelIndex) index) const;
 
@@ -439,9 +443,15 @@ protected:
 
 /*private:*/
     /+ Q_DISABLE_COPY(QAbstractListModel) +/
+    mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
     override QModelIndex parent(ref const(QModelIndex) child) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
     override int columnCount(ref const(QModelIndex) parent) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
     override bool hasChildren(ref const(QModelIndex) parent) const;
+    }));
 }
 
 // inline implementations

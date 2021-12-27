@@ -362,8 +362,13 @@ public:
     final void installEventFilter(QObject filterObj);
     final void removeEventFilter(QObject obj);
 
+    // Workaround for https://issues.dlang.org/show_bug.cgi?id=22620
+    private enum dummyNamespaceConnectionType = __traits(getCppNamespaces, ConnectionType);
+
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static QMetaObject.Connection connect(const QObject sender, const char *signal,
                         const QObject receiver, const char *member, ConnectionType = ConnectionType.AutoConnection);
+    }));
 
     /+ static QMetaObject::Connection connect(const QObject *sender, const QMetaMethod &signal,
                         const QObject *receiver, const QMetaMethod &method,
@@ -840,15 +845,20 @@ private:
     /+ Q_PRIVATE_SLOT(d_func(), void _q_reregisterTimers(void *)) +/
 
 private:
-    mixin(mangleWindows("?connectImpl@QObject@@CA?AVConnection@QMetaObject@@PEBV1@PEAPEAX01PEAVQSlotObjectBase@QtPrivate@@W4ConnectionType@Qt@@PEBHPEBU3@@Z", q{
+    // Workaround for https://issues.dlang.org/show_bug.cgi?id=22620
+    enum dummyNamespaceQSlotObjectBase = __traits(getCppNamespaces, qt.core.objectdefs_impl.QSlotObjectBase);
+
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static QMetaObject.Connection connectImpl(const(QObject) sender, void** signal,
                                                    const(QObject) receiver, void** slotPtr,
                                                    /+ QtPrivate:: +/qt.core.objectdefs_impl.QSlotObjectBase* slot, /+ Qt:: +/qt.core.namespace.ConnectionType type,
                                                    const(int)* types, const(QMetaObject)* senderMetaObject);
     }));
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static bool disconnectImpl(const(QObject) sender, void** signal, const(QObject) receiver, void** slot,
                                    const(QMetaObject)* senderMetaObject);
+    }));
 
 }
 

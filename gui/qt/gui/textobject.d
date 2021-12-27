@@ -225,7 +225,9 @@ public:
 
     QVector!(QTextLayout.FormatRange) textFormats() const;
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     const(QTextDocument) document() const;
+    }));
 
     QTextList textList() const;
 

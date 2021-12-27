@@ -127,8 +127,10 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     bool isActive() const;
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X("Use begin(QPaintDevice*) instead") +/
         void initFrom(const(QPaintDevice) device);
+    }));
 /+ #endif +/
 
     enum CompositionMode {
@@ -743,13 +745,19 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     QPaintEngine paintEngine() const;
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X("Use QWidget::render() instead") +/
         static void setRedirected(const(QPaintDevice) device, QPaintDevice replacement,
                                   ref const(QPoint) offset = globalInitVar!QPoint);
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X("Use QWidget::render() instead") +/
         static QPaintDevice redirected(const(QPaintDevice) device, QPoint* offset = null);
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X("Use QWidget::render() instead") +/
         static void restoreRedirected(const(QPaintDevice) device);
+    }));
 /+ #endif +/
 
     void beginNativePainting();

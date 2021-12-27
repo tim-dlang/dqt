@@ -310,7 +310,9 @@ public:
     final QTreeWidgetItem itemAt(ref const(QPoint) p) const;
     pragma(inline, true) final QTreeWidgetItem itemAt(int ax, int ay) const
     { auto tmp = QPoint(ax, ay); return itemAt(tmp); }
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QRect visualItemRect(const(QTreeWidgetItem) item) const;
+    }));
 
     final int sortColumn() const;
     final void sortItems(int column, /+ Qt:: +/qt.core.namespace.SortOrder order);
@@ -327,42 +329,68 @@ public:
     { setItemWidget(item, column, null); }
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::isSelected() instead") +/
         final bool isItemSelected(const(QTreeWidgetItem) item) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setSelected() instead") +/
         final void setItemSelected(const(QTreeWidgetItem) item, bool select);
+    }));
 /+ #endif +/
     final QList!(QTreeWidgetItem) selectedItems() const;
     final QList!(QTreeWidgetItem) findItems(ref const(QString) text, /+ Qt:: +/qt.core.namespace.MatchFlags flags,
                                           int column = 0) const;
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::isHidden() instead") +/
         final bool isItemHidden(const(QTreeWidgetItem) item) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setHidden() instead") +/
         final void setItemHidden(const(QTreeWidgetItem) item, bool hide);
+    }));
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::isExpanded() instead") +/
         final bool isItemExpanded(const(QTreeWidgetItem) item) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setExpanded() instead") +/
         final void setItemExpanded(const(QTreeWidgetItem) item, bool expand);
+    }));
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::isFirstColumnSpanned() instead") +/
         final bool isFirstItemColumnSpanned(const(QTreeWidgetItem) item) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setFirstColumnSpanned() instead") +/
         final void setFirstItemColumnSpanned(const(QTreeWidgetItem) item, bool span);
+    }));
 /+ #endif +/
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QTreeWidgetItem itemAbove(const(QTreeWidgetItem) item) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QTreeWidgetItem itemBelow(const(QTreeWidgetItem) item) const;
+    }));
 
     override void setSelectionModel(QItemSelectionModel selectionModel);
 
 public /+ Q_SLOTS +/:
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     @QSlot final void scrollToItem(const(QTreeWidgetItem) item,
                           QAbstractItemView.ScrollHint hint = ScrollHint.EnsureVisible);
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     @QSlot final void expandItem(const(QTreeWidgetItem) item);
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     @QSlot final void collapseItem(const(QTreeWidgetItem) item);
+    }));
     @QSlot final void clear();
 
 /+ Q_SIGNALS +/public:
@@ -386,7 +414,7 @@ protected:
 #else +/
     /+ virtual +/ QMimeData mimeData(const(QList!(QTreeWidgetItem)) items) const;
 /+ #endif +/
-    mixin(mangleWindows("?dropMimeData@QTreeWidget@@MEAA_NPEAVQTreeWidgetItem@@HPEBVQMimeData@@W4DropAction@Qt@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ bool dropMimeData(QTreeWidgetItem parent, int index,
                                   const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action);
     }));
@@ -397,9 +425,13 @@ public:
 #else +/
 protected:
 /+ #endif +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QList!(QTreeWidgetItem) items(const(QMimeData) data) const;
+    }));
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QModelIndex indexFromItem(const(QTreeWidgetItem) item, int column = 0) const;
+    }));
 /+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
     final QModelIndex indexFromItem(QTreeWidgetItem item, int column = 0) const; // ### Qt 6: remove
 /+ #endif +/
@@ -410,7 +442,7 @@ protected:
     override void dropEvent(QDropEvent event);
 /+ #endif +/
 private:
-    mixin(mangleWindows("?setModel@QTreeWidget@@EEAAXPEAVQAbstractItemModel@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     protected override void setModel(QAbstractItemModel model);
     }));
 

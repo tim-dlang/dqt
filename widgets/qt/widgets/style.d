@@ -860,7 +860,9 @@ alias SubControls = QFlags!(SubControl);
                                   QSizePolicy.ControlTypes controls2, /+ Qt:: +/qt.core.namespace.Orientation orientation,
                                   QStyleOption* option = null, QWidget widget = null) const;
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final const(QStyle)  proxy() const;
+    }));
 
 private:
     /+ Q_DISABLE_COPY(QStyle) +/

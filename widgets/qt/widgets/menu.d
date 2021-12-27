@@ -63,8 +63,12 @@ public:
     final QAction addAction(ref const(QString) text);
     final QAction addAction(const(QString) text) { return addAction(text); }
     final QAction addAction(ref const(QIcon) icon, ref const(QString) text);
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QAction addAction(ref const(QString) text, const(QObject) receiver, const(char)* member, ref const(QKeySequence) shortcut /+ = 0 +/);
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QAction addAction(ref const(QIcon) icon, ref const(QString) text, const(QObject) receiver, const(char)* member, ref const(QKeySequence) shortcut /+ = 0 +/);
+    }));
 
 /+ #ifdef Q_CLANG_QDOC
     template<typename Functor>
@@ -234,7 +238,11 @@ protected:
     override void timerEvent(QTimerEvent );
     override bool event(QEvent );
     override bool focusNextPrevChild(bool next);
+    // Workaround for https://issues.dlang.org/show_bug.cgi?id=22620
+    private enum dummyNamespaceQStyleOptionMenuItem = __traits(getCppNamespaces, QStyleOptionMenuItem);
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final void initStyleOption(QStyleOptionMenuItem* option, const(QAction) action) const;
+    }));
 
 private /+ Q_SLOTS +/:
     @QSlot final void internalDelayedPopup();

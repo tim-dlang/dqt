@@ -978,8 +978,8 @@ struct IteratorOwner(const_iterator)
 
 struct /+ Q_CORE_EXPORT +/ VectorBoolElements
 {
-  extern static __gshared const(bool) true_element;
-  extern static __gshared const(bool) false_element;
+  mixin(q{extern } ~ exportOnWindows ~ q{static __gshared const(bool) true_element;});
+  mixin(q{extern } ~ exportOnWindows ~ q{static __gshared const(bool) false_element;});
 }
 
 /+ template<>

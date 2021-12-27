@@ -72,8 +72,10 @@ public:
 
     override QStringList mimeTypes() const;
     override QMimeData mimeData(ref const(QModelIndexList) indexes) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool dropMimeData(const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action,
                           int row, int column, ref const(QModelIndex) parent);
+    }));
     override /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;
 
     // QDirModel specific API

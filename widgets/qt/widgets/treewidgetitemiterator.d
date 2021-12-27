@@ -101,7 +101,9 @@ alias IteratorFlags = QFlags!(IteratorFlag);
     }
 
 private:
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     bool matchesFlags(const(QTreeWidgetItem) item) const;
+    }));
     QScopedPointer!(QTreeWidgetItemIteratorPrivate) d_ptr;
     QTreeWidgetItem current;
     IteratorFlags flags;

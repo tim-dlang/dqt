@@ -37,7 +37,9 @@ version(QT_NO_CURSOR)
 {
 public:
     static QPoint pos();
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static QPoint pos(const(QScreen) screen);
+    }));
     static void setPos(int x, int y);
     static void setPos(QScreen screen, int x, int y);
     pragma(inline, true) static void setPos(ref const(QPoint) p) { setPos(p.x(), p.y()); }
@@ -111,7 +113,9 @@ public:
     QPoint hotSpot() const;
 
     static QPoint pos();
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static QPoint pos(const(QScreen) screen);
+    }));
     static void setPos(int x, int y);
     static void setPos(QScreen screen, int x, int y);
     pragma(inline, true) static void setPos(ref const(QPoint) p) { setPos(p.x(), p.y()); }

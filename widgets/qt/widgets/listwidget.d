@@ -217,7 +217,7 @@ public:
     override void setSelectionModel(QItemSelectionModel selectionModel);
 
     final QListWidgetItem item(int row) const;
-    mixin(mangleWindows("?row@QListWidget@@QEBAHPEBVQListWidgetItem@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final int row(const(QListWidgetItem) item) const;
     }));
     final void insertItem(int row, QListWidgetItem item);
@@ -242,7 +242,9 @@ public:
     final QListWidgetItem itemAt(ref const(QPoint) p) const;
     pragma(inline, true) final QListWidgetItem itemAt(int ax, int ay) const
     { auto tmp = QPoint(ax, ay); return itemAt(tmp); }
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QRect visualItemRect(const(QListWidgetItem) item) const;
+    }));
 
     final void sortItems(/+ Qt:: +/qt.core.namespace.SortOrder order = /+ Qt:: +/qt.core.namespace.SortOrder.AscendingOrder);
     final void setSortingEnabled(bool enable);
@@ -260,19 +262,27 @@ public:
     { setItemWidget(aItem, null); }
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QListWidgetItem::isSelected() instead") +/
         final bool isItemSelected(const(QListWidgetItem) item) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QListWidgetItem::setSelected() instead") +/
         final void setItemSelected(const(QListWidgetItem) item, bool select);
+    }));
 /+ #endif +/
     final QList!(QListWidgetItem) selectedItems() const;
     final QList!(QListWidgetItem) findItems(ref const(QString) text, /+ Qt:: +/qt.core.namespace.MatchFlags flags) const;
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QListWidgetItem::isHidden() instead") +/
         final bool isItemHidden(const(QListWidgetItem) item) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QListWidgetItem::setHidden() instead") +/
         final void setItemHidden(const(QListWidgetItem) item, bool hide);
+    }));
 /+ #endif
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 protected:
@@ -281,7 +291,9 @@ protected:
     override void dropEvent(QDropEvent event);
 /+ #endif +/
 public /+ Q_SLOTS +/:
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     @QSlot final void scrollToItem(const(QListWidgetItem) item, QAbstractItemView.ScrollHint hint = ScrollHint.EnsureVisible);
+    }));
     @QSlot final void clear();
 
 /+ Q_SIGNALS +/public:
@@ -308,7 +320,7 @@ protected:
     /+ virtual +/ QMimeData mimeData(const(QList!(QListWidgetItem)) items) const;
 /+ #endif
 #if QT_CONFIG(draganddrop) +/
-    mixin(mangleWindows("?dropMimeData@QListWidget@@MEAA_NHPEBVQMimeData@@W4DropAction@Qt@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ bool dropMimeData(int index, const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action);
     }));
     /+ virtual +/ /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;
@@ -319,16 +331,20 @@ public:
 #else +/
 protected:
 /+ #endif +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QList!(QListWidgetItem) items(const(QMimeData) data) const;
+    }));
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QModelIndex indexFromItem(const(QListWidgetItem) item) const;
+    }));
 /+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
     final QModelIndex indexFromItem(QListWidgetItem item) const; // ### Qt 6: remove
 /+ #endif +/
     final QListWidgetItem itemFromIndex(ref const(QModelIndex) index) const;
 
 private:
-    mixin(mangleWindows("?setModel@QListWidget@@EEAAXPEAVQAbstractItemModel@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     protected override void setModel(QAbstractItemModel model);
     }));
     final /+ Qt:: +/qt.core.namespace.SortOrder sortOrder() const;

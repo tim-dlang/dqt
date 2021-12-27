@@ -174,10 +174,14 @@ alias SelectionFlags = QFlags!(SelectionFlag);    /+ Q_FLAG(SelectionFlags) +/
     final QModelIndexList selectedIndexes() const;
     @QInvokable final QModelIndexList selectedRows(int column = 0) const;
     @QInvokable final QModelIndexList selectedColumns(int row = 0) const;
+    mixin(mangleWindows("?selection@QItemSelectionModel@@QEBA?BVQItemSelection@@XZ", q{
     final const(QItemSelection) selection() const;
+    }));
 
     // ### Qt 6: Merge these two as "QAbstractItemModel *model() const"
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final const(QAbstractItemModel) model() const;
+    }));
     final QAbstractItemModel model();
 
     final void setModel(QAbstractItemModel model);

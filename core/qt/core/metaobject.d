@@ -254,13 +254,23 @@ public:
     bool isReadable() const;
     bool isWritable() const;
     bool isResettable() const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     bool isDesignable(const(QObject) obj = null) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     bool isScriptable(const(QObject) obj = null) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     bool isStored(const(QObject) obj = null) const;
+    }));
 /+ #if QT_DEPRECATED_SINCE(5, 15) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_VERSION_5_15 +/ bool isEditable(const(QObject) obj = null) const;
+    }));
 /+ #endif +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     bool isUser(const(QObject) obj = null) const;
+    }));
     bool isConstant() const;
     bool isFinal() const;
     bool isRequired() const;
@@ -275,7 +285,9 @@ public:
 
     int revision() const;
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     QVariant read(const(QObject) obj) const;
+    }));
     bool write(QObject obj, ref const(QVariant) value) const;
     bool reset(QObject obj) const;
 

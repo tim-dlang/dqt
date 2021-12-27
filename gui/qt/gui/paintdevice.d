@@ -82,9 +82,9 @@ public:
 protected:
     this()/+ noexcept+/;
     /+ virtual +/ int metric(PaintDeviceMetric metric) const;
-    package /+ virtual +/ void initPainter(QPainter* painter) const;
-    package /+ virtual +/ QPaintDevice redirected(QPoint* offset) const;
-    package /+ virtual +/ QPainter* sharedPainter() const;
+    /+ virtual +/ void initPainter(QPainter* painter) const;
+    /+ virtual +/ QPaintDevice redirected(QPoint* offset) const;
+    /+ virtual +/ QPainter* sharedPainter() const;
 
     ushort        painters;                        // refcount
 private:

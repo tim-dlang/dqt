@@ -34,9 +34,15 @@ public:
     this();
     ~this();
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final int screenNumber(const(QWidget) widget = null) const;
+    }));
+    mixin(mangleWindows("?screenGeometry@QDesktopWidget@@QEBA?BVQRect@@PEBVQWidget@@@Z", q{
     final const(QRect) screenGeometry(const(QWidget) widget) const;
+    }));
+    mixin(mangleWindows("?availableGeometry@QDesktopWidget@@QEBA?BVQRect@@PEBVQWidget@@@Z", q{
     final const(QRect) availableGeometry(const(QWidget) widget) const;
+    }));
 
 /+ #if QT_DEPRECATED_SINCE(5, 11) +/
     /+ QT_DEPRECATED_X("Use QScreen::virtualSiblings() of primary screen") +/  final bool isVirtualDesktop() const;

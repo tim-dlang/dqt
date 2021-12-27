@@ -315,7 +315,9 @@ alias RenderFlags = QFlags!(RenderFlag);
 
     pragma(inline, true) final bool isEnabled() const
     { return !testAttribute(/+ Qt:: +/qt.core.namespace.WidgetAttribute.WA_Disabled); }
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final bool isEnabledTo(const(QWidget) ) const;
+    }));
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
     /+ QT_DEPRECATED_X ("Use isEnabled() instead") +/
         pragma(inline, true) final bool isEnabledToTLW() const
@@ -395,8 +397,12 @@ public:
     final QPoint mapFromGlobal(ref const(QPoint) ) const;
     final QPoint mapToParent(ref const(QPoint) ) const;
     final QPoint mapFromParent(ref const(QPoint) ) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QPoint mapTo(const(QWidget) , ref const(QPoint) ) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QPoint mapFrom(const(QWidget) , ref const(QPoint) ) const;
+    }));
 
     final QWidget window() const;
     final QWidget nativeParentWidget() const;
@@ -629,7 +635,9 @@ public:
     final void adjustSize();
     pragma(inline, true) final bool isVisible() const
     { return testAttribute(/+ Qt:: +/qt.core.namespace.WidgetAttribute.WA_WState_Visible); }
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final bool isVisibleTo(const(QWidget) ) const;
+    }));
     pragma(inline, true) final bool isHidden() const
     { return testAttribute(/+ Qt:: +/qt.core.namespace.WidgetAttribute.WA_WState_Hidden); }
 
@@ -730,7 +738,9 @@ public:
 
     final void ensurePolished() const;
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final bool isAncestorOf(const(QWidget) child) const;
+    }));
 
     version(QT_KEYPAD_NAVIGATION)
     {

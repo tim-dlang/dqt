@@ -254,10 +254,10 @@ public:
     final void setColumnCount(int columns);
     final int columnCount() const;
 
-    mixin(mangleWindows("?row@QTableWidget@@QEBAHPEBVQTableWidgetItem@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final int row(const(QTableWidgetItem) item) const;
     }));
-    mixin(mangleWindows("?column@QTableWidget@@QEBAHPEBVQTableWidgetItem@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final int column(const(QTableWidgetItem) item) const;
     }));
 
@@ -299,10 +299,14 @@ public:
     { setCellWidget(arow, acolumn, null); }
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTableWidgetItem::isSelected() instead") +/
         final bool isItemSelected(const(QTableWidgetItem) item) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_X ("Use QTableWidgetItem::setSelected() instead") +/
         final void setItemSelected(const(QTableWidgetItem) item, bool select);
+    }));
 /+ #endif +/
     final void setRangeSelected(ref const(QTableWidgetSelectionRange) range, bool select);
 
@@ -316,13 +320,21 @@ public:
     final QTableWidgetItem itemAt(ref const(QPoint) p) const;
     pragma(inline, true) final QTableWidgetItem itemAt(int ax, int ay) const
     { auto tmp = QPoint(ax, ay); return itemAt(tmp); }
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QRect visualItemRect(const(QTableWidgetItem) item) const;
+    }));
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final const(QTableWidgetItem) itemPrototype() const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final void setItemPrototype(const(QTableWidgetItem) item);
+    }));
 
 public /+ Q_SLOTS +/:
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     @QSlot final void scrollToItem(const(QTableWidgetItem) item, QAbstractItemView.ScrollHint hint = ScrollHint.EnsureVisible);
+    }));
     @QSlot final void insertRow(int row);
     @QSlot final void insertColumn(int column);
     @QSlot final void removeRow(int row);
@@ -361,7 +373,7 @@ protected:
 #else +/
     /+ virtual +/ QMimeData mimeData(const(QList!(QTableWidgetItem)) items) const;
 /+ #endif +/
-    mixin(mangleWindows("?dropMimeData@QTableWidget@@MEAA_NHHPEBVQMimeData@@W4DropAction@Qt@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ bool dropMimeData(int row, int column, const(QMimeData) data, qt.core.namespace.DropAction action);
     }));
     /+ virtual +/ /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;
@@ -371,9 +383,13 @@ public:
 #else +/
 protected:
 /+ #endif +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QList!(QTableWidgetItem) items(const(QMimeData) data) const;
+    }));
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QModelIndex indexFromItem(const(QTableWidgetItem) item) const;
+    }));
 /+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
     final QModelIndex indexFromItem(QTableWidgetItem item) const; // ### Qt 6: remove
 /+ #endif +/
@@ -384,7 +400,7 @@ protected:
     override void dropEvent(QDropEvent event);
 /+ #endif +/
 private:
-    mixin(mangleWindows("?setModel@QTableView@@UEAAXPEAVQAbstractItemModel@@@Z", q{
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     protected override void setModel(QAbstractItemModel model);
     }));
 

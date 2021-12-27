@@ -144,8 +144,12 @@ public:
 /+ #ifndef QT_NO_VALIDATOR +/
     version(QT_NO_VALIDATOR){}else
     {
+        mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
         final void setValidator(const(QValidator) v);
+        }));
+        mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
         final const(QValidator) validator() const;
+        }));
     }
 /+ #endif
 

@@ -51,7 +51,9 @@ public:
     final QString text(ref QString subtype, Mode mode = Mode.Clipboard) const;
     final void setText(ref const(QString) , Mode mode = Mode.Clipboard);
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final const(QMimeData) mimeData(Mode mode = Mode.Clipboard ) const;
+    }));
     final void setMimeData(QMimeData data, Mode mode = Mode.Clipboard);
 
     final QImage image(Mode mode = Mode.Clipboard) const;

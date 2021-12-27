@@ -340,7 +340,9 @@ public:
     override void sort(int column, /+ Qt:: +/qt.core.namespace.SortOrder order = /+ Qt:: +/qt.core.namespace.SortOrder.AscendingOrder);
 
     final QStandardItem itemFromIndex(ref const(QModelIndex) index) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QModelIndex indexFromItem(const(QStandardItem) item) const;
+    }));
 
     final QStandardItem item(int row, int column = 0) const;
     final void setItem(int row, int column, QStandardItem item);
@@ -383,8 +385,12 @@ public:
     final QStandardItem takeHorizontalHeaderItem(int column);
     final QStandardItem takeVerticalHeaderItem(int row);
 
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final const(QStandardItem) itemPrototype() const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final void setItemPrototype(const(QStandardItem) item);
+    }));
 
     final QList!(QStandardItem) findItems(ref const(QString) text,
                                         /+ Qt:: +/qt.core.namespace.MatchFlags flags = /+ Qt:: +/qt.core.namespace.MatchFlag.MatchExactly,
@@ -395,7 +401,9 @@ public:
 
     override QStringList mimeTypes() const;
     override QMimeData mimeData(ref const(QModelIndexList) indexes) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     override bool dropMimeData (const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action, int row, int column, ref const(QModelIndex) parent);
+    }));
 
 /+ Q_SIGNALS +/public:
     // ### Qt 6: add changed roles
