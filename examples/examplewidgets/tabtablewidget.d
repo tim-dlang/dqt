@@ -37,13 +37,13 @@ private /+ slots +/:
         import qt.gui.brush;
         import qt.gui.color;
         import qt.gui.font;
+        import qt.widgets.action;
         import qt.widgets.colordialog;
         import qt.widgets.fontdialog;
         import qt.widgets.inputdialog;
         import qt.widgets.lineedit;
         import qt.widgets.menu;
         import qt.widgets.tablewidget;
-        import qt.widgets.action;
 
         int currentRow = ui.tableWidget.rowAt(pos.y());
         int currentColumn = ui.tableWidget.columnAt(pos.x());

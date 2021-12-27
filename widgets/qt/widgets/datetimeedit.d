@@ -23,13 +23,12 @@ import qt.core.size;
 import qt.core.string;
 import qt.core.variant;
 import qt.gui.event;
+import qt.gui.validator;
 import qt.helpers;
 import qt.widgets.abstractspinbox;
 import qt.widgets.calendarwidget;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
-version(QT_NO_VALIDATOR){}else
-    import qt.gui.validator;
 
 /+ QT_REQUIRE_CONFIG(datetimeedit); +/
 

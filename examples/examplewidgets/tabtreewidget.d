@@ -36,11 +36,11 @@ private /+ slots +/:
         import qt.gui.brush;
         import qt.gui.color;
         import qt.gui.font;
+        import qt.widgets.action;
         import qt.widgets.colordialog;
         import qt.widgets.fontdialog;
         import qt.widgets.menu;
         import qt.widgets.treewidget;
-        import qt.widgets.action;
 
         QTreeWidgetItem item = ui.treeWidget.itemAt(pos);
         QMenu menu = cpp_new!QMenu;

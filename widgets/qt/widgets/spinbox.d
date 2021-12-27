@@ -15,11 +15,10 @@ extern(C++):
 import qt.config;
 import qt.core.coreevent;
 import qt.core.string;
+import qt.gui.validator;
 import qt.helpers;
 import qt.widgets.abstractspinbox;
 import qt.widgets.widget;
-version(QT_NO_VALIDATOR){}else
-    import qt.gui.validator;
 
 /+ QT_REQUIRE_CONFIG(spinbox); +/
 

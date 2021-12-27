@@ -24,10 +24,9 @@ import qt.gui.event;
 import qt.gui.icon;
 import qt.helpers;
 import qt.widgets.action;
+import qt.widgets.event;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
-version(QT_NO_ACTION){}else
-    import qt.widgets.event;
 
 /+ QT_REQUIRE_CONFIG(toolbar); +/
 

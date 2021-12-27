@@ -25,10 +25,9 @@ import qt.gui.icon;
 import qt.gui.keysequence;
 import qt.helpers;
 import qt.widgets.action;
+import qt.widgets.event;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
-version(QT_NO_ACTION){}else
-    import qt.widgets.event;
 
 /+ #if defined(Q_OS_MACOS) || defined(Q_CLANG_QDOC)
 Q_FORWARD_DECLARE_OBJC_CLASS(NSMenu);
