@@ -1,0 +1,234 @@
+import std.stdio, std.conv, std.string, std.path, std.process, std.file, std.algorithm, std.range;
+static import std.system;
+
+struct Test
+{
+    string name;
+    string[] qtModules;
+    string[] extraArgs;
+    bool buildOnly;
+}
+
+string[] dependencyClosure(string[] modules, string[][string] dependencies)
+{
+    string[] r;
+    bool[string] done;
+    void add(string[] modules)
+    {
+        foreach(m; modules)
+        {
+            if(m in done)
+                continue;
+            done[m] = true;
+            auto d = m in dependencies;
+            if(d)
+                add(*d);
+            r ~= m;
+        }
+    }
+    add(modules);
+    return r;
+}
+
+version(Windows)
+{
+    enum os = "win";
+    enum libExt = ".lib";
+}
+else
+{
+    enum os = text(std.system.os);
+    enum libExt = ".a";
+}
+
+int main(string[] args)
+{
+    bool anyFailure;
+
+    string model;
+    static if(size_t.sizeof == 8)
+        model = "64";
+    else static if(size_t.sizeof == 4)
+        model = "32";
+    else static assert("Unknown size of size_t");
+
+    string compiler = "dmd";
+
+    for(size_t i = 1; i < args.length; i++)
+    {
+        if(args[i].startsWith("-m"))
+        {
+            model = args[i][2..$];
+        }
+        else if(args[i].startsWith("--compiler="))
+        {
+            compiler = args[i]["--compiler=".length..$];
+        }
+        else
+        {
+            stderr.writeln("Unknown argument ", args[i]);
+            return 1;
+        }
+    }
+
+    version(Windows)
+    {
+        import core.sys.windows.winbase: SetErrorMode, SEM_NOGPFAULTERRORBOX;
+        uint dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
+        SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
+    }
+
+    string[][string] moduleDependencies;
+    moduleDependencies["widgets"] = ["gui"];
+    moduleDependencies["gui"] = ["core"];
+
+    // Collect tests
+    Test[] tests;
+    foreach (DirEntry e; dirEntries("tests", "*.d", SpanMode.shallow))
+    {
+        tests ~= Test(e.name, [], ["-main", "-unittest", "-Itests", "-I" ~ buildPath("test_results", os ~ model, "tests")]);
+        File f = File(e.name, "r");
+        foreach(line; f.byLine)
+        {
+            if(!line.startsWith("//"))
+                break;
+            if(line.startsWith("// QT_MODULES:"))
+            {
+                tests[$-1].qtModules = line["// QT_MODULES:".length..$].splitter().filter!(m => m.length).map!(m => m.idup).array;
+            }
+            else if(line.startsWith("// BUILD_ONLY"))
+            {
+                tests[$-1].buildOnly = true;
+            }
+            else
+            {
+                stderr.writeln("Unknown comment at start of file ", e.name, ": ", line);
+            }
+        }
+    }
+    tests ~= Test(buildPath("examples", "helloworld", "main.d"), ["widgets"], ["-Iexamples"], true);
+    tests ~= Test(buildPath("examples", "examplewidgets", "main.d"), ["widgets"], ["-Iexamples", "-J" ~ buildPath("examples", "examplewidgets")], true);
+
+    foreach(ref test; tests)
+        test.qtModules = dependencyClosure(test.qtModules, moduleDependencies);
+    tests.sort!((a, b) => a.qtModules.length < b.qtModules.length);
+
+    // Create module qtmodules.d, which contains lists of all D modules per Qt module.
+    {
+        mkdirRecurse(buildPath("test_results", os ~ model, "tests", "imports"));
+        File moduleListFile = File(buildPath("test_results", os ~ model, "tests", "imports", "qtmodules.d"), "w");
+        moduleListFile.writeln("module imports.qtmodules;");
+        foreach(m; ["core", "gui", "widgets"])
+        {
+            moduleListFile.writeln("immutable string[] modules", capitalize(m), " = [");
+            string[] modules;
+            foreach (DirEntry e; dirEntries(buildPath(m, "qt", m), "*.d", SpanMode.depth))
+            {
+                string m2 = e.name[0..$-2].replace("/", ".").replace("\\", ".");
+                assert(m2.startsWith(m ~ "."));
+                m2 = m2[m.length+1..$];
+                modules ~= m2;
+            }
+            modules.sort();
+            foreach(m2; modules)
+                moduleListFile.writeln("    \"", m2, "\",");
+            moduleListFile.writeln("];");
+        }
+    }
+
+    // Precompile static libraries for the bindings.
+    foreach(m; ["core", "gui", "widgets"])
+    {
+        string[] dmdArgs = [compiler, "-lib", "-g", "-m" ~ model];
+        foreach (DirEntry e; dirEntries(buildPath(m, "qt", m), "*.d", SpanMode.depth))
+        {
+            dmdArgs ~= e.name;
+        }
+        if(m == "core")
+            dmdArgs ~= buildPath("core", "qt", "helpers.d");
+        foreach_reverse(m2; dependencyClosure([m], moduleDependencies))
+        {
+            dmdArgs ~= "-I" ~ m2;
+        }
+        dmdArgs ~= "-od" ~ buildPath("test_results", os ~ model);
+        dmdArgs ~= "-of" ~ "libdqt" ~ m ~ libExt;
+
+        auto dmdRes = execute(dmdArgs);
+        if(dmdRes.status)
+        {
+            stderr.writeln("Failure compiling module ", m);
+            stderr.writeln(escapeShellCommand(dmdArgs));
+            stderr.writeln(dmdRes.output);
+            return 1;
+        }
+    }
+
+    // Compile and run the tests
+    foreach(ref test; tests)
+    {
+        string resultDir = buildPath("test_results", os ~ model, dirName(test.name));
+        string executable = buildPath(resultDir, baseName(test.name, ".d"));
+
+        string[] dmdArgs = [compiler];
+        dmdArgs ~= "-i=-qt";
+        dmdArgs ~= "-g";
+        dmdArgs ~= "-m" ~ model;
+        dmdArgs ~= test.name;
+        version(Windows){}else
+            dmdArgs ~= "-L-lstdc++";
+        foreach_reverse(m; test.qtModules)
+        {
+            dmdArgs ~= "-I" ~ m;
+        }
+        foreach_reverse(m; test.qtModules)
+        {
+            dmdArgs ~= buildPath("test_results", os ~ model, "libdqt" ~ m ~ libExt);
+        }
+        foreach_reverse(m; test.qtModules)
+        {
+            version(Windows)
+                dmdArgs ~= "Qt5" ~ capitalize(m) ~ ".lib";
+            else
+                dmdArgs ~= "-L-lQt5" ~ capitalize(m);
+        }
+        dmdArgs ~= "-od" ~ resultDir;
+        dmdArgs ~= "-of" ~ executable;
+        dmdArgs ~= test.extraArgs;
+        version(Windows)
+        {
+            if(model == "64")
+                dmdArgs ~= "-L/LIBPATH:C:\\Qt\\5.15.2\\msvc2019_64\\lib";
+            else
+                dmdArgs ~= "-L/LIBPATH:C:\\Qt\\5.15.2\\msvc2019\\lib";
+        }
+
+        auto dmdRes = execute(dmdArgs);
+        if(dmdRes.status)
+        {
+            stderr.writeln("Failure compiling ", test.name);
+            stderr.writeln(escapeShellCommand(dmdArgs));
+            stderr.writeln(dmdRes.output);
+            anyFailure = true;
+            continue;
+        }
+
+        string testOutput;
+        if(!test.buildOnly)
+        {
+            string[] testArgs = [absolutePath(executable)];
+            auto testRes = execute(testArgs, null, Config.none, size_t.max, resultDir);
+            if(testRes.status)
+            {
+                stderr.writeln("Failure executing ", test.name);
+                stderr.writeln(escapeShellCommand(testArgs));
+                stderr.writeln(testRes.output);
+                anyFailure = true;
+                continue;
+            }
+            testOutput = testRes.output.strip();
+        }
+        stderr.writeln("Done ", test.name, testOutput.length ? ": " : "", testOutput);
+    }
+
+    return anyFailure;
+}
