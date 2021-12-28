@@ -34,11 +34,13 @@ version(Windows)
 {
     enum os = "win";
     enum libExt = ".lib";
+    enum exeExt = ".exe";
 }
 else
 {
     enum os = text(std.system.os);
     enum libExt = ".a";
+    enum exeExt = "";
 }
 
 int main(string[] args)
@@ -53,6 +55,7 @@ int main(string[] args)
     else static assert("Unknown size of size_t");
 
     string compiler = "dmd";
+    string qtPath;
 
     for(size_t i = 1; i < args.length; i++)
     {
@@ -64,10 +67,25 @@ int main(string[] args)
         {
             compiler = args[i]["--compiler=".length..$];
         }
+        else if(args[i].startsWith("--qt-path="))
+        {
+            qtPath = args[i]["--qt-path=".length..$];
+        }
         else
         {
             stderr.writeln("Unknown argument ", args[i]);
             return 1;
+        }
+    }
+
+    version(Windows)
+    {
+        if(qtPath.length == 0)
+        {
+            if(model == "64")
+                qtPath = "C:\\Qt\\5.15.2\\msvc2019_64";
+            else
+                qtPath = "C:\\Qt\\5.15.2\\msvc2019";
         }
     }
 
@@ -137,6 +155,7 @@ int main(string[] args)
     }
 
     // Precompile static libraries for the bindings.
+    bool[string] moduleCompiled;
     foreach(m; ["core", "gui", "widgets"])
     {
         string[] dmdArgs = [compiler, "-lib", "-g", "-m" ~ model];
@@ -159,17 +178,33 @@ int main(string[] args)
             stderr.writeln("Failure compiling module ", m);
             stderr.writeln(escapeShellCommand(dmdArgs));
             stderr.writeln(dmdRes.output);
-            return 1;
+            anyFailure = true;
+        }
+        else
+        {
+            moduleCompiled[m] = true;
         }
     }
 
     // Compile and run the tests
     foreach(ref test; tests)
     {
+        bool canTest = true;
+        foreach_reverse(m; test.qtModules)
+            if(m !in moduleCompiled)
+                canTest = false;
+
+        if(!canTest)
+        {
+            stderr.writeln("Skipping ", test.name);
+            continue;
+        }
+
         string resultDir = buildPath("test_results", os ~ model, dirName(test.name));
-        string executable = buildPath(resultDir, baseName(test.name, ".d"));
+        string executable = buildPath(resultDir, baseName(test.name, ".d") ~ exeExt);
 
         string[] dmdArgs = [compiler];
+        string[string] env;
         dmdArgs ~= "-i=-qt";
         dmdArgs ~= "-g";
         dmdArgs ~= "-m" ~ model;
@@ -194,12 +229,18 @@ int main(string[] args)
         dmdArgs ~= "-od" ~ resultDir;
         dmdArgs ~= "-of" ~ executable;
         dmdArgs ~= test.extraArgs;
-        version(Windows)
+        if(qtPath.length)
         {
-            if(model == "64")
-                dmdArgs ~= "-L/LIBPATH:C:\\Qt\\5.15.2\\msvc2019_64\\lib";
+            version(Windows)
+            {
+                dmdArgs ~= "-L/LIBPATH:" ~ qtPath ~ "\\lib";
+                env["PATH"] = absolutePath(qtPath) ~ "\\bin";
+            }
             else
-                dmdArgs ~= "-L/LIBPATH:C:\\Qt\\5.15.2\\msvc2019\\lib";
+            {
+                dmdArgs ~= "-L-L" ~ qtPath ~ "/lib";
+                env["LD_LIBRARY_PATH"] = absolutePath(qtPath) ~ "/lib";
+            }
         }
 
         auto dmdRes = execute(dmdArgs);
@@ -216,7 +257,7 @@ int main(string[] args)
         if(!test.buildOnly)
         {
             string[] testArgs = [absolutePath(executable)];
-            auto testRes = execute(testArgs, null, Config.none, size_t.max, resultDir);
+            auto testRes = execute(testArgs, env, Config.none, size_t.max, resultDir);
             if(testRes.status)
             {
                 stderr.writeln("Failure executing ", test.name);
