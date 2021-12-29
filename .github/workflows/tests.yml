@@ -18,6 +18,11 @@ jobs:
       matrix:
         platform: [ linux64, win64, win32 ]
         dc: [ dmd-latest, ldc-latest ]
+        exclude:
+          - platform: win32
+            dc: ldc-latest
+          - platform: win64
+            dc: ldc-latest
         include:
           - platform: linux64
             os: ubuntu-20.04

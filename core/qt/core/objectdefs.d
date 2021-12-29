@@ -223,6 +223,7 @@ private template IsInQtPackage(alias S)
 
 template memberFunctionExternDeclaration(alias F)
 {
+    version(Windows)
     mixin((){
             string code;
             version(Windows)
@@ -232,6 +233,8 @@ template memberFunctionExternDeclaration(alias F)
             code ~= q{pragma(mangle, F.mangleof) ReturnType!F memberFunctionExternDeclaration(__traits(parent, F), Parameters!F);};
             return code;
         }());
+    else
+        alias memberFunctionExternDeclaration = F;
 }
 
 enum NotIsConstructor(alias F) = __traits(identifier, F) != "__ctor";
