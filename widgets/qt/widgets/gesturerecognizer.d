@@ -52,7 +52,9 @@ public:
     }
     /+ Q_DECLARE_FLAGS(Result, ResultFlag) +/
 alias Result = QFlags!(ResultFlag);
+    mixin(mangleItanium("_ZN18QGestureRecognizerC2Ev", q{
     this();
+    }));
     /+ virtual +/~this();
 
     /+ virtual +/ QGesture create(QObject target);

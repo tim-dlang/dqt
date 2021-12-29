@@ -55,7 +55,9 @@ public:
     }
     /+ Q_DECLARE_FLAGS(OpenMode, OpenModeFlag) +/
 alias OpenMode = QFlags!(OpenModeFlag);
+    mixin(mangleItanium("_ZN9QIODeviceC2Ev", q{
     this();
+    }));
 /+ #ifndef QT_NO_QOBJECT +/
     /+ explicit +/this(QObject parent);
 /+ #endif +/

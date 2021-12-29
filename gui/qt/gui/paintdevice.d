@@ -80,7 +80,9 @@ public:
 
     pragma(inline, true) static qreal devicePixelRatioFScale() { return 0x10000; }
 protected:
+    mixin(mangleItanium("_ZN12QPaintDeviceC2Ev", q{
     this()/+ noexcept+/;
+    }));
     /+ virtual +/ int metric(PaintDeviceMetric metric) const;
     /+ virtual +/ void initPainter(QPainter* painter) const;
     /+ virtual +/ QPaintDevice redirected(QPoint* offset) const;

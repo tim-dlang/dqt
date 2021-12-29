@@ -45,7 +45,9 @@ protected:
     this(ref QStylePrivate dd);
 
 public:
+    mixin(mangleItanium("_ZN6QStyleC2Ev", q{
     this();
+    }));
     /+ virtual +/~this();
 
     /+ virtual +/ void polish(QWidget widget);

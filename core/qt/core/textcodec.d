@@ -110,7 +110,9 @@ protected:
     /+ virtual +/ abstract QString convertToUnicode(const(char)* in_, int length, ConverterState* state) const;
     /+ virtual +/ abstract QByteArray convertFromUnicode(const(QChar)* in_, int length, ConverterState* state) const;
 
+    mixin(mangleItanium("_ZN10QTextCodecC2Ev", q{
     this();
+    }));
     /*public*/ /+ virtual +/~this();
 
 private:

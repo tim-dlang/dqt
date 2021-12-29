@@ -184,8 +184,9 @@ class /+ Q_CORE_EXPORT +/ QAbstractItemModel : QObject
     /+ friend class QIdentityProxyModel; +/
     /+ friend class QTransposeProxyModelPrivate; +/
 public:
-
+    mixin(mangleItanium("_ZN18QAbstractItemModelC2EP7QObject", q{
     /+ explicit +/this(QObject parent = null);
+    }));
     /+ virtual +/~this();
 
     @QInvokable final bool hasIndex(int row, int column, ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;

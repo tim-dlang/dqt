@@ -32,7 +32,9 @@ class /+ Q_GUI_EXPORT +/ QImageIOHandler
 private:
     /+ Q_DECLARE_PRIVATE(QImageIOHandler) +/
 public:
+    mixin(mangleItanium("_ZN15QImageIOHandlerC2Ev", q{
     this();
+    }));
     /+ virtual +/~this();
 
     final void setDevice(QIODevice device);

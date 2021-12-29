@@ -567,6 +567,17 @@ alias mangleWindows = function string(string mangling, string code)
         return code;
 };
 
+// Changes the mangling only on platforms with Itanium C++ ABI.
+alias mangleItanium = function string(string mangling, string code)
+{
+    version(Windows)
+        return code;
+    else
+    {
+        return "pragma(mangle, \"" ~ mangling ~ "\") " ~ code;
+    }
+};
+
 alias mangleOpLess = function string(string name)
 {
     version(Windows)

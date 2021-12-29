@@ -46,7 +46,9 @@ interface QPagedPaintDeviceInterface : QPaintDeviceInterface
 class /+ Q_GUI_EXPORT +/ QPagedPaintDevice : QPaintDevice
 {
 public:
+    mixin(mangleItanium("_ZN17QPagedPaintDeviceC2Ev", q{
     /+ QT_DEPRECATED +/this();
+    }));
     ~this();
 
     /+ virtual +/ abstract bool newPage();

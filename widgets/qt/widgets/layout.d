@@ -52,7 +52,9 @@ public:
     /+ Q_ENUM(SizeConstraint) +/
 
     this(QWidget parent);
+    mixin(mangleItanium("_ZN7QLayoutC2Ev", q{
     this();
+    }));
     ~this();
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
