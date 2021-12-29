@@ -226,6 +226,11 @@ int main(string[] args)
         {
             version(Windows)
                 dmdArgs ~= "Qt5" ~ capitalize(m) ~ ".lib";
+            else version(OSX)
+            {
+                dmdArgs ~= "-L-framework";
+                dmdArgs ~= "-LQt" ~ capitalize(m);
+            }
             else
                 dmdArgs ~= "-L-lQt5" ~ capitalize(m);
         }
@@ -238,6 +243,10 @@ int main(string[] args)
             {
                 dmdArgs ~= "-L/LIBPATH:" ~ qtPath ~ "\\lib";
                 env["PATH"] = absolutePath(qtPath) ~ "\\bin";
+            }
+            else version(OSX)
+            {
+                dmdArgs ~= "-L-F" ~ qtPath ~ "/lib";
             }
             else
             {
