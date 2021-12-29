@@ -17,14 +17,14 @@ jobs:
 
       matrix:
         platform: [ linux64, win64, win32, osx64 ]
-        dc: [ dmd-latest, ldc-latest ]
+        dc: [ dmd-latest, ldc-latest, dmd-master ]
 
         exclude:
-          - platform: win32
-            dc: ldc-latest
-
-          - platform: win64
-            dc: ldc-latest
+          - { platform: win32, dc: ldc-latest }
+          - { platform: win64, dc: ldc-latest }
+          - { platform: win32, dc: dmd-latest }
+          - { platform: win64, dc: dmd-latest }
+          - { platform: osx64, dc: ldc-latest }
 
         include:
           - platform: linux64
