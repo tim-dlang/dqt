@@ -83,6 +83,10 @@ public:
     static void setOrganizationName(ref const(QString) orgName);
     static QString organizationName();
     static void setApplicationName(ref const(QString) application);
+    static void setApplicationName(const(QString) application)
+    {
+        setApplicationName(application);
+    }
     static QString applicationName();
     static void setApplicationVersion(ref const(QString) version_);
     static QString applicationVersion();
@@ -192,8 +196,8 @@ private:
     static QStringList libraryPathsLocked();
 /+ #endif +/
 
-    mixin(mangleWindows("?self@QCoreApplication@@0PEAV1@EA", q{
-    extern export static __gshared QCoreApplication self;
+    mixin(mangleWindows("?self@QCoreApplication@@0PEAV1@EA", exportOnWindows ~ q{
+    extern static __gshared QCoreApplication self;
     }));
 
     /+ Q_DISABLE_COPY(QCoreApplication) +/

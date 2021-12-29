@@ -2,6 +2,7 @@
 module testcore1;
 
 import qt.config;
+import qt.core.coreapplication;
 import qt.core.list;
 import qt.core.object;
 import qt.core.string;
@@ -10,6 +11,14 @@ import qt.core.variant;
 import qt.core.vector;
 import qt.helpers;
 import std.stdio;
+
+QCoreApplication app;
+shared static this()
+{
+    import core.runtime;
+    app = new QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    assert(QCoreApplication.instance() is app);
+}
 
 class TestObject : QObject
 {
@@ -206,7 +215,6 @@ void connectByString(TestObject a, TestObject b)
     import qt.core.object;
     import qt.core.objectdefs;
 
-    // grep " signal" ../orig/test2/testobject.h | sed "s/    void signal\(.*\);/    QObject::connect(a, SIGNAL(signal\1), b, SLOT(onSignal\1));/g"
     QObject.connect(a, (mixin(SIGNAL(q{signalVoid()}))).ptr, b, (mixin(SLOT(q{onSignalVoid()}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalInt(int)}))).ptr, b, (mixin(SLOT(q{onSignalInt(int)}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalInt3(int,int,int)}))).ptr, b, (mixin(SLOT(q{onSignalInt3(int,int,int)}))).ptr);
@@ -223,7 +231,6 @@ void connectByPointer(TestObject a, TestObject b)
     import qt.core.object;
     import qt.core.vector;
 
-    // grep " signal" ../orig/test2/testobject.h | sed "s/    void signal\([^(]*\)(.*;/    QObject::connect(a, \&TestObject::signal\1, b, \&TestObject::onSignal\1);/g"
     QObject.connect(a.signal!"signalVoid", b.slot!"onSignalVoid");
     QObject.connect(a.signal!"signalInt", b.slot!"onSignalInt");
     QObject.connect(a.signal!"signalInt3", b.slot!"onSignalInt3");
@@ -333,4 +340,36 @@ unittest
     compareVariant(v, "00000000 00005940 06000000");
     v = QVariant(cast(int)'A');
     compareVariant(v, "41000000 ???????? 02000000");
+}
+
+unittest
+{
+    import qt.core.objectdefs;
+
+    size_t changeCount = 0;
+    {
+        scope QObject dummy = new QObject;
+        QObject.connect(QCoreApplication.instance().signal!"applicationNameChanged", dummy, (){
+            changeCount++;
+        });
+        assert(changeCount == 0);
+        QCoreApplication.setApplicationName(QString("ApplicationName1"));
+        assert(changeCount == 1);
+    }
+    QCoreApplication.setApplicationName(QString("ApplicationName2"));
+    // Slot was not called again, because dummy is out of scope.
+    assert(changeCount == 1);
+
+    scope QObject dummy = new QObject;
+    QMetaObject.Connection connection = QObject.connect(QCoreApplication.instance().signal!"applicationNameChanged", dummy, (){
+        changeCount++;
+    });
+    assert(changeCount == 1);
+
+    QCoreApplication.setApplicationName(QString("ApplicationName3"));
+    assert(changeCount == 2);
+
+    QObject.disconnect(connection);
+    QCoreApplication.setApplicationName(QString("ApplicationName4"));
+    assert(changeCount == 2);
 }

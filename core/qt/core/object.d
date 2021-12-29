@@ -503,7 +503,7 @@ public:
         { return disconnect(this, signal, receiver, member); } +/
     /+ inline bool disconnect(const QObject *receiver, const char *member = nullptr) const
         { return disconnect(this, nullptr, receiver, member); } +/
-    /+ static bool disconnect(const QMetaObject::Connection &); +/
+    static bool disconnect(ref const(QMetaObject.Connection));
 
 /+ #ifdef Q_CLANG_QDOC
     template<typename PointerToMemberFunction>
