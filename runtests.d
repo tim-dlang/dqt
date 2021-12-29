@@ -265,6 +265,23 @@ int main(string[] args)
             continue;
         }
 
+        version(OSX)
+        {
+            if(qtPath.length)
+            {
+                string[] rpathArgs = ["install_name_tool", "-add_rpath", absolutePath(qtPath) ~ "/lib", absolutePath(executable)];
+                auto rpathRes = execute(rpathArgs);
+                if(rpathRes.status)
+                {
+                    stderr.writeln("Failure setting rpath for ", test.name);
+                    stderr.writeln(escapeShellCommand(rpathArgs));
+                    stderr.writeln(rpathRes.output);
+                    anyFailure = true;
+                    continue;
+                }
+            }
+        }
+
         string testOutput;
         if(!test.buildOnly)
         {
