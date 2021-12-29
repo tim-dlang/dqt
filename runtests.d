@@ -170,7 +170,10 @@ int main(string[] args)
             dmdArgs ~= "-I" ~ m2;
         }
         dmdArgs ~= "-od" ~ buildPath("test_results", os ~ model);
-        dmdArgs ~= "-of" ~ "libdqt" ~ m ~ libExt;
+        if(compiler.endsWith("ldc2"))
+            dmdArgs ~= "-of" ~ buildPath("test_results", os ~ model, "libdqt" ~ m ~ libExt);
+        else
+            dmdArgs ~= "-of" ~ "libdqt" ~ m ~ libExt;
 
         auto dmdRes = execute(dmdArgs);
         if(dmdRes.status)
