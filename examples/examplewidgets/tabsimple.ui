@@ -23,37 +23,204 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-209</y>
-        <width>423</width>
-        <height>943</height>
+        <y>-308</y>
+        <width>476</width>
+        <height>1042</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="18" column="2">
-        <widget class="QProgressBar" name="progressBar">
-         <property name="value">
-          <number>24</number>
+       <item row="4" column="1" colspan="2">
+        <widget class="QDialogButtonBox" name="buttonBox">
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
          </property>
         </widget>
        </item>
-       <item row="8" column="2">
-        <widget class="QSpinBox" name="spinBox">
-         <property name="value">
-          <number>42</number>
+       <item row="22" column="3">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>QPushButton</string>
+          <string>QCommandLinkButton</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_5">
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_8">
          <property name="text">
-          <string>QDialogButtonBox</string>
+          <string>QLineEdit</string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="2">
+        <widget class="QScrollBar" name="horizontalScrollBar">
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="QTimeEdit" name="timeEdit"/>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>QFontComboBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>QGroupBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>CheckBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>QCheckBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="2">
+        <widget class="QCalendarWidget" name="calendarWidget"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>QLCDNumber</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="label_20">
+         <property name="text">
+          <string>Line</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="0">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>QSlider</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
+        <widget class="QDateTimeEdit" name="dateTimeEdit"/>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>QDateTimeEdit</string>
+         </property>
+        </widget>
+       </item>
+       <item row="24" column="2">
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/icons/actions/format-text-bold.png</normaloff>
+           <normalon>:/icons/actions/format-text-italic.png</normalon>:/icons/actions/format-text-bold.png</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="2">
+        <widget class="QDial" name="dial">
+         <property name="maximum">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>QCalendarWidget</string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>QScrollBar</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string notr="true">QComboBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QCommandLinkButton" name="commandLinkButton">
+         <property name="text">
+          <string>CommandLinkButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="2">
+        <widget class="QLabel" name="label_23">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap>:/icons/actions/format-text-bold.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>Item 1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string notr="true">Item 2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Item 3</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="22" column="0">
+        <widget class="QLabel" name="label_17">
+         <property name="text">
+          <string>QKeySequenceEdit</string>
          </property>
         </widget>
        </item>
@@ -80,73 +247,12 @@
          </layout>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_8">
+       <item row="12" column="0" colspan="2">
+        <widget class="QLabel" name="label_12">
          <property name="text">
-          <string>QLineEdit</string>
+          <string>QDateEdit</string>
          </property>
         </widget>
-       </item>
-       <item row="11" column="2">
-        <widget class="QTimeEdit" name="timeEdit"/>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>QSpinBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="19" column="0">
-        <widget class="QLabel" name="label_14">
-         <property name="text">
-          <string>QDial</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="2">
-        <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
-       </item>
-       <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string notr="true">QComboBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QCommandLinkButton" name="commandLinkButton">
-         <property name="text">
-          <string>CommandLinkButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>QCheckBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="22" column="3">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="20" column="2">
         <widget class="QSlider" name="horizontalSlider">
@@ -158,62 +264,40 @@
          </property>
         </widget>
        </item>
-       <item row="17" column="2">
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+       <item row="22" column="2">
+        <widget class="QKeySequenceEdit" name="keySequenceEdit"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>QDialogButtonBox</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>QCommandLinkButton</string>
-         </property>
-        </widget>
-       </item>
-       <item row="21" column="0">
-        <widget class="QLabel" name="label_16">
-         <property name="text">
-          <string>QScrollBar</string>
+       <item row="8" column="2">
+        <widget class="QSpinBox" name="spinBox">
+         <property name="value">
+          <number>42</number>
          </property>
         </widget>
        </item>
        <item row="7" column="2">
         <widget class="QLineEdit" name="lineEdit"/>
        </item>
-       <item row="18" column="0">
-        <widget class="QLabel" name="label_21">
+       <item row="6" column="2">
+        <widget class="QFontComboBox" name="fontComboBox"/>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="label_11">
          <property name="text">
-          <string>QProgressBar</string>
+          <string>QTimeEdit</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="label_13">
+       <item row="25" column="0">
+        <widget class="QLabel" name="label_25">
          <property name="text">
-          <string>QDateTimeEdit</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="2">
-        <widget class="QDialogButtonBox" name="buttonBox">
-         <property name="standardButtons">
-          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-         </property>
-        </widget>
-       </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="label_20">
-         <property name="text">
-          <string>Line</string>
-         </property>
-        </widget>
-       </item>
-       <item row="22" column="0">
-        <widget class="QLabel" name="label_17">
-         <property name="text">
-          <string>QKeySequenceEdit</string>
+          <string>QPushButton with Theme-Icon</string>
          </property>
         </widget>
        </item>
@@ -224,110 +308,10 @@
          </property>
         </widget>
        </item>
-       <item row="22" column="2">
-        <widget class="QKeySequenceEdit" name="keySequenceEdit"/>
-       </item>
-       <item row="2" column="2">
-        <widget class="QCheckBox" name="checkBox">
+       <item row="24" column="0">
+        <widget class="QLabel" name="label_24">
          <property name="text">
-          <string>CheckBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QComboBox" name="comboBox">
-         <item>
-          <property name="text">
-           <string>Item 1</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string notr="true">Item 2</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Item 3</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="12" column="2">
-        <widget class="QDateEdit" name="dateEdit"/>
-       </item>
-       <item row="21" column="2">
-        <widget class="QScrollBar" name="horizontalScrollBar">
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="2">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>QFontComboBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="19" column="2">
-        <widget class="QDial" name="dial">
-         <property name="maximum">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0" colspan="2">
-        <widget class="QLabel" name="label_12">
-         <property name="text">
-          <string>QDateEdit</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QFontComboBox" name="fontComboBox"/>
-       </item>
-       <item row="13" column="2">
-        <widget class="QDateTimeEdit" name="dateTimeEdit"/>
-       </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>QTimeEdit</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="label_18">
-         <property name="text">
-          <string>QCalendarWidget</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="2">
-        <widget class="QCalendarWidget" name="calendarWidget"/>
-       </item>
-       <item row="20" column="0">
-        <widget class="QLabel" name="label_15">
-         <property name="text">
-          <string>QSlider</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>QGroupBox</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="label_19">
-         <property name="text">
-          <string>QLCDNumber</string>
+          <string>QPushButton with Icon</string>
          </property>
         </widget>
        </item>
@@ -337,6 +321,79 @@
           <double>42.000000000000000</double>
          </property>
         </widget>
+       </item>
+       <item row="25" column="2">
+        <widget class="QPushButton" name="pushButton_3">
+         <property name="text">
+          <string>document-new</string>
+         </property>
+         <property name="icon">
+          <iconset theme="document-new">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="2">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0">
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>QProgressBar</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="2">
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>24</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>PushButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>QPushButton</string>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="0">
+        <widget class="QLabel" name="label_22">
+         <property name="text">
+          <string>QLabel with Pixmap</string>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string>QDial</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>QSpinBox</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+       </item>
+       <item row="12" column="2">
+        <widget class="QDateEdit" name="dateEdit"/>
        </item>
       </layout>
      </widget>

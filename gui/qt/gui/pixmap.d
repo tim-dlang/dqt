@@ -64,6 +64,10 @@ public:
     this(int w, int h);
     /+ explicit +/this(ref const(QSize) );
     this(ref const(QString) fileName, const(char)* format = null, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor);
+    this(const(QString) fileName, const(char)* format = null, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor)
+    {
+        this(fileName, format, flags);
+    }
     version(QT_NO_IMAGEFORMAT_XPM){}else
     {
         /+ explicit +/this(const(char)* /+ const +/ /+[0]+/* xpm);

@@ -84,6 +84,10 @@ public:
 
     void addPixmap(ref const(QPixmap) pixmap, Mode mode = Mode.Normal, State state = State.Off);
     void addFile(ref const(QString) fileName, ref const(QSize) size = globalInitVar!QSize, Mode mode = Mode.Normal, State state = State.Off);
+    void addFile(const(QString) fileName, const(QSize) size = globalInitVar!QSize, Mode mode = Mode.Normal, State state = State.Off)
+    {
+        addFile(fileName, size, mode, state);
+    }
 
     QList!(QSize) availableSizes(Mode mode = Mode.Normal, State state = State.Off) const;
 

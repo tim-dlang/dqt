@@ -42,6 +42,7 @@ private struct UICodeWriter()
     import std.conv;
     import std.algorithm;
     import std.exception;
+    import std.string;
     alias DOMEntity = qt.widgets.internal.dxml.dom.DOMEntity!string;
 
     string customWidgetPackage;
@@ -339,6 +340,88 @@ private struct UICodeWriter()
             code.put(".sizePolicy().hasHeightForWidth());\n");
 
             codeValue.put(sizePolicyVar);
+        }
+        else if(property.children[0].name == "pixmap")
+        {
+            enforce(property.children[0].children.length == 1);
+            enforce(property.children[0].children[0].type == EntityType.text);
+            codeValue.put("imported!q{qt.gui.pixmap}.QPixmap(imported!q{qt.core.string}.QString(");
+            writeStringLiteral(codeValue, property.children[0].children[0].text);
+            codeValue.put("))");
+        }
+        else if(property.children[0].name == "iconset")
+        {
+            string iconVar = createTmpVar(*tmpCount, "iconVar");
+
+            code.put("        imported!q{qt.gui.icon}.QIcon ");
+            code.put(iconVar);
+            code.put(";\n");
+
+            string theme;
+            foreach(attr; property.children[0].attributes)
+            {
+                if(attr.name == "theme")
+                    theme = attr.value;
+            }
+
+            if(theme.length)
+            {
+                string iconNameVar = createTmpVar(*tmpCount, "iconThemeName");
+
+                code.put("          auto ");
+                code.put(iconNameVar);
+                code.put(" = imported!q{qt.core.string}.QString(");
+                writeStringLiteral(*code, theme);
+                code.put(");\n");
+                code.put("        if (imported!q{qt.gui.icon}.QIcon.hasThemeIcon(");
+                code.put(iconNameVar);
+                code.put(")) {\n");
+                code.put("        ");
+                code.put(iconVar);
+                code.put(" = imported!q{qt.gui.icon}.QIcon.fromTheme(");
+                code.put(iconNameVar);
+                code.put(");\n");
+                code.put("        } else {\n");
+            }
+
+            foreach(i, c; property.children[0].children)
+            {
+                if(c.type == EntityType.text)
+                    continue;
+                enforce(c.children.length == 1);
+                enforce(c.children[0].type == EntityType.text);
+
+                string type = c.name;
+                string mode, state;
+                if(type.endsWith("on"))
+                {
+                    mode = type[0..$-2];
+                    state = type[$-2..$];
+                }
+                else if(type.endsWith("off"))
+                {
+                    mode = type[0..$-3];
+                    state = type[$-3..$];
+                }
+                else
+                    enforce(false);
+
+                if(theme.length)
+                    code.put("  ");
+                code.put("        ");
+                code.put(iconVar);
+                code.put(".addFile(imported!q{qt.core.string}.QString(");
+                writeStringLiteral(*code, c.children[0].text);
+                code.put("), globalInitVar!(imported!q{qt.core.size}.QSize), imported!q{qt.gui.icon}.QIcon.Mode.");
+                code.put(mode.capitalize);
+                code.put(", imported!q{qt.gui.icon}.QIcon.State.");
+                code.put(state.capitalize);
+                code.put(");\n");
+            }
+
+            if(theme.length)
+                code.put("        }\n");
+            codeValue.put(iconVar);
         }
         else
             enforce(false, "Unsupported property type " ~ property.children[0].name);

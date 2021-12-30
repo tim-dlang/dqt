@@ -41,6 +41,10 @@
        <property name="text">
         <string>Bold</string>
        </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/icons/actions/format-text-bold.png</normaloff>:/icons/actions/format-text-bold.png</iconset>
+       </property>
        <property name="checkable">
         <bool>true</bool>
        </property>
@@ -50,6 +54,10 @@
       <widget class="QPushButton" name="pushButtonItalic">
        <property name="text">
         <string>Italic</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/icons/actions/format-text-italic.png</normaloff>:/icons/actions/format-text-italic.png</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -106,6 +114,8 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

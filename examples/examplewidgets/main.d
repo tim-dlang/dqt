@@ -20,8 +20,21 @@ public:
 int main()
 {
     import core.runtime;
-    import qt.widgets.application;
     import examplewidgets.mainwindow;
+    import qt.core.resource;
+    import qt.core.string;
+    import qt.widgets.application;
+
+    /* The file resources.rcc can be created from resources.qrc with the
+     * following command:
+     * rcc -binary resources.qrc -o resources.rcc
+     * Normally that would be part of the build process, but it is already
+     * included in the repository for this example.
+     * Alternatively it would also be possible to generate qrc_resources.cpp
+     * and compile it as part of the project, but that would add a C++
+     * compiler as a dependency.
+     */
+    QResource.registerResource(QString("examples/examplewidgets/resources.rcc"));
 
     auto eventLogger = new EventLogger();
     scope a = new QApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
