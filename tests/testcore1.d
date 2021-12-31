@@ -373,3 +373,24 @@ unittest
     QCoreApplication.setApplicationName(QString("ApplicationName4"));
     assert(changeCount == 2);
 }
+
+unittest
+{
+    import core.stdcpp.new_;
+    import qt.core.timer;
+
+    QObject obj = cpp_new!QObject();
+    assert(qobject_cast!(QObject)(obj) is obj);
+    assert(qobject_cast!(TestObject)(obj) is null);
+    assert(qobject_cast!(QTimer)(obj) is null);
+
+    TestObject testObject = cpp_new!TestObject();
+    assert(qobject_cast!(QObject)(testObject) is testObject);
+    assert(qobject_cast!(TestObject)(testObject) is testObject);
+    assert(qobject_cast!(QTimer)(testObject) is null);
+
+    QTimer timer = cpp_new!QTimer();
+    assert(qobject_cast!(QObject)(timer) is timer);
+    assert(qobject_cast!(TestObject)(timer) is null);
+    assert(qobject_cast!(QTimer)(timer) is timer);
+}

@@ -897,18 +897,15 @@ inline QT_DEPRECATED QList<T> qFindChildren(const QObject *o, const QRegExp &re)
 }
 #endif
 
-#endif //QT_DEPRECATED
+#endif +/ //QT_DEPRECATED
 
-template <class T>
-inline T qobject_cast(QObject *object)
+T qobject_cast(T)(QObject object) if(is(T : QObject))
 {
-    typedef typename std::remove_cv<typename std::remove_pointer<T>::type>::type ObjType;
-    Q_STATIC_ASSERT_X(QtPrivate::HasQ_OBJECT_Macro<ObjType>::Value,
-                    "qobject_cast requires the type to have a Q_OBJECT macro");
-    return static_cast<T>(ObjType::staticMetaObject.cast(object));
+    static assert(is(__traits(parent, T.staticMetaObject) == T));
+    return static_cast!T(T.staticMetaObject.cast_(object));
 }
 
-template <class T>
+/+ template <class T>
 inline T qobject_cast(const QObject *object)
 {
     typedef typename std::remove_cv<typename std::remove_pointer<T>::type>::type ObjType;
@@ -916,7 +913,6 @@ inline T qobject_cast(const QObject *object)
                       "qobject_cast requires the type to have a Q_OBJECT macro");
     return static_cast<T>(ObjType::staticMetaObject.cast(object));
 }
-
 
 template <class T> inline const char * qobject_interface_iid()
 { return nullptr; }

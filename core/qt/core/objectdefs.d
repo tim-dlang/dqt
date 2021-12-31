@@ -762,8 +762,12 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     { return cast(const(QMetaObject)*)(d.superdata); }+/
 
     bool inherits(const(QMetaObject)* metaObject) const/+ noexcept+/;
-    /*QObject cast_(QObject obj) const;
-    const(QObject) cast_(const(QObject) obj) const;*/
+    mixin(mangleWindows("?cast@QMetaObject@@QEBAPEAVQObject@@PEAV2@@Z", q{
+    mixin(mangleItanium("_ZNK11QMetaObject4castEP7QObject", q{
+    QObject cast_(QObject obj) const;
+    }));
+    }));
+    //const(QObject) cast_(const(QObject) obj) const;
 
     version(QT_NO_TRANSLATION){}else
     {
