@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.coreevent;
 import qt.core.namespace;
+import qt.core.string;
 import qt.gui.event;
 import qt.gui.keysequence;
 import qt.helpers;
@@ -39,6 +40,11 @@ public:
 
 public /+ Q_SLOTS +/:
     @QSlot final void setKeySequence(ref const(QKeySequence) keySequence);
+    final void setKeySequence(const QString keySequence)
+    {
+        auto tmp = QKeySequence(keySequence);
+        setKeySequence(tmp);
+    }
     @QSlot final void clear();
 
 /+ Q_SIGNALS +/public:

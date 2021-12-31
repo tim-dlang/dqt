@@ -104,7 +104,7 @@ int main(string[] args)
     Test[] tests;
     foreach (DirEntry e; dirEntries("tests", "*.d", SpanMode.shallow))
     {
-        tests ~= Test(e.name, [], ["-main", "-unittest", "-Itests", "-I" ~ buildPath("test_results", os ~ model, "tests")]);
+        tests ~= Test(e.name, [], ["-main", "-unittest", "-Itests", "-I" ~ buildPath("test_results", os ~ model, "tests"), "-Jtests"]);
         File f = File(e.name, "r");
         foreach(line; f.byLine)
         {
@@ -151,6 +151,25 @@ int main(string[] args)
             foreach(m2; modules)
                 moduleListFile.writeln("    \"", m2, "\",");
             moduleListFile.writeln("];");
+        }
+    }
+
+    // Create module testfiles.d, which contains lists of files in the test files.
+    {
+        File fileListFile = File(buildPath("test_results", os ~ model, "tests", "imports", "testfiles.d"), "w");
+        fileListFile.writeln("module imports.testfiles;");
+        foreach(m; ["ui"])
+        {
+            fileListFile.writeln("immutable string[] files", capitalize(m), " = [");
+            string[] files;
+            foreach (DirEntry e; dirEntries(buildPath("tests", m), "*", SpanMode.shallow))
+            {
+                files ~= baseName(e.name);
+            }
+            files.sort();
+            foreach(m2; files)
+                fileListFile.writeln("    \"", m2, "\",");
+            fileListFile.writeln("];");
         }
     }
 
@@ -208,6 +227,7 @@ int main(string[] args)
 
         string[] dmdArgs = [compiler];
         string[string] env;
+        env["DQT_ROOT"] = getcwd();
         dmdArgs ~= "-i=-qt";
         dmdArgs ~= "-g";
         dmdArgs ~= "-m" ~ model;

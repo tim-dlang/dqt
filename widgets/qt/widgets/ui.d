@@ -74,6 +74,7 @@ private struct UICodeWriter()
 
     struct WidgetInfo
     {
+        string xmlName;
         string name;
         string className;
     }
@@ -83,6 +84,7 @@ private struct UICodeWriter()
     WidgetInfo getWidgetInfo(DOMEntity widget)
     {
         WidgetInfo info;
+        info.xmlName = widget.name;
         foreach(attr; widget.attributes)
         {
             if(attr.name == "class")
@@ -180,6 +182,8 @@ private struct UICodeWriter()
         Appender!string codeValue;
         bool needTmp;
         string methodName = "set" ~ std.ascii.toUpper(name[0]) ~ name[1..$];
+        if(name == "showGroupSeparator")
+            methodName = "setGroupSeparatorShown";
         if(property.children[0].name == "rect")
         {
             if(isTopLevel)
@@ -292,6 +296,29 @@ private struct UICodeWriter()
                     codeValue.put("null");
                 codeValue.put(")");
             }
+            needTmp = true;
+        }
+        else if(property.children[0].name == "size")
+        {
+            string width, height;
+            foreach(i, c; property.children[0].children)
+            {
+                enforce(c.children.length == 1);
+                enforce(c.children[0].type == EntityType.text);
+                if(c.name == "width")
+                    width = c.children[0].text;
+                else if(c.name == "height")
+                    height = c.children[0].text;
+                else
+                    enforce(false);
+            }
+
+            codeValue.put("imported!q{qt.core.size}.QSize(");
+            codeValue.put(width);
+            codeValue.put(", ");
+            codeValue.put(height);
+            codeValue.put(")");
+            needTmp = true;
         }
         else if(property.children[0].name == "sizepolicy")
         {
@@ -341,6 +368,34 @@ private struct UICodeWriter()
 
             codeValue.put(sizePolicyVar);
         }
+        else if(property.children[0].name == "font")
+        {
+            string fontVar = createTmpVar(*tmpCount, "font");
+            code.put("        auto ");
+            code.put(fontVar);
+            code.put(" = imported!q{qt.gui.font}.QFont.create();\n");
+
+            foreach(i, c; property.children[0].children)
+            {
+                enforce(c.children.length == 1);
+                enforce(c.children[0].type == EntityType.text);
+                code.put("        ");
+                code.put(fontVar);
+                code.put(".");
+                if(c.name == "pointsize")
+                    code.put("setPointSize");
+                else
+                {
+                    code.put("set");
+                    code.put(c.name.capitalize);
+                }
+                code.put("(");
+                code.put(c.children[0].text);
+                code.put(");\n");
+            }
+
+            codeValue.put(fontVar);
+        }
         else if(property.children[0].name == "pixmap")
         {
             enforce(property.children[0].children.length == 1);
@@ -348,6 +403,120 @@ private struct UICodeWriter()
             codeValue.put("imported!q{qt.gui.pixmap}.QPixmap(imported!q{qt.core.string}.QString(");
             writeStringLiteral(codeValue, property.children[0].children[0].text);
             codeValue.put("))");
+        }
+        else if(property.children[0].name == "cursorShape")
+        {
+            enforce(property.children[0].children.length == 1);
+            enforce(property.children[0].children[0].type == EntityType.text);
+            codeValue.put("imported!q{qt.gui.cursor}.QCursor(imported!q{qt.core.namespace}.CursorShape.");
+            codeValue.put(property.children[0].children[0].text);
+            codeValue.put(")");
+            needTmp = true;
+        }
+        else if(property.children[0].name == "datetime")
+        {
+            string year, month, day, hour, minute, second;
+            foreach(i, c; property.children[0].children)
+            {
+                enforce(c.children.length == 1);
+                enforce(c.children[0].type == EntityType.text);
+                if(c.name == "year")
+                    year = c.children[0].text;
+                else if(c.name == "month")
+                    month = c.children[0].text;
+                else if(c.name == "day")
+                    day = c.children[0].text;
+                else if(c.name == "hour")
+                    hour = c.children[0].text;
+                else if(c.name == "minute")
+                    minute = c.children[0].text;
+                else if(c.name == "second")
+                    second = c.children[0].text;
+                else
+                    enforce(false);
+            }
+
+            string var = createTmpVar(*tmpCount, "datetime");
+            code.put("        auto ");
+            code.put(var);
+            code.put(" = ");
+            code.put("imported!q{qt.core.datetime}.QDateTime(");
+            code.put("imported!q{qt.core.datetime}.QDate(");
+            code.put(year);
+            code.put(", ");
+            code.put(month);
+            code.put(", ");
+            code.put(day);
+            code.put("),");
+            code.put("imported!q{qt.core.datetime}.QTime(");
+            code.put(hour);
+            code.put(", ");
+            code.put(minute);
+            code.put(", ");
+            code.put(second);
+            code.put(")");
+            code.put(");\n");
+            codeValue.put(var);
+        }
+        else if(property.children[0].name == "date")
+        {
+            string year, month, day;
+            foreach(i, c; property.children[0].children)
+            {
+                enforce(c.children.length == 1);
+                enforce(c.children[0].type == EntityType.text);
+                if(c.name == "year")
+                    year = c.children[0].text;
+                else if(c.name == "month")
+                    month = c.children[0].text;
+                else if(c.name == "day")
+                    day = c.children[0].text;
+                else
+                    enforce(false);
+            }
+
+            string var = createTmpVar(*tmpCount, "date");
+            code.put("        auto ");
+            code.put(var);
+            code.put(" = ");
+            code.put("imported!q{qt.core.datetime}.QDate(");
+            code.put(year);
+            code.put(", ");
+            code.put(month);
+            code.put(", ");
+            code.put(day);
+            code.put(");\n");
+            codeValue.put(var);
+        }
+        else if(property.children[0].name == "time")
+        {
+            string hour, minute, second;
+            foreach(i, c; property.children[0].children)
+            {
+                enforce(c.children.length == 1);
+                enforce(c.children[0].type == EntityType.text);
+                if(c.name == "hour")
+                    hour = c.children[0].text;
+                else if(c.name == "minute")
+                    minute = c.children[0].text;
+                else if(c.name == "second")
+                    second = c.children[0].text;
+                else
+                    enforce(false);
+            }
+
+            string var = createTmpVar(*tmpCount, "time");
+            code.put("        auto ");
+            code.put(var);
+            code.put(" = ");
+            code.put("imported!q{qt.core.datetime}.QTime(");
+            code.put(hour);
+            code.put(", ");
+            code.put(minute);
+            code.put(", ");
+            code.put(second);
+            code.put(");\n");
+            codeValue.put(var);
         }
         else if(property.children[0].name == "iconset")
         {
@@ -435,7 +604,8 @@ private struct UICodeWriter()
             code.put(tmpVar);
             code.put(" = ");
             code.put(codeValue.data);
-            code.put("; ");
+            code.put(";\n");
+            code.put("        ");
         }
         code.put(widgetName);
         code.put(".");
@@ -520,7 +690,7 @@ private struct UICodeWriter()
         return info;
     }
 
-    WidgetInfo addWidget(DOMEntity widget, string parentName, bool parentIsLayout)
+    WidgetInfo addWidget(DOMEntity widget, string parentName, WidgetInfo parentInfo, WidgetInfo parentParentInfo)
     {
         WidgetInfo info = getWidgetInfo(widget);
 
@@ -649,7 +819,7 @@ private struct UICodeWriter()
                 codeSetup.put(info.className);
             }
             codeSetup.put(")(");
-            if(!(parentIsLayout && widget.name == "layout"))
+            if(!(parentInfo.xmlName == "layout" && widget.name == "layout"))
                 codeSetup.put(parentName);
             codeSetup.put(");\n");
         }
@@ -722,14 +892,49 @@ private struct UICodeWriter()
             constructorArg = parentName;
         if(widget.name == "item")
             constructorArg = parentName;
+        string[string] margins;
         foreach(property; widget.children)
         {
             if(property.name == "property")
-                addProperty(property, info.name, info.className, false, "");
+            {
+                string name;
+                foreach(attr; property.attributes)
+                {
+                    if(attr.name == "name")
+                        name = attr.value;
+                }
+                if(name.among("leftMargin", "topMargin", "rightMargin", "bottomMargin"))
+                {
+                    enforce(property.children[0].name == "number");
+                    enforce(property.children[0].children.length == 1);
+                    enforce(property.children[0].children[0].type == EntityType.text);
+                    margins[name] = property.children[0].children[0].text;
+                }
+                else
+                    addProperty(property, info.name, info.className, false, "");
+            }
+        }
+        bool inLayoutInSplitter = parentInfo.className == "QWidget" && parentParentInfo.className == "QSplitter" && info.xmlName == "layout";
+        if(margins !is null || inLayoutInSplitter)
+        {
+            string defaultMargin = (parentInfo.xmlName == "layout") ? "0" : "-1";
+            if(inLayoutInSplitter)
+                defaultMargin = "0";
+            codeSetup.put("        ");
+            codeSetup.put(info.name);
+            codeSetup.put(".setContentsMargins(");
+            codeSetup.put(margins.get("leftMargin", defaultMargin));
+            codeSetup.put(", ");
+            codeSetup.put(margins.get("topMargin", defaultMargin));
+            codeSetup.put(", ");
+            codeSetup.put(margins.get("rightMargin", defaultMargin));
+            codeSetup.put(", ");
+            codeSetup.put(margins.get("bottomMargin", defaultMargin));
+            codeSetup.put(");\n");
         }
         foreach(c; widget.children)
         {
-            WidgetInfo childInfo = addChildWidget(widget, info, c, constructorArg, widget.name == "layout");
+            WidgetInfo childInfo = addChildWidget(widget, info, c, constructorArg, info, parentInfo);
             if(info.className == "QTabWidget")
             {
                 foreach(property; c.children)
@@ -750,12 +955,12 @@ private struct UICodeWriter()
         return info;
     }
 
-    WidgetInfo addChildWidget(DOMEntity widget, WidgetInfo info, DOMEntity c, string constructorArg, bool parentIsLayout)
+    WidgetInfo addChildWidget(DOMEntity widget, WidgetInfo info, DOMEntity c, string constructorArg, WidgetInfo parentInfo, WidgetInfo parentParentInfo)
     {
         if(c.name == "item" && widget.name == "layout")
         {
             enforce(c.children.length == 1);
-            WidgetInfo childInfo = addWidget(c.children[0], constructorArg, parentIsLayout);
+            WidgetInfo childInfo = addWidget(c.children[0], constructorArg, parentInfo, parentParentInfo);
 
             string row, column, rowspan = "1", colspan = "1";
             foreach(attr; c.attributes)
@@ -812,7 +1017,7 @@ private struct UICodeWriter()
         }
         else if(c.name == "widget" || c.name == "layout")
         {
-            WidgetInfo childInfo = addWidget(c, constructorArg, parentIsLayout);
+            WidgetInfo childInfo = addWidget(c, constructorArg, parentInfo, parentParentInfo);
 
             if(info.className == "QTabWidget")
             {
@@ -974,13 +1179,13 @@ private struct UICodeWriter()
         {
             if(c.name == "action")
             {
-                addWidget(c, rootWidgetInfo.name, false);
+                addWidget(c, rootWidgetInfo.name, WidgetInfo(), WidgetInfo());
             }
         }
 
         foreach(c; rootWidget.children)
         {
-            addChildWidget(*rootWidget, rootWidgetInfo, c, rootWidgetInfo.name, false);
+            addChildWidget(*rootWidget, rootWidgetInfo, c, rootWidgetInfo.name, WidgetInfo(), WidgetInfo());
         }
 
         foreach(c; root.children)

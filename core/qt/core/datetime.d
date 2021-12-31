@@ -328,6 +328,10 @@ public:
 /+ #if QT_CONFIG(timezone) +/
     this(ref const(QDate) date, ref const(QTime) time, ref const(QTimeZone) timeZone);
 /+ #endif +/ // timezone
+    this(const(QDate) date, const(QTime) time, /+ Qt:: +/qt.core.namespace.TimeSpec spec = /+ Qt:: +/qt.core.namespace.TimeSpec.LocalTime)
+    {
+        this(date, time, spec);
+    }
     //@disable this(this);
     //this(ref const(QDateTime) other)/+ noexcept+/;
     /+ QDateTime(QDateTime &&other) noexcept; +/

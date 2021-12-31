@@ -1,0 +1,314 @@
+    imported!q{qt.widgets.gridlayout}.QGridLayout gridLayout;
+    imported!q{qt.widgets.checkbox}.QCheckBox checkBox;
+    imported!q{qt.widgets.progressbar}.QProgressBar progressBar;
+    imported!q{qt.widgets.lineedit}.QLineEdit lineEdit;
+    imported!q{qt.widgets.slider}.QSlider horizontalSlider;
+    imported!q{qt.widgets.pushbutton}.QPushButton pushButton;
+    imported!q{qt.widgets.spinbox}.QSpinBox spinBox;
+    imported!q{qt.widgets.scrollbar}.QScrollBar horizontalScrollBar;
+    imported!q{qt.widgets.datetimeedit}.QDateEdit dateEdit;
+    imported!q{qt.widgets.combobox}.QComboBox comboBox;
+    imported!q{qt.widgets.keysequenceedit}.QKeySequenceEdit keySequenceEdit;
+    imported!q{qt.widgets.lcdnumber}.QLCDNumber lcdNumber;
+    imported!q{qt.widgets.datetimeedit}.QTimeEdit timeEdit;
+    imported!q{qt.widgets.spinbox}.QDoubleSpinBox doubleSpinBox;
+    imported!q{qt.widgets.label}.QLabel label;
+    imported!q{qt.widgets.datetimeedit}.QDateTimeEdit dateTimeEdit;
+    imported!q{qt.widgets.radiobutton}.QRadioButton radioButton;
+    imported!q{qt.widgets.dial}.QDial dial;
+    imported!q{qt.widgets.frame}.QFrame line;
+
+    void setupUi(imported!q{qt.widgets.widget}.QWidget FormWidgets1)
+    {
+        import core.stdcpp.new_: cpp_new;
+        if (FormWidgets1.objectName().isEmpty())
+            FormWidgets1.setObjectName("FormWidgets1");
+        FormWidgets1.resize(564, 541);
+        gridLayout = cpp_new!(imported!q{qt.widgets.gridlayout}.QGridLayout)(FormWidgets1);
+        gridLayout.setObjectName("gridLayout");
+        checkBox = cpp_new!(imported!q{qt.widgets.checkbox}.QCheckBox)(FormWidgets1);
+        checkBox.setObjectName("checkBox");
+        checkBox.setChecked(false);
+        checkBox.setTristate(true);
+
+        gridLayout.addWidget(checkBox, 3, 0, 1, 1);
+
+        progressBar = cpp_new!(imported!q{qt.widgets.progressbar}.QProgressBar)(FormWidgets1);
+        progressBar.setObjectName("progressBar");
+        progressBar.setMinimum(-100);
+        progressBar.setMaximum(200);
+        progressBar.setValue(24);
+        progressBar.setAlignment(imported!q{qt.core.flags}.flagsFromStaticString!(typeof(progressBar.alignment()), q{Qt::AlignCenter}));
+        progressBar.setTextVisible(true);
+        progressBar.setOrientation(imported!q{qt.core.flags}.enumFromStaticString!(typeof(progressBar.orientation()), q{Qt::Horizontal}));
+        progressBar.setInvertedAppearance(false);
+        progressBar.setTextDirection(imported!q{qt.core.flags}.enumFromStaticString!(typeof(progressBar.textDirection()), q{QProgressBar::TopToBottom}));
+
+        gridLayout.addWidget(progressBar, 16, 0, 1, 2);
+
+        lineEdit = cpp_new!(imported!q{qt.widgets.lineedit}.QLineEdit)(FormWidgets1);
+        lineEdit.setObjectName("lineEdit");
+        lineEdit.setMaxLength(32765);
+        lineEdit.setFrame(true);
+        lineEdit.setEchoMode(imported!q{qt.core.flags}.enumFromStaticString!(typeof(lineEdit.echoMode()), q{QLineEdit::Normal}));
+        lineEdit.setCursorPosition(4);
+        lineEdit.setAlignment(imported!q{qt.core.flags}.flagsFromStaticString!(typeof(lineEdit.alignment()), q{Qt::AlignCenter}));
+        lineEdit.setDragEnabled(false);
+        lineEdit.setReadOnly(false);
+        lineEdit.setCursorMoveStyle(imported!q{qt.core.flags}.enumFromStaticString!(typeof(lineEdit.cursorMoveStyle()), q{Qt::LogicalMoveStyle}));
+        lineEdit.setClearButtonEnabled(false);
+
+        gridLayout.addWidget(lineEdit, 12, 0, 1, 2);
+
+        horizontalSlider = cpp_new!(imported!q{qt.widgets.slider}.QSlider)(FormWidgets1);
+        horizontalSlider.setObjectName("horizontalSlider");
+        horizontalSlider.setOrientation(imported!q{qt.core.flags}.enumFromStaticString!(typeof(horizontalSlider.orientation()), q{Qt::Horizontal}));
+        horizontalSlider.setTickPosition(imported!q{qt.core.flags}.enumFromStaticString!(typeof(horizontalSlider.tickPosition()), q{QSlider::TicksBelow}));
+        horizontalSlider.setTickInterval(5);
+
+        gridLayout.addWidget(horizontalSlider, 15, 0, 1, 2);
+
+        pushButton = cpp_new!(imported!q{qt.widgets.pushbutton}.QPushButton)(FormWidgets1);
+        pushButton.setObjectName("pushButton");
+        pushButton.setCheckable(true);
+        pushButton.setChecked(true);
+        pushButton.setAutoRepeat(false);
+        pushButton.setAutoExclusive(false);
+        pushButton.setAutoRepeatDelay(300);
+        pushButton.setAutoRepeatInterval(100);
+        pushButton.setAutoDefault(false);
+        pushButton.setDefault(false);
+        pushButton.setFlat(false);
+
+        gridLayout.addWidget(pushButton, 2, 0, 1, 1);
+
+        spinBox = cpp_new!(imported!q{qt.widgets.spinbox}.QSpinBox)(FormWidgets1);
+        spinBox.setObjectName("spinBox");
+        spinBox.setWrapping(false);
+        spinBox.setFrame(true);
+        spinBox.setAlignment(imported!q{qt.core.flags}.flagsFromStaticString!(typeof(spinBox.alignment()), q{Qt::AlignCenter}));
+        spinBox.setReadOnly(false);
+        spinBox.setButtonSymbols(imported!q{qt.core.flags}.enumFromStaticString!(typeof(spinBox.buttonSymbols()), q{QAbstractSpinBox::UpDownArrows}));
+        spinBox.setAccelerated(false);
+        spinBox.setCorrectionMode(imported!q{qt.core.flags}.enumFromStaticString!(typeof(spinBox.correctionMode()), q{QAbstractSpinBox::CorrectToPreviousValue}));
+        spinBox.setKeyboardTracking(true);
+        spinBox.setGroupSeparatorShown(false);
+        spinBox.setMinimum(1);
+        spinBox.setMaximum(80);
+        spinBox.setSingleStep(2);
+        spinBox.setStepType(imported!q{qt.core.flags}.enumFromStaticString!(typeof(spinBox.stepType()), q{QAbstractSpinBox::DefaultStepType}));
+        spinBox.setValue(36);
+        spinBox.setDisplayIntegerBase(16);
+
+        gridLayout.addWidget(spinBox, 6, 0, 1, 1);
+
+        horizontalScrollBar = cpp_new!(imported!q{qt.widgets.scrollbar}.QScrollBar)(FormWidgets1);
+        horizontalScrollBar.setObjectName("horizontalScrollBar");
+        horizontalScrollBar.setMinimum(1);
+        horizontalScrollBar.setMaximum(50);
+        horizontalScrollBar.setSingleStep(2);
+        horizontalScrollBar.setPageStep(5);
+        horizontalScrollBar.setValue(8);
+        horizontalScrollBar.setSliderPosition(8);
+        horizontalScrollBar.setTracking(true);
+        horizontalScrollBar.setOrientation(imported!q{qt.core.flags}.enumFromStaticString!(typeof(horizontalScrollBar.orientation()), q{Qt::Horizontal}));
+        horizontalScrollBar.setInvertedAppearance(false);
+        horizontalScrollBar.setInvertedControls(true);
+
+        gridLayout.addWidget(horizontalScrollBar, 14, 0, 1, 2);
+
+        dateEdit = cpp_new!(imported!q{qt.widgets.datetimeedit}.QDateEdit)(FormWidgets1);
+        dateEdit.setObjectName("dateEdit");
+
+        gridLayout.addWidget(dateEdit, 11, 0, 1, 1);
+
+        comboBox = cpp_new!(imported!q{qt.widgets.combobox}.QComboBox)(FormWidgets1);
+        comboBox.addItem(imported!q{qt.core.string}.QString.create());
+        comboBox.addItem(imported!q{qt.core.string}.QString.create());
+        comboBox.addItem(imported!q{qt.core.string}.QString.create());
+        comboBox.setObjectName("comboBox");
+        comboBox.setEditable(true);
+        comboBox.setMaxVisibleItems(12);
+        comboBox.setMaxCount(2147483646);
+        comboBox.setInsertPolicy(imported!q{qt.core.flags}.enumFromStaticString!(typeof(comboBox.insertPolicy()), q{QComboBox::InsertAtBottom}));
+        comboBox.setSizeAdjustPolicy(imported!q{qt.core.flags}.enumFromStaticString!(typeof(comboBox.sizeAdjustPolicy()), q{QComboBox::AdjustToContentsOnFirstShow}));
+        comboBox.setMinimumContentsLength(0);
+        comboBox.setDuplicatesEnabled(false);
+        comboBox.setFrame(true);
+        comboBox.setModelColumn(0);
+
+        gridLayout.addWidget(comboBox, 5, 0, 1, 1);
+
+        keySequenceEdit = cpp_new!(imported!q{qt.widgets.keysequenceedit}.QKeySequenceEdit)(FormWidgets1);
+        keySequenceEdit.setObjectName("keySequenceEdit");
+
+        gridLayout.addWidget(keySequenceEdit, 13, 0, 1, 2);
+
+        lcdNumber = cpp_new!(imported!q{qt.widgets.lcdnumber}.QLCDNumber)(FormWidgets1);
+        lcdNumber.setObjectName("lcdNumber");
+        lcdNumber.setSmallDecimalPoint(false);
+        lcdNumber.setDigitCount(5);
+        lcdNumber.setMode(imported!q{qt.core.flags}.enumFromStaticString!(typeof(lcdNumber.mode()), q{QLCDNumber::Dec}));
+        lcdNumber.setSegmentStyle(imported!q{qt.core.flags}.enumFromStaticString!(typeof(lcdNumber.segmentStyle()), q{QLCDNumber::Filled}));
+        lcdNumber.setValue(8.000000000000000);
+        lcdNumber.setIntValue(8);
+
+        gridLayout.addWidget(lcdNumber, 8, 0, 1, 2);
+
+        timeEdit = cpp_new!(imported!q{qt.widgets.datetimeedit}.QTimeEdit)(FormWidgets1);
+        timeEdit.setObjectName("timeEdit");
+        auto time = imported!q{qt.core.datetime}.QTime(19, 59, 0);
+        timeEdit.setTime(time);
+
+        gridLayout.addWidget(timeEdit, 11, 1, 1, 1);
+
+        doubleSpinBox = cpp_new!(imported!q{qt.widgets.spinbox}.QDoubleSpinBox)(FormWidgets1);
+        doubleSpinBox.setObjectName("doubleSpinBox");
+        doubleSpinBox.setDecimals(3);
+        doubleSpinBox.setMinimum(-100.000000000000000);
+        doubleSpinBox.setMaximum(50.000000000000000);
+        doubleSpinBox.setSingleStep(0.500000000000000);
+        doubleSpinBox.setStepType(imported!q{qt.core.flags}.enumFromStaticString!(typeof(doubleSpinBox.stepType()), q{QAbstractSpinBox::DefaultStepType}));
+        doubleSpinBox.setValue(10.000000000000000);
+
+        gridLayout.addWidget(doubleSpinBox, 6, 1, 1, 1);
+
+        label = cpp_new!(imported!q{qt.widgets.label}.QLabel)(FormWidgets1);
+        label.setObjectName("label");
+        auto sizePolicy = imported!q{qt.widgets.sizepolicy}.QSizePolicy(imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Preferred, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth());
+        label.setSizePolicy(sizePolicy);
+        auto tmp = imported!q{qt.core.size}.QSize(1, 0);
+        label.setMinimumSize(tmp);
+        auto tmp1 = imported!q{qt.core.size}.QSize(16777215, 16777215);
+        label.setMaximumSize(tmp1);
+        auto font = imported!q{qt.gui.font}.QFont.create();
+        font.setPointSize(12);
+        font.setItalic(true);
+        label.setFont(font);
+        auto tmp2 = imported!q{qt.gui.cursor}.QCursor(imported!q{qt.core.namespace}.CursorShape.CrossCursor);
+        label.setCursor(tmp2);
+        label.setFocusPolicy(imported!q{qt.core.flags}.enumFromStaticString!(typeof(label.focusPolicy()), q{Qt::NoFocus}));
+        label.setContextMenuPolicy(imported!q{qt.core.flags}.enumFromStaticString!(typeof(label.contextMenuPolicy()), q{Qt::DefaultContextMenu}));
+        label.setAcceptDrops(false);
+        label.setToolTipDuration(-1);
+        label.setFrameShape(imported!q{qt.core.flags}.enumFromStaticString!(typeof(label.frameShape()), q{QFrame::Box}));
+        label.setFrameShadow(imported!q{qt.core.flags}.enumFromStaticString!(typeof(label.frameShadow()), q{QFrame::Raised}));
+        label.setLineWidth(3);
+        label.setMidLineWidth(2);
+        label.setTextFormat(imported!q{qt.core.flags}.enumFromStaticString!(typeof(label.textFormat()), q{Qt::AutoText}));
+        label.setScaledContents(false);
+        label.setAlignment(imported!q{qt.core.flags}.flagsFromStaticString!(typeof(label.alignment()), q{Qt::AlignCenter}));
+        label.setWordWrap(false);
+        label.setMargin(2);
+        label.setIndent(-1);
+        label.setOpenExternalLinks(false);
+        label.setTextInteractionFlags(imported!q{qt.core.flags}.flagsFromStaticString!(typeof(label.textInteractionFlags()), q{Qt::LinksAccessibleByMouse}));
+
+        gridLayout.addWidget(label, 1, 0, 1, 1);
+
+        dateTimeEdit = cpp_new!(imported!q{qt.widgets.datetimeedit}.QDateTimeEdit)(FormWidgets1);
+        dateTimeEdit.setObjectName("dateTimeEdit");
+        auto datetime = imported!q{qt.core.datetime}.QDateTime(imported!q{qt.core.datetime}.QDate(2001, 1, 2),imported!q{qt.core.datetime}.QTime(12, 0, 0));
+        dateTimeEdit.setDateTime(datetime);
+        auto date = imported!q{qt.core.datetime}.QDate(2001, 1, 2);
+        dateTimeEdit.setDate(date);
+        auto datetime1 = imported!q{qt.core.datetime}.QDateTime(imported!q{qt.core.datetime}.QDate(9999, 12, 14),imported!q{qt.core.datetime}.QTime(23, 59, 59));
+        dateTimeEdit.setMaximumDateTime(datetime1);
+        auto datetime2 = imported!q{qt.core.datetime}.QDateTime(imported!q{qt.core.datetime}.QDate(1752, 9, 29),imported!q{qt.core.datetime}.QTime(0, 0, 0));
+        dateTimeEdit.setMinimumDateTime(datetime2);
+        auto date1 = imported!q{qt.core.datetime}.QDate(9999, 12, 14);
+        dateTimeEdit.setMaximumDate(date1);
+        auto date2 = imported!q{qt.core.datetime}.QDate(1752, 9, 29);
+        dateTimeEdit.setMinimumDate(date2);
+        dateTimeEdit.setCurrentSection(imported!q{qt.core.flags}.enumFromStaticString!(typeof(dateTimeEdit.currentSection()), q{QDateTimeEdit::DaySection}));
+        dateTimeEdit.setCalendarPopup(true);
+        dateTimeEdit.setCurrentSectionIndex(0);
+        dateTimeEdit.setTimeSpec(imported!q{qt.core.flags}.enumFromStaticString!(typeof(dateTimeEdit.timeSpec()), q{Qt::LocalTime}));
+
+        gridLayout.addWidget(dateTimeEdit, 10, 0, 1, 2);
+
+        radioButton = cpp_new!(imported!q{qt.widgets.radiobutton}.QRadioButton)(FormWidgets1);
+        radioButton.setObjectName("radioButton");
+
+        gridLayout.addWidget(radioButton, 4, 0, 1, 2);
+
+        dial = cpp_new!(imported!q{qt.widgets.dial}.QDial)(FormWidgets1);
+        dial.setObjectName("dial");
+        dial.setWrapping(true);
+        dial.setNotchTarget(5.000000000000000);
+        dial.setNotchesVisible(true);
+
+        gridLayout.addWidget(dial, 19, 0, 1, 1);
+
+        line = cpp_new!(imported!q{qt.widgets.frame}.QFrame)(FormWidgets1);
+        line.setObjectName("line");
+        line.setFrameShape(imported!q{qt.widgets.frame}.QFrame.Shape.HLine);
+        line.setFrameShadow(imported!q{qt.widgets.frame}.QFrame.Shadow.Sunken);
+
+        gridLayout.addWidget(line, 18, 0, 1, 2);
+
+
+        retranslateUi(FormWidgets1);
+        comboBox.setCurrentIndex(-1);
+
+        imported!q{qt.core.objectdefs}.QMetaObject.connectSlotsByName(FormWidgets1);
+    } // setupUi
+
+    void retranslateUi(imported!q{qt.widgets.widget}.QWidget FormWidgets1)
+    {
+        auto tmp = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "FormWidgets1", null);
+        FormWidgets1.setWindowTitle(tmp);
+        auto tmp1 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "CheckBox", null);
+        checkBox.setText(tmp1);
+        auto tmp2 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "value: %p%", null);
+        progressBar.setFormat(tmp2);
+        auto tmp3 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "text", null);
+        lineEdit.setText(tmp3);
+        auto tmp4 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "placeholder", null);
+        lineEdit.setPlaceholderText(tmp4);
+        auto tmp5 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "PushButton", null);
+        pushButton.setText(tmp5);
+        auto tmp6 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "Ctrl+L", null);
+        pushButton.setShortcut(tmp6);
+        auto tmp7 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "special value", null);
+        spinBox.setSpecialValueText(tmp7);
+        auto tmp8 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", " suffix", null);
+        spinBox.setSuffix(tmp8);
+        auto tmp9 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "prefix ", null);
+        spinBox.setPrefix(tmp9);
+        auto tmp10 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "1", null);
+        comboBox.setItemText(0, tmp10);
+        auto tmp11 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "2", null);
+        comboBox.setItemText(1, tmp11);
+        auto tmp12 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "3", null);
+        comboBox.setItemText(2, tmp12);
+        auto tmp13 = imported!q{qt.core.string}.QString.create();
+        comboBox.setCurrentText(tmp13);
+        auto tmp14 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "placeholder", null);
+        comboBox.setPlaceholderText(tmp14);
+        auto tmp15 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "Ctrl+A", null);
+        keySequenceEdit.setKeySequence(tmp15);
+        auto tmp16 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "prefix ", null);
+        doubleSpinBox.setPrefix(tmp16);
+        auto tmp17 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", " suffix", null);
+        doubleSpinBox.setSuffix(tmp17);
+        auto tmp18 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "tooltip", null);
+        label.setToolTip(tmp18);
+        auto tmp19 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "statustip", null);
+        label.setStatusTip(tmp19);
+        auto tmp20 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "whatsthis", null);
+        label.setWhatsThis(tmp20);
+        auto tmp21 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "accessiblename", null);
+        label.setAccessibleName(tmp21);
+        auto tmp22 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "accessibledescription", null);
+        label.setAccessibleDescription(tmp22);
+        auto tmp23 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "TextLabel", null);
+        label.setText(tmp23);
+        auto tmp24 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "dd.MM.yy HH:mm", null);
+        dateTimeEdit.setDisplayFormat(tmp24);
+        auto tmp25 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormWidgets1", "RadioButton", null);
+        radioButton.setText(tmp25);
+    } // retranslateUi

@@ -66,6 +66,11 @@ public:
     version(QT_NO_SHORTCUT){}else
     {
         final void setShortcut(ref const(QKeySequence) key);
+        final void setShortcut(const QString shortcut)
+        {
+            auto tmp = QKeySequence(shortcut);
+            setShortcut(tmp);
+        }
         final QKeySequence shortcut() const;
     }
 

@@ -69,6 +69,10 @@ public:
     {
         setProperty("value", val);
     }
+    final void setIntValue(int val)
+    {
+        setProperty("intValue", val);
+    }
 
     override QSize sizeHint() const;
 
