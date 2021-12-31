@@ -74,7 +74,7 @@ jobs:
       - name: Install Qt
         run: |
           wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qtbase_file }}"
-          7z x "${{ matrix.qtbase_file }}" 5.15.2/${{ matrix.qt_arch }}/lib/ 5.15.2/${{ matrix.qt_arch }}/bin/
+          7z x "${{ matrix.qtbase_file }}" 5.15.2/${{ matrix.qt_arch }}/lib/ 5.15.2/${{ matrix.qt_arch }}/bin/ 5.15.2/${{ matrix.qt_arch }}/plugins/platforms
 
       - name: Install ICU for Qt
         if: ${{ matrix.qticu_file != '' }}

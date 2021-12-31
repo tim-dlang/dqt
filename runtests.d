@@ -228,6 +228,8 @@ int main(string[] args)
         string[] dmdArgs = [compiler];
         string[string] env;
         env["DQT_ROOT"] = getcwd();
+        env["QT_QPA_PLATFORM"] = "offscreen";
+        env["QT_DEBUG_PLUGINS"] = "1";
         dmdArgs ~= "-i=-qt";
         dmdArgs ~= "-g";
         dmdArgs ~= "-m" ~ model;
