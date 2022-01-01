@@ -1,10 +1,13 @@
 // QT_MODULES: widgets
 import imports.testfiles;
-import qt.widgets.application;
 import qt.core.locale;
+import qt.core.metatype;
 import qt.core.object;
 import qt.core.objectdefs;
 import qt.core.string;
+import qt.core.variant;
+import qt.gui.keysequence;
+import qt.widgets.application;
 import qt.widgets.layout;
 import qt.widgets.layoutitem;
 import qt.widgets.ui;
@@ -36,12 +39,15 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
         auto propertyName = fromStringz(meta.property(i).name());
         if(propertyName == "objectName")
             continue;
-        QString value = obj.property(propertyName.ptr).toString();
+        QVariant valueVar = obj.property(propertyName.ptr);
+        QString value = valueVar.toString();
         /*if(value.isEmpty())
             continue;*/
-        auto propertyType = fromStringz(obj.property(propertyName.ptr).typeName());
-        if(propertyType == "QFont")
+        auto propertyType = fromStringz(valueVar.typeName());
+        if(valueVar.type() == cast(QVariant.Type)QMetaType.Type.QFont)
             value = QString("platform dependent");
+        if(valueVar.type() == cast(QVariant.Type)QMetaType.Type.QKeySequence)
+            value = valueVar.value!QKeySequence().toString(QKeySequence.SequenceFormat.PortableText);
         if(propertyName == "x" || propertyName == "y" || propertyName == "width" || propertyName == "height")
             value = QString("platform dependent");
         appender.put(indent);
@@ -54,6 +60,8 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
         appender.put(")\n");
     }
     if(fromStringz(meta.className()) == "QComboBox")
+        return;
+    if(fromStringz(meta.className()) == "QKeySequenceEdit")
         return;
     QLayout layout = qobject_cast!QLayout(obj);
     if(layout)
@@ -85,6 +93,8 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
 unittest
 {
     import core.runtime;
+    QString styleName = QString("Fusion");
+    QApplication.setStyle(styleName);
     scope app = new QApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
 
     QLocale locale = QLocale.c();

@@ -356,9 +356,8 @@ extern(C++, "QtPrivate") {
     /+ template<typename T> +/
     /+ inline void setValue(const T &value); +/
 
-    /+ template<typename T> +/
-    /+ inline T value() const
-    { return qvariant_cast<T>(*this); } +/
+    pragma(inline, true) T value(T)() const
+    { return qvariant_cast!T(this); }
 
     static QVariant fromValue(T)(ref const T value)
     {
