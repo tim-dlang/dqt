@@ -328,6 +328,8 @@ template MetaObjectImpl(T)
                 return "QMetaType.Type.QPoint";
             else static if(is(T2 == int*))
                 return text("0x80000000 | ", addString("int*"));
+            else static if(is(T2 == class) && __traits(getLinkage, T2) == "C++")
+                return text("0x80000000 | ", addString(__traits(identifier, T2) ~ "*"));
             else
                 static assert("TODO: Type not yet supported ", T2.stringof);
         }

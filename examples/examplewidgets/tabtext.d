@@ -1,6 +1,7 @@
 module examplewidgets.tabtext;
 
 import qt.config;
+import qt.core.coreevent;
 import qt.helpers;
 import qt.widgets.ui;
 import qt.widgets.widget;
@@ -93,6 +94,14 @@ private /+ slots +/:
             blockFmt.setIndent(0);
             cursor.setBlockFormat(blockFmt);
         }
+    }
+
+protected:
+    override extern(C++) void changeEvent(QEvent event)
+    {
+        if(event.type() == QEvent.Type.LanguageChange)
+            ui.retranslateUi(this);
+        QWidget.changeEvent(event);
     }
 
 private:

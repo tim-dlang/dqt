@@ -1,6 +1,7 @@
 module examplewidgets.tabdialogs;
 
 import qt.config;
+import qt.core.coreevent;
 import qt.core.string;
 import qt.helpers;
 import qt.widgets.errormessage;
@@ -133,6 +134,14 @@ private /+ slots +/:
         QString path = ui.lineEditPath.text();
         path = QFileDialog.getExistingDirectory(this, globalInitVar!QString, path);
         ui.lineEditPath.setText(path);
+    }
+
+protected:
+    override extern(C++) void changeEvent(QEvent event)
+    {
+        if(event.type() == QEvent.Type.LanguageChange)
+            ui.retranslateUi(this);
+        QWidget.changeEvent(event);
     }
 
 private:

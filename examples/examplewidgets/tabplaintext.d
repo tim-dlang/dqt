@@ -1,6 +1,7 @@
 module examplewidgets.tabplaintext;
 
 import qt.config;
+import qt.core.coreevent;
 import qt.helpers;
 import qt.widgets.ui;
 import qt.widgets.widget;
@@ -46,6 +47,14 @@ private /+ slots +/:
     @QSlot final void on_comboBoxType_currentIndexChanged(int index)
     {
         on_plainTextEdit_textChanged();
+    }
+
+protected:
+    override extern(C++) void changeEvent(QEvent event)
+    {
+        if(event.type() == QEvent.Type.LanguageChange)
+            ui.retranslateUi(this);
+        QWidget.changeEvent(event);
     }
 
 private:

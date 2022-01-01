@@ -21,6 +21,8 @@ import qt.core.object;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.helpers;
+version(QT_NO_TRANSLATION){}else
+    import qt.core.translator;
 
 /+ #ifndef QT_NO_QOBJECT
 #else
@@ -38,7 +40,6 @@ alias MSG = tagMSG;
 
 
 extern(C++, class) struct QCoreApplicationPrivate;
-extern(C++, class) struct QTranslator;
 extern(C++, class) struct QPostEventList;
 extern(C++, class) struct QAbstractEventDispatcher;
 extern(C++, class) struct QAbstractNativeEventFilter;
@@ -132,8 +133,8 @@ public:
 #ifndef QT_NO_TRANSLATION +/
     version(QT_NO_TRANSLATION){}else
     {
-        static bool installTranslator(QTranslator*  messageFile);
-        static bool removeTranslator(QTranslator*  messageFile);
+        static bool installTranslator(QTranslator  messageFile);
+        static bool removeTranslator(QTranslator  messageFile);
     }
 /+ #endif +/
 
