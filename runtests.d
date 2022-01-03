@@ -1,5 +1,6 @@
 import std.stdio, std.conv, std.string, std.path, std.process, std.file, std.algorithm, std.range;
 static import std.system;
+import std.datetime.stopwatch;
 
 struct Test
 {
@@ -177,6 +178,8 @@ int main(string[] args)
     bool[string] moduleCompiled;
     foreach(m; ["core", "gui", "widgets"])
     {
+        auto sw = StopWatch(AutoStart.yes);
+
         string[] dmdArgs = [compiler, "-lib", "-g", "-m" ~ model];
         foreach (DirEntry e; dirEntries(buildPath(m, "qt", m), "*.d", SpanMode.depth))
         {
@@ -197,6 +200,8 @@ int main(string[] args)
         auto dmdRes = execute(dmdArgs);
         if(dmdRes.status)
         {
+            sw.stop();
+            stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
             stderr.writeln("Failure compiling module ", m);
             stderr.writeln(escapeShellCommand(dmdArgs));
             stderr.writeln(dmdRes.output);
@@ -205,12 +210,17 @@ int main(string[] args)
         else
         {
             moduleCompiled[m] = true;
+            sw.stop();
+            stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
+            stderr.writeln("Compiled ", m);
         }
     }
 
     // Compile and run the tests
     foreach(ref test; tests)
     {
+        auto sw = StopWatch(AutoStart.yes);
+
         bool canTest = true;
         foreach_reverse(m; test.qtModules)
             if(m !in moduleCompiled)
@@ -218,6 +228,8 @@ int main(string[] args)
 
         if(!canTest)
         {
+            sw.stop();
+            stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
             stderr.writeln("Skipping ", test.name);
             continue;
         }
@@ -280,6 +292,8 @@ int main(string[] args)
         auto dmdRes = execute(dmdArgs);
         if(dmdRes.status)
         {
+            sw.stop();
+            stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
             stderr.writeln("Failure compiling ", test.name);
             stderr.writeln(escapeShellCommand(dmdArgs));
             stderr.writeln(dmdRes.output);
@@ -295,6 +309,8 @@ int main(string[] args)
                 auto rpathRes = execute(rpathArgs);
                 if(rpathRes.status)
                 {
+                    sw.stop();
+                    stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
                     stderr.writeln("Failure setting rpath for ", test.name);
                     stderr.writeln(escapeShellCommand(rpathArgs));
                     stderr.writeln(rpathRes.output);
@@ -311,6 +327,8 @@ int main(string[] args)
             auto testRes = execute(testArgs, env, Config.none, size_t.max, resultDir);
             if(testRes.status)
             {
+                sw.stop();
+                stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
                 stderr.writeln("Failure executing ", test.name);
                 stderr.writeln(escapeShellCommand(testArgs));
                 stderr.writeln(testRes.output);
@@ -319,6 +337,8 @@ int main(string[] args)
             }
             testOutput = testRes.output.strip();
         }
+        sw.stop();
+        stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
         stderr.writeln("Done ", test.name, testOutput.length ? ": " : "", testOutput);
     }
 
