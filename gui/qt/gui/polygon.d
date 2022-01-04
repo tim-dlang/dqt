@@ -25,7 +25,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QPolygon](https://doc.qt.io/qt-5/qpolygon.html).
-@(QMetaType.Type.QPolygon) @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygon
+@Q_MOVABLE_TYPE @(QMetaType.Type.QPolygon) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygon
 {
     public QVector!(QPoint) base0;
     alias base0 this;
