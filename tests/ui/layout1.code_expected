@@ -1,79 +1,79 @@
-    imported!q{qt.widgets.boxlayout}.QVBoxLayout verticalLayout_3;
-    imported!q{qt.widgets.splitter}.QSplitter splitter;
-    imported!q{qt.widgets.widget}.QWidget verticalLayoutWidget_2;
-    imported!q{qt.widgets.boxlayout}.QVBoxLayout verticalLayout_2;
-    imported!q{qt.widgets.pushbutton}.QPushButton pushButton;
-    imported!q{qt.widgets.layoutitem}.QSpacerItem verticalSpacer;
-    imported!q{qt.widgets.pushbutton}.QPushButton pushButton_2;
-    imported!q{qt.widgets.widget}.QWidget verticalLayoutWidget;
-    imported!q{qt.widgets.boxlayout}.QVBoxLayout verticalLayout;
-    imported!q{qt.widgets.boxlayout}.QHBoxLayout horizontalLayout;
-    imported!q{qt.widgets.layoutitem}.QSpacerItem horizontalSpacer_2;
-    imported!q{qt.widgets.pushbutton}.QPushButton pushButton_3;
-    imported!q{qt.widgets.label}.QLabel label_3;
-    imported!q{qt.widgets.formlayout}.QFormLayout formLayout;
-    imported!q{qt.widgets.label}.QLabel label;
-    imported!q{qt.widgets.lineedit}.QLineEdit lineEdit;
-    imported!q{qt.widgets.label}.QLabel label_2;
-    imported!q{qt.widgets.lineedit}.QLineEdit lineEdit_2;
-    imported!q{qt.widgets.layoutitem}.QSpacerItem horizontalSpacer;
-    imported!q{qt.widgets.gridlayout}.QGridLayout gridLayout;
-    imported!q{qt.widgets.layoutitem}.QSpacerItem verticalSpacer_2;
-    imported!q{qt.widgets.layoutitem}.QSpacerItem horizontalSpacer_3;
-    imported!q{qt.widgets.layoutitem}.QSpacerItem horizontalSpacer_4;
-    imported!q{qt.widgets.pushbutton}.QPushButton pushButton_4;
-    imported!q{qt.widgets.layoutitem}.QSpacerItem verticalSpacer_3;
+    dqtimported!q{qt.widgets.boxlayout}.QVBoxLayout verticalLayout_3;
+    dqtimported!q{qt.widgets.splitter}.QSplitter splitter;
+    dqtimported!q{qt.widgets.widget}.QWidget verticalLayoutWidget_2;
+    dqtimported!q{qt.widgets.boxlayout}.QVBoxLayout verticalLayout_2;
+    dqtimported!q{qt.widgets.pushbutton}.QPushButton pushButton;
+    dqtimported!q{qt.widgets.layoutitem}.QSpacerItem verticalSpacer;
+    dqtimported!q{qt.widgets.pushbutton}.QPushButton pushButton_2;
+    dqtimported!q{qt.widgets.widget}.QWidget verticalLayoutWidget;
+    dqtimported!q{qt.widgets.boxlayout}.QVBoxLayout verticalLayout;
+    dqtimported!q{qt.widgets.boxlayout}.QHBoxLayout horizontalLayout;
+    dqtimported!q{qt.widgets.layoutitem}.QSpacerItem horizontalSpacer_2;
+    dqtimported!q{qt.widgets.pushbutton}.QPushButton pushButton_3;
+    dqtimported!q{qt.widgets.label}.QLabel label_3;
+    dqtimported!q{qt.widgets.formlayout}.QFormLayout formLayout;
+    dqtimported!q{qt.widgets.label}.QLabel label;
+    dqtimported!q{qt.widgets.lineedit}.QLineEdit lineEdit;
+    dqtimported!q{qt.widgets.label}.QLabel label_2;
+    dqtimported!q{qt.widgets.lineedit}.QLineEdit lineEdit_2;
+    dqtimported!q{qt.widgets.layoutitem}.QSpacerItem horizontalSpacer;
+    dqtimported!q{qt.widgets.gridlayout}.QGridLayout gridLayout;
+    dqtimported!q{qt.widgets.layoutitem}.QSpacerItem verticalSpacer_2;
+    dqtimported!q{qt.widgets.layoutitem}.QSpacerItem horizontalSpacer_3;
+    dqtimported!q{qt.widgets.layoutitem}.QSpacerItem horizontalSpacer_4;
+    dqtimported!q{qt.widgets.pushbutton}.QPushButton pushButton_4;
+    dqtimported!q{qt.widgets.layoutitem}.QSpacerItem verticalSpacer_3;
 
-    void setupUi(imported!q{qt.widgets.widget}.QWidget FormLayout1)
+    void setupUi(dqtimported!q{qt.widgets.widget}.QWidget FormLayout1)
     {
         import core.stdcpp.new_: cpp_new;
         if (FormLayout1.objectName().isEmpty())
             FormLayout1.setObjectName("FormLayout1");
         FormLayout1.resize(400, 300);
-        verticalLayout_3 = cpp_new!(imported!q{qt.widgets.boxlayout}.QVBoxLayout)(FormLayout1);
+        verticalLayout_3 = cpp_new!(dqtimported!q{qt.widgets.boxlayout}.QVBoxLayout)(FormLayout1);
         verticalLayout_3.setObjectName("verticalLayout_3");
         verticalLayout_3.setContentsMargins(3, 2, -1, 1);
-        splitter = cpp_new!(imported!q{qt.widgets.splitter}.QSplitter)(FormLayout1);
+        splitter = cpp_new!(dqtimported!q{qt.widgets.splitter}.QSplitter)(FormLayout1);
         splitter.setObjectName("splitter");
-        splitter.setOrientation(imported!q{qt.core.flags}.enumFromStaticString!(typeof(splitter.orientation()), q{Qt::Horizontal}));
+        splitter.setOrientation(dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(splitter.orientation()), q{Qt::Horizontal}));
         splitter.setOpaqueResize(true);
         splitter.setHandleWidth(6);
         splitter.setChildrenCollapsible(true);
-        verticalLayoutWidget_2 = cpp_new!(imported!q{qt.widgets.widget}.QWidget)(splitter);
+        verticalLayoutWidget_2 = cpp_new!(dqtimported!q{qt.widgets.widget}.QWidget)(splitter);
         verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2");
-        verticalLayout_2 = cpp_new!(imported!q{qt.widgets.boxlayout}.QVBoxLayout)(verticalLayoutWidget_2);
+        verticalLayout_2 = cpp_new!(dqtimported!q{qt.widgets.boxlayout}.QVBoxLayout)(verticalLayoutWidget_2);
         verticalLayout_2.setObjectName("verticalLayout_2");
         verticalLayout_2.setContentsMargins(0, 0, 0, 0);
-        pushButton = cpp_new!(imported!q{qt.widgets.pushbutton}.QPushButton)(verticalLayoutWidget_2);
+        pushButton = cpp_new!(dqtimported!q{qt.widgets.pushbutton}.QPushButton)(verticalLayoutWidget_2);
         pushButton.setObjectName("pushButton");
 
         verticalLayout_2.addWidget(pushButton);
 
-        verticalSpacer = cpp_new!(imported!q{qt.widgets.layoutitem}.QSpacerItem)(20, 40, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding);
+        verticalSpacer = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(20, 40, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding);
 
         verticalLayout_2.addItem(verticalSpacer);
 
-        pushButton_2 = cpp_new!(imported!q{qt.widgets.pushbutton}.QPushButton)(verticalLayoutWidget_2);
+        pushButton_2 = cpp_new!(dqtimported!q{qt.widgets.pushbutton}.QPushButton)(verticalLayoutWidget_2);
         pushButton_2.setObjectName("pushButton_2");
 
         verticalLayout_2.addWidget(pushButton_2);
 
         splitter.addWidget(verticalLayoutWidget_2);
-        verticalLayoutWidget = cpp_new!(imported!q{qt.widgets.widget}.QWidget)(splitter);
+        verticalLayoutWidget = cpp_new!(dqtimported!q{qt.widgets.widget}.QWidget)(splitter);
         verticalLayoutWidget.setObjectName("verticalLayoutWidget");
-        verticalLayout = cpp_new!(imported!q{qt.widgets.boxlayout}.QVBoxLayout)(verticalLayoutWidget);
+        verticalLayout = cpp_new!(dqtimported!q{qt.widgets.boxlayout}.QVBoxLayout)(verticalLayoutWidget);
         verticalLayout.setObjectName("verticalLayout");
         verticalLayout.setSpacing(7);
-        verticalLayout.setSizeConstraint(imported!q{qt.core.flags}.enumFromStaticString!(typeof(verticalLayout.sizeConstraint()), q{QLayout::SetDefaultConstraint}));
+        verticalLayout.setSizeConstraint(dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(verticalLayout.sizeConstraint()), q{QLayout::SetDefaultConstraint}));
         verticalLayout.setContentsMargins(15, 16, 17, 18);
-        horizontalLayout = cpp_new!(imported!q{qt.widgets.boxlayout}.QHBoxLayout)();
+        horizontalLayout = cpp_new!(dqtimported!q{qt.widgets.boxlayout}.QHBoxLayout)();
         horizontalLayout.setObjectName("horizontalLayout");
         horizontalLayout.setSpacing(11);
-        horizontalSpacer_2 = cpp_new!(imported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
+        horizontalSpacer_2 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
 
         horizontalLayout.addItem(horizontalSpacer_2);
 
-        pushButton_3 = cpp_new!(imported!q{qt.widgets.pushbutton}.QPushButton)(verticalLayoutWidget);
+        pushButton_3 = cpp_new!(dqtimported!q{qt.widgets.pushbutton}.QPushButton)(verticalLayoutWidget);
         pushButton_3.setObjectName("pushButton_3");
 
         horizontalLayout.addWidget(pushButton_3);
@@ -81,7 +81,7 @@
 
         verticalLayout.addLayout(horizontalLayout);
 
-        label_3 = cpp_new!(imported!q{qt.widgets.label}.QLabel)(verticalLayoutWidget);
+        label_3 = cpp_new!(dqtimported!q{qt.widgets.label}.QLabel)(verticalLayoutWidget);
         label_3.setObjectName("label_3");
 
         verticalLayout.addWidget(label_3);
@@ -90,69 +90,69 @@
 
         verticalLayout_3.addWidget(splitter);
 
-        formLayout = cpp_new!(imported!q{qt.widgets.formlayout}.QFormLayout)();
+        formLayout = cpp_new!(dqtimported!q{qt.widgets.formlayout}.QFormLayout)();
         formLayout.setObjectName("formLayout");
-        formLayout.setSizeConstraint(imported!q{qt.core.flags}.enumFromStaticString!(typeof(formLayout.sizeConstraint()), q{QLayout::SetDefaultConstraint}));
-        formLayout.setFieldGrowthPolicy(imported!q{qt.core.flags}.enumFromStaticString!(typeof(formLayout.fieldGrowthPolicy()), q{QFormLayout::AllNonFixedFieldsGrow}));
-        formLayout.setRowWrapPolicy(imported!q{qt.core.flags}.enumFromStaticString!(typeof(formLayout.rowWrapPolicy()), q{QFormLayout::DontWrapRows}));
-        formLayout.setLabelAlignment(imported!q{qt.core.flags}.flagsFromStaticString!(typeof(formLayout.labelAlignment()), q{Qt::AlignCenter}));
-        formLayout.setFormAlignment(imported!q{qt.core.flags}.flagsFromStaticString!(typeof(formLayout.formAlignment()), q{Qt::AlignCenter}));
+        formLayout.setSizeConstraint(dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(formLayout.sizeConstraint()), q{QLayout::SetDefaultConstraint}));
+        formLayout.setFieldGrowthPolicy(dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(formLayout.fieldGrowthPolicy()), q{QFormLayout::AllNonFixedFieldsGrow}));
+        formLayout.setRowWrapPolicy(dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(formLayout.rowWrapPolicy()), q{QFormLayout::DontWrapRows}));
+        formLayout.setLabelAlignment(dqtimported!q{qt.core.flags}.flagsFromStaticString!(typeof(formLayout.labelAlignment()), q{Qt::AlignCenter}));
+        formLayout.setFormAlignment(dqtimported!q{qt.core.flags}.flagsFromStaticString!(typeof(formLayout.formAlignment()), q{Qt::AlignCenter}));
         formLayout.setHorizontalSpacing(7);
         formLayout.setVerticalSpacing(8);
         formLayout.setContentsMargins(1, 2, 3, 0);
-        label = cpp_new!(imported!q{qt.widgets.label}.QLabel)(FormLayout1);
+        label = cpp_new!(dqtimported!q{qt.widgets.label}.QLabel)(FormLayout1);
         label.setObjectName("label");
 
-        formLayout.setWidget(0, imported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.LabelRole, label);
+        formLayout.setWidget(0, dqtimported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.LabelRole, label);
 
-        lineEdit = cpp_new!(imported!q{qt.widgets.lineedit}.QLineEdit)(FormLayout1);
+        lineEdit = cpp_new!(dqtimported!q{qt.widgets.lineedit}.QLineEdit)(FormLayout1);
         lineEdit.setObjectName("lineEdit");
 
-        formLayout.setWidget(0, imported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, lineEdit);
+        formLayout.setWidget(0, dqtimported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, lineEdit);
 
-        label_2 = cpp_new!(imported!q{qt.widgets.label}.QLabel)(FormLayout1);
+        label_2 = cpp_new!(dqtimported!q{qt.widgets.label}.QLabel)(FormLayout1);
         label_2.setObjectName("label_2");
 
-        formLayout.setWidget(2, imported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.LabelRole, label_2);
+        formLayout.setWidget(2, dqtimported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.LabelRole, label_2);
 
-        lineEdit_2 = cpp_new!(imported!q{qt.widgets.lineedit}.QLineEdit)(FormLayout1);
+        lineEdit_2 = cpp_new!(dqtimported!q{qt.widgets.lineedit}.QLineEdit)(FormLayout1);
         lineEdit_2.setObjectName("lineEdit_2");
 
-        formLayout.setWidget(2, imported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, lineEdit_2);
+        formLayout.setWidget(2, dqtimported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, lineEdit_2);
 
-        horizontalSpacer = cpp_new!(imported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
+        horizontalSpacer = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
 
-        formLayout.setItem(1, imported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, horizontalSpacer);
+        formLayout.setItem(1, dqtimported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, horizontalSpacer);
 
-        gridLayout = cpp_new!(imported!q{qt.widgets.gridlayout}.QGridLayout)();
+        gridLayout = cpp_new!(dqtimported!q{qt.widgets.gridlayout}.QGridLayout)();
         gridLayout.setObjectName("gridLayout");
-        gridLayout.setSizeConstraint(imported!q{qt.core.flags}.enumFromStaticString!(typeof(gridLayout.sizeConstraint()), q{QLayout::SetDefaultConstraint}));
+        gridLayout.setSizeConstraint(dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(gridLayout.sizeConstraint()), q{QLayout::SetDefaultConstraint}));
         gridLayout.setHorizontalSpacing(1);
         gridLayout.setVerticalSpacing(2);
         gridLayout.setContentsMargins(2, 3, 0, 5);
-        verticalSpacer_2 = cpp_new!(imported!q{qt.widgets.layoutitem}.QSpacerItem)(20, 40, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding);
+        verticalSpacer_2 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(20, 40, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding);
 
         gridLayout.addItem(verticalSpacer_2, 0, 1, 1, 1);
 
-        horizontalSpacer_3 = cpp_new!(imported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
+        horizontalSpacer_3 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
 
         gridLayout.addItem(horizontalSpacer_3, 1, 0, 1, 1);
 
-        horizontalSpacer_4 = cpp_new!(imported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
+        horizontalSpacer_4 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
 
         gridLayout.addItem(horizontalSpacer_4, 1, 2, 1, 1);
 
-        pushButton_4 = cpp_new!(imported!q{qt.widgets.pushbutton}.QPushButton)(FormLayout1);
+        pushButton_4 = cpp_new!(dqtimported!q{qt.widgets.pushbutton}.QPushButton)(FormLayout1);
         pushButton_4.setObjectName("pushButton_4");
 
         gridLayout.addWidget(pushButton_4, 1, 1, 1, 1);
 
-        verticalSpacer_3 = cpp_new!(imported!q{qt.widgets.layoutitem}.QSpacerItem)(20, 40, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum, imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding);
+        verticalSpacer_3 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(20, 40, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding);
 
         gridLayout.addItem(verticalSpacer_3, 2, 1, 1, 1);
 
 
-        formLayout.setLayout(3, imported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, gridLayout);
+        formLayout.setLayout(3, dqtimported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, gridLayout);
 
 
         verticalLayout_3.addLayout(formLayout);
@@ -160,25 +160,25 @@
 
         retranslateUi(FormLayout1);
 
-        imported!q{qt.core.objectdefs}.QMetaObject.connectSlotsByName(FormLayout1);
+        dqtimported!q{qt.core.objectdefs}.QMetaObject.connectSlotsByName(FormLayout1);
     } // setupUi
 
-    void retranslateUi(imported!q{qt.widgets.widget}.QWidget FormLayout1)
+    void retranslateUi(dqtimported!q{qt.widgets.widget}.QWidget FormLayout1)
     {
-        auto tmp = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "FormLayout1", null);
+        auto tmp = dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "FormLayout1", null);
         FormLayout1.setWindowTitle(tmp);
-        auto tmp1 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "PushButton", null);
+        auto tmp1 = dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "PushButton", null);
         pushButton.setText(tmp1);
-        auto tmp2 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "PushButton", null);
+        auto tmp2 = dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "PushButton", null);
         pushButton_2.setText(tmp2);
-        auto tmp3 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "PushButton", null);
+        auto tmp3 = dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "PushButton", null);
         pushButton_3.setText(tmp3);
-        auto tmp4 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "TextLabel", null);
+        auto tmp4 = dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "TextLabel", null);
         label_3.setText(tmp4);
-        auto tmp5 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "TextLabel", null);
+        auto tmp5 = dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "TextLabel", null);
         label.setText(tmp5);
-        auto tmp6 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "TextLabel", null);
+        auto tmp6 = dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "TextLabel", null);
         label_2.setText(tmp6);
-        auto tmp7 = imported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "PushButton", null);
+        auto tmp7 = dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate("FormLayout1", "PushButton", null);
         pushButton_4.setText(tmp7);
     } // retranslateUi

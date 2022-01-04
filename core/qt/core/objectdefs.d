@@ -110,9 +110,9 @@ version(QT_NO_TRANSLATION){}else
     QT_DEPRECATED static inline QString trUtf8(const char *s, const char *c = nullptr, int n = -1) \
         { return staticMetaObject.tr(s, c, n); } +/
 enum QT_TR_FUNCTIONS =
-        q{pragma(inline, true) static imported!"qt.core.string".QString tr(const(char)* s, const(char)* c = null, int n = -1)
+        q{pragma(inline, true) static dqtimported!"qt.core.string".QString tr(const(char)* s, const(char)* c = null, int n = -1)
             { return staticMetaObject.tr(s, c, n); }
-        /+ QT_DEPRECATED +/ pragma(inline, true) static imported!"qt.core.string".QString trUtf8(const(char)* s, const(char)* c = null, int n = -1)
+        /+ QT_DEPRECATED +/ pragma(inline, true) static dqtimported!"qt.core.string".QString trUtf8(const(char)* s, const(char)* c = null, int n = -1)
             { return staticMetaObject.tr(s, c, n); }};
 }
 version(QT_NO_TRANSLATION)
@@ -169,14 +169,14 @@ enum Q_OBJECT =
 q{    public:
         /+ QT_WARNING_PUSH
         Q_OBJECT_NO_OVERRIDE_WARNING +/
-        extern(C++) extern } ~ exportOnWindows ~ q{static __gshared const(imported!q{qt.core.objectdefs}.QMetaObject) staticMetaObject;
-        extern(C++) override /+ virtual +/ const(imported!q{qt.core.objectdefs}.QMetaObject)* metaObject() const;
+        extern(C++) extern } ~ exportOnWindows ~ q{static __gshared const(dqtimported!q{qt.core.objectdefs}.QMetaObject) staticMetaObject;
+        extern(C++) override /+ virtual +/ const(dqtimported!q{qt.core.objectdefs}.QMetaObject)* metaObject() const;
         extern(C++) override /+ virtual +/ void* qt_metacast(const(char)* );
-        extern(C++) override /+ virtual +/ int qt_metacall(imported!q{qt.core.objectdefs}.QMetaObject.Call, int, void** );
+        extern(C++) override /+ virtual +/ int qt_metacall(dqtimported!q{qt.core.objectdefs}.QMetaObject.Call, int, void** );
         } ~ QT_TR_FUNCTIONS ~ q{
     private:
         /+ Q_OBJECT_NO_ATTRIBUTES_WARNING +/
-        /+ Q_DECL_HIDDEN_STATIC_METACALL +/ static void qt_static_metacall(imported!"qt.core.object".QObject , imported!q{qt.core.objectdefs}.QMetaObject.Call, int, void** );
+        /+ Q_DECL_HIDDEN_STATIC_METACALL +/ static void qt_static_metacall(dqtimported!"qt.core.object".QObject , dqtimported!q{qt.core.objectdefs}.QMetaObject.Call, int, void** );
         /+ QT_WARNING_POP +/
         extern(C++) struct QPrivateSignal {}};
         /+ QT_ANNOTATE_CLASS(qt_qobject, "") +/
@@ -461,8 +461,8 @@ template MetaObjectImpl(T)
 
 enum Q_OBJECT_D = q{
     public:
-        extern(C++) extern static __gshared const(imported!q{qt.core.objectdefs}.QMetaObject) staticMetaObject;
-        extern(C++) override const(imported!q{qt.core.objectdefs}.QMetaObject)* metaObject() const
+        extern(C++) extern static __gshared const(dqtimported!q{qt.core.objectdefs}.QMetaObject) staticMetaObject;
+        extern(C++) override const(dqtimported!q{qt.core.objectdefs}.QMetaObject)* metaObject() const
         {
             import qt.core.object;
             return qt.core.object.QObject.d_ptr.metaObject ? qt.core.object.QObject.d_ptr.dynamicMetaObject() : &staticMetaObject;
@@ -476,7 +476,7 @@ enum Q_OBJECT_D = q{
                 return static_cast!(void*)(this);
             return super.qt_metacast(_clname);
         }
-        extern(C++) override int qt_metacall(imported!q{qt.core.objectdefs}.QMetaObject.Call  _c, int _id, void **_a)
+        extern(C++) override int qt_metacall(dqtimported!q{qt.core.objectdefs}.QMetaObject.Call  _c, int _id, void **_a)
         {
             import qt.core.objectdefs;
             _id = super.qt_metacall(_c, _id, _a);
@@ -494,7 +494,7 @@ enum Q_OBJECT_D = q{
             }
             return _id;
         }
-        extern(C++) static void qt_static_metacall(imported!"qt.core.object".QObject _o, imported!q{qt.core.objectdefs}.QMetaObject.Call _c, int _id, void **_a)
+        extern(C++) static void qt_static_metacall(dqtimported!"qt.core.object".QObject _o, dqtimported!q{qt.core.objectdefs}.QMetaObject.Call _c, int _id, void **_a)
         {
             import qt.core.objectdefs;
             if (_c == qt.core.objectdefs.QMetaObject.Call.InvokeMetaMethod) {
@@ -553,7 +553,7 @@ enum Q_SIGNAL_IMPL_D = q{
         r ~= "]";
         return r;
         }());
-    imported!q{qt.core.objectdefs}.QMetaObject.activate(this, &staticMetaObject, imported!q{qt.core.objectdefs}.MetaObjectImpl!(typeof(this)).signalIndex!(__traits(parent, Dummy)), _a.ptr);
+    dqtimported!q{qt.core.objectdefs}.QMetaObject.activate(this, &staticMetaObject, dqtimported!q{qt.core.objectdefs}.MetaObjectImpl!(typeof(this)).signalIndex!(__traits(parent, Dummy)), _a.ptr);
 };
 
 /+ #define Q_GADGET \
@@ -570,13 +570,13 @@ private: \
     /*end*/ +/
 enum Q_GADGET =
 q{    public:
-        extern(C++) extern } ~ exportOnWindows ~ q{static __gshared const(imported!q{qt.core.objectdefs}.QMetaObject) staticMetaObject;
+        extern(C++) extern } ~ exportOnWindows ~ q{static __gshared const(dqtimported!q{qt.core.objectdefs}.QMetaObject) staticMetaObject;
         /+ void qt_check_for_QGADGET_macro(); +/
         alias QtGadgetHelper = void;
     private:
         /+ QT_WARNING_PUSH
         Q_OBJECT_NO_ATTRIBUTES_WARNING +/
-        /+ Q_DECL_HIDDEN_STATIC_METACALL +/ static void qt_static_metacall(imported!q{qt.core.object}.QObject , imported!q{qt.core.objectdefs}.QMetaObject.Call, int, void** );};
+        /+ Q_DECL_HIDDEN_STATIC_METACALL +/ static void qt_static_metacall(dqtimported!q{qt.core.object}.QObject , dqtimported!q{qt.core.objectdefs}.QMetaObject.Call, int, void** );};
         /+ QT_WARNING_POP
         QT_ANNOTATE_CLASS(qt_qgadget, "") +/
         /*end*/

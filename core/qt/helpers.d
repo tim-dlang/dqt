@@ -869,9 +869,11 @@ version(Windows)
 else
     enum exportOnWindows = "";
 
-// TODO: can be removed when a released dmd contains imported.
-static if(!__traits(compiles, imported))
-template imported(string moduleName)
+/* Same as imported from druntime object.d.
+ * Using a custom implementation also works with older druntime
+ * and works around https://issues.dlang.org/show_bug.cgi?id=22651
+ */
+template dqtimported(string moduleName)
 {
-    mixin("import imported = " ~ moduleName ~ ";");
+    mixin("import dqtimported = " ~ moduleName ~ ";");
 }

@@ -198,7 +198,7 @@ private:
     { return msecs >= 2000 ? /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer : /+ Qt:: +/qt.core.namespace.TimerType.PreciseTimer; }
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static void singleShotImpl(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType,
-                                   const(QObject) receiver, /+ QtPrivate:: +/imported!q{qt.core.objectdefs_impl}.QSlotObjectBase* slotObj);
+                                   const(QObject) receiver, /+ QtPrivate:: +/dqtimported!q{qt.core.objectdefs_impl}.QSlotObjectBase* slotObj);
     }));
 
 /+ #if __has_include(<chrono>) +/

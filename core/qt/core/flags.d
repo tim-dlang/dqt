@@ -226,14 +226,14 @@ template flagsFromStaticString(T, string str)
 {
     enum flagsFromStaticString = (){
         T r;
-        static foreach(element; imported!q{std.array}.split(str, "|"))
+        static foreach(element; dqtimported!q{std.array}.split(str, "|"))
         {
-            r |= __traits(getMember, T.enum_type, imported!q{std.array}.split(element, "::")[$-1]);
+            r |= __traits(getMember, T.enum_type, dqtimported!q{std.array}.split(element, "::")[$-1]);
         }
         return r;
     }();
 }
 template enumFromStaticString(T, string str)
 {
-    enum enumFromStaticString = __traits(getMember, T, imported!q{std.array}.split(str, "::")[$-1]);
+    enum enumFromStaticString = __traits(getMember, T, dqtimported!q{std.array}.split(str, "::")[$-1]);
 }

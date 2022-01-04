@@ -163,7 +163,7 @@ private struct UICodeWriter()
 
             code.put("        ");
             code.put(widgetName);
-            code.put(".setFrameShape(imported!q{qt.widgets.frame}.QFrame.Shape.");
+            code.put(".setFrameShape(dqtimported!q{qt.widgets.frame}.QFrame.Shape.");
             if(value == "Qt::Horizontal")
                 code.put("HLine");
             else if(value == "Qt::Vertical")
@@ -175,7 +175,7 @@ private struct UICodeWriter()
             code.put("        ");
             code.put(widgetName);
             code.put(".");
-            code.put("setFrameShadow(imported!q{qt.widgets.frame}.QFrame.Shadow.Sunken);\n");
+            code.put("setFrameShadow(dqtimported!q{qt.widgets.frame}.QFrame.Shadow.Sunken);\n");
             return;
         }
 
@@ -202,7 +202,7 @@ private struct UICodeWriter()
             }
             else
             {
-                codeValue.put("imported!q{qt.core.rect}.QRect(");
+                codeValue.put("dqtimported!q{qt.core.rect}.QRect(");
                 foreach(i, c; property.children[0].children)
                 {
                     if(i)
@@ -217,7 +217,7 @@ private struct UICodeWriter()
         }
         else if(property.children[0].name == "color")
         {
-            codeValue.put("imported!q{qt.gui.color}.QColor(");
+            codeValue.put("dqtimported!q{qt.gui.color}.QColor(");
             foreach(i, c; property.children[0].children)
             {
                 if(i)
@@ -238,7 +238,7 @@ private struct UICodeWriter()
         {
             enforce(property.children[0].children.length == 1);
             enforce(property.children[0].children[0].type == EntityType.text);
-            codeValue.put("imported!q{qt.core.flags}.flagsFromStaticString!(typeof(");
+            codeValue.put("dqtimported!q{qt.core.flags}.flagsFromStaticString!(typeof(");
             codeValue.put(widgetName);
             codeValue.put(".");
             codeValue.put(name);
@@ -250,7 +250,7 @@ private struct UICodeWriter()
         {
             enforce(property.children[0].children.length == 1);
             enforce(property.children[0].children[0].type == EntityType.text);
-            codeValue.put("imported!q{qt.core.flags}.enumFromStaticString!(typeof(");
+            codeValue.put("dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(");
             codeValue.put(widgetName);
             codeValue.put(".");
             codeValue.put(name);
@@ -275,17 +275,17 @@ private struct UICodeWriter()
             {
                 if(widgetType == "QTreeWidget")
                     return;
-                codeValue.put("imported!q{qt.core.string}.QString.create()");
+                codeValue.put("dqtimported!q{qt.core.string}.QString.create()");
             }
             else if(noTr)
             {
-                codeValue.put("imported!q{qt.core.string}.QString.fromUtf8(");
+                codeValue.put("dqtimported!q{qt.core.string}.QString.fromUtf8(");
                 writeStringLiteral(codeValue, value.asDecodedXML);
                 codeValue.put(")");
             }
             else
             {
-                codeValue.put("imported!q{qt.core.coreapplication}.QCoreApplication.translate(\"");
+                codeValue.put("dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate(\"");
                 codeValue.put(rootWidgetInfo.name);
                 codeValue.put("\", ");
                 writeStringLiteral(codeValue, value.asDecodedXML);
@@ -313,7 +313,7 @@ private struct UICodeWriter()
                     enforce(false);
             }
 
-            codeValue.put("imported!q{qt.core.size}.QSize(");
+            codeValue.put("dqtimported!q{qt.core.size}.QSize(");
             codeValue.put(width);
             codeValue.put(", ");
             codeValue.put(height);
@@ -334,9 +334,9 @@ private struct UICodeWriter()
             string sizePolicyVar = createTmpVar(*tmpCount, "sizePolicy");
             code.put("        auto ");
             code.put(sizePolicyVar);
-            code.put(" = imported!q{qt.widgets.sizepolicy}.QSizePolicy(imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.");
+            code.put(" = dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy(dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.");
             code.put(hsizetype);
-            code.put(", imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.");
+            code.put(", dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.");
             code.put(vsizetype);
             code.put(");\n");
 
@@ -373,7 +373,7 @@ private struct UICodeWriter()
             string fontVar = createTmpVar(*tmpCount, "font");
             code.put("        auto ");
             code.put(fontVar);
-            code.put(" = imported!q{qt.gui.font}.QFont.create();\n");
+            code.put(" = dqtimported!q{qt.gui.font}.QFont.create();\n");
 
             foreach(i, c; property.children[0].children)
             {
@@ -400,7 +400,7 @@ private struct UICodeWriter()
         {
             enforce(property.children[0].children.length == 1);
             enforce(property.children[0].children[0].type == EntityType.text);
-            codeValue.put("imported!q{qt.gui.pixmap}.QPixmap(imported!q{qt.core.string}.QString(");
+            codeValue.put("dqtimported!q{qt.gui.pixmap}.QPixmap(dqtimported!q{qt.core.string}.QString(");
             writeStringLiteral(codeValue, property.children[0].children[0].text);
             codeValue.put("))");
         }
@@ -408,7 +408,7 @@ private struct UICodeWriter()
         {
             enforce(property.children[0].children.length == 1);
             enforce(property.children[0].children[0].type == EntityType.text);
-            codeValue.put("imported!q{qt.gui.cursor}.QCursor(imported!q{qt.core.namespace}.CursorShape.");
+            codeValue.put("dqtimported!q{qt.gui.cursor}.QCursor(dqtimported!q{qt.core.namespace}.CursorShape.");
             codeValue.put(property.children[0].children[0].text);
             codeValue.put(")");
             needTmp = true;
@@ -440,15 +440,15 @@ private struct UICodeWriter()
             code.put("        auto ");
             code.put(var);
             code.put(" = ");
-            code.put("imported!q{qt.core.datetime}.QDateTime(");
-            code.put("imported!q{qt.core.datetime}.QDate(");
+            code.put("dqtimported!q{qt.core.datetime}.QDateTime(");
+            code.put("dqtimported!q{qt.core.datetime}.QDate(");
             code.put(year);
             code.put(", ");
             code.put(month);
             code.put(", ");
             code.put(day);
             code.put("),");
-            code.put("imported!q{qt.core.datetime}.QTime(");
+            code.put("dqtimported!q{qt.core.datetime}.QTime(");
             code.put(hour);
             code.put(", ");
             code.put(minute);
@@ -479,7 +479,7 @@ private struct UICodeWriter()
             code.put("        auto ");
             code.put(var);
             code.put(" = ");
-            code.put("imported!q{qt.core.datetime}.QDate(");
+            code.put("dqtimported!q{qt.core.datetime}.QDate(");
             code.put(year);
             code.put(", ");
             code.put(month);
@@ -509,7 +509,7 @@ private struct UICodeWriter()
             code.put("        auto ");
             code.put(var);
             code.put(" = ");
-            code.put("imported!q{qt.core.datetime}.QTime(");
+            code.put("dqtimported!q{qt.core.datetime}.QTime(");
             code.put(hour);
             code.put(", ");
             code.put(minute);
@@ -522,7 +522,7 @@ private struct UICodeWriter()
         {
             string iconVar = createTmpVar(*tmpCount, "iconVar");
 
-            code.put("        imported!q{qt.gui.icon}.QIcon ");
+            code.put("        dqtimported!q{qt.gui.icon}.QIcon ");
             code.put(iconVar);
             code.put(";\n");
 
@@ -539,15 +539,15 @@ private struct UICodeWriter()
 
                 code.put("          auto ");
                 code.put(iconNameVar);
-                code.put(" = imported!q{qt.core.string}.QString(");
+                code.put(" = dqtimported!q{qt.core.string}.QString(");
                 writeStringLiteral(*code, theme);
                 code.put(");\n");
-                code.put("        if (imported!q{qt.gui.icon}.QIcon.hasThemeIcon(");
+                code.put("        if (dqtimported!q{qt.gui.icon}.QIcon.hasThemeIcon(");
                 code.put(iconNameVar);
                 code.put(")) {\n");
                 code.put("        ");
                 code.put(iconVar);
-                code.put(" = imported!q{qt.gui.icon}.QIcon.fromTheme(");
+                code.put(" = dqtimported!q{qt.gui.icon}.QIcon.fromTheme(");
                 code.put(iconNameVar);
                 code.put(");\n");
                 code.put("        } else {\n");
@@ -579,11 +579,11 @@ private struct UICodeWriter()
                     code.put("  ");
                 code.put("        ");
                 code.put(iconVar);
-                code.put(".addFile(imported!q{qt.core.string}.QString(");
+                code.put(".addFile(dqtimported!q{qt.core.string}.QString(");
                 writeStringLiteral(*code, c.children[0].text);
-                code.put("), globalInitVar!(imported!q{qt.core.size}.QSize), imported!q{qt.gui.icon}.QIcon.Mode.");
+                code.put("), globalInitVar!(dqtimported!q{qt.core.size}.QSize), dqtimported!q{qt.gui.icon}.QIcon.Mode.");
                 code.put(mode.capitalize);
-                code.put(", imported!q{qt.gui.icon}.QIcon.State.");
+                code.put(", dqtimported!q{qt.gui.icon}.QIcon.State.");
                 code.put(state.capitalize);
                 code.put(");\n");
             }
@@ -629,20 +629,20 @@ private struct UICodeWriter()
         {
             codeSetup.put("        ");
             codeSetup.put(parentName);
-            codeSetup.put(".addItem(imported!q{qt.core.string}.QString.create());\n");
+            codeSetup.put(".addItem(dqtimported!q{qt.core.string}.QString.create());\n");
             extraArg = text(itemIndex, ", ");
             name = parentName;
         }
         else if(parentType == "QTreeWidget")
         {
             name = createTmpVar(tmpCountSetup, "__qtreewidgetitem");
-            codeSetup.put("        imported!q{qt.widgets.treewidget}.QTreeWidgetItem ");
+            codeSetup.put("        dqtimported!q{qt.widgets.treewidget}.QTreeWidgetItem ");
             codeSetup.put(name);
-            codeSetup.put(" = cpp_new!(imported!q{qt.widgets.treewidget}.QTreeWidgetItem)(");
+            codeSetup.put(" = cpp_new!(dqtimported!q{qt.widgets.treewidget}.QTreeWidgetItem)(");
             codeSetup.put(parentName);
             codeSetup.put(");\n");
 
-            codeRetranslate.put("        imported!q{qt.widgets.treewidget}.QTreeWidgetItem ");
+            codeRetranslate.put("        dqtimported!q{qt.widgets.treewidget}.QTreeWidgetItem ");
             codeRetranslate.put(name);
             codeRetranslate.put(" = ");
             codeRetranslate.put(parentName);
@@ -747,7 +747,7 @@ private struct UICodeWriter()
             }
 
             codeVars.put("    ");
-            codeVars.put("imported!q{");
+            codeVars.put("dqtimported!q{");
             codeVars.put(getWidgetModule(info.className));
             codeVars.put("}.");
             codeVars.put(info.className);
@@ -757,7 +757,7 @@ private struct UICodeWriter()
 
             codeSetup.put("        ");
             codeSetup.put(info.name);
-            codeSetup.put(" = cpp_new!(imported!q{");
+            codeSetup.put(" = cpp_new!(dqtimported!q{");
             codeSetup.put(getWidgetModule(info.className));
             codeSetup.put("}.");
             codeSetup.put(info.className);
@@ -768,16 +768,16 @@ private struct UICodeWriter()
             codeSetup.put(", ");
             if(orientation == "Qt::Horizontal")
             {
-                codeSetup.put("imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.");
+                codeSetup.put("dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.");
                 codeSetup.put(sizeType);
                 codeSetup.put(", ");
-                codeSetup.put("imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum");
+                codeSetup.put("dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum");
             }
             else if(orientation == "Qt::Vertical")
             {
-                codeSetup.put("imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum");
+                codeSetup.put("dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum");
                 codeSetup.put(", ");
-                codeSetup.put("imported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.");
+                codeSetup.put("dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.");
                 codeSetup.put(sizeType);
             }
             else
@@ -791,11 +791,11 @@ private struct UICodeWriter()
             codeVars.put("    ");
             if(info.className == "Line")
             {
-                codeVars.put("imported!q{qt.widgets.frame}.QFrame");
+                codeVars.put("dqtimported!q{qt.widgets.frame}.QFrame");
             }
             else
             {
-                codeVars.put("imported!q{");
+                codeVars.put("dqtimported!q{");
                 codeVars.put(getWidgetModule(info.className));
                 codeVars.put("}.");
                 codeVars.put(info.className);
@@ -809,11 +809,11 @@ private struct UICodeWriter()
             codeSetup.put(" = cpp_new!(");
             if(info.className == "Line")
             {
-                codeSetup.put("imported!q{qt.widgets.frame}.QFrame");
+                codeSetup.put("dqtimported!q{qt.widgets.frame}.QFrame");
             }
             else
             {
-                codeSetup.put("imported!q{");
+                codeSetup.put("dqtimported!q{");
                 codeSetup.put(getWidgetModule(info.className));
                 codeSetup.put("}.");
                 codeSetup.put(info.className);
@@ -827,12 +827,12 @@ private struct UICodeWriter()
         if(info.className == "QTreeWidget")
         {
             string headerName = createTmpVar(tmpCountSetup, "__qtreewidgetitem");
-            codeSetup.put("        imported!q{qt.widgets.treewidget}.QTreeWidgetItem ");
+            codeSetup.put("        dqtimported!q{qt.widgets.treewidget}.QTreeWidgetItem ");
             codeSetup.put(headerName);
-            codeSetup.put(" = cpp_new!(imported!q{qt.widgets.treewidget}.QTreeWidgetItem)(");
+            codeSetup.put(" = cpp_new!(dqtimported!q{qt.widgets.treewidget}.QTreeWidgetItem)(");
             codeSetup.put(");\n");
 
-            codeRetranslate.put("        imported!q{qt.widgets.treewidget}.QTreeWidgetItem ");
+            codeRetranslate.put("        dqtimported!q{qt.widgets.treewidget}.QTreeWidgetItem ");
             codeRetranslate.put(headerName);
             codeRetranslate.put(" = ");
             codeRetranslate.put(info.name);
@@ -987,7 +987,7 @@ private struct UICodeWriter()
                     codeSetup.put(".setWidget(");
 
                 codeSetup.put(row);
-                codeSetup.put(", imported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.");
+                codeSetup.put(", dqtimported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.");
                 codeSetup.put((column == "1") ? "FieldRole" : "LabelRole");
                 codeSetup.put(", ");
             }
@@ -1026,7 +1026,7 @@ private struct UICodeWriter()
                 codeSetup.put(".addTab(");
                 codeSetup.put(childInfo.name);
                 codeSetup.put(", ");
-                codeSetup.put("imported!q{qt.core.string}.QString.create()"); // TODO: not translateable strings
+                codeSetup.put("dqtimported!q{qt.core.string}.QString.create()"); // TODO: not translateable strings
                 codeSetup.put(");\n");
             }
             else if(info.className == "QMainWindow")
@@ -1127,7 +1127,7 @@ private struct UICodeWriter()
                 break;
             }
 
-        codeSetupConnect.put("        imported!q{qt.core.object}.QObject.connect(");
+        codeSetupConnect.put("        dqtimported!q{qt.core.object}.QObject.connect(");
         codeSetupConnect.put(sender);
         codeSetupConnect.put(".signal!\"");
         codeSetupConnect.put(signal);
@@ -1204,7 +1204,7 @@ private struct UICodeWriter()
 
         codeVars.put("\n");
         codeVars.put("    void setupUi(");
-        codeVars.put("imported!q{");
+        codeVars.put("dqtimported!q{");
         codeVars.put(getWidgetModule(rootWidgetInfo.className));
         codeVars.put("}.");
         codeVars.put(rootWidgetInfo.className);
@@ -1220,13 +1220,13 @@ private struct UICodeWriter()
         codeVars.put(");\n");
         codeVars.put(codeSetupConnect.data);
         codeVars.put(codeSetupDelayed.data);
-        codeVars.put("\n        imported!q{qt.core.objectdefs}.QMetaObject.connectSlotsByName(");
+        codeVars.put("\n        dqtimported!q{qt.core.objectdefs}.QMetaObject.connectSlotsByName(");
         codeVars.put(rootWidgetInfo.name);
         codeVars.put(");\n");
         codeVars.put("    } // setupUi\n");
         codeVars.put("\n");
         codeVars.put("    void retranslateUi(");
-        codeVars.put("imported!q{");
+        codeVars.put("dqtimported!q{");
         codeVars.put(getWidgetModule(rootWidgetInfo.className));
         codeVars.put("}.");
         codeVars.put(rootWidgetInfo.className);
