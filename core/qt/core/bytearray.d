@@ -132,7 +132,6 @@ static if(!versionIsSet!("QT_COMPILING_QSTRING_COMPAT_CPP") && defined!"Q_COMPIL
 /// Binding for C++ class [QByteArray](https://doc.qt.io/qt-5/qbytearray.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QByteArray) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QByteArray
 {
-    static import qt.core.namespace;
 private:
     alias Data = QTypedArrayData!(char);
 

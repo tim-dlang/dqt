@@ -78,7 +78,6 @@ struct IsCompatibleStdBasicString
 /// Binding for C++ class [QStringView](https://doc.qt.io/qt-5/qstringview.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QStringView
 {
-    static import qt.core.stringalgorithms;
 public:
     alias storage_type = wchar;
     alias value_type = const(QChar);

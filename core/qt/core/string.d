@@ -56,7 +56,6 @@ template <bool...B> class BoolList;
 @Q_MOVABLE_TYPE extern(C++, class) struct QLatin1String
 {
 public:
-    static import qt.core.stringalgorithms;
     @disable this();
     /+pragma(inline, true) this()/+ noexcept+/
     {
@@ -319,8 +318,6 @@ static if(!versionIsSet!("QT_COMPILING_QSTRING_COMPAT_CPP") && defined!"Q_COMPIL
 @Q_MOVABLE_TYPE @(QMetaType.Type.QString) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
 {
 public:
-    static import qt.core.stringalgorithms;
-    static import qt.core.namespace;
     alias Data = QStringData;
 
     version(Windows)
@@ -1757,8 +1754,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QString::SectionFlags) +/
 /// Binding for C++ class [QStringRef](https://doc.qt.io/qt-5/qstringref.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QStringRef {
 private:
-    static import qt.core.stringalgorithms;
-    static import qt.core.namespace;
     const(QString)* m_string = null;
     int m_position = 0;
     int m_size = 0;
