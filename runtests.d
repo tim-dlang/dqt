@@ -57,6 +57,7 @@ int main(string[] args)
 
     string compiler = "dmd";
     string qtPath;
+    bool verbose;
 
     for(size_t i = 1; i < args.length; i++)
     {
@@ -71,6 +72,10 @@ int main(string[] args)
         else if(args[i].startsWith("--qt-path="))
         {
             qtPath = args[i]["--qt-path=".length..$];
+        }
+        else if(args[i] == "-v")
+        {
+            verbose = true;
         }
         else
         {
@@ -198,13 +203,17 @@ int main(string[] args)
             dmdArgs ~= "-of" ~ "libdqt" ~ m ~ libExt;
 
         auto dmdRes = execute(dmdArgs);
+        if(dmdRes.status || verbose)
+        {
+            stderr.writeln(escapeShellCommand(dmdArgs));
+            if(dmdRes.output.length)
+                stderr.writeln(dmdRes.output.strip());
+        }
         if(dmdRes.status)
         {
             sw.stop();
             stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
             stderr.writeln("Failure compiling module ", m);
-            stderr.writeln(escapeShellCommand(dmdArgs));
-            stderr.writeln(dmdRes.output);
             anyFailure = true;
         }
         else
@@ -290,13 +299,17 @@ int main(string[] args)
         }
 
         auto dmdRes = execute(dmdArgs);
+        if(dmdRes.status || verbose)
+        {
+            stderr.writeln(escapeShellCommand(dmdArgs));
+            if(dmdRes.output.length)
+                stderr.writeln(dmdRes.output.strip());
+        }
         if(dmdRes.status)
         {
             sw.stop();
             stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
             stderr.writeln("Failure compiling ", test.name);
-            stderr.writeln(escapeShellCommand(dmdArgs));
-            stderr.writeln(dmdRes.output);
             anyFailure = true;
             continue;
         }
@@ -307,13 +320,17 @@ int main(string[] args)
             {
                 string[] rpathArgs = ["install_name_tool", "-add_rpath", absolutePath(qtPath) ~ "/lib", absolutePath(executable)];
                 auto rpathRes = execute(rpathArgs);
+                if(rpathRes.status || verbose)
+                {
+                    stderr.writeln(escapeShellCommand(rpathArgs));
+                    if(rpathRes.output.length)
+                        stderr.writeln(rpathRes.output.strip());
+                }
                 if(rpathRes.status)
                 {
                     sw.stop();
                     stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
                     stderr.writeln("Failure setting rpath for ", test.name);
-                    stderr.writeln(escapeShellCommand(rpathArgs));
-                    stderr.writeln(rpathRes.output);
                     anyFailure = true;
                     continue;
                 }
@@ -325,13 +342,17 @@ int main(string[] args)
         {
             string[] testArgs = [absolutePath(executable)];
             auto testRes = execute(testArgs, env, Config.none, size_t.max, resultDir);
+            if(testRes.status || verbose)
+            {
+                stderr.writeln(escapeShellCommand(testArgs));
+                if(testRes.output.length)
+                    stderr.writeln(testRes.output.strip());
+            }
             if(testRes.status)
             {
                 sw.stop();
                 stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
                 stderr.writeln("Failure executing ", test.name);
-                stderr.writeln(escapeShellCommand(testArgs));
-                stderr.writeln(testRes.output);
                 anyFailure = true;
                 continue;
             }
