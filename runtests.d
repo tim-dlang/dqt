@@ -185,7 +185,7 @@ int main(string[] args)
     {
         auto sw = StopWatch(AutoStart.yes);
 
-        string[] dmdArgs = [compiler, "-lib", "-g", "-m" ~ model];
+        string[] dmdArgs = [compiler, "-lib", "-g", "-w", "-m" ~ model];
         foreach (DirEntry e; dirEntries(buildPath(m, "qt", m), "*.d", SpanMode.depth))
         {
             dmdArgs ~= e.name;
@@ -253,6 +253,7 @@ int main(string[] args)
         //env["QT_DEBUG_PLUGINS"] = "1";
         dmdArgs ~= "-i=-qt";
         dmdArgs ~= "-g";
+        dmdArgs ~= "-w";
         dmdArgs ~= "-m" ~ model;
         dmdArgs ~= test.name;
         version(Windows){}else
