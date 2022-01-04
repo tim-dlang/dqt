@@ -81,6 +81,7 @@ private:
     final bool supportsMode(Mode mode) const;
     final bool ownsMode(Mode mode) const;
     final void emitChanged(Mode mode);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }

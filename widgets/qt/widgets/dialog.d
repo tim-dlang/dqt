@@ -94,5 +94,6 @@ protected:
 private:
     /+ Q_DECLARE_PRIVATE(QDialog) +/
     /+ Q_DISABLE_COPY(QDialog) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

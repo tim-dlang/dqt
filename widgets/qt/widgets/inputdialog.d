@@ -142,14 +142,6 @@ alias InputDialogOptions = QFlags!(InputDialogOption);
                                ref const(QString) text = globalInitVar!QString, bool* ok = null,
                                /+ Qt:: +/qt.core.namespace.WindowFlags flags = /+ Qt:: +/qt.core.namespace.WindowFlags(),
                                /+ Qt:: +/qt.core.namespace.InputMethodHints inputMethodHints = /+ Qt:: +/qt.core.namespace.InputMethodHint.ImhNone);
-    static QString getText(QWidget parent, const(QString) title, const(QString) label,
-                               QLineEdit.EchoMode echo = QLineEdit.EchoMode.Normal,
-                               const(QString) text = globalInitVar!QString, bool* ok = null,
-                               /+ Qt:: +/qt.core.namespace.WindowFlags flags = /+ Qt:: +/qt.core.namespace.WindowFlags(),
-                               /+ Qt:: +/qt.core.namespace.InputMethodHints inputMethodHints = /+ Qt:: +/qt.core.namespace.InputMethodHint.ImhNone)
-    {
-        return getText(parent, title, label, echo, text, ok, flags, inputMethodHints);
-    }
     static QString getMultiLineText(QWidget parent, ref const(QString) title, ref const(QString) label,
                                         ref const(QString) text = globalInitVar!QString, bool* ok = null,
                                         /+ Qt:: +/qt.core.namespace.WindowFlags flags = /+ Qt:: +/qt.core.namespace.WindowFlags(),
@@ -207,6 +199,7 @@ private:
     /+ Q_PRIVATE_SLOT(d_func(), void _q_textChanged(const QString&))
     Q_PRIVATE_SLOT(d_func(), void _q_plainTextEditTextChanged())
     Q_PRIVATE_SLOT(d_func(), void _q_currentRowChanged(const QModelIndex&, const QModelIndex&)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QInputDialog.InputDialogOptions.enum_type) operator |(QInputDialog.InputDialogOptions.enum_type f1, QInputDialog.InputDialogOptions.enum_type f2)/+noexcept+/{return QFlags!(QInputDialog.InputDialogOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QInputDialog.InputDialogOptions.enum_type) operator |(QInputDialog.InputDialogOptions.enum_type f1, QFlags!(QInputDialog.InputDialogOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/

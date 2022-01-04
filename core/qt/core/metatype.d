@@ -841,6 +841,7 @@ private:
     uint m_extensionFlags;
     int m_typeId;
     const(QMetaObject)* m_metaObject;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #undef QT_DEFINE_METATYPE_ID +/

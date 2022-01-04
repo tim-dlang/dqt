@@ -234,32 +234,16 @@ public /+ Q_SLOTS +/:
     @QSlot final void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment a);
 
     @QSlot final void setPlainText(ref const(QString) text);
-    final void setPlainText(const(QString) text)
-    {
-        setPlainText(text);
-    }
 /+ #ifndef QT_NO_TEXTHTMLPARSER +/
     version(QT_NO_TEXTHTMLPARSER){}else
     {
         @QSlot final void setHtml(ref const(QString) text);
-        final void setHtml(const(QString) text)
-        {
-            setHtml(text);
-        }
     }
 /+ #endif
 #if QT_CONFIG(textmarkdownreader) +/
     @QSlot final void setMarkdown(ref const(QString) markdown);
-    final void setMarkdown(const(QString) markdown)
-    {
-        setMarkdown(markdown);
-    }
 /+ #endif +/
     @QSlot final void setText(ref const(QString) text);
-    final void setText(const(QString) text)
-    {
-        setText(text);
-    }
 
     version(QT_NO_CLIPBOARD){}else
     {
@@ -358,6 +342,7 @@ private:
     /+ friend class QTextEditControl; +/
     /+ friend class QTextDocument; +/
     /+ friend class QWidgetTextControl; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator |(QTextEdit.AutoFormatting.enum_type f1, QTextEdit.AutoFormatting.enum_type f2)/+noexcept+/{return QFlags!(QTextEdit.AutoFormatting.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator |(QTextEdit.AutoFormatting.enum_type f1, QFlags!(QTextEdit.AutoFormatting.enum_type) f2)/+noexcept+/{return f2|f1;}+/

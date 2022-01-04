@@ -98,5 +98,6 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QFrame) +/
     /+ Q_DECLARE_PRIVATE(QFrame) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

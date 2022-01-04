@@ -203,6 +203,7 @@ private:
         const(quint16) b = cast(quint16)((blue()  * fa + 0x80000000) >> 32);
         return fromRgba64(r, g, b, cast(quint16)(a));
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QRgba64, Q_PRIMITIVE_TYPE); +/

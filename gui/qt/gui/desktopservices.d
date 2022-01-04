@@ -59,6 +59,7 @@ public:
 #endif +/
 private:
     static QString storageLocationImpl(mixin((!defined!"QT_NO_STANDARDPATHS") ? q{QStandardPaths.StandardLocation } : q{AliasSeq!()}) type);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }

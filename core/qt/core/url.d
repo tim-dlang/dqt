@@ -369,6 +369,7 @@ private:
 public:
     alias DataPtr = QUrlPrivate*;
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/

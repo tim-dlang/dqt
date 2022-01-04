@@ -318,6 +318,7 @@ public: // can't give friendship to a namespace, so it needs to be public
     explicit QColor(Spec spec, ushort a1, ushort a2, ushort a3, ushort a4, ushort a5=0) noexcept
         : cspec(spec), ct(a1, a2, a3, a4, a5) {}
 #endif +/ // Q_COMPILER_UNIFORM_INIT
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QColor, QT_VERSION >= QT_VERSION_CHECK(6,0,0) ? Q_MOVABLE_TYPE : Q_RELOCATABLE_TYPE);
 

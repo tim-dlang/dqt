@@ -159,6 +159,7 @@ private:
     Q_DECLARE_PRIVATE(QAbstractSpinBox) +/
     /+ Q_DISABLE_COPY(QAbstractSpinBox) +/
     /+ friend class QAccessibleAbstractSpinBox; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator |(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/{return QFlags!(QAbstractSpinBox.StepEnabled.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator |(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/{return f2|f1;}+/

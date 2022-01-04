@@ -55,7 +55,6 @@ public:
     ~this();
 
     final void setText(ref const(QString) text);
-    final void setText(const QString s){setText(s);}
     final QString text() const;
 
     final void setIcon(ref const(QIcon) icon);
@@ -136,5 +135,6 @@ private:
     /+ Q_DECLARE_PRIVATE(QAbstractButton) +/
     /+ Q_DISABLE_COPY(QAbstractButton) +/
     /+ friend class QButtonGroup; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

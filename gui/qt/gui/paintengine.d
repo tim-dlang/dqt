@@ -58,6 +58,7 @@ alias RenderFlags = QFlags!(RenderFlag);    qreal descent() const;
     RenderFlags renderFlags() const;
     QString text() const;
     QFont font() const;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QTextItem, Q_PRIMITIVE_TYPE); +/
 
@@ -288,6 +289,7 @@ private:
     /+ friend class QMacCGContext; +/
     /+ friend class QPreviewPaintEngine; +/
     /+ friend class QX11GLPlatformPixmap; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -331,6 +333,7 @@ protected:
     /+ friend class QMacPrintEnginePrivate; +/
 
     QPaintEngine.DirtyFlags dirtyFlags;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 //

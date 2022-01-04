@@ -54,5 +54,6 @@ public:
 private:
     /+ Q_DISABLE_COPY(QTextList) +/
     /+ Q_DECLARE_PRIVATE(QTextList) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

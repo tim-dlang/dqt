@@ -269,6 +269,7 @@ private:
         /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &); +/
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &); +/
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QPainterPath)
@@ -329,6 +330,7 @@ private:
     /+ friend class QX11PaintEngine; +/
 
     QScopedPointer!(QPainterPathStrokerPrivate) d_ptr;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+pragma(inline, true) QPainterPath operator *(ref const(QPainterPath) p, ref const(QTransform) m)

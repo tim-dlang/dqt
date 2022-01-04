@@ -113,5 +113,6 @@ private:
     /+ Q_PRIVATE_SLOT(d_func(), void _q_documentModified())
     Q_PRIVATE_SLOT(d_func(), void _q_activateAnchor(const QString &))
     Q_PRIVATE_SLOT(d_func(), void _q_highlightLink(const QString &)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

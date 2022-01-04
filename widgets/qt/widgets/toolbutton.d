@@ -112,5 +112,6 @@ private:
 #endif
     Q_PRIVATE_SLOT(d_func(), void _q_actionTriggered()) +/
 
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

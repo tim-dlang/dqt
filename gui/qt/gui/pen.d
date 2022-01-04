@@ -110,6 +110,7 @@ private:
 public:
     alias DataPtr = QPenPrivate*;
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QPen)

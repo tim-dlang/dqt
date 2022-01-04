@@ -510,6 +510,7 @@ private:
 
     int compare_single_char_helper(int diff) const/+ noexcept+/
     { return diff ? diff : size() > 1 ? 1 : 0; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QStringView, Q_PRIMITIVE_TYPE); +/
 

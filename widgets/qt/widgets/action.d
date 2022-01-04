@@ -89,7 +89,6 @@ public:
     final QIcon icon() const;
 
     final void setText(ref const(QString) text);
-    final void setText(const QString s){setText(s);}
     final QString text() const;
 
     final void setIconText(ref const(QString) text);
@@ -211,6 +210,7 @@ private:
     {
         /+ friend void qt_mac_clear_status_text(QAction *action); +/
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #ifndef QT_NO_DEBUG_STREAM

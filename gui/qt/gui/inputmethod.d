@@ -95,5 +95,6 @@ private:
     /+ friend class QPlatformInputContext; +/
     this();
     ~this();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

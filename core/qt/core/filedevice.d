@@ -121,6 +121,7 @@ protected:
 
 private:
     /+ Q_DISABLE_COPY(QFileDevice) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QFileDevice.Permissions.enum_type) operator |(QFileDevice.Permissions.enum_type f1, QFileDevice.Permissions.enum_type f2)/+noexcept+/{return QFlags!(QFileDevice.Permissions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QFileDevice.Permissions.enum_type) operator |(QFileDevice.Permissions.enum_type f1, QFlags!(QFileDevice.Permissions.enum_type) f2)/+noexcept+/{return f2|f1;}+/

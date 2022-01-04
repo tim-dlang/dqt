@@ -55,6 +55,7 @@ public:
 
 private:
     QExplicitlySharedDataPointer!(QFontPrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QFontInfo) +/

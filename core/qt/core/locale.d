@@ -1189,6 +1189,7 @@ private:
     /+ friend Q_CORE_EXPORT uint qHash(const QLocale &key, uint seed) noexcept; +/
 
     QSharedDataPointer!(QLocalePrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/{return QFlags!(QLocale.NumberOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/

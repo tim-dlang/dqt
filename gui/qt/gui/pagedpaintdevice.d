@@ -251,6 +251,7 @@ protected:
     /+ QT_DEPRECATED +/ final ref QPageLayout devicePageLayout();
     /+ friend class QPagedPaintDevicePrivate; +/
     QPagedPaintDevicePrivate* d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 static assert(__traits(classInstanceSize, QPagedPaintDevice) == (void*).sizeof * 4);

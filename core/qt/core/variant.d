@@ -569,6 +569,7 @@ public:
     alias DataPtr = Private;
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
     pragma(inline, true) ref const(DataPtr) data_ptr() const return { return d; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #if QT_DEPRECATED_SINCE(5, 14) +/
@@ -621,6 +622,7 @@ public:
 private:
     /+ friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &); +/
     const(QVariant)* v;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+pragma(inline, true) bool operator ==(ref const(QVariant) v1, ref const(QVariantComparisonHelper) v2)
@@ -691,6 +693,7 @@ public:
     int size() const;
 
     bool canReverseIterate() const;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }+/
 
 /+
@@ -753,6 +756,7 @@ public:
     QVariant value(ref const(QVariant) key) const;
 
     int size() const;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }+/
 
 version(QT_MOC){}else

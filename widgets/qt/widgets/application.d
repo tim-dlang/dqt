@@ -218,5 +218,6 @@ private:
     {
         /+ friend class QGestureManager; +/
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -112,6 +112,7 @@ private:
     /+ friend class QMainWindowLayout; +/
     /+ friend class QDockWidgetLayout; +/
     /+ friend class QDockAreaLayoutInfo; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QDockWidget.DockWidgetFeatures.enum_type) operator |(QDockWidget.DockWidgetFeatures.enum_type f1, QDockWidget.DockWidgetFeatures.enum_type f2)/+noexcept+/{return QFlags!(QDockWidget.DockWidgetFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDockWidget.DockWidgetFeatures.enum_type) operator |(QDockWidget.DockWidgetFeatures.enum_type f1, QFlags!(QDockWidget.DockWidgetFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/

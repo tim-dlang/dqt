@@ -89,6 +89,7 @@ private:
     /+ Q_DISABLE_COPY(QToolBox) +/
     /+ Q_PRIVATE_SLOT(d_func(), void _q_buttonClicked())
     Q_PRIVATE_SLOT(d_func(), void _q_widgetDestroyed(QObject*)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 

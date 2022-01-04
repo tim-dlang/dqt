@@ -171,7 +171,6 @@ public:
 
 public /+ Q_SLOTS +/:
     @QSlot final void setText(ref const(QString) );
-    final void setText(const(QString) text) { setText(text); }
     @QSlot final void clear();
     @QSlot final void selectAll();
     @QSlot final void undo();
@@ -255,5 +254,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_updateNeeded(const QRect &))
     Q_PRIVATE_SLOT(d_func(), void _q_textChanged(const QString &))
     Q_PRIVATE_SLOT(d_func(), void _q_clearButtonClicked()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

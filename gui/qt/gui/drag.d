@@ -70,5 +70,6 @@ public:
 private:
     /+ friend class QDragManager; +/
     /+ Q_DISABLE_COPY(QDrag) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

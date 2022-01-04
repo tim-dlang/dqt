@@ -215,6 +215,7 @@ private:
         /+ friend QVector4D operator*(const QVector4D& vector, const QMatrix4x4& matrix); +/
         /+ friend QVector4D operator*(const QMatrix4x4& matrix, const QVector4D& vector); +/
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QVector4D, Q_PRIMITIVE_TYPE);

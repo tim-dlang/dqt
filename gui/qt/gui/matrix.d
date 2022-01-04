@@ -121,6 +121,7 @@ package:
     qreal _m11 = 1; qreal _m12 = 0;
     qreal _m21 = 0; qreal _m22 = 1;
     qreal _dx = 0; qreal _dy = 0;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QMatrix, Q_MOVABLE_TYPE);
 

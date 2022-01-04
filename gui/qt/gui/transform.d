@@ -328,6 +328,7 @@ private:
     extern(C++, class) struct Private;
     Private* d;
 /+ #endif +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QTransform, Q_MOVABLE_TYPE);
 

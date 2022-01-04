@@ -92,6 +92,7 @@ public /+ Q_SLOTS +/:
 private:
     /+ Q_DISABLE_COPY(QSpinBox) +/
     /+ Q_DECLARE_PRIVATE(QSpinBox) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct QDoubleSpinBoxPrivate;
@@ -159,5 +160,6 @@ public /+ Q_SLOTS +/:
 private:
     /+ Q_DISABLE_COPY(QDoubleSpinBox) +/
     /+ Q_DECLARE_PRIVATE(QDoubleSpinBox) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

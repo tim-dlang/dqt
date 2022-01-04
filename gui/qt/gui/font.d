@@ -337,6 +337,7 @@ private:
 
     QExplicitlySharedDataPointer!(QFontPrivate) d;
     uint resolve_mask;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QFont)

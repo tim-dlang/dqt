@@ -137,6 +137,7 @@ private:
     /+ Q_DECLARE_PRIVATE(QDialogButtonBox) +/
     /+ Q_PRIVATE_SLOT(d_func(), void _q_handleButtonClicked())
     Q_PRIVATE_SLOT(d_func(), void _q_handleButtonDestroyed()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator |(QDialogButtonBox.StandardButtons.enum_type f1, QDialogButtonBox.StandardButtons.enum_type f2)/+noexcept+/{return QFlags!(QDialogButtonBox.StandardButtons.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator |(QDialogButtonBox.StandardButtons.enum_type f1, QFlags!(QDialogButtonBox.StandardButtons.enum_type) f2)/+noexcept+/{return f2|f1;}+/

@@ -47,6 +47,7 @@ public:
     static void setPalette(ref const(QPalette) );
     static QFont font();
     static void setFont(ref const(QFont) );
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }

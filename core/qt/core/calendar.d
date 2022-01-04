@@ -173,5 +173,6 @@ public:
 private:
     // Always supplied by QCalendarBackend and expected to be a singleton
     const(QCalendarBackend)* d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

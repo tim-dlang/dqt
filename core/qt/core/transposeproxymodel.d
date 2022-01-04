@@ -56,5 +56,6 @@ public:
     override void sort(int column, /+ Qt:: +/qt.core.namespace.SortOrder order = /+ Qt:: +/qt.core.namespace.SortOrder.AscendingOrder);
 protected:
     this(ref QTransposeProxyModelPrivate , QObject parent);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -150,6 +150,7 @@ public:
     {
         this.base0 = typeof(this.base0)(value);
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 // High-level atomic pointer operations

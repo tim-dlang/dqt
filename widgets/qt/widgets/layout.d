@@ -166,6 +166,7 @@ private:
     /+ friend class QApplicationPrivate; +/
     /+ friend class QWidget; +/
 
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 

@@ -143,6 +143,7 @@ private:
 
     /+ friend class QCoreApplication; +/
     /+ friend class QThreadData; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #if QT_CONFIG(cxx11_future) +/

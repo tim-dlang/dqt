@@ -84,10 +84,6 @@ public:
 
     void addPixmap(ref const(QPixmap) pixmap, Mode mode = Mode.Normal, State state = State.Off);
     void addFile(ref const(QString) fileName, ref const(QSize) size = globalInitVar!QSize, Mode mode = Mode.Normal, State state = State.Off);
-    void addFile(const(QString) fileName, const(QSize) size = globalInitVar!QSize, Mode mode = Mode.Normal, State state = State.Off)
-    {
-        addFile(fileName, size, mode, state);
-    }
 
     QList!(QSize) availableSizes(Mode mode = Mode.Normal, State state = State.Off) const;
 
@@ -123,6 +119,7 @@ private:
 public:
     alias DataPtr = QIconPrivate*;
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QIcon)

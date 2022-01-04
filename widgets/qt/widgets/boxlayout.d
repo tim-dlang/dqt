@@ -84,6 +84,7 @@ public:
 
 private:
     /+ Q_DISABLE_COPY(QBoxLayout) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QHBoxLayout](https://doc.qt.io/qt-5/qhboxlayout.html).
@@ -98,6 +99,7 @@ public:
 
 private:
     /+ Q_DISABLE_COPY(QHBoxLayout) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QVBoxLayout](https://doc.qt.io/qt-5/qvboxlayout.html).
@@ -112,5 +114,6 @@ public:
 
 private:
     /+ Q_DISABLE_COPY(QVBoxLayout) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

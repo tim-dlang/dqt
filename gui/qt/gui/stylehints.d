@@ -102,5 +102,6 @@ public:
 private:
     /+ friend class QGuiApplication; +/
     this();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -136,5 +136,6 @@ private:
     /+ Q_DISABLE_COPY(QImageReader) +/
 @disable this(this);
 /+this(ref const(QImageReader));+//+ref QImageReader operator =(ref const(QImageReader));+/    QImageReaderPrivate* d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -54,5 +54,6 @@ private:
     /+ Q_DECLARE_PRIVATE(QRadioButton) +/
     /+ Q_DISABLE_COPY(QRadioButton) +/
     /+ friend class QAccessibleButton; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -200,6 +200,7 @@ private:
         quint32 for_faster_swapping_dont_use;
     }
     /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &s, const QPalette &p); +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QPalette)

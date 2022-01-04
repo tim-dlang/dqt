@@ -61,5 +61,6 @@ public:
 private:
     qint64 t1 = 0x8000000000000000L;
     qint64 t2 = 0x8000000000000000L;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

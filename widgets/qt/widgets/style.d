@@ -874,6 +874,7 @@ private:
     /+ friend class QProxyStyle; +/
     /+ friend class QProxyStylePrivate; +/
     final void setProxy(QStyle style);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/{return QFlags!(QStyle.State.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/{return f2|f1;}+/

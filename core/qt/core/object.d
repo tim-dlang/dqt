@@ -858,6 +858,7 @@ private:
                                    const(QMetaObject)* senderMetaObject);
     }));
 
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ inline QMetaObject::Connection QObject::connect(const QObject *asender, const char *asignal,

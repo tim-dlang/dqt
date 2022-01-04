@@ -99,7 +99,6 @@ public:
         { return data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole).toString(); }
     pragma(inline, true) final void setText(int column, ref const(QString) atext)
     { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole, atext); }
-    final void setText(int column, const(QString) atext) { setText(column, atext); }
 
     pragma(inline, true) final QIcon icon(int column) const
         { return qvariant_cast!(QIcon)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.DecorationRole)); }
@@ -110,8 +109,6 @@ public:
         { return data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole).toString(); }
     pragma(inline, true) final void setStatusTip(int column, ref const(QString) astatusTip)
     { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole, astatusTip); }
-    pragma(inline, true) final void setStatusTip(int column, const(QString) astatusTip)
-    { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole, astatusTip); }
 
 /+ #ifndef QT_NO_TOOLTIP +/
     version(QT_NO_TOOLTIP){}else
@@ -120,8 +117,6 @@ public:
             { return data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole).toString(); }
         pragma(inline, true) final void setToolTip(int column, ref const(QString) atoolTip)
         { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole, atoolTip); }
-        pragma(inline, true) final void setToolTip(int column, const(QString) atoolTip)
-        { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole, atoolTip); }
     }
 /+ #endif
 
@@ -129,8 +124,6 @@ public:
     pragma(inline, true) final QString whatsThis(int column) const
         { return data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.WhatsThisRole).toString(); }
     pragma(inline, true) final void setWhatsThis(int column, ref const(QString) awhatsThis)
-    { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.WhatsThisRole, awhatsThis); }
-    pragma(inline, true) final void setWhatsThis(int column, const(QString) awhatsThis)
     { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.WhatsThisRole, awhatsThis); }
 /+ #endif +/
 
@@ -156,8 +149,6 @@ public:
     pragma(inline, true) final QBrush background(int column) const
         { return qvariant_cast!(QBrush)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
     pragma(inline, true) final void setBackground(int column, ref const(QBrush) brush)
-        { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, brush.style() != /+ Qt:: +/qt.core.namespace.BrushStyle.NoBrush ? QVariant.fromValue(brush) : QVariant()); }
-    pragma(inline, true) final void setBackground(int column, const(QBrush) brush)
         { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, brush.style() != /+ Qt:: +/qt.core.namespace.BrushStyle.NoBrush ? QVariant.fromValue(brush) : QVariant()); }
     pragma(inline, true) final void setBackground(int column, const(QColor) color)
         { setBackground(column, QBrush(color)); }
@@ -250,6 +241,7 @@ private:
     QTreeWidgetItem par;
     QList!(QTreeWidgetItem) children;
     /+ Qt:: +/qt.core.namespace.ItemFlags itemFlags;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #if QT_CONFIG(statustip)
@@ -461,5 +453,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_sort())
     Q_PRIVATE_SLOT(d_func(), void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight))
     Q_PRIVATE_SLOT(d_func(), void _q_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

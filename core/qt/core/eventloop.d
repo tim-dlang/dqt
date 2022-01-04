@@ -55,6 +55,7 @@ alias ProcessEventsFlags = QFlags!(ProcessEventsFlag);
 
 public /+ Q_SLOTS +/:
     @QSlot final void quit();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator |(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/{return QFlags!(QEventLoop.ProcessEventsFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator |(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -86,5 +87,6 @@ private:
     /+ Q_DISABLE_COPY(QEventLoopLocker) +/
 @disable this(this);
 /+this(ref const(QEventLoopLocker));+//+ref QEventLoopLocker operator =(ref const(QEventLoopLocker));+/    QEventLoopLockerPrivate* d_ptr;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

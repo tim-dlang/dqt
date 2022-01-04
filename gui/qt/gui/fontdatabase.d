@@ -153,5 +153,6 @@ private:
     /+ friend class QRawFont; +/
 
     QFontDatabasePrivate* d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

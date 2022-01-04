@@ -49,10 +49,6 @@ public:
 
     this(/+ Qt:: +/qt.core.namespace.BrushStyle bs);
     this(ref const(QColor) color, /+ Qt:: +/qt.core.namespace.BrushStyle bs=/+ Qt:: +/qt.core.namespace.BrushStyle.SolidPattern);
-    this(const(QColor) color, /+ Qt:: +/qt.core.namespace.BrushStyle bs=/+ Qt:: +/qt.core.namespace.BrushStyle.SolidPattern)
-    {
-        this(color, bs);
-    }
     this(/+ Qt:: +/qt.core.namespace.GlobalColor color, /+ Qt:: +/qt.core.namespace.BrushStyle bs=/+ Qt:: +/qt.core.namespace.BrushStyle.SolidPattern);
 
     this(ref const(QColor) color, ref const(QPixmap) pixmap);
@@ -118,6 +114,7 @@ public:
     pragma(inline, true) bool isDetached() const { return d.ref_.loadRelaxed() == 1; }
     alias DataPtr = QScopedPointer!(QBrushData, QBrushDataPointerDeleter);
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QBrush)
@@ -418,6 +415,7 @@ private:
     QGradientStops m_stops;
     QGradientData m_data;
     void* dummy; // ### Qt 6: replace with actual content (CoordinateMode, InterpolationMode, ...)
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QLinearGradient](https://doc.qt.io/qt-5/qlineargradient.html).
@@ -447,6 +445,7 @@ public:
     QPointF finalStop() const;
     void setFinalStop(ref const(QPointF) stop);
     pragma(inline, true) void setFinalStop(qreal x, qreal y) { auto tmp = QPointF(x, y); setFinalStop(tmp); }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -493,6 +492,7 @@ public:
 
     qreal focalRadius() const;
     void setFocalRadius(qreal radius);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -522,5 +522,6 @@ public:
 
     qreal angle() const;
     void setAngle(qreal angle);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

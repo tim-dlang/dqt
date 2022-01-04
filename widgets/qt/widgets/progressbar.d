@@ -94,5 +94,6 @@ protected:
 private:
     /+ Q_DECLARE_PRIVATE(QProgressBar) +/
     /+ Q_DISABLE_COPY(QProgressBar) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

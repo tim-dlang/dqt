@@ -135,5 +135,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_completionSelected(const QItemSelection&))
     Q_PRIVATE_SLOT(d_func(), void _q_autoResizePopup())
     Q_PRIVATE_SLOT(d_func(), void _q_fileSystemModelDirectoryLoaded(const QString&)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

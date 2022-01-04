@@ -67,5 +67,6 @@ protected:
 private:
     /+ Q_DECLARE_PRIVATE(QScrollArea) +/
     /+ Q_DISABLE_COPY(QScrollArea) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -117,6 +117,7 @@ protected:
 
 private:
     /+ friend struct QCoreGlobalData; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QTextCodec.ConversionFlags.enum_type) operator |(QTextCodec.ConversionFlags.enum_type f1, QTextCodec.ConversionFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextCodec.ConversionFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTextCodec.ConversionFlags.enum_type) operator |(QTextCodec.ConversionFlags.enum_type f1, QFlags!(QTextCodec.ConversionFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -147,6 +148,7 @@ private:
 private:
     const(QTextCodec) c;
     QTextCodec.ConverterState state;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QTextDecoder](https://doc.qt.io/qt-5/qtextdecoder.html).
@@ -172,5 +174,6 @@ private:
 private:
     const(QTextCodec) c;
     QTextCodec.ConverterState state;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

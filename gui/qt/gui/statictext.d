@@ -54,7 +54,6 @@ public:
     /+ void swap(QStaticText &other) noexcept { qSwap(data, other.data); } +/
 
     void setText(ref const(QString) text);
-    final void setText(const QString s){setText(s);}
     QString text() const;
 
     void setTextFormat(/+ Qt:: +/qt.core.namespace.TextFormat textFormat);
@@ -81,6 +80,7 @@ private:
 
     QExplicitlySharedDataPointer!(QStaticTextPrivate) data;
     /+ friend class QStaticTextPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QStaticText)

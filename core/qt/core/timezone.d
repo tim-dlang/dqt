@@ -166,6 +166,7 @@ private:
     /+ friend class QDateTime; +/
     /+ friend class QDateTimePrivate; +/
     QSharedDataPointer!(QTimeZonePrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QTimeZone::OffsetData, Q_MOVABLE_TYPE);

@@ -206,6 +206,7 @@ private:
 public:
     alias DataPtr = QKeySequencePrivate*;
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QKeySequence)
@@ -225,6 +226,7 @@ public:
     @disable this();
     /+this() {}+/
     this(int) {}
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }

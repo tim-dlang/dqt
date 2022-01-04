@@ -104,6 +104,7 @@ private:
     /+ Q_DECLARE_PRIVATE(QSplitter) +/
 private:
     /+ friend class QSplitterHandle; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #if QT_DEPRECATED_SINCE(5, 13)
@@ -143,5 +144,6 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QSplitterHandle) +/
     /+ Q_DECLARE_PRIVATE(QSplitterHandle) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

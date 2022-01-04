@@ -72,5 +72,6 @@ protected:
 private:
     /+ Q_DECLARE_PRIVATE(QDial) +/
     /+ Q_DISABLE_COPY(QDial) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

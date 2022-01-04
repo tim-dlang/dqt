@@ -79,6 +79,7 @@ public:
 
 protected:
     /+ Qt:: +/qt.core.namespace.Alignment align_;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QSpacerItem](https://doc.qt.io/qt-5/qspaceritem.html).
@@ -113,6 +114,7 @@ private:
     int height;
     QSizePolicy sizeP;
     QRect rect;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QWidgetItem](https://doc.qt.io/qt-5/qwidgetitem.html).
@@ -146,6 +148,7 @@ public:
     override QSizePolicy.ControlTypes controlTypes() const;
 protected:
     QWidget wid;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 class /+ Q_WIDGETS_EXPORT +/ QWidgetItemV2 : QWidgetItem
@@ -180,6 +183,7 @@ private:
     /+ friend class QWidgetPrivate; +/
 
     /+ Q_DISABLE_COPY(QWidgetItemV2) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 static assert(__traits(classInstanceSize, QLayoutItem) == (void*).sizeof + 4);

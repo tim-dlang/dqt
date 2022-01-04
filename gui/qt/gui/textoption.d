@@ -185,6 +185,7 @@ private:
     uint f;
     qreal tab = -1;
     QTextOptionPrivate* d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator |(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/{return QFlags!(QTextOption.Flags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator |(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/{return f2|f1;}+/

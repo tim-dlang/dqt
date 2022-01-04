@@ -85,5 +85,6 @@ private:
 /+ #if QT_CONFIG(menu)
     Q_PRIVATE_SLOT(d_func(), void _q_popupPressed())
 #endif +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

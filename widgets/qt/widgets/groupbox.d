@@ -43,10 +43,6 @@ public:
 
     final QString title() const;
     final void setTitle(ref const(QString) title);
-    final void setTitle(const(QString) title)
-    {
-        setTitle(title);
-    }
 
     final /+ Qt:: +/qt.core.namespace.Alignment alignment() const;
     final void setAlignment(int alignment);
@@ -83,5 +79,6 @@ private:
     /+ Q_DISABLE_COPY(QGroupBox) +/
     /+ Q_DECLARE_PRIVATE(QGroupBox) +/
     /+ Q_PRIVATE_SLOT(d_func(), void _q_setChildrenEnabled(bool b)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -101,6 +101,7 @@ public:
 public:
     alias DataPtr = QByteArray.DataPtr;
     pragma(inline, true) ref DataPtr data_ptr() return { return d.data_ptr(); }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+/+ Q_CORE_EXPORT +/ QBitArray operator &(ref const(QBitArray) , ref const(QBitArray) );+/
@@ -124,6 +125,7 @@ public:
     /+pragma(inline, true) bool operator !() const { return !a.testBit(i); }+/
     /+ref QBitRef operator =(ref const(QBitRef) val) { a.setBit(i, val); return this; }+/
     /+ref QBitRef operator =(bool val) { a.setBit(i, val); return this; }+/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 

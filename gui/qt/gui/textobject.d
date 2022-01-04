@@ -60,6 +60,7 @@ private:
     /+ Q_DECLARE_PRIVATE(QTextObject) +/
     /+ Q_DISABLE_COPY(QTextObject) +/
     /+ friend class QTextDocumentPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct QTextBlockGroupPrivate;
@@ -84,6 +85,7 @@ private:
     /+ Q_DECLARE_PRIVATE(QTextBlockGroup) +/
     /+ Q_DISABLE_COPY(QTextBlockGroup) +/
     /+ friend class QTextDocumentPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 class /+ Q_GUI_EXPORT +/ QTextFrameLayoutData {
@@ -168,6 +170,7 @@ private:
     /+ friend class QTextDocumentPrivate; +/
     /+ Q_DECLARE_PRIVATE(QTextFrame) +/
     /+ Q_DISABLE_COPY(QTextFrame) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QTextFrame::iterator, Q_MOVABLE_TYPE); +/
 
@@ -313,6 +316,7 @@ private:
     int n = 0;
     /+ friend class QTextDocumentPrivate; +/
     /+ friend class QTextLayout; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QTextBlock, Q_MOVABLE_TYPE);
@@ -368,6 +372,7 @@ private:
     const(QTextDocumentPrivate)* p = null;
     int n = 0;
     int ne = 0;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QTextFragment, Q_MOVABLE_TYPE); +/

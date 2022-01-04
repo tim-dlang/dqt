@@ -91,6 +91,7 @@ private:
     qreal fixedValueOrPercentage = 0;
     /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextLength &); +/
     /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &); +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QTextLength, QT_VERSION >= QT_VERSION_CHECK(6,0,0) ? Q_PRIMITIVE_TYPE : Q_RELOCATABLE_TYPE);
 
@@ -386,6 +387,7 @@ private:
     /+ friend class QTextCharFormat; +/
     /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextFormat &); +/
     /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &); +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QTextFormat) +/
@@ -593,6 +595,7 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
     /+ friend class QTextFormat; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QTextCharFormat) +/
@@ -710,6 +713,7 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
     /+ friend class QTextFormat; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QTextBlockFormat) +/
@@ -759,6 +763,7 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
     /+ friend class QTextFormat; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QTextListFormat) +/
@@ -805,6 +810,7 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) format);
     /+ friend class QTextFormat; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QTextImageFormat) +/
@@ -910,6 +916,7 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
     /+ friend class QTextFormat; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QTextFrameFormat) +/
@@ -979,6 +986,7 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
     /+ friend class QTextFormat; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QTextTableFormat) +/
@@ -1134,6 +1142,7 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
     /+ friend class QTextFormat; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QTextTableCellFormat) +/

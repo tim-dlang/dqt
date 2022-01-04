@@ -63,5 +63,6 @@ protected:
 
 private:
     /+ Q_DECLARE_PRIVATE(QRubberBand) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

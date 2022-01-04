@@ -214,6 +214,7 @@ private:
 
     int readBlock(char* data, int len);
     /+ friend class QtPrivate::StreamStateSaver; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ namespace QtPrivate {

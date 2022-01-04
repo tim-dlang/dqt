@@ -71,10 +71,6 @@ public:
 /+ #endif +/
 
     static bool registerResource(ref const(QString) rccFilename, ref const(QString) resourceRoot=globalInitVar!QString);
-    static bool registerResource(const(QString) rccFilename, const(QString) resourceRoot=globalInitVar!QString)
-    {
-        return registerResource(rccFilename, resourceRoot);
-    }
     static bool unregisterResource(ref const(QString) rccFilename, ref const(QString) resourceRoot=globalInitVar!QString);
 
     static bool registerResource(const(uchar)* rccData, ref const(QString) resourceRoot=globalInitVar!QString);
@@ -92,5 +88,6 @@ protected:
 
 private:
     /+ Q_DECLARE_PRIVATE(QResource) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

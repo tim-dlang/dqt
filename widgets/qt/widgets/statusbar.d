@@ -66,5 +66,6 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QStatusBar) +/
     /+ Q_DECLARE_PRIVATE(QStatusBar) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

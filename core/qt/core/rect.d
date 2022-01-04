@@ -48,7 +48,7 @@ public:
         this.x2 = abottomRight.x();
         this.y2 = abottomRight.y();
     }
-    pragma(inline, true) this(const(QPoint) atopLeft, const(QSize) asize)/+ noexcept+/
+    pragma(inline, true) this(ref const(QPoint) atopLeft, ref const(QSize) asize)/+ noexcept+/
     {
         this.x1 = atopLeft.x();
         this.y1 = atopLeft.y();
@@ -326,6 +326,7 @@ private:
     int y1 = 0;
     int x2 = -1;
     int y2 = -1;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QRect, Q_MOVABLE_TYPE);
 
@@ -396,7 +397,7 @@ public:
         this.w = asize.width();
         this.h = asize.height();
     }
-    pragma(inline, true) this(const(QPointF) atopLeft, const(QPointF) abottomRight)/+ noexcept+/
+    pragma(inline, true) this(ref const(QPointF) atopLeft, ref const(QPointF) abottomRight)/+ noexcept+/
     {
         this.xp = atopLeft.x();
         this.yp = atopLeft.y();
@@ -637,6 +638,7 @@ private:
     qreal yp = 0.;
     qreal w = 0.;
     qreal h = 0.;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QRectF, Q_MOVABLE_TYPE);
 

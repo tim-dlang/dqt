@@ -55,6 +55,7 @@ public:
     /+ virtual +//*abstract*/ ~this(){}
     /+ virtual +/ abstract void undo();
     /+ virtual +/ abstract void redo();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -295,6 +296,7 @@ private:
     /+ Q_DISABLE_COPY(QTextDocument) +/
     /+ Q_DECLARE_PRIVATE(QTextDocument) +/
     /+ friend class QTextObjectPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator |(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextDocument.FindFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator |(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/

@@ -82,5 +82,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_slotSourceLayoutChanged(const QList<QPersistentModelIndex> &, QAbstractItemModel::LayoutChangeHint))
     Q_PRIVATE_SLOT(d_func(), void _q_slotModelAboutToBeReset())
     Q_PRIVATE_SLOT(d_func(), void _q_slotModelReset()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

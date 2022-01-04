@@ -108,6 +108,7 @@ private:
     QTreeWidgetItem current;
     IteratorFlags flags;
     /+ Q_DECLARE_PRIVATE(QTreeWidgetItemIterator) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) operator |(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QTreeWidgetItemIterator.IteratorFlags.enum_type f2)/+noexcept+/{return QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) operator |(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/

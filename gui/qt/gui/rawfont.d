@@ -154,6 +154,7 @@ private:
     /+ friend class QTextEngine; +/
 
     QExplicitlySharedDataPointer!(QRawFontPrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator |(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/{return QFlags!(QRawFont.LayoutFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator |(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/

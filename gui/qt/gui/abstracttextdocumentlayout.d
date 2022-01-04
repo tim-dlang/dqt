@@ -108,6 +108,7 @@ private:
     /+ Q_PRIVATE_SLOT(d_func(), void _q_handlerDestroyed(QObject *obj))
     Q_PRIVATE_SLOT(d_func(), int _q_dynamicPageCountSlot())
     Q_PRIVATE_SLOT(d_func(), QSizeF _q_dynamicDocumentSizeSlot()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QAbstractTextDocumentLayout::Selection,    Q_RELOCATABLE_TYPE);
 Q_DECLARE_TYPEINFO(QAbstractTextDocumentLayout::PaintContext, Q_RELOCATABLE_TYPE); +/
@@ -119,6 +120,7 @@ public:
     /+ virtual +/~this();
     /+ virtual +/ abstract QSizeF intrinsicSize(QTextDocument doc, int posInDocument, ref const(QTextFormat) format);
     /+ virtual +/ abstract void drawObject(QPainter* painter, ref const(QRectF) rect, QTextDocument doc, int posInDocument, ref const(QTextFormat) format);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #ifndef Q_CLANG_QDOC

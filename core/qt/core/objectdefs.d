@@ -684,6 +684,7 @@ public:
 private:
     const(void)* _data = null;
     const(char)* _name = null;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QGenericReturnArgument](https://doc.qt.io/qt-5/qgenericreturnargument.html).
@@ -696,6 +697,7 @@ public:
     {
         this.base0 = QGenericArgument(aName, aData);
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 class QArgument(T): QGenericArgument
@@ -757,6 +759,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
         /+ Connection(Connection &&o) noexcept : d_ptr(o.d_ptr) { o.d_ptr = nullptr; } +/
         /+ Connection &operator=(Connection &&other) noexcept
         { qSwap(d_ptr, other.d_ptr); return *this; } +/
+        mixin(CREATE_CONVENIENCE_WRAPPERS);
     }
 
     const(char)* className() const;
@@ -1057,6 +1060,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
 private:
     static bool invokeMethodImpl(QObject object, /+ QtPrivate:: +/qt.core.objectdefs_impl.QSlotObjectBase* slot, /+ Qt:: +/qt.core.namespace.ConnectionType type, void* ret);
     /+ friend class QTimer; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, "QtPrivate") {

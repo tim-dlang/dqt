@@ -101,6 +101,7 @@ private:
     int r = -1; int c = -1;
     quintptr i = 0;
     /*const*/ QAbstractItemModel m = null;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QModelIndex, Q_MOVABLE_TYPE);
 
@@ -157,6 +158,7 @@ private:
 /+ #ifndef QT_NO_DEBUG_STREAM
     friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QPersistentModelIndex &);
 #endif +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_SHARED(QPersistentModelIndex)
 
@@ -384,6 +386,7 @@ private:
 
     /+ Q_DECLARE_PRIVATE(QAbstractItemModel) +/
     /+ Q_DISABLE_COPY(QAbstractItemModel) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -417,6 +420,7 @@ protected:
     /+ Q_DISABLE_COPY(QAbstractTableModel) +/
     override QModelIndex parent(ref const(QModelIndex) child) const;
     override bool hasChildren(ref const(QModelIndex) parent) const;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QAbstractListModel](https://doc.qt.io/qt-5/qabstractlistmodel.html).
@@ -453,6 +457,7 @@ protected:
     mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
     override bool hasChildren(ref const(QModelIndex) parent) const;
     }));
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 // inline implementations

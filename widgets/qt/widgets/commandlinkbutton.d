@@ -60,5 +60,6 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QCommandLinkButton) +/
     /+ Q_DECLARE_PRIVATE(QCommandLinkButton) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

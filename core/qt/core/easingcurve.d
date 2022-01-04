@@ -104,6 +104,7 @@ private:
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QEasingCurve &); +/
     }
 /+ #endif +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_SHARED(QEasingCurve)
 

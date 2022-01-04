@@ -366,6 +366,7 @@ private:
     /+ friend class QListModeViewBase; +/
     /+ friend class QListViewPrivate; +/
     /+ friend class QAbstractSlider; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QAbstractItemView.EditTriggers.enum_type) operator |(QAbstractItemView.EditTriggers.enum_type f1, QAbstractItemView.EditTriggers.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemView.EditTriggers.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QAbstractItemView.EditTriggers.enum_type) operator |(QAbstractItemView.EditTriggers.enum_type f1, QFlags!(QAbstractItemView.EditTriggers.enum_type) f2)/+noexcept+/{return f2|f1;}+/

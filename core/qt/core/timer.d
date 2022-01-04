@@ -246,6 +246,7 @@ private:
         return value;
     }
     // reserved : 28
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 

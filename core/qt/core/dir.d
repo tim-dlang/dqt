@@ -211,6 +211,7 @@ private:
         return d_ptr.constData();
     } +/
 
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator |(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/{return QFlags!(QDir.Filters.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator |(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/{return f2|f1;}+/

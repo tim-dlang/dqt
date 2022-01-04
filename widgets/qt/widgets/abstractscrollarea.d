@@ -124,6 +124,7 @@ private:
 
     /+ friend class QStyleSheetStyle; +/
     /+ friend class QWidgetPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #endif +/ // QT_CONFIG(scrollarea)

@@ -131,6 +131,7 @@ public:
 
 private:
     QPoint pt1; QPoint pt2;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QLine, Q_MOVABLE_TYPE);
 
@@ -310,6 +311,7 @@ public:
 
 private:
     QPointF pt1; QPointF pt2;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QLineF, Q_MOVABLE_TYPE);
 

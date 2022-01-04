@@ -224,6 +224,7 @@ public:
     ushort  data2;
     ushort  data3;
     uchar[8]   data4;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QUuid, Q_PRIMITIVE_TYPE);

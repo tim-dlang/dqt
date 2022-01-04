@@ -112,6 +112,7 @@ private:
 public:
     alias DataPtr = QExplicitlySharedDataPointer!(QPicturePrivate);
     pragma(inline, true) ref DataPtr data_ptr() return { return d_ptr; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QPicture) +/
@@ -182,6 +183,7 @@ private:
     void init_();
 
     QPictureIOData* d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }

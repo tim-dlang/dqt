@@ -147,7 +147,6 @@ alias StandardButtons = QFlags!(StandardButton);    /+ Q_FLAG(StandardButtons) +
 
     final QString text() const;
     final void setText(ref const(QString) text);
-    final void setText(const QString s){setText(s);}
 
     final Icon icon() const;
     final void setIcon(Icon);
@@ -285,6 +284,7 @@ private:
 
     Q_DISABLE_COPY(QMessageBox) +/
     /+ Q_DECLARE_PRIVATE(QMessageBox) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator |(QMessageBox.StandardButtons.enum_type f1, QMessageBox.StandardButtons.enum_type f2)/+noexcept+/{return QFlags!(QMessageBox.StandardButtons.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator |(QMessageBox.StandardButtons.enum_type f1, QFlags!(QMessageBox.StandardButtons.enum_type) f2)/+noexcept+/{return f2|f1;}+/

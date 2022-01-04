@@ -77,6 +77,7 @@ private:
     /+ friend class QGestureRecognizer; +/
     /+ friend class QGestureManager; +/
     /+ friend class QGraphicsScenePrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct QPanGesturePrivate;
@@ -108,6 +109,7 @@ public:
 
     /+ friend class QPanGestureRecognizer; +/
     /+ friend class QWinNativePanGestureRecognizer; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct QPinchGesturePrivate;
@@ -174,6 +176,7 @@ public:
     final void setRotationAngle(qreal value);
 
     /+ friend class QPinchGestureRecognizer; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator |(QPinchGesture.ChangeFlags.enum_type f1, QPinchGesture.ChangeFlags.enum_type f2)/+noexcept+/{return QFlags!(QPinchGesture.ChangeFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator |(QPinchGesture.ChangeFlags.enum_type f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -210,6 +213,7 @@ public:
     final void setSwipeAngle(qreal value);
 
     /+ friend class QSwipeGestureRecognizer; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct QTapGesturePrivate;
@@ -229,6 +233,7 @@ public:
     final void setPosition(ref const(QPointF) pos);
 
     /+ friend class QTapGestureRecognizer; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct QTapAndHoldGesturePrivate;
@@ -251,6 +256,7 @@ public:
     static int timeout();
 
     /+ friend class QTapAndHoldGestureRecognizer; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct QGestureEventPrivate;
@@ -298,6 +304,7 @@ private:
 
     /+ friend class QApplication; +/
     /+ friend class QGestureManager; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }+/
 
 /+ #  ifndef QT_NO_DEBUG_STREAM

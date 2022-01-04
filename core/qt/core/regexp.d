@@ -107,6 +107,7 @@ public:
 
 private:
     QRegExpPrivate* priv;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QRegExp, Q_MOVABLE_TYPE);

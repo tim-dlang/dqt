@@ -116,6 +116,7 @@ public:
 private:
     /+ friend class QPageLayoutPrivate; +/
     QExplicitlySharedDataPointer!(QPageLayoutPrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QPageLayout) +/

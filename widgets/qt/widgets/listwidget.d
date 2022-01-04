@@ -185,6 +185,7 @@ private:
     QListWidget view;
     QListWidgetItemPrivate* d;
     /+ Qt:: +/qt.core.namespace.ItemFlags itemFlags;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #ifndef QT_NO_TOOLTIP
@@ -226,7 +227,6 @@ public:
     pragma(inline, true) final void addItem(ref const(QString) label) { insertItem(count(), label); }
     pragma(inline, true) final void addItem(QListWidgetItem aitem)
     { insertItem(count(), aitem); }
-    final void addItem(const(QString) label) { addItem(label); }
     pragma(inline, true) final void addItems(ref const(QStringList) labels) { insertItems(count(), labels); }
     final QListWidgetItem takeItem(int row);
     final int count() const;
@@ -361,5 +361,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_emitCurrentItemChanged(const QModelIndex &previous, const QModelIndex &current))
     Q_PRIVATE_SLOT(d_func(), void _q_sort())
     Q_PRIVATE_SLOT(d_func(), void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -193,6 +193,7 @@ private:
 
     /+ friend class QVector3D; +/
     /+ friend class QVector4D; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QVector2D, Q_PRIMITIVE_TYPE);

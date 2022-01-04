@@ -45,5 +45,6 @@ protected:
 
 private:
     /+ Q_DISABLE_COPY(QErrorMessage) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

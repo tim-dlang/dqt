@@ -200,5 +200,6 @@ private:
     {
         /+ friend class QPlatformSessionManager; +/
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

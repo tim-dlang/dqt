@@ -118,6 +118,7 @@ private:
 /+ #ifndef QT_NO_DEBUG_STREAM
     friend Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QColorSpace &colorSpace);
 #endif +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+bool /+ Q_GUI_EXPORT +/ operator ==(ref const(QColorSpace) colorSpace1, ref const(QColorSpace) colorSpace2);+/

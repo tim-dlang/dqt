@@ -54,6 +54,7 @@ private:
         return r;
     }
 
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }
@@ -124,6 +125,7 @@ public:
 private:
     /+ friend Q_GUI_EXPORT bool operator==(const QCursor &lhs, const QCursor &rhs) noexcept; +/
     QCursorData* d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QCursor) +/
 

@@ -146,6 +146,7 @@ private:
     final void resetRowWrapPolicy();
     final void resetLabelAlignment();
     final void resetFormAlignment();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QFormLayout::TakeRowResult, Q_PRIMITIVE_TYPE); +/

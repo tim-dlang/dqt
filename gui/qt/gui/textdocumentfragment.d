@@ -65,5 +65,6 @@ private:
     QTextDocumentFragmentPrivate* d;
     /+ friend class QTextCursor; +/
     /+ friend class QTextDocumentWriter; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

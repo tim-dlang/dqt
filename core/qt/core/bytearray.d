@@ -494,6 +494,7 @@ alias Base64Options = QFlags!(Base64Option);
             /+ref QByteArray operator *()/+ noexcept+/ { return decoded; }+/
             /+ref const(QByteArray) operator *() const/+ noexcept+/ { return decoded; }+/
         }
+        mixin(CREATE_CONVENIENCE_WRAPPERS);
     }
 
     /+ Q_REQUIRED_RESULT static FromBase64Result fromBase64Encoding(QByteArray &&base64, Base64Options options = Base64Encoding); +/
@@ -617,6 +618,7 @@ private:
 public:
     alias DataPtr = Data*;
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QByteArray.Base64Options.enum_type) operator |(QByteArray.Base64Options.enum_type f1, QByteArray.Base64Options.enum_type f2)/+noexcept+/{return QFlags!(QByteArray.Base64Options.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QByteArray.Base64Options.enum_type) operator |(QByteArray.Base64Options.enum_type f1, QFlags!(QByteArray.Base64Options.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -704,6 +706,7 @@ public:
     { return a.d.data()[i] < c; }+/
     /+pragma(inline, true) bool operator <=(char c) const
     { return a.d.data()[i] <= c; }+/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) bool operator ==(ref const(QByteArray) a1, ref const(QByteArray) a2)/+ noexcept+/
 {

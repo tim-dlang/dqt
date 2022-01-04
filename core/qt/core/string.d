@@ -294,6 +294,7 @@ return QLatin1String(m_data, m_size - n);
 private:
     int m_size = 0;
     const(char)* m_data = null;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QLatin1String, Q_MOVABLE_TYPE);
 
@@ -1386,6 +1387,7 @@ private:
 public:
     alias DataPtr = Data*;
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #if QT_STRINGVIEW_LEVEL < 2
 #endif
@@ -1520,6 +1522,7 @@ public:
     ushort unicode() const { return this.toQChar.unicode(); }
     ref ushort unicode() { return s.data()[i].unicode(); }
 
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QCharRef, Q_MOVABLE_TYPE);
 
@@ -2018,6 +2021,7 @@ public:
     qulonglong toULongLong(bool* ok = null, int base = 10) const;
     float toFloat(bool* ok = null) const;
     double toDouble(bool* ok = null) const;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QStringRef, Q_PRIMITIVE_TYPE); +/
 

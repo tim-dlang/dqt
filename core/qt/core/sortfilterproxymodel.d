@@ -204,5 +204,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_sourceColumnsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int))
     Q_PRIVATE_SLOT(d_func(), void _q_sourceColumnsMoved(QModelIndex,int,int,QModelIndex,int))
     Q_PRIVATE_SLOT(d_func(), void _q_clearMapping()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

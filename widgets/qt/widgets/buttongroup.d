@@ -74,5 +74,6 @@ private:
     /+ Q_DECLARE_PRIVATE(QButtonGroup) +/
     /+ friend class QAbstractButton; +/
     /+ friend class QAbstractButtonPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

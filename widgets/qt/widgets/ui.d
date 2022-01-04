@@ -113,6 +113,8 @@ private struct UICodeWriter()
             return "qt.widgets.datetimeedit";
         if(name == "QDoubleSpinBox")
             return "qt.widgets.spinbox";
+        if(name == "QWebEngineView")
+            return "qt.webenginewidgets.webengineview";
 
         if(name.startsWith("Q"))
             return "qt.widgets." ~ std.uni.toLower(name[1..$]);

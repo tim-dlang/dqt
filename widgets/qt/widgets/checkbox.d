@@ -68,5 +68,6 @@ private:
     /+ Q_DECLARE_PRIVATE(QCheckBox) +/
     /+ Q_DISABLE_COPY(QCheckBox) +/
     /+ friend class QAccessibleButton; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

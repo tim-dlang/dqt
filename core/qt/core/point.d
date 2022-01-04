@@ -118,6 +118,7 @@ private:
     /+ friend class QTransform; +/
     int xp = 0;
     int yp = 0;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QPoint, Q_MOVABLE_TYPE);
@@ -293,6 +294,7 @@ private:
 
     qreal xp = 0;
     qreal yp = 0;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QPointF, Q_MOVABLE_TYPE);

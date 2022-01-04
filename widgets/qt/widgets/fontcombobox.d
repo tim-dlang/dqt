@@ -72,6 +72,7 @@ private:
     /+ Q_DECLARE_PRIVATE(QFontComboBox) +/
     /+ Q_PRIVATE_SLOT(d_func(), void _q_currentChanged(const QString &))
     Q_PRIVATE_SLOT(d_func(), void _q_updateModel()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator |(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/{return QFlags!(QFontComboBox.FontFilters.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator |(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/{return f2|f1;}+/

@@ -218,6 +218,7 @@ private:
     /+ friend Q_CORE_EXPORT QString qAppName(); +/
     /+ friend class QClassFactory; +/
     /+ friend class QCommandLineParserPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #ifdef QT_NO_DEPRECATED

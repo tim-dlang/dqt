@@ -164,6 +164,7 @@ private:
 
     this(ref QRegularExpressionPrivate dd);
     QExplicitlySharedDataPointer!(QRegularExpressionPrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator |(QRegularExpression.PatternOptions.enum_type f1, QRegularExpression.PatternOptions.enum_type f2)/+noexcept+/{return QFlags!(QRegularExpression.PatternOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator |(QRegularExpression.PatternOptions.enum_type f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -258,6 +259,7 @@ private:
 
     this(ref QRegularExpressionMatchPrivate dd);
     QSharedDataPointer!(QRegularExpressionMatchPrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QRegularExpressionMatch)
@@ -305,6 +307,7 @@ private:
 
     this(ref QRegularExpressionMatchIteratorPrivate dd);
     QSharedDataPointer!(QRegularExpressionMatchIteratorPrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QRegularExpressionMatchIterator) +/

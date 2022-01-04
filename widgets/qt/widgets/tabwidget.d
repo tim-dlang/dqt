@@ -50,15 +50,7 @@ public:
     ~this();
 
     final int addTab(QWidget widget, ref const(QString) );
-    final int addTab(QWidget widget, const(QString) label)
-    {
-        return addTab(widget, label);
-    }
     final int addTab(QWidget widget, ref const(QIcon) icon, ref const(QString) label);
-    final int addTab(QWidget widget, const(QIcon) icon, const(QString) label)
-    {
-        return addTab(widget, icon, label);
-    }
 
     final int insertTab(int index, QWidget widget, ref const(QString) );
     final int insertTab(int index, QWidget widget, ref const(QIcon) icon, ref const(QString) label);
@@ -73,10 +65,6 @@ public:
 
     final QString tabText(int index) const;
     final void setTabText(int index, ref const(QString) text);
-    final void setTabText(int index, const(QString) text)
-    {
-        setTabText(index, text);
-    }
 
     final QIcon tabIcon(int index) const;
     final void setTabIcon(int index, ref const(QIcon)  icon);
@@ -174,5 +162,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_removeTab(int))
     Q_PRIVATE_SLOT(d_func(), void _q_tabMoved(int, int)) +/
     final void setUpLayout(bool /+ = false +/);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

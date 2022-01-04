@@ -101,5 +101,6 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QGridLayout) +/
 
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

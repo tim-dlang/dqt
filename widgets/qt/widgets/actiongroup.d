@@ -78,6 +78,7 @@ private:
     /+ Q_PRIVATE_SLOT(d_func(), void _q_actionTriggered())
     Q_PRIVATE_SLOT(d_func(), void _q_actionChanged())
     Q_PRIVATE_SLOT(d_func(), void _q_actionHovered()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }

@@ -286,6 +286,7 @@ private:
         Bits bits;
         quint32 data;
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
 // Can't add in Qt 5, as QList<QSizePolicy> would be BiC:

@@ -1955,5 +1955,6 @@ public:
     static bool registerCallback(Callback, qInternalCallback);
     static bool unregisterCallback(Callback, qInternalCallback);
     static bool activateCallbacks(Callback, void** );
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

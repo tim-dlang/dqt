@@ -116,6 +116,7 @@ private:
 
     /+ friend inline bool operator==(const QMargins &, const QMargins &) noexcept; +/
     /+ friend inline bool operator!=(const QMargins &, const QMargins &) noexcept; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QMargins, Q_MOVABLE_TYPE);
@@ -329,6 +330,7 @@ private:
     qreal m_top = 0;
     qreal m_right = 0;
     qreal m_bottom = 0;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QMarginsF, Q_MOVABLE_TYPE);

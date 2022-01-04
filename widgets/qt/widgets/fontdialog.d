@@ -89,6 +89,7 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_styleHighlighted(int))
     Q_PRIVATE_SLOT(d_func(), void _q_sizeHighlighted(int))
     Q_PRIVATE_SLOT(d_func(), void _q_updateSample()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QFontDialog.FontDialogOptions.enum_type) operator |(QFontDialog.FontDialogOptions.enum_type f1, QFontDialog.FontDialogOptions.enum_type f2)/+noexcept+/{return QFlags!(QFontDialog.FontDialogOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QFontDialog.FontDialogOptions.enum_type) operator |(QFontDialog.FontDialogOptions.enum_type f1, QFlags!(QFontDialog.FontDialogOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/

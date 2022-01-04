@@ -784,6 +784,7 @@ private:
     /+ friend class QAlphaPaintEngine; +/
     /+ friend class QPreviewPaintEngine; +/
     /+ friend class QTextEngine; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator |(QPainter.RenderHints.enum_type f1, QPainter.RenderHints.enum_type f2)/+noexcept+/{return QFlags!(QPainter.RenderHints.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator |(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/{return f2|f1;}+/

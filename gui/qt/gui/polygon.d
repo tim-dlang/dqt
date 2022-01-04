@@ -87,6 +87,7 @@ public:
     /+ Q_REQUIRED_RESULT +/ QPolygon subtracted(ref const(QPolygon) r) const;
 
     bool intersects(ref const(QPolygon) r) const;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QPolygon)
 
@@ -160,6 +161,7 @@ public:
     /+ Q_REQUIRED_RESULT +/ QPolygonF subtracted(ref const(QPolygonF) r) const;
 
     bool intersects(ref const(QPolygonF) r) const;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QPolygonF)
 

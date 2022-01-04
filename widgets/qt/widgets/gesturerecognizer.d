@@ -64,6 +64,7 @@ alias Result = QFlags!(ResultFlag);
 
     static /+ Qt:: +/qt.core.namespace.GestureType registerRecognizer(QGestureRecognizer recognizer);
     static void unregisterRecognizer(/+ Qt:: +/qt.core.namespace.GestureType type);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QGestureRecognizer.Result.enum_type) operator |(QGestureRecognizer.Result.enum_type f1, QGestureRecognizer.Result.enum_type f2)/+noexcept+/{return QFlags!(QGestureRecognizer.Result.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QGestureRecognizer.Result.enum_type) operator |(QGestureRecognizer.Result.enum_type f1, QFlags!(QGestureRecognizer.Result.enum_type) f2)/+noexcept+/{return f2|f1;}+/

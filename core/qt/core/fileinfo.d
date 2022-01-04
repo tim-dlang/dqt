@@ -143,6 +143,7 @@ private:
     {
         return d_ptr.constData();
     } +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QFileInfo) +/

@@ -141,6 +141,7 @@ private:
     /+ friend class QPlatformScreen; +/
     /+ friend class QHighDpiScaling; +/
     /+ friend class QWindowSystemInterface; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #ifndef QT_NO_DEBUG_STREAM

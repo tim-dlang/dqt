@@ -225,6 +225,7 @@ public:
 public:
     alias DataPtr = QExplicitlySharedDataPointer!(QPlatformPixmap);
     pragma(inline, true) ref DataPtr data_ptr() return { return data; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QPixmap)

@@ -274,6 +274,7 @@ private:
     this(int windowsId, ref const(QSize) pointSize, ref const(QString) name);
     this(ref QPageSizePrivate dd);
     QSharedDataPointer!(QPageSizePrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QPageSize) +/

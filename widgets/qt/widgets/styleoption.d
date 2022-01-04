@@ -97,6 +97,7 @@ public:
     //void init_(const(QWidget) w);
     // pragma(inline, true) void initFrom(const(QWidget) w) { init_(w); }
     /+ref QStyleOption operator =(ref const(QStyleOption) other);+/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QStyleOptionFocusRect](https://doc.qt.io/qt-5/qstyleoptionfocusrect.html).
@@ -131,6 +132,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QStyleOptionFrame](https://doc.qt.io/qt-5/qstyleoptionframe.html).
@@ -174,6 +176,7 @@ alias FrameFeatures = QFlags!(FrameFeature);    FrameFeatures features;
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -223,6 +226,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionTabWidgetFrameV2 = QStyleOptionTabWidgetFrame;
@@ -265,6 +269,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionTabBarBaseV2 = QStyleOptionTabBarBase;
@@ -316,6 +321,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QStyleOptionButton](https://doc.qt.io/qt-5/qstyleoptionbutton.html).
@@ -358,6 +364,7 @@ alias ButtonFeatures = QFlags!(ButtonFeature);
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -417,6 +424,7 @@ alias TabFeatures = QFlags!(TabFeature);
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTabV4
@@ -437,6 +445,7 @@ public:
     }
 
     int tabIndex = -1;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -488,6 +497,7 @@ alias ToolBarFeatures = QFlags!(ToolBarFeature);    ToolBarPosition positionOfLi
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -537,6 +547,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionProgressBarV2 = QStyleOptionProgressBar;
@@ -588,6 +599,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QStyleOptionDockWidget](https://doc.qt.io/qt-5/qstyleoptiondockwidget.html).
@@ -627,6 +639,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionDockWidgetV2 = QStyleOptionDockWidget;
@@ -701,6 +714,7 @@ alias ViewItemFeatures = QFlags!(ViewItemFeature);
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -753,6 +767,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionToolBoxV2 = QStyleOptionToolBox;
@@ -791,6 +806,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #endif +/ // QT_CONFIG(rubberband)
 
@@ -817,6 +833,7 @@ public:
         this = other;
     }
     /+ QStyleOptionComplex &operator=(const QStyleOptionComplex &) = default; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #if QT_CONFIG(slider) +/
@@ -863,6 +880,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #endif // QT_CONFIG(slider)
 
@@ -901,6 +919,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #endif +/ // QT_CONFIG(spinbox)
 
@@ -949,6 +968,7 @@ alias ToolButtonFeatures = QFlags!(ToolButtonFeature);
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -993,6 +1013,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QStyleOptionTitleBar](https://doc.qt.io/qt-5/qstyleoptiontitlebar.html).
@@ -1031,6 +1052,7 @@ public:
 
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QStyleOptionGroupBox](https://doc.qt.io/qt-5/qstyleoptiongroupbox.html).
@@ -1070,6 +1092,7 @@ public:
     /+ QStyleOptionGroupBox &operator=(const QStyleOptionGroupBox &) = default; +/
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QStyleOptionSizeGrip](https://doc.qt.io/qt-5/qstyleoptionsizegrip.html).
@@ -1103,6 +1126,7 @@ public:
     /+ QStyleOptionSizeGrip &operator=(const QStyleOptionSizeGrip &) = default; +/
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QStyleOptionGraphicsItem](https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html).
@@ -1139,6 +1163,7 @@ public:
     static qreal levelOfDetailFromTransform(ref const(QTransform) worldTransform);
 protected:
     this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 T qstyleoption_cast(T)(const(QStyleOption)* opt)
@@ -1180,6 +1205,7 @@ public:
 
     int version_;
     int type;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+
@@ -1193,6 +1219,7 @@ public:
     ~this();
 
     QRegion region;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QStyleHintReturnVariant](https://doc.qt.io/qt-5/qstylehintreturnvariant.html).
@@ -1205,6 +1232,7 @@ public:
     ~this();
 
     QVariant variant;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 +/
 

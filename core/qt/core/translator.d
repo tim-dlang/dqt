@@ -62,6 +62,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QTranslator) +/
     /+ Q_DECLARE_PRIVATE(QTranslator) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }

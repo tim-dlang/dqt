@@ -174,6 +174,7 @@ private:
     /+ friend class QObject; +/
     /+ friend bool operator==(const QMetaMethod &m1, const QMetaMethod &m2); +/
     /+ friend bool operator!=(const QMetaMethod &m1, const QMetaMethod &m2); +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QMetaMethod, Q_MOVABLE_TYPE); +/
 
@@ -226,6 +227,7 @@ private:
     const(QMetaObject)* mobj = null;
     uint handle = 0;
     /+ friend struct QMetaObject; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QMetaEnum, Q_MOVABLE_TYPE); +/
 
@@ -308,6 +310,7 @@ private:
     QMetaEnum menum;
     /+ friend struct QMetaObject; +/
     /+ friend struct QMetaObjectPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QMetaClassInfo](https://doc.qt.io/qt-5/qmetaclassinfo.html).
@@ -327,6 +330,7 @@ private:
     const(QMetaObject)* mobj = null;
     uint handle = 0;
     /+ friend struct QMetaObject; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QMetaClassInfo, Q_MOVABLE_TYPE); +/
 

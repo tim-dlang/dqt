@@ -191,6 +191,7 @@ private:
     }
     extern static __gshared const(QRegionData) shared_empty;
     static void cleanUp(QRegionData* x);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QRegion)
 

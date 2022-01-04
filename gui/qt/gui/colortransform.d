@@ -60,6 +60,7 @@ private:
     /+ friend class QImage; +/
 
     const(QColorTransformPrivate)* d = null;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QColorTransform) +/

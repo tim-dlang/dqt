@@ -475,7 +475,6 @@ public:
 
 public /+ Q_SLOTS +/:
     @QSlot final void setWindowTitle(ref const(QString) );
-    final void setWindowTitle(const QString s){setWindowTitle(s);}
     version(QT_NO_STYLE_STYLESHEET){}else
     {
         @QSlot final void setStyleSheet(ref const(QString) styleSheet);
@@ -619,11 +618,6 @@ public:
     pragma(inline, true) final void move(int ax, int ay)
     { auto tmp = QPoint(ax, ay); move(tmp); }
     final void move(ref const(QPoint) );
-    final void move(const(QPoint) p)
-    {
-        move(p);
-    }
-
     pragma(inline, true) final void resize(int w, int h)
     { auto tmp = QSize(w, h); resize(tmp); }
     final void resize(ref const(QSize) );
@@ -905,6 +899,7 @@ private:
     /+ Q_PRIVATE_SLOT(d_func(), void _q_showIfNotHidden()) +/
 
     QWidgetData* data;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator |(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QWidget.RenderFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator |(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/

@@ -160,6 +160,7 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_resolvedName(const QString &fileName, const QString &resolvedName)) +/
 
     /+ friend class QFileDialogPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator |(QFileSystemModel.Options.enum_type f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/{return QFlags!(QFileSystemModel.Options.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator |(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/{return f2|f1;}+/

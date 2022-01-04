@@ -101,6 +101,7 @@ private:
 
     /+ friend class QApplication; +/
     /+ friend class QApplicationPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #if QT_DEPRECATED_SINCE(5, 11)

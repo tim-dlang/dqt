@@ -58,6 +58,7 @@ private:
 /+this(ref const(QDirIterator));+//+ref QDirIterator operator =(ref const(QDirIterator));+/
     QScopedPointer!(QDirIteratorPrivate) d;
     /+ friend class QDir; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator |(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)/+noexcept+/{return QFlags!(QDirIterator.IteratorFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator |(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/

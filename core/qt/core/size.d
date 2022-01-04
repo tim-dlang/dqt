@@ -116,6 +116,7 @@ public:
 private:
     int wd = -1;
     int ht = -1;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QSize, Q_MOVABLE_TYPE);
 
@@ -264,6 +265,7 @@ public:
 private:
     qreal wd = -1.;
     qreal ht = -1.;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QSizeF, Q_MOVABLE_TYPE);
 

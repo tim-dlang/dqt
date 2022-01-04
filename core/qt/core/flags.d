@@ -67,6 +67,7 @@ public:
     }
     /+pragma(inline, true) auto opCast(T : uint)() const/+ noexcept+/ { return uint(i); }+/
 /+ #endif +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QFlag, Q_PRIMITIVE_TYPE); +/
 
@@ -80,6 +81,7 @@ public:
         this.i = value;
     }
     /+pragma(inline, true) auto opCast(T : int)() const/+ noexcept+/ { return i; }+/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QIncompatibleFlag, Q_PRIMITIVE_TYPE);
 

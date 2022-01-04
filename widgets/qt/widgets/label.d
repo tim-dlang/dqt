@@ -121,12 +121,7 @@ public:
 
 public /+ Q_SLOTS +/:
     @QSlot final void setText(ref const(QString) );
-    final void setText(const QString s){setText(s);}
     @QSlot final void setPixmap(ref const(QPixmap) );
-    final void setPixmap(const(QPixmap) pixmap)
-    {
-        setPixmap(pixmap);
-    }
 /+ #ifndef QT_NO_PICTURE +/
     version(QT_NO_PICTURE){}else
     {
@@ -176,5 +171,6 @@ private:
     /+ friend class QTipLabel; +/
     /+ friend class QMessageBoxPrivate; +/
     /+ friend class QBalloonTip; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

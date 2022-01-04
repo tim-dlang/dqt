@@ -180,8 +180,6 @@ public:
 
     pragma(inline, true) final void addItem(ref const(QString) atext, ref const(QVariant) auserData = globalInitVar!QVariant)
     { insertItem(count(), atext, auserData); }
-    pragma(inline, true) final void addItem(const(QString) atext, const(QVariant) auserData = globalInitVar!QVariant)
-    { insertItem(count(), atext, auserData); }
     pragma(inline, true) final void addItem(ref const(QIcon) aicon, ref const(QString) atext,
                             ref const(QVariant) auserData = globalInitVar!QVariant)
     { insertItem(count(), aicon, atext, auserData); }
@@ -198,7 +196,6 @@ public:
     final void removeItem(int index);
 
     final void setItemText(int index, ref const(QString) text);
-    final void setItemText(int index, const QString s){setItemText(index, s);}
     final void setItemIcon(int index, ref const(QIcon) icon);
     final void setItemData(int index, ref const(QVariant) value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole);
 
@@ -288,5 +285,6 @@ private:
 #if QT_CONFIG(completer)
     Q_PRIVATE_SLOT(d_func(), void _q_completerActivated(const QModelIndex &index))
 #endif +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

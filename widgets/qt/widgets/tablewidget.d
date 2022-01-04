@@ -73,6 +73,7 @@ public:
 
 private:
     int top; int left; int bottom; int right;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct QTableModel;
@@ -111,7 +112,6 @@ public:
         { return data(/+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole).toString(); }
     pragma(inline, true) final void setText(ref const(QString) atext)
     { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole, atext); }
-    final void setText(const(QString) atext) { setText(atext); }
 
     pragma(inline, true) final QIcon icon() const
         { return qvariant_cast!(QIcon)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.DecorationRole)); }
@@ -220,6 +220,7 @@ private:
     QTableWidget view;
     QTableWidgetItemPrivate* d;
     /+ Qt:: +/qt.core.namespace.ItemFlags itemFlags;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #ifndef QT_NO_TOOLTIP
@@ -416,5 +417,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_emitCurrentItemChanged(const QModelIndex &previous, const QModelIndex &current))
     Q_PRIVATE_SLOT(d_func(), void _q_sort())
     Q_PRIVATE_SLOT(d_func(), void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

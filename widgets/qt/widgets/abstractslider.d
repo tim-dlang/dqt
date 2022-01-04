@@ -134,5 +134,6 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QAbstractSlider) +/
     /+ Q_DECLARE_PRIVATE(QAbstractSlider) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

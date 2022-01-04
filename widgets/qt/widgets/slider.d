@@ -74,5 +74,6 @@ private:
 
     /+ Q_DISABLE_COPY(QSlider) +/
     /+ Q_DECLARE_PRIVATE(QSlider) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

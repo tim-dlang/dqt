@@ -33,6 +33,7 @@ public:
 
 private:
     char ch;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+pragma(inline, true) bool operator ==(char lhs, QLatin1Char rhs)/+ noexcept+/ { return lhs == rhs.toLatin1(); }+/
@@ -642,6 +643,7 @@ private:
     /+ friend bool operator==(QChar, QChar) noexcept; +/
     /+ friend bool operator< (QChar, QChar) noexcept; +/
     ushort ucs = 0;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QChar, Q_MOVABLE_TYPE); +/

@@ -61,6 +61,7 @@ public:
     void start(int msec, QObject obj);
     void start(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType, QObject obj);
     void stop();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QBasicTimer, Q_MOVABLE_TYPE);
 

@@ -155,6 +155,7 @@ protected:
 private:
     /+ Q_DECLARE_PRIVATE(QIODevice) +/
     /+ Q_DISABLE_COPY(QIODevice) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/{return QFlags!(QIODevice.OpenMode.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/{return f2|f1;}+/

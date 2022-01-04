@@ -201,6 +201,7 @@ protected:
 private:
     /+ Q_DECLARE_PRIVATE(QMainWindow) +/
     /+ Q_DISABLE_COPY(QMainWindow) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator |(QMainWindow.DockOptions.enum_type f1, QMainWindow.DockOptions.enum_type f2)/+noexcept+/{return QFlags!(QMainWindow.DockOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator |(QMainWindow.DockOptions.enum_type f1, QFlags!(QMainWindow.DockOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/

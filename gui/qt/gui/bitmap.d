@@ -83,6 +83,7 @@ public:
     QBitmap transformed(ref const(QTransform) matrix) const;
 
     alias DataPtr = QExplicitlySharedDataPointer!(QPlatformPixmap);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_SHARED(QBitmap) +/
 

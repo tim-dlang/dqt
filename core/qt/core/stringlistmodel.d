@@ -60,5 +60,6 @@ public:
 private:
     /+ Q_DISABLE_COPY(QStringListModel) +/
     QStringList lst;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

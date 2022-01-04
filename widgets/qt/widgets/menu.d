@@ -60,7 +60,6 @@ public:
     /+ using QWidget::addAction; +/
     alias addAction = QWidget.addAction;
     final QAction addAction(ref const(QString) text);
-    final QAction addAction(const(QString) text) { return addAction(text); }
     final QAction addAction(ref const(QIcon) icon, ref const(QString) text);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QAction addAction(ref const(QString) text, const(QObject) receiver, const(char)* member, ref const(QKeySequence) shortcut /+ = 0 +/);
@@ -171,7 +170,6 @@ public:
     final void popup(ref const(QPoint) pos, QAction at = null);
     final QAction exec();
     final QAction exec(ref const(QPoint) pos, QAction at = null);
-    final QAction exec(const(QPoint) pos, QAction at = null) {return exec(pos, at);}
 
 /+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
     static QAction *exec(const QList<QAction *> &actions, const QPoint &pos, QAction *at = nullptr, QWidget *parent = nullptr);
@@ -188,10 +186,6 @@ public:
 
     final QString title() const;
     final void setTitle(ref const(QString) title);
-    final void setTitle(const(QString) title)
-    {
-        setTitle(title);
-    }
 
     final QIcon icon() const;
     final void setIcon(ref const(QIcon) icon);
@@ -266,6 +260,7 @@ private:
     /+ friend class QToolButtonPrivate; +/
     /+ friend void qt_mac_emit_menuSignals(QMenu *menu, bool show); +/
     /+ friend void qt_mac_menu_emit_hovered(QMenu *menu, QAction *action); +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 version(OSX)

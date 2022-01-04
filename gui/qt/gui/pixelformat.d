@@ -224,6 +224,7 @@ private:
 
     /+ friend Q_DECL_CONST_FUNCTION inline bool operator!=(QPixelFormat fmt1, QPixelFormat fmt2)
     { return !(fmt1 == fmt2); } +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_STATIC_ASSERT(sizeof(QPixelFormat) == sizeof(quint64));
 Q_DECLARE_TYPEINFO(QPixelFormat, Q_PRIMITIVE_TYPE); +/

@@ -200,6 +200,7 @@ private:
     /+ friend class QTextDocumentFragmentPrivate; +/
     /+ friend class QTextCopyHelper; +/
     /+ friend class QWidgetTextControlPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QTextCursor) +/

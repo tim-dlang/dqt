@@ -106,5 +106,6 @@ private:
     /+ Q_DECLARE_PRIVATE(QAbstractItemDelegate) +/
     /+ Q_DISABLE_COPY(QAbstractItemDelegate) +/
     /+ Q_PRIVATE_SLOT(d_func(), void _q_commitDataAndCloseEditor(QWidget*)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -59,6 +59,7 @@ public:
 protected:
     /+ Qt:: +/qt.core.namespace.KeyboardModifiers modState;
     cpp_ulong ts;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QEnterEvent](https://doc.qt.io/qt-5/qenterevent.html).
@@ -83,6 +84,7 @@ public:
 
 protected:
     QPointF l; QPointF w; QPointF s;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QMouseEvent](https://doc.qt.io/qt-5/qmouseevent.html).
@@ -135,6 +137,7 @@ protected:
     QVector2D velocity;
 
     /+ friend class QGuiApplicationPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QHoverEvent](https://doc.qt.io/qt-5/qhoverevent.html).
@@ -155,6 +158,7 @@ public:
 
 protected:
     QPointF p; QPointF op;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #if QT_CONFIG(wheelevent) +/
@@ -295,6 +299,7 @@ protected:
     }
 
     /+ friend class QApplication; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #endif
 
@@ -366,6 +371,7 @@ protected:
     // QTabletEventPrivate for extra storage.
     // ### Qt 6: QPointingEvent will have Buttons, QTabletEvent will inherit
     void* mExtra;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #endif +/ // QT_CONFIG(tabletevent)
 
@@ -405,6 +411,7 @@ protected:
     qreal mRealValue;
     cpp_ulong mSequenceId;
     quint64 mIntValue;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 }
 
@@ -468,6 +475,7 @@ protected:
         return value;
     }
     // ushort reserved:15;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -485,6 +493,7 @@ public:
 
 private:
     /+ Qt:: +/qt.core.namespace.FocusReason m_reason;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -503,6 +512,7 @@ protected:
     QRect m_rect;
     QRegion m_region;
     bool m_erased;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QMoveEvent](https://doc.qt.io/qt-5/qmoveevent.html).
@@ -517,6 +527,7 @@ public:
 protected:
     QPoint p; QPoint oldp;
     /+ friend class QApplication; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QExposeEvent](https://doc.qt.io/qt-5/qexposeevent.html).
@@ -530,6 +541,7 @@ public:
 
 protected:
     QRegion rgn;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QPlatformSurfaceEvent](https://doc.qt.io/qt-5/qplatformsurfaceevent.html).
@@ -548,6 +560,7 @@ public:
 
 protected:
     SurfaceEventType m_surfaceEventType;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QResizeEvent](https://doc.qt.io/qt-5/qresizeevent.html).
@@ -562,6 +575,7 @@ public:
 protected:
     QSize s; QSize olds;
     /+ friend class QApplication; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -571,6 +585,7 @@ class /+ Q_GUI_EXPORT +/ QCloseEvent : QEvent
 public:
     this();
     ~this();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -580,6 +595,7 @@ class /+ Q_GUI_EXPORT +/ QIconDragEvent : QEvent
 public:
     this();
     ~this();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -589,6 +605,7 @@ class /+ Q_GUI_EXPORT +/ QShowEvent : QEvent
 public:
     this();
     ~this();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -598,6 +615,7 @@ class /+ Q_GUI_EXPORT +/ QHideEvent : QEvent
 public:
     this();
     ~this();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 version(QT_NO_CONTEXTMENU){}else
@@ -638,6 +656,7 @@ protected:
         bitfieldData_reas = (bitfieldData_reas & ~0xff) | ((value & 0xff) << 0);
         return value;
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 }
 
@@ -696,6 +715,7 @@ private:
     QString commit;
     int replace_from;
     int replace_length;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QInputMethodEvent::Attribute, Q_MOVABLE_TYPE); +/
 
@@ -718,6 +738,7 @@ private:
     }
     /+ friend QTypeInfo<QueryPair>; +/
     QVector!(void*) m_values;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QInputMethodQueryEvent::QueryPair, Q_MOVABLE_TYPE); +/
 
@@ -758,6 +779,7 @@ protected:
     /+ Qt:: +/qt.core.namespace.DropAction drop_action;
     /+ Qt:: +/qt.core.namespace.DropAction default_action;
     const(QMimeData) mdata;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -779,6 +801,7 @@ public:
 
 protected:
     QRect rect;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -789,6 +812,7 @@ public:
     this(ref const(QPoint) pos, /+ Qt:: +/qt.core.namespace.DropActions actions, const(QMimeData) data,
                         /+ Qt:: +/qt.core.namespace.MouseButtons buttons, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers);
     ~this();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -798,6 +822,7 @@ class /+ Q_GUI_EXPORT +/ QDragLeaveEvent : QEvent
 public:
     this();
     ~this();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #endif +/ // QT_CONFIG(draganddrop)
 
@@ -820,6 +845,7 @@ public:
 private:
     QPoint p;
     QPoint gp;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 version(QT_NO_STATUSTIP){}else
@@ -834,6 +860,7 @@ public:
     pragma(inline, true) final QString tip() const { return *cast(QString*)&s; }
 private:
     QString s;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 }
 
@@ -848,6 +875,7 @@ public:
     pragma(inline, true) final QString href() const { return *cast(QString*)&s; }
 private:
     QString s;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #endif +/
 
@@ -865,6 +893,7 @@ public:
 private:
     QString f;
     QUrl m_url;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 version(QT_NO_TOOLBAR){}else
@@ -888,6 +917,7 @@ private:
         bitfieldData_tog = (bitfieldData_tog & ~0x1) | ((value & 0x1) << 0);
         return value;
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 }
 
@@ -907,6 +937,7 @@ protected:
     QKeySequence sequence;
     bool ambig;
     int  sid;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 }
 
@@ -923,6 +954,7 @@ public:
 private:
     /+ Qt:: +/qt.core.namespace.WindowStates ostate;
     bool m_override;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #ifndef QT_NO_DEBUG_STREAM
@@ -960,6 +992,7 @@ private:
     // array (or hash) can be added to hold additional properties.
     // In this case, m_numericId will then turn into an index into that array (or hash).
     qint64 m_numericId = -1;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QPointingDeviceUniqueId, Q_MOVABLE_TYPE);
 
@@ -1137,6 +1170,7 @@ protected:
     {
         /+ friend class QGraphicsScenePrivate; +/ // direct access to _touchPoints
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type) operator |(QTouchEvent.TouchPoint.InfoFlags.enum_type f1, QTouchEvent.TouchPoint.InfoFlags.enum_type f2)/+noexcept+/{return QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type) operator |(QTouchEvent.TouchPoint.InfoFlags.enum_type f1, QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
@@ -1170,6 +1204,7 @@ private:
     QSizeF m_viewportSize;
     QRectF m_contentPosRange;
     QPointF m_contentPos;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -1195,6 +1230,7 @@ private:
     QPointF m_contentPos;
     QPointF m_overshoot;
     QScrollEvent.ScrollState m_state;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 class /+ Q_GUI_EXPORT +/ QScreenOrientationChangeEvent : QEvent
@@ -1209,6 +1245,7 @@ public:
 private:
     QScreen m_screen;
     /+ Qt:: +/qt.core.namespace.ScreenOrientation m_orientation;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 class /+ Q_GUI_EXPORT +/ QApplicationStateChangeEvent : QEvent
@@ -1219,6 +1256,7 @@ public:
 
 private:
     /+ Qt:: +/qt.core.namespace.ApplicationState m_applicationState;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 version(QT_NO_INPUTMETHOD)
 {

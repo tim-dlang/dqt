@@ -14,6 +14,7 @@ module qt.helpers;
 import std.traits;
 import std.conv;
 import std.array;
+import std.meta;
 
 private string nextCodePart(string code)
 {
@@ -877,3 +878,111 @@ template dqtimported(string moduleName)
 {
     mixin("import dqtimported = " ~ moduleName ~ ";");
 }
+
+private template Parameters2(alias F)
+{
+    static if(is(typeof(F) P == __parameters))
+        alias Parameters2 = P;
+}
+
+template isParamConstStructRef(alias F, size_t i)
+{
+    enum isParamConstStructRef = is(Parameters2!F[i] == struct) && is(Parameters2!F[i] == const) && [__traits(getParameterStorageClasses, F, i)] == ["ref"];
+}
+
+template anyParamConstStructRef(alias F, size_t i = 0)
+{
+    static if(i >= Parameters2!F.length)
+        enum anyParamConstStructRef = false;
+    else static if(isParamConstStructRef!(F, i))
+        enum anyParamConstStructRef = true;
+    else
+        enum anyParamConstStructRef = anyParamConstStructRef!(F, i + 1);
+}
+
+template dummyFunctionWithSameArgs(alias F)
+{
+    static if(is(typeof(F) Params == __parameters))
+        void dummyFunctionWithSameArgs(Params params);
+}
+
+template callableWithNParameters(alias F, size_t n)
+{
+    enum callableWithNParameters = __traits(compiles, (){
+        Parameters2!F[0..n] params = void;
+        dummyFunctionWithSameArgs!F(params);
+        });
+}
+
+enum isWrapperCallable(alias F, Params...) = ()
+    {
+        static if(Params.length > Parameters2!F.length)
+            return false;
+        else static if(!callableWithNParameters!(F, Params.length))
+			return false;
+		else
+        {
+			bool r = true;
+            // The parameter types have to be checked with if to work around https://issues.dlang.org/show_bug.cgi?id=13140
+            static foreach(i; 0..Params.length)
+            {
+                if(!is(Params[i] : Parameters2!F[i]))
+                    r = false;
+            }
+            // Workaround for https://issues.dlang.org/show_bug.cgi?id=12672
+            bool anyParamNeedsTemp;
+            static foreach(i; 0..Params.length)
+            {
+                static if(isParamConstStructRef!(F, i))
+                {
+                    static if(!__traits(isRef, Params[i]))
+                        anyParamNeedsTemp = true;
+                }
+                // Ref parameters, which are not const structs should not use a temporary.
+                else if([__traits(getParameterStorageClasses, F, i)] == ["ref"] && !__traits(isRef, Params[i]))
+                    r = false;
+            }
+            if(!anyParamNeedsTemp)
+                r = false;
+            return r;
+        }
+    }();
+
+// Creates wrapper functions for every function in the current class / struct, which are callable with rvalues.
+enum CREATE_CONVENIENCE_WRAPPERS = q{
+    static foreach(member; __traits(derivedMembers, typeof(this)))
+    {
+        static if((!(member.length >= 2 && member[0..2] == "__") || member == "__ctor")
+                && !(member.length >= 32 && member[0..32] == "dummyFunctionForChangingMangling")
+                && member != "rawConstructor")
+            static foreach(F; __traits(getOverloads, typeof(this), member))
+            {
+                static if(__traits(getVisibility, F) == "public" && anyParamConstStructRef!F)
+                {
+                    mixin((){
+                        string code;
+                        code ~= "public extern(D) pragma(inline, true) ";
+                        if(member == "__ctor")
+                            code ~= "this";
+                        else
+                        {
+                            static if(__traits(isStaticFunction, F))
+                                code ~= "static ";
+                            else static if(is(typeof(this) == class))
+                                code ~= "final ";
+                            code ~= "auto " ~ member;
+                        }
+                        code ~= "(Params...)(auto ref Params params)";
+                        code ~= "if(isWrapperCallable!(F, Params))";
+                        code ~= "{";
+                        if(member == "__ctor")
+                            code ~= "this(params);";
+                        else
+                            code ~= "return " ~ member ~ "(params);";
+                        code ~= "}";
+                        return code;
+                    }());
+                }
+            }
+    }
+};

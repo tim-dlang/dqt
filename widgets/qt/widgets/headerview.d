@@ -254,5 +254,6 @@ private:
                                                      QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoLayoutChangeHint))
     Q_DECLARE_PRIVATE(QHeaderView) +/
     /+ Q_DISABLE_COPY(QHeaderView) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

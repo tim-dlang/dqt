@@ -179,5 +179,6 @@ private:
     /+ friend class QMainWindowLayout; +/
     /+ friend class QToolBarLayout; +/
     /+ friend class QToolBarAreaLayout; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

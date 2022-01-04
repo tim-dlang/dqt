@@ -69,8 +69,6 @@ public:
     }
     pragma(inline, true) final void setText(ref const(QString) atext)
     { setData(atext, /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole); }
-    pragma(inline, true) final void setText(const(QString) atext)
-    { setText(atext); }
 
     pragma(inline, true) final QIcon icon() const {
         return qvariant_cast!(QIcon)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.DecorationRole));
@@ -277,6 +275,7 @@ private:
     /+ Q_DECLARE_PRIVATE(QStandardItem) +/
     /+ friend class QStandardItemModelPrivate; +/
     /+ friend class QStandardItemModel; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #ifndef QT_NO_TOOLTIP
@@ -420,6 +419,7 @@ private:
 
     /+ Q_PRIVATE_SLOT(d_func(), void _q_emitItemChanged(const QModelIndex &topLeft,
                                                      const QModelIndex &bottomRight)) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #ifndef QT_NO_DATASTREAM

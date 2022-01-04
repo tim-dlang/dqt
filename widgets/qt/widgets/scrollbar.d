@@ -69,5 +69,6 @@ private:
     /+ friend class QListModeViewBase; +/
     /+ friend class QAbstractItemView; +/
 /+ #endif +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

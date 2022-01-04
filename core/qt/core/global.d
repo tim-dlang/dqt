@@ -747,6 +747,7 @@ private:
     /+ Q_DISABLE_COPY(QMacAutoReleasePool) +/
 @disable this(this);
 /+this(ref const(QMacAutoReleasePool));+//+ref QMacAutoReleasePool operator =(ref const(QMacAutoReleasePool));+/    void* pool;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }

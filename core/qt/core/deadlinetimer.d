@@ -170,6 +170,7 @@ private:
 public:
     // This is not a public function, it's here only for Qt's internal convenience...
     QPair!(qint64, uint) _q_data() const { return qMakePair(t1, t2); }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QDeadlineTimer)

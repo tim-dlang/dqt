@@ -119,6 +119,7 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QPdfWriter) +/
     /+ Q_DECLARE_PRIVATE(QPdfWriter) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 

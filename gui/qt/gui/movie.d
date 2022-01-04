@@ -113,5 +113,6 @@ public /+ Q_SLOTS +/:
 private:
     /+ Q_DISABLE_COPY(QMovie) +/
     /+ Q_PRIVATE_SLOT(d_func(), void _q_loadNextFrame()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -62,5 +62,6 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QKeySequenceEdit) +/
     /+ Q_DECLARE_PRIVATE(QKeySequenceEdit) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

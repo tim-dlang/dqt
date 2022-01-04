@@ -189,7 +189,6 @@ public:
 public /+ Q_SLOTS +/:
 
     @QSlot final void setPlainText(ref const(QString) text);
-    final void setPlainText(const QString s){setPlainText(s);}
 
     version(QT_NO_CLIPBOARD){}else
     {
@@ -207,10 +206,6 @@ public /+ Q_SLOTS +/:
     @QSlot final void insertPlainText(ref const(QString) text);
 
     @QSlot final void appendPlainText(ref const(QString) text);
-    @QSlot final void appendPlainText(const(QString) text)
-    {
-        appendPlainText(text);
-    }
     @QSlot final void appendHtml(ref const(QString) html);
 
     @QSlot final void centerCursor();
@@ -294,6 +289,7 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_cursorPositionChanged()) +/
 
     /+ friend class QPlainTextEditControl; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -339,5 +335,6 @@ private:
 
     /+ friend class QPlainTextEdit; +/
     /+ friend class QPlainTextEditPrivate; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

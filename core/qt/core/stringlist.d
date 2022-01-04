@@ -208,6 +208,7 @@ public:
 
     /+ using QList<QString>::indexOf; +/
     /+ using QList<QString>::lastIndexOf; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_TYPEINFO(QStringList, Q_MOVABLE_TYPE);

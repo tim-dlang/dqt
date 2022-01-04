@@ -106,6 +106,7 @@ protected:
     QScopedPointer!(QImageIOHandlerPrivate) d_ptr;
 private:
     /+ Q_DISABLE_COPY(QImageIOHandler) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 static if(!defined!"QT_NO_IMAGEFORMATPLUGIN")
@@ -130,6 +131,7 @@ public:
 alias Capabilities = QFlags!(Capability);
     /+ virtual +/ abstract Capabilities capabilities(QIODevice device, ref const(QByteArray) format) const;
     /+ virtual +/ abstract QImageIOHandler create(QIODevice device, ref const(QByteArray) format = globalInitVar!QByteArray) const;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QImageIOPlugin.Capabilities.enum_type) operator |(QImageIOPlugin.Capabilities.enum_type f1, QImageIOPlugin.Capabilities.enum_type f2)/+noexcept+/{return QFlags!(QImageIOPlugin.Capabilities.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QImageIOPlugin.Capabilities.enum_type) operator |(QImageIOPlugin.Capabilities.enum_type f1, QFlags!(QImageIOPlugin.Capabilities.enum_type) f2)/+noexcept+/{return f2|f1;}+/

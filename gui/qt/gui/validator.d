@@ -65,6 +65,7 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QValidator) +/
     /+ Q_DECLARE_PRIVATE(QValidator) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QIntValidator](https://doc.qt.io/qt-5/qintvalidator.html).
@@ -97,6 +98,7 @@ private:
 
     int b;
     int t;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 version(QT_NO_REGEXP){}else
@@ -149,6 +151,7 @@ private:
     double b;
     double t;
     int dec;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -175,6 +178,7 @@ private:
     /+ Q_DISABLE_COPY(QRegExpValidator) +/
 
     QRegExp r;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 }
@@ -207,6 +211,7 @@ public /+ Q_SLOTS +/:
 private:
     /+ Q_DISABLE_COPY(QRegularExpressionValidator) +/
     /+ Q_DECLARE_PRIVATE(QRegularExpressionValidator) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ #endif +/ // QT_CONFIG(regularexpression)

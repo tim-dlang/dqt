@@ -356,6 +356,7 @@ private:
     // needs this:
     /+ Q_ALWAYS_INLINE +/
         pragma(inline, true) final void setSpontaneous() { spont = true; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QTimerEvent](https://doc.qt.io/qt-5/qtimerevent.html).
@@ -367,6 +368,7 @@ public:
     final int timerId() const { return id; }
 protected:
     int id;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -382,6 +384,7 @@ public:
     final bool removed() const { return type() == Type.ChildRemoved; }
 protected:
     QObject c;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QDynamicPropertyChangeEvent](https://doc.qt.io/qt-5/qdynamicpropertychangeevent.html).
@@ -395,6 +398,7 @@ public:
 
 private:
     QByteArray n;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 class /+ Q_CORE_EXPORT +/ QDeferredDeleteEvent : QEvent
@@ -406,5 +410,6 @@ public:
 private:
     int level;
     /+ friend class QCoreApplication; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

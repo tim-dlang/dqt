@@ -76,6 +76,7 @@ private:
     /+ friend class QTextLayout; +/
     int itm = 0;
     QTextEngine* eng = null;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
@@ -209,6 +210,7 @@ private:
                                QRectF *brect, int tabstops, int* tabarray, int tabarraylen,
                                QPainter *painter); +/
     QTextEngine* d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QTextLayout::FormatRange, Q_RELOCATABLE_TYPE); +/
 
@@ -286,5 +288,6 @@ private:
     /+ friend class QTextFragment; +/
     int index = 0;
     QTextEngine* eng = null;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -165,5 +165,6 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_yearClicked())
     Q_PRIVATE_SLOT(d_func(), void _q_monthChanged(QAction *act)) +/
 
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

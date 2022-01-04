@@ -186,6 +186,7 @@ private:
     /+ Q_DISABLE_COPY(QDateTimeEdit) +/
 
     /+ Q_PRIVATE_SLOT(d_func(), void _q_resetButton()) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QTimeEdit](https://doc.qt.io/qt-5/qtimeedit.html).
@@ -200,6 +201,7 @@ public:
 
 /+ Q_SIGNALS +/public:
     @QSignal final void userTimeChanged(ref const(QTime) time);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QDateEdit](https://doc.qt.io/qt-5/qdateedit.html).
@@ -214,6 +216,7 @@ public:
 
 /+ Q_SIGNALS +/public:
     @QSignal final void userDateChanged(ref const(QDate) date);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QDateTimeEdit.Sections.enum_type) operator |(QDateTimeEdit.Sections.enum_type f1, QDateTimeEdit.Sections.enum_type f2)/+noexcept+/{return QFlags!(QDateTimeEdit.Sections.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDateTimeEdit.Sections.enum_type) operator |(QDateTimeEdit.Sections.enum_type f1, QFlags!(QDateTimeEdit.Sections.enum_type) f2)/+noexcept+/{return f2|f1;}+/

@@ -70,5 +70,6 @@ private:
         uint[256] q_data;
         Data p;
     }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

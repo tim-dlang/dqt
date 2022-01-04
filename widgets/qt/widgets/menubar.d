@@ -154,5 +154,6 @@ private:
     /+ friend class QMenu; +/
     /+ friend class QMenuPrivate; +/
     /+ friend class QWindowsStyle; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

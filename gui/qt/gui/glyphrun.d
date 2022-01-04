@@ -111,6 +111,7 @@ private:
 
     void detach();
     QExplicitlySharedDataPointer!(QGlyphRunPrivate) d;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QGlyphRun) +/

@@ -403,6 +403,7 @@ private:
 public:
     alias DataPtr = QImageData*;
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /+ Q_DECLARE_SHARED(QImage)

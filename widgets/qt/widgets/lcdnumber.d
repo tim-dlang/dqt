@@ -98,5 +98,6 @@ public:
 private:
     /+ Q_DISABLE_COPY(QLCDNumber) +/
     /+ Q_DECLARE_PRIVATE(QLCDNumber) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

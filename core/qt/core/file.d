@@ -143,5 +143,6 @@ protected:
 private:
     /+ friend class QTemporaryFile; +/
     /+ Q_DISABLE_COPY(QFile) +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

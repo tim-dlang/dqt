@@ -76,6 +76,7 @@ private:
 
     const(QTextTable) table = null;
     int fragment;
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 /// Binding for C++ class [QTextTable](https://doc.qt.io/qt-5/qtexttable.html).
@@ -115,5 +116,6 @@ private:
     /+ Q_DISABLE_COPY(QTextTable) +/
     /+ Q_DECLARE_PRIVATE(QTextTable) +/
     /+ friend class QTextTableCell; +/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

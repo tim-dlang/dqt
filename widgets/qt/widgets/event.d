@@ -33,6 +33,7 @@ public:
 
     pragma(inline, true) final QAction action() const { return cast(QAction)act; }
     pragma(inline, true) final QAction before() const { return cast(QAction)bef; }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 }
 version(QT_NO_ACTION)

@@ -84,6 +84,7 @@ private:
     // prevent construction
     @disable this();
     //@disable ~this();
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QStandardPaths.LocateOptions.enum_type) operator |(QStandardPaths.LocateOptions.enum_type f1, QStandardPaths.LocateOptions.enum_type f2)/+noexcept+/{return QFlags!(QStandardPaths.LocateOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStandardPaths.LocateOptions.enum_type) operator |(QStandardPaths.LocateOptions.enum_type f1, QFlags!(QStandardPaths.LocateOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
