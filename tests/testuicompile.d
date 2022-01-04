@@ -119,7 +119,7 @@ unittest
             std.file.write(resultPath, appender.data);
             string expectedPath = buildPath(dqtRoot, "tests", "ui", filename[0..$-3] ~ ".properties_expected");
             auto expected = readText(expectedPath);
-            if(appender.data != expected)
+            if(appender.data.replace("\r", "") != expected.replace("\r", ""))
             {
                 stderr.writeln("Wrong properties for ", filename);
                 stderr.writeln(appender.data);

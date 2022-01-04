@@ -2,6 +2,7 @@
 import imports.testfiles;
 import qt.widgets.ui;
 import std.algorithm;
+import std.array;
 import std.file;
 import std.path;
 import std.process;
@@ -24,7 +25,7 @@ unittest
         std.file.write(resultPath, code);
         string expectedPath = buildPath(dqtRoot, "tests", "ui", filename[0..$-3] ~ ".code_expected");
         auto expected = readText(expectedPath);
-        if(code != expected)
+        if(code.replace("\r", "") != expected.replace("\r", ""))
         {
             stderr.writeln("Wrong code for ", filename);
             stderr.writeln(code);
