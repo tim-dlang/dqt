@@ -59,8 +59,7 @@ protected:
 
         if(selected == pdfAction)
         {
-            QString filter = QString("*.pdf");
-            QString filename = QFileDialog.getSaveFileName(this, globalInitVar!QString, globalInitVar!QString, filter);
+            QString filename = QFileDialog.getSaveFileName(this, globalInitVar!QString, globalInitVar!QString, QString("*.pdf"));
             if(!filename.isEmpty())
             {
                 scope writer = new QPdfWriter(filename);
@@ -84,27 +83,24 @@ private:
         import qt.gui.textoption;
 
         p.drawText(15, 20, title);
-        QBrush brush = QBrush(/+ Qt:: +/qt.core.namespace.GlobalColor.blue);
-        p.setBrush(brush);
+        p.setBrush(QBrush(/+ Qt:: +/qt.core.namespace.GlobalColor.blue));
         p.drawRect(15, 30, 100, 30);
-        auto tmp = QRectF(15, 30, 100, 30); auto tmp__1 = QTextOption(/+ Qt:: +/qt.core.namespace.Alignment.AlignCenter); auto tmpx1 = QString("drawRect"); p.drawText(tmp, tmpx1, tmp__1);
+        p.drawText(QRectF(15, 30, 100, 30), QString("drawRect"), QTextOption(/+ Qt:: +/qt.core.namespace.Alignment.AlignCenter));
 
-        brush = QBrush(/+ Qt:: +/qt.core.namespace.GlobalColor.green);
-        p.setBrush(brush);
+        p.setBrush(QBrush(/+ Qt:: +/qt.core.namespace.GlobalColor.green));
         p.drawEllipse(140, 30, 100, 30);
-        auto tmp__2 = QRectF(140, 30, 100, 30); auto tmp__3 = QTextOption(/+ Qt:: +/qt.core.namespace.Alignment.AlignCenter); auto tmpx2 = QString("drawEllipse"); p.drawText(tmp__2, tmpx2, tmp__3);
+        p.drawText(QRectF(140, 30, 100, 30), QString("drawEllipse"), QTextOption(/+ Qt:: +/qt.core.namespace.Alignment.AlignCenter));
 
         p.drawStaticText(270, 30, staticText);
 
-        auto tmpx3 = "currentDateTime: " ~ QDateTime.currentDateTime().toString(/+ Qt:: +/qt.core.namespace.DateFormat.ISODate); p.drawText(15, 90, tmpx3);
+        p.drawText(15, 90, "currentDateTime: " ~ QDateTime.currentDateTime().toString(/+ Qt:: +/qt.core.namespace.DateFormat.ISODate));
     }
     final QImage createImage()
     {
         import qt.core.namespace;
 
         auto image = QImage(400, 100, QImage.Format.Format_RGBA8888);
-        QColor tmp = QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.white);
-        image.fill(tmp);
+        image.fill(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.white));
         auto p = QPainter(image.paintDevice);
         drawImage(&p, QString("QPainter(QImage)"));
         return image;
@@ -114,8 +110,7 @@ private:
         import qt.core.namespace;
 
         auto image = QPixmap(400, 100);
-        QColor tmp = QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.gray);
-        image.fill(tmp);
+        image.fill(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.gray));
         auto p = QPainter(image.paintDevice);
         drawImage(&p, QString("QPainter(QPixmap)"));
         return image;

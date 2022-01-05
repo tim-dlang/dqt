@@ -45,7 +45,7 @@ private /+ slots +/:
         QMessageBox msgBox = cpp_new!QMessageBox;
         msgBox.setIcon(cast(/+ QMessageBox::Icon +/QMessageBox.Icon)ui.comboBoxIcon.currentIndex());
         msgBox.setText(ui.plainTextEditText.toPlainText());
-        auto tmp = ui.plainTextEditDetailed.toPlainText(); msgBox.setDetailedText(tmp);
+        msgBox.setDetailedText(ui.plainTextEditDetailed.toPlainText());
         QMessageBox.StandardButtons buttons;
         if(ui.checkBoxOK.isChecked())
             buttons |= QMessageBox.StandardButton.Ok;
@@ -75,8 +75,7 @@ private /+ slots +/:
         default:
             buttonName = "Unknown";
         }
-        QString text = QString("Clicked: ") ~ buttonName;
-        ui.labelResult.setText(text);
+        ui.labelResult.setText(QString("Clicked: ") ~ buttonName);
         cpp_delete(msgBox);
     }
 
@@ -106,7 +105,7 @@ private /+ slots +/:
 
     @QSlot final void on_pushButtonShowError_clicked()
     {
-        auto tmp = ui.plainTextEditErrorMessage.toPlainText(); errorMessage.showMessage(tmp);
+        errorMessage.showMessage(ui.plainTextEditErrorMessage.toPlainText());
     }
 
     @QSlot final void on_pushButtonOpenFile_clicked()

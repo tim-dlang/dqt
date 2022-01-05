@@ -87,7 +87,7 @@ private /+ slots +/:
             QTextList list = cursor.currentList();
             if(list)
             {
-                auto tmp = cursor.block(); list.remove(tmp);
+                list.remove(cursor.block());
             }
 
             QTextBlockFormat blockFmt = cursor.blockFormat();

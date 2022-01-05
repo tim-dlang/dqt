@@ -41,7 +41,7 @@ private /+ slots +/:
         if(ui.comboBoxType.currentIndex() == 1)
             ui.textBrowser.setHtml(ui.plainTextEdit.toPlainText());
         if(ui.comboBoxType.currentIndex() == 2)
-            { auto tmp = ui.plainTextEdit.toPlainText(); ui.textBrowser.setPlainText(tmp);}
+            ui.textBrowser.setPlainText(ui.plainTextEdit.toPlainText());
     }
 
     @QSlot final void on_comboBoxType_currentIndexChanged(int index)

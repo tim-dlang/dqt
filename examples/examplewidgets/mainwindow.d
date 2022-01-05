@@ -100,8 +100,7 @@ private /+ slots +/:
         text ~= "Build ABI: " ~ QSysInfo.buildAbi() ~ "\n";
         text ~= "CPU Architecture: " ~ QSysInfo.buildCpuArchitecture() ~ "\n";
         text ~= "Current CPU Architecture: " ~ QSysInfo.currentCpuArchitecture();
-        QString title = "System Info";
-        QMessageBox.information(this, title, text);
+        QMessageBox.information(this, QString("System Info"), text);
     }
 
     @QSlot final void onLanguageActionTriggered(QAction action)
