@@ -84,10 +84,6 @@ public:
     static void setOrganizationName(ref const(QString) orgName);
     static QString organizationName();
     static void setApplicationName(ref const(QString) application);
-    static void setApplicationName(const(QString) application)
-    {
-        setApplicationName(application);
-    }
     static QString applicationName();
     static void setApplicationVersion(ref const(QString) version_);
     static QString applicationVersion();

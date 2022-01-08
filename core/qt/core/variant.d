@@ -211,7 +211,6 @@ extern(C++, "QtPrivate") {
     this(ref const(QByteArray) bytearray);
     this(ref const(QBitArray) bitarray);
     this(ref const(QString) string);
-    this(const(QString) string){ this(string); }
     this(QLatin1String string);
     this(ref const(QStringList) stringlist);
     this(QChar qchar);
