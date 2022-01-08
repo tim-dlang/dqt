@@ -25,6 +25,7 @@ version(QT_NO_RAWFONT){}else
     import qt.core.rect;
     import qt.core.shareddata;
     import qt.core.string;
+    import qt.core.typeinfo;
     import qt.core.vector;
     import qt.gui.font;
     import qt.gui.fontdatabase;
@@ -40,7 +41,7 @@ version(QT_NO_RAWFONT){}else
 
 extern(C++, class) struct QRawFontPrivate;
 /// Binding for C++ class [QRawFont](https://doc.qt.io/qt-5/qrawfont.html).
-extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRawFont
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRawFont
 {
 public:
     enum AntialiasingType {

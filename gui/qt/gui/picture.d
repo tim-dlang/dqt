@@ -24,6 +24,7 @@ version(QT_NO_PICTURE){}else
     import qt.core.shareddata;
     import qt.core.string;
     import qt.core.stringlist;
+    import qt.core.typeinfo;
     import qt.gui.paintdevice;
     import qt.gui.paintengine;
     import qt.gui.painter;
@@ -34,7 +35,7 @@ version(QT_NO_PICTURE){}else
 
 extern(C++, class) struct QPicturePrivate;
 /// Binding for C++ class [QPicture](https://doc.qt.io/qt-5/qpicture.html).
-extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPicture
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPicture
 {
 private:
     immutable void *vtbl;

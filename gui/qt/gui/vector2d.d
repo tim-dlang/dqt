@@ -25,6 +25,7 @@ version(QT_NO_VECTOR2D){}else
     import qt.core.metatype;
     import qt.core.namespace;
     import qt.core.point;
+    import qt.core.typeinfo;
     import qt.core.variant;
 }
 
@@ -37,7 +38,7 @@ version(QT_NO_VECTOR2D){}else
 {
 
 /// Binding for C++ class [QVector2D](https://doc.qt.io/qt-5/qvector2d.html).
-@(QMetaType.Type.QVector2D) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QVector2D
+@Q_PRIMITIVE_TYPE @(QMetaType.Type.QVector2D) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QVector2D
 {
 public:
     @disable this();

@@ -245,7 +245,7 @@ Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QList<QItemSelectionRange>;
 #endif +/ // Q_CC_MSVC
 
 /// Binding for C++ class [QItemSelection](https://doc.qt.io/qt-5/qitemselection.html).
-extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelection
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelection
 {
     public QList!(QItemSelectionRange) base0;
     alias base0 this;

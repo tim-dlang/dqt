@@ -220,7 +220,7 @@ version(QT_NO_SHORTCUT)
 {
 
 /// Binding for C++ class [QKeySequence](https://doc.qt.io/qt-5/qkeysequence.html).
-@(QMetaType.Type.QKeySequence) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QKeySequence
+@Q_MOVABLE_TYPE @(QMetaType.Type.QKeySequence) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QKeySequence
 {
 public:
     @disable this();

@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.metatype;
 import qt.core.point;
+import qt.core.typeinfo;
 import qt.gui.screen;
 import qt.helpers;
 version(QT_NO_CURSOR){}else
@@ -33,7 +34,7 @@ version(QT_NO_CURSOR)
 {
 
 /// Binding for C++ class [QCursor](https://doc.qt.io/qt-5/qcursor.html).
-@(QMetaType.Type.QCursor) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QCursor
+@Q_RELOCATABLE_TYPE @(QMetaType.Type.QCursor) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QCursor
 {
 public:
     static QPoint pos();
@@ -66,7 +67,7 @@ extern(C++, class) struct QCursorData;
 
 
 /// Binding for C++ class [QCursor](https://doc.qt.io/qt-5/qcursor.html).
-@(QMetaType.Type.QCursor) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QCursor
+@Q_RELOCATABLE_TYPE @(QMetaType.Type.QCursor) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QCursor
 {
 public:
     @disable this();

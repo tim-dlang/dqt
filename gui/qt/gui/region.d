@@ -18,6 +18,7 @@ import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.refcount;
+import qt.core.typeinfo;
 import qt.core.variant;
 import qt.core.vector;
 import qt.gui.bitmap;
@@ -38,7 +39,7 @@ struct QRegionPrivate;
 
 
 /// Binding for C++ class [QRegion](https://doc.qt.io/qt-5/qregion.html).
-@(QMetaType.Type.QRegion) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRegion
+@Q_RELOCATABLE_TYPE @(QMetaType.Type.QRegion) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRegion
 {
 public:
     enum RegionType { Rectangle, Ellipse }

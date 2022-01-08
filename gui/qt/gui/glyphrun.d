@@ -21,6 +21,7 @@ version(QT_NO_RAWFONT){}else
     import qt.core.point;
     import qt.core.rect;
     import qt.core.shareddata;
+    import qt.core.typeinfo;
     import qt.core.vector;
     import qt.gui.rawfont;
 }
@@ -32,7 +33,7 @@ version(QT_NO_RAWFONT){}else
 
 extern(C++, class) struct QGlyphRunPrivate;
 /// Binding for C++ class [QGlyphRun](https://doc.qt.io/qt-5/qglyphrun.html).
-extern(C++, class) struct /+ Q_GUI_EXPORT +/ QGlyphRun
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QGlyphRun
 {
 public:
     enum GlyphRunFlag {

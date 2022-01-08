@@ -20,6 +20,7 @@ import qt.core.point;
 import qt.core.rect;
 import qt.core.scopedpointer;
 import qt.core.string;
+import qt.core.typeinfo;
 import qt.core.vector;
 import qt.gui.font;
 import qt.gui.matrix;
@@ -36,7 +37,7 @@ extern(C++, class) struct QPainterPathStrokerPrivate;
 extern(C++, class) struct QVectorPath;
 
 /// Binding for C++ class [QPainterPath](https://doc.qt.io/qt-5/qpainterpath.html).
-extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPainterPath
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPainterPath
 {
 public:
     enum ElementType {
