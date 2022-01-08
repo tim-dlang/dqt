@@ -314,7 +314,10 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
     void setProperty(int propertyId, ref const(QVariant) value);
     void setProperty(T)(int propertyId, T value)
     {
-        QVariant v = QVariant(value);
+        static if(is(T==enum))
+            QVariant v = QVariant(cast(int)value);
+        else
+            QVariant v = QVariant(value);
         setProperty(propertyId, v);
     }
     void clearProperty(int propertyId);
@@ -361,7 +364,7 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
     /+auto opCast(T : QVariant)() const;+/
 
     pragma(inline, true) void setLayoutDirection(/+ Qt:: +/qt.core.namespace.LayoutDirection direction)
-        { setProperty(QTextFormat.Property.LayoutDirection, cast(int)direction); }
+        { setProperty(QTextFormat.Property.LayoutDirection, direction); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.LayoutDirection layoutDirection() const
         { return /+ Qt:: +/cast(qt.core.namespace.LayoutDirection)(intProperty(QTextFormat.Property.LayoutDirection)); }
 
@@ -463,11 +466,11 @@ public:
     pragma(inline, true) bool fontItalic() const
     { return boolProperty(Property.FontItalic); }
     pragma(inline, true) void setFontCapitalization(QFont.Capitalization capitalization)
-    { setProperty(Property.FontCapitalization, cast(int)capitalization); }
+    { setProperty(Property.FontCapitalization, capitalization); }
     pragma(inline, true) QFont.Capitalization fontCapitalization() const
     { return static_cast!(QFont.Capitalization)(intProperty(Property.FontCapitalization)); }
     pragma(inline, true) void setFontLetterSpacingType(QFont.SpacingType letterSpacingType)
-    { setProperty(Property.FontLetterSpacingType, cast(int)letterSpacingType); }
+    { setProperty(Property.FontLetterSpacingType, letterSpacingType); }
     pragma(inline, true) QFont.SpacingType fontLetterSpacingType() const
     { return static_cast!(QFont.SpacingType)(intProperty(Property.FontLetterSpacingType)); }
     pragma(inline, true) void setFontLetterSpacing(qreal spacing)
@@ -480,7 +483,7 @@ public:
     { return doubleProperty(Property.FontWordSpacing); }
 
     pragma(inline, true) void setFontUnderline(bool underline)
-    { setProperty(Property.TextUnderlineStyle, cast(int)(underline ? UnderlineStyle.SingleUnderline : UnderlineStyle.NoUnderline)); }
+    { setProperty(Property.TextUnderlineStyle, underline ? UnderlineStyle.SingleUnderline : UnderlineStyle.NoUnderline); }
     bool fontUnderline() const;
 
     pragma(inline, true) void setFontOverline(bool overline)
@@ -509,9 +512,9 @@ public:
     { return intProperty(Property.FontStretch); }
 
     pragma(inline, true) void setFontStyleHint(QFont.StyleHint hint, QFont.StyleStrategy strategy = QFont.StyleStrategy.PreferDefault)
-    { setProperty(Property.FontStyleHint, cast(int)hint); setProperty(Property.FontStyleStrategy, cast(int)strategy); }
+    { setProperty(Property.FontStyleHint, hint); setProperty(Property.FontStyleStrategy, strategy); }
     pragma(inline, true) void setFontStyleStrategy(QFont.StyleStrategy strategy)
-    { setProperty(Property.FontStyleStrategy, cast(int)strategy); }
+    { setProperty(Property.FontStyleStrategy, strategy); }
     QFont.StyleHint fontStyleHint() const
     { return static_cast!(QFont.StyleHint)(intProperty(Property.FontStyleHint)); }
     QFont.StyleStrategy fontStyleStrategy() const
@@ -519,7 +522,7 @@ public:
 
     pragma(inline, true) void setFontHintingPreference(QFont.HintingPreference hintingPreference)
     {
-        setProperty(Property.FontHintingPreference, cast(int)hintingPreference);
+        setProperty(Property.FontHintingPreference, hintingPreference);
     }
 
     pragma(inline, true) QFont.HintingPreference fontHintingPreference() const
@@ -537,7 +540,7 @@ public:
     { return static_cast!(UnderlineStyle)(intProperty(Property.TextUnderlineStyle)); }
 
     pragma(inline, true) void setVerticalAlignment(VerticalAlignment alignment)
-    { setProperty(Property.TextVerticalAlignment, cast(int)alignment); }
+    { setProperty(Property.TextVerticalAlignment, alignment); }
     pragma(inline, true) VerticalAlignment verticalAlignment() const
     { return static_cast!(VerticalAlignment)(intProperty(Property.TextVerticalAlignment)); }
 
@@ -706,7 +709,7 @@ public:
     QList!(QTextOption.Tab) tabPositions() const;
 
     pragma(inline, true) void setMarker(MarkerType marker)
-    { auto tmp = int(marker); setProperty(Property.BlockMarker, cast(int)tmp); }
+    { auto tmp = int(marker); setProperty(Property.BlockMarker, tmp); }
     /+pragma(inline, true) MarkerType marker() const
     { return MarkerType(intProperty(Property.BlockMarker)); }+/
 
@@ -741,7 +744,7 @@ public:
     }
 
     pragma(inline, true) void setStyle(Style astyle)
-    { setProperty(Property.ListStyle, cast(int)astyle); }
+    { setProperty(Property.ListStyle, astyle); }
     pragma(inline, true) Style style() const
     { return static_cast!(Style)(intProperty(Property.ListStyle)); }
 
@@ -850,7 +853,7 @@ public:
     }
 
     pragma(inline, true) void setPosition(Position f)
-    { setProperty(Property.CssFloat, cast(int)f); }
+    { setProperty(Property.CssFloat, f); }
     pragma(inline, true) Position position() const
     { return static_cast!(Position)(intProperty(Property.CssFloat)); }
 
@@ -865,7 +868,7 @@ public:
     { return brushProperty(Property.FrameBorderBrush); }
 
     pragma(inline, true) void setBorderStyle(BorderStyle style)
-    { setProperty(Property.FrameBorderStyle, cast(int)style); }
+    { setProperty(Property.FrameBorderStyle, style); }
     pragma(inline, true) BorderStyle borderStyle() const
     { return static_cast!(BorderStyle)(intProperty(Property.FrameBorderStyle)); }
 
@@ -969,7 +972,7 @@ public:
     { setProperty(Property.TableCellPadding, apadding); }
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
-    { auto tmp = cast(int)(aalignment); setProperty(Property.BlockAlignment, cast(int)tmp); }
+    { auto tmp = cast(int)(aalignment); setProperty(Property.BlockAlignment, tmp); }
 /+    pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const
     { return QFlag(intProperty(Property.BlockAlignment)); }+/
 
@@ -1083,22 +1086,22 @@ public:
     }
 
     pragma(inline, true) void setTopBorderStyle(QTextFrameFormat.BorderStyle style)
-    { setProperty(Property.TableCellTopBorderStyle, cast(int)style); }
+    { setProperty(Property.TableCellTopBorderStyle, style); }
     pragma(inline, true) QTextFrameFormat.BorderStyle topBorderStyle() const
     { return static_cast!(QTextFrameFormat.BorderStyle)(intProperty(Property.TableCellTopBorderStyle)); }
 
     pragma(inline, true) void setBottomBorderStyle(QTextFrameFormat.BorderStyle style)
-    { setProperty(Property.TableCellBottomBorderStyle, cast(int)style); }
+    { setProperty(Property.TableCellBottomBorderStyle, style); }
     pragma(inline, true) QTextFrameFormat.BorderStyle bottomBorderStyle() const
     { return static_cast!(QTextFrameFormat.BorderStyle)(intProperty(Property.TableCellBottomBorderStyle)); }
 
     pragma(inline, true) void setLeftBorderStyle(QTextFrameFormat.BorderStyle style)
-    { setProperty(Property.TableCellLeftBorderStyle, cast(int)style); }
+    { setProperty(Property.TableCellLeftBorderStyle, style); }
     pragma(inline, true) QTextFrameFormat.BorderStyle leftBorderStyle() const
     { return static_cast!(QTextFrameFormat.BorderStyle)(intProperty(Property.TableCellLeftBorderStyle)); }
 
     pragma(inline, true) void setRightBorderStyle(QTextFrameFormat.BorderStyle style)
-    { setProperty(Property.TableCellRightBorderStyle, cast(int)style); }
+    { setProperty(Property.TableCellRightBorderStyle, style); }
     pragma(inline, true) QTextFrameFormat.BorderStyle rightBorderStyle() const
     { return static_cast!(QTextFrameFormat.BorderStyle)(intProperty(Property.TableCellRightBorderStyle)); }
 
