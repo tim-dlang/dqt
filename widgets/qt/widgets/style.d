@@ -36,16 +36,18 @@ extern(C++, class) struct QTab;
 extern(C++, class) struct QStylePrivate;
 
 /// Binding for C++ class [QStyle](https://doc.qt.io/qt-5/qstyle.html).
-class /+ Q_WIDGETS_EXPORT +/ QStyle : QObject
+abstract class /+ Q_WIDGETS_EXPORT +/ QStyle : QObject
 {
     mixin(Q_OBJECT);
     /+ Q_DECLARE_PRIVATE(QStyle) +/
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QStylePrivate dd);
+    }));
 
 public:
-    mixin(mangleItanium("_ZN6QStyleC2Ev", q{
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this();
     }));
     /+ virtual +/~this();

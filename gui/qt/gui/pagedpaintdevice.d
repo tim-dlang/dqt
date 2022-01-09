@@ -43,10 +43,10 @@ interface QPagedPaintDeviceInterface : QPaintDeviceInterface
 }
 
 /// Binding for C++ class [QPagedPaintDevice](https://doc.qt.io/qt-5/qpagedpaintdevice.html).
-class /+ Q_GUI_EXPORT +/ QPagedPaintDevice : QPaintDevice
+abstract class /+ Q_GUI_EXPORT +/ QPagedPaintDevice : QPaintDevice
 {
 public:
-    mixin(mangleItanium("_ZN17QPagedPaintDeviceC2Ev", q{
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ QT_DEPRECATED +/this();
     }));
     ~this();
@@ -245,7 +245,9 @@ public:
 /+ #endif +/
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(QPagedPaintDevicePrivate* dd);
+    }));
     final QPagedPaintDevicePrivate* dd();
     /+ QT_DEPRECATED +/ final QPageLayout devicePageLayout() const;
     /+ QT_DEPRECATED +/ final ref QPageLayout devicePageLayout();

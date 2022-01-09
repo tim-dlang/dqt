@@ -32,7 +32,7 @@ version(QT_NO_SHORTCUT){}else
 extern(C++, class) struct QAbstractButtonPrivate;
 
 /// Binding for C++ class [QAbstractButton](https://doc.qt.io/qt-5/qabstractbutton.html).
-class /+ Q_WIDGETS_EXPORT +/ QAbstractButton : QWidget
+abstract class /+ Q_WIDGETS_EXPORT +/ QAbstractButton : QWidget
 {
     mixin(Q_OBJECT);
 
@@ -51,7 +51,9 @@ class /+ Q_WIDGETS_EXPORT +/ QAbstractButton : QWidget
     Q_PROPERTY(bool down READ isDown WRITE setDown DESIGNABLE false) +/
 
 public:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QWidget parent = null);
+    }));
     ~this();
 
     final void setText(ref const(QString) text);
@@ -129,7 +131,9 @@ protected:
 
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QAbstractButtonPrivate dd, QWidget parent = null);
+    }));
 
 private:
     /+ Q_DECLARE_PRIVATE(QAbstractButton) +/

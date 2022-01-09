@@ -27,12 +27,12 @@ static if(!defined!"QT_NO_IMAGEFORMATPLUGIN")
 
 extern(C++, class) struct QImageIOHandlerPrivate;
 /// Binding for C++ class [QImageIOHandler](https://doc.qt.io/qt-5/qimageiohandler.html).
-class /+ Q_GUI_EXPORT +/ QImageIOHandler
+abstract class /+ Q_GUI_EXPORT +/ QImageIOHandler
 {
 private:
     /+ Q_DECLARE_PRIVATE(QImageIOHandler) +/
 public:
-    mixin(mangleItanium("_ZN15QImageIOHandlerC2Ev", q{
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this();
     }));
     /+ virtual +/~this();
@@ -102,7 +102,9 @@ alias Transformations = QFlags!(Transformation);
     /+ virtual +/ QRect currentImageRect() const;
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QImageIOHandlerPrivate dd);
+    }));
     QScopedPointer!(QImageIOHandlerPrivate) d_ptr;
 private:
     /+ Q_DISABLE_COPY(QImageIOHandler) +/
@@ -115,11 +117,13 @@ static if(!defined!"QT_NO_IMAGEFORMATPLUGIN")
 /+ #define QImageIOHandlerFactoryInterface_iid "org.qt-project.Qt.QImageIOHandlerFactoryInterface" +/
 
 /// Binding for C++ class [QImageIOPlugin](https://doc.qt.io/qt-5/qimageioplugin.html).
-class /+ Q_GUI_EXPORT +/ QImageIOPlugin : QObject
+abstract class /+ Q_GUI_EXPORT +/ QImageIOPlugin : QObject
 {
     mixin(Q_OBJECT);
 public:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QObject parent = null);
+    }));
     ~this();
 
     enum Capability {

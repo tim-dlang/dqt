@@ -253,18 +253,19 @@ template globalInitVar(T)
         static assert(false, T.stringof);
 }
 
+private struct FunctionManglingCpp
+{
+    string prefix;
+    string[] nameParts;
+    string flags;
+    string flags2;
+    string returnType;
+    string[] parameters;
+    string suffix;
+}
+
 version(Windows)
 {
-    private struct FunctionManglingWin
-    {
-        string name;
-        string flags;
-        string flags2;
-        string returnType;
-        string[] parameters;
-        string suffix;
-    }
-
     private string parseTypeManglingWin(ref string mangling, bool is64bit)
     {
         import std.exception, std.ascii, std.algorithm;
@@ -426,10 +427,10 @@ version(Windows)
         mangling = mangling[i..$];
         return r;
     }
-    /*private*/ FunctionManglingWin parseFunctionManglingWin(string mangling, bool is64bit)
+    /*private*/ FunctionManglingCpp parseFunctionManglingWin(string mangling, bool is64bit)
     {
         import std.exception, std.ascii, std.algorithm;
-        FunctionManglingWin r;
+        FunctionManglingCpp r;
         enforce(mangling.length && mangling[0] == '?', text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
         size_t i = 1;
         while(true)
@@ -448,7 +449,7 @@ version(Windows)
             enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
             i++;
         }
-        r.name = mangling[0..i];
+        r.nameParts = [mangling[0..i]];
         mangling = mangling[i..$];
 
         enforce(mangling.length >= 2, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
@@ -482,7 +483,7 @@ version(Windows)
                 mangling = mangling[2..$];
             }
 
-            if(r.name.startsWith("??1")) // destructor
+            if(r.nameParts[$-1].startsWith("??1")) // destructor
             {
                 enforce(mangling == "@XZ");
                 r.suffix = mangling;
@@ -513,6 +514,42 @@ version(Windows)
         }
         else
             enforce(false, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+
+        return r;
+    }
+}
+else
+{
+    /*private*/ FunctionManglingCpp parseFunctionManglingItanium(string mangling, bool is64bit)
+    {
+        import std.exception, std.ascii, std.algorithm, std.conv;
+        FunctionManglingCpp r;
+        enforce(mangling.startsWith("_ZN"), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+        r.prefix = mangling[0..3];
+        mangling = mangling[3..$];
+
+        while(mangling.length)
+        {
+            if(mangling[0] >= '0' && mangling[0] <= '9')
+            {
+                size_t lengthBytes = 1;
+                while(lengthBytes < mangling.length && mangling[lengthBytes] >= '0' && mangling[lengthBytes] <= '9')
+                    lengthBytes++;
+                size_t length = to!size_t(mangling[0..lengthBytes]);
+                enforce(mangling.length >= lengthBytes + length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+                r.nameParts ~= mangling[0..lengthBytes + length];
+                mangling = mangling[lengthBytes + length..$];
+            }
+            else if(mangling.length >= 2 && mangling[0].among('C', 'D') && mangling[1].among('0', '1'))
+            {
+                r.nameParts ~= mangling[0..2];
+                mangling = mangling[2..$];
+            }
+            else
+                break;
+        }
+
+        r.suffix = mangling;
 
         return r;
     }
@@ -562,11 +599,7 @@ alias mangleWindows = function string(string mangling, string code)
                 parsed.returnType = parsed.returnType.replaceStart("AE", "A");
                 parsed.returnType = parsed.returnType.replaceStart("BE", "B");
             }
-            mangling = parsed.name;
-            mangling ~= parsed.flags;
-            mangling ~= parsed.flags2;
-            mangling ~= parsed.returnType;
-            foreach(param; parsed.parameters)
+            foreach(ref param; parsed.parameters)
             {
                 static if(size_t.sizeof == 4)
                 {
@@ -577,13 +610,12 @@ alias mangleWindows = function string(string mangling, string code)
                     param = param.replaceStart("AE", "A");
                     param = param.replaceStart("BE", "B");
                 }
-                mangling ~= param;
             }
             static if(size_t.sizeof == 4)
             {
                 parsed.suffix = parsed.suffix.replaceStart("EA", "A");
             }
-            mangling ~= parsed.suffix;
+            mangling = recreateCppMangling(parsed);
         }
         return "pragma(mangle, \"" ~ mangling ~ "\") " ~ code;
     }
@@ -613,140 +645,183 @@ alias mangleOpLess = function string(string name)
         return text("_ZNK", name.length, name, "ltERKS_");
 };
 
-version(Windows)
-package FunctionManglingWin splitWindowsCppMangling(bool isClass, string attributes, string attributes2, string name, string dummyFunctionName, size_t numParameters, string mangling)
-{
-    import std.algorithm;
 
-    if(name == "~this")
-        mangling = mangling.replace(dummyFunctionName, "this");
-    else
-        mangling = mangling.replace(dummyFunctionName, name);
-    auto parsed = parseFunctionManglingWin(mangling, (void*).sizeof == 8);
-    assert(parsed.parameters.length == numParameters);
-    if(name == "this")
+package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, string attributes2, string name, string dummyFunctionName, size_t numParameters, string mangling)
+{
+    import std.algorithm, std.exception, std.conv;
+
+    version(Windows)
     {
-        parsed.name = parsed.name.replaceStart("?this@", "??0");
-        assert(parsed.returnType == "X");
-        parsed.returnType = "@";
-        foreach(ref param; parsed.parameters)
+        auto parsed = parseFunctionManglingWin(mangling, (void*).sizeof == 8);
+        if(name == "~this")
+            parsed.nameParts[0] = parsed.nameParts[0].replace(dummyFunctionName, "this");
+        else
+            parsed.nameParts[0] = parsed.nameParts[0].replace(dummyFunctionName, name);
+        assert(parsed.parameters.length == numParameters);
+        if(name == "this")
         {
-            if(param.length >= 2 && param[$-1] == '@' && param[$-2] >= '1' && param[$-2] <= '9')
+            parsed.nameParts[$-1] = parsed.nameParts[$-1].replaceStart("?this@", "??0");
+            assert(parsed.returnType == "X");
+            parsed.returnType = "@";
+            foreach(ref param; parsed.parameters)
             {
-                // References have to be decremented, because the dummy function has a return type, but not the real constructor.
-                param = param[0..$-2] ~ cast(char)(param[$-2] - 1) ~ param[$-1];
+                if(param.length >= 2 && param[$-1] == '@' && param[$-2] >= '1' && param[$-2] <= '9')
+                {
+                    // References have to be decremented, because the dummy function has a return type, but not the real constructor.
+                    param = param[0..$-2] ~ cast(char)(param[$-2] - 1) ~ param[$-1];
+                }
+            }
+        }
+        if(name == "~this")
+        {
+            parsed.nameParts[$-1] = parsed.nameParts[$-1].replaceStart("?this@", "??1");
+            assert(parsed.returnType == "X");
+            parsed.returnType = "@";
+        }
+        if(!attributes.canFind("static"))
+        {
+            // private / protected / public / none
+            uint accessLevel = (parsed.flags[0] - 'A') / 8;
+            // none / static / virtual / thunk
+            uint functionType = ((parsed.flags[0] - 'A') % 8) / 2;
+
+            if(attributes.canFind("static"))
+                functionType = 1;
+            else if(attributes.canFind("final") || !isClass || name == "this")
+                functionType = 0;
+            else
+                functionType = 2;
+
+            parsed.flags = [cast(char)('A' + accessLevel * 8 + functionType * 2)];
+            if(attributes2.canFind("const"))
+            {
+                static if(size_t.sizeof == 8)
+                    parsed.flags ~= "EBA";
+                else
+                    parsed.flags ~= "BE";
+            }
+            else
+            {
+                static if(size_t.sizeof == 8)
+                    parsed.flags ~= "EAA";
+                else
+                    parsed.flags ~= "AE";
             }
         }
     }
-    if(name == "~this")
+    else
     {
-        parsed.name = parsed.name.replaceStart("?this@", "??1");
-        assert(parsed.returnType == "X");
-        parsed.returnType = "@";
+        FunctionManglingCpp parsed = parseFunctionManglingItanium(mangling, (void*).sizeof == 8);
+        enforce(parsed.nameParts[$-1].endsWith(dummyFunctionName));
+        if(name == "this")
+            parsed.nameParts[$-1] = "C1";
+        else if(name == "~this")
+            parsed.nameParts[$-1] = "D1";
+        else
+            parsed.nameParts[$-1] = text(name.length, name);
+
+        if(!attributes.canFind("static"))
+        {
+            if(attributes2.canFind("const"))
+                parsed.prefix ~= "K";
+        }
     }
-    if(!attributes.canFind("static"))
+    return parsed;
+}
+
+// Workaround for https://issues.dlang.org/show_bug.cgi?id=22550
+package FunctionManglingCpp mangleClassesTailConst(FunctionManglingCpp parsed)
+{
+    version(Windows)
+    {
+        string makeTailConst(string mangling)
+        {
+            static if(size_t.sizeof == 8)
+            {
+                mangling = mangling.replaceStart("QEB", "PEB");
+            }
+            else
+            {
+                mangling = mangling.replaceStart("QB", "PB");
+            }
+            return mangling;
+        }
+        parsed.returnType = makeTailConst(parsed.returnType);
+        foreach(ref param; parsed.parameters)
+        {
+            param = makeTailConst(param);
+        }
+    }
+    return parsed;
+}
+
+package FunctionManglingCpp mangleChangeAccess(FunctionManglingCpp parsed, string access)
+{
+    version(Windows)
     {
         // private / protected / public / none
         uint accessLevel = (parsed.flags[0] - 'A') / 8;
         // none / static / virtual / thunk
         uint functionType = ((parsed.flags[0] - 'A') % 8) / 2;
 
-        if(attributes.canFind("static"))
-            functionType = 1;
-        else if(attributes.canFind("final") || !isClass || name == "this")
+        if(access == "private")
+            accessLevel = 0;
+        else if(access == "protected")
+            accessLevel = 1;
+        else if(access == "public")
+            accessLevel = 2;
+        else
+            assert(false);
+
+        parsed.flags = cast(char)('A' + accessLevel * 8 + functionType * 2) ~ parsed.flags[1..$];
+    }
+    return parsed;
+}
+
+
+package FunctionManglingCpp mangleChangeFunctionType(FunctionManglingCpp parsed, string functionTypeStr)
+{
+    version(Windows)
+    {
+        // private / protected / public / none
+        uint accessLevel = (parsed.flags[0] - 'A') / 8;
+        // none / static / virtual / thunk
+        uint functionType = ((parsed.flags[0] - 'A') % 8) / 2;
+
+        if(functionTypeStr == "none")
             functionType = 0;
-        else
+        else if(functionTypeStr == "static")
+            functionType = 1;
+        else if(functionTypeStr == "virtual")
             functionType = 2;
-
-        parsed.flags = [cast(char)('A' + accessLevel * 8 + functionType * 2)];
-        if(attributes2.canFind("const"))
-        {
-            static if(size_t.sizeof == 8)
-                parsed.flags ~= "EBA";
-            else
-                parsed.flags ~= "BE";
-        }
         else
-        {
-            static if(size_t.sizeof == 8)
-                parsed.flags ~= "EAA";
-            else
-                parsed.flags ~= "AE";
-        }
+            assert(false);
+
+        parsed.flags = cast(char)('A' + accessLevel * 8 + functionType * 2) ~ parsed.flags[1..$];
     }
     return parsed;
 }
 
-version(Windows)
-package FunctionManglingWin mangleClassesTailConst(FunctionManglingWin parsed)
+// Workaround for https://issues.dlang.org/show_bug.cgi?id=22636
+package FunctionManglingCpp mangleConstructorBaseObject(FunctionManglingCpp parsed)
 {
-    string makeTailConst(string mangling)
-    {
-        static if(size_t.sizeof == 8)
-        {
-            mangling = mangling.replaceStart("QEB", "PEB");
-        }
-        else
-        {
-            mangling = mangling.replaceStart("QB", "PB");
-        }
-        return mangling;
-    }
-    parsed.returnType = makeTailConst(parsed.returnType);
-    foreach(ref param; parsed.parameters)
-    {
-        param = makeTailConst(param);
-    }
-    return parsed;
-}
-
-version(Windows)
-package FunctionManglingWin mangleChangeAccess(FunctionManglingWin parsed, string access)
-{
-    // private / protected / public / none
-    uint accessLevel = (parsed.flags[0] - 'A') / 8;
-    // none / static / virtual / thunk
-    uint functionType = ((parsed.flags[0] - 'A') % 8) / 2;
-
-    if(access == "private")
-        accessLevel = 0;
-    else if(access == "protected")
-        accessLevel = 1;
-    else if(access == "public")
-        accessLevel = 2;
+    version(Windows)
+    {}
     else
-        assert(false);
-
-    parsed.flags = cast(char)('A' + accessLevel * 8 + functionType * 2) ~ parsed.flags[1..$];
+    {
+        import std.exception;
+        enforce(parsed.nameParts[$-1] == "C1");
+        parsed.nameParts[$-1] = "C2";
+    }
     return parsed;
 }
 
-version(Windows)
-package FunctionManglingWin mangleChangeFunctionType(FunctionManglingWin parsed, string functionTypeStr)
-{
-    // private / protected / public / none
-    uint accessLevel = (parsed.flags[0] - 'A') / 8;
-    // none / static / virtual / thunk
-    uint functionType = ((parsed.flags[0] - 'A') % 8) / 2;
-
-    if(functionTypeStr == "none")
-        functionType = 0;
-    else if(functionTypeStr == "static")
-        functionType = 1;
-    else if(functionTypeStr == "virtual")
-        functionType = 2;
-    else
-        assert(false);
-
-    parsed.flags = cast(char)('A' + accessLevel * 8 + functionType * 2) ~ parsed.flags[1..$];
-    return parsed;
-}
-
-version(Windows)
-string recreateWindowsCppMangling(FunctionManglingWin parsed)
+string recreateCppMangling(FunctionManglingCpp parsed)
 {
     string mangling;
-    mangling = parsed.name;
+    mangling = parsed.prefix;
+    foreach(part; parsed.nameParts)
+        mangling ~= part;
     mangling ~= parsed.flags;
     mangling ~= parsed.flags2;
     mangling ~= parsed.returnType;
@@ -759,180 +834,231 @@ string recreateWindowsCppMangling(FunctionManglingWin parsed)
 }
 
 /*
-    Workaround for https://issues.dlang.org/show_bug.cgi?id=22550
     Changes the mangling of function declarations.
     It only uses a very simple parser and will only work for some declarations.
     The mangling could be wrong for some functions.
 */
-package string changeWindowsMangling(string changeFuncs, string declaration, size_t line = __LINE__)
+package string changeCppMangling(bool debugHere = false)(string changeFuncs, string declaration, size_t line = __LINE__)
 {
+    import std.ascii, std.algorithm;
+
     string code;
-    version(Windows)
+
+    struct StartEnd
     {
-        import std.ascii, std.algorithm;
-
-        struct StartEnd
+        size_t start, end;
+    }
+    StartEnd[] parts;
+    size_t parenCount;
+    bool afterCombiner;
+    bool afterSemicolon;
+    for(size_t i = 0; i < declaration.length;)
+    {
+        string part = nextCodePart(declaration[i..$]);
+        bool mergeToLastPart;
+        if(isWhite(part[0]) || part.startsWith("//") || part.startsWith("/*") || part.startsWith("/+"))
         {
-            size_t start, end;
-        }
-        StartEnd[] parts;
-        size_t parenCount;
-        bool afterCombiner;
-        bool afterSemicolon;
-        for(size_t i = 0; i < declaration.length;)
-        {
-            string part = nextCodePart(declaration[i..$]);
-            bool mergeToLastPart;
-            if(isWhite(part[0]) || part.startsWith("//") || part.startsWith("/*") || part.startsWith("/+"))
-            {
-                i += part.length;
-                continue;
-            }
-            else
-            {
-                assert(!afterSemicolon);
-                if(afterCombiner)
-                {
-                    mergeToLastPart = true;
-                    afterCombiner = false;
-                }
-
-                if(part == "(")
-                {
-                    if(parenCount)
-                        mergeToLastPart = true;
-                    parenCount++;
-                }
-                else if(part == ")")
-                {
-                    assert(parenCount);
-                    mergeToLastPart = true;
-                    parenCount--;
-                }
-                else if(parenCount)
-                {
-                    mergeToLastPart = true;
-                }
-                else if(part == "." || part == "!")
-                {
-                    mergeToLastPart = true;
-                    afterCombiner = true;
-                }
-                else if(part == "@")
-                {
-                    afterCombiner = true;
-                }
-                else if(part == "~")
-                {
-                    afterCombiner = true;
-                }
-                else if(part == ";")
-                {
-                    afterSemicolon = true;
-                }
-                else
-                {
-                }
-            }
-
-            if(mergeToLastPart)
-                parts[$-1].end = i + part.length;
-            else
-                parts ~= StartEnd(i, i + part.length);
-
-            //code ~= "pragma(msg, q{" ~ part ~ "});";
             i += part.length;
+            continue;
         }
-
-        /*foreach(i, part; parts)
-            code ~= "pragma(msg, q{" ~ text(i, ": ") ~ declaration[part.start..part.end] ~ "});";*/
-
-        size_t attributesEnd;
-        string usedAttributes;
-        string attributesNoComments;
-        while(parts.length)
+        else
         {
-            string part = declaration[parts[0].start..parts[0].end];
-            if(part.among("static", "override", "final", "extern", "export", "__gshared",
-                "private", "protected", "public", "package")
-                || part[0] == '@')
+            assert(!afterSemicolon);
+            if(afterCombiner)
             {
-                attributesEnd = parts[0].end;
-                attributesNoComments ~= part ~ " ";
+                mergeToLastPart = true;
+                afterCombiner = false;
             }
-            else if(part.among("const", "immutable", "shared"))
+
+            if(part == "(")
             {
-                usedAttributes ~= part ~ " ";
-                attributesEnd = parts[0].end;
-                attributesNoComments ~= part ~ " ";
+                if(parenCount)
+                    mergeToLastPart = true;
+                parenCount++;
+            }
+            else if(part == ")")
+            {
+                assert(parenCount);
+                mergeToLastPart = true;
+                parenCount--;
+            }
+            else if(parenCount)
+            {
+                mergeToLastPart = true;
+            }
+            else if(part == "." || part == "!")
+            {
+                mergeToLastPart = true;
+                afterCombiner = true;
+            }
+            else if(part == "@")
+            {
+                afterCombiner = true;
+            }
+            else if(part == "~")
+            {
+                afterCombiner = true;
+            }
+            else if(part == ";")
+            {
+                afterSemicolon = true;
             }
             else
-                break;
-            parts = parts[1..$];
+            {
+            }
         }
-        string attributes = declaration[0..attributesEnd];
-        assert(parts.length >= 3, text(parts.length));
-        string returnType;
-        if(declaration[parts[0].start..parts[0].end] != "this" && declaration[parts[0].start..parts[0].end] != "~this")
-        {
-            returnType = declaration[attributesEnd..parts[0].end];
-            parts = parts[1..$];
-        }
-        assert(parts.length >= 3, text(parts.length));
-        string name = declaration[parts[0].start..parts[0].end];
-        parts = parts[1..$];
-        assert(isAlphaNum(name[0]) || name[0] == '_' || name == "~this");
-        string params = declaration[parts[0].start..parts[0].end];
-        parts = parts[1..$];
-        assert(params.startsWith("("));
-        string attributesUsedAfter;
-        while(parts.length >= 2)
-        {
-            string part = declaration[parts[0].start..parts[0].end];
-            assert(part.among("const", "immutable", "shared"));
-            attributesUsedAfter ~= part ~ " ";
-            parts = parts[1..$];
-        }
-        assert(parts.length == 1);
-        assert(declaration[parts[0].start..parts[0].end].startsWith(";"));
 
-        /*code ~= "pragma(msg, q{" ~ attributes ~ "});";
-        code ~= "pragma(msg, q{" ~ returnType ~ "});";
-        code ~= "pragma(msg, q{" ~ name ~ "});";
-        code ~= "pragma(msg, q{" ~ params ~ "});";*/
-
-        string dummyFunctionName;
-        if(name == "~this")
-            dummyFunctionName = text("dummyFunctionForChangingMangling", line, "_destructor");
+        if(mergeToLastPart)
+            parts[$-1].end = i + part.length;
         else
-            dummyFunctionName = text("dummyFunctionForChangingMangling", line, "_", name);
+            parts ~= StartEnd(i, i + part.length);
 
-        code ~= "static";
-        code ~= " " ~ usedAttributes;
-        code ~= " " ~ returnType;
-        if(name == "this" || name == "~this")
-            code ~= "void";
-        code ~= " " ~ dummyFunctionName;
-        code ~= params;
-        //code ~= " " ~ attributesUsedAfter;
-        code ~= ";\n";
-        //code ~= "pragma(msg, " ~ dummyFunctionName ~ ".mangleof);\n";
-        //code ~= "pragma(msg, parseFunctionManglingWin(" ~ dummyFunctionName ~ ".mangleof, (void*).sizeof));\n";
-        code ~= "pragma(mangle, splitWindowsCppMangling(is(typeof(this) == class), ";
+        //code ~= "pragma(msg, q{" ~ part ~ "});";
+        i += part.length;
+    }
+
+    /*foreach(i, part; parts)
+        code ~= "pragma(msg, q{" ~ text(i, ": ") ~ declaration[part.start..part.end] ~ "});";*/
+
+    size_t attributesEnd;
+    string usedAttributes;
+    string attributesNoComments;
+    while(parts.length)
+    {
+        string part = declaration[parts[0].start..parts[0].end];
+        if(part.among("static", "override", "final", "extern", "export", "__gshared",
+            "private", "protected", "public", "package")
+            || part[0] == '@')
+        {
+            attributesEnd = parts[0].end;
+            attributesNoComments ~= part ~ " ";
+        }
+        else if(part.among("const", "immutable", "shared"))
+        {
+            usedAttributes ~= part ~ " ";
+            attributesEnd = parts[0].end;
+            attributesNoComments ~= part ~ " ";
+        }
+        else
+            break;
+        parts = parts[1..$];
+    }
+    string attributes = declaration[0..attributesEnd];
+    assert(parts.length >= 3, text(parts.length));
+    string returnType;
+    if(declaration[parts[0].start..parts[0].end] != "this" && declaration[parts[0].start..parts[0].end] != "~this")
+    {
+        returnType = declaration[attributesEnd..parts[0].end];
+        parts = parts[1..$];
+    }
+    assert(parts.length >= 3, text(parts.length));
+    string name = declaration[parts[0].start..parts[0].end];
+    parts = parts[1..$];
+    assert(isAlphaNum(name[0]) || name[0] == '_' || name == "~this");
+    string params = declaration[parts[0].start..parts[0].end];
+    parts = parts[1..$];
+    assert(params.startsWith("("));
+    string attributesUsedAfter;
+    while(parts.length >= 2)
+    {
+        string part = declaration[parts[0].start..parts[0].end];
+        assert(part.among("const", "immutable", "shared"));
+        attributesUsedAfter ~= part ~ " ";
+        parts = parts[1..$];
+    }
+    assert(parts.length == 1);
+    assert(declaration[parts[0].start..parts[0].end].startsWith(";"));
+
+    /*code ~= "pragma(msg, q{" ~ attributes ~ "});";
+    code ~= "pragma(msg, q{" ~ returnType ~ "});";
+    code ~= "pragma(msg, q{" ~ name ~ "});";
+    code ~= "pragma(msg, q{" ~ params ~ "});";*/
+
+    string dummyFunctionName;
+    if(name == "~this")
+        dummyFunctionName = text("dummyFunctionForChangingMangling", line, "_destructor");
+    else
+        dummyFunctionName = text("dummyFunctionForChangingMangling", line, "_", name);
+
+    code ~= "static";
+    code ~= " " ~ usedAttributes;
+    code ~= " " ~ returnType;
+    if(name == "this" || name == "~this")
+        code ~= "void";
+    code ~= " " ~ dummyFunctionName;
+    code ~= params;
+    //code ~= " " ~ attributesUsedAfter;
+    code ~= ";\n";
+    if(debugHere)
+    {
+        code ~= "pragma(msg, " ~ dummyFunctionName ~ ".mangleof);\n";
+
+        version(Windows)
+            code ~= "pragma(msg, parseFunctionManglingWin(" ~ dummyFunctionName ~ ".mangleof, (void*).sizeof == 8));\n";
+        else
+            code ~= "pragma(msg, parseFunctionManglingItanium(" ~ dummyFunctionName ~ ".mangleof, (void*).sizeof == 8));\n";
+
+        code ~= "pragma(msg, splitCppMangling(is(typeof(this) == class), ";
         code ~= "q{" ~ attributesNoComments ~ "}, ";
         code ~= "q{" ~ attributesUsedAfter ~ "}, ";
         code ~= "q{" ~ name ~ "}, ";
         code ~= "q{" ~ dummyFunctionName ~ "}, ";
-        code ~= "dqtimported!q{std.traits}.Parameters!" ~ dummyFunctionName ~ ".length, ";
+        code ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
+        code ~= dummyFunctionName ~ ".mangleof";
+        code ~= ")";
+        code ~= ");\n";
+
+        code ~= "pragma(msg, splitCppMangling(is(typeof(this) == class), ";
+        code ~= "q{" ~ attributesNoComments ~ "}, ";
+        code ~= "q{" ~ attributesUsedAfter ~ "}, ";
+        code ~= "q{" ~ name ~ "}, ";
+        code ~= "q{" ~ dummyFunctionName ~ "}, ";
+        code ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
         code ~= dummyFunctionName ~ ".mangleof";
         code ~= ")";
         code ~= "." ~ changeFuncs;
-        code ~= ".recreateWindowsCppMangling";
-        code ~= ")\n";
+        code ~= ");\n";
+
+        code ~= "pragma(msg, splitCppMangling(is(typeof(this) == class), ";
+        code ~= "q{" ~ attributesNoComments ~ "}, ";
+        code ~= "q{" ~ attributesUsedAfter ~ "}, ";
+        code ~= "q{" ~ name ~ "}, ";
+        code ~= "q{" ~ dummyFunctionName ~ "}, ";
+        code ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
+        code ~= dummyFunctionName ~ ".mangleof";
+        code ~= ")";
+        code ~= "." ~ changeFuncs;
+        code ~= ".recreateCppMangling";
+        code ~= ");\n";
     }
+    code ~= "pragma(mangle, splitCppMangling(is(typeof(this) == class), ";
+    code ~= "q{" ~ attributesNoComments ~ "}, ";
+    code ~= "q{" ~ attributesUsedAfter ~ "}, ";
+    code ~= "q{" ~ name ~ "}, ";
+    code ~= "q{" ~ dummyFunctionName ~ "}, ";
+    code ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
+    code ~= dummyFunctionName ~ ".mangleof";
+    code ~= ")";
+    code ~= "." ~ changeFuncs;
+    code ~= ".recreateCppMangling";
+    code ~= ")\n";
 
     code ~= declaration;
     return code;
+}
+package string changeCppManglingNoop(bool debugHere = false)(string changeFuncs, string declaration, size_t line = __LINE__)
+{
+    return declaration;
+}
+version(Windows)
+{
+    alias changeWindowsMangling = changeCppMangling;
+    alias changeItaniumMangling = changeCppManglingNoop;
+}
+else
+{
+    alias changeWindowsMangling = changeCppManglingNoop;
+    alias changeItaniumMangling = changeCppMangling;
 }
 
 // Workaround for https://issues.dlang.org/show_bug.cgi?id=19660, which can be removed later.
@@ -950,20 +1076,20 @@ template dqtimported(string moduleName)
     mixin("import dqtimported = " ~ moduleName ~ ";");
 }
 
-private template Parameters2(alias F)
+package template FunctionParameters(alias F)
 {
     static if(is(typeof(F) P == __parameters))
-        alias Parameters2 = P;
+        alias FunctionParameters = P;
 }
 
 template isParamConstStructRef(alias F, size_t i)
 {
-    enum isParamConstStructRef = is(Parameters2!F[i] == struct) && is(Parameters2!F[i] == const) && [__traits(getParameterStorageClasses, F, i)] == ["ref"];
+    enum isParamConstStructRef = is(FunctionParameters!F[i] == struct) && is(FunctionParameters!F[i] == const) && [__traits(getParameterStorageClasses, F, i)] == ["ref"];
 }
 
 template anyParamConstStructRef(alias F, size_t i = 0)
 {
-    static if(i >= Parameters2!F.length)
+    static if(i >= FunctionParameters!F.length)
         enum anyParamConstStructRef = false;
     else static if(isParamConstStructRef!(F, i))
         enum anyParamConstStructRef = true;
@@ -980,14 +1106,14 @@ template dummyFunctionWithSameArgs(alias F)
 template callableWithNParameters(alias F, size_t n)
 {
     enum callableWithNParameters = __traits(compiles, (){
-        Parameters2!F[0..n] params = void;
+        FunctionParameters!F[0..n] params = void;
         dummyFunctionWithSameArgs!F(params);
         });
 }
 
 enum isWrapperCallable(alias F, Params...) = ()
     {
-        static if(Params.length > Parameters2!F.length)
+        static if(Params.length > FunctionParameters!F.length)
             return false;
         else static if(!callableWithNParameters!(F, Params.length))
             return false;
@@ -997,7 +1123,7 @@ enum isWrapperCallable(alias F, Params...) = ()
             // The parameter types have to be checked with if to work around https://issues.dlang.org/show_bug.cgi?id=13140
             static foreach(i; 0..Params.length)
             {
-                if(!is(Params[i] : Parameters2!F[i]))
+                if(!is(Params[i] : FunctionParameters!F[i]))
                     r = false;
             }
             // Workaround for https://issues.dlang.org/show_bug.cgi?id=12672

@@ -29,7 +29,7 @@ version(QT_NO_GESTURES){}else
 
 
 /// Binding for C++ class [QGestureRecognizer](https://doc.qt.io/qt-5/qgesturerecognizer.html).
-class /+ Q_WIDGETS_EXPORT +/ QGestureRecognizer
+abstract class /+ Q_WIDGETS_EXPORT +/ QGestureRecognizer
 {
 public:
     enum ResultFlag
@@ -52,7 +52,7 @@ public:
     }
     /+ Q_DECLARE_FLAGS(Result, ResultFlag) +/
 alias Result = QFlags!(ResultFlag);
-    mixin(mangleItanium("_ZN18QGestureRecognizerC2Ev", q{
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this();
     }));
     /+ virtual +/~this();

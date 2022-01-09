@@ -42,7 +42,7 @@ extern(C++, class) struct tst_QTreeView;
 extern(C++, class) struct QAbstractItemViewPrivate;
 
 /// Binding for C++ class [QAbstractItemView](https://doc.qt.io/qt-5/qabstractitemview.html).
-class /+ Q_WIDGETS_EXPORT +/ QAbstractItemView : QAbstractScrollArea
+abstract class /+ Q_WIDGETS_EXPORT +/ QAbstractItemView : QAbstractScrollArea
 {
     mixin(Q_OBJECT);
     /+ Q_PROPERTY(bool autoScroll READ hasAutoScroll WRITE setAutoScroll)
@@ -108,7 +108,9 @@ alias EditTriggers = QFlags!(EditTrigger);    /+ Q_FLAG(EditTriggers) +/
     }
     /+ Q_ENUM(ScrollMode) +/
 
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QWidget parent = null);
+    }));
     ~this();
 
     /+ virtual +/ void setModel(QAbstractItemModel model);
@@ -254,7 +256,9 @@ protected /+ Q_SLOTS +/:
     @QSignal final void iconSizeChanged(ref const(QSize) size);
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QAbstractItemViewPrivate , QWidget parent = null);
+    }));
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
     /+ QT_DEPRECATED +/ final void setHorizontalStepsPerItem(int steps);

@@ -30,13 +30,15 @@ import qt.helpers;
 extern(C++, class) struct QAbstractProxyModelPrivate;
 
 /// Binding for C++ class [QAbstractProxyModel](https://doc.qt.io/qt-5/qabstractproxymodel.html).
-class /+ Q_CORE_EXPORT +/ QAbstractProxyModel : QAbstractItemModel
+abstract class /+ Q_CORE_EXPORT +/ QAbstractProxyModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);
     /+ Q_PROPERTY(QAbstractItemModel* sourceModel READ sourceModel WRITE setSourceModel NOTIFY sourceModelChanged) +/
 
 public:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QObject parent = null);
+    }));
     ~this();
 
     /+ virtual +/ void setSourceModel(QAbstractItemModel sourceModel);
@@ -91,7 +93,9 @@ protected /+ Q_SLOTS +/:
 //    @QSlot final void resetInternalData();
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QAbstractProxyModelPrivate , QObject parent);
+    }));
 
 private:
     /+ Q_DECLARE_PRIVATE(QAbstractProxyModel) +/

@@ -32,7 +32,7 @@ import qt.helpers;
 extern(C++, class) struct QIODevicePrivate;
 
 /// Binding for C++ class [QIODevice](https://doc.qt.io/qt-5/qiodevice.html).
-class /+ Q_CORE_EXPORT +/ QIODevice
+abstract class /+ Q_CORE_EXPORT +/ QIODevice
 /+ #ifndef QT_NO_QOBJECT +/
     : QObject
 /+ #endif +/
@@ -55,11 +55,13 @@ public:
     }
     /+ Q_DECLARE_FLAGS(OpenMode, OpenModeFlag) +/
 alias OpenMode = QFlags!(OpenModeFlag);
-    mixin(mangleItanium("_ZN9QIODeviceC2Ev", q{
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this();
     }));
 /+ #ifndef QT_NO_QOBJECT +/
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QObject parent);
+    }));
 /+ #endif +/
     /+ virtual +/~this();
 
@@ -138,7 +140,9 @@ protected:
 /+ #ifdef QT_NO_QOBJECT
     QIODevice(QIODevicePrivate &dd);
 #else +/
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QIODevicePrivate dd, QObject parent = null);
+    }));
 /+ #endif +/
     /+ virtual +/ abstract qint64 readData(char* data, qint64 maxlen);
     /+ virtual +/ qint64 readLineData(char* data, qint64 maxlen);

@@ -39,7 +39,9 @@ abstract class /+ Q_GUI_EXPORT +/ QAbstractTextDocumentLayout : QObject
     /+ Q_DECLARE_PRIVATE(QAbstractTextDocumentLayout) +/
 
 public:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QTextDocument doc);
+    }));
     ~this();
 
     struct Selection
@@ -87,7 +89,9 @@ public:
     @QSignal final void pageCountChanged(int newPages);
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QAbstractTextDocumentLayoutPrivate , QTextDocument );
+    }));
 
     /+ virtual +/ abstract void documentChanged(int from, int charsRemoved, int charsAdded);
 
@@ -114,7 +118,7 @@ private:
 Q_DECLARE_TYPEINFO(QAbstractTextDocumentLayout::PaintContext, Q_RELOCATABLE_TYPE); +/
 
 /// Binding for C++ class [QTextObjectInterface](https://doc.qt.io/qt-5/qtextobjectinterface.html).
-class /+ Q_GUI_EXPORT +/ QTextObjectInterface
+abstract class /+ Q_GUI_EXPORT +/ QTextObjectInterface
 {
 public:
     /+ virtual +/~this();

@@ -36,7 +36,7 @@ protected:
 }
 
 /// Binding for C++ class [QPaintDevice](https://doc.qt.io/qt-5/qpaintdevice.html).
-class /+ Q_GUI_EXPORT +/ QPaintDevice//: QPaintDeviceInterface                                // device for QPainter
+abstract class /+ Q_GUI_EXPORT +/ QPaintDevice//: QPaintDeviceInterface                                // device for QPainter
 {
 public:
     enum PaintDeviceMetric {
@@ -80,7 +80,7 @@ public:
 
     pragma(inline, true) static qreal devicePixelRatioFScale() { return 0x10000; }
 protected:
-    mixin(mangleItanium("_ZN12QPaintDeviceC2Ev", q{
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this()/+ noexcept+/;
     }));
     /+ virtual +/ int metric(PaintDeviceMetric metric) const;

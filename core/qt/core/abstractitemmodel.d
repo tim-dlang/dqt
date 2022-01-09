@@ -177,7 +177,7 @@ extern(C++, class) struct QTransposeProxyModelPrivate;
 
 
 /// Binding for C++ class [QAbstractItemModel](https://doc.qt.io/qt-5/qabstractitemmodel.html).
-class /+ Q_CORE_EXPORT +/ QAbstractItemModel : QObject
+abstract class /+ Q_CORE_EXPORT +/ QAbstractItemModel : QObject
 {
     mixin(Q_OBJECT);
 
@@ -186,7 +186,8 @@ class /+ Q_CORE_EXPORT +/ QAbstractItemModel : QObject
     /+ friend class QIdentityProxyModel; +/
     /+ friend class QTransposeProxyModelPrivate; +/
 public:
-    mixin(mangleItanium("_ZN18QAbstractItemModelC2EP7QObject", q{
+
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QObject parent = null);
     }));
     /+ virtual +/~this();
@@ -329,7 +330,9 @@ protected /+ Q_SLOTS +/:
     @QSlot final void resetInternalData();
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QAbstractItemModelPrivate dd, QObject parent = null);
+    }));
 
     pragma(inline, true) final QModelIndex createIndex(int arow, int acolumn, void* adata = null) const
     { return QModelIndex(arow, acolumn, adata, this); }

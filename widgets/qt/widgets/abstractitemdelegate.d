@@ -34,7 +34,7 @@ import qt.widgets.widget;
 extern(C++, class) struct QAbstractItemDelegatePrivate;
 
 /// Binding for C++ class [QAbstractItemDelegate](https://doc.qt.io/qt-5/qabstractitemdelegate.html).
-class /+ Q_WIDGETS_EXPORT +/ QAbstractItemDelegate : QObject
+abstract class /+ Q_WIDGETS_EXPORT +/ QAbstractItemDelegate : QObject
 {
     mixin(Q_OBJECT);
 
@@ -48,7 +48,9 @@ public:
         RevertModelCache
     }
 
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QObject parent = null);
+    }));
     /+ virtual +/~this();
 
     // painting
@@ -101,7 +103,9 @@ public:
     @QSignal final void sizeHintChanged(ref const(QModelIndex) );
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QObjectPrivate , QObject parent = null);
+    }));
 private:
     /+ Q_DECLARE_PRIVATE(QAbstractItemDelegate) +/
     /+ Q_DISABLE_COPY(QAbstractItemDelegate) +/

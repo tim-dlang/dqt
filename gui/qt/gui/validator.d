@@ -35,11 +35,13 @@ version(QT_NO_VALIDATOR){}else
 extern(C++, class) struct QValidatorPrivate;
 
 /// Binding for C++ class [QValidator](https://doc.qt.io/qt-5/qvalidator.html).
-class /+ Q_GUI_EXPORT +/ QValidator : QObject
+abstract class /+ Q_GUI_EXPORT +/ QValidator : QObject
 {
     mixin(Q_OBJECT);
 public:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QObject  parent = null);
+    }));
     ~this();
 
     enum State {
@@ -59,8 +61,12 @@ public:
     @QSignal final void changed();
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QObjectPrivate d, QObject parent);
+    }));
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QValidatorPrivate d, QObject parent);
+    }));
 
 private:
     /+ Q_DISABLE_COPY(QValidator) +/

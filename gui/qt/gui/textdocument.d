@@ -49,7 +49,7 @@ extern(C++, "Qt")
 /+ #endif +/
 }
 
-class /+ Q_GUI_EXPORT +/ QAbstractUndoItem
+abstract class /+ Q_GUI_EXPORT +/ QAbstractUndoItem
 {
 public:
     /+ virtual +//*abstract*/ ~this(){}

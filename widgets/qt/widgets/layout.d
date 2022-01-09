@@ -29,7 +29,7 @@ import qt.widgets.widget;
 extern(C++, class) struct QLayoutPrivate;
 
 /// Binding for C++ class [QLayout](https://doc.qt.io/qt-5/qlayout.html).
-class /+ Q_WIDGETS_EXPORT +/ QLayout : QObject, QLayoutItemInterface
+abstract class /+ Q_WIDGETS_EXPORT +/ QLayout : QObject, QLayoutItemInterface
 {
     QLayoutItemFakeInheritance baseQLayoutItem;
     mixin(Q_OBJECT);
@@ -51,8 +51,10 @@ public:
     }
     /+ Q_ENUM(SizeConstraint) +/
 
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(QWidget parent);
-    mixin(mangleItanium("_ZN7QLayoutC2Ev", q{
+    }));
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this();
     }));
     ~this();
@@ -156,7 +158,9 @@ protected:
 
     final QRect alignmentRect(ref const(QRect)) const;
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QLayoutPrivate d, QLayout, QWidget);
+    }));
 
 private:
     /+ Q_DISABLE_COPY(QLayout) +/

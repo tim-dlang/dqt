@@ -27,7 +27,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QTextCodec](https://doc.qt.io/qt-5/qtextcodec.html).
-class /+ Q_CORE_EXPORT +/ QTextCodec
+abstract class /+ Q_CORE_EXPORT +/ QTextCodec
 {
 private:
     /+ Q_DISABLE_COPY(QTextCodec) +/
@@ -110,10 +110,10 @@ protected:
     /+ virtual +/ abstract QString convertToUnicode(const(char)* in_, int length, ConverterState* state) const;
     /+ virtual +/ abstract QByteArray convertFromUnicode(const(QChar)* in_, int length, ConverterState* state) const;
 
-    mixin(mangleItanium("_ZN10QTextCodecC2Ev", q{
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this();
     }));
-    /*public*/ /+ virtual +/~this();
+    /+ virtual +/~this();
 
 private:
     /+ friend struct QCoreGlobalData; +/

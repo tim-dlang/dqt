@@ -64,7 +64,7 @@ alias RenderFlags = QFlags!(RenderFlag);    qreal descent() const;
 
 
 /// Binding for C++ class [QPaintEngine](https://doc.qt.io/qt-5/qpaintengine.html).
-class /+ Q_GUI_EXPORT +/ QPaintEngine
+abstract class /+ Q_GUI_EXPORT +/ QPaintEngine
 {
 private:
     /+ Q_DECLARE_PRIVATE(QPaintEngine) +/
@@ -126,7 +126,9 @@ alias DirtyFlags = QFlags!(DirtyFlag);
         PolylineMode
     }
 
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(PaintEngineFeatures features=PaintEngineFeatures());
+    }));
     /+ virtual +/~this();
 
     final bool isActive() const { return (active) != 0; }
@@ -229,7 +231,9 @@ alias DirtyFlags = QFlags!(DirtyFlag);
     pragma(inline, true) final bool isExtended() const { return (extended) != 0; }
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QPaintEnginePrivate data, PaintEngineFeatures devcaps=PaintEngineFeatures());
+    }));
 
     QPaintEngineState* state;
     PaintEngineFeatures gccaps;

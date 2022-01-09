@@ -45,7 +45,7 @@ interface QLayoutItemInterface
 }
 
 /// Binding for C++ class [QLayoutItem](https://doc.qt.io/qt-5/qlayoutitem.html).
-class /+ Q_WIDGETS_EXPORT +/ QLayoutItem
+abstract class /+ Q_WIDGETS_EXPORT +/ QLayoutItem
 {
 public:
     /+ explicit +/pragma(inline, true) this(/+ Qt:: +/qt.core.namespace.Alignment aalignment = /+ Qt:: +/qt.core.namespace.Alignment())

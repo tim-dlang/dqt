@@ -33,13 +33,17 @@ static if(!defined!"QT_NO_SYNTAXHIGHLIGHTER")
 extern(C++, class) struct QSyntaxHighlighterPrivate;
 
 /// Binding for C++ class [QSyntaxHighlighter](https://doc.qt.io/qt-5/qsyntaxhighlighter.html).
-class /+ Q_GUI_EXPORT +/ QSyntaxHighlighter : QObject
+abstract class /+ Q_GUI_EXPORT +/ QSyntaxHighlighter : QObject
 {
     mixin(Q_OBJECT);
     /+ Q_DECLARE_PRIVATE(QSyntaxHighlighter) +/
 public:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QObject parent);
+    }));
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QTextDocument parent);
+    }));
     ~this();
 
     final void setDocument(QTextDocument doc);

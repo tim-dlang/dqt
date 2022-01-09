@@ -66,7 +66,7 @@ Q_CORE_EXPORT void qt_qFindChildren_helper(const QObject *parent, const QRegular
                                            const QMetaObject &mo, QList<void *> *list, Qt::FindChildOptions options);
 Q_CORE_EXPORT QObject *qt_qFindChild_helper(const QObject *parent, const QString &name, const QMetaObject &mo, Qt::FindChildOptions options); +/
 
-class /+ Q_CORE_EXPORT +/ QObjectData {
+abstract class /+ Q_CORE_EXPORT +/ QObjectData {
 private:
     /+ Q_DISABLE_COPY(QObjectData) +/
 public:
