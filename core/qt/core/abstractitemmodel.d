@@ -397,12 +397,14 @@ private:
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemModel::CheckIndexOptions) +/
 /// Binding for C++ class [QAbstractTableModel](https://doc.qt.io/qt-5/qabstracttablemodel.html).
-class /+ Q_CORE_EXPORT +/ QAbstractTableModel : QAbstractItemModel
+abstract class /+ Q_CORE_EXPORT +/ QAbstractTableModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);
 
 public:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QObject parent = null);
+    }));
     ~this();
 
     override QModelIndex index(int row, int column, ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
@@ -417,7 +419,9 @@ public:
     /+ using QObject::parent; +/
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QAbstractItemModelPrivate dd, QObject parent);
+    }));
 
 /*private:*/
     /+ Q_DISABLE_COPY(QAbstractTableModel) +/
@@ -431,12 +435,14 @@ protected:
 }
 
 /// Binding for C++ class [QAbstractListModel](https://doc.qt.io/qt-5/qabstractlistmodel.html).
-class /+ Q_CORE_EXPORT +/ QAbstractListModel : QAbstractItemModel
+abstract class /+ Q_CORE_EXPORT +/ QAbstractListModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);
 
 public:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     /+ explicit +/this(QObject parent = null);
+    }));
     ~this();
 
     override QModelIndex index(int row, int column = 0, ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
@@ -451,7 +457,9 @@ public:
     /+ using QObject::parent; +/
 
 protected:
+    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QAbstractItemModelPrivate dd, QObject parent);
+    }));
 
 /*private:*/
     /+ Q_DISABLE_COPY(QAbstractListModel) +/
