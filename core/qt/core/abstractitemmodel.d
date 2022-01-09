@@ -418,8 +418,12 @@ protected:
 
 /*private:*/
     /+ Q_DISABLE_COPY(QAbstractTableModel) +/
+    mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
     override QModelIndex parent(ref const(QModelIndex) child) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
     override bool hasChildren(ref const(QModelIndex) parent) const;
+    }));
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

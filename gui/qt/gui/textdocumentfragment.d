@@ -58,7 +58,9 @@ public:
     version(QT_NO_TEXTHTMLPARSER){}else
     {
         static QTextDocumentFragment fromHtml(ref const(QString) html);
+        mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
         static QTextDocumentFragment fromHtml(ref const(QString) html, const(QTextDocument) resourceProvider);
+        }));
     }
 
 private:

@@ -85,10 +85,8 @@ public:
         this.d = adata;
         if (d) d.ref_.ref_();
     }+/
-    @disable this(this);
-    pragma(inline, true) this(ref const(QSharedDataPointer!(T)) o)
+    pragma(inline, true) this(this)
     {
-        this.d = cast(T*)o.d;
         static if(__traits(compiles, d.ref_))
         {
             if (d) d.ref_.ref_();

@@ -176,7 +176,8 @@ private:
     {
         void exec(ref const(QByteArray) ba, int ver = 0, QDataStream.ByteOrder byteOrder = QDataStream.ByteOrder.BigEndian);
     }
-    struct QRegionData {
+    // Workaround for https://issues.dlang.org/show_bug.cgi?id=20701
+    extern(C++, struct) struct QRegionData {
         /+ QtPrivate:: +/qt.core.refcount.RefCount ref_;
         QRegionPrivate* qt_rgn;
     }
@@ -190,7 +191,9 @@ private:
             QRegionData* d;
         }
     }
+    mixin(mangleWindows("?shared_empty@QRegion@@0UQRegionData@1@B", exportOnWindows ~ q{
     extern static __gshared const(QRegionData) shared_empty;
+    }));
     static void cleanUp(QRegionData* x);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }

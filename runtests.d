@@ -151,6 +151,8 @@ int main(string[] args)
                 string m2 = e.name[0..$-2].replace("/", ".").replace("\\", ".");
                 assert(m2.startsWith(m ~ "."));
                 m2 = m2[m.length+1..$];
+                if(m2.startsWith("qt.widgets.internal.dxml."))
+                    continue;
                 modules ~= m2;
             }
             modules.sort();

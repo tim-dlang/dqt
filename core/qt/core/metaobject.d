@@ -203,7 +203,7 @@ public:
     const(char)* key(int index) const;
     int value(int index) const;
 
-    const(char)* scope_() const;
+    //const(char)* scope_() const;
 
     int keyToValue(const(char)* key, bool* ok = null) const;
     const(char)* valueToKey(int value) const;

@@ -130,7 +130,8 @@ public:
     int preeditAreaPosition() const;
     QString preeditAreaText() const;
 
-    struct FormatRange {
+    // Workaround for https://issues.dlang.org/show_bug.cgi?id=20701
+    extern(C++, struct) struct FormatRange {
         int start;
         int length;
         QTextCharFormat format;

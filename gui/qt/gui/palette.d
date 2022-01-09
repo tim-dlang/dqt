@@ -168,7 +168,7 @@ private:
                            ref const(QBrush) highlight, ref const(QBrush) highlighted_text,
                            ref const(QBrush) link, ref const(QBrush) link_visited,
                            ref const(QBrush) toolTipBase, ref const(QBrush) toolTipText);
-    void init_();
+    //void init_();
     void detach();
 
     QPalettePrivate* d;

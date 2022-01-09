@@ -64,7 +64,8 @@ extern(C++, class) struct /+ Q_CORE_EXPORT +/ QCalendar
 public:
     // (Extra parentheses to suppress bogus reading of min() as a macro.)
     enum int Unspecified = int.min;
-    struct YearMonthDay
+    // Workaround for https://issues.dlang.org/show_bug.cgi?id=20701
+    extern(C++, struct) struct YearMonthDay
     {
         /+ YearMonthDay() = default; +/
         this(int y, int m = 1, int d = 1)

@@ -133,7 +133,9 @@ public:
 
     static QPlatformNativeInterface* platformNativeInterface();
 
+    mixin(mangleWindows("?platformFunction@QGuiApplication@@SAP6AXXZAEBVQByteArray@@@Z", q{
     static QFunctionPointer platformFunction(ref const(QByteArray) function_);
+    }));
 
     static void setQuitOnLastWindowClosed(bool quit);
     static bool quitOnLastWindowClosed();

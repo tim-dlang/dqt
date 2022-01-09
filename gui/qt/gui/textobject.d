@@ -191,13 +191,11 @@ public:
         this.p = priv;
         this.n = b;
     }
-    @disable this();
     /+pragma(inline, true) this()
     {
         this.p = null;
         this.n = 0;
     }+/
-    @disable this(this);
     pragma(inline, true) this(ref const(QTextBlock) o)
     {
         this.p = cast(QTextDocumentPrivate*)o.p;

@@ -751,8 +751,10 @@ private:
 class /+ Q_GUI_EXPORT +/ QDropEvent : QEvent
 {
 public:
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QPointF) pos, /+ Qt:: +/qt.core.namespace.DropActions actions, const(QMimeData) data,
                    /+ Qt:: +/qt.core.namespace.MouseButtons buttons, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers, Type type = Type.Drop);
+    }));
     ~this();
 
 //    pragma(inline, true) final QPoint pos() const { return p.toPoint(); }
@@ -787,8 +789,10 @@ protected:
 class /+ Q_GUI_EXPORT +/ QDragMoveEvent : QDropEvent
 {
 public:
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QPoint) pos, /+ Qt:: +/qt.core.namespace.DropActions actions, const(QMimeData) data,
                        /+ Qt:: +/qt.core.namespace.MouseButtons buttons, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers, Type type = Type.DragMove);
+    }));
     ~this();
 
     pragma(inline, true) final QRect answerRect() const { return rect; }
@@ -809,8 +813,10 @@ protected:
 class /+ Q_GUI_EXPORT +/ QDragEnterEvent : QDragMoveEvent
 {
 public:
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QPoint) pos, /+ Qt:: +/qt.core.namespace.DropActions actions, const(QMimeData) data,
                         /+ Qt:: +/qt.core.namespace.MouseButtons buttons, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers);
+    }));
     ~this();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }

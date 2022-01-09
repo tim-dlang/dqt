@@ -160,7 +160,9 @@ public:
 /+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
     this(ref const(QFont) font, QPaintDevice pd);
 /+ #endif +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QFont) font, const(QPaintDevice) pd);
+    }));
     @disable this(this);
     this(ref const(QFont) font);
     ~this();

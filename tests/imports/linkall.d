@@ -19,10 +19,15 @@ size_t linkAll(alias m)()
         static if(is(__traits(getMember, m, s) == struct) || is(__traits(getMember, m, s) == union) || is(__traits(getMember, m, s) == class))
         {
             alias S = __traits(getMember, m, s);
-            static if(__traits(compiles, mixin("new m." ~ s)))
+            static if(__traits(getVisibility, __traits(getMember, m, s)) == "public")
             {{
                 //pragma(msg, "=== ", s);
-                auto inst = mixin("new m." ~ s);
+                static if(__traits(compiles, mixin("new m." ~ s)))
+                    auto inst = mixin("new m." ~ s);
+                else static if(is(__traits(getMember, m, s) == class))
+                    mixin("m." ~ s ~ " inst;");
+                else
+                    mixin("m." ~ s ~ "* inst;");
                 sum += cast(size_t)cast(void*)inst;
                 static foreach(field; __traits(allMembers, S))
                 {
@@ -41,7 +46,7 @@ size_t linkAll(alias m)()
                         static foreach(o; __traits(getOverloads, S, field))
                         {
                             //pragma(msg, "    ", typeof(o));
-                            static if(__traits(isDisabled, o))
+                            static if(__traits(isDisabled, o) || __traits(isAbstractFunction, o))
                             {
                             }
                             else static if(is(typeof(o) == function))

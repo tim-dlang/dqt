@@ -268,6 +268,7 @@ version(Windows)
     private string parseTypeManglingWin(ref string mangling, bool is64bit)
     {
         import std.exception, std.ascii, std.algorithm;
+        bool inPointer;
         size_t i = 0;
         while(true)
         {
@@ -288,21 +289,38 @@ version(Windows)
                 i++;
                 break;
             }
+            else if(inPointer && mangling[i].among('6'))
+            {
+                // function type
+                i++;
+                enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                enforce(mangling[i] == 'A', text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                // return type and arguments
+                while(true)
+                {
+                    enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                    if(mangling[i] == 'Z')
+                    {
+                        i++;
+                        break;
+                    }
+                    string mangling2 = mangling[i..$];
+                    string arg = parseTypeManglingWin(mangling2, is64bit);
+                    i += arg.length;
+                }
+                break;
+            }
             else if(mangling[i] >= '0' && mangling[i] <= '9')
             {
                 // back references
                 i++;
                 break;
             }
-            else if(mangling[i].among('A', 'B'))
+            else if(mangling[i].among('A', 'B', 'P', 'Q', 'R', 'S'))
             {
                 // modifiers
-                i++;
-                continue;
-            }
-            else if(mangling[i].among('P', 'Q', 'R', 'S'))
-            {
-                // modifiers
+                if(mangling[i].among('P', 'Q'))
+                    inPointer = true;
                 i++;
                 if(is64bit)
                 {
@@ -403,6 +421,7 @@ version(Windows)
             }
             enforce(false, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
         }
+        assert(i < mangling.length);
         string r = mangling[0..i];
         mangling = mangling[i..$];
         return r;
@@ -540,6 +559,8 @@ alias mangleWindows = function string(string mangling, string code)
                 parsed.returnType = parsed.returnType.replaceStart("QE", "Q");
                 parsed.returnType = parsed.returnType.replaceStart("RE", "R");
                 parsed.returnType = parsed.returnType.replaceStart("SE", "S");
+                parsed.returnType = parsed.returnType.replaceStart("AE", "A");
+                parsed.returnType = parsed.returnType.replaceStart("BE", "B");
             }
             mangling = parsed.name;
             mangling ~= parsed.flags;
@@ -553,6 +574,8 @@ alias mangleWindows = function string(string mangling, string code)
                     param = param.replaceStart("QE", "Q");
                     param = param.replaceStart("RE", "R");
                     param = param.replaceStart("SE", "S");
+                    param = param.replaceStart("AE", "A");
+                    param = param.replaceStart("BE", "B");
                 }
                 mangling ~= param;
             }
@@ -591,15 +614,33 @@ alias mangleOpLess = function string(string name)
 };
 
 version(Windows)
-package FunctionManglingWin splitWindowsCppMangling(bool isClass, string attributes, string attributes2, string name, string dummyFunctionName, string mangling)
+package FunctionManglingWin splitWindowsCppMangling(bool isClass, string attributes, string attributes2, string name, string dummyFunctionName, size_t numParameters, string mangling)
 {
     import std.algorithm;
 
-    mangling = mangling.replace(dummyFunctionName, name);
+    if(name == "~this")
+        mangling = mangling.replace(dummyFunctionName, "this");
+    else
+        mangling = mangling.replace(dummyFunctionName, name);
     auto parsed = parseFunctionManglingWin(mangling, (void*).sizeof == 8);
+    assert(parsed.parameters.length == numParameters);
     if(name == "this")
     {
         parsed.name = parsed.name.replaceStart("?this@", "??0");
+        assert(parsed.returnType == "X");
+        parsed.returnType = "@";
+        foreach(ref param; parsed.parameters)
+        {
+            if(param.length >= 2 && param[$-1] == '@' && param[$-2] >= '1' && param[$-2] <= '9')
+            {
+                // References have to be decremented, because the dummy function has a return type, but not the real constructor.
+                param = param[0..$-2] ~ cast(char)(param[$-2] - 1) ~ param[$-1];
+            }
+        }
+    }
+    if(name == "~this")
+    {
+        parsed.name = parsed.name.replaceStart("?this@", "??1");
         assert(parsed.returnType == "X");
         parsed.returnType = "@";
     }
@@ -612,7 +653,7 @@ package FunctionManglingWin splitWindowsCppMangling(bool isClass, string attribu
 
         if(attributes.canFind("static"))
             functionType = 1;
-        else if(attributes.canFind("final") || !isClass)
+        else if(attributes.canFind("final") || !isClass || name == "this")
             functionType = 0;
         else
             functionType = 2;
@@ -673,6 +714,27 @@ package FunctionManglingWin mangleChangeAccess(FunctionManglingWin parsed, strin
         accessLevel = 1;
     else if(access == "public")
         accessLevel = 2;
+    else
+        assert(false);
+
+    parsed.flags = cast(char)('A' + accessLevel * 8 + functionType * 2) ~ parsed.flags[1..$];
+    return parsed;
+}
+
+version(Windows)
+package FunctionManglingWin mangleChangeFunctionType(FunctionManglingWin parsed, string functionTypeStr)
+{
+    // private / protected / public / none
+    uint accessLevel = (parsed.flags[0] - 'A') / 8;
+    // none / static / virtual / thunk
+    uint functionType = ((parsed.flags[0] - 'A') % 8) / 2;
+
+    if(functionTypeStr == "none")
+        functionType = 0;
+    else if(functionTypeStr == "static")
+        functionType = 1;
+    else if(functionTypeStr == "virtual")
+        functionType = 2;
     else
         assert(false);
 
@@ -760,6 +822,10 @@ package string changeWindowsMangling(string changeFuncs, string declaration, siz
                 {
                     afterCombiner = true;
                 }
+                else if(part == "~")
+                {
+                    afterCombiner = true;
+                }
                 else if(part == ";")
                 {
                     afterSemicolon = true;
@@ -807,7 +873,7 @@ package string changeWindowsMangling(string changeFuncs, string declaration, siz
         string attributes = declaration[0..attributesEnd];
         assert(parts.length >= 3, text(parts.length));
         string returnType;
-        if(declaration[parts[0].start..parts[0].end] != "this")
+        if(declaration[parts[0].start..parts[0].end] != "this" && declaration[parts[0].start..parts[0].end] != "~this")
         {
             returnType = declaration[attributesEnd..parts[0].end];
             parts = parts[1..$];
@@ -815,7 +881,7 @@ package string changeWindowsMangling(string changeFuncs, string declaration, siz
         assert(parts.length >= 3, text(parts.length));
         string name = declaration[parts[0].start..parts[0].end];
         parts = parts[1..$];
-        assert(isAlphaNum(name[0]) || name[0] == '_');
+        assert(isAlphaNum(name[0]) || name[0] == '_' || name == "~this");
         string params = declaration[parts[0].start..parts[0].end];
         parts = parts[1..$];
         assert(params.startsWith("("));
@@ -835,12 +901,16 @@ package string changeWindowsMangling(string changeFuncs, string declaration, siz
         code ~= "pragma(msg, q{" ~ name ~ "});";
         code ~= "pragma(msg, q{" ~ params ~ "});";*/
 
-        string dummyFunctionName = text("dummyFunctionForChangingMangling", line, "_", name);
+        string dummyFunctionName;
+        if(name == "~this")
+            dummyFunctionName = text("dummyFunctionForChangingMangling", line, "_destructor");
+        else
+            dummyFunctionName = text("dummyFunctionForChangingMangling", line, "_", name);
 
         code ~= "static";
         code ~= " " ~ usedAttributes;
         code ~= " " ~ returnType;
-        if(name == "this")
+        if(name == "this" || name == "~this")
             code ~= "void";
         code ~= " " ~ dummyFunctionName;
         code ~= params;
@@ -853,6 +923,7 @@ package string changeWindowsMangling(string changeFuncs, string declaration, siz
         code ~= "q{" ~ attributesUsedAfter ~ "}, ";
         code ~= "q{" ~ name ~ "}, ";
         code ~= "q{" ~ dummyFunctionName ~ "}, ";
+        code ~= "dqtimported!q{std.traits}.Parameters!" ~ dummyFunctionName ~ ".length, ";
         code ~= dummyFunctionName ~ ".mangleof";
         code ~= ")";
         code ~= "." ~ changeFuncs;
@@ -919,10 +990,10 @@ enum isWrapperCallable(alias F, Params...) = ()
         static if(Params.length > Parameters2!F.length)
             return false;
         else static if(!callableWithNParameters!(F, Params.length))
-			return false;
-		else
+            return false;
+        else
         {
-			bool r = true;
+            bool r = true;
             // The parameter types have to be checked with if to work around https://issues.dlang.org/show_bug.cgi?id=13140
             static foreach(i; 0..Params.length)
             {

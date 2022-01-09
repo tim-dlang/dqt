@@ -106,7 +106,7 @@ private:
     /+ friend class QPainter; +/
     /+ friend bool Q_GUI_EXPORT qHasPixmapTexture(const QBrush& brush); +/
     void detach(/+ Qt:: +/qt.core.namespace.BrushStyle newStyle);
-    void init_(ref const(QColor) color, /+ Qt:: +/qt.core.namespace.BrushStyle bs);
+    //void init_(ref const(QColor) color, /+ Qt:: +/qt.core.namespace.BrushStyle bs);
     QScopedPointer!(QBrushData, QBrushDataPointerDeleter) d;
     void cleanUp(QBrushData* x);
 

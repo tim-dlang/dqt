@@ -66,11 +66,13 @@ public:
     this(ref const(QString) fileName, const(char)* format = null, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor);
     version(QT_NO_IMAGEFORMAT_XPM){}else
     {
-        /+ explicit +/this(const(char)* /+ const +/ /+[0]+/* xpm);
+        //mixin(mangleWindows("??0QPixmap@@QEAA@QEBQEBD@Z", q{
+        /+ explicit +/this(const(char**) xpm);
+        //}));
     }
     @disable this(this);
     this(ref const(QPixmap) );
-    mixin(mangleWindows("??1QPixmap@@UEAA@XZ", q{
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     ~this();
     }));
     /+ref QPixmap operator =(ref const(QPixmap) );+/
@@ -82,7 +84,9 @@ public:
     /+auto opCast(T : QVariant)() const;+/
 
     bool isNull() const;
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     int devType() const;
+    }));
 
     int width() const;
     int height() const;
@@ -182,7 +186,9 @@ public:
 
     bool isQBitmap() const;
 
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     QPaintEngine paintEngine() const;
+    }));
 
     /+pragma(inline, true) bool operator !() const { return isNull(); }+/
 
@@ -192,7 +198,9 @@ public:
 #endif +/
 
 protected:
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     int metric(PaintDeviceMetric) const;
+    }));
     static QPixmap fromImageInPlace(ref QImage image, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor);
 
 private:

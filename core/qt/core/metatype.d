@@ -808,7 +808,7 @@ private:
 // ### Qt6: FIXME: Remove the special Q_CC_MSVC handling, it was introduced to maintain BC.
 #if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC)
 #ifndef Q_CLANG_QDOC +/
-    static if(!defined!"Q_NO_TEMPLATE_FRIENDS")
+    static if(!defined!"Q_NO_TEMPLATE_FRIENDS" && !versionIsSet!("Windows"))
     {
         /+ template<typename, bool> +/ /+ friend struct QtPrivate::ValueTypeIsMetaType; +/
         /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunction; +/
@@ -825,8 +825,8 @@ private:
     public:
     }
 /+ #endif +/
-    static bool registerConverterFunction(const(/+ QtPrivate:: +/AbstractConverterFunction)* f, int from, int to);
-    static void unregisterConverterFunction(int from, int to);
+/*    static bool registerConverterFunction(const(/+ QtPrivate:: +/AbstractConverterFunction)* f, int from, int to);
+    static void unregisterConverterFunction(int from, int to);*/
 private:
 
     TypedConstructor m_typedConstructor;

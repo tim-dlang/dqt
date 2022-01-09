@@ -58,7 +58,8 @@ public:
         OffsetName = 3
     }
 
-    @Q_MOVABLE_TYPE struct OffsetData {
+    // Workaround for https://issues.dlang.org/show_bug.cgi?id=20701
+    @Q_MOVABLE_TYPE extern(C++, struct) struct OffsetData {
         QString abbreviation;
         QDateTime atUtc;
         int offsetFromUtc;

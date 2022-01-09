@@ -47,22 +47,8 @@ version(QT_NO_DATASTREAM){}else
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QTableWidgetSelectionRange
 {
 public:
-    @disable this();
-    pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-    ref typeof(this) rawConstructor();
-    static typeof(this) create()
-    {
-        typeof(this) r = typeof(this).init;
-        r.rawConstructor();
-        return r;
-    }
-
     this(int top, int left, int bottom, int right);
     ~this();
-
-    @disable this(this);
-    this(ref const(QTableWidgetSelectionRange) other);
-    /+ref QTableWidgetSelectionRange operator =(ref const(QTableWidgetSelectionRange) other);+/
 
     pragma(inline, true) int topRow() const { return top; }
     pragma(inline, true) int bottomRow() const { return bottom; }
@@ -72,7 +58,7 @@ public:
     pragma(inline, true) int columnCount() const { return right - left + 1; }
 
 private:
-    int top; int left; int bottom; int right;
+    int top = -1; int left = -1; int bottom = -2; int right = -2;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

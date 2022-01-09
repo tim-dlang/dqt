@@ -165,7 +165,7 @@ public:
 private:
     enum { Dirty = -123, HfwCacheMaxSize = 3 }
 
-    pragma(inline, true) final bool useSizeCache() const;
+    //pragma(inline, true) final bool useSizeCache() const;
     final void updateCacheIfNecessary() const;
     pragma(inline, true) final void invalidateSizeCache() {
         q_cachedMinimumSize.setWidth(Dirty);

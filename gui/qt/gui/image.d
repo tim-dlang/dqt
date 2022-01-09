@@ -146,7 +146,9 @@ public:
 
     version(QT_NO_IMAGEFORMAT_XPM){}else
     {
-        /+ explicit +/this(const(char)* /+ const +/ /+[0]+/* xpm);
+        //mixin(mangleWindows("??0QImage@@QEAA@QEBQEBD@Z", q{
+        /+ explicit +/this(const(char**) xpm);
+        //}));
     }
     /+ explicit +/this(ref const(QString) fileName, const(char)* format = null);
 
@@ -155,7 +157,7 @@ public:
     /+ inline QImage(QImage &&other) noexcept
         : QPaintDevice(), d(nullptr)
     { qSwap(d, other.d); } +/
-    mixin(mangleWindows("??1QImage@@UEAA@XZ", q{
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     ~this();
     }));
 
@@ -167,7 +169,9 @@ public:
 
     bool isNull() const;
 
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     int devType() const;
+    }));
 
     /+bool operator ==(ref const(QImage) ) const;+/
     /+bool operator !=(ref const(QImage) ) const;+/
@@ -341,7 +345,9 @@ public:
 #endif +/
     qint64 cacheKey() const;
 
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     QPaintEngine paintEngine() const;
+    }));
 
     // Auxiliary data
     int dotsPerMeterX() const;
@@ -382,7 +388,9 @@ public:
 #endif +/
 
 protected:
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     /+ virtual +/ int metric(PaintDeviceMetric metric) const;
+    }));
     QImage mirrored_helper(bool horizontal, bool vertical) const;
     QImage rgbSwapped_helper() const;
     void mirrored_inplace(bool horizontal, bool vertical);

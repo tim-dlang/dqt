@@ -210,7 +210,7 @@ public:
 
 
     QUuid.Variant variant() const/+ noexcept+/;
-    QUuid.Version version_() const/+ noexcept+/;
+    //QUuid.Version version_() const/+ noexcept+/;
 
     static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {

@@ -55,16 +55,20 @@ public:
     /+ explicit +/this(int formatVersion/+ = -1+/);
     @disable this(this);
     this(ref const(QPicture) );
-    mixin(mangleWindows("??1QPicture@@UEAA@XZ", q{
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     ~this();
     }));
 
     bool isNull() const;
 
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     int devType() const;
+    }));
     uint size() const;
     const(char)* data() const;
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     /+ virtual +/ void setData(const(char)* data, uint size);
+    }));
 
     bool play(QPainter* p);
 
@@ -95,12 +99,16 @@ public:
     /+ QT_DEPRECATED +/ static QStringList outputFormatList();
 /+ #endif +/ // QT_DEPRECATED_SINCE(5, 10)
 
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     QPaintEngine paintEngine() const;
+    }));
 
 protected:
     this(ref QPicturePrivate data);
 
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     int metric(PaintDeviceMetric m) const;
+    }));
 
 private:
     bool exec(QPainter* p, ref QDataStream ds, int i);
@@ -181,7 +189,7 @@ private:
     /+ Q_DISABLE_COPY(QPictureIO) +/
 @disable this(this);
 /+this(ref const(QPictureIO));+//+ref QPictureIO operator =(ref const(QPictureIO));+/
-    void init_();
+    //void init_();
 
     QPictureIOData* d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
