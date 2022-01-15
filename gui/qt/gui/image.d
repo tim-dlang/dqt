@@ -185,24 +185,20 @@ public:
 
     Format format() const;
 
-/+    static if((!versionIsSet!("QT_COMPILING_QIMAGE_COMPAT_CPP") && defined!"Q_COMPILER_REF_QUALIFIERS"))
+/+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(QT_COMPILING_QIMAGE_COMPAT_CPP)
+    Q_REQUIRED_RESULT +/ /+ Q_ALWAYS_INLINE +/ pragma(inline, true) QImage convertToFormat(Format f, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const/+ &+/
+    { return convertToFormat_helper(f, flags); }
+    /+ Q_REQUIRED_RESULT +/ /+ Q_ALWAYS_INLINE QImage convertToFormat(Format f, Qt::ImageConversionFlags flags = Qt::AutoColor) &&
     {
-        /+ Q_REQUIRED_RESULT +/ /+ Q_ALWAYS_INLINE +/ pragma(inline, true) QImage convertToFormat(Format f, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const/+ &+/
-        { return convertToFormat_helper(f, flags); }
-        /+ Q_REQUIRED_RESULT +/ /+ Q_ALWAYS_INLINE +/ pragma(inline, true) QImage convertToFormat(Format f, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor)/+ &&+/
-        {
-            if (convertToFormat_inplace(f, flags))
-                return cast(QImage)(/+ std:: +/move(this));
-            else
-                return convertToFormat_helper(f, flags);
-        }
-    }
-    else
-    {
-        /+ Q_REQUIRED_RESULT +/ QImage convertToFormat(Format f, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const;
-    }
-+/
-    /+ Q_REQUIRED_RESULT +/ QImage convertToFormat(Format f, ref const(QVector!(QRgb)) colorTable, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const;
+        if (convertToFormat_inplace(f, flags))
+            return std::move(*this);
+        else
+            return convertToFormat_helper(f, flags);
+    } +/
+/+ #else
+    Q_REQUIRED_RESULT QImage convertToFormat(Format f, Qt::ImageConversionFlags flags = Qt::AutoColor) const;
+#endif
+    Q_REQUIRED_RESULT +/ QImage convertToFormat(Format f, ref const(QVector!(QRgb)) colorTable, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const;
     bool reinterpretAsFormat(Format f);
 
     void convertTo(Format f, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor);
@@ -302,22 +298,19 @@ public:
 /+ #endif +/ // QT_DEPRECATED_SINCE(5, 15)
     QImage transformed(ref const(QTransform) matrix, /+ Qt:: +/qt.core.namespace.TransformationMode mode = /+ Qt:: +/qt.core.namespace.TransformationMode.FastTransformation) const;
     static QTransform trueMatrix(ref const(QTransform) , int w, int h);
-    static if((!versionIsSet!("QT_COMPILING_QIMAGE_COMPAT_CPP") && defined!"Q_COMPILER_REF_QUALIFIERS"))
-    {
-        QImage mirrored(bool horizontally = false, bool vertically = true) const/+ &+/
-            { return mirrored_helper(horizontally, vertically); }
-        /+ QImage &&mirrored(bool horizontally = false, bool vertically = true) &&
-            { mirrored_inplace(horizontally, vertically); return std::move(*this); } +/
-        QImage rgbSwapped() const/+ &+/
-            { return rgbSwapped_helper(); }
-        /+ QImage &&rgbSwapped() &&
-            { rgbSwapped_inplace(); return std::move(*this); } +/
-    }
-    else
-    {
-        QImage mirrored(bool horizontally = false, bool vertically = true) const;
-        QImage rgbSwapped() const;
-    }
+/+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(QT_COMPILING_QIMAGE_COMPAT_CPP) +/
+    QImage mirrored(bool horizontally = false, bool vertically = true) const/+ &+/
+        { return mirrored_helper(horizontally, vertically); }
+    /+ QImage &&mirrored(bool horizontally = false, bool vertically = true) &&
+        { mirrored_inplace(horizontally, vertically); return std::move(*this); } +/
+    QImage rgbSwapped() const/+ &+/
+        { return rgbSwapped_helper(); }
+    /+ QImage &&rgbSwapped() &&
+        { rgbSwapped_inplace(); return std::move(*this); } +/
+/+ #else
+    QImage mirrored(bool horizontally = false, bool vertically = true) const;
+    QImage rgbSwapped() const;
+#endif +/
     void invertPixels(InvertMode /+ = InvertRgb +/);
 
     QColorSpace colorSpace() const;

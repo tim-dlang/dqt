@@ -122,12 +122,9 @@ struct QByteArrayDataPtr
         QByteArrayDataPtr holder = { qbytearray_literal.data_ptr() }; \
         return QByteArray(holder); \
     }()) \
-    /**/ +/
-static if(!versionIsSet!("QT_COMPILING_QSTRING_COMPAT_CPP") && defined!"Q_COMPILER_REF_QUALIFIERS")
-{
-/+ #    define Q_REQUIRED_RESULT
+    /**/
+#    define Q_REQUIRED_RESULT
 #    define Q_REQUIRED_RESULT_pushed +/
-}
 
 /// Binding for C++ class [QByteArray](https://doc.qt.io/qt-5/qbytearray.html).
 @Q_MOVABLE_TYPE @(QMetaType.Type.QByteArray) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QByteArray
@@ -317,40 +314,33 @@ alias Base64Options = QFlags!(Base64Option);
 #    define Q_REQUIRED_RESULT
 #    define Q_REQUIRED_RESULT_pushed
 #  endif
-    Q_REQUIRED_RESULT +/ 
-    static if((!versionIsSet!("QT_COMPILING_QSTRING_COMPAT_CPP") && defined!"Q_COMPILER_REF_QUALIFIERS"))
-    {
-        QByteArray toLower() const/+ &+/
-        { return toLower_helper(this); }
-        /+ Q_REQUIRED_RESULT +/ QByteArray toLower()/+ &&+/
-        { return toLower_helper(this); }
-        /+ Q_REQUIRED_RESULT +/ QByteArray toUpper() const/+ &+/
-        { return toUpper_helper(this); }
-        /+ Q_REQUIRED_RESULT +/ QByteArray toUpper()/+ &&+/
-        { return toUpper_helper(this); }
-        /+ Q_REQUIRED_RESULT +/ QByteArray trimmed() const/+ &+/
-        { return trimmed_helper(this); }
-        /+ Q_REQUIRED_RESULT +/ QByteArray trimmed()/+ &&+/
-        { return trimmed_helper(this); }
-        /+ Q_REQUIRED_RESULT +/ QByteArray simplified() const/+ &+/
-        { return simplified_helper(this); }
-        /+ Q_REQUIRED_RESULT +/ QByteArray simplified()/+ &&+/
-        { return simplified_helper(this); }
-    }
-    else
-    {
-    /+ #  ifdef Q_REQUIRED_RESULT_pushed
-    #    pragma pop_macro("Q_REQUIRED_RESULT")
-    #  endif
-    #else +/
-        /+ Q_REQUIRED_RESULT +/ QByteArray toLower() const;
-        /+ Q_REQUIRED_RESULT +/ QByteArray toUpper() const;
-        /+ Q_REQUIRED_RESULT +/ QByteArray trimmed() const;
-        /+ Q_REQUIRED_RESULT +/ QByteArray simplified() const;
-    }
-/+ #endif +/
+    Q_REQUIRED_RESULT +/ QByteArray toLower() const/+ &+/
+    { return toLower_helper(this); }
+    /+ Q_REQUIRED_RESULT +/ /+ QByteArray toLower() &&
+    { return toLower_helper(*this); } +/
+    /+ Q_REQUIRED_RESULT +/ QByteArray toUpper() const/+ &+/
+    { return toUpper_helper(this); }
+    /+ Q_REQUIRED_RESULT +/ /+ QByteArray toUpper() &&
+    { return toUpper_helper(*this); } +/
+    /+ Q_REQUIRED_RESULT +/ QByteArray trimmed() const/+ &+/
+    { return trimmed_helper(this); }
+    /+ Q_REQUIRED_RESULT +/ /+ QByteArray trimmed() &&
+    { return trimmed_helper(*this); } +/
+    /+ Q_REQUIRED_RESULT +/ QByteArray simplified() const/+ &+/
+    { return simplified_helper(this); }
+    /+ Q_REQUIRED_RESULT +/ /+ QByteArray simplified() &&
+    { return simplified_helper(*this); } +/
+/+ #  ifdef Q_REQUIRED_RESULT_pushed
+#    pragma pop_macro("Q_REQUIRED_RESULT")
+#  endif
+#else
+    Q_REQUIRED_RESULT QByteArray toLower() const;
+    Q_REQUIRED_RESULT QByteArray toUpper() const;
+    Q_REQUIRED_RESULT QByteArray trimmed() const;
+    Q_REQUIRED_RESULT QByteArray simplified() const;
+#endif
 
-    /+ Q_REQUIRED_RESULT +/ QByteArray leftJustified(int width, char fill = ' ', bool truncate = false) const;
+    Q_REQUIRED_RESULT +/ QByteArray leftJustified(int width, char fill = ' ', bool truncate = false) const;
     /+ Q_REQUIRED_RESULT +/ QByteArray rightJustified(int width, char fill = ' ', bool truncate = false) const;
 
     ref QByteArray prepend(char c);
@@ -482,17 +472,14 @@ alias Base64Options = QFlags!(Base64Option);
 
         /+/+ explicit +/ auto opCast(T : bool)() const/+ noexcept+/ { return decodingStatus == QByteArray.Base64DecodingStatus.Ok; }+/
 
-        static if(defined!"Q_COMPILER_REF_QUALIFIERS")
-        {
-            /+ref QByteArray operator *()/+ & noexcept+/ { return decoded; }+/
-            /+ref const(QByteArray) operator *() const/+ & noexcept+/ { return decoded; }+/
-            /+ QByteArray &&operator*() && noexcept { return std::move(decoded); } +/
-        }
-        else
-        {
-            /+ref QByteArray operator *()/+ noexcept+/ { return decoded; }+/
-            /+ref const(QByteArray) operator *() const/+ noexcept+/ { return decoded; }+/
-        }
+    /+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(Q_QDOC) +/
+        ref QByteArray opUnary(string op)()/+ & noexcept+/ if(op == "*") { return decoded; }
+        ref const(QByteArray) opUnary(string op)() const/+ & noexcept+/ if(op == "*") { return decoded; }
+        /+ QByteArray &&operator*() && noexcept { return std::move(decoded); } +/
+    /+ #else
+        QByteArray &operator*() noexcept { return decoded; }
+        const QByteArray &operator*() const noexcept { return decoded; }
+    #endif +/
         mixin(CREATE_CONVENIENCE_WRAPPERS);
     }
 
