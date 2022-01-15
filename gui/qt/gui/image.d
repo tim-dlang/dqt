@@ -185,10 +185,10 @@ public:
 
     Format format() const;
 
-/+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(QT_COMPILING_QIMAGE_COMPAT_CPP)
-    Q_REQUIRED_RESULT +/ /+ Q_ALWAYS_INLINE +/ pragma(inline, true) QImage convertToFormat(Format f, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const/+ &+/
+/+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(QT_COMPILING_QIMAGE_COMPAT_CPP) +/
+    /+ Q_REQUIRED_RESULT +/ /+ Q_ALWAYS_INLINE +/ pragma(inline, true) QImage convertToFormat(Format f, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const/+ &+/
     { return convertToFormat_helper(f, flags); }
-    /+ Q_REQUIRED_RESULT +/ /+ Q_ALWAYS_INLINE QImage convertToFormat(Format f, Qt::ImageConversionFlags flags = Qt::AutoColor) &&
+    /+ Q_REQUIRED_RESULT Q_ALWAYS_INLINE QImage convertToFormat(Format f, Qt::ImageConversionFlags flags = Qt::AutoColor) &&
     {
         if (convertToFormat_inplace(f, flags))
             return std::move(*this);
@@ -197,8 +197,8 @@ public:
     } +/
 /+ #else
     Q_REQUIRED_RESULT QImage convertToFormat(Format f, Qt::ImageConversionFlags flags = Qt::AutoColor) const;
-#endif
-    Q_REQUIRED_RESULT +/ QImage convertToFormat(Format f, ref const(QVector!(QRgb)) colorTable, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const;
+#endif +/
+    /+ Q_REQUIRED_RESULT +/ QImage convertToFormat(Format f, ref const(QVector!(QRgb)) colorTable, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const;
     bool reinterpretAsFormat(Format f);
 
     void convertTo(Format f, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor);

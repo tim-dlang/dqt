@@ -299,11 +299,11 @@ public:
 
     final int startTimer(int interval, /+ Qt:: +/qt.core.namespace.TimerType timerType = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer);
 /+ #if __has_include(<chrono>) +/
-    /+ Q_ALWAYS_INLINE +/
-/+        pragma(inline, true) final int startTimer(/+ std::chrono:: +/milliseconds time, /+ Qt:: +/qt.core.namespace.TimerType timerType = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer)
+    /+ Q_ALWAYS_INLINE
+    int startTimer(std::chrono::milliseconds time, Qt::TimerType timerType = Qt::CoarseTimer)
     {
         return startTimer(int(time.count()), timerType);
-    }+/
+    } +/
 /+ #endif +/
     final void killTimer(int id);
 

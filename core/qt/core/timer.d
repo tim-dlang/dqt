@@ -154,35 +154,35 @@ public /+ Q_SLOTS +/:
 
 public:
 /+ #if __has_include(<chrono>) || defined(Q_QDOC) +/
-/+    final void setInterval(/+ std::chrono:: +/milliseconds value)
+    /+ void setInterval(std::chrono::milliseconds value)
     {
         setInterval(int(value.count()));
-    }
+    } +/
 
-    final /+ std::chrono:: +/milliseconds intervalAsDuration() const
+    /+ std::chrono::milliseconds intervalAsDuration() const
     {
-        auto tmp = interval(); return /+ std:: +//+ chrono:: +/milliseconds(tmp);
-    }
+        return std::chrono::milliseconds(interval());
+    } +/
 
-    final /+ std::chrono:: +/milliseconds remainingTimeAsDuration() const
+    /+ std::chrono::milliseconds remainingTimeAsDuration() const
     {
-        auto tmp = remainingTime(); return /+ std:: +//+ chrono:: +/milliseconds(tmp);
-    }
+        return std::chrono::milliseconds(remainingTime());
+    } +/
 
-    static void singleShot(/+ std::chrono:: +/milliseconds value, const(QObject) receiver, const(char)* member)
+    /+ static void singleShot(std::chrono::milliseconds value, const QObject *receiver, const char *member)
     {
         singleShot(int(value.count()), receiver, member);
-    }
+    } +/
 
-    static void singleShot(/+ std::chrono:: +/milliseconds value, /+ Qt:: +/qt.core.namespace.TimerType timerType, const(QObject) receiver, const(char)* member)
+    /+ static void singleShot(std::chrono::milliseconds value, Qt::TimerType timerType, const QObject *receiver, const char *member)
     {
         singleShot(int(value.count()), timerType, receiver, member);
-    }
+    } +/
 
-    final void start(/+ std::chrono:: +/milliseconds value)
+    /+ void start(std::chrono::milliseconds value)
     {
         start(int(value.count()));
-    }+/
+    } +/
 /+ #endif +/
 
 protected:
@@ -202,15 +202,15 @@ private:
     }));
 
 /+ #if __has_include(<chrono>) +/
-/+    static /+ Qt:: +/qt.core.namespace.TimerType defaultTypeFor(/+ std::chrono:: +/milliseconds interval)
-    { return defaultTypeFor(int(interval.count())); }+/
+    /+ static Qt::TimerType defaultTypeFor(std::chrono::milliseconds interval)
+    { return defaultTypeFor(int(interval.count())); } +/
 
-/+    static void singleShotImpl(/+ std::chrono:: +/milliseconds interval, /+ Qt:: +/qt.core.namespace.TimerType timerType,
-                                   const(QObject) receiver, /+ QtPrivate:: +/qt.core.objectdefs_impl.QSlotObjectBase* slotObj)
+    /+ static void singleShotImpl(std::chrono::milliseconds interval, Qt::TimerType timerType,
+                               const QObject *receiver, QtPrivate::QSlotObjectBase *slotObj)
     {
         singleShotImpl(int(interval.count()),
                        timerType, receiver, slotObj);
-    }+/
+    } +/
 /+ #endif +/
 
     int id; int inter; int del;

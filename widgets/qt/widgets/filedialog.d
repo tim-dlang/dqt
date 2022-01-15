@@ -260,8 +260,8 @@ public:
                                            Options options = Options(),
                                            ref const(QStringList) supportedSchemes = globalInitVar!QStringList);
 
-/+    static void getOpenFileContent(ref const(QString) nameFilter,
-                                       ref const(/+ std:: +/function_!(ExternCPPFunc!(void function(ref const(QString) , ref const(QByteArray) )))) fileContentsReady);+/
+    /+ static void getOpenFileContent(const QString &nameFilter,
+                                   const std::function<void(const QString &, const QByteArray &)> &fileContentsReady); +/
     static void saveFileContent(ref const(QByteArray) fileContent, ref const(QString) fileNameHint = globalInitVar!QString);
 
 protected:

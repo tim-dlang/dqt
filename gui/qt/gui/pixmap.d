@@ -75,6 +75,7 @@ public:
     mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     ~this();
     }));
+
     /+ref QPixmap operator =(ref const(QPixmap) );+/
     /+ inline QPixmap &operator=(QPixmap &&other) noexcept
     { qSwap(data, other.data); return *this; } +/

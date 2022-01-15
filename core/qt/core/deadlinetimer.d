@@ -139,15 +139,15 @@ public:
             setPreciseRemainingTime(0, std::chrono::nanoseconds(remaining).count(), type_);
     } +/
 
-/+    /+ std::chrono:: +/nanoseconds remainingTimeAsDuration() const/+ noexcept+/
+    /+ std::chrono::nanoseconds remainingTimeAsDuration() const noexcept
     {
         if (isForever())
-            return /+ std:: +//+ chrono:: +/nanoseconds.max();
+            return std::chrono::nanoseconds::max();
         qint64 nsecs = rawRemainingTimeNSecs();
         if (nsecs <= 0)
-            return /+ std:: +//+ chrono:: +/nanoseconds.zero();
-        return /+ std:: +//+ chrono:: +/nanoseconds(nsecs);
-    }+/
+            return std::chrono::nanoseconds::zero();
+        return std::chrono::nanoseconds(nsecs);
+    } +/
 
     /+ template <class Rep, class Period> +/
     /+ friend QDeadlineTimer operator+(QDeadlineTimer dt, std::chrono::duration<Rep, Period> value)

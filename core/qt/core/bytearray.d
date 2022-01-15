@@ -313,22 +313,22 @@ alias Base64Options = QFlags!(Base64Option);
 #    undef Q_REQUIRED_RESULT
 #    define Q_REQUIRED_RESULT
 #    define Q_REQUIRED_RESULT_pushed
-#  endif
-    Q_REQUIRED_RESULT +/ QByteArray toLower() const/+ &+/
+#  endif +/
+    /+ Q_REQUIRED_RESULT +/ QByteArray toLower() const/+ &+/
     { return toLower_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QByteArray toLower() &&
+    /+ Q_REQUIRED_RESULT QByteArray toLower() &&
     { return toLower_helper(*this); } +/
     /+ Q_REQUIRED_RESULT +/ QByteArray toUpper() const/+ &+/
     { return toUpper_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QByteArray toUpper() &&
+    /+ Q_REQUIRED_RESULT QByteArray toUpper() &&
     { return toUpper_helper(*this); } +/
     /+ Q_REQUIRED_RESULT +/ QByteArray trimmed() const/+ &+/
     { return trimmed_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QByteArray trimmed() &&
+    /+ Q_REQUIRED_RESULT QByteArray trimmed() &&
     { return trimmed_helper(*this); } +/
     /+ Q_REQUIRED_RESULT +/ QByteArray simplified() const/+ &+/
     { return simplified_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QByteArray simplified() &&
+    /+ Q_REQUIRED_RESULT QByteArray simplified() &&
     { return simplified_helper(*this); } +/
 /+ #  ifdef Q_REQUIRED_RESULT_pushed
 #    pragma pop_macro("Q_REQUIRED_RESULT")
@@ -338,9 +338,9 @@ alias Base64Options = QFlags!(Base64Option);
     Q_REQUIRED_RESULT QByteArray toUpper() const;
     Q_REQUIRED_RESULT QByteArray trimmed() const;
     Q_REQUIRED_RESULT QByteArray simplified() const;
-#endif
+#endif +/
 
-    Q_REQUIRED_RESULT +/ QByteArray leftJustified(int width, char fill = ' ', bool truncate = false) const;
+    /+ Q_REQUIRED_RESULT +/ QByteArray leftJustified(int width, char fill = ' ', bool truncate = false) const;
     /+ Q_REQUIRED_RESULT +/ QByteArray rightJustified(int width, char fill = ' ', bool truncate = false) const;
 
     ref QByteArray prepend(char c);

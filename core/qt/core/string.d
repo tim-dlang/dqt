@@ -696,26 +696,26 @@ alias SectionFlags = QFlags!(SectionFlag);
 #    undef Q_REQUIRED_RESULT
 #    define Q_REQUIRED_RESULT
 #    define Q_REQUIRED_RESULT_pushed
-#  endif
-    Q_REQUIRED_RESULT +/ QString toLower() const/+ &+/
+#  endif +/
+    /+ Q_REQUIRED_RESULT +/ QString toLower() const/+ &+/
     { return toLower_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QString toLower() &&
+    /+ Q_REQUIRED_RESULT QString toLower() &&
     { return toLower_helper(*this); } +/
     /+ Q_REQUIRED_RESULT +/ QString toUpper() const/+ &+/
     { return toUpper_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QString toUpper() &&
+    /+ Q_REQUIRED_RESULT QString toUpper() &&
     { return toUpper_helper(*this); } +/
     /+ Q_REQUIRED_RESULT +/ QString toCaseFolded() const/+ &+/
     { return toCaseFolded_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QString toCaseFolded() &&
+    /+ Q_REQUIRED_RESULT QString toCaseFolded() &&
     { return toCaseFolded_helper(*this); } +/
     /+ Q_REQUIRED_RESULT +/ QString trimmed() const/+ &+/
     { return trimmed_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QString trimmed() &&
+    /+ Q_REQUIRED_RESULT QString trimmed() &&
     { return trimmed_helper(*this); } +/
     /+ Q_REQUIRED_RESULT +/ QString simplified() const/+ &+/
     { return simplified_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QString simplified() &&
+    /+ Q_REQUIRED_RESULT QString simplified() &&
     { return simplified_helper(*this); } +/
 /+ #  ifdef Q_REQUIRED_RESULT_pushed
 #    pragma pop_macro("Q_REQUIRED_RESULT")
@@ -726,8 +726,8 @@ alias SectionFlags = QFlags!(SectionFlag);
     Q_REQUIRED_RESULT QString toCaseFolded() const;
     Q_REQUIRED_RESULT QString trimmed() const;
     Q_REQUIRED_RESULT QString simplified() const;
-#endif
-    Q_REQUIRED_RESULT +/ QString toHtmlEscaped() const;
+#endif +/
+    /+ Q_REQUIRED_RESULT +/ QString toHtmlEscaped() const;
 
     ref QString insert(int i, QChar c);
     ref QString insert(int i, const(QChar)* uc, int len);
@@ -881,25 +881,25 @@ public:
 
     const(ushort)* utf16() const;
 
-/+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(QT_COMPILING_QSTRING_COMPAT_CPP) && !defined(Q_CLANG_QDOC)
-    Q_REQUIRED_RESULT +/ QByteArray toLatin1() const/+ &+/
+/+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(QT_COMPILING_QSTRING_COMPAT_CPP) && !defined(Q_CLANG_QDOC) +/
+    /+ Q_REQUIRED_RESULT +/ QByteArray toLatin1() const/+ &+/
     { return toLatin1_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QByteArray toLatin1() &&
+    /+ Q_REQUIRED_RESULT QByteArray toLatin1() &&
     { return toLatin1_helper_inplace(*this); } +/
     /+ Q_REQUIRED_RESULT +/ QByteArray toUtf8() const/+ &+/
     { return toUtf8_helper(this); }
-    /+ Q_REQUIRED_RESULT +/ /+ QByteArray toUtf8() &&
+    /+ Q_REQUIRED_RESULT QByteArray toUtf8() &&
     { return toUtf8_helper(*this); } +/
     /+ Q_REQUIRED_RESULT +/ QByteArray toLocal8Bit() const/+ &+/
     { return toLocal8Bit_helper(isNull() ? null : constData(), size()); }
-    /+ Q_REQUIRED_RESULT +/ /+ QByteArray toLocal8Bit() &&
+    /+ Q_REQUIRED_RESULT QByteArray toLocal8Bit() &&
     { return toLocal8Bit_helper(isNull() ? nullptr : constData(), size()); } +/
 /+ #else
     Q_REQUIRED_RESULT QByteArray toLatin1() const;
     Q_REQUIRED_RESULT QByteArray toUtf8() const;
     Q_REQUIRED_RESULT QByteArray toLocal8Bit() const;
-#endif
-    Q_REQUIRED_RESULT +/ QVector!(uint) toUcs4() const;
+#endif +/
+    /+ Q_REQUIRED_RESULT +/ QVector!(uint) toUcs4() const;
 
     // note - this are all inline so we can benefit from strlen() compile time optimizations
     pragma(inline, true) static QString fromLatin1(const(char)* str, int size = -1)
