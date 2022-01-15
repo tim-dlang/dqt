@@ -388,21 +388,21 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::ComponentFormattingOptions)//Q_DECLARE_OPERA
 
 // add operators for OR'ing the two types of flags
 /+pragma(inline, true) ref QUrl.FormattingOptions operator |=(ref QUrl.FormattingOptions i, QUrl.ComponentFormattingOptions f)
-{ i |= QUrl.UrlFormattingOption(cast(int)(f)); return i; }+/
+{ i |= cast(QUrl.UrlFormattingOption)(cast(int)(f)); return i; }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.UrlFormattingOption i, QUrl.ComponentFormattingOption f)
-{ return i | QUrl.UrlFormattingOption(int(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption)(int(f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.UrlFormattingOption i, QUrl.ComponentFormattingOptions f)
-{ return i | QUrl.UrlFormattingOption(cast(int)(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption)(cast(int)(f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.ComponentFormattingOption f, QUrl.UrlFormattingOption i)
-{ return i | QUrl.UrlFormattingOption(int(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption)(int(f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.ComponentFormattingOptions f, QUrl.UrlFormattingOption i)
-{ return i | QUrl.UrlFormattingOption(cast(int)(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption)(cast(int)(f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.FormattingOptions i, QUrl.ComponentFormattingOptions f)
-{ return i | QUrl.UrlFormattingOption(cast(int)(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption)(cast(int)(f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.ComponentFormattingOption f, QUrl.FormattingOptions i)
-{ return i | QUrl.UrlFormattingOption(int(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption)(int(f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.ComponentFormattingOptions f, QUrl.FormattingOptions i)
-{ return i | QUrl.UrlFormattingOption(cast(int)(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption)(cast(int)(f)); }+/
 
 //inline QUrl::UrlFormattingOption &operator=(const QUrl::UrlFormattingOption &i, QUrl::ComponentFormattingOptions f)
 //{ i = int(f); f; }

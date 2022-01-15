@@ -52,6 +52,7 @@ version(QT_NO_RAWFONT){}else
 
 
 extern(C++, class) struct QPainterPrivate;
+extern(C++, class) struct QTextEngine;
 
 extern(C++, class) struct QPainterPrivateDeleter;
 
@@ -59,7 +60,6 @@ extern(C++, class) struct QPainterPrivateDeleter;
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPainter
 {
 private:
-    import qt.core.namespace;
     /+ Q_DECLARE_PRIVATE(QPainter) +/
     mixin(Q_GADGET);
 

@@ -124,7 +124,7 @@ public:
     // no QT_DEPRECATED_SINCE because it is a virtual function
     /+ QT_DEPRECATED_X ("Use QListWidgetItem::setBackground() instead") +/
         /+ virtual +/ void setBackgroundColor(ref const(QColor) color)
-        { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, QVariant.fromValue(color)); }
+        { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, color); }
 
     pragma(inline, true) final QBrush background() const
         { return qvariant_cast!(QBrush)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }

@@ -85,7 +85,7 @@ public:
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const { return /+ Qt:: +/qt.core.namespace.Alignment(cast(QFlag)(align_)); }
 
     pragma(inline, true) void setTextDirection(/+ Qt:: +/qt.core.namespace.LayoutDirection aDirection) { this.direction = aDirection; }
-//    pragma(inline, true) /+ Qt:: +/qt.core.namespace.LayoutDirection textDirection() const { return /+ Qt:: +/qt.core.namespace.LayoutDirection(direction); }
+    pragma(inline, true) /+ Qt:: +/qt.core.namespace.LayoutDirection textDirection() const { return cast(/+ Qt:: +/qt.core.namespace.LayoutDirection)(direction); }
 
     enum WrapMode {
         NoWrap,

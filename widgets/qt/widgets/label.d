@@ -72,7 +72,7 @@ public:
         /+ QT_DEPRECATED_VERSION_X(5, 15, "Use the other overload which returns QPicture by-value") +/
             final const(QPicture)* picture() const; // ### Qt 7: Remove function
 
-//        final QPicture picture(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const;
+        final QPicture picture(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const;
     }
 /+ #  else
     QPicture picture(Qt::ReturnByValueConstant = Qt::ReturnByValue) const; // ### Qt 7: Remove arg

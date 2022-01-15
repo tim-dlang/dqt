@@ -317,7 +317,7 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
         static if(is(T==enum))
             QVariant v = QVariant(cast(int)value);
         else
-            QVariant v = QVariant(value);
+            QVariant v = QVariant.fromValue(value);
         setProperty(propertyId, v);
     }
     void clearProperty(int propertyId);
@@ -366,7 +366,7 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
     pragma(inline, true) void setLayoutDirection(/+ Qt:: +/qt.core.namespace.LayoutDirection direction)
         { setProperty(QTextFormat.Property.LayoutDirection, direction); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.LayoutDirection layoutDirection() const
-        { return /+ Qt:: +/cast(qt.core.namespace.LayoutDirection)(intProperty(QTextFormat.Property.LayoutDirection)); }
+        { return cast(/+ Qt:: +/qt.core.namespace.LayoutDirection)(intProperty(QTextFormat.Property.LayoutDirection)); }
 
 /*    pragma(inline, true) void setBackground(ref const(QBrush) brush)
     { setProperty(Property.BackgroundBrush, brush); }*/
@@ -496,8 +496,8 @@ public:
     pragma(inline, true) bool fontStrikeOut() const
     { return boolProperty(Property.FontStrikeOut); }
 
-/+    pragma(inline, true) void setUnderlineColor(ref const(QColor) color)
-    { setProperty(Property.TextUnderlineColor, color); }+/
+    pragma(inline, true) void setUnderlineColor(ref const(QColor) color)
+    { setProperty(Property.TextUnderlineColor, color); }
     pragma(inline, true) QColor underlineColor() const
     { return colorProperty(Property.TextUnderlineColor); }
 
@@ -544,8 +544,8 @@ public:
     pragma(inline, true) VerticalAlignment verticalAlignment() const
     { return static_cast!(VerticalAlignment)(intProperty(Property.TextVerticalAlignment)); }
 
-/+    pragma(inline, true) void setTextOutline(ref const(QPen) pen)
-    { setProperty(Property.TextOutline, pen); }+/
+    pragma(inline, true) void setTextOutline(ref const(QPen) pen)
+    { setProperty(Property.TextOutline, pen); }
     pragma(inline, true) QPen textOutline() const
     { return penProperty(Property.TextOutline); }
 
@@ -631,8 +631,8 @@ public:
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
     { auto tmp = cast(int)(aalignment); setProperty(Property.BlockAlignment, tmp); }
-/+    pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const
-    { int a = intProperty(Property.BlockAlignment); if (a == 0) a = /+ Qt:: +/qt.core.namespace.AlignmentFlag.AlignLeft; return QFlag(a); }+/
+    pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const
+    { int a = intProperty(Property.BlockAlignment); if (a == 0) a = /+ Qt:: +/qt.core.namespace.AlignmentFlag.AlignLeft; return qt.core.namespace.Alignment(QFlag(a)); }
 
     pragma(inline, true) void setTopMargin(qreal margin)
     { setProperty(Property.BlockTopMargin, margin); }
@@ -671,7 +671,7 @@ public:
 
     pragma(inline, true) void setLineHeight(qreal height, int heightType)
     { setProperty(Property.LineHeight, height); setProperty(Property.LineHeightType, heightType); }
-/+    pragma(inline, true) qreal lineHeight(qreal scriptLineHeight, qreal scaling) const
+    pragma(inline, true) qreal lineHeight(qreal scriptLineHeight, qreal scaling) const
     /+pragma(inline, true) qreal lineHeight(qreal scriptLineHeight, qreal scaling = 1.0) const+/
     {
       switch(intProperty(Property.LineHeightType)) {
@@ -689,7 +689,7 @@ public:
       }
       return(0);
     }
-+/
+
     pragma(inline, true) qreal lineHeight() const
     { return doubleProperty(Property.LineHeight); }
     pragma(inline, true) int lineHeightType() const
@@ -702,16 +702,16 @@ public:
 
     pragma(inline, true) void setPageBreakPolicy(PageBreakFlags flags)
     { auto tmp = cast(int)(flags); setProperty(Property.PageBreakPolicy, tmp); }
-/+    pragma(inline, true) PageBreakFlags pageBreakPolicy() const
-    { return PageBreakFlags(cast(QFlag)(intProperty(Property.PageBreakPolicy))); }+/
+    pragma(inline, true) PageBreakFlags pageBreakPolicy() const
+    { return PageBreakFlags(cast(QFlag)(intProperty(Property.PageBreakPolicy))); }
 
     void setTabPositions(ref const(QList!(QTextOption.Tab)) tabs);
     QList!(QTextOption.Tab) tabPositions() const;
 
     pragma(inline, true) void setMarker(MarkerType marker)
     { auto tmp = int(marker); setProperty(Property.BlockMarker, tmp); }
-    /+pragma(inline, true) MarkerType marker() const
-    { return MarkerType(intProperty(Property.BlockMarker)); }+/
+    pragma(inline, true) MarkerType marker() const
+    { return cast(MarkerType)(intProperty(Property.BlockMarker)); }
 
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
@@ -862,8 +862,8 @@ public:
     pragma(inline, true) qreal border() const
     { return doubleProperty(Property.FrameBorder); }
 
-/+    pragma(inline, true) void setBorderBrush(ref const(QBrush) brush)
-    { setProperty(Property.FrameBorderBrush, brush); }+/
+    pragma(inline, true) void setBorderBrush(ref const(QBrush) brush)
+    { setProperty(Property.FrameBorderBrush, brush); }
     pragma(inline, true) QBrush borderBrush() const
     { return brushProperty(Property.FrameBorderBrush); }
 
@@ -897,7 +897,7 @@ public:
     pragma(inline, true) qreal padding() const
     { return doubleProperty(Property.FramePadding); }
 
-/+    pragma(inline, true) void setWidth(qreal awidth)
+    pragma(inline, true) void setWidth(qreal awidth)
     { setProperty(Property.FrameWidth, QTextLength(QTextLength.Type.FixedLength, awidth)); }
     pragma(inline, true) void setWidth(ref const(QTextLength) length)
     { setProperty(Property.FrameWidth, length); }
@@ -907,14 +907,14 @@ public:
     pragma(inline, true) void setHeight(qreal aheight)
     { setProperty(Property.FrameHeight, QTextLength(QTextLength.Type.FixedLength, aheight)); }
     pragma(inline, true) void setHeight(ref const(QTextLength) aheight)
-    { setProperty(Property.FrameHeight, aheight); }+/
+    { setProperty(Property.FrameHeight, aheight); }
     pragma(inline, true) QTextLength height() const
     { return lengthProperty(Property.FrameHeight); }
 
     pragma(inline, true) void setPageBreakPolicy(PageBreakFlags flags)
     { auto tmp = cast(int)(flags); setProperty(Property.PageBreakPolicy, tmp); }
-/+    pragma(inline, true) PageBreakFlags pageBreakPolicy() const
-    { return PageBreakFlags(cast(QFlag)(intProperty(Property.PageBreakPolicy))); }+/
+    pragma(inline, true) PageBreakFlags pageBreakPolicy() const
+    { return PageBreakFlags(cast(QFlag)(intProperty(Property.PageBreakPolicy))); }
 
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
@@ -973,8 +973,8 @@ public:
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
     { auto tmp = cast(int)(aalignment); setProperty(Property.BlockAlignment, tmp); }
-/+    pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const
-    { return QFlag(intProperty(Property.BlockAlignment)); }+/
+    pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const
+    { return qt.core.namespace.Alignment(QFlag(intProperty(Property.BlockAlignment))); }
 
     pragma(inline, true) void setHeaderRowCount(int count)
     { setProperty(Property.TableHeaderRowCount, count); }
@@ -1113,7 +1113,7 @@ public:
         setRightBorderStyle(style);
     }
 
-/+    pragma(inline, true) void setTopBorderBrush(ref const(QBrush) brush)
+    pragma(inline, true) void setTopBorderBrush(ref const(QBrush) brush)
     { setProperty(Property.TableCellTopBorderBrush, brush); }
     pragma(inline, true) QBrush topBorderBrush() const
     { return brushProperty(Property.TableCellTopBorderBrush); }
@@ -1140,7 +1140,6 @@ public:
         setLeftBorderBrush(brush);
         setRightBorderBrush(brush);
     }
-+/
 
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);

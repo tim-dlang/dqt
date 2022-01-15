@@ -58,8 +58,8 @@ public:
     final void setAllowedAreas(/+ Qt:: +/qt.core.namespace.ToolBarAreas areas);
     final /+ Qt:: +/qt.core.namespace.ToolBarAreas allowedAreas() const;
 
-/+    pragma(inline, true) final bool isAreaAllowed(/+ Qt:: +/qt.core.namespace.ToolBarArea area) const
-    { return (allowedAreas() & area) == area; }+/
+    pragma(inline, true) final bool isAreaAllowed(/+ Qt:: +/qt.core.namespace.ToolBarArea area) const
+    { return (allowedAreas() & area) == area; }
 
     final void setOrientation(/+ Qt:: +/qt.core.namespace.Orientation orientation);
     final /+ Qt:: +/qt.core.namespace.Orientation orientation() const;

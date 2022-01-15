@@ -33,7 +33,6 @@ version(QT_NO_RAWFONT){}else
     import qt.gui.rawfont;
 }
 
-extern(C++, class) struct QTextEngine;
 /+ #ifndef QT_NO_RAWFONT
 class QRawFont;
 #endif +/

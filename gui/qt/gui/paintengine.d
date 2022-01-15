@@ -223,7 +223,7 @@ alias DirtyFlags = QFlags!(DirtyFlag);
         state.dirtyFlags &= ~static_cast!(uint)(df);
     }
 
-    //final bool hasFeature(PaintEngineFeatures feature) const { return cast(bool)(gccaps & feature); }
+    final bool hasFeature(PaintEngineFeatures feature) const { return cast(bool)(gccaps & feature); }
 
     final QPainter* painter() const;
 

@@ -71,12 +71,12 @@ public:
 
     version(QT_NO_INTEGER_EVENT_COORDINATES){}else
     {
-/+        pragma(inline, true) final QPoint pos() const { return l.toPoint(); }
+        pragma(inline, true) final QPoint pos() const { return l.toPoint(); }
         pragma(inline, true) final QPoint globalPos() const { return s.toPoint(); }
         pragma(inline, true) final int x() const { return qRound(l.x()); }
         pragma(inline, true) final int y() const { return qRound(l.y()); }
         pragma(inline, true) final int globalX() const { return qRound(s.x()); }
-        pragma(inline, true) final int globalY() const { return qRound(s.y()); }+/
+        pragma(inline, true) final int globalY() const { return qRound(s.y()); }
     }
     final ref const(QPointF) localPos() const { return l; }
     final ref const(QPointF) windowPos() const { return w; }
@@ -106,12 +106,12 @@ public:
 
     version(QT_NO_INTEGER_EVENT_COORDINATES){}else
     {
-    /+    pragma(inline, true) final QPoint pos() const { return l.toPoint(); }
+        pragma(inline, true) final QPoint pos() const { return l.toPoint(); }
         pragma(inline, true) final QPoint globalPos() const { return s.toPoint(); }
         pragma(inline, true) final int x() const { return qRound(l.x()); }
         pragma(inline, true) final int y() const { return qRound(l.y()); }
         pragma(inline, true) final int globalX() const { return qRound(s.x()); }
-        pragma(inline, true) final int globalY() const { return qRound(s.y()); }+/
+        pragma(inline, true) final int globalY() const { return qRound(s.y()); }
     }
     final ref const(QPointF) localPos() const { return l; }
     final ref const(QPointF) windowPos() const { return w; }
@@ -149,8 +149,8 @@ public:
 
     version(QT_NO_INTEGER_EVENT_COORDINATES){}else
     {
-       /+ pragma(inline, true) final QPoint pos() const { return p.toPoint(); }
-        pragma(inline, true) final QPoint oldPos() const { return op.toPoint(); }+/
+        pragma(inline, true) final QPoint pos() const { return p.toPoint(); }
+        pragma(inline, true) final QPoint oldPos() const { return op.toPoint(); }
     }
 
     pragma(inline, true) final ref const(QPointF) posF() const { return p; }
@@ -209,7 +209,7 @@ public:
         pragma(inline, true) final /+ Qt:: +/qt.core.namespace.Orientation orientation() const { return qt4O; }
     version(QT_NO_INTEGER_EVENT_COORDINATES){}else
     {
-      /+  /+ QT_DEPRECATED_VERSION_X_5_15("Use position()") +/
+        /+ QT_DEPRECATED_VERSION_X_5_15("Use position()") +/
             pragma(inline, true) final QPoint pos() const { return p.toPoint(); }
         /+ QT_DEPRECATED_VERSION_X_5_15("Use globalPosition()") +/
             pragma(inline, true) final QPoint globalPos()   const { return g.toPoint(); }
@@ -220,7 +220,7 @@ public:
         /+ QT_DEPRECATED_VERSION_X_5_15("Use globalPosition()") +/
             pragma(inline, true) final int globalX() const { return cast(int)(g.x()); }
         /+ QT_DEPRECATED_VERSION_X_5_15("Use globalPosition()") +/
-            pragma(inline, true) final int globalY() const { return cast(int)(g.y()); }+/
+            pragma(inline, true) final int globalY() const { return cast(int)(g.y()); }
     }
     /+ QT_DEPRECATED_VERSION_X_5_15("Use position()") +/
         pragma(inline, true) final ref const(QPointF) posF() const { return p; }
@@ -233,10 +233,10 @@ public:
 
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.MouseButtons buttons() const { return mouseState; }
 
-//    pragma(inline, true) final /+ Qt:: +/qt.core.namespace.ScrollPhase phase() const { return /+ Qt:: +/qt.core.namespace.ScrollPhase(ph); }
+    pragma(inline, true) final /+ Qt:: +/qt.core.namespace.ScrollPhase phase() const { return cast(/+ Qt:: +/qt.core.namespace.ScrollPhase)(ph); }
     pragma(inline, true) final bool inverted() const { return invertedScrolling; }
 
-//    final /+ Qt:: +/qt.core.namespace.MouseEventSource source() const { return /+ Qt:: +/qt.core.namespace.MouseEventSource(src); }
+    final /+ Qt:: +/qt.core.namespace.MouseEventSource source() const { return cast(/+ Qt:: +/qt.core.namespace.MouseEventSource)(src); }
 
 protected:
     QPointF p;
@@ -329,8 +329,8 @@ public:
                      /+ Qt:: +/qt.core.namespace.MouseButton button, /+ Qt:: +/qt.core.namespace.MouseButtons buttons);
     ~this();
 
-//    pragma(inline, true) final QPoint pos() const { return mPos.toPoint(); }
-//    pragma(inline, true) final QPoint globalPos() const { return mGPos.toPoint(); }
+    pragma(inline, true) final QPoint pos() const { return mPos.toPoint(); }
+    pragma(inline, true) final QPoint globalPos() const { return mGPos.toPoint(); }
 /+ #if QT_DEPRECATED_SINCE(5,0)
     QT_DEPRECATED inline const QPointF &hiResGlobalPos() const { return mPos; }
 #endif +/
@@ -338,20 +338,20 @@ public:
     pragma(inline, true) final ref const(QPointF) posF() const { return mPos; }
     pragma(inline, true) final ref const(QPointF) globalPosF() const { return mGPos; }
 
-/+    pragma(inline, true) final int x() const { return qRound(mPos.x()); }
+    pragma(inline, true) final int x() const { return qRound(mPos.x()); }
     pragma(inline, true) final int y() const { return qRound(mPos.y()); }
     pragma(inline, true) final int globalX() const { return qRound(mGPos.x()); }
-    pragma(inline, true) final int globalY() const { return qRound(mGPos.y()); }+/
+    pragma(inline, true) final int globalY() const { return qRound(mGPos.y()); }
 /+ #if QT_DEPRECATED_SINCE(5, 15) +/
     /+ QT_DEPRECATED_VERSION_X_5_15("use globalPosF().x()") +/
         pragma(inline, true) final qreal hiResGlobalX() const { return mGPos.x(); }
     /+ QT_DEPRECATED_VERSION_X_5_15("use globalPosF().y()") +/
         pragma(inline, true) final qreal hiResGlobalY() const { return mGPos.y(); }
-/+    /+ QT_DEPRECATED_VERSION_X_5_15("Use deviceType()") +/
-        pragma(inline, true) final TabletDevice device() const { return TabletDevice(mDev); }
+    /+ QT_DEPRECATED_VERSION_X_5_15("Use deviceType()") +/
+        pragma(inline, true) final TabletDevice device() const { return cast(TabletDevice)(mDev); }
 /+ #endif +/
-    pragma(inline, true) final TabletDevice deviceType() const { return TabletDevice(mDev); }
-    pragma(inline, true) final PointerType pointerType() const { return PointerType(mPointerType); }+/
+    pragma(inline, true) final TabletDevice deviceType() const { return cast(TabletDevice)(mDev); }
+    pragma(inline, true) final PointerType pointerType() const { return cast(PointerType)(mPointerType); }
     pragma(inline, true) final qint64 uniqueId() const { return mUnique; }
     pragma(inline, true) final qreal pressure() const { return mPress; }
     pragma(inline, true) final int z() const { return mZ; }
@@ -391,12 +391,12 @@ public:
     final /+ Qt:: +/qt.core.namespace.NativeGestureType gestureType() const { return mGestureType; }
     final qreal value() const { return mRealValue; }
 
-/+    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
     {
         pragma(inline, true) final const(QPoint) pos() const { return mLocalPos.toPoint(); }
         pragma(inline, true) final const(QPoint) globalPos() const { return mScreenPos.toPoint(); }
     }
-+/
+
     final ref const(QPointF) localPos() const { return mLocalPos; }
     final ref const(QPointF) windowPos() const { return mWindowPos; }
     final ref const(QPointF) screenPos() const { return mScreenPos; }
@@ -640,7 +640,7 @@ public:
     pragma(inline, true) final ref const(QPoint) pos() const { return p; }
     pragma(inline, true) final ref const(QPoint) globalPos() const { return gp; }
 
-//    pragma(inline, true) final Reason reason() const { return Reason(reas); }
+    pragma(inline, true) final Reason reason() const { return cast(Reason)(reas); }
 
 protected:
     QPoint p;
@@ -757,7 +757,7 @@ public:
     }));
     ~this();
 
-//    pragma(inline, true) final QPoint pos() const { return p.toPoint(); }
+    pragma(inline, true) final QPoint pos() const { return p.toPoint(); }
     pragma(inline, true) final ref const(QPointF) posF() const { return p; }
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.MouseButtons mouseButtons() const { return mouseState; }
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.KeyboardModifiers keyboardModifiers() const { return modState; }

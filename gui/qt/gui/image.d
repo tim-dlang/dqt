@@ -146,9 +146,7 @@ public:
 
     version(QT_NO_IMAGEFORMAT_XPM){}else
     {
-        //mixin(mangleWindows("??0QImage@@QEAA@QEBQEBD@Z", q{
         /+ explicit +/this(const(char**) xpm);
-        //}));
     }
     /+ explicit +/this(ref const(QString) fileName, const(char)* format = null);
 

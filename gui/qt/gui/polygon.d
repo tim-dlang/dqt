@@ -67,13 +67,12 @@ public:
     QRect boundingRect() const;
 
     void point(int i, int* x, int* y) const;
-/+    pragma(inline, true) QPoint point(int index) const
+    pragma(inline, true) QPoint point(int index) const
     { return at(index); }
     pragma(inline, true) void setPoint(int index, int x, int y)
     { (this)[index] = QPoint(x, y); }
     pragma(inline, true) void setPoint(int index, ref const(QPoint) pt)
     { (this)[index] = pt; }
-+/
     void setPoints(int nPoints, const(int)* points);
     void setPoints(int nPoints, int firstx, int firsty, ...);
     void putPoints(int index, int nPoints, const(int)* points);

@@ -66,9 +66,7 @@ public:
     this(ref const(QString) fileName, const(char)* format = null, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor);
     version(QT_NO_IMAGEFORMAT_XPM){}else
     {
-        //mixin(mangleWindows("??0QPixmap@@QEAA@QEBQEBD@Z", q{
         /+ explicit +/this(const(char**) xpm);
-        //}));
     }
     @disable this(this);
     this(ref const(QPixmap) );
