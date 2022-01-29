@@ -54,7 +54,7 @@ template QTypeInfo(T)
         enum isComplex = false;
         enum isStatic = false;
     }
-    else static if(is(T == int) || is(T == uint) || is(T == double))
+    else static if(is(T == int) || is(T == uint) || is(T == double) || is(T == char))
     {
         enum isRelocatable = true;
         enum isComplex = false;
@@ -90,6 +90,12 @@ template QTypeInfo(T)
         enum isComplex = false;
         enum isStatic = false;
     }
+    else static if(qIsTrivial!T)
+    {
+        enum isRelocatable = qIsRelocatable!T;
+        enum isComplex = !qIsTrivial!T;
+        enum isStatic = true;
+    }
     else static if(getUDAs!(T, QTypeInfoFlags).length)
     {
         enum combinedFlags = (){
@@ -111,7 +117,7 @@ template QTypeInfo(T)
         enum isStatic = true;
     }
     enum isLarge = T.sizeof > (void*).sizeof;
-    
+
     //pragma(msg, T.stringof, " ", isRelocatable, isComplex, isStatic, isLarge);
 }
 alias QTypeInfoQuery = QTypeInfo;

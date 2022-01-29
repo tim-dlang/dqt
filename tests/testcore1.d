@@ -150,6 +150,7 @@ void checkType(T, bool relocatable, bool complex, bool static_)()
 
 unittest
 {
+    import core.stdc.wchar_;
     import qt.core.abstractitemmodel;
     import qt.core.bytearray;
     import qt.core.itemselectionmodel;
@@ -159,6 +160,7 @@ unittest
     import qt.core.pair;
     import qt.core.point;
     import qt.core.size;
+    import qt.core.stringview;
     import qt.core.timezone;
     import qt.core.url;
 
@@ -168,6 +170,9 @@ unittest
     checkType!(int*, 1, 0, 0)();
     checkType!(void*, 1, 0, 0)();
     checkType!(void, 0, 0, 0)();
+    checkType!(char, 1, 0, 0)();
+    checkType!(wchar, 1, 0, 1)();
+    checkType!(wchar_t, 1, 0, 1)();
     checkType!(QLocale.Country, 1, 0, 1)();
     checkType!(/+ Qt:: +/qt.core.namespace.DayOfWeek, 1, 0, 1)();
     checkType!(QTimeZone.OffsetData, 1, 1, 0)();
@@ -185,6 +190,7 @@ unittest
     checkType!(QSize, 1, 1, 0)();
     checkType!(QString, 1, 1, 0)();
     checkType!(QStringRef, 1, 0, 0)();
+    checkType!(QStringView, 1, 0, 0)();
     checkType!(QUrl, 1, 1, 0)();
     checkType!(QVariant, 1, 1, 0)();
     checkType!(QAbstractItemModel, 1, 0, 0)();
