@@ -15,9 +15,9 @@ extern(C++):
 import qt.config;
 import qt.core.flags;
 import qt.core.global;
+import qt.core.metamacros;
 import qt.core.metatype;
 import qt.core.namespace;
-import qt.core.objectdefs;
 import qt.core.typeinfo;
 import qt.core.variant;
 import qt.helpers;

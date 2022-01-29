@@ -15,7 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.bytearray;
 import qt.core.list;
-import qt.core.objectdefs;
+import qt.core.metamacros;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.gui.font;

@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.coreevent;
 import qt.core.list;
+import qt.core.metamacros;
 import qt.core.metaobject;
 import qt.core.metatype;
 import qt.core.namespace;
@@ -256,12 +257,12 @@ protected:
         is done by the [Meta-Object Compiler](https://doc.qt.io/qt-5/moc.html)
         for C++ classes.
     +/
-    enum Q_OBJECT = qt.core.objectdefs.Q_OBJECT;
+    enum Q_OBJECT = qt.core.metamacros.Q_OBJECT;
     /// ditto
-    enum Q_OBJECT_D = qt.core.objectdefs.Q_OBJECT_D;
+    enum Q_OBJECT_D = qt.core.metamacros.Q_OBJECT_D;
 
     /// String constant for mixin in every signal in classes implemnted in D.
-    enum Q_SIGNAL_IMPL_D = qt.core.objectdefs.Q_SIGNAL_IMPL_D;
+    enum Q_SIGNAL_IMPL_D = qt.core.metamacros.Q_SIGNAL_IMPL_D;
 
 public:
 

@@ -17,7 +17,7 @@ import qt.helpers;
 static if(!defined!"QT_NO_STANDARDPATHS")
 {
     import qt.core.flags;
-    import qt.core.objectdefs;
+    import qt.core.metamacros;
     import qt.core.string;
     import qt.core.stringlist;
 }

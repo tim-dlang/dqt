@@ -14,8 +14,8 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
+import qt.core.metamacros;
 import qt.core.metatype;
-import qt.core.objectdefs;
 import qt.core.shareddata;
 import qt.core.string;
 import qt.core.stringlist;

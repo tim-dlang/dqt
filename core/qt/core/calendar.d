@@ -15,7 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.datetime;
 import qt.core.locale;
-import qt.core.objectdefs;
+import qt.core.metamacros;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.core.stringview;

@@ -14,8 +14,8 @@ extern(C++):
 
 import qt.config;
 import qt.core.bytearray;
+import qt.core.metamacros;
 import qt.core.metatype;
-import qt.core.objectdefs;
 import qt.core.point;
 import qt.core.typeinfo;
 import qt.core.variant;

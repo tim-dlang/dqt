@@ -14,8 +14,8 @@ extern(C++):
 
 import qt.config;
 import qt.core.bytearray;
+import qt.core.metamacros;
 import qt.core.object;
-import qt.core.objectdefs;
 import qt.helpers;
 
 extern(C++, class) struct QEventPrivate;
