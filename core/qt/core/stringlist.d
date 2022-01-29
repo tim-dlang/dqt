@@ -116,8 +116,10 @@ public:
     /+ inline QStringList(QList<QString> &&l) noexcept : QList<QString>(std::move(l)) { } +/
     /+ inline QStringList(std::initializer_list<QString> args) : QList<QString>(args) { } +/
     /+ template <typename InputIterator, QtPrivate::IfIsInputIterator<InputIterator> = true> +/
-    /+ inline QStringList(InputIterator first, InputIterator last)
-        : QList<QString>(first, last) { } +/
+    pragma(inline, true) this(InputIterator,)(InputIterator first, InputIterator last)
+    {
+        this.QList!(QString) = typeof(this.QList!(QString))(first, last);
+    }
 
     /+ref QStringList operator =(ref const(QList!(QString)) other)
     { QList!(QString).operator=(other); return this; }+/

@@ -223,10 +223,10 @@ public:
     }
 
     /+ template <typename D, if_same_type<D> = true> +/
-    /+ explicit QScopedArrayPointer(D *p)
-        : QScopedPointer<T, Cleanup>(p)
+    /+ explicit +/this(D,)(D* p)
     {
-    } +/
+        this.QScopedPointer!(T, Cleanup) = p;
+    }
 
     pragma(inline, true) final ref T opIndex(int i)
     {

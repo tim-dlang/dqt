@@ -45,9 +45,10 @@ public:
     // not ambiguous. Implementation detail that should not be documented.
     /+ template<char = 0>
 #endif +/
-    /+ QFontMetrics(const QFont &font, const QPaintDevice *pd)
-        : QFontMetrics(font, const_cast<QPaintDevice*>(pd))
-    {} +/
+    this(ref const(QFont) font, const(QPaintDevice) pd)
+    {
+        this(font, const_cast!(QPaintDevice)(pd));
+    }
 /+ #else
     QFontMetrics(const QFont &font, const QPaintDevice *pd);
 #endif +/
@@ -142,9 +143,10 @@ public:
     // not ambiguous. Implementation detail that should not be documented.
     /+ template<char = 0>
 #endif +/
-    /+ QFontMetricsF(const QFont &font, const QPaintDevice *pd)
-        : QFontMetricsF(font, const_cast<QPaintDevice*>(pd))
-    {} +/
+    this(ref const(QFont) font, const(QPaintDevice) pd)
+    {
+        this(font, const_cast!(QPaintDevice)(pd));
+    }
 /+ #else
     QFontMetricsF(const QFont &font, const QPaintDevice *pd);
 #endif +/

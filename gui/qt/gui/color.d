@@ -252,7 +252,7 @@ private:
 
     void invalidate()/+ noexcept+/;
     /+ template <typename String> +/
-    /+ bool setColorFromString(String name); +/
+    bool setColorFromString(String)(String name);
 
     static bool isRgbaValid(int r, int g, int b, int a = 255)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    {

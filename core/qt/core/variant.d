@@ -67,11 +67,7 @@ class QEasingCurve;
 class QRegularExpression;
 #endif +/ // QT_CONFIG(regularexpression)
 
-version(QT_MOC)
-{
-pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) );
-}
-
+// pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) );
 
 extern(C++, "QtPrivate") {
 
@@ -353,7 +349,7 @@ extern(C++, "QtPrivate") {
     pragma(inline, true) const(void)* data() const { return constData(); }
 
     /+ template<typename T> +/
-    /+ inline void setValue(const T &value); +/
+    pragma(inline, true) void setValue(T)(ref const(T) value);
 
     pragma(inline, true) T value(T)() const
     { return qvariant_cast!T(this); }
@@ -375,8 +371,8 @@ extern(C++, "QtPrivate") {
 #endif +/
 
     /+ template<typename T> +/
-    /+ bool canConvert() const
-    { return canConvert(qMetaTypeId<T>()); } +/
+    bool canConvert(T)() const
+    { return canConvert(qMetaTypeId!(T)()); }
 
  public:
     struct PrivateShared

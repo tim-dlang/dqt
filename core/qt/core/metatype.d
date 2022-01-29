@@ -640,30 +640,30 @@ alias TypeFlags = QFlags!(TypeFlag);
 
 public:
     /+ template<typename T> +/
-    /+ static bool registerComparators()
+    static bool registerComparators(T)()
     {
-        Q_STATIC_ASSERT_X((!QMetaTypeId2<T>::IsBuiltIn),
-            "QMetaType::registerComparators: The type must be a custom type.");
+        mixin(Q_STATIC_ASSERT_X(q{(!QMetaTypeId2!(T).IsBuiltIn)},
+                q{"QMetaType::registerComparators: The type must be a custom type."}));
 
-        const int typeId = qMetaTypeId<T>();
-        static const QtPrivate::BuiltInComparatorFunction<T> f;
+        const(int) typeId = qMetaTypeId!(T)();
+        extern(D) static __gshared const(/+ QtPrivate:: +/BuiltInComparatorFunction!(T)) f;
         return registerComparatorFunction( &f, typeId);
-    } +/
+    }
     /+ template<typename T> +/
-    /+ static bool registerEqualsComparator()
+    static bool registerEqualsComparator(T)()
     {
-        Q_STATIC_ASSERT_X((!QMetaTypeId2<T>::IsBuiltIn),
-            "QMetaType::registerEqualsComparator: The type must be a custom type.");
-        const int typeId = qMetaTypeId<T>();
-        static const QtPrivate::BuiltInEqualsComparatorFunction<T> f;
+        mixin(Q_STATIC_ASSERT_X(q{(!QMetaTypeId2!(T).IsBuiltIn)},
+                q{"QMetaType::registerEqualsComparator: The type must be a custom type."}));
+        const(int) typeId = qMetaTypeId!(T)();
+        extern(D) static __gshared const(/+ QtPrivate:: +/BuiltInEqualsComparatorFunction!(T)) f;
         return registerComparatorFunction( &f, typeId);
-    } +/
+    }
 
     /+ template<typename T> +/
-    /+ static bool hasRegisteredComparators()
+    static bool hasRegisteredComparators(T)()
     {
-        return hasRegisteredComparators(qMetaTypeId<T>());
-    } +/
+        return hasRegisteredComparators(qMetaTypeId!(T)());
+    }
     static bool hasRegisteredComparators(int typeId);
 
 

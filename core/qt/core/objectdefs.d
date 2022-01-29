@@ -1067,7 +1067,7 @@ extern(C++, "QtPrivate") {
     /* Trait that tells is a the Object has a Q_OBJECT macro */
     struct HasQ_OBJECT_Macro(Object) {
         /+ template <typename T> +/
-        /+ static char test(int (T::*)(QMetaObject::Call, int, void **)); +/
+        static char test(T)(ExternCPPFunc!(int function(QMetaObject.Call, int, void** ))/+ T::* +/ );
         static int test(ExternCPPFunc!(int function(QMetaObject.Call, int, void** ))/+ Object::* +/ );
         enum { Value =  (test(&Object.qt_metacall)). sizeof == int.sizeof }
     }

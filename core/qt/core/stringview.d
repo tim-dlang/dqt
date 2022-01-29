@@ -128,12 +128,10 @@ private:
 #endif
         return QtPrivate::qustrlen(reinterpret_cast<const ushort *>(str));
     } +/
-    static qsizetype lengthHelperPointer(const(QChar)* str)/+ noexcept+/
+    /+ static qsizetype lengthHelperPointer(const QChar *str) noexcept
     {
-        import qt.core.stringalgorithms;
-
-        return /+ QtPrivate:: +/qt.core.stringalgorithms.qustrlen(reinterpret_cast!(const(ushort)*)(str));
-    }
+        return QtPrivate::qustrlen(reinterpret_cast<const ushort *>(str));
+    } +/
 
     static const(storage_type) *castHelper(Char)(const Char *str) /*noexcept*/
     { return reinterpret_cast!(const storage_type*)(str); }
@@ -161,8 +159,10 @@ public:
     }
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    /+ QStringView(const Char *f, const Char *l)
-        : QStringView(f, l - f) {} +/
+    this(Char,)(const(Char)* f, const(Char)* l) if(is(Char == QChar) || is(Char == ushort) || is(Char == wchar))
+    {
+        this(f, l - f);
+    }
 
 /+ #ifdef Q_CLANG_QDOC
     template <typename Char, size_t N>
@@ -173,36 +173,42 @@ public:
 #else
 #if QT_DEPRECATED_SINCE(5, 14) +/
     /+ template <typename Array, if_compatible_array<Array> = true> +/
-    /+ QT_DEPRECATED_VERSION_X_5_14(R"(Use u"~~~" or QStringView(u"~~~") instead of QStringViewLiteral("~~~"))")
-    QStringView(const Array &str, QtPrivate::Deprecated_t) noexcept
-        : QStringView(str, lengthHelperArray(str)) {} +/
-/+ #endif // QT_DEPRECATED_SINCE
+    /+ QT_DEPRECATED_VERSION_X_5_14(R"(Use u"~~~" or QStringView(u"~~~") instead of QStringViewLiteral("~~~"))") +/
+        this(Array,)(ref const(Array) str, /+ QtPrivate:: +/qt.core.global.Deprecated_t)/+ noexcept+/
+        {
+            this(str, lengthHelperArray(str));
+        }
+/+ #endif +/ // QT_DEPRECATED_SINCE
 
-    template <typename Array, if_compatible_array<Array> = true>
-    QStringView(const Array &str) noexcept
-        : QStringView(str, lengthHelperArray(str)) {}
+    /+ template <typename Array, if_compatible_array<Array> = true> +/
+    /+ this(Array,)(ref const(Array) str)/+ noexcept+/
+    {
+        this(str, lengthHelperArray(str));
+    } +/
 
-    template <typename Pointer, if_compatible_pointer<Pointer> = true>
-    QStringView(const Pointer &str) noexcept
-        : QStringView(str, str ? lengthHelperPointer(str) : 0) {}
-#endif
+    /+ template <typename Pointer, if_compatible_pointer<Pointer> = true> +/
+    /+ this(Pointer,)(ref const(Pointer) str)/+ noexcept+/
+    {
+        this(str, str ? lengthHelperPointer(str) : 0);
+    } +/
+/+ #endif
 
 #ifdef Q_CLANG_QDOC
     QStringView(const QString &str) noexcept;
     QStringView(const QStringRef &str) noexcept;
 #else +/
     /+ template <typename String, if_compatible_qstring_like<String> = true> +/
-    /+ QStringView(const String &str) noexcept
-        : QStringView(str.isNull() ? nullptr : str.data(), qsizetype(str.size())) {} +/
-    this(String)(ref const String str) /*nothrow*/
+    this(String)(ref const(String) str)/+ noexcept+/
     {
         this(str.isNull() ? null : str.data(), qsizetype(str.size()));
     }
 /+ #endif +/
 
     /+ template <typename StdBasicString, if_compatible_string<StdBasicString> = true> +/
-    /+ QStringView(const StdBasicString &str) noexcept
-        : QStringView(str.data(), qsizetype(str.size())) {} +/
+    /+ this(StdBasicString,)(ref const(StdBasicString) str)/+ noexcept+/
+    {
+        this(str.data(), qsizetype(str.size()));
+    } +/
 
     //
     // QStringView inline members that require QString:

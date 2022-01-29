@@ -530,8 +530,11 @@ private:
             std::is_convertible<T, QStringView>::value ||
             std::is_convertible<T, QLatin1String>::value> {}; +/
     /+ template <typename T> +/
-    /+ struct is_convertible_to_view_or_qstring
-        : is_convertible_to_view_or_qstring_helper<typename std::decay<T>::type> {}; +/
+    struct is_convertible_to_view_or_qstring(T)
+ {
+        is_convertible_to_view_or_qstring_helper!(/+ typename std::decay<T>::type +/decay.type) base0;
+        alias base0 this;
+}/+ ; +/
 public:
     /+ template <typename...Args> +/
     /+ Q_REQUIRED_RESULT
@@ -1055,16 +1058,18 @@ public:
     version(QT_RESTRICTED_CAST_FROM_ASCII)
     {
         /+ template <int N> +/
-        /+ inline QString(const char (&ch)[N])
-            : d(fromAscii_helper(ch, N - 1))
-        {} +/
+        pragma(inline, true) this(int N)(ref const(char)[N] ch)
+        {
+            this.d = fromAscii_helper(ch.ptr, N - 1);
+        }
         /+ template <int N> +/
-        /+ QString(char (&)[N]) = delete; +/
+        this(int N)(ref char[N] ) /+ = delete +/;
         /+ template <int N> +/
-        /+ inline QString &operator=(const char (&ch)[N])
-        { return (*this = fromUtf8(ch, N - 1)); } +/
+        /+pragma(inline, true) ref QString operator =(int N)(ref const(char)[N] ch)
+        { return ((){return this = fromUtf8(ch.ptr, N - 1);
+    }()); }+/
         /+ template <int N> +/
-        /+ QString &operator=(char (&)[N]) = delete; +/
+        /+ref QString operator =(int N)(ref char[N] ) /+ = delete +/;+/
     }
 /+ #endif
 #if !defined(QT_NO_CAST_FROM_ASCII) && !defined(QT_RESTRICTED_CAST_FROM_ASCII)
@@ -1351,11 +1356,11 @@ private:
     /+ friend class QCollator; +/
     /+ friend struct QAbstractConcatenable; +/
 
-    /+ template <typename T> +/ /+ static
-    T toIntegral_helper(const QChar *data, int len, bool *ok, int base)
+    /+ template <typename T> +/ 
+        static T toIntegral_helper(T)(const(QChar)* data, int len, bool* ok, int base)
     {
-        using Int64 = typename std::conditional<std::is_unsigned<T>::value, qulonglong, qlonglong>::type;
-        using Int32 = typename std::conditional<std::is_unsigned<T>::value, uint, int>::type;
+        alias Int64 = /+ typename std::conditional<std::is_unsigned<T>::value, qulonglong, qlonglong>::type +/conditional.type;
+        alias Int32 = /+ typename std::conditional<std::is_unsigned<T>::value, uint, int>::type +/conditional.type;
 
         // we select the right overload by casting size() to int or uint
         Int64 val = toIntegral_helper(data, Int32(len), ok, base);
@@ -1365,7 +1370,7 @@ private:
             val = 0;
         }
         return T(val);
-    } +/
+    }
 
 public:
     alias DataPtr = Data*;

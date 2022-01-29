@@ -19,34 +19,29 @@ import qt.helpers;
 #endif
 
 QT_WARNING_PUSH
-QT_WARNING_DISABLE_DEPRECATED
+QT_WARNING_DISABLE_DEPRECATED +/
 
 /*
     Warning: The contents of QAlgorithmsPrivate is not a part of the public Qt API
     and may be changed from version to version or even be completely removed.
 */
-namespace QAlgorithmsPrivate {
+extern(C++, "QAlgorithmsPrivate") {
 
-#if QT_DEPRECATED_SINCE(5, 2)
-template <typename RandomAccessIterator, typename T, typename LessThan>
-QT_DEPRECATED_X("Use std::sort") void qSortHelper(RandomAccessIterator start, RandomAccessIterator end, const T &t, LessThan lessThan);
-template <typename RandomAccessIterator, typename T>
-QT_DEPRECATED_X("Use std::sort") inline void qSortHelper(RandomAccessIterator begin, RandomAccessIterator end, const T &dummy);
-template <typename RandomAccessIterator, typename T, typename LessThan>
-QT_DEPRECATED_X("Use std::stable_sort") void qStableSortHelper(RandomAccessIterator start, RandomAccessIterator end, const T &t, LessThan lessThan);
-template <typename RandomAccessIterator, typename T>
-QT_DEPRECATED_X("Use std::stable_sort") inline void qStableSortHelper(RandomAccessIterator, RandomAccessIterator, const T &);
-template <typename RandomAccessIterator, typename T, typename LessThan>
-QT_DEPRECATED_X("Use std::lower_bound") RandomAccessIterator qLowerBoundHelper(RandomAccessIterator begin, RandomAccessIterator end, const T &value, LessThan lessThan);
-template <typename RandomAccessIterator, typename T, typename LessThan>
-QT_DEPRECATED_X("Use std::upper_bound") RandomAccessIterator qUpperBoundHelper(RandomAccessIterator begin, RandomAccessIterator end, const T &value, LessThan lessThan);
-template <typename RandomAccessIterator, typename T, typename LessThan>
-QT_DEPRECATED_X("Use std::binary_search") RandomAccessIterator qBinaryFindHelper(RandomAccessIterator begin, RandomAccessIterator end, const T &value, LessThan lessThan);
-#endif // QT_DEPRECATED_SINCE(5, 2)
+/+ #if QT_DEPRECATED_SINCE(5, 2) +/
+/+ QT_DEPRECATED_X("Use std::sort") +/ void qSortHelper(RandomAccessIterator, T, LessThan)(RandomAccessIterator start, RandomAccessIterator end, ref const(T) t, LessThan lessThan);
+/+ QT_DEPRECATED_X("Use std::sort") +/ pragma(inline, true) void qSortHelper(RandomAccessIterator, T)(RandomAccessIterator begin, RandomAccessIterator end, ref const(T) dummy);
+
+/+ QT_DEPRECATED_X("Use std::stable_sort") +/ void qStableSortHelper(RandomAccessIterator, T, LessThan)(RandomAccessIterator start, RandomAccessIterator end, ref const(T) t, LessThan lessThan);
+/+ QT_DEPRECATED_X("Use std::stable_sort") +/ pragma(inline, true) void qStableSortHelper(RandomAccessIterator, T)(RandomAccessIterator, RandomAccessIterator, ref const(T) );
+
+/+ QT_DEPRECATED_X("Use std::lower_bound") +/ RandomAccessIterator qLowerBoundHelper(RandomAccessIterator, T, LessThan)(RandomAccessIterator begin, RandomAccessIterator end, ref const(T) value, LessThan lessThan);
+/+ QT_DEPRECATED_X("Use std::upper_bound") +/ RandomAccessIterator qUpperBoundHelper(RandomAccessIterator, T, LessThan)(RandomAccessIterator begin, RandomAccessIterator end, ref const(T) value, LessThan lessThan);
+/+ QT_DEPRECATED_X("Use std::binary_search") +/ RandomAccessIterator qBinaryFindHelper(RandomAccessIterator, T, LessThan)(RandomAccessIterator begin, RandomAccessIterator end, ref const(T) value, LessThan lessThan);
+/+ #endif +/ // QT_DEPRECATED_SINCE(5, 2)
 
 }
 
-#if QT_DEPRECATED_SINCE(5, 2) +/
+/+ #if QT_DEPRECATED_SINCE(5, 2) +/
 /+ QT_DEPRECATED_X("Use std::copy") +/ pragma(inline, true) OutputIterator qCopy(InputIterator, OutputIterator)(InputIterator begin, InputIterator end, OutputIterator dest)
 {
     while (begin != end)

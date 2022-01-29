@@ -193,7 +193,7 @@ public:
     /+ inline QList(std::initializer_list<T> args)
         : QList(args.begin(), args.end()) {} +/
     /+ template <typename InputIterator, QtPrivate::IfIsInputIterator<InputIterator> = true> +/
-    /+ QList(InputIterator first, InputIterator last); +/
+    this(InputIterator,)(InputIterator first, InputIterator last);
     /+bool operator ==(ref const(QList!(T)) l) const
     {
         if (d == l.d)

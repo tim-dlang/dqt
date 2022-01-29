@@ -145,7 +145,7 @@ public:
     /+ inline QVector(std::initializer_list<T> args); +/
     /+ QVector<T> &operator=(std::initializer_list<T> args); +/
     /+ template <typename InputIterator, QtPrivate::IfIsInputIterator<InputIterator> = true> +/
-    /+ inline QVector(InputIterator first, InputIterator last); +/
+    pragma(inline, true) this(InputIterator,)(InputIterator first, InputIterator last);
     /+ explicit +/this(QArrayDataPointerRef!(T) ref_)/+ noexcept+/
     {
         this.d = ref_.ptr;

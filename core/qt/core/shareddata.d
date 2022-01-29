@@ -230,16 +230,25 @@ public:
     }
 
     /+ template<class X> +/
-    /+ inline QExplicitlySharedDataPointer(const QExplicitlySharedDataPointer<X> &o)
-#ifdef QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST
-        : d(static_cast<T *>(o.data()))
-#else
-        : d(o.data())
-#endif
+    /+@disable this(this);
+    pragma(inline, true) this(X)(ref const(QExplicitlySharedDataPointer!(X)) o)/+ #ifdef QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST +/
+/+ #endif +/
     {
+        static if(defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
+        {
+            this.d = static_cast!(T*)(o.data());
+
+        }
+        else
+        {
+            /+ #else +/
+                    this.d = o.data();
+
+        }
+
         if(d)
-            d->ref.ref();
-    } +/
+            d.ref_.ref_();
+    }+/
 
     /+pragma(inline, true) ref QExplicitlySharedDataPointer!(T)  operator =(ref const(QExplicitlySharedDataPointer!(T)) o) {
         import core.stdcpp.new_;

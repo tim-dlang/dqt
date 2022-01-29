@@ -37,15 +37,19 @@ struct QPair(T1, T2)
     // compiler-generated copy/move ctor/assignment operators are fine!
 
     /+ template <typename TT1, typename TT2> +/
-    /+ QPair(const QPair<TT1, TT2> &p)
-        noexcept((std::is_nothrow_constructible<T1, TT1&>::value &&
-                              std::is_nothrow_constructible<T2, TT2&>::value))
-        : first(p.first), second(p.second) {} +/
+    /+ @disable this(this);
+    this(TT1,TT2)(ref const(QPair!(TT1, TT2)) p)
+            /+ noexcept((std::is_nothrow_constructible<T1, TT1&>::value &&
+                                  std::is_nothrow_constructible<T2, TT2&>::value)) +/
+    {
+        this.first = p.first;
+        this.second = p.second;
+    } +/
     /+ template <typename TT1, typename TT2> +/
-    /+ QPair &operator=(const QPair<TT1, TT2> &p)
-        noexcept((std::is_nothrow_assignable<T1, TT1&>::value &&
-                              std::is_nothrow_assignable<T2, TT2&>::value))
-    { first = p.first; second = p.second; return *this; } +/
+    /+ref QPair operator =(TT1,TT2)(ref const(QPair!(TT1, TT2)) p)
+            /+ noexcept((std::is_nothrow_assignable<T1, TT1&>::value &&
+                                  std::is_nothrow_assignable<T2, TT2&>::value)) +/
+    { first = p.first; second = p.second; return this; }+/
     /+ template <typename TT1, typename TT2> +/
     /+ QPair(QPair<TT1, TT2> &&p)
         noexcept((std::is_nothrow_constructible<T1, TT1>::value &&
