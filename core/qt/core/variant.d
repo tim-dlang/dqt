@@ -349,7 +349,23 @@ extern(C++, "QtPrivate") {
     pragma(inline, true) const(void)* data() const { return constData(); }
 
     /+ template<typename T> +/
-    pragma(inline, true) void setValue(T)(ref const(T) value);
+    pragma(inline, true) void setValue(T)(ref const(T) avalue)
+    {
+        import core.lifetime;
+
+        // If possible we reuse the current QVariant private.
+        const(uint) type = qMetaTypeId!(T)();
+        if (isDetached() && (type == d.type || (type <= uint(QVariant.Type.Char) && d.type <= uint(QVariant.Type.Char)))) {
+            d.type = type;
+            d.is_null = false;
+            T* old = reinterpret_cast!(T*)(d.is_shared ? d.data.shared_.ptr : &d.data.ptr);
+            if (QTypeInfo!(T).isComplex)
+                destroy!false(old);
+            emplace!T(old, avalue); // call the copy constructor
+        } else {
+            this = QVariant(type, &avalue, QTypeInfo!(T).isPointer);
+        }
+    }
 
     pragma(inline, true) T value(T)() const
     { return qvariant_cast!T(this); }

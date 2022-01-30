@@ -145,7 +145,14 @@ public:
     /+ inline QVector(std::initializer_list<T> args); +/
     /+ QVector<T> &operator=(std::initializer_list<T> args); +/
     /+ template <typename InputIterator, QtPrivate::IfIsInputIterator<InputIterator> = true> +/
-    pragma(inline, true) this(InputIterator,)(InputIterator first, InputIterator last);
+    pragma(inline, true) this(InputIterator,)(InputIterator first, InputIterator last)
+    {
+        import qt.core.containertools_impl;
+        this();
+
+        /+ QtPrivate:: +/qt.core.containertools_impl.reserveIfForwardIterator(&this, first, last);
+        /+ std:: +/copy(first, last, /+ std:: +/back_inserter(this));
+    }
     /+ explicit +/this(QArrayDataPointerRef!(T) ref_)/+ noexcept+/
     {
         this.d = ref_.ptr;

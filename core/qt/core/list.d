@@ -193,7 +193,14 @@ public:
     /+ inline QList(std::initializer_list<T> args)
         : QList(args.begin(), args.end()) {} +/
     /+ template <typename InputIterator, QtPrivate::IfIsInputIterator<InputIterator> = true> +/
-    this(InputIterator,)(InputIterator first, InputIterator last);
+    this(InputIterator,)(InputIterator first, InputIterator last)
+    {
+        import qt.core.containertools_impl;
+        this();
+
+        /+ QtPrivate:: +/qt.core.containertools_impl.reserveIfForwardIterator(&this, first, last);
+        /+ std:: +/copy(first, last, /+ std:: +/back_inserter(this));
+    }
     /+bool operator ==(ref const(QList!(T)) l) const
     {
         if (d == l.d)
