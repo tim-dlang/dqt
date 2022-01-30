@@ -98,7 +98,6 @@ alias LayoutFlags = QFlags!(LayoutFlag);
         return advancesForGlyphIndexes(glyphIndexes, QRawFont.LayoutFlags.SeparateAdvances);
     }
     pragma(inline, true) QVector!(QPointF) advancesForGlyphIndexes(ref const(QVector!(quint32)) glyphIndexes, LayoutFlags layoutFlags) const
-    /+pragma(inline, true) QVector!(QPointF) advancesForGlyphIndexes(ref const(QVector!(quint32)) glyphIndexes, QRawFont.LayoutFlags layoutFlags) const+/
     {
         QVector!QPointF advances = QVector!QPointF(glyphIndexes.size());
         if (advancesForGlyphIndexes(cast(const(quint32)*)(glyphIndexes.constData()), advances.data(), glyphIndexes.size(), layoutFlags))

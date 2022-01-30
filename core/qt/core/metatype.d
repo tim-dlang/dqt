@@ -514,13 +514,13 @@ alias TypeFlags = QFlags!(TypeFlag);
                                 Destructor destructor,
                                 Constructor constructor,
                                 int size,
-                                QMetaType.TypeFlags flags,
+                                TypeFlags flags,
                                 const(QMetaObject)* metaObject);
     static int registerType(const(char)* typeName,
                                 TypedDestructor destructor,
                                 TypedConstructor constructor,
                                 int size,
-                                QMetaType.TypeFlags flags,
+                                TypeFlags flags,
                                 const(QMetaObject)* metaObject);
     static bool unregisterType(int type);
     /+ static int registerNormalizedType(const QT_PREPEND_NAMESPACE(QByteArray) &normalizedTypeName, Deleter deleter,
@@ -566,7 +566,7 @@ alias TypeFlags = QFlags!(TypeFlag);
     }
 
     @disable this();
-    /+ explicit +/this(const(int) type/+ = QMetaType.Type.UnknownType+/); // ### Qt6: drop const
+    /+ explicit +/this(const(int) type/+ = Type.UnknownType+/); // ### Qt6: drop const
     pragma(inline, true) ~this()
     {
         if (/+ Q_UNLIKELY +/(isExtended(ExtensionFlag.DtorEx)))
@@ -592,7 +592,6 @@ alias TypeFlags = QFlags!(TypeFlag);
         return m_size;
     }
 /+    pragma(inline, true) TypeFlags flags() const
-    /+pragma(inline, true) QMetaType.TypeFlags flags() const+/
     {
         if (/+ Q_UNLIKELY +/(isExtended(ExtensionFlag.FlagsEx)))
             return flagsExtended();
@@ -793,7 +792,7 @@ private:
     void ctor(const(QMetaTypeInterface)* info);
     void dtor();
     uint sizeExtended() const;
-    QMetaType.TypeFlags flagsExtended() const;
+    TypeFlags flagsExtended() const;
     const(QMetaObject)* metaObjectExtended() const;
     void* createExtended(const(void)* copy = null) const;
     void destroyExtended(void* data) const;

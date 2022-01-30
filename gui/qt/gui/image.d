@@ -353,8 +353,8 @@ public:
     void setText(ref const(QString) key, ref const(QString) value);
 
     QPixelFormat pixelFormat() const/+ noexcept+/;
-    static QPixelFormat toPixelFormat(QImage.Format format)/+ noexcept+/;
-    static QImage.Format toImageFormat(QPixelFormat format)/+ noexcept+/;
+    static QPixelFormat toPixelFormat(Format format)/+ noexcept+/;
+    static Format toImageFormat(QPixelFormat format)/+ noexcept+/;
 
     // Platform specific conversion functions
 /+ #if defined(Q_OS_DARWIN) || defined(Q_QDOC) +/

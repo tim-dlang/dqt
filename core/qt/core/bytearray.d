@@ -462,7 +462,7 @@ alias Base64Options = QFlags!(Base64Option);
     {
     public:
         QByteArray decoded;
-        QByteArray.Base64DecodingStatus decodingStatus;
+        Base64DecodingStatus decodingStatus;
 
         /+ void swap(QByteArray::FromBase64Result &other) noexcept
         {
@@ -509,28 +509,20 @@ alias Base64Options = QFlags!(Base64Option);
     /+ typedef std::reverse_iterator<iterator> reverse_iterator; +/
     /+ typedef std::reverse_iterator<const_iterator> const_reverse_iterator; +/
     pragma(inline, true) iterator begin()
-    /+pragma(inline, true) QByteArray.iterator begin()+/
     { detach(); return cast(iterator)(d.data()); }
     pragma(inline, true) const_iterator begin() const
-    /+pragma(inline, true) QByteArray.const_iterator begin() const+/
     { return cast(const_iterator)(d.data()); }
     pragma(inline, true) const_iterator cbegin() const
-    /+pragma(inline, true) QByteArray.const_iterator cbegin() const+/
     { return cast(const_iterator)(d.data()); }
     pragma(inline, true) const_iterator constBegin() const
-    /+pragma(inline, true) QByteArray.const_iterator constBegin() const+/
     { return cast(const_iterator)(d.data()); }
     pragma(inline, true) iterator end()
-    /+pragma(inline, true) QByteArray.iterator end()+/
     { detach(); return cast(iterator)(d.data() + d.size); }
     pragma(inline, true) const_iterator end() const
-    /+pragma(inline, true) QByteArray.const_iterator end() const+/
     { return cast(const_iterator)(d.data() + d.size); }
     pragma(inline, true) const_iterator cend() const
-    /+pragma(inline, true) QByteArray.const_iterator cend() const+/
     { return cast(const_iterator)(d.data() + d.size); }
     pragma(inline, true) const_iterator constEnd() const
-    /+pragma(inline, true) QByteArray.const_iterator constEnd() const+/
     { return cast(const_iterator)(d.data() + d.size); }
     /+ reverse_iterator rbegin() { return reverse_iterator(end()); } +/
     /+ reverse_iterator rend() { return reverse_iterator(begin()); } +/

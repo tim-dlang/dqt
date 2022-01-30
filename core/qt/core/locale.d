@@ -1168,7 +1168,7 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     static QLocale c() { return QLocale(Language.C); }
     static QLocale system();
 
-    static QList!(QLocale) matchingLocales(QLocale.Language language, QLocale.Script script, QLocale.Country country);
+    static QList!(QLocale) matchingLocales(Language language, Script script, Country country);
     static QList!(Country) countriesForLanguage(Language lang);
 
     void setNumberOptions(NumberOptions options);

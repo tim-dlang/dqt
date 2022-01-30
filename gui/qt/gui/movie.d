@@ -98,7 +98,7 @@ public:
     @QSignal final void started();
     @QSignal final void resized(ref const(QSize) size);
     @QSignal final void updated(ref const(QRect) rect);
-    @QSignal final void stateChanged(QMovie.MovieState state);
+    @QSignal final void stateChanged(MovieState state);
     @QSignal final void error(QImageReader.ImageReaderError error);
     @QSignal final void finished();
     @QSignal final void frameChanged(int frameNumber);

@@ -110,10 +110,10 @@ public:
     QString comment() const;
 
     QString displayName(ref const(QDateTime) atDateTime,
-                            QTimeZone.NameType nameType/* = QTimeZone.NameType.DefaultName*/,
+                            NameType nameType/* = NameType.DefaultName*/,
                             ref const(QLocale) locale/* = globalInitVar!QLocale*/) const;
-    QString displayName(QTimeZone.TimeType timeType,
-                            QTimeZone.NameType nameType/* = QTimeZone.NameType.DefaultName*/,
+    QString displayName(TimeType timeType,
+                            NameType nameType/* = NameType.DefaultName*/,
                             ref const(QLocale) locale/* = globalInitVar!QLocale*/) const;
     QString abbreviation(ref const(QDateTime) atDateTime) const;
 

@@ -1142,7 +1142,7 @@ alias InfoFlags = QFlags!(InfoFlag);/+ #endif +/
                              QTouchDevice* device = null,
                              /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers = /+ Qt:: +/qt.core.namespace.KeyboardModifier.NoModifier,
                              /+ Qt:: +/qt.core.namespace.TouchPointStates touchPointStates = /+ Qt:: +/qt.core.namespace.TouchPointStates(),
-                             ref const(QList!(QTouchEvent.TouchPoint)) touchPoints = globalInitVar!(QList!(QTouchEvent.TouchPoint)));
+                             ref const(QList!(TouchPoint)) touchPoints = globalInitVar!(QList!(TouchPoint)));
     ~this();
 
     pragma(inline, true) final QWindow* window() const { return cast(QWindow*)_window; }
@@ -1166,7 +1166,7 @@ protected:
     QObject _target;
     QTouchDevice* _device;
     /+ Qt:: +/qt.core.namespace.TouchPointStates _touchPointStates;
-    QList!(QTouchEvent.TouchPoint) _touchPoints;
+    QList!(TouchPoint) _touchPoints;
 
     /+ friend class QGuiApplication; +/
     /+ friend class QGuiApplicationPrivate; +/
@@ -1235,7 +1235,7 @@ public:
 private:
     QPointF m_contentPos;
     QPointF m_overshoot;
-    QScrollEvent.ScrollState m_state;
+    ScrollState m_state;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

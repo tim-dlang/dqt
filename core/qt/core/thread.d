@@ -204,7 +204,7 @@ struct Callable(Function)
         cast(void)m_function();
     }+/
 
-    /+ typename std::decay<Function>::type +/decay.type m_function;
+    /+ std:: +/decay!(Function).type m_function;
 }
 } // namespace QtPrivate
 

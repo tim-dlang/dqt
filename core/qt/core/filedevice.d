@@ -103,8 +103,8 @@ alias FileHandleFlags = QFlags!(FileHandleFlag);
     final uchar* map(qint64 offset, qint64 size, MemoryMapFlags flags = MemoryMapFlags.NoOptions);
     final bool unmap(uchar* address);
 
-    final QDateTime fileTime(QFileDevice.FileTime time) const;
-    final bool setFileTime(ref const(QDateTime) newDate, QFileDevice.FileTime fileTime);
+    final QDateTime fileTime(FileTime time) const;
+    final bool setFileTime(ref const(QDateTime) newDate, FileTime fileTime);
 
 protected:
     this();

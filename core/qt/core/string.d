@@ -532,7 +532,7 @@ private:
     /+ template <typename T> +/
     struct is_convertible_to_view_or_qstring(T)
  {
-        is_convertible_to_view_or_qstring_helper!(/+ typename std::decay<T>::type +/decay.type) base0;
+        is_convertible_to_view_or_qstring_helper!(/+ std:: +/decay!(T).type) base0;
         alias base0 this;
 }/+ ; +/
 public:
@@ -1161,28 +1161,20 @@ public:
     /+ typedef std::reverse_iterator<iterator> reverse_iterator; +/
     /+ typedef std::reverse_iterator<const_iterator> const_reverse_iterator; +/
     pragma(inline, true) iterator begin()
-    /+pragma(inline, true) QString.iterator begin()+/
     { detach(); return reinterpret_cast!(QChar*)(d.data()); }
     pragma(inline, true) const_iterator begin() const
-    /+pragma(inline, true) QString.const_iterator begin() const+/
     { return reinterpret_cast!(const(QChar)*)(d.data()); }
     pragma(inline, true) const_iterator cbegin() const
-    /+pragma(inline, true) QString.const_iterator cbegin() const+/
     { return reinterpret_cast!(const(QChar)*)(d.data()); }
     pragma(inline, true) const_iterator constBegin() const
-    /+pragma(inline, true) QString.const_iterator constBegin() const+/
     { return reinterpret_cast!(const(QChar)*)(d.data()); }
     pragma(inline, true) iterator end()
-    /+pragma(inline, true) QString.iterator end()+/
     { detach(); return reinterpret_cast!(QChar*)(d.data() + d.size); }
     pragma(inline, true) const_iterator end() const
-    /+pragma(inline, true) QString.const_iterator end() const+/
     { return reinterpret_cast!(const(QChar)*)(d.data() + d.size); }
     pragma(inline, true) const_iterator cend() const
-    /+pragma(inline, true) QString.const_iterator cend() const+/
     { return reinterpret_cast!(const(QChar)*)(d.data() + d.size); }
     pragma(inline, true) const_iterator constEnd() const
-    /+pragma(inline, true) QString.const_iterator constEnd() const+/
     { return reinterpret_cast!(const(QChar)*)(d.data() + d.size); }
     /+ reverse_iterator rbegin() { return reverse_iterator(end()); } +/
     /+ reverse_iterator rend() { return reverse_iterator(begin()); } +/
@@ -1359,8 +1351,8 @@ private:
     /+ template <typename T> +/ 
         static T toIntegral_helper(T)(const(QChar)* data, int len, bool* ok, int base)
     {
-        alias Int64 = /+ typename std::conditional<std::is_unsigned<T>::value, qulonglong, qlonglong>::type +/conditional.type;
-        alias Int32 = /+ typename std::conditional<std::is_unsigned<T>::value, uint, int>::type +/conditional.type;
+        alias Int64 = /+ std:: +/conditional!(UnknownType!q{/+ std:: +/is_unsigned!(T).value}, qulonglong, qlonglong).type;
+        alias Int32 = /+ std:: +/conditional!(UnknownType!q{/+ std:: +/is_unsigned!(T).value}, uint, int).type;
 
         // we select the right overload by casting size() to int or uint
         Int64 val = toIntegral_helper(data, Int32(len), ok, base);

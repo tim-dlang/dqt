@@ -62,7 +62,7 @@ public:
     final void setPixmap(ref const(QPixmap) , Mode mode  = Mode.Clipboard);
 
 /+ Q_SIGNALS +/public:
-    @QSignal final void changed(QClipboard.Mode mode);
+    @QSignal final void changed(Mode mode);
     @QSignal final void selectionChanged();
     @QSignal final void findBufferChanged();
     @QSignal final void dataChanged();

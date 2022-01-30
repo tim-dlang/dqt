@@ -82,7 +82,7 @@ extern(C++, "QAlgorithmsPrivate") {
     return first;
 }
 
-/+ QT_DEPRECATED_X("Use std::find") +/ /+ typename Container::const_iterator +/pragma(inline, true) UnknownType!q{} qFind(Container, T)(ref const(Container) container, ref const(T) val)
+/+ QT_DEPRECATED_X("Use std::find") +/ pragma(inline, true) UnknownType!q{Container.const_iterator} qFind(Container, T)(ref const(Container) container, ref const(T) val)
 {
     return qFind(container.constBegin(), container.constEnd(), val);
 }
@@ -194,7 +194,7 @@ public:
     return /+ QAlgorithmsPrivate:: +/qLowerBoundHelper(begin, end, value, lessThan);
 }
 
-/+ QT_DEPRECATED_X("Use std::lower_bound") +/ /+ typename Container::const_iterator +/UnknownType!q{} qLowerBound(Container, T)(ref const(Container) container, ref const(T) value)
+/+ QT_DEPRECATED_X("Use std::lower_bound") +/ UnknownType!q{Container.const_iterator} qLowerBound(Container, T)(ref const(Container) container, ref const(T) value)
 {
     return /+ QAlgorithmsPrivate:: +/qLowerBoundHelper(container.constBegin(), container.constEnd(), value, qLess!(T)());
 }
@@ -224,7 +224,7 @@ public:
     return /+ QAlgorithmsPrivate:: +/qUpperBoundHelper(begin, end, value, lessThan);
 }
 
-/+ QT_DEPRECATED_X("Use std::upper_bound") +/ /+ typename Container::const_iterator +/UnknownType!q{} qUpperBound(Container, T)(ref const(Container) container, ref const(T) value)
+/+ QT_DEPRECATED_X("Use std::upper_bound") +/ UnknownType!q{Container.const_iterator} qUpperBound(Container, T)(ref const(Container) container, ref const(T) value)
 {
     return /+ QAlgorithmsPrivate:: +/qUpperBoundHelper(container.constBegin(), container.constEnd(), value, qLess!(T)());
 }
@@ -245,7 +245,7 @@ public:
     return /+ QAlgorithmsPrivate:: +/qBinaryFindHelper(begin, end, value, lessThan);
 }
 
-/+ QT_DEPRECATED_X("Use std::binary_search") +/ /+ typename Container::const_iterator +/UnknownType!q{} qBinaryFind(Container, T)(ref const(Container) container, ref const(T) value)
+/+ QT_DEPRECATED_X("Use std::binary_search") +/ UnknownType!q{Container.const_iterator} qBinaryFind(Container, T)(ref const(Container) container, ref const(T) value)
 {
     return /+ QAlgorithmsPrivate:: +/qBinaryFindHelper(container.constBegin(), container.constEnd(), value, qLess!(T)());
 }

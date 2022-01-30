@@ -148,7 +148,7 @@ public:
     @QSignal final void bottomChanged(double bottom);
     @QSignal final void topChanged(double top);
     @QSignal final void decimalsChanged(int decimals);
-    @QSignal final void notationChanged(QDoubleValidator.Notation notation);
+    @QSignal final void notationChanged(Notation notation);
 
 private:
     /+ Q_DECLARE_PRIVATE(QDoubleValidator) +/

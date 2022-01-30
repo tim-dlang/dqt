@@ -89,7 +89,7 @@ public:
     final void moveSection(int from, int to);
     final void swapSections(int first, int second);
     final void resizeSection(int logicalIndex, int size);
-    final void resizeSections(QHeaderView.ResizeMode mode);
+    final void resizeSections(ResizeMode mode);
 
     final bool isSectionHidden(int logicalIndex) const;
     final void setSectionHidden(int logicalIndex, bool hide);

@@ -108,9 +108,6 @@ alias MatchOptions = QFlags!(MatchOption);
                                       int offset                = 0,
                                       MatchType matchType       = MatchType.NormalMatch,
                                       MatchOptions matchOptions = MatchOption.NoMatchOption) const
-    /+
-    pragma(inline, true) QRegularExpressionMatch match(QStringView subject, int offset,
-                                                      QRegularExpression.MatchType matchType, MatchOptions matchOptions) const+/
     {
         auto tmp = subject.toString(); return match(tmp, offset, matchType, matchOptions);
     }
@@ -129,9 +126,6 @@ alias MatchOptions = QFlags!(MatchOption);
                                                     int offset                = 0,
                                                     MatchType matchType       = MatchType.NormalMatch,
                                                     MatchOptions matchOptions = MatchOption.NoMatchOption) const
-    /+
-    pragma(inline, true) QRegularExpressionMatchIterator globalMatch(QStringView subject, int offset,
-                                                                    QRegularExpression.MatchType matchType, MatchOptions matchOptions) const+/
     {
         auto tmp = subject.toString(); return globalMatch(tmp, offset, matchType, matchOptions);
     }

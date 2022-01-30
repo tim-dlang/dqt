@@ -89,7 +89,7 @@ public:
     QObject styleObject;
 
     @disable this();
-    this(int version_/+ = QStyleOption.StyleOptionVersion.Version+/, int type = OptionType.SO_Default);
+    this(int version_/+ = StyleOptionVersion.Version+/, int type = OptionType.SO_Default);
     @disable this(this);
     this(ref const(QStyleOption) other);
     ~this();
@@ -825,7 +825,7 @@ public:
     QStyle.SubControls activeSubControls;
 
     @disable this();
-    this(int version_/+ = QStyleOptionComplex.StyleOptionVersion.Version+/, int type = OptionType.SO_Complex);
+    this(int version_/+ = StyleOptionVersion.Version+/, int type = OptionType.SO_Complex);
     @disable this(this);
     this(ref const(QStyleOptionComplex) other)
     {
@@ -1168,7 +1168,7 @@ protected:
 
 T qstyleoption_cast(T)(const(QStyleOption)* opt)
 {
-    /+ typename std::remove_cv<typename std::remove_pointer<T>::type>::type +/alias Opt = type;
+    alias Opt = /+ std:: +/remove_cv!(/+ std:: +/remove_pointer!(T).__remove_pointer_helper.type).type;
     if (opt && opt.version_ >= Opt.Version && (opt.type == Opt.Type
         || int(Opt.Type) == QStyleOption.OptionType.SO_Default
         || (int(Opt.Type) == QStyleOption.OptionType.SO_Complex
@@ -1179,7 +1179,7 @@ T qstyleoption_cast(T)(const(QStyleOption)* opt)
 
 T qstyleoption_cast(T)(QStyleOption* opt)
 {
-    /+ typename std::remove_cv<typename std::remove_pointer<T>::type>::type +/alias Opt = type;
+    alias Opt = /+ std:: +/remove_cv!(/+ std:: +/remove_pointer!(T).__remove_pointer_helper.type).type;
     if (opt && opt.version_ >= Opt.Version && (opt.type == Opt.Type
         || int(Opt.Type) == QStyleOption.OptionType.SO_Default
         || (int(Opt.Type) == QStyleOption.OptionType.SO_Complex
@@ -1238,7 +1238,7 @@ public:
 
 T qstyleoption_cast(T)(const(QStyleHintReturn)* hint)
 {
-    /+ typename std::remove_cv<typename std::remove_pointer<T>::type>::type +/alias Opt = type;
+    alias Opt = /+ std:: +/remove_cv!(/+ std:: +/remove_pointer!(T).__remove_pointer_helper.type).type;
     if (hint && hint.version_ <= Opt.Version &&
         (hint.type == Opt.Type || int(Opt.Type) == QStyleHintReturn.HintReturnType.SH_Default))
         return static_cast!(T)(hint);
@@ -1247,7 +1247,7 @@ T qstyleoption_cast(T)(const(QStyleHintReturn)* hint)
 
 T qstyleoption_cast(T)(QStyleHintReturn* hint)
 {
-    /+ typename std::remove_cv<typename std::remove_pointer<T>::type>::type +/alias Opt = type;
+    alias Opt = /+ std:: +/remove_cv!(/+ std:: +/remove_pointer!(T).__remove_pointer_helper.type).type;
     if (hint && hint.version_ <= Opt.Version &&
         (hint.type == Opt.Type || int(Opt.Type) == QStyleHintReturn.HintReturnType.SH_Default))
         return static_cast!(T)(hint);

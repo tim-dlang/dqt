@@ -211,7 +211,7 @@ public:
     QPolygonF toFillPolygon(ref const(QTransform) matrix = globalInitVar!QTransform) const;
 
     int elementCount() const;
-    QPainterPath.Element elementAt(int i) const;
+    Element elementAt(int i) const;
     void setElementPositionAt(int i, qreal x, qreal y);
 
     qreal   length() const;

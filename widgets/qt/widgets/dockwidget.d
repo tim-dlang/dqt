@@ -89,7 +89,7 @@ alias DockWidgetFeatures = QFlags!(DockWidgetFeature);    /+ Q_FLAG(DockWidgetFe
     }
 
 /+ Q_SIGNALS +/public:
-    @QSignal final void featuresChanged(QDockWidget.DockWidgetFeatures features);
+    @QSignal final void featuresChanged(DockWidgetFeatures features);
     @QSignal final void topLevelChanged(bool topLevel);
     @QSignal final void allowedAreasChanged(/+ Qt:: +/qt.core.namespace.DockWidgetAreas allowedAreas);
     @QSignal final void visibilityChanged(bool visible);

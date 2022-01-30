@@ -188,9 +188,9 @@ alias SelectionFlags = QFlags!(SelectionFlag);    /+ Q_FLAG(SelectionFlags) +/
     final void setModel(QAbstractItemModel model);
 
 public /+ Q_SLOTS +/:
-    /+ virtual +/ @QSlot void setCurrentIndex(ref const(QModelIndex) index, QItemSelectionModel.SelectionFlags command);
-    /+ virtual +/ @QSlot void select(ref const(QModelIndex) index, QItemSelectionModel.SelectionFlags command);
-    /+ virtual +/ @QSlot void select(ref const(QItemSelection) selection, QItemSelectionModel.SelectionFlags command);
+    /+ virtual +/ @QSlot void setCurrentIndex(ref const(QModelIndex) index, SelectionFlags command);
+    /+ virtual +/ @QSlot void select(ref const(QModelIndex) index, SelectionFlags command);
+    /+ virtual +/ @QSlot void select(ref const(QItemSelection) selection, SelectionFlags command);
     /+ virtual +/ @QSlot void clear();
     /+ virtual +/ @QSlot void reset();
 

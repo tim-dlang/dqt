@@ -122,11 +122,11 @@ alias EditTriggers = QFlags!(EditTrigger);    /+ Q_FLAG(EditTriggers) +/
     final void setItemDelegate(QAbstractItemDelegate delegate_);
     final QAbstractItemDelegate itemDelegate() const;
 
-    final void setSelectionMode(QAbstractItemView.SelectionMode mode);
-    final QAbstractItemView.SelectionMode selectionMode() const;
+    final void setSelectionMode(SelectionMode mode);
+    final SelectionMode selectionMode() const;
 
-    final void setSelectionBehavior(QAbstractItemView.SelectionBehavior behavior);
-    final QAbstractItemView.SelectionBehavior selectionBehavior() const;
+    final void setSelectionBehavior(SelectionBehavior behavior);
+    final SelectionBehavior selectionBehavior() const;
 
     final QModelIndex currentIndex() const;
     final QModelIndex rootIndex() const;

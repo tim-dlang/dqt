@@ -138,7 +138,6 @@ public:
     void setFloatingPointPrecision(FloatingPointPrecision precision);
 
     pragma(inline, true) ByteOrder byteOrder() const
-    /+pragma(inline, true) QDataStream.ByteOrder byteOrder() const+/
     { return byteorder; }
     void setByteOrder(ByteOrder);
 

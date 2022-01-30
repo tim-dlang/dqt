@@ -1052,7 +1052,7 @@ QT_WARNING_DISABLE_MSVC(4530) /* C++ exception handler used, but unwind semantic
 /+ #undef QT_3ARG_ALG +/
 
 // this adds const to non-const objects (like std::as_const)
-/+ typename std::add_const<T>::type +/ref add_const.type qAsConst(T)(ref T t)/+ noexcept+/ { return t; }
+ref /+ std:: +/add_const!(T).type qAsConst(T)(ref T t)/+ noexcept+/ { return t; }
 // prevent rvalue arguments:
 /+ template <typename T>
 void qAsConst(const T &&) = delete;

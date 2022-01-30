@@ -99,7 +99,7 @@ public:
 
 /+ Q_SIGNALS +/public:
     @QSignal final void commitData(QWidget editor);
-    @QSignal final void closeEditor(QWidget editor, QAbstractItemDelegate.EndEditHint hint = EndEditHint.NoHint);
+    @QSignal final void closeEditor(QWidget editor, EndEditHint hint = EndEditHint.NoHint);
     @QSignal final void sizeHintChanged(ref const(QModelIndex) );
 
 protected:

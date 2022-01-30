@@ -68,8 +68,8 @@ public:
 
     final void setInvertedAppearance(bool invert);
     final bool invertedAppearance() const;
-    final void setTextDirection(QProgressBar.Direction textDirection);
-    final QProgressBar.Direction textDirection() const;
+    final void setTextDirection(Direction textDirection);
+    final Direction textDirection() const;
 
     final void setFormat(ref const(QString) format);
     final void resetFormat();

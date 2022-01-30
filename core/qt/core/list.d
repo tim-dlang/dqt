@@ -662,7 +662,6 @@ public:
         return cast(iterator)(n);
     }
     pragma(inline, true) iterator erase(iterator it)
-    /+/+ typename QList<T>::iterator +/pragma(inline, true) iterator erase(iterator it)+/
     {
         (mixin(Q_ASSERT_X(q{QList!T.isValidIterator(it)},q{ "QList::erase"},q{ "The specified iterator argument 'it' is invalid"})));
         if (d.ref_.isShared()) {
@@ -674,8 +673,6 @@ public:
         return iterator(reinterpret_cast!(Node*)(p.erase(reinterpret_cast!(void**)(it.i))));
     }
     iterator erase(iterator afirst, iterator alast)
-    /+/+ typename QList<T>::iterator +/iterator erase(/+ typename QList<T>::iterator +/ iterator afirst,
-                                                                     /+ typename QList<T>::iterator +/ iterator alast)+/
     {
         (mixin(Q_ASSERT_X(q{QList.isValidIterator(afirst)},q{ "QList::erase"},q{ "The specified iterator argument 'afirst' is invalid"})));
         (mixin(Q_ASSERT_X(q{QList.isValidIterator(alast)},q{ "QList::erase"},q{ "The specified iterator argument 'alast' is invalid"})));
@@ -841,7 +838,6 @@ public:
 
 private:
     Node* detach_helper_grow(int i, int c)
-    /+/+ typename QList<T>::Node +/Node* detach_helper_grow(int i, int c)+/
     {
         Node* n = reinterpret_cast!(Node*)(p.begin());
         QListData.Data *x = p.detach_grow(&i, c);
@@ -1059,7 +1055,7 @@ extern(C++, "QtPrivate")
 {
 int indexOf(T, U)(ref const(QList!(T)) list, ref const(U) u, int from)
 {
-    /+ typename QList<T>::Node +/// self alias: alias Node = QList.Node;
+    // self alias: alias Node = QList!(T).Node;
 
     if (from < 0)
         from = qMax(from + list.p.size(), 0);
@@ -1078,7 +1074,7 @@ extern(C++, "QtPrivate")
 {
 int lastIndexOf(T, U)(ref const(QList!(T)) list, ref const(U) u, int from)
 {
-    /+ typename QList<T>::Node +/// self alias: alias Node = QList.Node;
+    // self alias: alias Node = QList!(T).Node;
 
     if (from < 0)
         from += list.p.size();

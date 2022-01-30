@@ -455,8 +455,8 @@ public:
     }+/
 
     // STL-style
-    /+ typename Data::iterator +/alias iterator = Data.iterator;
-    /+ typename Data::const_iterator +/alias const_iterator = Data.const_iterator;
+    alias iterator = Data.iterator;
+    alias const_iterator = Data.const_iterator;
     /+ typedef std::reverse_iterator<iterator> reverse_iterator; +/
     /+ typedef std::reverse_iterator<const_iterator> const_reverse_iterator; +/
 /+ #if !defined(QT_STRICT_ITERATORS) || defined(Q_CLANG_QDOC) +/
@@ -509,7 +509,7 @@ public:
     /+ const_reverse_iterator crbegin() const noexcept { return const_reverse_iterator(end()); } +/
     /+ const_reverse_iterator crend() const noexcept { return const_reverse_iterator(begin()); } +/
     iterator insert()(iterator before, int n, ref const(T) t)
-    /+/+ typename QVector<T>::iterator +/iterator insert(iterator before, size_type n, ref const(T) t)+/
+    /+iterator insert(iterator before, size_type n, ref const(T) t)+/
     {
         import core.lifetime;
         import core.stdc.string;
@@ -548,7 +548,6 @@ public:
     pragma(inline, true) iterator insert()(iterator before, ref const(T) x) { return insert(before, 1, x); }
     /+ inline iterator insert(iterator before, T &&x); +/
     iterator erase(iterator abegin, iterator aend)
-    /+/+ typename QVector<T>::iterator +/iterator erase(iterator abegin, iterator aend)+/
     {
         import core.lifetime;
         import core.stdc.string;

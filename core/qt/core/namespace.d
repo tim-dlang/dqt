@@ -92,10 +92,10 @@ alias KeyboardModifiers = QFlags!(KeyboardModifier);
     // "namespace"-prefixed. This is considered bad practice and is why
     // KeypadModifier was not added to the Modifier enum.
     enum Modifier {
-        META          = /+ Qt:: +/KeyboardModifier.MetaModifier,
-        SHIFT         = /+ Qt:: +/KeyboardModifier.ShiftModifier,
-        CTRL          = /+ Qt:: +/KeyboardModifier.ControlModifier,
-        ALT           = /+ Qt:: +/KeyboardModifier.AltModifier,
+        META          = KeyboardModifier.MetaModifier,
+        SHIFT         = KeyboardModifier.ShiftModifier,
+        CTRL          = KeyboardModifier.ControlModifier,
+        ALT           = KeyboardModifier.AltModifier,
         MODIFIER_MASK = KeyboardModifier.KeyboardModifierMask,
         UNICODE_ACCEL = cast(KeyboardModifier)0x00000000
     }

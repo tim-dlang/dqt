@@ -477,8 +477,8 @@ extern(C++, "QtPrivate") {
         alias f_save = ExternCPPFunc!(void function(const(Private)* , ref QDataStream ));
     }
     alias f_compare = ExternCPPFunc!(bool function(const(Private)* , const(Private)* ));
-    alias f_convert = ExternCPPFunc!(bool function(const(QVariant.Private)* d, int t, void* , bool* ));
-    alias f_canConvert = ExternCPPFunc!(bool function(const(QVariant.Private)* d, int t));
+    alias f_convert = ExternCPPFunc!(bool function(const(Private)* d, int t, void* , bool* ));
+    alias f_canConvert = ExternCPPFunc!(bool function(const(Private)* d, int t));
     /+ typedef void (*f_debugStream)(QDebug, const QVariant &); +/
     /+ struct Handler {
         f_construct construct;

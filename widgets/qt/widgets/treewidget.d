@@ -89,8 +89,8 @@ public:
     { return !(flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsEnabled); }
 
     enum ChildIndicatorPolicy { ShowIndicator, DontShowIndicator, DontShowIndicatorWhenChildless }
-    final void setChildIndicatorPolicy(QTreeWidgetItem.ChildIndicatorPolicy policy);
-    final QTreeWidgetItem.ChildIndicatorPolicy childIndicatorPolicy() const;
+    final void setChildIndicatorPolicy(ChildIndicatorPolicy policy);
+    final ChildIndicatorPolicy childIndicatorPolicy() const;
 
     final /+ Qt:: +/qt.core.namespace.ItemFlags flags() const;
     final void setFlags(/+ Qt:: +/qt.core.namespace.ItemFlags flags);

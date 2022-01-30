@@ -295,8 +295,8 @@ alias CheckIndexOptions = QFlags!(CheckIndexOption);
 /+ Q_SIGNALS +/public:
     @QSignal final void dataChanged(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight, ref const(QVector!(int)) roles = globalInitVar!(QVector!(int)));
     @QSignal final void headerDataChanged(/+ Qt:: +/qt.core.namespace.Orientation orientation, int first, int last);
-    @QSignal final void layoutChanged(ref const(QList!(QPersistentModelIndex)) parents = globalInitVar!(QList!(QPersistentModelIndex)), QAbstractItemModel.LayoutChangeHint hint = QAbstractItemModel.LayoutChangeHint.NoLayoutChangeHint);
-    @QSignal final void layoutAboutToBeChanged(ref const(QList!(QPersistentModelIndex)) parents = globalInitVar!(QList!(QPersistentModelIndex)), QAbstractItemModel.LayoutChangeHint hint = QAbstractItemModel.LayoutChangeHint.NoLayoutChangeHint);
+    @QSignal final void layoutChanged(ref const(QList!(QPersistentModelIndex)) parents = globalInitVar!(QList!(QPersistentModelIndex)), LayoutChangeHint hint = LayoutChangeHint.NoLayoutChangeHint);
+    @QSignal final void layoutAboutToBeChanged(ref const(QList!(QPersistentModelIndex)) parents = globalInitVar!(QList!(QPersistentModelIndex)), LayoutChangeHint hint = LayoutChangeHint.NoLayoutChangeHint);
 
     @QSignal final void rowsAboutToBeInserted(ref const(QModelIndex) parent, int first, int last, QPrivateSignal);
     @QSignal final void rowsInserted(ref const(QModelIndex) parent, int first, int last, QPrivateSignal);

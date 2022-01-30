@@ -184,8 +184,8 @@ public:
     }
 
 private:
-    /+pragma(inline, true) static Int initializer_list_helper(/+ typename std::initializer_list<Enum>::const_iterator +/ initializer_list.const_iterator it,
-                                                                   /+ typename std::initializer_list<Enum>::const_iterator +/ initializer_list.const_iterator end)/+
+    /+pragma(inline, true) static Int initializer_list_helper(/+ std:: +/initializer_list!(Enum).const_iterator it,
+                                                                   /+ std:: +/initializer_list!(Enum).const_iterator end)/+
         noexcept+/
     {
         return (it == end ? Int(0) : (Int(*it) | initializer_list_helper(it + 1, end)));

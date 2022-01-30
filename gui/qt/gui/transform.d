@@ -292,7 +292,6 @@ private:
 }
     /******* inlines *****/
     pragma(inline, true) TransformationType inline_type() const
-    /+pragma(inline, true) QTransform.TransformationType inline_type() const+/
     {
         if (m_dirty == TransformationType.TxNone)
             return static_cast!(TransformationType)(m_type);
