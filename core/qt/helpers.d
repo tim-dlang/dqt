@@ -1183,3 +1183,31 @@ enum CREATE_CONVENIENCE_WRAPPERS = q{
             }
     }
 };
+
+package alias parentOf(alias sym) = __traits(parent, sym);
+package alias parentOf(alias sym : T!Args, alias T, Args...) = __traits(parent, T);
+
+// Like std.traits.packageName, but allows modules without package.
+package template packageName(alias T)
+{
+    import std.algorithm.searching : startsWith;
+
+    enum bool isNotFunc = !isSomeFunction!(T);
+
+    static if (__traits(compiles, parentOf!T))
+        enum parent = packageName!(parentOf!T);
+    else
+        enum string parent = null;
+
+    static if (isNotFunc && T.stringof.startsWith("package "))
+        enum packageName = (parent.length ? parent ~ '.' : "") ~ T.stringof[8 .. $];
+    else static if (parent)
+        enum packageName = parent;
+    else
+        enum packageName = "";
+}
+
+package template IsInQtPackage(alias S)
+{
+    enum IsInQtPackage = packageName!(S).length > 3 && packageName!(S)[0..3] == "qt.";
+}
