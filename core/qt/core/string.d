@@ -1351,8 +1351,8 @@ private:
     /+ template <typename T> +/ 
         static T toIntegral_helper(T)(const(QChar)* data, int len, bool* ok, int base)
     {
-        alias Int64 = /+ std:: +/conditional!(UnknownType!q{/+ std:: +/is_unsigned!(T).value}, qulonglong, qlonglong).type;
-        alias Int32 = /+ std:: +/conditional!(UnknownType!q{/+ std:: +/is_unsigned!(T).value}, uint, int).type;
+        alias Int64 = /+ std:: +/conditional!(/+ std:: +/is_unsigned!(T).value, qulonglong, qlonglong).type;
+        alias Int32 = /+ std:: +/conditional!(/+ std:: +/is_unsigned!(T).value, uint, int).type;
 
         // we select the right overload by casting size() to int or uint
         Int64 val = toIntegral_helper(data, Int32(len), ok, base);

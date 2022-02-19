@@ -180,7 +180,7 @@ public:
     /+pragma(inline, true) ref QList!(T) operator =(ref const(QList!(T)) l)
     {
         if (d != l.d) {
-            QList<T> tmp(l);
+            auto tmp = QList!(T)(l);
             tmp.swap(this);
         }
         return this;
@@ -694,7 +694,7 @@ public:
             alast += offsetlast;
         }
 
-        for (Node *n = afirst.i; n < alast.i; ++n)
+        for (Node* n = afirst.i; n < alast.i; ++n)
             node_destruct(n);
         int idx = cast(int)(afirst - begin());
         p.remove(idx, alast - afirst);
@@ -730,7 +730,7 @@ public:
 
         }
 
-        QList!T cpy;
+        QList!(T) cpy;
         if (alength <= 0)
             return cpy;
         cpy.reserve(alength);
@@ -847,7 +847,7 @@ private:
     Node* detach_helper_grow(int i, int c)
     {
         Node* n = reinterpret_cast!(Node*)(p.begin());
-        QListData.Data *x = p.detach_grow(&i, c);
+        QListData.Data* x = p.detach_grow(&i, c);
         /+ QT_TRY +/ {
              /+ QT_CATCH(...) +/scope(failure) {
                 p.dispose();
@@ -875,7 +875,7 @@ private:
     void detach_helper(int alloc)
     {
         Node* n = reinterpret_cast!(Node*)(p.begin());
-        QListData.Data *x = p.detach(alloc);
+        QListData.Data* x = p.detach(alloc);
         /+ QT_TRY +/ {
              /+ QT_CATCH(...) +/scope(failure) {
                 p.dispose();

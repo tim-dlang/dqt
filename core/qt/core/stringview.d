@@ -444,7 +444,7 @@ return QStringView(m_data, m_size - n);
         (mixin(Q_ASSERT(q{cast(int)(QStringView.m_size) == QStringView.m_size})));
         QString s = QString.fromRawData(data(), cast(int)(m_size));
         const split = s.splitRef(sep.toString(), behavior, cs);
-        QList!QStringView result;
+        QList!(QStringView) result;
         foreach (const ref QStringRef r; split)
             result.append(QStringView(m_data + r.position(), r.size()));
         return result;
@@ -456,7 +456,7 @@ return QStringView(m_data, m_size - n);
         (mixin(Q_ASSERT(q{int(QStringView.m_size) == QStringView.m_size})));
         QString s = QString.fromRawData(data(), int(m_size));
         const split = s.splitRef(sep, behavior, cs);
-        QList!QStringView result;
+        QList!(QStringView) result;
         foreach (const ref QStringRef r; split)
             result.append(QStringView(m_data + r.position(), r.size()));
         return result;
@@ -470,7 +470,7 @@ return QStringView(m_data, m_size - n);
         (mixin(Q_ASSERT(q{int(QStringView.m_size) == QStringView.m_size})));
         QString s = QString.fromRawData(data(), int(m_size));
         const split = s.splitRef(sep, behavior);
-        QList!QStringView result;
+        QList!(QStringView) result;
         result.reserve(split.size());
         foreach(const ref QStringRef r; split)
             result.append(r);

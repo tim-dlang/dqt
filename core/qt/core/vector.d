@@ -133,7 +133,7 @@ public:
     /+ref QVector!(T) operator =(ref const(QVector!(T)) v)
     {
         if (v.d != d) {
-            QVector<T> tmp(v);
+            auto tmp = QVector!(T)(v);
             tmp.swap(this);
         }
         return this;
@@ -630,7 +630,7 @@ public:
 
         }
 
-        QVector!T midResult;
+        QVector!(T) midResult;
         midResult.realloc(len);
         T* srcFrom = d.begin() + pos;
         T* srcTo = d.begin() + pos + len;
