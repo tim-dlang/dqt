@@ -307,7 +307,7 @@ private:
     {
         return (bitfieldData_posted >> 0) & 0x1;
     }
-    uint posted(uint value)
+    ushort posted(ushort value)
     {
         bitfieldData_posted = (bitfieldData_posted & ~0x1) | ((value & 0x1) << 0);
         return value;
@@ -317,7 +317,7 @@ private:
     {
         return (bitfieldData_posted >> 1) & 0x1;
     }
-    uint spont(uint value)
+    ushort spont(ushort value)
     {
         bitfieldData_posted = (bitfieldData_posted & ~0x2) | ((value & 0x1) << 1);
         return value;
@@ -327,7 +327,7 @@ private:
     {
         return (bitfieldData_posted >> 2) & 0x1;
     }
-    uint m_accept(uint value)
+    ushort m_accept(ushort value)
     {
         bitfieldData_posted = (bitfieldData_posted & ~0x4) | ((value & 0x1) << 2);
         return value;
@@ -337,7 +337,7 @@ private:
     {
         return (bitfieldData_posted >> 3) & 0x1fff;
     }
-    uint reserved(uint value)
+    ushort reserved(ushort value)
     {
         bitfieldData_posted = (bitfieldData_posted & ~0xfff8) | ((value & 0x1fff) << 3);
         return value;

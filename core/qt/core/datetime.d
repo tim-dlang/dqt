@@ -261,7 +261,7 @@ private:
             {
                 return (bitfieldData_status >> 0) & 0xff;
             }
-            final uint status(uint value)
+            final quintptr status(quintptr value)
             {
                 bitfieldData_status = (bitfieldData_status & ~0xff) | ((value & 0xff) << 0);
                 return value;
@@ -273,7 +273,7 @@ private:
         {
             return (bitfieldData_msecs >> 0) & 0x1;
         }
-        final uint msecs(uint value)
+        final qintptr msecs(qintptr value)
         {
             bitfieldData_status = (bitfieldData_status & ~0x100) | ((value & 0x1) << 8);
             return value;
@@ -286,7 +286,7 @@ private:
             {
                 return (bitfieldData_msecs >> 65) & 0xff;
             }
-            final uint status(uint value)
+            final quintptr status(quintptr value)
             {
                 bitfieldData_msecs = (bitfieldData_msecs & ~0x1fe) | ((value & 0xff) << 65);
                 return value;

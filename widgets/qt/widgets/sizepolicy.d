@@ -193,7 +193,7 @@ private:
         {
             return (bitfieldData_horStretch >> 0) & 0xff;
         }
-        final uint horStretch(uint value)
+        final quint32 horStretch(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xff) | ((value & 0xff) << 0);
             return value;
@@ -203,7 +203,7 @@ private:
         {
             return (bitfieldData_horStretch >> 8) & 0xff;
         }
-        final uint verStretch(uint value)
+        final quint32 verStretch(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xff00) | ((value & 0xff) << 8);
             return value;
@@ -213,7 +213,7 @@ private:
         {
             return (bitfieldData_horStretch >> 16) & 0xf;
         }
-        final uint horPolicy(uint value)
+        final quint32 horPolicy(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xf0000) | ((value & 0xf) << 16);
             return value;
@@ -223,7 +223,7 @@ private:
         {
             return (bitfieldData_horStretch >> 20) & 0xf;
         }
-        final uint verPolicy(uint value)
+        final quint32 verPolicy(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xf00000) | ((value & 0xf) << 20);
             return value;
@@ -233,7 +233,7 @@ private:
         {
             return (bitfieldData_horStretch >> 24) & 0x1f;
         }
-        final uint ctype(uint value)
+        final quint32 ctype(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x1f000000) | ((value & 0x1f) << 24);
             return value;
@@ -243,7 +243,7 @@ private:
         {
             return (bitfieldData_horStretch >> 29) & 0x1;
         }
-        final uint hfw(uint value)
+        final quint32 hfw(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x20000000) | ((value & 0x1) << 29);
             return value;
@@ -253,7 +253,7 @@ private:
         {
             return (bitfieldData_horStretch >> 30) & 0x1;
         }
-        final uint wfh(uint value)
+        final quint32 wfh(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x40000000) | ((value & 0x1) << 30);
             return value;
@@ -263,7 +263,7 @@ private:
         {
             return (bitfieldData_horStretch >> 31) & 0x1;
         }
-        final uint retainSizeWhenHidden(uint value)
+        final quint32 retainSizeWhenHidden(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x80000000) | ((value & 0x1) << 31);
             return value;

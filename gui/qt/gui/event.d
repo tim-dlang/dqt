@@ -272,7 +272,7 @@ protected:
     {
         return (bitfieldData__unused_ >> 4) & 0x1;
     }
-    uint invertedScrolling(uint value)
+    bool invertedScrolling(bool value)
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0x10) | ((value & 0x1) << 4);
         return value;
@@ -292,7 +292,7 @@ protected:
     {
         return (bitfieldData__unused_ >> 8) & 0xffffff;
     }
-    uint reserved(uint value)
+    int reserved(int value)
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0xffffff00) | ((value & 0xffffff) << 8);
         return value;
@@ -469,7 +469,7 @@ protected:
     {
         return (bitfieldData_autor >> 0) & 0x1;
     }
-    uint autor(uint value)
+    ushort autor(ushort value)
     {
         bitfieldData_autor = (bitfieldData_autor & ~0x1) | ((value & 0x1) << 0);
         return value;
