@@ -107,10 +107,8 @@ public:
     }
 
 
-    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) if(op == "+")
-    { return QPoint(xp+p2.xp, yp+p2.yp); }
 
-    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) if(op == "-")
+    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if(op == "-")
     { return QPoint(xp-p2.xp, yp-p2.yp); }
 
 
