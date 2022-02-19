@@ -2308,7 +2308,7 @@ struct ArgBase {
 /+
 /+ Q_REQUIRED_RESULT +/ /+ Q_ALWAYS_INLINE +/ pragma(inline, true) QString argToQStringDispatch(StringView, Args)(StringView pattern, ref const(Args) args)
 {
-    /+ const(ArgBase)*[0]  +/ auto argBases = mixin(buildStaticArray!(q{const(ArgBase)*}, q{cast(const(ArgBase)*)(&args)..., /* avoid zero-sized array */ null}));
+    /+ const(ArgBase)*[0]  +/ auto argBases = mixin(buildStaticArray!(q{const(ArgBase)*}, q{&args..., /* avoid zero-sized array */ null}));
     return /+ QtPrivate:: +/argToQString(pattern, sizeof...(Args), argBases.ptr);
 }+/
 

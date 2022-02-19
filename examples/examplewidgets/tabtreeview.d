@@ -137,9 +137,9 @@ public:
     {
         if (orientation == /+ Qt:: +/qt.core.namespace.Orientation.Horizontal && role == /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) {
             if(section == 0)
-                return cast(QVariant)(QString("Name"));
+                return QVariant(QString("Name"));
             else if(section == 1)
-                return cast(QVariant)(QString("Description"));
+                return QVariant(QString("Description"));
         }
 
         return QVariant();

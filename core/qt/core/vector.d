@@ -70,7 +70,7 @@ public:
             d = cast(Data*)(Data.allocate(asize));
             //mixin(Q_CHECK_PTR(q{QVector.d}));
             d.size = asize;
-            defaultConstruct(cast(T*)(d.begin()), cast(T*)(d.end()));
+            defaultConstruct(d.begin(), d.end());
         } else {
             d = cast(Data*)(Data.sharedNull());
         }
@@ -84,7 +84,7 @@ public:
             d = cast(Data*)(Data.allocate(asize));
             mixin(Q_CHECK_PTR(q{QVector.d}));
             d.size = asize;
-            T* i = cast(T*)(d.end());
+            T* i = d.end();
             while (i != d.begin())
                 copyEmplace!T(*--i, t);
         } else {
@@ -106,7 +106,7 @@ public:
                 mixin(Q_CHECK_PTR(q{QVector.d}));
             }
             if (d.alloc) {
-                copyConstruct(cast(const(T)*)(v.d.begin()), cast(const(T)*)(v.d.end()), cast(T*)(d.begin()));
+                copyConstruct(v.d.begin(), v.d.end(), d.begin());
                 d.size = v.d.size;
             }
         }
@@ -164,9 +164,9 @@ public:
             return true;
         if (d.size != v.d.size)
             return false;
-        const(T)* vb = cast(const(T)*)(v.d.begin());
-        const(T)* b  = cast(const(T)*)(d.begin());
-        const(T)* e  = cast(const(T)*)(d.end());
+        const(T)* vb = v.d.begin();
+        const(T)* b  = d.begin();
+        const(T)* e  = d.end();
         return /+ std:: +/equal(b, e, mixin(QT_MAKE_CHECKED_ARRAY_ITERATOR(q{vb},q{ v.d->size})));
     }+/
     /+pragma(inline, true) bool operator !=(ref const(QVector!(T)) v) const { return !(this == v); }+/
@@ -184,9 +184,9 @@ public:
             realloc(qMax(int(d.alloc), asize), opt);
         }
         if (asize < d.size)
-            destruct(cast(T*)(begin() + asize), cast(T*)(end()));
+            destruct(begin() + asize, end());
         else
-            defaultConstruct(cast(T*)(end()), cast(T*)(begin() + asize));
+            defaultConstruct(end(), begin() + asize);
         d.size = asize;
     }
 
@@ -263,14 +263,14 @@ public:
 
     pragma(inline, true) bool isSharedWith(ref const(QVector!(T)) other) const { return d == other.d; }
 
-    pragma(inline, true) T* data() { detach(); return cast(T*)(d.begin()); }
-    pragma(inline, true) const(T)* data() const { return cast(const(T)*)(d.begin()); }
-    pragma(inline, true) const(T)* constData() const { return cast(const(T)*)(d.begin()); }
+    pragma(inline, true) T* data() { detach(); return d.begin(); }
+    pragma(inline, true) const(T)* data() const { return d.begin(); }
+    pragma(inline, true) const(T)* constData() const { return d.begin(); }
     pragma(inline, true) void clear()
     {
         if (!d.size)
             return;
-        destruct(cast(T*)(begin()), cast(T*)(end()));
+        destruct(begin(), end());
         d.size = 0;
     }
 
@@ -361,8 +361,8 @@ public:
         auto copy = const(T)(from);
         resize(asize < 0 ? d.size : asize);
         if (d.size) {
-            T* i = cast(T*)(d.end());
-            T* b = cast(T*)(d.begin());
+            T* i = d.end();
+            T* b = d.begin();
             while (i != b)
                 *--i = copy;
         }
@@ -409,14 +409,14 @@ public:
     }
 /+    bool contains(ref const(T) t) const
     {
-        const(T)* b = cast(const(T)*)(d.begin());
-        const(T)* e = cast(const(T)*)(d.end());
+        const(T)* b = d.begin();
+        const(T)* e = d.end();
         return /+ std:: +/find(b, e, t) != e;
     }+/
 /+    int count(ref const(T) t) const
     {
-        const(T)* b = cast(const(T)*)(d.begin());
-        const(T)* e = cast(const(T)*)(d.end());
+        const(T)* b = d.begin();
+        const(T)* e = d.end();
         return int(/+ std:: +/count(b, e, t));
     }
 +/
@@ -454,7 +454,7 @@ public:
         if (from == to) // don't detach when no-op
             return;
         detach();
-        T* /+ const +/  b = cast(T*)(d.begin());
+        T* /+ const +/  b = d.begin();
         if (from < to)
             /+ std:: +/rotate(b + from, b + from + 1, b + to + 1);
         else
@@ -527,22 +527,22 @@ public:
         if (n != 0) {
             T copy = *cast(T*)&t;
             if (!isDetached() || d.size + n > int(d.alloc))
-                realloc(d.size + n, /+ QArrayData:: +/QArrayData.AllocationOptions.Grow);
-            static if (!QTypeInfoQuery!T.isRelocatable) {
-                T* b = cast(T*)(d.end());
-                T* i = cast(T*)(d.end() + n);
+                realloc(d.size + n, QArrayData.AllocationOptions.Grow);
+            static if (!QTypeInfoQuery!(T).isRelocatable) {
+                T* b = d.end();
+                T* i = d.end() + n;
                 while (i != b)
                     emplace!T(--i);
-                i = cast(T*)(d.end());
+                i = d.end();
                 T* j = i + n;
-                b = cast(T*)(d.begin() + offset);
+                b = d.begin() + offset;
                 while (i != b)
                     *--j = *--i;
                 i = b+n;
                 while (i != b)
                     *--i = copy;
             } else {
-                T* b = cast(T*)(d.begin() + offset);
+                T* b = d.begin() + offset;
                 T* i = b + n;
                 memmove(static_cast!(void*)(i), static_cast!(const(void)*)(b), (d.size - offset) * T.sizeof);
                 while (i != b)
@@ -590,10 +590,10 @@ public:
                 }
                 if (abegin < d.end()) {
                     // destroy rest of instances
-                    destruct(cast(T*)(abegin), cast(T*)(d.end()));
+                    destruct(abegin, d.end());
                 }
             } else {
-                destruct(cast(T*)(abegin), cast(T*)(aend));
+                destruct(abegin, aend);
                 // QTBUG-53605: static_cast<void *> masks clang errors of the form
                 // error: destination for this 'memmove' call is a pointer to class containing a dynamic class
                 // FIXME maybe use std::is_polymorphic (as soon as allowed) to avoid the memmove
@@ -632,8 +632,8 @@ public:
 
         QVector!T midResult;
         midResult.realloc(len);
-        T* srcFrom = cast(T*)(d.begin() + pos);
-        T* srcTo = cast(T*)(d.begin() + pos + len);
+        T* srcFrom = d.begin() + pos;
+        T* srcTo = d.begin() + pos + len;
         midResult.copyConstruct(srcFrom, srcTo, midResult.data());
         midResult.d.size = len;
         return midResult;
@@ -753,15 +753,15 @@ private:
                     //(mixin(Q_ASSERT(q{!x.ref_.isStatic()})));
                     x.size = asize;
 
-                    T* srcBegin = cast(T*)(d.begin());
-                    T* srcEnd = asize > d.size ? cast(T*)(d.end()) : cast(T*)(d.begin() + asize);
-                    T* dst = cast(T*)(x.begin());
+                    T* srcBegin = d.begin();
+                    T* srcEnd = asize > d.size ? d.end() : d.begin() + asize;
+                    T* dst = x.begin();
 
                     if (!QTypeInfoQuery!T.isRelocatable || (isShared && QTypeInfo!T.isComplex)) {
                         /+ QT_TRY +/ {
                              /+ QT_CATCH (...) +/scope(failure) {
                                 // destruct already copied objects
-                                destruct(cast(T*)(x.begin()), dst);
+                                destruct(x.begin(), dst);
                             }
                             if (true/+isShared || !std.is_nothrow_move_constructible<T>.value+/) {
                                 // we can not move the data, we need to copy construct it
@@ -778,7 +778,7 @@ private:
 
                         // destruct unused / not moved data
                         if (asize < d.size)
-                            destruct(cast(T*)(d.begin() + asize), cast(T*)(d.end()));
+                            destruct(d.begin() + asize, d.end());
                     }
 
                     if (asize > d.size) {
@@ -789,7 +789,7 @@ private:
                             /+ QT_TRY +/ {
                                  /+ QT_CATCH (...) +/scope(failure) {
                                     // destruct already copied objects
-                                    destruct(cast(T*)(x.begin()), dst);
+                                    destruct(x.begin(), dst);
                                 }
                                 while (dst != x.end())
                                     emplace!T(dst++);
@@ -803,9 +803,9 @@ private:
                 (mixin(Q_ASSERT(q{QVector.isDetached()})));       // can be done only on detached d
                 (mixin(Q_ASSERT(q{x == QVector.d})));             // in this case we do not need to allocate anything
                 if (asize <= d.size) {
-                    destruct(cast(T*)(x.begin() + asize), cast(T*)(x.end())); // from future end to current end
+                    destruct(x.begin() + asize, x.end()); // from future end to current end
                 } else {
-                    defaultConstruct(cast(T*)(x.end()), cast(T*)(x.begin() + asize)); // from current end to future end
+                    defaultConstruct(x.end(), x.begin() + asize); // from current end to future end
                 }
                 x.size = asize;
             }
@@ -861,15 +861,15 @@ private:
     //        (mixin(Q_ASSERT(q{!x.ref_.isStatic()})));
             x.size = d.size;
 
-            T* srcBegin = cast(T*)(d.begin());
-            T* srcEnd = cast(T*)(d.end());
-            T* dst = cast(T*)(x.begin());
+            T* srcBegin = d.begin();
+            T* srcEnd = d.end();
+            T* dst = x.begin();
 
             if (!QTypeInfoQuery!T.isRelocatable || (isShared && QTypeInfo!T.isComplex)) {
                 /+ QT_TRY +/ {
                      /+ QT_CATCH (...) +/scope(failure) {
                         // destruct already copied objects
-                        destruct(cast(T*)(x.begin()), dst);
+                        destruct(x.begin(), dst);
                     }
                     /+if (isShared || !std::is_nothrow_move_constructible<T>::value)+/ {
                         // we can not move the data, we need to copy construct it
@@ -911,7 +911,7 @@ private:
     }
     void freeData(Data* x)
     {
-        destruct(cast(T*)(x.begin()), cast(T*)(x.end()));
+        destruct(x.begin(), x.end());
         Data.deallocate(x);
     }
     void defaultConstruct()(T* from, T* to)

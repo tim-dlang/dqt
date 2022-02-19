@@ -1947,7 +1947,7 @@ int qRegisterMetaType(T)(const(char)* typeName
 #else +/
     /+ QT_PREPEND_NAMESPACE(QByteArray) +/QByteArray normalizedTypeName = QMetaObject.normalizedType(typeName);
 /+ #endif +/
-    return qRegisterNormalizedMetaType!(T)(normalizedTypeName, cast(T*)(dummy), defined__1);
+    return qRegisterNormalizedMetaType!(T)(normalizedTypeName, dummy, defined__1);
 }
 
 /+ #ifndef QT_NO_DATASTREAM
