@@ -14,7 +14,6 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.string;
 import qt.core.stringlist;
@@ -36,7 +35,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
 #endif +/
 
 /// Binding for C++ class [QColor](https://doc.qt.io/qt-5/qcolor.html).
-@Q_RELOCATABLE_TYPE @(QMetaType.Type.QColor) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColor
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColor
 {
 public:
     enum Spec { Invalid, Rgb, Hsv, Cmyk, Hsl, ExtendedRgb }

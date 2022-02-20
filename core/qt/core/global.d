@@ -25,7 +25,6 @@ import core.stdc.config;
 import qt.config;
 import qt.core.bytearray;
 import qt.core.config;
-import qt.core.metatype;
 import qt.core.string;
 import qt.core.typeinfo;
 import qt.helpers;

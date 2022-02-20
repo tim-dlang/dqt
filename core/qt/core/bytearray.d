@@ -19,7 +19,6 @@ import qt.core.arraydata;
 import qt.core.flags;
 import qt.core.global;
 import qt.core.list;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.typeinfo;
 import qt.helpers;
@@ -127,7 +126,7 @@ struct QByteArrayDataPtr
 #    define Q_REQUIRED_RESULT_pushed +/
 
 /// Binding for C++ class [QByteArray](https://doc.qt.io/qt-5/qbytearray.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QByteArray) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QByteArray
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QByteArray
 {
 private:
     alias Data = QTypedArrayData!(char);

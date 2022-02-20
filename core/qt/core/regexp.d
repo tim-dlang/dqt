@@ -19,7 +19,6 @@ version(QT_NO_REGEXP_CAPTURE){}else
     import qt.core.stringlist;
 version(QT_NO_REGEXP){}else
 {
-    import qt.core.metatype;
     import qt.core.namespace;
     import qt.core.string;
     import qt.core.typeinfo;
@@ -38,7 +37,7 @@ struct QRegExpPrivate;
 /+ Q_CORE_EXPORT uint qHash(const QRegExp &key, uint seed = 0) noexcept; +/
 
 /// Binding for C++ class [QRegExp](https://doc.qt.io/qt-5/qregexp.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QRegExp) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegExp
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegExp
 {
 public:
     enum PatternSyntax {

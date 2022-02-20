@@ -14,7 +14,6 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.point;
 import qt.core.typeinfo;
 import qt.helpers;
@@ -24,7 +23,7 @@ import qt.helpers;
  *******************************************************************************/
 
 /// Binding for C++ class [QLine](https://doc.qt.io/qt-5/qline.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QLine) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLine
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLine
 {
 public:
     /+pragma(inline, true) this() { }+/
@@ -152,7 +151,7 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLine &);
  * class QLineF
  *******************************************************************************/
 /// Binding for C++ class [QLineF](https://doc.qt.io/qt-5/qlinef.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QLineF) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLineF {
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLineF {
 public:
 
     enum IntersectType { NoIntersection, BoundedIntersection, UnboundedIntersection }

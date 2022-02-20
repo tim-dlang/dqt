@@ -16,7 +16,6 @@ import qt.config;
 import qt.core.atomic;
 import qt.core.global;
 import qt.core.metamacros;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.pair;
 import qt.core.point;
@@ -34,7 +33,7 @@ import qt.helpers;
 struct QBrushDataPointerDeleter;
 
 /// Binding for C++ class [QBrush](https://doc.qt.io/qt-5/qbrush.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QBrush) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBrush
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBrush
 {
 public:
     @disable this();

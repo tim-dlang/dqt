@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.global;
 import qt.core.metamacros;
-import qt.core.metatype;
 import qt.core.shareddata;
 import qt.core.string;
 import qt.core.stringlist;
@@ -27,7 +26,7 @@ import qt.helpers;
 extern(C++, class) struct QFontPrivate;                                     /* don't touch */
 
 /// Binding for C++ class [QFont](https://doc.qt.io/qt-5/qfont.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QFont) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFont
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFont
 {
     mixin(Q_GADGET);
 public:

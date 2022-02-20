@@ -15,12 +15,11 @@ extern(C++):
 import qt.config;
 import qt.core.bytearray;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.typeinfo;
 import qt.helpers;
 
 /// Binding for C++ class [QBitArray](https://doc.qt.io/qt-5/qbitarray.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QBitArray) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QBitArray
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QBitArray
 {
 private:
     /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QBitArray &); +/

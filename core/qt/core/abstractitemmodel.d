@@ -20,7 +20,6 @@ import qt.core.global;
 import qt.core.hash;
 import qt.core.list;
 import qt.core.map;
-import qt.core.metatype;
 import qt.core.mimedata;
 import qt.core.namespace;
 import qt.core.object;
@@ -37,7 +36,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QModelIndex](https://doc.qt.io/qt-5/qmodelindex.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QModelIndex) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QModelIndex
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QModelIndex
 {
 private:
     /+ friend class QAbstractItemModel; +/
@@ -115,7 +114,7 @@ extern(C++, class) struct QPersistentModelIndexData;
 /+ uint qHash(const QPersistentModelIndex &index, uint seed = 0) noexcept; +/
 
 /// Binding for C++ class [QPersistentModelIndex](https://doc.qt.io/qt-5/qpersistentmodelindex.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QPersistentModelIndex) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPersistentModelIndex
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPersistentModelIndex
 {
 public:
 

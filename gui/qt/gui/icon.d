@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.global;
 import qt.core.list;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.rect;
 import qt.core.size;
@@ -32,7 +31,7 @@ extern(C++, class) struct QIconPrivate;
 extern(C++, class) struct QIconEngine;
 
 /// Binding for C++ class [QIcon](https://doc.qt.io/qt-5/qicon.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QIcon) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QIcon
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QIcon
 {
 public:
     enum Mode { Normal, Disabled, Active, Selected }

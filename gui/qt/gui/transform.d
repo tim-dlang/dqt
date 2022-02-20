@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.global;
 import qt.core.line;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
@@ -29,7 +28,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QTransform](https://doc.qt.io/qt-5/qtransform.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QTransform) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTransform
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTransform
 {
 public:
     enum TransformationType {

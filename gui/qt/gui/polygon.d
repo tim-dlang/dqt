@@ -14,7 +14,6 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
@@ -25,7 +24,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QPolygon](https://doc.qt.io/qt-5/qpolygon.html).
-@Q_RELOCATABLE_TYPE @(QMetaType.Type.QPolygon) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygon
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygon
 {
     public QVector!(QPoint) base0;
     alias base0 this;
@@ -108,7 +107,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPolygon &polygon);
 
 
 /// Binding for C++ class [QPolygonF](https://doc.qt.io/qt-5/qpolygonf.html).
-@Q_RELOCATABLE_TYPE @(QMetaType.Type.QPolygonF) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygonF
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygonF
 {
     public QVector!(QPointF) base0;
     alias base0 this;

@@ -16,7 +16,6 @@ import qt.config;
 import qt.core.bytearray;
 import qt.core.flags;
 import qt.core.list;
-import qt.core.metatype;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.core.typeinfo;
@@ -112,7 +111,7 @@ class QTypeInfo<QUrlTwoFlags<E1, E2> > : public QTypeInfoMerger<QUrlTwoFlags<E1,
 Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed = 0) noexcept; +/
 
 /// Binding for C++ class [QUrl](https://doc.qt.io/qt-5/qurl.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QUrl) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QUrl
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QUrl
 {
 public:
     enum ParsingMode {

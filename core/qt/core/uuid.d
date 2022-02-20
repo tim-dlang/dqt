@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.bytearray;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.string;
 import qt.core.stringview;
@@ -51,7 +50,7 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSUUID);
 
 
 /// Binding for C++ class [QUuid](https://doc.qt.io/qt-5/quuid.html).
-@Q_PRIMITIVE_TYPE @(QMetaType.Type.QUuid) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QUuid
+@Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QUuid
 {
 private:
     this(/+ Qt:: +/qt.core.namespace.Initialization) {}

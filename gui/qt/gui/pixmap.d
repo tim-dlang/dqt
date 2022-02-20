@@ -16,7 +16,6 @@ import qt.config;
 import qt.core.bytearray;
 import qt.core.global;
 import qt.core.iodevice;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.object;
 import qt.core.point;
@@ -42,7 +41,7 @@ import qt.helpers;
 extern(C++, class) struct QPlatformPixmap;
 
 /// Binding for C++ class [QPixmap](https://doc.qt.io/qt-5/qpixmap.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QPixmap) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPixmap
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPixmap
 {
 private:
     immutable void *vtbl;

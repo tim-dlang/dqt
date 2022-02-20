@@ -14,7 +14,6 @@ extern(C++):
 
 import qt.config;
 import qt.core.list;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.qchar;
 import qt.core.regularexpression;
@@ -87,7 +86,7 @@ private:
 
 // ### Qt6: check if there's a better way
 /// Binding for C++ class [QStringList](https://doc.qt.io/qt-5/qstringlist.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QStringList) extern(C++, class) struct QStringList
+@Q_MOVABLE_TYPE extern(C++, class) struct QStringList
 {
     public QList!(QString) base0;
     alias base0 this;

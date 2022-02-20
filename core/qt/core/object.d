@@ -17,7 +17,6 @@ import qt.core.coreevent;
 import qt.core.list;
 import qt.core.metamacros;
 import qt.core.metaobject;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.objectdefs;
 import qt.core.objectdefs_impl;
@@ -198,7 +197,7 @@ template parametersSame(Params...)
 }
 
 /// Binding for C++ class [QObject](https://doc.qt.io/qt-5/qobject.html).
-@(QMetaType.Type.QObjectStar) class /+ Q_CORE_EXPORT +/ QObject
+class /+ Q_CORE_EXPORT +/ QObject
 {
     mixin((){import std.array; return Q_OBJECT.replace("override", "");}());
 

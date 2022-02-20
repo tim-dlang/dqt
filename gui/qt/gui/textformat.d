@@ -18,7 +18,6 @@ import qt.core.global;
 import qt.core.list;
 import qt.core.map;
 import qt.core.metamacros;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.shareddata;
 import qt.core.string;
@@ -47,7 +46,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextLength &);
 #endif +/
 
 /// Binding for C++ class [QTextLength](https://doc.qt.io/qt-5/qtextlength.html).
-@(QMetaType.Type.QTextLength) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLength
+extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLength
 {
 public:
     enum Type { VariableLength = 0, FixedLength, PercentageLength }
@@ -105,7 +104,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextFormat &);
 #endif +/
 
 /// Binding for C++ class [QTextFormat](https://doc.qt.io/qt-5/qtextformat.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QTextFormat) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFormat
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFormat
 {
     mixin(Q_GADGET);
 public:

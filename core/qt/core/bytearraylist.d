@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.bytearray;
 import qt.core.list;
-import qt.core.metatype;
 import qt.helpers;
 
 /+ #ifndef QBYTEARRAYLIST_H +/

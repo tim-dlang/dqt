@@ -39,7 +39,7 @@ version(QT_NO_VECTOR3D){}else
 {
 
 /// Binding for C++ class [QVector3D](https://doc.qt.io/qt-5/qvector3d.html).
-@Q_PRIMITIVE_TYPE @(QMetaType.Type.QVector3D) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QVector3D
+@Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QVector3D
 {
 public:
     @disable this();

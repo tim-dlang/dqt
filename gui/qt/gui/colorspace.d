@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.bytearray;
 import qt.core.metamacros;
-import qt.core.metatype;
 import qt.core.point;
 import qt.core.typeinfo;
 import qt.core.variant;
@@ -24,7 +23,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QColorSpace](https://doc.qt.io/qt-5/qcolorspace.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QColorSpace) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColorSpace
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColorSpace
 {
     mixin(Q_GADGET);
 public:

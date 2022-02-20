@@ -14,7 +14,6 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.typeinfo;
 import qt.helpers;
 
@@ -25,7 +24,7 @@ struct CGPoint;
 
 
 /// Binding for C++ class [QPoint](https://doc.qt.io/qt-5/qpoint.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QPoint) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPoint
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPoint
 {
 public:
     /+pragma(inline, true) this()
@@ -178,7 +177,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QPoint &);
 
 
 /// Binding for C++ class [QPointF](https://doc.qt.io/qt-5/qpointf.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QPointF) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPointF
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPointF
 {
 public:
     /+pragma(inline, true) this()

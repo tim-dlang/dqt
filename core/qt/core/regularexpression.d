@@ -14,7 +14,6 @@ extern(C++):
 
 import qt.config;
 import qt.core.flags;
-import qt.core.metatype;
 import qt.core.shareddata;
 import qt.core.string;
 import qt.core.stringlist;
@@ -30,7 +29,7 @@ struct QRegularExpressionPrivate;
 /+ Q_CORE_EXPORT uint qHash(const QRegularExpression &key, uint seed = 0) noexcept; +/
 
 /// Binding for C++ class [QRegularExpression](https://doc.qt.io/qt-5/qregularexpression.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QRegularExpression) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegularExpression
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRegularExpression
 {
 public:
     enum PatternOption {

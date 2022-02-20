@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.global;
 import qt.core.line;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
@@ -28,7 +27,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QMatrix](https://doc.qt.io/qt-5/qmatrix.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QMatrix) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QMatrix // 2D transform matrix
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QMatrix // 2D transform matrix
 {
 public:
     /+ explicit +/pragma(inline, true) this(/+ Qt:: +/qt.core.namespace.Initialization) {}

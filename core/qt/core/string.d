@@ -20,7 +20,6 @@ import qt.core.arraydata;
 import qt.core.bytearray;
 import qt.core.flags;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.qchar;
 import qt.core.regularexpression;
@@ -312,7 +311,7 @@ bool isLatin1(QLatin1String)/+ noexcept+/
 #    define Q_REQUIRED_RESULT_pushed +/
 
 /// Binding for C++ class [QString](https://doc.qt.io/qt-5/qstring.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QString) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
 {
 public:
     alias Data = QStringData;

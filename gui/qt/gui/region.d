@@ -13,7 +13,6 @@ module qt.gui.region;
 extern(C++):
 
 import qt.config;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
@@ -39,7 +38,7 @@ struct QRegionPrivate;
 
 
 /// Binding for C++ class [QRegion](https://doc.qt.io/qt-5/qregion.html).
-@Q_RELOCATABLE_TYPE @(QMetaType.Type.QRegion) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRegion
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRegion
 {
 public:
     enum RegionType { Rectangle, Ellipse }

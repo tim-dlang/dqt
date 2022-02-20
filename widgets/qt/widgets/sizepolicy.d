@@ -16,7 +16,6 @@ import qt.config;
 import qt.core.flags;
 import qt.core.global;
 import qt.core.metamacros;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.typeinfo;
 import qt.core.variant;
@@ -42,7 +41,7 @@ import qt.helpers;
 Q_DECL_CONST_FUNCTION inline uint qHash(QSizePolicy key, uint seed = 0) noexcept; +/
 
 /// Binding for C++ class [QSizePolicy](https://doc.qt.io/qt-5/qsizepolicy.html).
-@Q_RELOCATABLE_TYPE @(QMetaType.Type.QSizePolicy) extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QSizePolicy
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QSizePolicy
 {
     mixin(Q_GADGET);
 

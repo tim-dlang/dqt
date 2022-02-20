@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.global;
 import qt.core.margins;
-import qt.core.metatype;
 import qt.core.point;
 import qt.core.size;
 import qt.core.typeinfo;
@@ -31,7 +30,7 @@ struct CGRect;
 
 
 /// Binding for C++ class [QRect](https://doc.qt.io/qt-5/qrect.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QRect) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRect
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRect
 {
 public:
     /+this()/+ noexcept+/
@@ -380,7 +379,7 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QRect &);
 
 
 /// Binding for C++ class [QRectF](https://doc.qt.io/qt-5/qrectf.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QRectF) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRectF
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRectF
 {
 public:
     /+this()/+ noexcept+/

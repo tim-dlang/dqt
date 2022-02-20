@@ -14,7 +14,6 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.shareddata;
 import qt.core.size;
@@ -30,7 +29,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QBitmap](https://doc.qt.io/qt-5/qbitmap.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QBitmap) extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBitmap
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBitmap
 {
     public QPixmap base0;
     alias base0 this;

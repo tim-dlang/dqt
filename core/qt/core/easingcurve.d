@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.global;
 import qt.core.metamacros;
-import qt.core.metatype;
 import qt.core.point;
 import qt.core.typeinfo;
 import qt.core.vector;
@@ -30,7 +29,7 @@ import qt.helpers;
 
 extern(C++, class) struct QEasingCurvePrivate;
 /// Binding for C++ class [QEasingCurve](https://doc.qt.io/qt-5/qeasingcurve.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QEasingCurve) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QEasingCurve
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QEasingCurve
 {
     mixin(Q_GADGET);
 public:

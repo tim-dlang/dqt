@@ -15,7 +15,6 @@ extern(C++):
 import core.stdc.stddef;
 import qt.config;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.string;
 import qt.core.typeinfo;
 import qt.helpers;
@@ -51,7 +50,7 @@ private:
 /+pragma(inline, true) bool operator > (QLatin1Char lhs, char rhs)/+ noexcept+/ { return lhs.toLatin1() >  rhs; }+/
 
 /// Binding for C++ class [QChar](https://doc.qt.io/qt-5/qchar.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QChar) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QChar {
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QChar {
 public:
     enum SpecialCharacter {
         Null = 0x0000,

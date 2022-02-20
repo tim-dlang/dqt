@@ -15,7 +15,6 @@ extern(C++):
 import qt.config;
 import qt.core.calendar;
 import qt.core.global;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.string;
 import qt.core.stringview;
@@ -34,7 +33,7 @@ class QTimeZone;
 #endif +/
 
 /// Binding for C++ class [QDate](https://doc.qt.io/qt-5/qdate.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QDate) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDate // ### Qt 6: change to be used by value, not const &
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDate // ### Qt 6: change to be used by value, not const &
 {
 public:
     enum MonthNameType { // ### Qt 6: remove, along with methods using it
@@ -170,7 +169,7 @@ private:
 /+ Q_DECLARE_TYPEINFO(QDate, Q_MOVABLE_TYPE); +/
 
 /// Binding for C++ class [QTime](https://doc.qt.io/qt-5/qtime.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QTime) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTime // ### Qt 6: change to be used by value, not const &
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTime // ### Qt 6: change to be used by value, not const &
 {
 private:
     /+ explicit +/ this(int ms)
@@ -248,7 +247,7 @@ private:
 extern(C++, class) struct QDateTimePrivate;
 
 /// Binding for C++ class [QDateTime](https://doc.qt.io/qt-5/qdatetime.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QDateTime) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDateTime
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDateTime
 {
 private:
     // ### Qt 6: revisit the optimization

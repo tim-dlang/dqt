@@ -18,11 +18,11 @@ import qt.core.datastream;
 import qt.core.flags;
 import qt.core.global;
 import qt.core.list;
-import qt.core.metatype;
 import qt.core.object;
 import qt.core.objectdefs;
 import qt.core.variant;
 import qt.helpers;
+import std.traits;
 
 /+ #ifndef QT_NO_QOBJECT
 #endif
@@ -34,123 +34,139 @@ import qt.helpers;
 // from qcborcommon.h
 enum class QCborSimpleType : quint8;
 
-template <typename T>
-struct QMetaTypeId2;
 
 template <typename T>
 inline int qMetaTypeId();
++/
+
+struct BuiltinTypeInfo
+{
+    string typeName;
+    int typeNameID;
+    string realType;
+    string dType;
+}
 
 // F is a tuple: (QMetaType::TypeName, QMetaType::TypeNameID, RealType)
 // ### Qt6: reorder the types to match the C++ integral type ranking
-#define QT_FOR_EACH_STATIC_PRIMITIVE_TYPE(F)\
-    F(Void, 43, void) \
-    F(Bool, 1, bool) \
-    F(Int, 2, int) \
-    F(UInt, 3, uint) \
-    F(LongLong, 4, qlonglong) \
-    F(ULongLong, 5, qulonglong) \
-    F(Double, 6, double) \
-    F(Long, 32, long) \
-    F(Short, 33, short) \
-    F(Char, 34, char) \
-    F(ULong, 35, ulong) \
-    F(UShort, 36, ushort) \
-    F(UChar, 37, uchar) \
-    F(Float, 38, float) \
-    F(SChar, 40, signed char) \
-    F(Nullptr, 51, std::nullptr_t) \
-    F(QCborSimpleType, 52, QCborSimpleType) \
+enum immutable(BuiltinTypeInfo[]) primitiveTypes = [
+    BuiltinTypeInfo("Void", 43, "void"),
+    BuiltinTypeInfo("Bool", 1, "bool"),
+    BuiltinTypeInfo("Int", 2, "int"),
+    BuiltinTypeInfo("UInt", 3, "uint"),
+    BuiltinTypeInfo("LongLong", 4, "qlonglong"),
+    BuiltinTypeInfo("ULongLong", 5, "qulonglong"),
+    BuiltinTypeInfo("Double", 6, "double"),
+    BuiltinTypeInfo("Long", 32, "long"),
+    BuiltinTypeInfo("Short", 33, "short"),
+    BuiltinTypeInfo("Char", 34, "char"),
+    BuiltinTypeInfo("ULong", 35, "ulong"),
+    BuiltinTypeInfo("UShort", 36, "ushort"),
+    BuiltinTypeInfo("UChar", 37, "uchar"),
+    BuiltinTypeInfo("Float", 38, "float"),
+    BuiltinTypeInfo("SChar", 40, "signed char", "byte"),
+    BuiltinTypeInfo("Nullptr", 51, "std::nullptr_t", "typeof(null)"),
+    BuiltinTypeInfo("QCborSimpleType", 52, "QCborSimpleType"),
+];
 
-#define QT_FOR_EACH_STATIC_PRIMITIVE_POINTER(F)\
-    F(VoidStar, 31, void*) \
+enum immutable(BuiltinTypeInfo[]) primitivePointerTypes = [
+    BuiltinTypeInfo("VoidStar", 31, "void*"),
+];
 
-#if QT_CONFIG(easingcurve)
-#define QT_FOR_EACH_STATIC_EASINGCURVE(F)\
-    F(QEasingCurve, 29, QEasingCurve)
-#else
+/+ #if QT_CONFIG(easingcurve) +/
+enum immutable(BuiltinTypeInfo[]) easingCurveTypes = [
+    BuiltinTypeInfo("QEasingCurve", 29, "QEasingCurve"),
+];
+/+ #else
 #define QT_FOR_EACH_STATIC_EASINGCURVE(F)
-#endif
+#endif +/
 
-#if QT_CONFIG(itemmodel)
-#define QT_FOR_EACH_STATIC_ITEMMODEL_CLASS(F)\
-    F(QModelIndex, 42, QModelIndex) \
-    F(QPersistentModelIndex, 50, QPersistentModelIndex)
-#else
+/+ #if QT_CONFIG(itemmodel) +/
+enum immutable(BuiltinTypeInfo[]) itemModelClasses = [
+    BuiltinTypeInfo("QModelIndex", 42, "QModelIndex"),
+    BuiltinTypeInfo("QPersistentModelIndex", 50, "QPersistentModelIndex"),
+];
+/+ #else
 #define QT_FOR_EACH_STATIC_ITEMMODEL_CLASS(F)
-#endif
+#endif +/
 
-#define QT_FOR_EACH_STATIC_CORE_CLASS(F)\
-    F(QChar, 7, QChar) \
-    F(QString, 10, QString) \
-    F(QStringList, 11, QStringList) \
-    F(QByteArray, 12, QByteArray) \
-    F(QBitArray, 13, QBitArray) \
-    F(QDate, 14, QDate) \
-    F(QTime, 15, QTime) \
-    F(QDateTime, 16, QDateTime) \
-    F(QUrl, 17, QUrl) \
-    F(QLocale, 18, QLocale) \
-    F(QRect, 19, QRect) \
-    F(QRectF, 20, QRectF) \
-    F(QSize, 21, QSize) \
-    F(QSizeF, 22, QSizeF) \
-    F(QLine, 23, QLine) \
-    F(QLineF, 24, QLineF) \
-    F(QPoint, 25, QPoint) \
-    F(QPointF, 26, QPointF) \
-    F(QRegExp, 27, QRegExp) \
-    QT_FOR_EACH_STATIC_EASINGCURVE(F) \
-    F(QUuid, 30, QUuid) \
-    F(QVariant, 41, QVariant) \
-    F(QRegularExpression, 44, QRegularExpression) \
-    F(QJsonValue, 45, QJsonValue) \
-    F(QJsonObject, 46, QJsonObject) \
-    F(QJsonArray, 47, QJsonArray) \
-    F(QJsonDocument, 48, QJsonDocument) \
-    F(QCborValue, 53, QCborValue) \
-    F(QCborArray, 54, QCborArray) \
-    F(QCborMap, 55, QCborMap) \
-    QT_FOR_EACH_STATIC_ITEMMODEL_CLASS(F)
+enum immutable(BuiltinTypeInfo[]) coreClasses = [
+    BuiltinTypeInfo("QChar", 7, "QChar"),
+    BuiltinTypeInfo("QString", 10, "QString"),
+    BuiltinTypeInfo("QStringList", 11, "QStringList"),
+    BuiltinTypeInfo("QByteArray", 12, "QByteArray"),
+    BuiltinTypeInfo("QBitArray", 13, "QBitArray"),
+    BuiltinTypeInfo("QDate", 14, "QDate"),
+    BuiltinTypeInfo("QTime", 15, "QTime"),
+    BuiltinTypeInfo("QDateTime", 16, "QDateTime"),
+    BuiltinTypeInfo("QUrl", 17, "QUrl"),
+    BuiltinTypeInfo("QLocale", 18, "QLocale"),
+    BuiltinTypeInfo("QRect", 19, "QRect"),
+    BuiltinTypeInfo("QRectF", 20, "QRectF"),
+    BuiltinTypeInfo("QSize", 21, "QSize"),
+    BuiltinTypeInfo("QSizeF", 22, "QSizeF"),
+    BuiltinTypeInfo("QLine", 23, "QLine"),
+    BuiltinTypeInfo("QLineF", 24, "QLineF"),
+    BuiltinTypeInfo("QPoint", 25, "QPoint"),
+    BuiltinTypeInfo("QPointF", 26, "QPointF"),
+    BuiltinTypeInfo("QRegExp", 27, "QRegExp"),
+] ~ easingCurveTypes ~ [
+    BuiltinTypeInfo("QUuid", 30, "QUuid"),
+    BuiltinTypeInfo("QVariant", 41, "QVariant"),
+    BuiltinTypeInfo("QRegularExpression", 44, "QRegularExpression"),
+    BuiltinTypeInfo("QJsonValue", 45, "QJsonValue"),
+    BuiltinTypeInfo("QJsonObject", 46, "QJsonObject"),
+    BuiltinTypeInfo("QJsonArray", 47, "QJsonArray"),
+    BuiltinTypeInfo("QJsonDocument", 48, "QJsonDocument"),
+    BuiltinTypeInfo("QCborValue", 53, "QCborValue"),
+    BuiltinTypeInfo("QCborArray", 54, "QCborArray"),
+    BuiltinTypeInfo("QCborMap", 55, "QCborMap"),
+] ~ itemModelClasses;
 
-#define QT_FOR_EACH_STATIC_CORE_POINTER(F)\
-    F(QObjectStar, 39, QObject*)
+enum immutable(BuiltinTypeInfo[]) corePointers = [
+    BuiltinTypeInfo("QObjectStar", 39, "QObject*"),
+];
 
-#define QT_FOR_EACH_STATIC_CORE_TEMPLATE(F)\
-    F(QVariantMap, 8, QVariantMap) \
-    F(QVariantList, 9, QVariantList) \
-    F(QVariantHash, 28, QVariantHash) \
-    F(QByteArrayList, 49, QByteArrayList) \
+enum immutable(BuiltinTypeInfo[]) coreTemplates = [
+    BuiltinTypeInfo("QVariantMap", 8, "QVariantMap"),
+    BuiltinTypeInfo("QVariantList", 9, "QVariantList"),
+    BuiltinTypeInfo("QVariantHash", 28, "QVariantHash"),
+    BuiltinTypeInfo("QByteArrayList", 49, "QByteArrayList"),
+];
 
-#define QT_FOR_EACH_STATIC_GUI_CLASS(F)\
-    F(QFont, 64, QFont) \
-    F(QPixmap, 65, QPixmap) \
-    F(QBrush, 66, QBrush) \
-    F(QColor, 67, QColor) \
-    F(QPalette, 68, QPalette) \
-    F(QIcon, 69, QIcon) \
-    F(QImage, 70, QImage) \
-    F(QPolygon, 71, QPolygon) \
-    F(QRegion, 72, QRegion) \
-    F(QBitmap, 73, QBitmap) \
-    F(QCursor, 74, QCursor) \
-    F(QKeySequence, 75, QKeySequence) \
-    F(QPen, 76, QPen) \
-    F(QTextLength, 77, QTextLength) \
-    F(QTextFormat, 78, QTextFormat) \
-    F(QMatrix, 79, QMatrix) \
-    F(QTransform, 80, QTransform) \
-    F(QMatrix4x4, 81, QMatrix4x4) \
-    F(QVector2D, 82, QVector2D) \
-    F(QVector3D, 83, QVector3D) \
-    F(QVector4D, 84, QVector4D) \
-    F(QQuaternion, 85, QQuaternion) \
-    F(QPolygonF, 86, QPolygonF) \
-    F(QColorSpace, 87, QColorSpace) \
+enum immutable(BuiltinTypeInfo[]) guiClasses = [
+    BuiltinTypeInfo("QFont", 64, "QFont"),
+    BuiltinTypeInfo("QPixmap", 65, "QPixmap"),
+    BuiltinTypeInfo("QBrush", 66, "QBrush"),
+    BuiltinTypeInfo("QColor", 67, "QColor"),
+    BuiltinTypeInfo("QPalette", 68, "QPalette"),
+    BuiltinTypeInfo("QIcon", 69, "QIcon"),
+    BuiltinTypeInfo("QImage", 70, "QImage"),
+    BuiltinTypeInfo("QPolygon", 71, "QPolygon"),
+    BuiltinTypeInfo("QRegion", 72, "QRegion"),
+    BuiltinTypeInfo("QBitmap", 73, "QBitmap"),
+    BuiltinTypeInfo("QCursor", 74, "QCursor"),
+    BuiltinTypeInfo("QKeySequence", 75, "QKeySequence"),
+    BuiltinTypeInfo("QPen", 76, "QPen"),
+    BuiltinTypeInfo("QTextLength", 77, "QTextLength"),
+    BuiltinTypeInfo("QTextFormat", 78, "QTextFormat"),
+    BuiltinTypeInfo("QMatrix", 79, "QMatrix"),
+    BuiltinTypeInfo("QTransform", 80, "QTransform"),
+    BuiltinTypeInfo("QMatrix4x4", 81, "QMatrix4x4"),
+    BuiltinTypeInfo("QVector2D", 82, "QVector2D"),
+    BuiltinTypeInfo("QVector3D", 83, "QVector3D"),
+    BuiltinTypeInfo("QVector4D", 84, "QVector4D"),
+    BuiltinTypeInfo("QQuaternion", 85, "QQuaternion"),
+    BuiltinTypeInfo("QPolygonF", 86, "QPolygonF"),
+    BuiltinTypeInfo("QColorSpace", 87, "QColorSpace"),
+];
 
 
-#define QT_FOR_EACH_STATIC_WIDGETS_CLASS(F)\
-    F(QSizePolicy, 121, QSizePolicy) \
+enum immutable(BuiltinTypeInfo[]) widgetClasses = [
+    BuiltinTypeInfo("QSizePolicy", 121, "QSizePolicy"),
+];
 
+/+
 // ### FIXME kill that set
 #define QT_FOR_EACH_STATIC_HACKS_TYPE(F)\
     F(QMetaTypeId2<qreal>::MetaType, -1, qreal)
@@ -175,16 +191,18 @@ inline int qMetaTypeId();
     F(QVariantMap, -1, QVariantMap, "QMap<QString,QVariant>") \
     F(QVariantHash, -1, QVariantHash, "QHash<QString,QVariant>") \
     F(QByteArrayList, -1, QByteArrayList, "QList<QByteArray>") \
++/
 
-#define QT_FOR_EACH_STATIC_TYPE(F)\
-    QT_FOR_EACH_STATIC_PRIMITIVE_TYPE(F)\
-    QT_FOR_EACH_STATIC_PRIMITIVE_POINTER(F)\
-    QT_FOR_EACH_STATIC_CORE_CLASS(F)\
-    QT_FOR_EACH_STATIC_CORE_POINTER(F)\
-    QT_FOR_EACH_STATIC_CORE_TEMPLATE(F)\
-    QT_FOR_EACH_STATIC_GUI_CLASS(F)\
-    QT_FOR_EACH_STATIC_WIDGETS_CLASS(F)\
+enum immutable(BuiltinTypeInfo[]) allBuiltinTypes =
+    primitiveTypes
+    ~ primitivePointerTypes
+    ~ coreClasses
+    ~ corePointers
+    ~ coreTemplates
+    ~ guiClasses
+    ~ widgetClasses;
 
+/+
 #define QT_DEFINE_METATYPE_ID(TypeName, Id, Name) \
     TypeName = Id,
 
@@ -421,23 +439,30 @@ private:
 public:
 /+ #ifndef Q_CLANG_QDOC +/
     // The code that actually gets compiled.
-    enum Type {
+    mixin((){
+        import std.conv;
+        string code = "enum Type {";
         // these are merged with QVariant
         /+ QT_FOR_EACH_STATIC_TYPE(QT_DEFINE_METATYPE_ID) +/
-Void=43,Bool=1,Int=2,UInt=3,LongLong=4,ULongLong=5,Double=6,Long=32,Short=33,Char=34,ULong=35,UShort=36,UChar=37,Float=38,SChar=40,Nullptr=51,QCborSimpleType=52,VoidStar=31,QChar=7,QString=10,QStringList=11,QByteArray=12,QBitArray=13,QDate=14,QTime=15,QDateTime=16,QUrl=17,QLocale=18,QRect=19,QRectF=20,QSize=21,QSizeF=22,QLine=23,QLineF=24,QPoint=25,QPointF=26,QRegExp=27,QEasingCurve=29,QUuid=30,QVariant=41,QRegularExpression=44,QJsonValue=45,QJsonObject=46,QJsonArray=47,QJsonDocument=48,QCborValue=53,QCborArray=54,QCborMap=55,QModelIndex=42,QPersistentModelIndex=50,QObjectStar=39,QVariantMap=8,QVariantList=9,QVariantHash=28,QByteArrayList=49,QFont=64,QPixmap=65,QBrush=66,QColor=67,QPalette=68,QIcon=69,QImage=70,QPolygon=71,QRegion=72,QBitmap=73,QCursor=74,QKeySequence=75,QPen=76,QTextLength=77,QTextFormat=78,QMatrix=79,QTransform=80,QMatrix4x4=81,QVector2D=82,QVector3D=83,QVector4D=84,QQuaternion=85,QPolygonF=86,QColorSpace=87,QSizePolicy=121,
-        FirstCoreType = Type.Bool,
-        LastCoreType = Type.QCborMap,
-        FirstGuiType = Type.QFont,
-        LastGuiType = Type.QColorSpace,
-        FirstWidgetsType = Type.QSizePolicy,
-        LastWidgetsType = Type.QSizePolicy,
-        HighestInternalId = Type.LastWidgetsType,
+        foreach(t; allBuiltinTypes)
+            code ~= text(t.typeName, " = ", t.typeNameID, ", ");
+        code ~= q{
+            FirstCoreType = Type.Bool,
+            LastCoreType = Type.QCborMap,
+            FirstGuiType = Type.QFont,
+            LastGuiType = Type.QColorSpace,
+            FirstWidgetsType = Type.QSizePolicy,
+            LastWidgetsType = Type.QSizePolicy,
+            HighestInternalId = Type.LastWidgetsType,
 
-        QReal = qreal.sizeof == double.sizeof ? Type.Double : Type.Float,
+            QReal = qreal.sizeof == double.sizeof ? Type.Double : Type.Float,
 
-        UnknownType = 0,
-        User = 1024
-    }
+            UnknownType = 0,
+            User = 1024
+        };
+        code ~= "}";
+        return code;
+    }());
 /+ #else
     // If we are using QDoc it fakes the Type enum looks like this.
     enum Type {
@@ -1548,17 +1573,16 @@ struct QPairVariantInterfaceConvertFunctor<std::pair<T, U> >
     template <class T> class Name; \
 
 
-QT_FOR_EACH_AUTOMATIC_TEMPLATE_SMART_POINTER(QT_FORWARD_DECLARE_SHARED_POINTER_TYPES_ITER)
-namespace QtPrivate
+QT_FOR_EACH_AUTOMATIC_TEMPLATE_SMART_POINTER(QT_FORWARD_DECLARE_SHARED_POINTER_TYPES_ITER) +/
+extern(C++, "QtPrivate")
 {
-    template<typename T>
-    struct IsPointerToTypeDerivedFromQObject
+    struct IsPointerToTypeDerivedFromQObject(T)
     {
-        enum { Value = false };
-    };
+        enum { Value = false }
+    }
 
     // Specialize to avoid sizeof(void) warning
-    template<>
+    /+ template<>
     struct IsPointerToTypeDerivedFromQObject<void*>
     {
         enum { Value = false };
@@ -1586,12 +1610,11 @@ namespace QtPrivate
         static no_type checkType(...);
         Q_STATIC_ASSERT_X(sizeof(T), "Type argument of Q_DECLARE_METATYPE(T*) must be fully defined");
         enum { Value = sizeof(checkType(static_cast<T*>(nullptr))) == sizeof(yes_type) };
-    };
+    }; +/
 
-    template<typename T, typename Enable = void>
-    struct IsGadgetHelper { enum { IsRealGadget = false, IsGadgetOrDerivedFrom = false }; };
+    struct IsGadgetHelper(T, Enable) { enum { IsRealGadget = false, IsGadgetOrDerivedFrom = false } }
 
-    template<typename T>
+    /+ template<typename T>
     struct IsGadgetHelper<T, typename T::QtGadgetHelper>
     {
         template <typename X>
@@ -1601,12 +1624,11 @@ namespace QtPrivate
             IsRealGadget = sizeof(checkType(&T::qt_check_for_QGADGET_macro)) == sizeof(void *),
             IsGadgetOrDerivedFrom = true
         };
-    };
+    }; +/
 
-    template<typename T, typename Enable = void>
-    struct IsPointerToGadgetHelper { enum { IsRealGadget = false, IsGadgetOrDerivedFrom = false }; };
+    struct IsPointerToGadgetHelper(T, Enable) { enum { IsRealGadget = false, IsGadgetOrDerivedFrom = false } }
 
-    template<typename T>
+    /+ template<typename T>
     struct IsPointerToGadgetHelper<T*, typename T::QtGadgetHelper>
     {
         using BaseType = T;
@@ -1620,18 +1642,17 @@ namespace QtPrivate
     };
 
 
-    template<typename T> char qt_getEnumMetaObject(const T&);
+    template<typename T> char qt_getEnumMetaObject(const T&); +/
 
-    template<typename T>
-    struct IsQEnumHelper {
-        static const T &declval();
+    struct IsQEnumHelper(T) {
+        static ref const(T) declval();
         // If the type was declared with Q_ENUM, the friend qt_getEnumMetaObject() declared in the
         // Q_ENUM macro will be chosen by ADL, and the return type will be QMetaObject*.
         // Otherwise the chosen overload will be the catch all template function
         // qt_getEnumMetaObject(T) which returns 'char'
-        enum { Value = sizeof(qt_getEnumMetaObject(declval())) == sizeof(QMetaObject*) };
-    };
-    template<> struct IsQEnumHelper<void> { enum { Value = false }; };
+        enum { Value = (qt_getEnumMetaObject(declval())). sizeof == (QMetaObject*).sizeof }
+    }
+    /+ template<> struct IsQEnumHelper<void> { enum { Value = false }; };
 
     template<typename T, typename Enable = void>
     struct MetaObjectForType
@@ -1662,37 +1683,34 @@ namespace QtPrivate
     struct MetaObjectForType<T, typename std::enable_if<IsQEnumHelper<T>::Value>::type >
     {
         static inline const QMetaObject *value() { return qt_getEnumMetaObject(T()); }
-    };
+    }; +/
 
-    template<typename T>
-    struct IsSharedPointerToTypeDerivedFromQObject
+    struct IsSharedPointerToTypeDerivedFromQObject(T)
     {
-        enum { Value = false };
-    };
+        enum { Value = false }
+    }
 
-    template<typename T>
+    /+ template<typename T>
     struct IsSharedPointerToTypeDerivedFromQObject<QSharedPointer<T> > : IsPointerToTypeDerivedFromQObject<T*>
     {
-    };
+    }; +/
 
-    template<typename T>
-    struct IsWeakPointerToTypeDerivedFromQObject
+    struct IsWeakPointerToTypeDerivedFromQObject(T)
     {
-        enum { Value = false };
-    };
+        enum { Value = false }
+    }
 
-    template<typename T>
+    /+ template<typename T>
     struct IsWeakPointerToTypeDerivedFromQObject<QWeakPointer<T> > : IsPointerToTypeDerivedFromQObject<T*>
     {
-    };
+    }; +/
 
-    template<typename T>
-    struct IsTrackingPointerToTypeDerivedFromQObject
+    struct IsTrackingPointerToTypeDerivedFromQObject(T)
     {
-        enum { Value = false };
-    };
+        enum { Value = false }
+    }
 
-    template<typename T>
+    /+ template<typename T>
     struct IsTrackingPointerToTypeDerivedFromQObject<QPointer<T> >
     {
         enum { Value = true };
@@ -1808,34 +1826,93 @@ namespace QtPrivate
         static bool registerConverter(int) { return false; }
     };
 
-    Q_CORE_EXPORT bool isBuiltinType(const QByteArray &type);
+    Q_CORE_EXPORT bool isBuiltinType(const QByteArray &type); +/
 } // namespace QtPrivate
 
-template <typename T, int =
+struct QMetaTypeIdQObject(T, /+ int +/ /+ =
     QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value ? QMetaType::PointerToQObject :
     QtPrivate::IsGadgetHelper<T>::IsRealGadget             ? QMetaType::IsGadget :
     QtPrivate::IsPointerToGadgetHelper<T>::IsRealGadget    ? QMetaType::PointerToGadget :
-    QtPrivate::IsQEnumHelper<T>::Value                     ? QMetaType::IsEnumeration : 0>
-struct QMetaTypeIdQObject
+    QtPrivate::IsQEnumHelper<T>::Value                     ? QMetaType::IsEnumeration : 0 +/)
 {
     enum {
         Defined = 0
-    };
-};
+    }
+}
 
-template <typename T>
-struct QMetaTypeId : public QMetaTypeIdQObject<T>
-{
-};
+alias QMetaTypeId(T) = QMetaTypeIdQObject!(T);
 
-template <typename T>
-struct QMetaTypeId2
-{
-    enum { Defined = QMetaTypeId<T>::Defined, IsBuiltIn=false };
-    static inline int qt_metatype_id() { return QMetaTypeId<T>::qt_metatype_id(); }
-};
+mixin((){
+    import std.conv;
+    string code = "template QMetaTypeId2(T)\n";
+    code ~= "{\n";
+    code ~= "    static if(std.traits.isBuiltinType!T)\n";
+    code ~= "    {\n";
+    bool needsElse = false;
+    foreach(i, t; allBuiltinTypes)
+    {
+        string realType2 = t.realType;
+        if(t.dType.length)
+            realType2 = t.dType;
+        if(realType2[0] != 'Q')
+        {
+            code ~= "        ";
+            if(needsElse)
+                code ~= "else ";
+            code ~= text("static if(is(T == ", realType2, "))\n");
+            code ~= "        {\n";
+            code ~= text("            enum { Defined = 1, IsBuiltIn = true, MetaType = ", t.typeNameID, " };\n");
+            code ~= text("            pragma(inline, true) static int qt_metatype_id() { return ", t.typeNameID, "; }\n");
+            code ~= "        }\n";
+            needsElse = true;
+        }
+    }
+    code ~= "        else\n";
+    code ~= "        {\n";
+    code ~= "            static assert(false, \"type not supported \" ~ T.stringof);\n";
+    code ~= "        }\n";
+    code ~= "    }\n";
+    code ~= "    else\n";
+    code ~= "    {\n";
+    needsElse = false;
+    code ~= "        static if(IsInQtPackage!T)\n";
+    code ~= "        {\n";
+    foreach(i, t; allBuiltinTypes)
+    {
+        string realType2 = t.realType;
+        if(t.dType.length)
+            realType2 = t.dType;
+        if(realType2[0] == 'Q')
+        {
+            code ~= "            ";
+            if(needsElse)
+                code ~= "else ";
+            // TODO: Match templates like QList!(QString)
+            code ~= text("static if(__traits(identifier, T) == \"", realType2, "\")\n");
+            code ~= "            {\n";
+            code ~= text("                enum { Defined = 1, IsBuiltIn = true, MetaType = ", t.typeNameID, " };\n");
+            code ~= text("                pragma(inline, true) static int qt_metatype_id() { return ", t.typeNameID, "; }\n");
+            code ~= "            }\n";
+            needsElse = true;
+        }
+    }
+    code ~= "            else\n";
+    code ~= "            {\n";
+    code ~= "                enum { Defined = QMetaTypeId!(T).Defined, IsBuiltIn=false }\n";
+    code ~= "                pragma(inline, true) static int qt_metatype_id() { return QMetaTypeId!(T).qt_metatype_id(); }\n";
+    code ~= "            }\n";
+    code ~= "        }\n";
+    code ~= "        else\n";
+    code ~= "        {\n";
+    code ~= "            enum { Defined = QMetaTypeId!(T).Defined, IsBuiltIn=false }\n";
+    code ~= "            pragma(inline, true) static int qt_metatype_id() { return QMetaTypeId!(T).qt_metatype_id(); }\n";
+    code ~= "        }\n";
+    code ~= "    }\n";
+    code ~= "}\n";
+    return code;
+}());
 
-template <typename T>
+/+ template <typename T>
 struct QMetaTypeId2<const T&> : QMetaTypeId2<T> {};
 
 template <typename T>
@@ -1966,36 +2043,8 @@ void qRegisterMetaTypeStreamOperators(const char *typeName
 
 pragma(inline, true) int qMetaTypeId(T)()
 {
-/+    /+ Q_STATIC_ASSERT_X(QMetaTypeId2<T>::Defined, "Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object system") +/static assert(cast(bool)(QMetaTypeId2!(T).Defined),"Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object system");
-    return QMetaTypeId2!(T).qt_metatype_id();+/
-
-    import std.traits;
-
-    static if(is(T == void)) return QMetaType.Type.Void;
-    else static if(is(T == bool)) return QMetaType.Type.Bool;
-    else static if(is(T == int)) return QMetaType.Type.Int;
-    else static if(is(T == uint)) return QMetaType.Type.UInt;
-//    else static if(is(T == qlonglong)) return QMetaType.Type.LongLong;
-//    else static if(is(T == qulonglong)) return QMetaType.Type.ULongLong;
-    else static if(is(T == double)) return QMetaType.Type.Double;
-//    else static if(is(T == long)) return QMetaType.Type.Long;
-    else static if(is(T == short)) return QMetaType.Type.Short;
-    else static if(is(T == char)) return QMetaType.Type.Char;
-//    else static if(is(T == ulong)) return QMetaType.Type.ULong;
-    else static if(is(T == ushort)) return QMetaType.Type.UShort;
-    else static if(is(T == ubyte)) return QMetaType.Type.UChar;
-    else static if(is(T == float)) return QMetaType.Type.Float;
-    else static if(is(T == byte)) return QMetaType.Type.SChar;
-    else static if(is(T == typeof(null))) return QMetaType.Type.Nullptr;
-//    else static if(is(T == QCborSimpleType)) return QMetaType.Type.QCborSimpleType;
-    else static if(is(T == void*)) return QMetaType.Type.VoidStar;
-    else static if(is(T == QObject)) return QMetaType.Type.QObjectStar;
-    else static if(getUDAs!(T, QMetaType.Type).length)
-    {
-        static assert(getUDAs!(T, QMetaType.Type).length == 1);
-        return getUDAs!(T, QMetaType.Type)[0];
-    }
-    else static assert(false, "qMetaTypeId not implemented for " ~ T.stringof);
+    static assert(QMetaTypeId2!(T).Defined, "Type is not registered, please use the Q_DECLARE_METATYPE macro to make it known to Qt's meta-object system");
+    return QMetaTypeId2!(T).qt_metatype_id();
 }
 
 pragma(inline, true) int qRegisterMetaType(T)()

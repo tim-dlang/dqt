@@ -20,7 +20,6 @@ import qt.core.flags;
 import qt.core.global;
 import qt.core.list;
 import qt.core.metamacros;
-import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.qchar;
 import qt.core.shareddata;
@@ -38,7 +37,7 @@ extern(C++, class) struct QLocalePrivate;
 /+ Q_CORE_EXPORT uint qHash(const QLocale &key, uint seed = 0) noexcept; +/
 
 /// Binding for C++ class [QLocale](https://doc.qt.io/qt-5/qlocale.html).
-@Q_MOVABLE_TYPE @(QMetaType.Type.QLocale) extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLocale
+@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLocale
 {
     mixin(Q_GADGET);
     /+ friend class QString; +/
