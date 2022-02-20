@@ -34,38 +34,10 @@ static if(!defined!"QT_NO_PDF")
 
 extern(C++, class) struct QPdfWriterPrivate;
 
-private class QPdfWriterDummy : QPagedPaintDevice
-{
-    override void initPainter(QPainter* painter) const;
-    override QPaintDevice redirected(QPoint* offset) const;
-    override QPainter* sharedPainter() const;
-}
-
 /// Binding for C++ class [QPdfWriter](https://doc.qt.io/qt-5/qpdfwriter.html).
 class /+ Q_GUI_EXPORT +/ QPdfWriter : QObject, QPagedPaintDeviceInterface
 {
     QPagedPaintDeviceFakeInheritance baseQPagedPaintDeviceInterface;
-
-    int devType() const
-    {
-        const QPagedPaintDeviceInterface base1 = this;
-        return (cast(QPdfWriterDummy)cast(void*)base1).devType();
-    }
-    void initPainter(QPainter * painter) const
-    {
-        const QPagedPaintDeviceInterface base1 = this;
-        return (cast(QPdfWriterDummy)cast(void*)base1).initPainter(painter);
-    }
-    QPaintDevice redirected(QPoint* offset) const
-    {
-        const QPagedPaintDeviceInterface base1 = this;
-        return (cast(QPdfWriterDummy)cast(void*)base1).redirected(offset);
-    }
-    QPainter* sharedPainter() const
-    {
-        const QPagedPaintDeviceInterface base1 = this;
-        return (cast(QPdfWriterDummy)cast(void*)base1).sharedPainter();
-    }
 
     mixin(Q_OBJECT);
 public:
@@ -120,6 +92,24 @@ private:
     /+ Q_DISABLE_COPY(QPdfWriter) +/
     /+ Q_DECLARE_PRIVATE(QPdfWriter) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
+
+protected:
+    final int devType() const
+    {
+        assert(false);
+    }
+    final void initPainter(QPainter * painter) const
+    {
+        assert(false);
+    }
+    final QPaintDevice redirected(QPoint* offset) const
+    {
+        assert(false);
+    }
+    final QPainter* sharedPainter() const
+    {
+        assert(false);
+    }
 }
 
 
