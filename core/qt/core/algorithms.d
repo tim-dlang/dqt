@@ -12,7 +12,10 @@
 module qt.core.algorithms;
 extern(C++):
 
+import core.bitop;
+import core.stdc.config;
 import qt.config;
+import qt.core.global;
 import qt.helpers;
 
 /+ #ifdef Q_CC_MSVC
@@ -276,8 +279,6 @@ extern(C++, "QAlgorithmsPrivate") {
 
 /+ QT_DEPRECATED_X("Use std::sort") +/ void qSortHelper(RandomAccessIterator, T, LessThan)(RandomAccessIterator start, RandomAccessIterator end, ref const(T) t, LessThan lessThan)
 {
-    import qt.core.global;
-
 top:
     int span = int(end - start);
     if (span < 2)
@@ -335,8 +336,6 @@ top:
 
 /+ QT_DEPRECATED_X("Use std::reverse") +/ void qReverse(RandomAccessIterator)(RandomAccessIterator begin, RandomAccessIterator end)
 {
-    import qt.core.global;
-
     --end;
     while (begin < end)
         qSwap(*begin++, *end--);
@@ -351,8 +350,6 @@ top:
 
 /+ QT_DEPRECATED_X("Use std::merge") +/ void qMerge(RandomAccessIterator, T, LessThan)(RandomAccessIterator begin, RandomAccessIterator pivot, RandomAccessIterator end, ref T t, LessThan lessThan)
 {
-    import qt.core.global;
-
     const(int) len1 = pivot - begin;
     const(int) len2 = end - pivot;
 
@@ -619,45 +616,45 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 
 } //namespace QAlgorithmsPrivate
 
-/+ Q_DECL_CONST_FUNCTION inline uint qPopulationCount(quint32 v) noexcept
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint32 v)/+ noexcept+/
 {
-#ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT
-    return QAlgorithmsPrivate::qt_builtin_popcount(v);
-#else
+/+ #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT +/
+    return popcnt(v);
+/+ #else
     // See http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
     return
         (((v      ) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f +
         (((v >> 12) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f +
         (((v >> 24) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f;
-#endif
+#endif +/
 }
 
-Q_DECL_CONST_FUNCTION inline uint qPopulationCount(quint8 v) noexcept
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint8 v)/+ noexcept+/
 {
-#ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT
-    return QAlgorithmsPrivate::qt_builtin_popcount(v);
-#else
+/+ #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT +/
+    return popcnt(v);
+/+ #else
     return
         (((v      ) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f;
-#endif
+#endif +/
 }
 
-Q_DECL_CONST_FUNCTION inline uint qPopulationCount(quint16 v) noexcept
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint16 v)/+ noexcept+/
 {
-#ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT
-    return QAlgorithmsPrivate::qt_builtin_popcount(v);
-#else
+/+ #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT +/
+    return popcnt(v);
+/+ #else
     return
         (((v      ) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f +
         (((v >> 12) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f;
-#endif
+#endif +/
 }
 
-Q_DECL_CONST_FUNCTION inline uint qPopulationCount(quint64 v) noexcept
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint64 v)/+ noexcept+/
 {
-#ifdef QALGORITHMS_USE_BUILTIN_POPCOUNTLL
-    return QAlgorithmsPrivate::qt_builtin_popcountll(v);
-#else
+/+ #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNTLL +/
+    return popcnt(v);
+/+ #else
     return
         (((v      ) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f +
         (((v >> 12) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f +
@@ -665,24 +662,24 @@ Q_DECL_CONST_FUNCTION inline uint qPopulationCount(quint64 v) noexcept
         (((v >> 36) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f +
         (((v >> 48) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f +
         (((v >> 60) & 0xfff)    * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f;
-#endif
+#endif +/
 }
 
-Q_DECL_CONST_FUNCTION inline uint qPopulationCount(long unsigned int v) noexcept
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(cpp_ulong   v)/+ noexcept+/
 {
-    return qPopulationCount(static_cast<quint64>(v));
+    return qPopulationCount(static_cast!(quint64)(v));
 }
 
-#if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
+/+ #if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
 #undef QALGORITHMS_USE_BUILTIN_POPCOUNT
 #endif
-#undef QT_POPCOUNT_CONSTEXPR
+#undef QT_POPCOUNT_CONSTEXPR +/
 
-inline uint qCountTrailingZeroBits(quint32 v) noexcept
+pragma(inline, true) uint qCountTrailingZeroBits(quint32 v)/+ noexcept+/
 {
-#if defined(QT_HAS_BUILTIN_CTZ)
-    return v ? QAlgorithmsPrivate::qt_builtin_ctz(v) : 32U;
-#else
+/+ #if defined(QT_HAS_BUILTIN_CTZ) +/
+    return v ? bsf(v) : 32U;
+/+ #else
     // see http://graphics.stanford.edu/~seander/bithacks.html#ZerosOnRightParallel
     unsigned int c = 32; // c will be the number of zero bits on the right
     v &= -signed(v);
@@ -693,14 +690,14 @@ inline uint qCountTrailingZeroBits(quint32 v) noexcept
     if (v & 0x33333333) c -= 2;
     if (v & 0x55555555) c -= 1;
     return c;
-#endif
+#endif +/
 }
 
-inline uint qCountTrailingZeroBits(quint8 v) noexcept
+pragma(inline, true) uint qCountTrailingZeroBits(quint8 v)/+ noexcept+/
 {
-#if defined(QT_HAS_BUILTIN_CTZ)
-    return v ? QAlgorithmsPrivate::qt_builtin_ctz(v) : 8U;
-#else
+/+ #if defined(QT_HAS_BUILTIN_CTZ) +/
+    return v ? bsf(v) : 8U;
+/+ #else
     unsigned int c = 8; // c will be the number of zero bits on the right
     v &= -signed(v);
     if (v) c--;
@@ -708,14 +705,14 @@ inline uint qCountTrailingZeroBits(quint8 v) noexcept
     if (v & 0x00000033) c -= 2;
     if (v & 0x00000055) c -= 1;
     return c;
-#endif
+#endif +/
 }
 
-inline uint qCountTrailingZeroBits(quint16 v) noexcept
+pragma(inline, true) uint qCountTrailingZeroBits(quint16 v)/+ noexcept+/
 {
-#if defined(QT_HAS_BUILTIN_CTZS)
-    return v ? QAlgorithmsPrivate::qt_builtin_ctzs(v) : 16U;
-#else
+/+ #if defined(QT_HAS_BUILTIN_CTZS) +/
+    return v ? bsf(v) : 16U;
+/+ #else
     unsigned int c = 16; // c will be the number of zero bits on the right
     v &= -signed(v);
     if (v) c--;
@@ -724,30 +721,30 @@ inline uint qCountTrailingZeroBits(quint16 v) noexcept
     if (v & 0x00003333) c -= 2;
     if (v & 0x00005555) c -= 1;
     return c;
-#endif
+#endif +/
 }
 
-inline uint qCountTrailingZeroBits(quint64 v) noexcept
+pragma(inline, true) uint qCountTrailingZeroBits(quint64 v)/+ noexcept+/
 {
-#if defined(QT_HAS_BUILTIN_CTZLL)
-    return v ? QAlgorithmsPrivate::qt_builtin_ctzll(v) : 64;
-#else
+/+ #if defined(QT_HAS_BUILTIN_CTZLL) +/
+    return v ? bsf(v) : 64;
+/+ #else
     quint32 x = static_cast<quint32>(v);
     return x ? qCountTrailingZeroBits(x)
              : 32 + qCountTrailingZeroBits(static_cast<quint32>(v >> 32));
-#endif
+#endif +/
 }
 
-inline uint qCountTrailingZeroBits(unsigned long v) noexcept
+pragma(inline, true) uint qCountTrailingZeroBits(cpp_ulong  v)/+ noexcept+/
 {
-    return qCountTrailingZeroBits(QIntegerForSizeof<long>::Unsigned(v));
+    return qCountTrailingZeroBits(QIntegerForSizeof!(cpp_long).Unsigned(v));
 }
 
-inline uint qCountLeadingZeroBits(quint32 v) noexcept
+pragma(inline, true) uint qCountLeadingZeroBits(quint32 v)/+ noexcept+/
 {
-#if defined(QT_HAS_BUILTIN_CLZ)
-    return v ? QAlgorithmsPrivate::qt_builtin_clz(v) : 32U;
-#else
+/+ #if defined(QT_HAS_BUILTIN_CLZ) +/
+    return v ? 31U - bsr(v) : 32U;
+/+ #else
     // Hacker's Delight, 2nd ed. Fig 5-16, p. 102
     v = v | (v >> 1);
     v = v | (v >> 2);
@@ -755,39 +752,39 @@ inline uint qCountLeadingZeroBits(quint32 v) noexcept
     v = v | (v >> 8);
     v = v | (v >> 16);
     return qPopulationCount(~v);
-#endif
+#endif +/
 }
 
-inline uint qCountLeadingZeroBits(quint8 v) noexcept
+pragma(inline, true) uint qCountLeadingZeroBits(quint8 v)/+ noexcept+/
 {
-#if defined(QT_HAS_BUILTIN_CLZ)
-    return v ? QAlgorithmsPrivate::qt_builtin_clz(v)-24U : 8U;
-#else
+/+ #if defined(QT_HAS_BUILTIN_CLZ) +/
+    return v ? 7U - bsr(v) : 8U;
+/+ #else
     v = v | (v >> 1);
     v = v | (v >> 2);
     v = v | (v >> 4);
     return qPopulationCount(static_cast<quint8>(~v));
-#endif
+#endif +/
 }
 
-inline uint qCountLeadingZeroBits(quint16 v) noexcept
+pragma(inline, true) uint qCountLeadingZeroBits(quint16 v)/+ noexcept+/
 {
-#if defined(QT_HAS_BUILTIN_CLZS)
-    return v ? QAlgorithmsPrivate::qt_builtin_clzs(v) : 16U;
-#else
+/+ #if defined(QT_HAS_BUILTIN_CLZS) +/
+    return v ? 15U - bsr(v) : 16U;
+/+ #else
     v = v | (v >> 1);
     v = v | (v >> 2);
     v = v | (v >> 4);
     v = v | (v >> 8);
     return qPopulationCount(static_cast<quint16>(~v));
-#endif
+#endif +/
 }
 
-inline uint qCountLeadingZeroBits(quint64 v) noexcept
+pragma(inline, true) uint qCountLeadingZeroBits(quint64 v)/+ noexcept+/
 {
-#if defined(QT_HAS_BUILTIN_CLZLL)
-    return v ? QAlgorithmsPrivate::qt_builtin_clzll(v) : 64U;
-#else
+/+ #if defined(QT_HAS_BUILTIN_CLZLL) +/
+    return v ? 63U - bsr(v) : 64U;
+/+ #else
     v = v | (v >> 1);
     v = v | (v >> 2);
     v = v | (v >> 4);
@@ -795,13 +792,13 @@ inline uint qCountLeadingZeroBits(quint64 v) noexcept
     v = v | (v >> 16);
     v = v | (v >> 32);
     return qPopulationCount(~v);
-#endif
+#endif +/
 }
 
-inline uint qCountLeadingZeroBits(unsigned long v) noexcept
+pragma(inline, true) uint qCountLeadingZeroBits(cpp_ulong  v)/+ noexcept+/
 {
-    return qCountLeadingZeroBits(QIntegerForSizeof<long>::Unsigned(v));
+    return qCountLeadingZeroBits(QIntegerForSizeof!(cpp_long).Unsigned(v));
 }
 
-QT_WARNING_POP +/
+/+ QT_WARNING_POP +/
 

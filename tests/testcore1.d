@@ -208,12 +208,64 @@ unittest
 unittest
 {
     import core.stdc.string;
+    import core.stdcpp.new_;
+    import qt.core.metaobject;
+    import qt.core.metatype;
     import qt.core.objectdefs;
 
     const(QMetaObject)* mo = &TestObject.staticMetaObject;
     assert(strcmp(mo.className(), "TestObject") == 0);
     //assert(mo->constructorCount() == 2);
     assert(mo.methodCount() - mo.methodOffset() == 8 + 8 + 8);
+
+    TestObject a = cpp_new!TestObject();
+    assert(a.metaObject() == mo);
+
+    QMetaMethod method = mo.method(mo.methodOffset() + 0);
+    assert(method.name().toConstCharArray() == "signalVoid");
+    assert(method.methodSignature().toConstCharArray() == "signalVoid()");
+    assert(method.parameterCount() == 0);
+
+    method = mo.method(mo.methodOffset() + 1);
+    assert(method.name().toConstCharArray() == "signalInt");
+    assert(method.methodSignature().toConstCharArray() == "signalInt(int)");
+    assert(method.parameterCount() == 1);
+    assert(method.parameterType(0) == QMetaType.Type.Int);
+
+    method = mo.method(mo.methodOffset() + 2);
+    assert(method.name().toConstCharArray() == "signalInt3");
+    assert(method.methodSignature().toConstCharArray() == "signalInt3(int,int,int)");
+    assert(method.parameterCount() == 3);
+    assert(method.parameterType(0) == QMetaType.Type.Int);
+    assert(method.parameterType(1) == QMetaType.Type.Int);
+    assert(method.parameterType(2) == QMetaType.Type.Int);
+
+    method = mo.method(mo.methodOffset() + 3);
+    assert(method.name().toConstCharArray() == "signalDouble");
+    assert(method.methodSignature().toConstCharArray() == "signalDouble(double)");
+    assert(method.parameterCount() == 1);
+    assert(method.parameterType(0) == QMetaType.Type.Double);
+
+    method = mo.method(mo.methodOffset() + 4);
+    assert(method.name().toConstCharArray() == "signalString");
+    assert(method.methodSignature().toConstCharArray() == "signalString(QString)");
+    assert(method.parameterCount() == 1);
+    assert(method.parameterType(0) == QMetaType.Type.QString);
+
+    method = mo.method(mo.methodOffset() + 5);
+    assert(method.name().toConstCharArray() == "signalListInt");
+    assert(method.methodSignature().toConstCharArray() == "signalListInt(QList<int>)");
+    assert(method.parameterCount() == 1);
+
+    method = mo.method(mo.methodOffset() + 6);
+    assert(method.name().toConstCharArray() == "signalVectorInt");
+    assert(method.methodSignature().toConstCharArray() == "signalVectorInt(QVector<int>)");
+    assert(method.parameterCount() == 1);
+
+    method = mo.method(mo.methodOffset() + 7);
+    assert(method.name().toConstCharArray() == "signalPointerInt");
+    assert(method.methodSignature().toConstCharArray() == "signalPointerInt(int*)");
+    assert(method.parameterCount() == 1);
 }
 
 void connectByString(TestObject a, TestObject b)
@@ -399,4 +451,35 @@ unittest
     assert(qobject_cast!(QObject)(timer) is timer);
     assert(qobject_cast!(TestObject)(timer) is null);
     assert(qobject_cast!(QTimer)(timer) is timer);
+}
+
+unittest
+{
+    import qt.core.algorithms;
+
+    assert(qPopulationCount(0U) == 0);
+    assert(qPopulationCount(0xffffU) == 16);
+    assert(qPopulationCount(0xffffffffU) == 32);
+    assert(qPopulationCount(0xffffffffffffffffU) == 64);
+    assert(qPopulationCount(0x8000000000000000U) == 1);
+
+    assert(qCountTrailingZeroBits(cast(ubyte)0U) == 8);
+    assert(qCountTrailingZeroBits(cast(ushort)0U) == 16);
+    assert(qCountTrailingZeroBits(0U) == 32);
+    assert(qCountTrailingZeroBits(cast(ulong)0U) == 64);
+    assert(qCountTrailingZeroBits(0x10U) == 4);
+    assert(qCountTrailingZeroBits(0x1000U) == 12);
+    assert(qCountTrailingZeroBits(0x80000000U) == 31);
+    assert(qCountTrailingZeroBits(0x8000000000000000U) == 63);
+    assert(qCountTrailingZeroBits(0xffffffff80000000U) == 31);
+
+    assert(qCountLeadingZeroBits(cast(ubyte)0U) == 8);
+    assert(qCountLeadingZeroBits(cast(ushort)0U) == 16);
+    assert(qCountLeadingZeroBits(0U) == 32);
+    assert(qCountLeadingZeroBits(cast(ulong)0U) == 64);
+    assert(qCountLeadingZeroBits(0x10U) == 27);
+    assert(qCountLeadingZeroBits(0x1000U) == 19);
+    assert(qCountLeadingZeroBits(0x80000000U) == 0);
+    assert(qCountLeadingZeroBits(0x8000000000000000U) == 0);
+    assert(qCountLeadingZeroBits(0xffffffff80000000U) == 0);
 }

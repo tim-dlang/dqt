@@ -235,6 +235,16 @@ alias Base64Options = QFlags!(Base64Option);
     { return cast(const(char)*)(d.data()); }
     pragma(inline, true) const(char)* constData() const
     { return cast(const(char)*)(d.data()); }
+
+    extern(D) const(ubyte)[] toConstUByteArray()
+    {
+        return (cast(const(ubyte)*)constData())[0..length];
+    }
+    extern(D) const(char)[] toConstCharArray()
+    {
+        return (cast(const(char)*)constData())[0..length];
+    }
+
     pragma(inline, true) void detach()
     { if (d.ref_.isShared() || (d.offset != QByteArrayData.sizeof)) reallocData(uint(d.size) + 1u, d.detachFlags()); }
     pragma(inline, true) bool isDetached() const
