@@ -93,11 +93,11 @@ Alternatively dmd can be used directly:
 dmd -i -m64 -Icore -Igui -Iwidgets ^
     -L/LIBPATH:C:\Qt\5.15.2\msvc2019_64\lib ^
     Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib ^
-    -g -run examples/helloworld\main.d
+    -g -run examples\helloworld\main.d
 dmd -i -m64 -Icore -Igui -Iwidgets -Iexamples -Jexamples/examplewidgets ^
     -L/LIBPATH:C:\Qt\5.15.2\msvc2019_64\lib ^
     Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib ^
-    -g -run examples/examplewidgets\main.d
+    -g -run examples\examplewidgets\main.d
 ```
 
 #### Windows 32-Bit
@@ -116,11 +116,11 @@ Alternatively dmd can be used directly:
 dmd -i -m32mscoff -Icore -Igui -Iwidgets ^
     -L/LIBPATH:C:\Qt\5.15.2\msvc2019\lib ^
     Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib ^
-    -g -run examples/helloworld\main.d
+    -g -run examples\helloworld\main.d
 dmd -i -m32mscoff -Icore -Igui -Iwidgets -Iexamples -Jexamples/examplewidgets ^
     -L/LIBPATH:C:\Qt\5.15.2\msvc2019\lib ^
     Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib ^
-    -g -run examples/examplewidgets\main.d
+    -g -run examples\examplewidgets\main.d
 ```
 
 ## QObject
