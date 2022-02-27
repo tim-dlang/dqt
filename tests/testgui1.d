@@ -45,6 +45,7 @@ unittest
 
 unittest
 {
+    import qt.core.list;
     import qt.core.variant;
     import qt.gui.brush;
     import qt.gui.color;
@@ -70,6 +71,17 @@ unittest
         assert(data.ref_.loadRelaxed() == 3);
         QVariant v2 = v;
         assert(data.ref_.loadRelaxed() == 4);
+    }
+    assert(data.ref_.loadRelaxed() == 1); // Only our extra reference remains.
+    {
+        QBrush b = QBrush(QColor(1, 2, 3));
+        data = *cast(QBrushData**)&b;
+        assert(data.ref_.loadRelaxed() == 1);
+        data.ref_.ref_(); // Add reference, so it is not freed and we can check the count at the end.
+        assert(data.ref_.loadRelaxed() == 2);
+        QList!(QBrush) l = QList!(QBrush).create();
+        l.append(b);
+        assert(data.ref_.loadRelaxed() == 3);
     }
     assert(data.ref_.loadRelaxed() == 1); // Only our extra reference remains.
 }
