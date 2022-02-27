@@ -375,7 +375,7 @@ alias qreal = double;
 // A tag to help mark stuff deprecated (cf. QStringViewLiteral)
 extern(C++, "QtPrivate") {
 enum /+ class +/ Deprecated_t {init}
-/+ Q_DECL_UNUSED +/ __gshared Deprecated_t Deprecated = Deprecated_t();
+/+ Q_DECL_UNUSED +/ extern(D) immutable Deprecated_t Deprecated = Deprecated_t();
 }
 /+ #endif
 
