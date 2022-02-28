@@ -49,7 +49,7 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSUUID);
 
 
 
-/// Binding for C++ class [QUuid](https://doc.qt.io/qt-5/quuid.html).
+/// Binding for C++ class [QUuid](https://doc.qt.io/qt-6/quuid.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QUuid
 {
 private:
@@ -81,9 +81,9 @@ public:
 
 /+ #if defined(Q_COMPILER_UNIFORM_INIT) && !defined(Q_CLANG_QDOC)
 
-    QUuid() noexcept : data1(0), data2(0), data3(0), data4{0,0,0,0,0,0,0,0} {}
+    constexpr QUuid() noexcept : data1(0), data2(0), data3(0), data4{0,0,0,0,0,0,0,0} {}
 
-    QUuid(uint l, ushort w1, ushort w2, uchar b1, uchar b2, uchar b3,
+    constexpr QUuid(uint l, ushort w1, ushort w2, uchar b1, uchar b2, uchar b3,
                            uchar b4, uchar b5, uchar b6, uchar b7, uchar b8) noexcept
         : data1(l), data2(w1), data3(w2), data4{b1, b2, b3, b4, b5, b6, b7, b8} {}
 #else +/
@@ -93,7 +93,7 @@ public:
         data1 = 0;
         data2 = 0;
         data3 = 0;
-        for(int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++)
             data4[i] = 0;
     }+/
     this(uint l, ushort w1, ushort w2, uchar b1, uchar b2, uchar b3, uchar b4, uchar b5, uchar b6, uchar b7, uchar b8)/+ noexcept+/
@@ -112,15 +112,13 @@ public:
     }
 /+ #endif +/
 
-    this(ref const(QString) );
+    /+ explicit +/this(ref const(QString) );
     static QUuid fromString(QStringView string)/+ noexcept+/;
     static QUuid fromString(QLatin1String string)/+ noexcept+/;
-    this(const(char)* );
-    QString toString() const;
-    QString toString(StringFormat mode) const; // ### Qt6: merge with previous
-    this(ref const(QByteArray) );
-    QByteArray toByteArray() const;
-    QByteArray toByteArray(StringFormat mode) const; // ### Qt6: merge with previous
+    /+ explicit +/this(const(char)* );
+    QString toString(StringFormat mode = StringFormat.WithBraces) const;
+    /+ explicit +/this(ref const(QByteArray) );
+    QByteArray toByteArray(StringFormat mode = StringFormat.WithBraces) const;
     QByteArray toRfc4122() const;
     static QUuid fromRfc4122(ref const(QByteArray) );
     bool isNull() const/+ noexcept+/;
@@ -150,7 +148,7 @@ public:
     // On Windows we have a type GUID that is used by the platform API, so we
     // provide convenience operators to cast from and to this type.
 #if defined(Q_COMPILER_UNIFORM_INIT) && !defined(Q_CLANG_QDOC)
-    QUuid(const GUID &guid) noexcept
+    constexpr QUuid(const GUID &guid) noexcept
         : data1(guid.Data1), data2(guid.Data2), data3(guid.Data3),
           data4{guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
                 guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]} {}
@@ -162,7 +160,7 @@ public:
             data1 = cast(uint)(guid.Data1);
             data2 = guid.Data2;
             data3 = guid.Data3;
-            for(int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
                 data4[i] = guid.Data4[i];
         }
     /+ #endif +/
@@ -173,7 +171,7 @@ public:
             return this;
         }+/
 
-        /+ auto opCast(T : GUID)() const/+ noexcept+/
+        /+auto opCast(T : GUID)() const/+ noexcept+/
         {
             GUID guid = _GUID( data1, data2, data3, [ data4[0], data4[1], data4[2], data4[3], data4[4], data4[5], data4[6], data4[7]] ) ;
             return guid;
@@ -207,7 +205,6 @@ public:
         auto tmp = baseData.toUtf8(); return QUuid.createUuidV5(ns, tmp);
     }
 
-
     Variant variant() const/+ noexcept+/;
     //Version version_() const/+ noexcept+/;
 
@@ -237,7 +234,7 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QUuid &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QUuid &);
 #endif
 
-Q_CORE_EXPORT uint qHash(const QUuid &uuid, uint seed = 0) noexcept; +/
+Q_CORE_EXPORT size_t qHash(const QUuid &uuid, size_t seed = 0) noexcept; +/
 
 /+pragma(inline, true) bool operator <=(ref const(QUuid) lhs, ref const(QUuid) rhs)/+ noexcept+/
 { return !(rhs < lhs); }+/

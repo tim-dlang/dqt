@@ -45,7 +45,7 @@ version(QT_NO_CONTEXTMENU){}else
 
 extern(C++, class) struct QPlainTextEditPrivate;
 
-/// Binding for C++ class [QPlainTextEdit](https://doc.qt.io/qt-5/qplaintextedit.html).
+/// Binding for C++ class [QPlainTextEdit](https://doc.qt.io/qt-6/qplaintextedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QPlainTextEdit : QAbstractScrollArea
 {
     mixin(Q_OBJECT);
@@ -58,12 +58,10 @@ class /+ Q_WIDGETS_EXPORT +/ QPlainTextEdit : QAbstractScrollArea
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
     Q_PROPERTY(QString plainText READ toPlainText WRITE setPlainText NOTIFY textChanged USER true)
     Q_PROPERTY(bool overwriteMode READ overwriteMode WRITE setOverwriteMode)
-#if QT_DEPRECATED_SINCE(5, 10)
-    Q_PROPERTY(int tabStopWidth READ tabStopWidth WRITE setTabStopWidth)
-#endif
     Q_PROPERTY(qreal tabStopDistance READ tabStopDistance WRITE setTabStopDistance)
     Q_PROPERTY(int cursorWidth READ cursorWidth WRITE setCursorWidth)
-    Q_PROPERTY(Qt::TextInteractionFlags textInteractionFlags READ textInteractionFlags WRITE setTextInteractionFlags)
+    Q_PROPERTY(Qt::TextInteractionFlags textInteractionFlags READ textInteractionFlags
+               WRITE setTextInteractionFlags)
     Q_PROPERTY(int blockCount READ blockCount)
     Q_PROPERTY(int maximumBlockCount READ maximumBlockCount WRITE setMaximumBlockCount)
     Q_PROPERTY(bool backgroundVisible READ backgroundVisible WRITE setBackgroundVisible)
@@ -131,13 +129,7 @@ public:
     final bool centerOnScroll() const;
 
     /+ bool find(const QString &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags()); +/
-/+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
-    {
-        /+ bool find(const QRegExp &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags()); +/
-    }
-/+ #endif
-#if QT_CONFIG(regularexpression) +/
+/+ #if QT_CONFIG(regularexpression) +/
     /+ bool find(const QRegularExpression &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags()); +/
 /+ #endif +/
 
@@ -161,11 +153,6 @@ public:
 
     final bool overwriteMode() const;
     final void setOverwriteMode(bool overwrite);
-
-/+ #if QT_DEPRECATED_SINCE(5, 10) +/
-    /+ QT_DEPRECATED +/ final int tabStopWidth() const;
-    /+ QT_DEPRECATED +/ final void setTabStopWidth(int width);
-/+ #endif +/
 
     final qreal tabStopDistance() const;
     final void setTabStopDistance(qreal distance);
@@ -294,7 +281,7 @@ private:
 
 
 extern(C++, class) struct QPlainTextDocumentLayoutPrivate;
-/// Binding for C++ class [QPlainTextDocumentLayout](https://doc.qt.io/qt-5/qplaintextdocumentlayout.html).
+/// Binding for C++ class [QPlainTextDocumentLayout](https://doc.qt.io/qt-6/qplaintextdocumentlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QPlainTextDocumentLayout : QAbstractTextDocumentLayout
 {
     mixin(Q_OBJECT);

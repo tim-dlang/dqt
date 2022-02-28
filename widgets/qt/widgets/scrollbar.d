@@ -27,7 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QScrollBarPrivate;
 
-/// Binding for C++ class [QScrollBar](https://doc.qt.io/qt-5/qscrollbar.html).
+/// Binding for C++ class [QScrollBar](https://doc.qt.io/qt-6/qscrollbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QScrollBar : QAbstractSlider
 {
     mixin(Q_OBJECT);
@@ -53,7 +53,7 @@ protected:
     {
         override void contextMenuEvent(QContextMenuEvent );
     }
-    final void initStyleOption(QStyleOptionSlider* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionSlider* option) const;
 
 
 private:

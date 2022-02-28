@@ -29,7 +29,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QTabWidgetPrivate;
 
-/// Binding for C++ class [QTabWidget](https://doc.qt.io/qt-5/qtabwidget.html).
+/// Binding for C++ class [QTabWidget](https://doc.qt.io/qt-6/qtabwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QTabWidget : QWidget
 {
     mixin(Q_OBJECT);
@@ -69,12 +69,9 @@ public:
     final QIcon tabIcon(int index) const;
     final void setTabIcon(int index, ref const(QIcon)  icon);
 
-/+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
-    {
-        final void setTabToolTip(int index, ref const(QString)  tip);
-        final QString tabToolTip(int index) const;
-    }
+/+ #if QT_CONFIG(tooltip) +/
+    final void setTabToolTip(int index, ref const(QString)  tip);
+    final QString tabToolTip(int index) const;
 /+ #endif
 
 #if QT_CONFIG(whatsthis) +/
@@ -85,7 +82,9 @@ public:
     final int currentIndex() const;
     final QWidget currentWidget() const;
     final QWidget widget(int index) const;
-    final int indexOf(QWidget widget) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    final int indexOf(const(QWidget) widget) const;
+    }));
     final int count() const;
 
     enum TabPosition { North, South, West, East }
@@ -152,7 +151,7 @@ protected:
     final void setTabBar(QTabBar );
     override void changeEvent(QEvent );
     override bool event(QEvent );
-    final void initStyleOption(QStyleOptionTabWidgetFrame* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionTabWidgetFrame* option) const;
 
 
 private:

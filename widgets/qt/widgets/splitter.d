@@ -30,7 +30,7 @@ extern(C++, class) struct QSplitterPrivate;
 /+ class QTextStream; +/
 
 
-/// Binding for C++ class [QSplitter](https://doc.qt.io/qt-5/qsplitter.html).
+/// Binding for C++ class [QSplitter](https://doc.qt.io/qt-6/qsplitter.html).
 class /+ Q_WIDGETS_EXPORT +/ QSplitter : QFrame
 {
     mixin(Q_OBJECT);
@@ -107,15 +107,9 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ #if QT_DEPRECATED_SINCE(5, 13)
-QT_DEPRECATED_X("Use QSplitter::saveState() instead")
-Q_WIDGETS_EXPORT QTextStream& operator<<(QTextStream&, const QSplitter&);
-QT_DEPRECATED_X("Use QSplitter::restoreState() instead")
-Q_WIDGETS_EXPORT QTextStream& operator>>(QTextStream&, QSplitter&);
-#endif +/
 
 extern(C++, class) struct QSplitterHandlePrivate;
-/// Binding for C++ class [QSplitterHandle](https://doc.qt.io/qt-5/qsplitterhandle.html).
+/// Binding for C++ class [QSplitterHandle](https://doc.qt.io/qt-6/qsplitterhandle.html).
 class /+ Q_WIDGETS_EXPORT +/ QSplitterHandle : QWidget
 {
     mixin(Q_OBJECT);

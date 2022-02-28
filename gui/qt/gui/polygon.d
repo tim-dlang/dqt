@@ -14,80 +14,69 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
+import qt.core.list;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.typeinfo;
 import qt.core.variant;
-import qt.core.vector;
 import qt.helpers;
 
 
-/// Binding for C++ class [QPolygon](https://doc.qt.io/qt-5/qpolygon.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygon
+// We export each out-of-line method individually to prevent MSVC from
+// exporting the whole QList class.
+/// Binding for C++ class [QPolygon](https://doc.qt.io/qt-6/qpolygon.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct QPolygon
 {
-    public QVector!(QPoint) base0;
+    public QList!(QPoint) base0;
     alias base0 this;
 public:
-    @disable this();
-    /+pragma(inline, true) this() {}+/
-    pragma(inline, true) ~this() {}
-    /+/+ explicit +/pragma(inline, true) this(int asize)
+    /+ using QList<QPoint>::QList; +/
+    /+ QPolygon() = default; +/
+    /+ Q_IMPLICIT +/ this(ref QList!(QPoint) v)
     {
-        this.QVector!(QPoint) = asize;
+        this.base0 = v;
     }
-    pragma(inline, true) this(ref const(QVector!(QPoint)) v)
-    {
-        this.QVector!(QPoint) = v;
-    }+/
-    /*implicit*/ /+ QPolygon(QVector<QPoint> &&v) noexcept : QVector<QPoint>(std::move(v)) {} +/
-    this(ref const(QRect) r, bool closed=false);
-    this(int nPoints, const(int)* points);
-    @disable this(this);
-    this(ref const(QPolygon) other)
-    {
-        this.base0 = *cast(QVector!QPoint*)&other.base0;
-    }
-    /+ QPolygon(QPolygon &&other) noexcept : QVector<QPoint>(std::move(other)) {} +/
-    /+ QPolygon &operator=(QPolygon &&other) noexcept { swap(other); return *this; } +/
-    /+ref QPolygon operator =(ref const(QPolygon) other) { QVector!(QPoint).operator=(other); return this; }+/
-    /+ void swap(QPolygon &other) noexcept { QVector<QPoint>::swap(other); } +/ // prevent QVector<QPoint><->QPolygon swaps
+    /+ Q_IMPLICIT +/ /+ QPolygon(QList<QPoint> &&v) noexcept : QList<QPoint>(std::move(v)) { } +/
+    /+ Q_IMPLICIT +/ /+ Q_GUI_EXPORT +/this(ref const(QRect) r, bool closed=false);
+    /+ Q_GUI_EXPORT +/this(int nPoints, const(int)* points);
+    /+ void swap(QPolygon &other) noexcept { QList<QPoint>::swap(other); } +/ // prevent QList<QPoint><->QPolygon swaps
 
-    /+auto opCast(T : QVariant)() const;+/
+    /+/+ Q_GUI_EXPORT +/ auto opCast(T : QVariant)() const;+/
 
-    void translate(int dx, int dy);
+    /+ Q_GUI_EXPORT +/ void translate(int dx, int dy);
     pragma(inline, true) void translate(ref const(QPoint) offset)
     { translate(offset.x(), offset.y()); }
 
-    /+ Q_REQUIRED_RESULT +/ QPolygon translated(int dx, int dy) const;
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QPolygon translated(ref const(QPoint) offset) const
+    /+ [[nodiscard]] +/ /+ Q_GUI_EXPORT +/ QPolygon translated(int dx, int dy) const;
+    /+ [[nodiscard]] +/ pragma(inline, true) QPolygon translated(ref const(QPoint) offset) const
     { return translated(offset.x(), offset.y()); }
 
-    QRect boundingRect() const;
+    /+ Q_GUI_EXPORT +/ QRect boundingRect() const;
 
-    void point(int i, int* x, int* y) const;
+    /+ Q_GUI_EXPORT +/ void point(int i, int* x, int* y) const;
     pragma(inline, true) QPoint point(int index) const
     { return at(index); }
     pragma(inline, true) void setPoint(int index, int x, int y)
     { (this)[index] = QPoint(x, y); }
     pragma(inline, true) void setPoint(int index, ref const(QPoint) pt)
     { (this)[index] = pt; }
-    void setPoints(int nPoints, const(int)* points);
-    void setPoints(int nPoints, int firstx, int firsty, ...);
-    void putPoints(int index, int nPoints, const(int)* points);
-    void putPoints(int index, int nPoints, int firstx, int firsty, ...);
-    void putPoints(int index, int nPoints, ref const(QPolygon)  from, int fromIndex=0);
+    /+ Q_GUI_EXPORT +/ void setPoints(int nPoints, const(int)* points);
+    /+ Q_GUI_EXPORT +/ void setPoints(int nPoints, int firstx, int firsty, ...);
+    /+ Q_GUI_EXPORT +/ void putPoints(int index, int nPoints, const(int)* points);
+    /+ Q_GUI_EXPORT +/ void putPoints(int index, int nPoints, int firstx, int firsty, ...);
+    /+ Q_GUI_EXPORT +/ void putPoints(int index, int nPoints, ref const(QPolygon)  from, int fromIndex=0);
 
-    bool containsPoint(ref const(QPoint) pt, /+ Qt:: +/qt.core.namespace.FillRule fillRule) const;
+    /+ Q_GUI_EXPORT +/ bool containsPoint(ref const(QPoint) pt, /+ Qt:: +/qt.core.namespace.FillRule fillRule) const;
 
-    /+ Q_REQUIRED_RESULT +/ QPolygon united(ref const(QPolygon) r) const;
-    /+ Q_REQUIRED_RESULT +/ QPolygon intersected(ref const(QPolygon) r) const;
-    /+ Q_REQUIRED_RESULT +/ QPolygon subtracted(ref const(QPolygon) r) const;
+    /+ [[nodiscard]] +/ /+ Q_GUI_EXPORT +/ QPolygon united(ref const(QPolygon) r) const;
+    /+ [[nodiscard]] +/ /+ Q_GUI_EXPORT +/ QPolygon intersected(ref const(QPolygon) r) const;
+    /+ [[nodiscard]] +/ /+ Q_GUI_EXPORT +/ QPolygon subtracted(ref const(QPolygon) r) const;
 
-    bool intersects(ref const(QPolygon) r) const;
+    /+ Q_GUI_EXPORT +/ bool intersects(ref const(QPolygon) r) const;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QPolygon)
+/+ Q_DECLARE_SHARED(QPolygon)
 
 #ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPolygon &);
@@ -106,62 +95,49 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPolygon &polygon);
  *****************************************************************************/
 
 
-/// Binding for C++ class [QPolygonF](https://doc.qt.io/qt-5/qpolygonf.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPolygonF
+/// Binding for C++ class [QPolygonF](https://doc.qt.io/qt-6/qpolygonf.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct QPolygonF
 {
-    public QVector!(QPointF) base0;
+    public QList!(QPointF) base0;
     alias base0 this;
 public:
-    @disable this();
-    /+pragma(inline, true) this() {}+/
-    pragma(inline, true) ~this() {}
-    /+/+ explicit +/pragma(inline, true) this(int asize)
+    /+ using QList<QPointF>::QList; +/
+    /+ QPolygonF() = default; +/
+    /+ Q_IMPLICIT +/ this(ref QList!(QPointF) v)
     {
-        this.QVector!(QPointF) = asize;
+        this.base0 = v;
     }
-    pragma(inline, true) this(ref const(QVector!(QPointF)) v)
-    {
-        this.QVector!(QPointF) = v;
-    }+/
-    /* implicit */ /+ QPolygonF(QVector<QPointF> &&v) noexcept : QVector<QPointF>(std::move(v)) {} +/
-    this(ref const(QRectF) r);
-    /*implicit*/ this(ref const(QPolygon) a);
-    //@disable this(this);
-    /+pragma(inline, true) this(ref const(QPolygonF) a)
-    {
-        this.QVector!(QPointF) = a;
-    }+/
-    /+ QPolygonF(QPolygonF &&other) noexcept : QVector<QPointF>(std::move(other)) {} +/
-    /+ QPolygonF &operator=(QPolygonF &&other) noexcept { swap(other); return *this; } +/
-    /+ref QPolygonF operator =(ref const(QPolygonF) other) { QVector!(QPointF).operator=(other); return this; }+/
-    /+ inline void swap(QPolygonF &other) { QVector<QPointF>::swap(other); } +/ // prevent QVector<QPointF><->QPolygonF swaps
+    /+ Q_IMPLICIT +/ /+ QPolygonF(QList<QPointF> &&v) noexcept : QList<QPointF>(std::move(v)) { } +/
+    /+ Q_IMPLICIT +/ /+ Q_GUI_EXPORT +/this(ref const(QRectF) r);
+    /+ Q_IMPLICIT +/ /+ Q_GUI_EXPORT +/this(ref const(QPolygon) a);
+    /+ inline void swap(QPolygonF &other) { QList<QPointF>::swap(other); } +/ // prevent QList<QPointF><->QPolygonF swaps
 
-    /+auto opCast(T : QVariant)() const;+/
+    /+/+ Q_GUI_EXPORT +/ auto opCast(T : QVariant)() const;+/
 
     pragma(inline, true) void translate(qreal dx, qreal dy)
     { auto tmp = QPointF(dx, dy); translate(tmp); }
-    void translate(ref const(QPointF) offset);
+    void /+ Q_GUI_EXPORT +/ translate(ref const(QPointF) offset);
 
     pragma(inline, true) QPolygonF translated(qreal dx, qreal dy) const
     { auto tmp = QPointF(dx, dy); return translated(tmp); }
-    /+ Q_REQUIRED_RESULT +/ QPolygonF translated(ref const(QPointF) offset) const;
+    /+ [[nodiscard]] +/ /+ Q_GUI_EXPORT +/ QPolygonF translated(ref const(QPointF) offset) const;
 
-    QPolygon toPolygon() const;
+    QPolygon /+ Q_GUI_EXPORT +/ toPolygon() const;
 
-    bool isClosed() const { return !isEmpty() && first() == last(); }
+    //bool isClosed() const { return !isEmpty() && first() == last(); }
 
-    QRectF boundingRect() const;
+    QRectF /+ Q_GUI_EXPORT +/ boundingRect() const;
 
-    bool containsPoint(ref const(QPointF) pt, /+ Qt:: +/qt.core.namespace.FillRule fillRule) const;
+    /+ Q_GUI_EXPORT +/ bool containsPoint(ref const(QPointF) pt, /+ Qt:: +/qt.core.namespace.FillRule fillRule) const;
 
-    /+ Q_REQUIRED_RESULT +/ QPolygonF united(ref const(QPolygonF) r) const;
-    /+ Q_REQUIRED_RESULT +/ QPolygonF intersected(ref const(QPolygonF) r) const;
-    /+ Q_REQUIRED_RESULT +/ QPolygonF subtracted(ref const(QPolygonF) r) const;
+    /+ [[nodiscard]] +/ /+ Q_GUI_EXPORT +/ QPolygonF united(ref const(QPolygonF) r) const;
+    /+ [[nodiscard]] +/ /+ Q_GUI_EXPORT +/ QPolygonF intersected(ref const(QPolygonF) r) const;
+    /+ [[nodiscard]] +/ /+ Q_GUI_EXPORT +/ QPolygonF subtracted(ref const(QPolygonF) r) const;
 
-    bool intersects(ref const(QPolygonF) r) const;
+    /+ Q_GUI_EXPORT +/ bool intersects(ref const(QPolygonF) r) const;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QPolygonF)
+/+ Q_DECLARE_SHARED(QPolygonF)
 
 #ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QPolygonF &);

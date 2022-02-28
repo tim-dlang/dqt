@@ -9,27 +9,24 @@
  * ensure the GNU Lesser General Public License version 3 requirements
  * will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
  */
-module qt.widgets.actiongroup;
+module qt.gui.actiongroup;
 extern(C++):
 
 import qt.config;
+import qt.core.list;
+import qt.core.object;
+import qt.core.string;
+import qt.gui.action;
+import qt.gui.icon;
 import qt.helpers;
-version(QT_NO_ACTION){}else
-{
-    import qt.core.list;
-    import qt.core.object;
-    import qt.core.string;
-    import qt.gui.icon;
-    import qt.widgets.action;
-}
 
-version(QT_NO_ACTION){}else
-{
+/+ QT_REQUIRE_CONFIG(action); +/
+
 
 extern(C++, class) struct QActionGroupPrivate;
 
-/// Binding for C++ class [QActionGroup](https://doc.qt.io/qt-5/qactiongroup.html).
-class /+ Q_WIDGETS_EXPORT +/ QActionGroup : QObject
+/// Binding for C++ class [QActionGroup](https://doc.qt.io/qt-6/qactiongroup.html).
+class /+ Q_GUI_EXPORT +/ QActionGroup : QObject
 {
     mixin(Q_OBJECT);
     /+ Q_DECLARE_PRIVATE(QActionGroup) +/
@@ -54,8 +51,8 @@ public:
     final QAction addAction(ref const(QIcon) icon, ref const(QString) text);
     final void removeAction(QAction a);
     final QList!(QAction) actions() const;
-
     final QAction checkedAction() const;
+
     final bool isExclusive() const;
     final bool isEnabled() const;
     final bool isVisible() const;
@@ -73,13 +70,16 @@ public /+ Q_SLOTS +/:
     @QSignal final void triggered(QAction );
     @QSignal final void hovered(QAction );
 
+private /+ Q_SLOTS +/:
+    @QSlot final void _q_actionTriggered();
+    @QSlot final void _q_actionHovered();
+    @QSlot final void _q_actionChanged();
+
+protected:
+     this(ref QActionGroupPrivate dd, QObject parent);
+
 private:
     /+ Q_DISABLE_COPY(QActionGroup) +/
-    /+ Q_PRIVATE_SLOT(d_func(), void _q_actionTriggered())
-    Q_PRIVATE_SLOT(d_func(), void _q_actionChanged())
-    Q_PRIVATE_SLOT(d_func(), void _q_actionHovered()) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
-}
-
 }
 

@@ -24,7 +24,7 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QSpinBoxPrivate;
-/// Binding for C++ class [QSpinBox](https://doc.qt.io/qt-5/qspinbox.html).
+/// Binding for C++ class [QSpinBox](https://doc.qt.io/qt-6/qspinbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QSpinBox : QAbstractSpinBox
 {
     mixin(Q_OBJECT);
@@ -84,10 +84,6 @@ public /+ Q_SLOTS +/:
 /+ Q_SIGNALS +/public:
     @QSignal final void valueChanged(int);
     @QSignal final void textChanged(ref const(QString) );
-/+ #if QT_DEPRECATED_SINCE(5, 14) +/
-    /+ QT_DEPRECATED_X("Use textChanged(QString) instead") +/
-        @QSignal final void valueChanged(ref const(QString) );
-/+ #endif +/
 
 private:
     /+ Q_DISABLE_COPY(QSpinBox) +/
@@ -96,7 +92,7 @@ private:
 }
 
 extern(C++, class) struct QDoubleSpinBoxPrivate;
-/// Binding for C++ class [QDoubleSpinBox](https://doc.qt.io/qt-5/qdoublespinbox.html).
+/// Binding for C++ class [QDoubleSpinBox](https://doc.qt.io/qt-6/qdoublespinbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QDoubleSpinBox : QAbstractSpinBox
 {
     mixin(Q_OBJECT);
@@ -152,10 +148,6 @@ public /+ Q_SLOTS +/:
 /+ Q_SIGNALS +/public:
     @QSignal final void valueChanged(double);
     @QSignal final void textChanged(ref const(QString) );
-/+ #if QT_DEPRECATED_SINCE(5, 14) +/
-    /+ QT_DEPRECATED_X("Use textChanged(QString) instead") +/
-        @QSignal final void valueChanged(ref const(QString) );
-/+ #endif +/
 
 private:
     /+ Q_DISABLE_COPY(QDoubleSpinBox) +/

@@ -23,8 +23,8 @@ import qt.helpers;
 
 extern(C++, class) struct QPageLayoutPrivate;
 
-/// Binding for C++ class [QPageLayout](https://doc.qt.io/qt-5/qpagelayout.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageLayout
+/// Binding for C++ class [QPageLayout](https://doc.qt.io/qt-6/qpagelayout.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageLayout
 {
 public:
 
@@ -38,7 +38,6 @@ public:
         Cicero
     }
 
-    // NOTE: Must keep in sync with QPrinter::Orientation
     enum Orientation {
         Portrait,
         Landscape
@@ -64,13 +63,12 @@ public:
                     ref const(QMarginsF) minMargins = globalInitVar!QMarginsF);
     @disable this(this);
     this(ref const(QPageLayout) other);
-    /+ QPageLayout &operator=(QPageLayout &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPageLayout) +/
     /+ref QPageLayout operator =(ref const(QPageLayout) other);+/
     ~this();
 
     /+ void swap(QPageLayout &other) noexcept { qSwap(d, other.d); } +/
 
-    /+ friend Q_GUI_EXPORT bool operator==(const QPageLayout &lhs, const QPageLayout &rhs); +/
     bool isEquivalentTo(ref const(QPageLayout) other) const;
 
     bool isValid() const;
@@ -115,17 +113,20 @@ public:
 
 private:
     /+ friend class QPageLayoutPrivate; +/
+    bool equals(ref const(QPageLayout) other) const;
+
+    /+ friend inline bool operator==(const QPageLayout &lhs, const QPageLayout &rhs)
+    { return lhs.equals(rhs); } +/
+    /+ friend inline bool operator!=(const QPageLayout &lhs, const QPageLayout &rhs)
+    { return !lhs.equals(rhs); } +/
+
     QExplicitlySharedDataPointer!(QPageLayoutPrivate) d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_SHARED(QPageLayout) +/
+/+ Q_DECLARE_SHARED(QPageLayout)
 
-/+/+ Q_GUI_EXPORT +/ bool operator ==(ref const(QPageLayout) lhs, ref const(QPageLayout) rhs);+/
-/+pragma(inline, true) bool operator !=(ref const(QPageLayout) lhs, ref const(QPageLayout) rhs)
-{ return !operator==(lhs, rhs); }+/
-
-/+ #ifndef QT_NO_DEBUG_STREAM
+#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QPageLayout &pageLayout);
 #endif
 

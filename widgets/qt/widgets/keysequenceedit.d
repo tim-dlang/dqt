@@ -25,11 +25,12 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QKeySequenceEditPrivate;
-/// Binding for C++ class [QKeySequenceEdit](https://doc.qt.io/qt-5/qkeysequenceedit.html).
+/// Binding for C++ class [QKeySequenceEdit](https://doc.qt.io/qt-6/qkeysequenceedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QKeySequenceEdit : QWidget
 {
     mixin(Q_OBJECT);
-    /+ Q_PROPERTY(QKeySequence keySequence READ keySequence WRITE setKeySequence NOTIFY keySequenceChanged USER true) +/
+    /+ Q_PROPERTY(QKeySequence keySequence READ keySequence WRITE setKeySequence
+               NOTIFY keySequenceChanged USER true) +/
 
 public:
     /+ explicit +/this(QWidget parent = null);

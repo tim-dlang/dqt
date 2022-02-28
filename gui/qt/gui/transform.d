@@ -20,15 +20,14 @@ import qt.core.point;
 import qt.core.rect;
 import qt.core.typeinfo;
 import qt.core.variant;
-import qt.gui.matrix;
 import qt.gui.painterpath;
 import qt.gui.polygon;
 import qt.gui.region;
 import qt.helpers;
 
 
-/// Binding for C++ class [QTransform](https://doc.qt.io/qt-5/qtransform.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTransform
+/// Binding for C++ class [QTransform](https://doc.qt.io/qt-6/qtransform.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTransform
 {
 public:
     enum TransformationType {
@@ -40,37 +39,33 @@ public:
         TxProject   = 0x10
     }
 
-    /+ explicit +/pragma(inline, true) this(/+ Qt:: +/qt.core.namespace.Initialization)
+    /+ explicit +/pragma(inline, true) this(/+ Qt:: +/qt.core.namespace.Initialization) {}
+    /+pragma(inline, true) this()
     {
-        this.affine = /+ Qt:: +/qt.core.namespace.Initialization.Uninitialized;
-    }
-    /+this();+/
-
+        this.m_matrix = [ {1, 0, 0}, {0, 1, 0}, {0, 0, 1}] ;
+        this.m_type = TransformationType.TxNone;
+        this.m_dirty = TransformationType.TxNone;
+    }+/
     this(qreal h11, qreal h12, qreal h13,
                    qreal h21, qreal h22, qreal h23,
-                   qreal h31, qreal h32, qreal h33 = 1.0);
+                   qreal h31, qreal h32, qreal h33)
+    {
+        this.m_matrix = [ [h11, h12, h13], [h21, h22, h23], [h31, h32, h33]] ;
+        this.m_type = TransformationType.TxNone;
+        this.m_dirty = TransformationType.TxProject;
+    }
     this(qreal h11, qreal h12, qreal h21,
-                   qreal h22, qreal dx, qreal dy);
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ explicit +/this(ref const(QMatrix) mtx);
-/+ #endif // QT_DEPRECATED_SINCE(5, 15)
+                   qreal h22, qreal dx, qreal dy)
+    {
+        this.m_matrix = [ [h11, h12, 0], [h21, h22, 0], [dx, dy, 1]] ;
+        this.m_type = TransformationType.TxNone;
+        this.m_dirty = TransformationType.TxShear;
+    }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    // ### Qt 6: remove; the compiler-generated ones are fine!
-    /+ QTransform &operator=(QTransform &&other) noexcept // = default
-    { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(QTransform)); return *this; } +/
-    /+ref QTransform operator =(ref const(QTransform) )/+ noexcept+/;+/ // = default
-    /+ QTransform(QTransform &&other) noexcept // = default
-        : affine(Qt::Uninitialized)
-    { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(QTransform)); } +/
-    @disable this(this);
-    this(ref const(QTransform) other)/+ noexcept+/// = default
-{
-    import core.stdc.string;
-    this.affine = /+ Qt:: +/qt.core.namespace.Initialization.Uninitialized;
-    memcpy(static_cast!(void*)(&this), static_cast!(const(void)*)(&other), QTransform.sizeof);
-}
-/+ #endif +/
+    /+ QTransform &operator=(QTransform &&other) noexcept = default; +/
+    /+ QTransform &operator=(const QTransform &) noexcept = default; +/
+    /+ QTransform(QTransform &&other) noexcept = default; +/
+    /+ QTransform(const QTransform &other) noexcept = default; +/
 
     pragma(inline, true) bool isAffine() const
     {
@@ -101,69 +96,63 @@ public:
 
     pragma(inline, true) qreal determinant() const
     {
-        return affine._m11*(m_33*affine._m22-affine._dy*m_23) -
-            affine._m21*(m_33*affine._m12-affine._dy*m_13)+affine._dx*(m_23*affine._m12-affine._m22*m_13);
+        return m_matrix[0][0] * (m_matrix[2][2] * m_matrix[1][1] - m_matrix[2][1] * m_matrix[1][2]) -
+               m_matrix[1][0] * (m_matrix[2][2] * m_matrix[0][1] - m_matrix[2][1] * m_matrix[0][2]) +
+               m_matrix[2][0] * (m_matrix[1][2] * m_matrix[0][1] - m_matrix[1][1] * m_matrix[0][2]);
     }
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use determinant() instead") +/
-        pragma(inline, true) qreal det() const
-    {
-        return determinant();
-    }
-/+ #endif +/
 
     pragma(inline, true) qreal m11() const
     {
-        return affine._m11;
+        return m_matrix[0][0];
     }
     pragma(inline, true) qreal m12() const
     {
-        return affine._m12;
+        return m_matrix[0][1];
     }
     pragma(inline, true) qreal m13() const
     {
-        return m_13;
+        return m_matrix[0][2];
     }
     pragma(inline, true) qreal m21() const
     {
-        return affine._m21;
+        return m_matrix[1][0];
     }
     pragma(inline, true) qreal m22() const
     {
-        return affine._m22;
+        return m_matrix[1][1];
     }
     pragma(inline, true) qreal m23() const
     {
-        return m_23;
+        return m_matrix[1][2];
     }
     pragma(inline, true) qreal m31() const
     {
-        return affine._dx;
+        return m_matrix[2][0];
     }
     pragma(inline, true) qreal m32() const
     {
-        return affine._dy;
+        return m_matrix[2][1];
     }
     pragma(inline, true) qreal m33() const
     {
-        return m_33;
+        return m_matrix[2][2];
     }
     pragma(inline, true) qreal dx() const
     {
-        return affine._dx;
+        return m_matrix[2][0];
     }
     pragma(inline, true) qreal dy() const
     {
-        return affine._dy;
+        return m_matrix[2][1];
     }
 
     void setMatrix(qreal m11, qreal m12, qreal m13,
                        qreal m21, qreal m22, qreal m23,
                        qreal m31, qreal m32, qreal m33);
 
-    /+ Q_REQUIRED_RESULT +/ QTransform inverted(bool* invertible = null) const;
-    /+ Q_REQUIRED_RESULT +/ QTransform adjoint() const;
-    /+ Q_REQUIRED_RESULT +/ QTransform transposed() const;
+    /+ [[nodiscard]] +/ QTransform inverted(bool* invertible = null) const;
+    /+ [[nodiscard]] +/ QTransform adjoint() const;
+    /+ [[nodiscard]] +/ QTransform transposed() const;
 
     ref QTransform translate(qreal dx, qreal dy);
     ref QTransform scale(qreal sx, qreal sy);
@@ -200,23 +189,19 @@ public:
     void map(int x, int y, int* tx, int* ty) const;
     void map(qreal x, qreal y, qreal* tx, qreal* ty) const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    ref const(QMatrix) toAffine() const;
-/+ #endif +/ // QT_DEPRECATED_SINCE(5, 15)
-
     /+pragma(inline, true) ref QTransform operator *=(qreal num)
     {
         if (num == 1.)
             return this;
-        affine._m11 *= num;
-        affine._m12 *= num;
-        m_13        *= num;
-        affine._m21 *= num;
-        affine._m22 *= num;
-        m_23        *= num;
-        affine._dx  *= num;
-        affine._dy  *= num;
-        m_33        *= num;
+        m_matrix[0][0] *= num;
+        m_matrix[0][1] *= num;
+        m_matrix[0][2] *= num;
+        m_matrix[1][0] *= num;
+        m_matrix[1][1] *= num;
+        m_matrix[1][2] *= num;
+        m_matrix[2][0] *= num;
+        m_matrix[2][1] *= num;
+        m_matrix[2][2] *= num;
         if (m_dirty < TransformationType.TxScale)
             m_dirty = TransformationType.TxScale;
         return this;
@@ -232,15 +217,15 @@ public:
     {
         if (num == 0)
             return this;
-        affine._m11 += num;
-        affine._m12 += num;
-        m_13        += num;
-        affine._m21 += num;
-        affine._m22 += num;
-        m_23        += num;
-        affine._dx  += num;
-        affine._dy  += num;
-        m_33        += num;
+        m_matrix[0][0] += num;
+        m_matrix[0][1] += num;
+        m_matrix[0][2] += num;
+        m_matrix[1][0] += num;
+        m_matrix[1][1] += num;
+        m_matrix[1][2] += num;
+        m_matrix[2][0] += num;
+        m_matrix[2][1] += num;
+        m_matrix[2][2] += num;
         m_dirty     = TransformationType.TxProject;
         return this;
     }
@@ -248,15 +233,15 @@ public:
     {
         if (num == 0)
             return this;
-        affine._m11 -= num;
-        affine._m12 -= num;
-        m_13        -= num;
-        affine._m21 -= num;
-        affine._m22 -= num;
-        m_23        -= num;
-        affine._dx  -= num;
-        affine._dy  -= num;
-        m_33        -= num;
+        m_matrix[0][0] -= num;
+        m_matrix[0][1] -= num;
+        m_matrix[0][2] -= num;
+        m_matrix[1][0] -= num;
+        m_matrix[1][1] -= num;
+        m_matrix[1][2] -= num;
+        m_matrix[2][0] -= num;
+        m_matrix[2][1] -= num;
+        m_matrix[2][2] -= num;
         m_dirty     = TransformationType.TxProject;
         return this;
     }
@@ -265,30 +250,16 @@ public:
     static QTransform fromScale(qreal dx, qreal dy);
 
 private:
-    pragma(inline, true) this(qreal h11, qreal h12, qreal h13,
-                          qreal h21, qreal h22, qreal h23,
-                          qreal h31, qreal h32, qreal h33, bool)
-    {
-        this.affine = QMatrix(h11, h12, h21, h22, h31, h32, true);
-        this.m_13 = h13; this.m_23 = h23; this.m_33 = h33;
-        this.m_type = TransformationType.TxNone;
-        this.m_dirty = TransformationType.TxProject;
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-        this.d = null;
-/+ #endif +/
-    }
-    pragma(inline, true) this(bool)
-    {
-        this.affine = true;
-        this.m_13 = 0;
-        this.m_23 = 0;
-        this.m_33 = 1;
-        this.m_type = TransformationType.TxNone;
-        this.m_dirty = TransformationType.TxNone;
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-        this.d = null;
-/+ #endif +/
-}
+    /+ struct Affine {
+             ref qreal[3][3]  m_matrix;
+        } +/
+
+public:
+    //auto asAffineMatrix() { return Affine (m_matrix) ; }
+    /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &s, Affine &m); +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &s, const Affine &m); +/
+
+private:
     /******* inlines *****/
     pragma(inline, true) TransformationType inline_type() const
     {
@@ -296,13 +267,10 @@ private:
             return static_cast!(TransformationType)(m_type);
         return type();
     }
-    QMatrix affine;
-    qreal   m_13 = 0;
-    qreal   m_23 = 0;
-    qreal   m_33 = 1;
+    qreal[3][3] m_matrix = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
 
     /+ mutable uint m_type : 5; +/
-    ushort bitfieldData_m_type;
+    ushort bitfieldData_m_type = TransformationType.TxNone | (TransformationType.TxNone << 5);
     final uint m_type() const
     {
         return (bitfieldData_m_type >> 0) & 0x1f;
@@ -322,22 +290,14 @@ private:
         bitfieldData_m_type = (bitfieldData_m_type & ~0x3e0) | ((value & 0x1f) << 5);
         return value;
     }
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    extern(C++, class) struct Private;
-    Private* d;
-/+ #endif +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QTransform, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QTransform, Q_RELOCATABLE_TYPE);
 
-Q_GUI_EXPORT Q_DECL_CONST_FUNCTION uint qHash(const QTransform &key, uint seed = 0) noexcept;
-#if QT_DEPRECATED_SINCE(5, 13)
-#endif
+Q_GUI_EXPORT Q_DECL_CONST_FUNCTION size_t qHash(const QTransform &key, size_t seed = 0) noexcept;
 
 QT_WARNING_PUSH
-QT_WARNING_DISABLE_CLANG("-Wfloat-equal")
-QT_WARNING_DISABLE_GCC("-Wfloat-equal")
-QT_WARNING_DISABLE_INTEL(1572)
+QT_WARNING_DISABLE_FLOAT_COMPARE
 
 QT_WARNING_POP +/
 

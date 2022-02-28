@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.bytearray;
 import qt.core.metaobject;
+import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.object;
 import qt.core.objectdefs_impl;
@@ -77,11 +78,18 @@ extern(D) alias SIGNAL = function string(string a)
 /+ #endif // QT_NO_META_MACROS
 
 #define Q_ARG(type, data) QArgument<type >(#type, data)
-#define Q_RETURN_ARG(type, data) QReturnArgument<type >(#type, data) +/
+#define Q_RETURN_ARG(type, data) QReturnArgument<type >(#type, data)
 
 
+namespace QtPrivate {
+class QMetaTypeInterface} +/
 
-/// Binding for C++ class [QGenericArgument](https://doc.qt.io/qt-5/qgenericargument.html).
+struct QMethodRawArguments
+{
+    void** arguments;
+}
+
+/// Binding for C++ class [QGenericArgument](https://doc.qt.io/qt-6/qgenericargument.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QGenericArgument
 {
 public:
@@ -99,7 +107,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QGenericReturnArgument](https://doc.qt.io/qt-5/qgenericreturnargument.html).
+/// Binding for C++ class [QGenericReturnArgument](https://doc.qt.io/qt-6/qgenericreturnargument.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QGenericReturnArgument
 {
     public QGenericArgument base0;
@@ -144,7 +152,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     /+
     extern(C++, class) struct Connection;
     +/
-    /// Binding for C++ class [Connection](https://doc.qt.io/qt-5/qmetaobject-connection.html).
+    /// Binding for C++ class [Connection](https://doc.qt.io/qt-6/qmetaobject-connection.html).
     extern(C++, class) struct /+ Q_CORE_EXPORT +/ Connection {
     private:
         void* d_ptr; //QObjectPrivate::Connection*
@@ -164,13 +172,15 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     /+ #ifdef Q_QDOC
         operator bool() const;
     #else +/
+        // still using the restricted bool trick here, in order to support
+        // code using copy-init (e.g. `bool ok = connect(...)`)
         alias RestrictedBool = void*/+ Connection::* +/*;
         /+auto opCast(T : RestrictedBool)() const { return d_ptr && isConnected_helper() ? &Connection.d_ptr : null; }+/
     /+ #endif +/
 
-        /+ Connection(Connection &&o) noexcept : d_ptr(o.d_ptr) { o.d_ptr = nullptr; } +/
-        /+ Connection &operator=(Connection &&other) noexcept
-        { qSwap(d_ptr, other.d_ptr); return *this; } +/
+        /+ Connection(Connection &&other) noexcept : d_ptr(qExchange(other.d_ptr, nullptr)) {} +/
+        /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(Connection) +/
+        /+ void swap(Connection &other) noexcept { qSwap(d_ptr, other.d_ptr); } +/
         mixin(CREATE_CONVENIENCE_WRAPPERS);
     }
 
@@ -179,17 +189,20 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     { return cast(const(QMetaObject)*)(d.superdata); }+/
 
     bool inherits(const(QMetaObject)* metaObject) const/+ noexcept+/;
-    mixin(mangleWindows("?cast@QMetaObject@@QEBAPEAVQObject@@PEAV2@@Z", q{
-    mixin(mangleItanium("_ZNK11QMetaObject4castEP7QObject", q{
-    QObject cast_(QObject obj) const;
+    QObject cast_(QObject obj) const
+    { return const_cast!(QObject)(cast_(const_cast!(const(QObject))(obj))); }
+    mixin(mangleWindows("?cast@QMetaObject@@QEBAPEBVQObject@@PEBV2@@Z", q{
+    mixin(mangleItanium("_ZNK11QMetaObject4castEPK7QObject", q{
+    const(QObject) cast_(const(QObject) obj) const;
     }));
     }));
-    //const(QObject) cast_(const(QObject) obj) const;
 
     version(QT_NO_TRANSLATION){}else
     {
         QString tr(const(char)* s, const(char)* c, int n = -1) const;
     }
+
+    QMetaType metaType() const;
 
     int methodOffset() const;
     int enumeratorOffset() const;
@@ -403,15 +416,11 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
         ReadProperty,
         WriteProperty,
         ResetProperty,
-        QueryPropertyDesignable,
-        QueryPropertyScriptable,
-        QueryPropertyStored,
-        QueryPropertyEditable,
-        QueryPropertyUser,
         CreateInstance,
         IndexOfMethod,
         RegisterPropertyMetaType,
-        RegisterMethodArgumentMetaType
+        RegisterMethodArgumentMetaType,
+        BindableProperty
     }
 
     int static_metacall(Call, int, void** ) const;
@@ -436,7 +445,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
 
         /+const(QMetaObject)* operator ->() const { return operator const QMetaObject *(); }+/
 
-        version(QT_NO_DATA_RELOCATION)
+        static if((versionIsSet!("QT_NO_DATA_RELOCATION") || (versionIsSet!("Windows") && !versionIsSet!("Cygwin"))))
         {
             alias Getter = ExternCPPFunc!(const(QMetaObject)* function());
             Getter indirect = null;
@@ -459,21 +468,27 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
         }
     }
 
-    struct generated_qobjectdefs_0 { // private data
+    struct Data { // private data
         SuperData superdata;
         const(void)* stringdata;
         const(uint)* data;
         alias StaticMetacallFunction = ExternCPPFunc!(void function(QObject , QMetaObject.Call, int, void** ));
         StaticMetacallFunction static_metacall;
         const(SuperData)* relatedMetaObjects;
+        const(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface)*/+ const +/ * metaTypes;
         void* extradata; //reserved for future use
-    }generated_qobjectdefs_0 d;
+    }Data d;
 
 private:
     static bool invokeMethodImpl(QObject object, /+ QtPrivate:: +/qt.core.objectdefs_impl.QSlotObjectBase* slot, /+ Qt:: +/qt.core.namespace.ConnectionType type, void* ret);
     /+ friend class QTimer; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
+
+/+ inline void swap(QMetaObject::Connection &lhs, QMetaObject::Connection &rhs) noexcept
+{
+    lhs.swap(rhs);
+} +/
 
 extern(C++, "QtPrivate") {
     /* Trait that tells is a the Object has a Q_OBJECT macro */

@@ -14,9 +14,6 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_REGEXP){}else
-version(QT_NO_VALIDATOR){}else
-    import qt.core.regexp;
 version(QT_NO_VALIDATOR){}else
 {
     import qt.core.locale;
@@ -34,7 +31,7 @@ version(QT_NO_VALIDATOR){}else
 
 extern(C++, class) struct QValidatorPrivate;
 
-/// Binding for C++ class [QValidator](https://doc.qt.io/qt-5/qvalidator.html).
+/// Binding for C++ class [QValidator](https://doc.qt.io/qt-6/qvalidator.html).
 abstract class /+ Q_GUI_EXPORT +/ QValidator : QObject
 {
     mixin(Q_OBJECT);
@@ -74,7 +71,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QIntValidator](https://doc.qt.io/qt-5/qintvalidator.html).
+/// Binding for C++ class [QIntValidator](https://doc.qt.io/qt-6/qintvalidator.html).
 class /+ Q_GUI_EXPORT +/ QIntValidator : QValidator
 {
     mixin(Q_OBJECT);
@@ -91,7 +88,7 @@ public:
 
     final void setBottom(int);
     final void setTop(int);
-    /+ virtual +/ void setRange(int bottom, int top);
+    final void setRange(int bottom, int top);
 
     final int bottom() const { return b; }
     final int top() const { return t; }
@@ -107,12 +104,9 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-version(QT_NO_REGEXP){}else
-{
-
 extern(C++, class) struct QDoubleValidatorPrivate;
 
-/// Binding for C++ class [QDoubleValidator](https://doc.qt.io/qt-5/qdoublevalidator.html).
+/// Binding for C++ class [QDoubleValidator](https://doc.qt.io/qt-6/qdoublevalidator.html).
 class /+ Q_GUI_EXPORT +/ QDoubleValidator : QValidator
 {
     mixin(Q_OBJECT);
@@ -133,7 +127,7 @@ public:
     /+ Q_ENUM(Notation) +/
     override QValidator.State validate(ref QString , ref int ) const;
 
-    /+ virtual +/ void setRange(double bottom, double top, int decimals = 0);
+    final void setRange(double bottom, double top, int decimals = 0);
     final void setBottom(double);
     final void setTop(double);
     final void setDecimals(int);
@@ -160,40 +154,11 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-
-/// Binding for C++ class [QRegExpValidator](https://doc.qt.io/qt-5/qregexpvalidator.html).
-class /+ Q_GUI_EXPORT +/ QRegExpValidator : QValidator
-{
-    mixin(Q_OBJECT);
-    /+ Q_PROPERTY(QRegExp regExp READ regExp WRITE setRegExp NOTIFY regExpChanged) +/
-
-public:
-    /+ explicit +/this(QObject parent = null);
-    /+ explicit +/this(ref const(QRegExp) rx, QObject parent = null);
-    ~this();
-
-    /+ virtual +/ override QValidator.State validate(ref QString input, ref int pos) const;
-
-    final void setRegExp(ref const(QRegExp) rx);
-    final ref const(QRegExp) regExp() const { return r; }
-
-/+ Q_SIGNALS +/public:
-    @QSignal final void regExpChanged(ref const(QRegExp) regExp);
-
-private:
-    /+ Q_DISABLE_COPY(QRegExpValidator) +/
-
-    QRegExp r;
-    mixin(CREATE_CONVENIENCE_WRAPPERS);
-}
-
-}
-
 /+ #if QT_CONFIG(regularexpression) +/
 
 extern(C++, class) struct QRegularExpressionValidatorPrivate;
 
-/// Binding for C++ class [QRegularExpressionValidator](https://doc.qt.io/qt-5/qregularexpressionvalidator.html).
+/// Binding for C++ class [QRegularExpressionValidator](https://doc.qt.io/qt-6/qregularexpressionvalidator.html).
 class /+ Q_GUI_EXPORT +/ QRegularExpressionValidator : QValidator
 {
     mixin(Q_OBJECT);
@@ -204,7 +169,7 @@ public:
     /+ explicit +/this(ref const(QRegularExpression) re, QObject parent = null);
     ~this();
 
-    /+ virtual +/ override QValidator.State validate(ref QString input, ref int pos) const;
+    override QValidator.State validate(ref QString input, ref int pos) const;
 
     final QRegularExpression regularExpression() const;
 

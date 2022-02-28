@@ -14,11 +14,14 @@ extern(C++):
 
 import qt.config;
 import qt.core.abstractitemmodel;
+import qt.core.bytearray;
+import qt.core.hash;
 import qt.core.itemselectionmodel;
 import qt.core.map;
 import qt.core.mimedata;
 import qt.core.namespace;
 import qt.core.object;
+import qt.core.property;
 import qt.core.size;
 import qt.core.stringlist;
 import qt.core.variant;
@@ -29,11 +32,12 @@ import qt.helpers;
 
 extern(C++, class) struct QAbstractProxyModelPrivate;
 
-/// Binding for C++ class [QAbstractProxyModel](https://doc.qt.io/qt-5/qabstractproxymodel.html).
+/// Binding for C++ class [QAbstractProxyModel](https://doc.qt.io/qt-6/qabstractproxymodel.html).
 abstract class /+ Q_CORE_EXPORT +/ QAbstractProxyModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);
-    /+ Q_PROPERTY(QAbstractItemModel* sourceModel READ sourceModel WRITE setSourceModel NOTIFY sourceModelChanged) +/
+    /+ Q_PROPERTY(QAbstractItemModel *sourceModel READ sourceModel WRITE setSourceModel
+               NOTIFY sourceModelChanged BINDABLE bindableSourceModel) +/
 
 public:
     mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
@@ -43,6 +47,7 @@ public:
 
     /+ virtual +/ void setSourceModel(QAbstractItemModel sourceModel);
     final QAbstractItemModel sourceModel() const;
+    final QBindable!(QAbstractItemModel) bindableSourceModel();
 
     /+ virtual +/ @QInvokable abstract QModelIndex mapToSource(ref const(QModelIndex) proxyIndex) const;
     /+ virtual +/ @QInvokable abstract QModelIndex mapFromSource(ref const(QModelIndex) sourceIndex) const;
@@ -61,9 +66,7 @@ public:
     override bool setData(ref const(QModelIndex) index, ref const(QVariant) value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.EditRole);
     override bool setItemData(ref const(QModelIndex) index, ref const(QMap!(int, QVariant)) roles);
     override bool setHeaderData(int section, /+ Qt:: +/qt.core.namespace.Orientation orientation, ref const(QVariant) value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.EditRole);
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    bool clearItemData(const QModelIndex &index) override;
-#endif +/
+    override bool clearItemData(ref const(QModelIndex) index);
 
     override QModelIndex buddy(ref const(QModelIndex) index) const;
     override bool canFetchMore(ref const(QModelIndex) parent) const;
@@ -85,14 +88,13 @@ public:
     override QStringList mimeTypes() const;
     override /+ Qt:: +/qt.core.namespace.DropActions supportedDragActions() const;
     override /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;
+    override QHash!(int, QByteArray) roleNames() const;
 
 /+ Q_SIGNALS +/public:
     @QSignal final void sourceModelChanged(QPrivateSignal);
 
-protected /+ Q_SLOTS +/:
-//    @QSlot final void resetInternalData();
-
 protected:
+    final QModelIndex createSourceIndex(int row, int col, void* internalPtr) const;
     mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QAbstractProxyModelPrivate , QObject parent);
     }));

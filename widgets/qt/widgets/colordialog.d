@@ -19,7 +19,6 @@ import qt.core.namespace;
 import qt.core.object;
 import qt.core.string;
 import qt.gui.color;
-import qt.gui.rgb;
 import qt.helpers;
 import qt.widgets.dialog;
 import qt.widgets.widget;
@@ -29,7 +28,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QColorDialogPrivate;
 
-/// Binding for C++ class [QColorDialog](https://doc.qt.io/qt-5/qcolordialog.html).
+/// Binding for C++ class [QColorDialog](https://doc.qt.io/qt-6/qcolordialog.html).
 class /+ Q_WIDGETS_EXPORT +/ QColorDialog : QDialog
 {
     mixin(Q_OBJECT);
@@ -72,10 +71,6 @@ alias ColorDialogOptions = QFlags!(ColorDialogOption);
                                ref const(QString) title = globalInitVar!QString,
                                ColorDialogOptions options = ColorDialogOptions());
 
-/+ #if QT_DEPRECATED_SINCE(5, 12) +/
-    /+ QT_DEPRECATED_X("Use getColor()") +/ static QRgb getRgba(QRgb rgba = 0xffffffff, bool* ok = null, QWidget parent = null);
-/+ #endif +/
-
     static int customCount();
     static QColor customColor(int index);
     static void setCustomColor(int index, QColor color);
@@ -105,6 +100,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QColorDialog.ColorDialogOptions.enum_type) operator |(QColorDialog.ColorDialogOptions.enum_type f1, QColorDialog.ColorDialogOptions.enum_type f2)/+noexcept+/{return QFlags!(QColorDialog.ColorDialogOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QColorDialog.ColorDialogOptions.enum_type) operator |(QColorDialog.ColorDialogOptions.enum_type f1, QFlags!(QColorDialog.ColorDialogOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QColorDialog.ColorDialogOptions.enum_type) operator &(QColorDialog.ColorDialogOptions.enum_type f1, QColorDialog.ColorDialogOptions.enum_type f2)/+noexcept+/{return QFlags!(QColorDialog.ColorDialogOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QColorDialog.ColorDialogOptions.enum_type) operator &(QColorDialog.ColorDialogOptions.enum_type f1, QFlags!(QColorDialog.ColorDialogOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QColorDialog.ColorDialogOptions.enum_type f1, QColorDialog.ColorDialogOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QColorDialog.ColorDialogOptions.enum_type f1, QFlags!(QColorDialog.ColorDialogOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QColorDialog.ColorDialogOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QColorDialog.ColorDialogOptions.enum_type f1, QColorDialog.ColorDialogOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QColorDialog.ColorDialogOptions.enum_type f1, QFlags!(QColorDialog.ColorDialogOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QColorDialog.ColorDialogOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QColorDialog.ColorDialogOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QColorDialog.ColorDialogOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QColorDialog.ColorDialogOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QColorDialog.ColorDialogOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QColorDialog.ColorDialogOptions.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QColorDialog::ColorDialogOptions) +/

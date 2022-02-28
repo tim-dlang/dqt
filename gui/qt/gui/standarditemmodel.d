@@ -21,6 +21,7 @@ import qt.core.map;
 import qt.core.mimedata;
 import qt.core.namespace;
 import qt.core.object;
+import qt.core.property;
 import qt.core.scopedpointer;
 import qt.core.size;
 import qt.core.string;
@@ -40,9 +41,8 @@ QT_REQUIRE_CONFIG(standarditemmodel); +/
 
 
 
-
 extern(C++, class) struct QStandardItemPrivate;
-/// Binding for C++ class [QStandardItem](https://doc.qt.io/qt-5/qstandarditem.html).
+/// Binding for C++ class [QStandardItem](https://doc.qt.io/qt-6/qstandarditem.html).
 class /+ Q_GUI_EXPORT +/ QStandardItem
 {
 public:
@@ -53,6 +53,7 @@ public:
     /+ virtual +/~this();
 
     /+ virtual +/ QVariant data(int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole + 1) const;
+    /+ virtual +/ void multiData(QModelRoleDataSpan roleDataSpan) const;
     /+ virtual +/ void setData(ref const(QVariant) value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole + 1);
     /+ virtual +/ void setData(T)(T value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole + 1)
     {
@@ -76,18 +77,13 @@ public:
     pragma(inline, true) final void setIcon(ref const(QIcon) aicon)
     { setData(aicon, /+ Qt:: +/qt.core.namespace.ItemDataRole.DecorationRole); }
 
-/+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
-    {
-        pragma(inline, true) final QString toolTip() const {
-            return qvariant_cast!(QString)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole));
-        }
-        pragma(inline, true) final void setToolTip(ref const(QString) atoolTip)
-        { setData(atoolTip, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole); }
+    pragma(inline, true) final QString toolTip() const {
+        return qvariant_cast!(QString)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole));
     }
-/+ #endif
+    pragma(inline, true) final void setToolTip(ref const(QString) atoolTip)
+    { setData(atoolTip, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole); }
 
-#ifndef QT_NO_STATUSTIP +/
+/+ #ifndef QT_NO_STATUSTIP +/
     version(QT_NO_STATUSTIP){}else
     {
         pragma(inline, true) final QString statusTip() const {
@@ -187,12 +183,7 @@ public:
     }
     final void setUserTristate(bool tristate);
 
-/+ #if QT_DEPRECATED_SINCE(5, 6) +/
-    /+ QT_DEPRECATED +/ final bool isTristate() const { return isAutoTristate(); }
-    /+ QT_DEPRECATED +/ final void setTristate(bool tristate);
-/+ #endif
-
-#if QT_CONFIG(draganddrop) +/
+/+ #if QT_CONFIG(draganddrop) +/
     pragma(inline, true) final bool isDragEnabled() const {
         return (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsDragEnabled) != 0;
     }
@@ -278,10 +269,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ #ifndef QT_NO_TOOLTIP
-#endif
-
-#ifndef QT_NO_STATUSTIP
+/+ #ifndef QT_NO_STATUSTIP
 #endif
 
 #if QT_CONFIG(whatsthis)
@@ -289,11 +277,11 @@ private:
 
 extern(C++, class) struct QStandardItemModelPrivate;
 
-/// Binding for C++ class [QStandardItemModel](https://doc.qt.io/qt-5/qstandarditemmodel.html).
+/// Binding for C++ class [QStandardItemModel](https://doc.qt.io/qt-6/qstandarditemmodel.html).
 class /+ Q_GUI_EXPORT +/ QStandardItemModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);
-    /+ Q_PROPERTY(int sortRole READ sortRole WRITE setSortRole) +/
+    /+ Q_PROPERTY(int sortRole READ sortRole WRITE setSortRole BINDABLE bindableSortRole) +/
 
 public:
     /+ explicit +/this(QObject parent = null);
@@ -301,6 +289,7 @@ public:
     ~this();
 
     final void setItemRoleNames(ref const(QHash!(int,QByteArray)) roleNames);
+    override QHash!(int, QByteArray) roleNames() const;
 
     override QModelIndex index(int row, int column, ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override QModelIndex parent(ref const(QModelIndex) child) const;
@@ -308,13 +297,11 @@ public:
     override int rowCount(ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override int columnCount(ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override bool hasChildren(ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
-    // Qt 6: Remove
-    override QModelIndex sibling(int row, int column, ref const(QModelIndex) idx) const;
 
     override QVariant data(ref const(QModelIndex) index, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) const;
+    override void multiData(ref const(QModelIndex) index, QModelRoleDataSpan roleDataSpan) const;
     override bool setData(ref const(QModelIndex) index, ref const(QVariant) value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.EditRole);
-    // Qt 6: add override keyword
-    final bool clearItemData(ref const(QModelIndex) index);
+    override bool clearItemData(ref const(QModelIndex) index);
 
     override QVariant headerData(int section, /+ Qt:: +/qt.core.namespace.Orientation orientation,
                             int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) const;
@@ -397,6 +384,7 @@ public:
 
     final int sortRole() const;
     final void setSortRole(int role);
+    final QBindable!(int) bindableSortRole();
 
     override QStringList mimeTypes() const;
     override QMimeData mimeData(ref const(QModelIndexList) indexes) const;
@@ -405,7 +393,6 @@ public:
     }));
 
 /+ Q_SIGNALS +/public:
-    // ### Qt 6: add changed roles
     @QSignal final void itemChanged(QStandardItem item);
 
 protected:

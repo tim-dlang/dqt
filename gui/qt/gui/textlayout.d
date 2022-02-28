@@ -19,7 +19,6 @@ import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.string;
-import qt.core.vector;
 import qt.gui.font;
 import qt.gui.paintdevice;
 import qt.gui.painter;
@@ -33,11 +32,12 @@ version(QT_NO_RAWFONT){}else
     import qt.gui.rawfont;
 }
 
+extern(C++, class) struct QTextEngine;
 /+ #ifndef QT_NO_RAWFONT
 class QRawFont;
 #endif +/
 
-/// Binding for C++ class [QTextInlineObject](https://doc.qt.io/qt-5/qtextinlineobject.html).
+/// Binding for C++ class [QTextInlineObject](https://doc.qt.io/qt-6/qtextinlineobject.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextInlineObject
 {
 public:
@@ -79,7 +79,7 @@ private:
 }
 
 
-/// Binding for C++ class [QTextLayout](https://doc.qt.io/qt-5/qtextlayout.html).
+/// Binding for C++ class [QTextLayout](https://doc.qt.io/qt-6/qtextlayout.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLayout
 {
 public:
@@ -95,20 +95,9 @@ public:
     }
 
     this(ref const(QString) text);
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    this(ref const(QString) text, ref const(QFont) font, QPaintDevice paintdevice = null);
-/+ #ifndef Q_QDOC +/
-    // the template is necessary to make QTextLayout(font,text,nullptr) and QTextLayout(font,text,NULL)
-    // not ambiguous. Implementation detail that should not be documented.
-    /+ template<char = 0>
-#endif +/
-    this(ref const(QString) textData, ref const(QFont) textFont, const(QPaintDevice) paintdevice)
-    {
-        this(textData, textFont, const_cast!(QPaintDevice)(paintdevice));
-    }
-/+ #else
-    QTextLayout(const QString &text, const QFont &font, const QPaintDevice *paintdevice = nullptr);
-#endif +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    this(ref const(QString) text, ref const(QFont) font, const(QPaintDevice) paintdevice = null);
+    }));
     this(ref const(QTextBlock) b);
     ~this();
 
@@ -141,13 +130,8 @@ public:
         /+ friend bool operator!=(const FormatRange &lhs, const FormatRange &rhs)
         { return !operator==(lhs, rhs); } +/
     }
-/+ #if QT_DEPRECATED_SINCE(5, 6) +/
-    /+ QT_DEPRECATED_X("Use setFormats()") +/ void setAdditionalFormats(ref const(QList!(FormatRange)) overrides);
-    /+ QT_DEPRECATED_X("Use formats()") +/ QList!(FormatRange) additionalFormats() const;
-    /+ QT_DEPRECATED_X("Use clearFormats()") +/ void clearAdditionalFormats();
-/+ #endif +/
-    void setFormats(ref const(QVector!(FormatRange)) overrides);
-    QVector!(FormatRange) formats() const;
+    void setFormats(ref const(QList!(FormatRange)) overrides);
+    QList!(FormatRange) formats() const;
     void clearFormats();
 
     void setCacheEnabled(bool enable);
@@ -176,7 +160,8 @@ public:
     int leftCursorPosition(int oldPos) const;
     int rightCursorPosition(int oldPos) const;
 
-    void draw(QPainter* p, ref const(QPointF) pos, ref const(QVector!(FormatRange)) selections = globalInitVar!(QVector!(FormatRange)),
+    void draw(QPainter* p, ref const(QPointF) pos,
+                  ref const(QList!(FormatRange)) selections = globalInitVar!(QList!(FormatRange)),
                   ref const(QRectF) clip = globalInitVar!QRectF) const;
     void drawCursor(QPainter* p, ref const(QPointF) pos, int cursorPosition) const;
     void drawCursor(QPainter* p, ref const(QPointF) pos, int cursorPosition, int width) const;
@@ -216,7 +201,7 @@ private:
 /+ Q_DECLARE_TYPEINFO(QTextLayout::FormatRange, Q_RELOCATABLE_TYPE); +/
 
 
-/// Binding for C++ class [QTextLine](https://doc.qt.io/qt-5/qtextline.html).
+/// Binding for C++ class [QTextLine](https://doc.qt.io/qt-6/qtextline.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLine
 {
 public:
@@ -270,7 +255,7 @@ public:
 
     int lineNumber() const { return index; }
 
-    void draw(QPainter* p, ref const(QPointF) point, const(QTextLayout.FormatRange)* selection = null) const;
+    void draw(QPainter* painter, ref const(QPointF) position) const;
 
     version(QT_NO_RAWFONT){}else
     {
@@ -284,6 +269,8 @@ private:
         this.eng = e;
     }
     void layout_helper(int numGlyphs);
+    void draw_internal(QPainter* p, ref const(QPointF) pos,
+                           const(QTextLayout.FormatRange)* selection) const;
 
     /+ friend class QTextLayout; +/
     /+ friend class QTextFragment; +/

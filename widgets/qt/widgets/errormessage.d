@@ -24,7 +24,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QErrorMessagePrivate;
 
-/// Binding for C++ class [QErrorMessage](https://doc.qt.io/qt-5/qerrormessage.html).
+/// Binding for C++ class [QErrorMessage](https://doc.qt.io/qt-6/qerrormessage.html).
 class /+ Q_WIDGETS_EXPORT +/ QErrorMessage: QDialog
 {
     mixin(Q_OBJECT);

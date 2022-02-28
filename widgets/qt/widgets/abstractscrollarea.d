@@ -28,13 +28,15 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QAbstractScrollAreaPrivate;
 
-/// Binding for C++ class [QAbstractScrollArea](https://doc.qt.io/qt-5/qabstractscrollarea.html).
+/// Binding for C++ class [QAbstractScrollArea](https://doc.qt.io/qt-6/qabstractscrollarea.html).
 class /+ Q_WIDGETS_EXPORT +/ QAbstractScrollArea : QFrame
 {
     mixin(Q_OBJECT);
 
-    /+ Q_PROPERTY(Qt::ScrollBarPolicy verticalScrollBarPolicy READ verticalScrollBarPolicy WRITE setVerticalScrollBarPolicy)
-    Q_PROPERTY(Qt::ScrollBarPolicy horizontalScrollBarPolicy READ horizontalScrollBarPolicy WRITE setHorizontalScrollBarPolicy)
+    /+ Q_PROPERTY(Qt::ScrollBarPolicy verticalScrollBarPolicy READ verticalScrollBarPolicy
+               WRITE setVerticalScrollBarPolicy)
+    Q_PROPERTY(Qt::ScrollBarPolicy horizontalScrollBarPolicy READ horizontalScrollBarPolicy
+               WRITE setHorizontalScrollBarPolicy)
     Q_PROPERTY(SizeAdjustPolicy sizeAdjustPolicy READ sizeAdjustPolicy WRITE setSizeAdjustPolicy) +/
 
 public:

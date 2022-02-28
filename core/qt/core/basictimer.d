@@ -19,22 +19,14 @@ import qt.core.typeinfo;
 import qt.helpers;
 
 
-/// Binding for C++ class [QBasicTimer](https://doc.qt.io/qt-5/qbasictimer.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QBasicTimer
+/// Binding for C++ class [QBasicTimer](https://doc.qt.io/qt-6/qbasictimer.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QBasicTimer
 {
 private:
     int id;
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-    Q_DISABLE_COPY(QBasicTimer)
-#elif QT_DEPRECATED_SINCE(5, 14) +/
-public:
-    // Just here to preserve BC, we can't remove them yet
-    @disable this(this);
-    /+ QT_DEPRECATED_X("copy-construction is unsupported; use move-construction instead") +/this(ref const(QBasicTimer) );
-    /+/+ QT_DEPRECATED_X("copy-assignment is unsupported; use move-assignment instead") +/
-        ref QBasicTimer operator =(ref const(QBasicTimer) );+/
-/+ #endif +/
-
+    /+ Q_DISABLE_COPY(QBasicTimer) +/
+@disable this(this);
+/+this(ref const(QBasicTimer));+//+ref QBasicTimer operator =(ref const(QBasicTimer));+/
 public:
     @disable this();
     /+this()/+ noexcept+/
@@ -47,11 +39,7 @@ public:
         : id{qExchange(other.id, 0)}
     {} +/
 
-    /+ QBasicTimer& operator=(QBasicTimer &&other) noexcept
-    {
-        QBasicTimer{std::move(other)}.swap(*this);
-        return *this;
-    } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QBasicTimer) +/
 
     /+ void swap(QBasicTimer &other) noexcept { qSwap(id, other.id); } +/
 
@@ -63,7 +51,7 @@ public:
     void stop();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QBasicTimer, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QBasicTimer, Q_RELOCATABLE_TYPE);
 
 inline void swap(QBasicTimer &lhs, QBasicTimer &rhs) noexcept { lhs.swap(rhs); } +/
 

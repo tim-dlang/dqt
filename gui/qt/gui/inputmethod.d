@@ -23,7 +23,7 @@ import qt.helpers;
 
 extern(C++, class) struct QInputMethodPrivate;
 
-/// Binding for C++ class [QInputMethod](https://doc.qt.io/qt-5/qinputmethod.html).
+/// Binding for C++ class [QInputMethod](https://doc.qt.io/qt-6/qinputmethod.html).
 class /+ Q_GUI_EXPORT +/ QInputMethod : QObject
 {
     mixin(Q_OBJECT);
@@ -31,7 +31,8 @@ class /+ Q_GUI_EXPORT +/ QInputMethod : QObject
     /+ Q_PROPERTY(QRectF cursorRectangle READ cursorRectangle NOTIFY cursorRectangleChanged)
     Q_PROPERTY(QRectF anchorRectangle READ anchorRectangle NOTIFY anchorRectangleChanged)
     Q_PROPERTY(QRectF keyboardRectangle READ keyboardRectangle NOTIFY keyboardRectangleChanged)
-    Q_PROPERTY(QRectF inputItemClipRectangle READ inputItemClipRectangle NOTIFY inputItemClipRectangleChanged)
+    Q_PROPERTY(QRectF inputItemClipRectangle READ inputItemClipRectangle
+               NOTIFY inputItemClipRectangleChanged)
     Q_PROPERTY(bool visible READ isVisible NOTIFY visibleChanged)
     Q_PROPERTY(bool animating READ isAnimating NOTIFY animatingChanged)
     Q_PROPERTY(QLocale locale READ locale NOTIFY localeChanged)
@@ -67,7 +68,7 @@ public:
     final QLocale locale() const;
     final /+ Qt:: +/qt.core.namespace.LayoutDirection inputDirection() const;
 
-    static QVariant queryFocusObject(/+ Qt:: +/qt.core.namespace.InputMethodQuery query, QVariant argument); // ### Qt 6: QVariant by const-ref
+    static QVariant queryFocusObject(/+ Qt:: +/qt.core.namespace.InputMethodQuery query, ref const(QVariant) argument);
 
 public /+ Q_SLOTS +/:
     @QSlot final void show();

@@ -25,12 +25,6 @@ extern(C++, class) struct RefCount
 public:
     extern(D) pragma(inline, true) bool ref_(string filename = __FILE__, size_t line = __LINE__)/+ noexcept+/ {
         int count = atomic.loadRelaxed();
-        version(QT_NO_UNSHARABLE_CONTAINERS){}else
-        {
-            if (count == 0) // !isSharable
-                return false;
-        }
-
         if (count != -1) // !isStatic
             atomic.ref_();
         return true;
@@ -38,35 +32,9 @@ public:
 
     extern(D) pragma(inline, true) bool deref(string filename = __FILE__, size_t line = __LINE__)/+ noexcept+/ {
         int count = atomic.loadRelaxed();
-        version(QT_NO_UNSHARABLE_CONTAINERS){}else
-        {
-            if (count == 0) // !isSharable
-                return false;
-        }
-
         if (count == -1) // isStatic
             return true;
         return atomic.deref();
-    }
-
-    version(QT_NO_UNSHARABLE_CONTAINERS){}else
-    {
-        bool setSharable(bool sharable)/+ noexcept+/
-        {
-            import qt.core.global;
-
-            (mixin(Q_ASSERT(q{!isShared()})));
-            if (sharable)
-                return atomic.testAndSetRelaxed(0, 1);
-            else
-                return atomic.testAndSetRelaxed(1, 0);
-        }
-
-        bool isSharable() const/+ noexcept+/
-        {
-            // Sharable === Shared ownership.
-            return atomic.loadRelaxed() != 0;
-        }
     }
 
 /+    bool isStatic() const/+ noexcept+/

@@ -44,9 +44,10 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
         /*if(value.isEmpty())
             continue;*/
         auto propertyType = fromStringz(valueVar.typeName());
-        if(valueVar.type() == cast(QVariant.Type)QMetaType.Type.QFont)
+        if(propertyType == "QFont")
+        if(valueVar.typeId() == QMetaType.Type.QFont)
             value = QString("platform dependent");
-        if(valueVar.type() == cast(QVariant.Type)QMetaType.Type.QKeySequence)
+        if(valueVar.typeId() == QMetaType.Type.QKeySequence)
             value = valueVar.value!QKeySequence().toString(QKeySequence.SequenceFormat.PortableText);
         if(propertyName == "x" || propertyName == "y" || propertyName == "width" || propertyName == "height")
             value = QString("platform dependent");

@@ -21,27 +21,11 @@ import qt.core.typeinfo;
 import qt.core.variant;
 import qt.helpers;
 
-// gcc < 4.8.0 has problems with init'ing variant members in constexpr ctors
-// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54922
-/+ #if !defined(Q_CC_GNU) || defined(Q_CC_INTEL) || defined(Q_CC_CLANG) || Q_CC_GNU >= 408
-# define QT_SIZEPOLICY_CONSTEXPR Q_DECL_CONSTEXPR
-# if defined(Q_COMPILER_UNIFORM_INIT)
-#  define QT_SIZEPOLICY_CONSTEXPR_AND_UNIFORM_INIT Q_DECL_CONSTEXPR
-# endif // uniform-init
-#endif
 
-#ifndef QT_SIZEPOLICY_CONSTEXPR
-# define QT_SIZEPOLICY_CONSTEXPR
-#endif
-#ifndef QT_SIZEPOLICY_CONSTEXPR_AND_UNIFORM_INIT
-# define QT_SIZEPOLICY_CONSTEXPR_AND_UNIFORM_INIT
-#endif
+/+ Q_DECL_CONST_FUNCTION inline size_t qHash(QSizePolicy key, size_t seed = 0) noexcept; +/
 
-
-Q_DECL_CONST_FUNCTION inline uint qHash(QSizePolicy key, uint seed = 0) noexcept; +/
-
-/// Binding for C++ class [QSizePolicy](https://doc.qt.io/qt-5/qsizepolicy.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QSizePolicy
+/// Binding for C++ class [QSizePolicy](https://doc.qt.io/qt-6/qsizepolicy.html).
+@Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QSizePolicy
 {
     mixin(Q_GADGET);
 
@@ -90,21 +74,13 @@ alias ControlTypes = QFlags!(ControlType);    /+ Q_FLAG(ControlTypes) +/
         this.data = 0;
     }+/
 
-/+ #if defined(Q_COMPILER_UNIFORM_INIT) && !defined(Q_QDOC)
-    QSizePolicy(Policy horizontal, Policy vertical, ControlType type = DefaultType) noexcept
-        : bits{0, 0, quint32(horizontal), quint32(vertical),
-               type == DefaultType ? 0 : toControlTypeFieldValue(type), 0, 0, 0}
-    {}
-#else +/
     this(Policy horizontal, Policy vertical, ControlType type = ControlType.DefaultType)/+ noexcept+/
     {
-        this.data = 0;
-
-        bits.horPolicy = horizontal;
-        bits.verPolicy = vertical;
-        setControlType(type);
+        this.bits.bitfieldData_horStretch = 0;
+        this.bits.horPolicy = horizontal;
+        this.bits.verPolicy = vertical;
+        this.bits.ctype = type == ControlType.DefaultType ? 0 : toControlTypeFieldValue(type);
     }
-/+ #endif +/ // uniform-init
     Policy horizontalPolicy() const/+ noexcept+/ { return static_cast!(Policy)(bits.horPolicy); }
     Policy verticalPolicy() const/+ noexcept+/ { return static_cast!(Policy)(bits.verPolicy); }
     ControlType controlType() const/+ noexcept+/;
@@ -113,9 +89,10 @@ alias ControlTypes = QFlags!(ControlType);    /+ Q_FLAG(ControlTypes) +/
     void setVerticalPolicy(Policy d)/+ noexcept+/ { bits.verPolicy = d; }
     void setControlType(ControlType type)/+ noexcept+/;
 
+    // ### Qt 7: consider making Policy a QFlags and removing these casts
     /+ Qt:: +/qt.core.namespace.Orientations expandingDirections() const/+ noexcept+/ {
-        return ( (verticalPolicy()   & PolicyFlag.ExpandFlag) ? /+ Qt:: +/qt.core.namespace.Orientations.Vertical   : /+ Qt:: +/qt.core.namespace.Orientations() )
-             | ( (horizontalPolicy() & PolicyFlag.ExpandFlag) ? /+ Qt:: +/qt.core.namespace.Orientations.Horizontal : /+ Qt:: +/qt.core.namespace.Orientations() ) ;
+        return ( (verticalPolicy()   & static_cast!(Policy)(PolicyFlag.ExpandFlag)) ? /+ Qt:: +/qt.core.namespace.Orientations.Vertical   : /+ Qt:: +/qt.core.namespace.Orientations() )
+             | ( (horizontalPolicy() & static_cast!(Policy)(PolicyFlag.ExpandFlag)) ? /+ Qt:: +/qt.core.namespace.Orientations.Horizontal : /+ Qt:: +/qt.core.namespace.Orientations() ) ;
     }
 
     void setHeightForWidth(bool b)/+ noexcept+/ { bits.hfw = b;  }
@@ -126,7 +103,7 @@ alias ControlTypes = QFlags!(ControlType);    /+ Q_FLAG(ControlTypes) +/
     /+bool operator ==(ref const(QSizePolicy) s) const/+ noexcept+/ { return data == s.data; }+/
     /+bool operator !=(ref const(QSizePolicy) s) const/+ noexcept+/ { return data != s.data; }+/
 
-    /+ friend Q_DECL_CONST_FUNCTION uint qHash(QSizePolicy key, uint seed) noexcept { return qHash(key.data, seed); } +/
+    /+ friend Q_DECL_CONST_FUNCTION size_t qHash(QSizePolicy key, size_t seed) noexcept { return qHash(key.data, seed); } +/
 
     /+auto opCast(T : QVariant)() const;+/
 
@@ -139,11 +116,7 @@ alias ControlTypes = QFlags!(ControlType);    /+ Q_FLAG(ControlTypes) +/
 //    void setRetainSizeWhenHidden(bool retainSize)/+ noexcept+/ { bits.retainSizeWhenHidden = retainSize; }
 
 //    void transpose()/+ noexcept+/ { this = transposed(); }
-    /+ Q_REQUIRED_RESULT +/
-    /+ #ifndef Q_QDOC
-        QT_SIZEPOLICY_CONSTEXPR_AND_UNIFORM_INIT
-    #endif +/
-/+        QSizePolicy transposed() const/+ noexcept+/
+/+    /+ [[nodiscard]] +/ QSizePolicy transposed() const/+ noexcept+/
     {
         return QSizePolicy(bits.transposed());
     }+/
@@ -166,8 +139,10 @@ private:
         this.bits = b;
     }+/
 
-/+    static quint32 toControlTypeFieldValue(ControlType type)/+ noexcept+/
+    static quint32 toControlTypeFieldValue(ControlType type)/+ noexcept+/
     {
+        import qt.core.algorithms;
+
         /*
           The control type is a flag type, with values 0x1, 0x2, 0x4, 0x8, 0x10,
           etc. In memory, we pack it onto the available bits (CTSize) in
@@ -183,7 +158,7 @@ private:
         */
 
         return qCountTrailingZeroBits(static_cast!(quint32)(type));
-    }+/
+    }
 
     struct Bits {
         /+ quint32 horStretch : 8; +/
@@ -268,7 +243,6 @@ private:
             return value;
         }
 
-        /+ QT_SIZEPOLICY_CONSTEXPR_AND_UNIFORM_INIT +/
 /+        Bits transposed() const/+ noexcept+/
         {
             return Bits(verStretch, // \ swap
@@ -287,17 +261,25 @@ private:
     }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-// Can't add in Qt 5, as QList<QSizePolicy> would be BiC:
-Q_DECLARE_TYPEINFO(QSizePolicy, Q_PRIMITIVE_TYPE);
-#else
-Q_DECLARE_TYPEINFO(QSizePolicy, Q_RELOCATABLE_TYPE);
-#endif +/
 /+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator |(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/{return QFlags!(QSizePolicy.ControlTypes.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator |(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator &(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/{return QFlags!(QSizePolicy.ControlTypes.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator &(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QSizePolicy.ControlTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QSizePolicy.ControlTypes.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QSizePolicy.ControlTypes.enum_type f1, int f2)/+noexcept+/;+/
 
-/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QSizePolicy::ControlTypes)
+/+ Q_DECLARE_TYPEINFO(QSizePolicy, Q_PRIMITIVE_TYPE);
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(QSizePolicy::ControlTypes)
 #ifndef QT_NO_DATASTREAM
 Q_WIDGETS_EXPORT QDataStream &operator<<(QDataStream &, const QSizePolicy &);
 Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &);
@@ -305,10 +287,5 @@ Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &);
 
 #ifndef QT_NO_DEBUG_STREAM
 Q_WIDGETS_EXPORT QDebug operator<<(QDebug dbg, const QSizePolicy &);
-#endif
-
-
-#undef QT_SIZEPOLICY_CONSTEXPR
-#undef QT_SIZEPOLICY_CONSTEXPR_AND_UNIFORM_INIT +/
-
+#endif +/
 

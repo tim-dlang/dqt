@@ -15,25 +15,27 @@ extern(C++):
 import qt.config;
 import qt.core.atomic;
 import qt.core.global;
+import qt.core.list;
 import qt.core.metamacros;
 import qt.core.namespace;
 import qt.core.pair;
 import qt.core.point;
-import qt.core.scopedpointer;
 import qt.core.typeinfo;
 import qt.core.variant;
-import qt.core.vector;
 import qt.gui.color;
 import qt.gui.image;
-import qt.gui.matrix;
 import qt.gui.pixmap;
 import qt.gui.transform;
 import qt.helpers;
 
-struct QBrushDataPointerDeleter;
+struct QBrushDataPointerDeleter
+{
+    /+void operator ()(QBrushData* d) const/+ noexcept+/;+/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
+}
 
-/// Binding for C++ class [QBrush](https://doc.qt.io/qt-5/qbrush.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBrush
+/// Binding for C++ class [QBrush](https://doc.qt.io/qt-6/qbrush.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBrush
 {
 public:
     @disable this();
@@ -62,8 +64,7 @@ public:
 
     ~this();
     /+ref QBrush operator =(ref const(QBrush) brush);+/
-    /+ inline QBrush &operator=(QBrush &&other) noexcept
-    { qSwap(d, other.d); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QBrush) +/
     /+ inline void swap(QBrush &other) noexcept
     { qSwap(d, other.d); } +/
 
@@ -71,11 +72,6 @@ public:
 
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.BrushStyle style() const { return d.style; }
     void setStyle(/+ Qt:: +/qt.core.namespace.BrushStyle);
-
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_X("Use transform()") +/ pragma(inline, true) ref const(QMatrix) matrix() const { return d.transform.toAffine(); }
-    /+ QT_DEPRECATED_X("Use setTransform()") +/ void setMatrix(ref const(QMatrix) mat);
-/+ #endif +/ // QT_DEPRECATED_SINCE(5, 15)
 
     pragma(inline, true) QTransform transform() const { return d.transform; }
     void setTransform(ref const(QTransform) );
@@ -98,6 +94,8 @@ public:
     /+bool operator ==(ref const(QBrush) b) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QBrush) b) const { return !(operator==(b)); }+/
 
+    //alias DataPtr = /+ std:: +/unique_ptr!(QBrushData, QBrushDataPointerDeleter);
+
 private:
     /+ friend class QRasterPaintEngine; +/
     /+ friend class QRasterPaintEnginePrivate; +/
@@ -106,13 +104,11 @@ private:
     /+ friend bool Q_GUI_EXPORT qHasPixmapTexture(const QBrush& brush); +/
     void detach(/+ Qt:: +/qt.core.namespace.BrushStyle newStyle);
     //void init_(ref const(QColor) color, /+ Qt:: +/qt.core.namespace.BrushStyle bs);
-    QScopedPointer!(QBrushData, QBrushDataPointerDeleter) d;
-    void cleanUp(QBrushData* x);
+    QBrushData* /*DataPtr*/ d;
 
 public:
     pragma(inline, true) bool isDetached() const { return d.ref_.loadRelaxed() == 1; }
-    alias DataPtr = QScopedPointer!(QBrushData, QBrushDataPointerDeleter);
-    pragma(inline, true) ref DataPtr data_ptr() return { return d; }
+    //pragma(inline, true) ref DataPtr data_ptr() { return d; }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -138,8 +134,6 @@ struct QBrushData
     QColor color;
     QTransform transform;
 }
-/+ #if QT_DEPRECATED_SINCE(5, 15)
-#endif +/ // QT_DEPRECATED_SINCE(5, 15)
 
 
 /*******************************************************************************
@@ -147,10 +141,10 @@ struct QBrushData
  */
 extern(C++, class) struct QGradientPrivate;
 
-alias QGradientStop = QPair!(qreal, QColor);
-alias QGradientStops = QVector!(QGradientStop);
+alias QGradientStop = qt.core.pair.QPair!(qreal, QColor);
+alias QGradientStops = QList!(QGradientStop);
 
-/// Binding for C++ class [QGradient](https://doc.qt.io/qt-5/qgradient.html).
+/// Binding for C++ class [QGradient](https://doc.qt.io/qt-6/qgradient.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QGradient
 {
     mixin(Q_GADGET);
@@ -396,7 +390,7 @@ public:
             qreal x1; qreal y1; qreal x2; qreal y2;
         }generated_qbrush_0 linear;
         struct generated_qbrush_1 {
-            qreal cx; qreal cy; qreal fx; qreal fy; qreal cradius;
+            qreal cx; qreal cy; qreal fx; qreal fy; qreal cradius; qreal fradius;
         }generated_qbrush_1 radial;
         struct generated_qbrush_2 {
             qreal cx; qreal cy; qreal angle;
@@ -409,15 +403,16 @@ private:
     /+ friend class QConicalGradient; +/
     /+ friend class QBrush; +/
 
-    Type m_type;
-    Spread m_spread;
+    Type m_type = Type.NoGradient;
+    Spread m_spread = Spread.PadSpread;
     QGradientStops m_stops;
     QGradientData m_data;
-    void* dummy; // ### Qt 6: replace with actual content (CoordinateMode, InterpolationMode, ...)
+    CoordinateMode m_coordinateMode = CoordinateMode.LogicalMode;
+    InterpolationMode m_interpolationMode = InterpolationMode.ColorInterpolation;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QLinearGradient](https://doc.qt.io/qt-5/qlineargradient.html).
+/// Binding for C++ class [QLinearGradient](https://doc.qt.io/qt-6/qlineargradient.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QLinearGradient
 {
     public QGradient base0;
@@ -448,7 +443,7 @@ public:
 }
 
 
-/// Binding for C++ class [QRadialGradient](https://doc.qt.io/qt-5/qradialgradient.html).
+/// Binding for C++ class [QRadialGradient](https://doc.qt.io/qt-6/qradialgradient.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRadialGradient
 {
     public QGradient base0;
@@ -495,7 +490,7 @@ public:
 }
 
 
-/// Binding for C++ class [QConicalGradient](https://doc.qt.io/qt-5/qconicalgradient.html).
+/// Binding for C++ class [QConicalGradient](https://doc.qt.io/qt-6/qconicalgradient.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QConicalGradient
 {
     public QGradient base0;

@@ -17,13 +17,11 @@ import qt.core.string;
 import qt.gui.textcursor;
 import qt.gui.textdocument;
 import qt.helpers;
-version(QT_NO_TEXTHTMLPARSER){}else
-    import qt.core.bytearray;
 
 /+ class QTextStream; +/
 extern(C++, class) struct QTextDocumentFragmentPrivate;
 
-/// Binding for C++ class [QTextDocumentFragment](https://doc.qt.io/qt-5/qtextdocumentfragment.html).
+/// Binding for C++ class [QTextDocumentFragment](https://doc.qt.io/qt-6/qtextdocumentfragment.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextDocumentFragment
 {
 public:
@@ -51,15 +49,14 @@ public:
     QString toPlainText() const;
     version(QT_NO_TEXTHTMLPARSER){}else
     {
-        QString toHtml(ref const(QByteArray) encoding = globalInitVar!QByteArray) const;
+        QString toHtml() const;
     }
 
     static QTextDocumentFragment fromPlainText(ref const(QString) plainText);
     version(QT_NO_TEXTHTMLPARSER){}else
     {
-        static QTextDocumentFragment fromHtml(ref const(QString) html);
         mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-        static QTextDocumentFragment fromHtml(ref const(QString) html, const(QTextDocument) resourceProvider);
+        static QTextDocumentFragment fromHtml(ref const(QString) html, const(QTextDocument) resourceProvider = null);
         }));
     }
 

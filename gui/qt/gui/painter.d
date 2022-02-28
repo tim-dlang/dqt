@@ -16,20 +16,19 @@ import qt.config;
 import qt.core.flags;
 import qt.core.global;
 import qt.core.line;
+import qt.core.list;
 import qt.core.metamacros;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.scopedpointer;
 import qt.core.string;
-import qt.core.vector;
 import qt.gui.brush;
 import qt.gui.color;
 import qt.gui.font;
 import qt.gui.fontinfo;
 import qt.gui.fontmetrics;
 import qt.gui.image;
-import qt.gui.matrix;
 import qt.gui.paintdevice;
 import qt.gui.paintengine;
 import qt.gui.painterpath;
@@ -52,11 +51,10 @@ version(QT_NO_RAWFONT){}else
 
 
 extern(C++, class) struct QPainterPrivate;
-extern(C++, class) struct QTextEngine;
 
 extern(C++, class) struct QPainterPrivateDeleter;
 
-/// Binding for C++ class [QPainter](https://doc.qt.io/qt-5/qpainter.html).
+/// Binding for C++ class [QPainter](https://doc.qt.io/qt-6/qpainter.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPainter
 {
 private:
@@ -68,11 +66,7 @@ public:
         Antialiasing = 0x01,
         TextAntialiasing = 0x02,
         SmoothPixmapTransform = 0x04,
-/+ #if QT_DEPRECATED_SINCE(5, 14) +/
-        HighQualityAntialiasing /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Use Antialiasing instead") +/ = 0x08,
-        NonCosmeticDefaultPen /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Default pen is non-cosmetic now") +/ = 0x10,
-/+ #endif +/
-        Qt4CompatiblePainting = 0x20,
+        VerticalSubpixelPositioning = 0x08,
         LosslessImageRendering = 0x40,
     }
     /+ Q_FLAG(RenderHint) +/
@@ -125,13 +119,6 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     bool begin(QPaintDevice );
     bool end();
     bool isActive() const;
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X("Use begin(QPaintDevice*) instead") +/
-        void initFrom(const(QPaintDevice) device);
-    }));
-/+ #endif +/
 
     enum CompositionMode {
         CompositionMode_SourceOver,
@@ -240,34 +227,10 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     void restore();
 
     // XForm functions
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use setTransform() instead") +/
-        void setMatrix(ref const(QMatrix) matrix, bool combine = false);
-    /+ QT_DEPRECATED_X("Use transform() instead") +/
-        ref const(QMatrix) matrix() const;
-    /+ QT_DEPRECATED_X("Use deviceTransform() instead") +/
-        ref const(QMatrix) deviceMatrix() const;
-    /+ QT_DEPRECATED_X("Use resetTransform() instead") +/
-        void resetMatrix();
-/+ #endif +/
-
     void setTransform(ref const(QTransform) transform, bool combine = false);
     ref const(QTransform) transform() const;
     ref const(QTransform) deviceTransform() const;
     void resetTransform();
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use setWorldTransform() instead") +/
-        void setWorldMatrix(ref const(QMatrix) matrix, bool combine = false);
-    /+ QT_DEPRECATED_X("Use worldTransform() instead") +/
-        ref const(QMatrix) worldMatrix() const;
-    /+ QT_DEPRECATED_X("Use combinedTransform() instead") +/
-        QMatrix combinedMatrix() const;
-    /+ QT_DEPRECATED_X("Use setWorldMatrixEnabled() instead") +/
-        void setMatrixEnabled(bool enabled);
-    /+ QT_DEPRECATED_X("Use worldMatrixEnabled() instead") +/
-        bool matrixEnabled() const;
-/+ #endif +/
 
     void setWorldTransform(ref const(QTransform) matrix, bool combine = false);
     ref const(QTransform) worldTransform() const;
@@ -330,12 +293,12 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     void drawPoints(const(QPointF)* points, int pointCount);
     pragma(inline, true) void drawPoints(ref const(QPolygonF) points)
     {
-        drawPoints(points.constData(), points.size());
+        drawPoints(points.constData(), cast(int)(points.size()));
     }
     void drawPoints(const(QPoint)* points, int pointCount);
     pragma(inline, true) void drawPoints(ref const(QPolygon) points)
     {
-        drawPoints(points.constData(), points.size());
+        drawPoints(points.constData(), cast(int)(points.size()));
     }
 
     //
@@ -365,24 +328,24 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     }
 
     void drawLines(const(QLineF)* lines, int lineCount);
-    pragma(inline, true) void drawLines(ref const(QVector!(QLineF)) lines)
+    pragma(inline, true) void drawLines(ref const(QList!(QLineF)) lines)
     {
-        drawLines(lines.constData(), lines.size());
+        drawLines(lines.constData(), cast(int)(lines.size()));
     }
     void drawLines(const(QPointF)* pointPairs, int lineCount);
-    pragma(inline, true) void drawLines(ref const(QVector!(QPointF)) pointPairs)
+    pragma(inline, true) void drawLines(ref const(QList!(QPointF)) pointPairs)
     {
-        drawLines(pointPairs.constData(), pointPairs.size() / 2);
+        drawLines(pointPairs.constData(), cast(int)(pointPairs.size() / 2));
     }
     void drawLines(const(QLine)* lines, int lineCount);
-    pragma(inline, true) void drawLines(ref const(QVector!(QLine)) lines)
+    pragma(inline, true) void drawLines(ref const(QList!(QLine)) lines)
     {
-        drawLines(lines.constData(), lines.size());
+        drawLines(lines.constData(), cast(int)(lines.size()));
     }
     void drawLines(const(QPoint)* pointPairs, int lineCount);
-    pragma(inline, true) void drawLines(ref const(QVector!(QPoint)) pointPairs)
+    pragma(inline, true) void drawLines(ref const(QList!(QPoint)) pointPairs)
     {
-        drawLines(pointPairs.constData(), pointPairs.size() / 2);
+        drawLines(pointPairs.constData(), cast(int)(pointPairs.size() / 2));
     }
 
     pragma(inline, true) void drawRect(ref const(QRectF) rect)
@@ -400,14 +363,14 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     }
 
     void drawRects(const(QRectF)* rects, int rectCount);
-    pragma(inline, true) void drawRects(ref const(QVector!(QRectF)) rects)
+    pragma(inline, true) void drawRects(ref const(QList!(QRectF)) rects)
     {
-        drawRects(rects.constData(), rects.size());
+        drawRects(rects.constData(), cast(int)(rects.size()));
     }
     void drawRects(const(QRect)* rects, int rectCount);
-    pragma(inline, true) void drawRects(ref const(QVector!(QRect)) rects)
+    pragma(inline, true) void drawRects(ref const(QList!(QRect)) rects)
     {
-        drawRects(rects.constData(), rects.size());
+        drawRects(rects.constData(), cast(int)(rects.size()));
     }
 
     void drawEllipse(ref const(QRectF) r);
@@ -429,34 +392,34 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     void drawPolyline(const(QPointF)* points, int pointCount);
     pragma(inline, true) void drawPolyline(ref const(QPolygonF) polyline)
     {
-        drawPolyline(polyline.constData(), polyline.size());
+        drawPolyline(polyline.constData(), cast(int)(polyline.size()));
     }
     void drawPolyline(const(QPoint)* points, int pointCount);
     pragma(inline, true) void drawPolyline(ref const(QPolygon) polyline)
     {
-        drawPolyline(polyline.constData(), polyline.size());
+        drawPolyline(polyline.constData(), cast(int)(polyline.size()));
     }
 
     void drawPolygon(const(QPointF)* points, int pointCount, /+ Qt:: +/qt.core.namespace.FillRule fillRule = /+ Qt:: +/qt.core.namespace.FillRule.OddEvenFill);
     pragma(inline, true) void drawPolygon(ref const(QPolygonF) polygon, /+ Qt:: +/qt.core.namespace.FillRule fillRule = /+ Qt:: +/qt.core.namespace.FillRule.OddEvenFill)
     {
-        drawPolygon(polygon.constData(), polygon.size(), fillRule);
+        drawPolygon(polygon.constData(), cast(int)(polygon.size()), fillRule);
     }
     void drawPolygon(const(QPoint)* points, int pointCount, /+ Qt:: +/qt.core.namespace.FillRule fillRule = /+ Qt:: +/qt.core.namespace.FillRule.OddEvenFill);
     pragma(inline, true) void drawPolygon(ref const(QPolygon) polygon, /+ Qt:: +/qt.core.namespace.FillRule fillRule = /+ Qt:: +/qt.core.namespace.FillRule.OddEvenFill)
     {
-        drawPolygon(polygon.constData(), polygon.size(), fillRule);
+        drawPolygon(polygon.constData(), cast(int)(polygon.size()), fillRule);
     }
 
     void drawConvexPolygon(const(QPointF)* points, int pointCount);
     pragma(inline, true) void drawConvexPolygon(ref const(QPolygonF) poly)
     {
-        drawConvexPolygon(poly.constData(), poly.size());
+        drawConvexPolygon(poly.constData(), cast(int)(poly.size()));
     }
     void drawConvexPolygon(const(QPoint)* points, int pointCount);
     pragma(inline, true) void drawConvexPolygon(ref const(QPolygon) poly)
     {
-        drawConvexPolygon(poly.constData(), poly.size());
+        drawConvexPolygon(poly.constData(), cast(int)(poly.size()));
     }
 
     void drawArc(ref const(QRectF) rect, int a, int alen);
@@ -501,15 +464,6 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     {
         auto tmp = QRectF(rect); drawRoundedRect(tmp, xRadius, yRadius, mode);
     }
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use drawRoundedRect(..., Qt::RelativeSize) instead") +/
-        void drawRoundRect(ref const(QRectF) r, int xround = 25, int yround = 25);
-    /+ QT_DEPRECATED_X("Use drawRoundedRect(..., Qt::RelativeSize) instead") +/
-        void drawRoundRect(int x, int y, int w, int h, int /+ = 25 +/, int /+ = 25 +/);
-    /+ QT_DEPRECATED_X("Use drawRoundedRect(..., Qt::RelativeSize) instead") +/
-        void drawRoundRect(ref const(QRect) r, int xround = 25, int yround = 25);
-/+ #endif +/
 
     void drawTiledPixmap(ref const(QRectF) rect, ref const(QPixmap) pm, ref const(QPointF) offset = globalInitVar!QPointF);
     pragma(inline, true) void drawTiledPixmap(int x, int y, int w, int h, ref const(QPixmap) pm, int sx=0, int sy=0)
@@ -744,22 +698,6 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
 
     QPaintEngine paintEngine() const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X("Use QWidget::render() instead") +/
-        static void setRedirected(const(QPaintDevice) device, QPaintDevice replacement,
-                                  ref const(QPoint) offset = globalInitVar!QPoint);
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X("Use QWidget::render() instead") +/
-        static QPaintDevice redirected(const(QPaintDevice) device, QPoint* offset = null);
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X("Use QWidget::render() instead") +/
-        static void restoreRedirected(const(QPaintDevice) device);
-    }));
-/+ #endif +/
-
     void beginNativePainting();
     void endNativePainting();
 
@@ -788,7 +726,19 @@ private:
 }
 /+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator |(QPainter.RenderHints.enum_type f1, QPainter.RenderHints.enum_type f2)/+noexcept+/{return QFlags!(QPainter.RenderHints.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator |(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator &(QPainter.RenderHints.enum_type f1, QPainter.RenderHints.enum_type f2)/+noexcept+/{return QFlags!(QPainter.RenderHints.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator &(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QPainter.RenderHints.enum_type f1, QPainter.RenderHints.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QPainter.RenderHints.enum_type f1, QPainter.RenderHints.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QPainter.RenderHints.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QPainter.RenderHints.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QPainter.RenderHints.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QPainter.RenderHints.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QPainter.RenderHints.enum_type f1, int f2)/+noexcept+/;+/
 /+ Q_DECLARE_TYPEINFO(QPainter::PixmapFragment, Q_RELOCATABLE_TYPE);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPainter::RenderHints)

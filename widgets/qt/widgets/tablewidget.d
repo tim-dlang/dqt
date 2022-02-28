@@ -25,9 +25,7 @@ import qt.core.size;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.core.variant;
-import qt.core.vector;
 import qt.gui.brush;
-import qt.gui.color;
 import qt.gui.event;
 import qt.gui.font;
 import qt.gui.icon;
@@ -42,30 +40,34 @@ version(QT_NO_DATASTREAM){}else
 /+ QT_REQUIRE_CONFIG(tablewidget); +/
 
 
-// ### Qt6 unexport the class, remove the user-defined special 3 and make it a literal type.
-/// Binding for C++ class [QTableWidgetSelectionRange](https://doc.qt.io/qt-5/qtablewidgetselectionrange.html).
-extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QTableWidgetSelectionRange
+/// Binding for C++ class [QTableWidgetSelectionRange](https://doc.qt.io/qt-6/qtablewidgetselectionrange.html).
+extern(C++, class) struct QTableWidgetSelectionRange
 {
 public:
-    this(int top, int left, int bottom, int right);
-    ~this();
+    /+ QTableWidgetSelectionRange() = default; +/
+    this(int top, int left, int bottom, int right)
+    {
+        this.m_top = top;
+        this.m_left = left;
+        this.m_bottom = bottom;
+        this.m_right = right;
+    }
 
-    pragma(inline, true) int topRow() const { return top; }
-    pragma(inline, true) int bottomRow() const { return bottom; }
-    pragma(inline, true) int leftColumn() const { return left; }
-    pragma(inline, true) int rightColumn() const { return right; }
-    pragma(inline, true) int rowCount() const { return bottom - top + 1; }
-    pragma(inline, true) int columnCount() const { return right - left + 1; }
-
+    pragma(inline, true) int topRow() const { return m_top; }
+    pragma(inline, true) int bottomRow() const { return m_bottom; }
+    pragma(inline, true) int leftColumn() const { return m_left; }
+    pragma(inline, true) int rightColumn() const { return m_right; }
+    pragma(inline, true) int rowCount() const { return m_bottom - m_top + 1; }
+    pragma(inline, true) int columnCount() const { return m_right - m_left + 1; }
 private:
-    int top = -1; int left = -1; int bottom = -2; int right = -2;
+    int m_top = -1; int m_left = -1; int m_bottom = -2; int m_right = -2;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 extern(C++, class) struct QTableModel;
 extern(C++, class) struct QTableWidgetItemPrivate;
 
-/// Binding for C++ class [QTableWidgetItem](https://doc.qt.io/qt-5/qtablewidgetitem.html).
+/// Binding for C++ class [QTableWidgetItem](https://doc.qt.io/qt-6/qtablewidgetitem.html).
 class /+ Q_WIDGETS_EXPORT +/ QTableWidgetItem
 {
 private:
@@ -109,14 +111,11 @@ public:
     pragma(inline, true) final void setStatusTip(ref const(QString) astatusTip)
     { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole, astatusTip); }
 
-/+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
-    {
-        pragma(inline, true) final QString toolTip() const
-            { return data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole).toString(); }
-        pragma(inline, true) final void setToolTip(ref const(QString) atoolTip)
-        { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole, atoolTip); }
-    }
+/+ #if QT_CONFIG(tooltip) +/
+    pragma(inline, true) final QString toolTip() const
+        { return data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole).toString(); }
+    pragma(inline, true) final void setToolTip(ref const(QString) atoolTip)
+    { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole, atoolTip); }
 /+ #endif
 
 #if QT_CONFIG(whatsthis) +/
@@ -136,28 +135,10 @@ public:
     pragma(inline, true) final void setTextAlignment(int alignment)
         { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole, alignment); }
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X ("Use QTableWidgetItem::background() instead") +/
-        pragma(inline, true) final QColor backgroundColor() const
-        { return qvariant_cast!(QColor)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
-    /+ QT_DEPRECATED_X ("Use QTableWidgetItem::setBackground() instead") +/
-        pragma(inline, true) final void setBackgroundColor(ref const(QColor) color)
-        { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, color); }
-/+ #endif +/
-
     pragma(inline, true) final QBrush background() const
         { return qvariant_cast!(QBrush)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
     pragma(inline, true) final void setBackground(ref const(QBrush) brush)
         { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, brush.style() != /+ Qt:: +/qt.core.namespace.BrushStyle.NoBrush ? QVariant.fromValue(brush) : QVariant()); }
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X ("Use QTableWidgetItem::foreground() instead") +/
-        pragma(inline, true) final QColor textColor() const
-        { return qvariant_cast!(QColor)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole)); }
-    /+ QT_DEPRECATED_X ("Use QTableWidgetItem::setForeground() instead") +/
-        pragma(inline, true) final void setTextColor(ref const(QColor) color)
-        { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole, color); }
-/+ #endif +/
 
     pragma(inline, true) final QBrush foreground() const
         { return qvariant_cast!(QBrush)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole)); }
@@ -202,14 +183,14 @@ private:
 
 private:
     int rtti;
-    QVector!(QWidgetItemData) values;
+    QList!(QWidgetItemData) values;
     QTableWidget view;
     QTableWidgetItemPrivate* d;
     /+ Qt:: +/qt.core.namespace.ItemFlags itemFlags;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ #ifndef QT_NO_TOOLTIP
+/+ #if QT_CONFIG(tooltip)
 #endif
 
 #if QT_CONFIG(whatsthis)
@@ -222,7 +203,7 @@ Q_WIDGETS_EXPORT QDataStream &operator<<(QDataStream &out, const QTableWidgetIte
 
 extern(C++, class) struct QTableWidgetPrivate;
 
-/// Binding for C++ class [QTableWidget](https://doc.qt.io/qt-5/qtablewidget.html).
+/// Binding for C++ class [QTableWidget](https://doc.qt.io/qt-6/qtablewidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QTableWidget : QTableView
 {
     mixin(Q_OBJECT);
@@ -251,6 +232,13 @@ public:
     final QTableWidgetItem item(int row, int column) const;
     final void setItem(int row, int column, QTableWidgetItem item);
     final QTableWidgetItem takeItem(int row, int column);
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    final QList!(QTableWidgetItem) items(const(QMimeData) data) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    final QModelIndex indexFromItem(const(QTableWidgetItem) item) const;
+    }));
+    final QTableWidgetItem itemFromIndex(ref const(QModelIndex) index) const;
 
     final QTableWidgetItem verticalHeaderItem(int row) const;
     final void setVerticalHeaderItem(int row, QTableWidgetItem item);
@@ -285,16 +273,6 @@ public:
     pragma(inline, true) final void removeCellWidget(int arow, int acolumn)
     { setCellWidget(arow, acolumn, null); }
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTableWidgetItem::isSelected() instead") +/
-        final bool isItemSelected(const(QTableWidgetItem) item) const;
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTableWidgetItem::setSelected() instead") +/
-        final void setItemSelected(const(QTableWidgetItem) item, bool select);
-    }));
-/+ #endif +/
     final void setRangeSelected(ref const(QTableWidgetSelectionRange) range, bool select);
 
     final QList!(QTableWidgetSelectionRange) selectedRanges() const;
@@ -336,7 +314,6 @@ public /+ Q_SLOTS +/:
 
     @QSignal final void itemActivated(QTableWidgetItem item);
     @QSignal final void itemEntered(QTableWidgetItem item);
-    // ### Qt 6: add changed roles
     @QSignal final void itemChanged(QTableWidgetItem item);
 
     @QSignal final void currentItemChanged(QTableWidgetItem current, QTableWidgetItem previous);
@@ -355,32 +332,11 @@ public /+ Q_SLOTS +/:
 protected:
     override bool event(QEvent e);
     /+ virtual +/ QStringList mimeTypes() const;
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-    virtual QMimeData *mimeData(const QList<QTableWidgetItem *> &items) const;
-#else +/
-    /+ virtual +/ QMimeData mimeData(const(QList!(QTableWidgetItem)) items) const;
-/+ #endif +/
+    /+ virtual +/ QMimeData mimeData(ref const(QList!(QTableWidgetItem)) items) const;
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ bool dropMimeData(int row, int column, const(QMimeData) data, qt.core.namespace.DropAction action);
     }));
     /+ virtual +/ /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;
-
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-public:
-#else +/
-protected:
-/+ #endif +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QList!(QTableWidgetItem) items(const(QMimeData) data) const;
-    }));
-
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QModelIndex indexFromItem(const(QTableWidgetItem) item) const;
-    }));
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    final QModelIndex indexFromItem(QTableWidgetItem item) const; // ### Qt 6: remove
-/+ #endif +/
-    final QTableWidgetItem itemFromIndex(ref const(QModelIndex) index) const;
 
 protected:
 /+ #if QT_CONFIG(draganddrop) +/

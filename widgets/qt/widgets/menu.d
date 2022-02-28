@@ -20,12 +20,11 @@ import qt.core.point;
 import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
+import qt.gui.action;
 import qt.gui.event;
 import qt.gui.icon;
 import qt.gui.keysequence;
 import qt.helpers;
-import qt.widgets.action;
-import qt.widgets.event;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
 
@@ -39,7 +38,7 @@ QT_REQUIRE_CONFIG(menu); +/
 extern(C++, class) struct QMenuPrivate;
 extern(C++, class) struct QPlatformMenu;
 
-/// Binding for C++ class [QMenu](https://doc.qt.io/qt-5/qmenu.html).
+/// Binding for C++ class [QMenu](https://doc.qt.io/qt-6/qmenu.html).
 class /+ Q_WIDGETS_EXPORT +/ QMenu : QWidget
 {
 private:
@@ -61,11 +60,20 @@ public:
     alias addAction = QWidget.addAction;
     final QAction addAction(ref const(QString) text);
     final QAction addAction(ref const(QIcon) icon, ref const(QString) text);
+
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QAction addAction(ref const(QString) text, const(QObject) receiver, const(char)* member, ref const(QKeySequence) shortcut /+ = 0 +/);
+    final QAction addAction(ref const(QString) text, const(QObject) receiver, const(char)* member
+    /+ #if QT_CONFIG(shortcut) +/
+                           , ref const(QKeySequence) shortcut /+ = {}
+    #endif +/
+                           );
     }));
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QAction addAction(ref const(QIcon) icon, ref const(QString) text, const(QObject) receiver, const(char)* member, ref const(QKeySequence) shortcut /+ = 0 +/);
+    final QAction addAction(ref const(QIcon) icon, ref const(QString) text, const(QObject) receiver, const(char)* member
+    /+ #if QT_CONFIG(shortcut) +/
+                           , ref const(QKeySequence) shortcut /+ = {}
+    #endif +/
+                           );
     }));
 
 /+ #ifdef Q_CLANG_QDOC
@@ -82,12 +90,14 @@ public:
     /+ template<class Obj, typename Func1> +/
     /+ inline typename std::enable_if<!std::is_same<const char*, Func1>::value
         && QtPrivate::IsPointerToTypeDerivedFromQObject<Obj*>::Value, QAction *>::type
-        addAction(const QString &text, const Obj *object, Func1 slot, const QKeySequence &shortcut = 0)
+        addAction(const QString &text, const Obj *object, Func1 slot
+#if QT_CONFIG(shortcut)
+                  , const QKeySequence &shortcut = {}
+#endif
+                  )
     {
         QAction *result = addAction(text);
-#ifdef QT_NO_SHORTCUT
-        Q_UNUSED(shortcut)
-#else
+#if QT_CONFIG(shortcut)
         result->setShortcut(shortcut);
 #endif
         connect(result, &QAction::triggered, object, std::move(slot));
@@ -95,12 +105,14 @@ public:
     } +/
     // addAction(QString): Connect to a functor or function pointer (without context)
     /+ template <typename Func1> +/
-    /+ inline QAction *addAction(const QString &text, Func1 slot, const QKeySequence &shortcut = 0)
+    /+ inline QAction *addAction(const QString &text, Func1 slot
+#if QT_CONFIG(shortcut)
+                              , const QKeySequence &shortcut = {}
+#endif
+                              )
     {
         QAction *result = addAction(text);
-#ifdef QT_NO_SHORTCUT
-        Q_UNUSED(shortcut)
-#else
+#if QT_CONFIG(shortcut)
         result->setShortcut(shortcut);
 #endif
         connect(result, &QAction::triggered, std::move(slot));
@@ -110,12 +122,15 @@ public:
     /+ template<class Obj, typename Func1> +/
     /+ inline typename std::enable_if<!std::is_same<const char*, Func1>::value
         && QtPrivate::IsPointerToTypeDerivedFromQObject<Obj*>::Value, QAction *>::type
-        addAction(const QIcon &actionIcon, const QString &text, const Obj *object, Func1 slot, const QKeySequence &shortcut = 0)
+        addAction(const QIcon &actionIcon, const QString &text, const Obj *object, Func1 slot
+#if QT_CONFIG(shortcut)
+                  , const QKeySequence &shortcut = {}
+#endif
+                  )
+
     {
         QAction *result = addAction(actionIcon, text);
-#ifdef QT_NO_SHORTCUT
-        Q_UNUSED(shortcut)
-#else
+#if QT_CONFIG(shortcut)
         result->setShortcut(shortcut);
 #endif
         connect(result, &QAction::triggered, object, std::move(slot));
@@ -123,12 +138,14 @@ public:
     } +/
     // addAction(QIcon, QString): Connect to a functor or function pointer (without context)
     /+ template <typename Func1> +/
-    /+ inline QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot, const QKeySequence &shortcut = 0)
+    /+ inline QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot
+#if QT_CONFIG(shortcut)
+                              , const QKeySequence &shortcut = {}
+#endif
+                              )
     {
         QAction *result = addAction(actionIcon, text);
-#ifdef QT_NO_SHORTCUT
-        Q_UNUSED(shortcut)
-#else
+#if QT_CONFIG(shortcut)
         result->setShortcut(shortcut);
 #endif
         connect(result, &QAction::triggered, std::move(slot));
@@ -171,11 +188,7 @@ public:
     final QAction exec();
     final QAction exec(ref const(QPoint) pos, QAction at = null);
 
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-    static QAction *exec(const QList<QAction *> &actions, const QPoint &pos, QAction *at = nullptr, QWidget *parent = nullptr);
-#else +/
-    static QAction exec(QList!(QAction) actions, ref const(QPoint) pos, QAction at = null, QWidget parent = null);
-/+ #endif +/
+    static QAction exec(ref const(QList!(QAction)) actions, ref const(QPoint) pos, QAction at = null, QWidget parent = null);
 
     override QSize sizeHint() const;
 
@@ -223,7 +236,7 @@ protected:
 /+ #if QT_CONFIG(wheelevent) +/
     override void wheelEvent(QWheelEvent );
 /+ #endif +/
-    override void enterEvent(QEvent );
+    override void enterEvent(QEnterEvent );
     override void leaveEvent(QEvent );
     override void hideEvent(QHideEvent );
     override void paintEvent(QPaintEvent );
@@ -234,7 +247,7 @@ protected:
     // Workaround for https://issues.dlang.org/show_bug.cgi?id=22620
     private enum dummyNamespaceQStyleOptionMenuItem = __traits(getCppNamespaces, QStyleOptionMenuItem);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final void initStyleOption(QStyleOptionMenuItem* option, const(QAction) action) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionMenuItem* option, const(QAction) action) const;
     }));
 
 private /+ Q_SLOTS +/:
@@ -256,16 +269,10 @@ private:
     /+ friend class QMenuBarPrivate; +/
     /+ friend class QTornOffMenu; +/
     /+ friend class QComboBox; +/
-    /+ friend class QAction; +/
+    /+ friend class QtWidgetsActionPrivate; +/
     /+ friend class QToolButtonPrivate; +/
     /+ friend void qt_mac_emit_menuSignals(QMenu *menu, bool show); +/
     /+ friend void qt_mac_menu_emit_hovered(QMenu *menu, QAction *action); +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
-}
-
-version(OSX)
-{
-// ### Qt 4 compatibility; remove in Qt 6
-/+ QT_DEPRECATED +/ pragma(inline, true) void qt_mac_set_dock_menu(QMenu menu) { menu.setAsDockMenu(); }
 }
 

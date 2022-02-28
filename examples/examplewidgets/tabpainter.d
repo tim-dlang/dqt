@@ -47,7 +47,7 @@ protected:
     }
     override extern(C++) void contextMenuEvent(QContextMenuEvent event)
     {
-        import qt.widgets.action;
+        import qt.gui.action;
         import qt.widgets.filedialog;
         import qt.widgets.menu;
         import qt.gui.pagesize;
@@ -63,7 +63,7 @@ protected:
             if(!filename.isEmpty())
             {
                 scope writer = new QPdfWriter(filename);
-                writer.setPageSize(QPdfWriter.PageSize.A4);
+                writer.setPageSize(QPageSize(QPageSize.PageSizeId.A4));
                 writer.setResolution(50);
                 auto p = QPainter(writer);
                 drawImage(&p, QString("QPainter(QPdfWriter)"));

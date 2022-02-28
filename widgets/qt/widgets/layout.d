@@ -28,17 +28,16 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QLayoutPrivate;
 
-/// Binding for C++ class [QLayout](https://doc.qt.io/qt-5/qlayout.html).
+/// Binding for C++ class [QLayout](https://doc.qt.io/qt-6/qlayout.html).
 abstract class /+ Q_WIDGETS_EXPORT +/ QLayout : QObject, QLayoutItemInterface
 {
     QLayoutItemFakeInheritance baseQLayoutItem;
     mixin(Q_OBJECT);
     /+ Q_DECLARE_PRIVATE(QLayout) +/
 
-/+ #if QT_DEPRECATED_SINCE(5, 13)
-    Q_PROPERTY(int margin READ margin WRITE setMargin)
-#endif
-    Q_PROPERTY(int spacing READ spacing WRITE setSpacing)
+    /+ Q_PROPERTY(int spacing READ spacing WRITE setSpacing)
+    Q_PROPERTY(QMargins contentsMargins READ contentsMargins WRITE setContentsMargins
+               RESET unsetContentsMargins)
     Q_PROPERTY(SizeConstraint sizeConstraint READ sizeConstraint WRITE setSizeConstraint) +/
 public:
     enum SizeConstraint {
@@ -52,23 +51,16 @@ public:
     /+ Q_ENUM(SizeConstraint) +/
 
     mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
-    this(QWidget parent);
-    }));
-    mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
-    this();
+    /+ explicit +/this(QWidget parent = null);
     }));
     ~this();
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    final int margin() const;
-    final void setMargin(int);
-/+ #endif +/
-
-    final int spacing() const;
-    final void setSpacing(int);
+    /+ virtual +/ int spacing() const;
+    /+ virtual +/ void setSpacing(int);
 
     final void setContentsMargins(int left, int top, int right, int bottom);
     final void setContentsMargins(ref const(QMargins) margins);
+    final void unsetContentsMargins();
     final void getContentsMargins(int* left, int* top, int* right, int* bottom) const;
     final QMargins contentsMargins() const;
     final QRect contentsRect() const;
@@ -101,15 +93,20 @@ public:
     /+ virtual +/ override void setGeometry(ref const(QRect));
     /+ virtual +/ abstract QLayoutItem itemAt(int index) const;
     /+ virtual +/ abstract QLayoutItem takeAt(int index);
-    /+ virtual +/ int indexOf(QWidget ) const;
-    /+ QT6_VIRTUAL +/ final int indexOf(QLayoutItem ) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    /+ virtual +/ int indexOf(const(QWidget) ) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    /+ virtual +/ int indexOf(const(QLayoutItem) ) const;
+    }));
     /+ virtual +/ abstract int count() const;
     override bool isEmpty() const;
     override QSizePolicy.ControlTypes controlTypes() const;
 
-    /+ QT6_VIRTUAL +/ final QLayoutItem replaceWidget(QWidget from, QWidget to,
-                                               /+ Qt:: +/qt.core.namespace.FindChildOptions options = /+ Qt:: +/qt.core.namespace.FindChildOption.FindChildrenRecursively);
+    /+ virtual +/ QLayoutItem replaceWidget(QWidget from, QWidget to,
+                                           /+ Qt:: +/qt.core.namespace.FindChildOptions options = /+ Qt:: +/qt.core.namespace.FindChildOption.FindChildrenRecursively);
 
+    final int totalMinimumHeightForWidth(int w) const;
     final int totalHeightForWidth(int w) const;
     final QSize totalMinimumSize() const;
     final QSize totalMaximumSize() const;

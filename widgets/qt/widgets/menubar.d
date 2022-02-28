@@ -20,11 +20,10 @@ import qt.core.point;
 import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
+import qt.gui.action;
 import qt.gui.event;
 import qt.gui.icon;
 import qt.helpers;
-import qt.widgets.action;
-import qt.widgets.event;
 import qt.widgets.menu;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
@@ -36,7 +35,7 @@ extern(C++, class) struct QMenuBarPrivate;
 extern(C++, class) struct QWindowsStyle;
 extern(C++, class) struct QPlatformMenuBar;
 
-/// Binding for C++ class [QMenuBar](https://doc.qt.io/qt-5/qmenubar.html).
+/// Binding for C++ class [QMenuBar](https://doc.qt.io/qt-6/qmenubar.html).
 class /+ Q_WIDGETS_EXPORT +/ QMenuBar : QWidget
 {
     mixin(Q_OBJECT);
@@ -140,7 +139,7 @@ protected:
     override bool eventFilter(QObject , QEvent );
     override bool event(QEvent );
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final void initStyleOption(QStyleOptionMenuItem* option, const(QAction) action) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionMenuItem* option, const(QAction) action) const;
     }));
 
 private:

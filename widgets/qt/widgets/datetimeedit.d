@@ -35,7 +35,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QDateTimeEditPrivate;
 
-/// Binding for C++ class [QDateTimeEdit](https://doc.qt.io/qt-5/qdatetimeedit.html).
+/// Binding for C++ class [QDateTimeEdit](https://doc.qt.io/qt-6/qdatetimeedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QDateTimeEdit : QAbstractSpinBox
 {
     mixin(Q_OBJECT);
@@ -43,8 +43,10 @@ class /+ Q_WIDGETS_EXPORT +/ QDateTimeEdit : QAbstractSpinBox
     /+ Q_PROPERTY(QDateTime dateTime READ dateTime WRITE setDateTime NOTIFY dateTimeChanged USER true)
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged)
     Q_PROPERTY(QTime time READ time WRITE setTime NOTIFY timeChanged)
-    Q_PROPERTY(QDateTime maximumDateTime READ maximumDateTime WRITE setMaximumDateTime RESET clearMaximumDateTime)
-    Q_PROPERTY(QDateTime minimumDateTime READ minimumDateTime WRITE setMinimumDateTime RESET clearMinimumDateTime)
+    Q_PROPERTY(QDateTime maximumDateTime READ maximumDateTime WRITE setMaximumDateTime
+               RESET clearMaximumDateTime)
+    Q_PROPERTY(QDateTime minimumDateTime READ minimumDateTime WRITE setMinimumDateTime
+               RESET clearMinimumDateTime)
     Q_PROPERTY(QDate maximumDate READ maximumDate WRITE setMaximumDate RESET clearMaximumDate)
     Q_PROPERTY(QDate minimumDate READ minimumDate WRITE setMinimumDate RESET clearMinimumDate)
     Q_PROPERTY(QTime maximumTime READ maximumTime WRITE setMaximumTime RESET clearMaximumTime)
@@ -77,8 +79,8 @@ alias Sections = QFlags!(Section);    /+ Q_FLAG(Sections) +/
 
     /+ explicit +/this(QWidget parent = null);
     /+ explicit +/this(ref const(QDateTime) dt, QWidget parent = null);
-    /+ explicit +/this(ref const(QDate) d, QWidget parent = null);
-    /+ explicit +/this(ref const(QTime) t, QWidget parent = null);
+    /+ explicit +/this(QDate d, QWidget parent = null);
+    /+ explicit +/this(QTime t, QWidget parent = null);
     ~this();
 
     final QDateTime dateTime() const;
@@ -99,24 +101,24 @@ alias Sections = QFlags!(Section);    /+ Q_FLAG(Sections) +/
     final void setDateTimeRange(ref const(QDateTime) min, ref const(QDateTime) max);
 
     final QDate minimumDate() const;
-    final void setMinimumDate(ref const(QDate) min);
+    final void setMinimumDate(QDate min);
     final void clearMinimumDate();
 
     final QDate maximumDate() const;
-    final void setMaximumDate(ref const(QDate) max);
+    final void setMaximumDate(QDate max);
     final void clearMaximumDate();
 
-    final void setDateRange(ref const(QDate) min, ref const(QDate) max);
+    final void setDateRange(QDate min, QDate max);
 
     final QTime minimumTime() const;
-    final void setMinimumTime(ref const(QTime) min);
+    final void setMinimumTime(QTime min);
     final void clearMinimumTime();
 
     final QTime maximumTime() const;
-    final void setMaximumTime(ref const(QTime) max);
+    final void setMaximumTime(QTime max);
     final void clearMaximumTime();
 
-    final void setTimeRange(ref const(QTime) min, ref const(QTime) max);
+    final void setTimeRange(QTime min, QTime max);
 
     final Sections displayedSections() const;
     final Section currentSection() const;
@@ -152,13 +154,13 @@ alias Sections = QFlags!(Section);    /+ Q_FLAG(Sections) +/
     override bool event(QEvent event);
 /+ Q_SIGNALS +/public:
     @QSignal final void dateTimeChanged(ref const(QDateTime) dateTime);
-    @QSignal final void timeChanged(ref const(QTime) time);
-    @QSignal final void dateChanged(ref const(QDate) date);
+    @QSignal final void timeChanged(QTime time);
+    @QSignal final void dateChanged(QDate date);
 
 public /+ Q_SLOTS +/:
     @QSlot final void setDateTime(ref const(QDateTime) dateTime);
-    @QSlot final void setDate(ref const(QDate) date);
-    @QSlot final void setTime(ref const(QTime) time);
+    @QSlot final void setDate(QDate date);
+    @QSlot final void setTime(QTime time);
 
 protected:
     override void keyPressEvent(QKeyEvent event);
@@ -175,11 +177,8 @@ protected:
     override StepEnabled stepEnabled() const;
     override void mousePressEvent(QMouseEvent event);
     override void paintEvent(QPaintEvent event);
-//    final void initStyleOption(QStyleOptionSpinBox* option) const;
+    override void initStyleOption(QStyleOptionSpinBox* option) const;
 
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    this(ref const(QVariant) val, QVariant.Type parserType, QWidget parent = null);
-/+ #endif +/
     this(ref const(QVariant) val, QMetaType.Type parserType, QWidget parent = null);
 private:
     /+ Q_DECLARE_PRIVATE(QDateTimeEdit) +/
@@ -189,37 +188,49 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QTimeEdit](https://doc.qt.io/qt-5/qtimeedit.html).
+/// Binding for C++ class [QTimeEdit](https://doc.qt.io/qt-6/qtimeedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QTimeEdit : QDateTimeEdit
 {
     mixin(Q_OBJECT);
     /+ Q_PROPERTY(QTime time READ time WRITE setTime NOTIFY userTimeChanged USER true) +/
 public:
     /+ explicit +/this(QWidget parent = null);
-    /+ explicit +/this(ref const(QTime) time, QWidget parent = null);
+    /+ explicit +/this(QTime time, QWidget parent = null);
     ~this();
 
 /+ Q_SIGNALS +/public:
-    @QSignal final void userTimeChanged(ref const(QTime) time);
+    @QSignal final void userTimeChanged(QTime time);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QDateEdit](https://doc.qt.io/qt-5/qdateedit.html).
+/// Binding for C++ class [QDateEdit](https://doc.qt.io/qt-6/qdateedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QDateEdit : QDateTimeEdit
 {
     mixin(Q_OBJECT);
     /+ Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY userDateChanged USER true) +/
 public:
     /+ explicit +/this(QWidget parent = null);
-    /+ explicit +/this(ref const(QDate) date, QWidget parent = null);
+    /+ explicit +/this(QDate date, QWidget parent = null);
     ~this();
 
 /+ Q_SIGNALS +/public:
-    @QSignal final void userDateChanged(ref const(QDate) date);
+    @QSignal final void userDateChanged(QDate date);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QDateTimeEdit.Sections.enum_type) operator |(QDateTimeEdit.Sections.enum_type f1, QDateTimeEdit.Sections.enum_type f2)/+noexcept+/{return QFlags!(QDateTimeEdit.Sections.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDateTimeEdit.Sections.enum_type) operator |(QDateTimeEdit.Sections.enum_type f1, QFlags!(QDateTimeEdit.Sections.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QDateTimeEdit.Sections.enum_type) operator &(QDateTimeEdit.Sections.enum_type f1, QDateTimeEdit.Sections.enum_type f2)/+noexcept+/{return QFlags!(QDateTimeEdit.Sections.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QDateTimeEdit.Sections.enum_type) operator &(QDateTimeEdit.Sections.enum_type f1, QFlags!(QDateTimeEdit.Sections.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QDateTimeEdit.Sections.enum_type f1, QDateTimeEdit.Sections.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDateTimeEdit.Sections.enum_type f1, QFlags!(QDateTimeEdit.Sections.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QDateTimeEdit.Sections.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDateTimeEdit.Sections.enum_type f1, QDateTimeEdit.Sections.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDateTimeEdit.Sections.enum_type f1, QFlags!(QDateTimeEdit.Sections.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QDateTimeEdit.Sections.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QDateTimeEdit.Sections.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QDateTimeEdit.Sections.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDateTimeEdit.Sections.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QDateTimeEdit.Sections.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDateTimeEdit.Sections.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QDateTimeEdit::Sections) +/

@@ -27,7 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QDialogPrivate;
 
-/// Binding for C++ class [QDialog](https://doc.qt.io/qt-5/qdialog.html).
+/// Binding for C++ class [QDialog](https://doc.qt.io/qt-6/qdialog.html).
 class /+ Q_WIDGETS_EXPORT +/ QDialog : QWidget
 {
     mixin(Q_OBJECT);
@@ -45,13 +45,6 @@ public:
     final int result() const;
 
     override void setVisible(bool visible);
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use show/hide on the affected widget instead") +/ final void setOrientation(/+ Qt:: +/qt.core.namespace.Orientation orientation);
-    /+ QT_DEPRECATED_X("Use show/hide on the affected widget instead") +/ final /+ Qt:: +/qt.core.namespace.Orientation orientation() const;
-    /+ QT_DEPRECATED_X("Use show/hide on the affected widget instead") +/ final void setExtension(QWidget extension);
-    /+ QT_DEPRECATED_X("Use show/hide on the affected widget instead") +/ final QWidget extension() const;
-/+ #endif +/
 
     override QSize sizeHint() const;
     override QSize minimumSizeHint() const;
@@ -73,10 +66,6 @@ public /+ Q_SLOTS +/:
     /+ virtual +/ @QSlot void done(int);
     /+ virtual +/ @QSlot void accept();
     /+ virtual +/ @QSlot void reject();
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use show/hide on the affected widget instead") +/ @QSlot final void showExtension(bool);
-/+ #endif +/
 
 protected:
     this(ref QDialogPrivate , QWidget parent, /+ Qt:: +/qt.core.namespace.WindowFlags f = /+ Qt:: +/qt.core.namespace.WindowFlags());

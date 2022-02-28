@@ -32,7 +32,7 @@ static if(!defined!"QT_NO_SYNTAXHIGHLIGHTER")
 
 extern(C++, class) struct QSyntaxHighlighterPrivate;
 
-/// Binding for C++ class [QSyntaxHighlighter](https://doc.qt.io/qt-5/qsyntaxhighlighter.html).
+/// Binding for C++ class [QSyntaxHighlighter](https://doc.qt.io/qt-6/qsyntaxhighlighter.html).
 abstract class /+ Q_GUI_EXPORT +/ QSyntaxHighlighter : QObject
 {
     mixin(Q_OBJECT);

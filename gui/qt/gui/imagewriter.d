@@ -24,11 +24,11 @@ import qt.helpers;
 
 
 extern(C++, class) struct QImageWriterPrivate;
-/// Binding for C++ class [QImageWriter](https://doc.qt.io/qt-5/qimagewriter.html).
+/// Binding for C++ class [QImageWriter](https://doc.qt.io/qt-6/qimagewriter.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QImageWriter
 {
-    /+ Q_DECLARE_TR_FUNCTIONS(QImageWriter) +/
-public:pragma(inline, true) static QString tr(const(char)* sourceText, const(char)* disambiguation=null, int n=-1){return QCoreApplication.translate("QImageWriter",sourceText,disambiguation,n);} mixin(QT_DECLARE_DEPRECATED_TR_FUNCTIONS(q{QImageWriter}));private:public:
+    mixin(Q_DECLARE_TR_FUNCTIONS(q{QImageWriter}));
+public:
     enum ImageWriterError {
         UnknownError,
         DeviceError,
@@ -65,13 +65,6 @@ public:pragma(inline, true) static QString tr(const(char)* sourceText, const(cha
     void setCompression(int compression);
     int compression() const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_VERSION_X_5_15("Use QColorSpace instead") +/
-        void setGamma(float gamma);
-    /+ QT_DEPRECATED_VERSION_X_5_15("Use QColorSpace instead") +/
-        float gamma() const;
-/+ #endif +/
-
     void setSubType(ref const(QByteArray) type);
     QByteArray subType() const;
     QList!(QByteArray) supportedSubTypes() const;
@@ -84,13 +77,6 @@ public:pragma(inline, true) static QString tr(const(char)* sourceText, const(cha
 
     QImageIOHandler.Transformations transformation() const;
     void setTransformation(QImageIOHandler.Transformations orientation);
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use QImageWriter::setText() instead") +/
-        void setDescription(ref const(QString) description);
-    /+ QT_DEPRECATED_X("Use QImageReader::text() instead") +/
-        QString description() const;
-/+ #endif +/
 
     void setText(ref const(QString) key, ref const(QString) text);
 

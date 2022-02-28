@@ -21,7 +21,7 @@ import qt.widgets.layout;
 import qt.widgets.sizepolicy;
 import qt.widgets.widget;
 
-/+ Q_DECL_UNUSED +/ extern(D) static __gshared const(int) QLAYOUTSIZE_MAX = int.max/256/16;
+extern(D) immutable int QLAYOUTSIZE_MAX = int.max/256/16;
 
 
 interface QLayoutItemInterface
@@ -44,7 +44,7 @@ interface QLayoutItemInterface
     /+ virtual +/ /+ QSizePolicy::ControlTypes +/QSizePolicy.ControlTypes controlTypes() const;
 }
 
-/// Binding for C++ class [QLayoutItem](https://doc.qt.io/qt-5/qlayoutitem.html).
+/// Binding for C++ class [QLayoutItem](https://doc.qt.io/qt-6/qlayoutitem.html).
 abstract class /+ Q_WIDGETS_EXPORT +/ QLayoutItem
 {
 public:
@@ -65,11 +65,7 @@ public:
     /+ virtual +/ int minimumHeightForWidth(int) const;
     /+ virtual +/ void invalidate();
 
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    /+ virtual +/ QWidget widget();
-/+ #else
-    virtual QWidget *widget() const;
-#endif +/
+    /+ virtual +/ QWidget widget() const;
     /+ virtual +/ QLayout layout();
     /+ virtual +/ QSpacerItem spacerItem();
 
@@ -82,7 +78,7 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QSpacerItem](https://doc.qt.io/qt-5/qspaceritem.html).
+/// Binding for C++ class [QSpacerItem](https://doc.qt.io/qt-6/qspaceritem.html).
 class /+ Q_WIDGETS_EXPORT +/ QSpacerItem : QLayoutItem
 {
 public:
@@ -117,7 +113,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QWidgetItem](https://doc.qt.io/qt-5/qwidgetitem.html).
+/// Binding for C++ class [QWidgetItem](https://doc.qt.io/qt-6/qwidgetitem.html).
 class /+ Q_WIDGETS_EXPORT +/ QWidgetItem : QLayoutItem
 {
 private:
@@ -137,14 +133,11 @@ public:
     override bool isEmpty() const;
     override void setGeometry(ref const(QRect));
     override QRect geometry() const;
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    override QWidget widget();
-/+ #else
-    QWidget *widget() const override;
-#endif +/
+    override QWidget widget() const;
 
     override bool hasHeightForWidth() const;
     override int heightForWidth(int) const;
+    override int minimumHeightForWidth(int) const;
     override QSizePolicy.ControlTypes controlTypes() const;
 protected:
     QWidget wid;

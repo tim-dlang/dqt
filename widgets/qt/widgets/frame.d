@@ -25,7 +25,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QFramePrivate;
 
-/// Binding for C++ class [QFrame](https://doc.qt.io/qt-5/qframe.html).
+/// Binding for C++ class [QFrame](https://doc.qt.io/qt-6/qframe.html).
 class /+ Q_WIDGETS_EXPORT +/ QFrame : QWidget
 {
     mixin(Q_OBJECT);
@@ -93,7 +93,7 @@ protected:
 
 protected:
     this(ref QFramePrivate dd, QWidget parent = null, /+ Qt:: +/qt.core.namespace.WindowFlags f = /+ Qt:: +/qt.core.namespace.WindowFlags());
-    final void initStyleOption(QStyleOptionFrame* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionFrame* option) const;
 
 private:
     /+ Q_DISABLE_COPY(QFrame) +/

@@ -16,11 +16,11 @@ import qt.config;
 import qt.core.abstractitemmodel;
 import qt.core.coreevent;
 import qt.core.itemselectionmodel;
+import qt.core.list;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.size;
-import qt.core.vector;
 import qt.gui.event;
 import qt.gui.painter;
 import qt.gui.region;
@@ -36,7 +36,7 @@ version(QT_NO_DATASTREAM){}else
 
 extern(C++, class) struct QHeaderViewPrivate;
 
-/// Binding for C++ class [QHeaderView](https://doc.qt.io/qt-5/qheaderview.html).
+/// Binding for C++ class [QHeaderView](https://doc.qt.io/qt-6/qheaderview.html).
 class /+ Q_WIDGETS_EXPORT +/ QHeaderView : QAbstractItemView
 {
     mixin(Q_OBJECT);
@@ -44,11 +44,15 @@ class /+ Q_WIDGETS_EXPORT +/ QHeaderView : QAbstractItemView
     Q_PROPERTY(bool showSortIndicator READ isSortIndicatorShown WRITE setSortIndicatorShown)
     Q_PROPERTY(bool highlightSections READ highlightSections WRITE setHighlightSections)
     Q_PROPERTY(bool stretchLastSection READ stretchLastSection WRITE setStretchLastSection)
-    Q_PROPERTY(bool cascadingSectionResizes READ cascadingSectionResizes WRITE setCascadingSectionResizes)
-    Q_PROPERTY(int defaultSectionSize READ defaultSectionSize WRITE setDefaultSectionSize RESET resetDefaultSectionSize)
+    Q_PROPERTY(bool cascadingSectionResizes READ cascadingSectionResizes
+               WRITE setCascadingSectionResizes)
+    Q_PROPERTY(int defaultSectionSize READ defaultSectionSize WRITE setDefaultSectionSize
+               RESET resetDefaultSectionSize)
     Q_PROPERTY(int minimumSectionSize READ minimumSectionSize WRITE setMinimumSectionSize)
     Q_PROPERTY(int maximumSectionSize READ maximumSectionSize WRITE setMaximumSectionSize)
-    Q_PROPERTY(Qt::Alignment defaultAlignment READ defaultAlignment WRITE setDefaultAlignment) +/
+    Q_PROPERTY(Qt::Alignment defaultAlignment READ defaultAlignment WRITE setDefaultAlignment)
+    Q_PROPERTY(bool sortIndicatorClearable READ isSortIndicatorClearable
+               WRITE setSortIndicatorClearable NOTIFY sortIndicatorClearableChanged) +/
 
 public:
 
@@ -106,19 +110,11 @@ public:
 
     final void setSectionsMovable(bool movable);
     final bool sectionsMovable() const;
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    inline QT_DEPRECATED void setMovable(bool movable) { setSectionsMovable(movable); }
-    inline QT_DEPRECATED bool isMovable() const { return sectionsMovable(); }
-#endif +/
     final void setFirstSectionMovable(bool movable);
     final bool isFirstSectionMovable() const;
 
     final void setSectionsClickable(bool clickable);
     final bool sectionsClickable() const;
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    inline QT_DEPRECATED void setClickable(bool clickable) { setSectionsClickable(clickable); }
-    inline QT_DEPRECATED bool isClickable() const { return sectionsClickable(); }
-#endif +/
 
     final void setHighlightSections(bool highlight);
     final bool highlightSections() const;
@@ -130,15 +126,6 @@ public:
     final void setResizeContentsPrecision(int precision);
     final int  resizeContentsPrecision() const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    inline QT_DEPRECATED void setResizeMode(ResizeMode mode)
-        { setSectionResizeMode(mode); }
-    inline QT_DEPRECATED void setResizeMode(int logicalindex, ResizeMode mode)
-        { setSectionResizeMode(logicalindex, mode); }
-    inline QT_DEPRECATED ResizeMode resizeMode(int logicalindex) const
-        { return sectionResizeMode(logicalindex); }
-#endif +/
-
     final int stretchSectionCount() const;
 
     final void setSortIndicatorShown(bool show);
@@ -147,6 +134,9 @@ public:
     final void setSortIndicator(int logicalIndex, /+ Qt:: +/qt.core.namespace.SortOrder order);
     final int sortIndicatorSection() const;
     final /+ Qt:: +/qt.core.namespace.SortOrder sortIndicatorOrder() const;
+
+    final void setSortIndicatorClearable(bool clearable);
+    final bool isSortIndicatorClearable() const;
 
     final bool stretchLastSection() const;
     final void setStretchLastSection(bool stretch);
@@ -195,6 +185,7 @@ public /+ Q_SLOTS +/:
     @QSignal final void sectionHandleDoubleClicked(int logicalIndex);
     @QSignal final void geometriesChanged();
     @QSignal final void sortIndicatorChanged(int logicalIndex, /+ Qt:: +/qt.core.namespace.SortOrder order);
+    @QSignal final void sortIndicatorClearableChanged(bool clearable);
 
 protected /+ Q_SLOTS +/:
     @QSlot final void updateSection(int logicalIndex);
@@ -226,7 +217,8 @@ protected:
     override void updateGeometries();
     override void scrollContentsBy(int dx, int dy);
 
-    override void dataChanged(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight, ref const(QVector!(int)) roles = globalInitVar!(QVector!(int)));
+    override void dataChanged(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight,
+                         ref const(QList!(int)) roles = globalInitVar!(QList!(int)));
     override void rowsInserted(ref const(QModelIndex) parent, int start, int end);
 
     override QRect visualRect(ref const(QModelIndex) index) const;
@@ -238,12 +230,17 @@ protected:
     override QModelIndex moveCursor(CursorAction, /+ Qt:: +/qt.core.namespace.KeyboardModifiers);
     override void setSelection(ref const(QRect) rect, QItemSelectionModel.SelectionFlags flags);
     override QRegion visualRegionForSelection(ref const(QItemSelection) selection) const;
-    final void initStyleOption(QStyleOptionHeader* option) const;
+    /+ virtual +/ void initStyleOptionForIndex(QStyleOptionHeader* option, int logicalIndex) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionHeader* option) const;
 
     /+ friend class QTableView; +/
     /+ friend class QTreeView; +/
 
 private:
+    mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
+    protected override void initStyleOption(QStyleOptionFrame* option) const;
+    }));
+
     // ### Qt6: make them protected slots in QHeaderViewPrivate
     /+ Q_PRIVATE_SLOT(d_func(), void _q_sectionsRemoved(const QModelIndex &parent, int logicalFirst, int logicalLast))
     Q_PRIVATE_SLOT(d_func(), void _q_sectionsAboutToBeMoved(const QModelIndex &sourceParent, int logicalStart, int logicalEnd, const QModelIndex &destinationParent, int logicalDestination))

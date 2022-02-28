@@ -29,7 +29,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QCompleterPrivate;
 
-/// Binding for C++ class [QCompleter](https://doc.qt.io/qt-5/qcompleter.html).
+/// Binding for C++ class [QCompleter](https://doc.qt.io/qt-6/qcompleter.html).
 class /+ Q_WIDGETS_EXPORT +/ QCompleter : QObject
 {
     mixin(Q_OBJECT);

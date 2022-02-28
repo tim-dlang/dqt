@@ -23,7 +23,7 @@ import qt.widgets.abstractbutton;
 
 extern(C++, class) struct QButtonGroupPrivate;
 
-/// Binding for C++ class [QButtonGroup](https://doc.qt.io/qt-5/qbuttongroup.html).
+/// Binding for C++ class [QButtonGroup](https://doc.qt.io/qt-6/qbuttongroup.html).
 class /+ Q_WIDGETS_EXPORT +/ QButtonGroup : QObject
 {
     mixin(Q_OBJECT);
@@ -58,16 +58,6 @@ public:
     @QSignal final void idPressed(int);
     @QSignal final void idReleased(int);
     @QSignal final void idToggled(int, bool);
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_VERSION_X_5_15("Use QButtonGroup::idClicked(int) instead") +/
-        @QSignal final void buttonClicked(int);
-    /+ QT_DEPRECATED_VERSION_X_5_15("Use QButtonGroup::idPressed(int) instead") +/
-        @QSignal final void buttonPressed(int);
-    /+ QT_DEPRECATED_VERSION_X_5_15("Use QButtonGroup::idReleased(int) instead") +/
-        @QSignal final void buttonReleased(int);
-    /+ QT_DEPRECATED_VERSION_X_5_15("Use QButtonGroup::idToggled(int, bool) instead") +/
-        @QSignal final void buttonToggled(int, bool);
-/+ #endif +/
 
 private:
     /+ Q_DISABLE_COPY(QButtonGroup) +/

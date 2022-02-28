@@ -31,7 +31,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QPushButtonPrivate;
 
-/// Binding for C++ class [QPushButton](https://doc.qt.io/qt-5/qpushbutton.html).
+/// Binding for C++ class [QPushButton](https://doc.qt.io/qt-6/qpushbutton.html).
 class /+ Q_WIDGETS_EXPORT +/ QPushButton : QAbstractButton
 {
     mixin(Q_OBJECT);
@@ -73,7 +73,8 @@ protected:
     override void keyPressEvent(QKeyEvent );
     override void focusInEvent(QFocusEvent );
     override void focusOutEvent(QFocusEvent );
-    final void initStyleOption(QStyleOptionButton* option) const;
+    override void mouseMoveEvent(QMouseEvent );
+    /+ virtual +/ void initStyleOption(QStyleOptionButton* option) const;
     override bool hitButton(ref const(QPoint) pos) const;
     this(ref QPushButtonPrivate dd, QWidget parent = null);
 

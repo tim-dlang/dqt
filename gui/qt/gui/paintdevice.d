@@ -19,7 +19,6 @@ import qt.gui.paintengine;
 import qt.gui.painter;
 import qt.helpers;
 
-extern(C++, class) struct QPaintDevicePrivate;
 
 interface QPaintDeviceInterface
 {
@@ -35,7 +34,7 @@ protected:
     /+ virtual +/ QPainter * sharedPainter() const;
 }
 
-/// Binding for C++ class [QPaintDevice](https://doc.qt.io/qt-5/qpaintdevice.html).
+/// Binding for C++ class [QPaintDevice](https://doc.qt.io/qt-6/qpaintdevice.html).
 abstract class /+ Q_GUI_EXPORT +/ QPaintDevice//: QPaintDeviceInterface                                // device for QPainter
 {
 public:
@@ -73,8 +72,8 @@ public:
     final int logicalDpiY() const { return metric(PaintDeviceMetric.PdmDpiY); }
     final int physicalDpiX() const { return metric(PaintDeviceMetric.PdmPhysicalDpiX); }
     final int physicalDpiY() const { return metric(PaintDeviceMetric.PdmPhysicalDpiY); }
-    final int devicePixelRatio() const { return metric(PaintDeviceMetric.PdmDevicePixelRatio); }
-    final qreal devicePixelRatioF()  const { return metric(PaintDeviceMetric.PdmDevicePixelRatioScaled) / devicePixelRatioFScale(); }
+    final qreal devicePixelRatio() const { return metric(PaintDeviceMetric.PdmDevicePixelRatioScaled) / devicePixelRatioFScale(); }
+    final qreal devicePixelRatioF()  const { return devicePixelRatio(); }
     final int colorCount() const { return metric(PaintDeviceMetric.PdmNumColors); }
     final int depth() const { return metric(PaintDeviceMetric.PdmDepth); }
 
@@ -92,8 +91,6 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QPaintDevice) +/
 
-    QPaintDevicePrivate* reserved;
-
     /+ friend class QPainter; +/
     /+ friend class QPainterPrivate; +/
     /+ friend class QFontEngineMac; +/
@@ -106,9 +103,8 @@ private:
   Inline functions
  *****************************************************************************/
 
-static assert(__traits(classInstanceSize, QPaintDevice) == (void*).sizeof * 3);
+static assert(__traits(classInstanceSize, QPaintDevice) == (void*).sizeof + ushort.sizeof);
 struct QPaintDeviceFakeInheritance
 {
-    static assert(__traits(classInstanceSize, QPaintDevice) % (void*).sizeof == 0);
-    void*[__traits(classInstanceSize, QPaintDevice) / (void*).sizeof - 1] data;
+    ushort painters;
 }

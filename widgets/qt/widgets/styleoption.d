@@ -29,7 +29,6 @@ import qt.gui.color;
 import qt.gui.font;
 import qt.gui.fontmetrics;
 import qt.gui.icon;
-import qt.gui.matrix;
 import qt.gui.palette;
 import qt.gui.region;
 import qt.gui.transform;
@@ -59,7 +58,7 @@ import qt.widgets.widget;
 
 class QDebug; +/
 
-/// Binding for C++ class [QStyleOption](https://doc.qt.io/qt-5/qstyleoption.html).
+/// Binding for C++ class [QStyleOption](https://doc.qt.io/qt-6/qstyleoption.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOption
 {
 public:
@@ -94,13 +93,14 @@ public:
     this(ref const(QStyleOption) other);
     ~this();
 
-    //void init_(const(QWidget) w);
-    // pragma(inline, true) void initFrom(const(QWidget) w) { init_(w); }
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    void initFrom(const(QWidget) w);
+    }));
     /+ref QStyleOption operator =(ref const(QStyleOption) other);+/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QStyleOptionFocusRect](https://doc.qt.io/qt-5/qstyleoptionfocusrect.html).
+/// Binding for C++ class [QStyleOptionFocusRect](https://doc.qt.io/qt-6/qstyleoptionfocusrect.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionFocusRect
 {
     public QStyleOption base0;
@@ -135,7 +135,7 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QStyleOptionFrame](https://doc.qt.io/qt-5/qstyleoptionframe.html).
+/// Binding for C++ class [QStyleOptionFrame](https://doc.qt.io/qt-6/qstyleoptionframe.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionFrame
 {
     public QStyleOption base0;
@@ -143,7 +143,7 @@ extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionFrame
     alias OptionType = QStyleOption.OptionType;
 public:
     enum StyleOptionType { Type = OptionType.SO_Frame }
-    enum StyleOptionVersion { Version = 3 }
+    enum StyleOptionVersion { Version = 1 }
 
     int lineWidth;
     int midLineWidth;
@@ -180,14 +180,23 @@ protected:
 }
 /+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator &(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator &(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)/+noexcept+/;+/
 
-/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionFrame::FrameFeatures) +/
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionFrameV2 = QStyleOptionFrame;
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionFrameV3 = QStyleOptionFrame;
-
-/+ #if QT_CONFIG(tabwidget) +/
-/// Binding for C++ class [QStyleOptionTabWidgetFrame](https://doc.qt.io/qt-5/qstyleoptiontabwidgetframe.html).
+/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionFrame::FrameFeatures)
+#if QT_CONFIG(tabwidget) +/
+/// Binding for C++ class [QStyleOptionTabWidgetFrame](https://doc.qt.io/qt-6/qstyleoptiontabwidgetframe.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTabWidgetFrame
 {
     public QStyleOption base0;
@@ -195,7 +204,7 @@ extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTabWidgetFrame
     alias OptionType = QStyleOption.OptionType;
 public:
     enum StyleOptionType { Type = OptionType.SO_TabWidgetFrame }
-    enum StyleOptionVersion { Version = 2 }
+    enum StyleOptionVersion { Version = 1 }
 
     int lineWidth;
     int midLineWidth;
@@ -229,12 +238,11 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionTabWidgetFrameV2 = QStyleOptionTabWidgetFrame;
 /+ #endif // QT_CONFIG(tabwidget)
 
 
 #if QT_CONFIG(tabbar) +/
-/// Binding for C++ class [QStyleOptionTabBarBase](https://doc.qt.io/qt-5/qstyleoptiontabbarbase.html).
+/// Binding for C++ class [QStyleOptionTabBarBase](https://doc.qt.io/qt-6/qstyleoptiontabbarbase.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTabBarBase
 {
     public QStyleOption base0;
@@ -242,7 +250,7 @@ extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTabBarBase
     alias OptionType = QStyleOption.OptionType;
 public:
     enum StyleOptionType { Type = OptionType.SO_TabBarBase }
-    enum StyleOptionVersion { Version = 2 }
+    enum StyleOptionVersion { Version = 1 }
 
     QTabBar.Shape shape;
     QRect tabBarRect;
@@ -272,10 +280,9 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionTabBarBaseV2 = QStyleOptionTabBarBase;
 /+ #endif +/ // QT_CONFIG(tabbar)
 
-/// Binding for C++ class [QStyleOptionHeader](https://doc.qt.io/qt-5/qstyleoptionheader.html).
+/// Binding for C++ class [QStyleOptionHeader](https://doc.qt.io/qt-6/qstyleoptionheader.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionHeader
 {
     public QStyleOption base0;
@@ -324,7 +331,72 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QStyleOptionButton](https://doc.qt.io/qt-5/qstyleoptionbutton.html).
+/// Binding for C++ class [QStyleOptionHeaderV2](https://doc.qt.io/qt-6/qstyleoptionheaderv2.html).
+extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionHeaderV2
+{
+    public QStyleOptionHeader base0;
+    alias base0 this;
+    alias OptionType = QStyleOption.OptionType;
+public:
+    enum StyleOptionType { Type = OptionType.SO_Header }
+    enum StyleOptionVersion { Version = 2 }
+
+    @disable this();
+    pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
+    ref typeof(this) rawConstructor();
+    static typeof(this) create()
+    {
+        typeof(this) r = typeof(this).init;
+        r.rawConstructor();
+        return r;
+    }
+
+    @disable this(this);
+    this(ref const(QStyleOptionHeaderV2) other)
+    {
+        this.base0 = QStyleOptionHeader(StyleOptionVersion.Version);
+        this = other;
+    }
+    /+ QStyleOptionHeaderV2 &operator=(const QStyleOptionHeaderV2 &) = default; +/
+
+    /+ Qt::TextElideMode textElideMode:2; +/
+    uint bitfieldData_textElideMode;
+    final qt.core.namespace.TextElideMode textElideMode() const
+    {
+        return cast(qt.core.namespace.TextElideMode)((bitfieldData_textElideMode >> 0) & 0x3);
+    }
+    final qt.core.namespace.TextElideMode textElideMode(qt.core.namespace.TextElideMode value)
+    {
+        bitfieldData_textElideMode = (bitfieldData_textElideMode & ~0x3) | ((value & 0x3) << 0);
+        return value;
+    }
+    /+ bool isSectionDragTarget:1; +/
+    final bool isSectionDragTarget() const
+    {
+        return (bitfieldData_textElideMode >> 2) & 0x1;
+    }
+    final bool isSectionDragTarget(bool value)
+    {
+        bitfieldData_textElideMode = (bitfieldData_textElideMode & ~0x4) | ((value & 0x1) << 2);
+        return value;
+    }
+    /+ int unused:29; +/
+    final int unused() const
+    {
+        return (bitfieldData_textElideMode >> 3) & 0x1fffffff;
+    }
+    final int unused(int value)
+    {
+        bitfieldData_textElideMode = (bitfieldData_textElideMode & ~0xfffffff8) | ((value & 0x1fffffff) << 3);
+        return value;
+    }
+
+protected:
+    this(int version_);
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
+}
+
+/// Binding for C++ class [QStyleOptionButton](https://doc.qt.io/qt-6/qstyleoptionbutton.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionButton
 {
     public QStyleOption base0;
@@ -368,11 +440,23 @@ protected:
 }
 /+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator &(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator &(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionButton::ButtonFeatures)
 #if QT_CONFIG(tabbar) +/
-/// Binding for C++ class [QStyleOptionTab](https://doc.qt.io/qt-5/qstyleoptiontab.html).
+/// Binding for C++ class [QStyleOptionTab](https://doc.qt.io/qt-6/qstyleoptiontab.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTab
 {
     public QStyleOption base0;
@@ -380,7 +464,7 @@ extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTab
     alias OptionType = QStyleOption.OptionType;
 public:
     enum StyleOptionType { Type = OptionType.SO_Tab }
-    enum StyleOptionVersion { Version = 3 }
+    enum StyleOptionVersion { Version = 1 }
 
     enum TabPosition { Beginning, Middle, End, OnlyOneTab }
     enum SelectedPosition { NotAdjacent, NextIsSelected, PreviousIsSelected }
@@ -402,6 +486,7 @@ alias TabFeatures = QFlags!(TabFeature);
     QSize leftButtonSize;
     QSize rightButtonSize;
     TabFeatures features;
+    int tabIndex = -1;
 
     @disable this();
     pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
@@ -426,40 +511,29 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-
-extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTabV4
-{
-    public QStyleOptionTab base0;
-    alias base0 this;
-    alias OptionType = QStyleOption.OptionType;
-public:
-    enum StyleOptionVersion { Version = 4 }
-    @disable this();
-    pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-    ref typeof(this) rawConstructor();
-    static typeof(this) create()
-    {
-        typeof(this) r = typeof(this).init;
-        r.rawConstructor();
-        return r;
-    }
-
-    int tabIndex = -1;
-    mixin(CREATE_CONVENIENCE_WRAPPERS);
-}
 /+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator &(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator &(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionTab::CornerWidgets) +/
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionTabV2 = QStyleOptionTab;
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionTabV3 = QStyleOptionTab;
 /+ #endif // QT_CONFIG(tabbar)
 
 
 #if QT_CONFIG(toolbar) +/
 
-/// Binding for C++ class [QStyleOptionToolBar](https://doc.qt.io/qt-5/qstyleoptiontoolbar.html).
+/// Binding for C++ class [QStyleOptionToolBar](https://doc.qt.io/qt-6/qstyleoptiontoolbar.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionToolBar
 {
     public QStyleOption base0;
@@ -501,12 +575,24 @@ protected:
 }
 /+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator &(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator &(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionToolBar::ToolBarFeatures) +/
 /+ #endif +/ // QT_CONFIG(toolbar)
 
-/// Binding for C++ class [QStyleOptionProgressBar](https://doc.qt.io/qt-5/qstyleoptionprogressbar.html).
+/// Binding for C++ class [QStyleOptionProgressBar](https://doc.qt.io/qt-6/qstyleoptionprogressbar.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionProgressBar
 {
     public QStyleOption base0;
@@ -514,7 +600,7 @@ extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionProgressBar
     alias OptionType = QStyleOption.OptionType;
 public:
     enum StyleOptionType { Type = OptionType.SO_ProgressBar }
-    enum StyleOptionVersion { Version = 2 }
+    enum StyleOptionVersion { Version = 1 }
 
     int minimum;
     int maximum;
@@ -522,7 +608,6 @@ public:
     QString text;
     /+ Qt:: +/qt.core.namespace.Alignment textAlignment;
     bool textVisible;
-    /+ Qt:: +/qt.core.namespace.Orientation orientation; // ### Qt 6: remove
     bool invertedAppearance;
     bool bottomToTop;
 
@@ -550,9 +635,7 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionProgressBarV2 = QStyleOptionProgressBar;
-
-/// Binding for C++ class [QStyleOptionMenuItem](https://doc.qt.io/qt-5/qstyleoptionmenuitem.html).
+/// Binding for C++ class [QStyleOptionMenuItem](https://doc.qt.io/qt-6/qstyleoptionmenuitem.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionMenuItem
 {
     public QStyleOption base0;
@@ -574,7 +657,7 @@ public:
     QString text;
     QIcon icon;
     int maxIconWidth;
-    int tabWidth; // ### Qt 6: rename to reservedShortcutWidth
+    int reservedShortcutWidth;
     QFont font;
 
     @disable this();
@@ -602,7 +685,7 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QStyleOptionDockWidget](https://doc.qt.io/qt-5/qstyleoptiondockwidget.html).
+/// Binding for C++ class [QStyleOptionDockWidget](https://doc.qt.io/qt-6/qstyleoptiondockwidget.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionDockWidget
 {
     public QStyleOption base0;
@@ -610,7 +693,7 @@ extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionDockWidget
     alias OptionType = QStyleOption.OptionType;
 public:
     enum StyleOptionType { Type = OptionType.SO_DockWidget }
-    enum StyleOptionVersion { Version = 2 }
+    enum StyleOptionVersion { Version = 1 }
 
     QString title;
     bool closable;
@@ -642,11 +725,9 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionDockWidgetV2 = QStyleOptionDockWidget;
-
 /+ #if QT_CONFIG(itemviews) +/
 
-/// Binding for C++ class [QStyleOptionViewItem](https://doc.qt.io/qt-5/qstyleoptionviewitem.html).
+/// Binding for C++ class [QStyleOptionViewItem](https://doc.qt.io/qt-6/qstyleoptionviewitem.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionViewItem
 {
     public QStyleOption base0;
@@ -654,7 +735,7 @@ extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionViewItem
     alias OptionType = QStyleOption.OptionType;
 public:
     enum StyleOptionType { Type = OptionType.SO_ViewItem }
-    enum StyleOptionVersion { Version = 4 }
+    enum StyleOptionVersion { Version = 1 }
 
     enum Position { Left, Right, Top, Bottom }
 
@@ -718,16 +799,24 @@ protected:
 }
 /+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator &(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator &(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionViewItem::ViewItemFeatures) +/
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionViewItemV2 = QStyleOptionViewItem;
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionViewItemV3 = QStyleOptionViewItem;
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionViewItemV4 = QStyleOptionViewItem;
-
 /+ #endif +/ // QT_CONFIG(itemviews)
 
-/// Binding for C++ class [QStyleOptionToolBox](https://doc.qt.io/qt-5/qstyleoptiontoolbox.html).
+/// Binding for C++ class [QStyleOptionToolBox](https://doc.qt.io/qt-6/qstyleoptiontoolbox.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionToolBox
 {
     public QStyleOption base0;
@@ -735,7 +824,7 @@ extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionToolBox
     alias OptionType = QStyleOption.OptionType;
 public:
     enum StyleOptionType { Type = OptionType.SO_ToolBox }
-    enum StyleOptionVersion { Version = 2 }
+    enum StyleOptionVersion { Version = 1 }
 
     QString text;
     QIcon icon;
@@ -770,10 +859,8 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECL_DEPRECATED +/ alias QStyleOptionToolBoxV2 = QStyleOptionToolBox;
-
 /+ #if QT_CONFIG(rubberband) +/
-/// Binding for C++ class [QStyleOptionRubberBand](https://doc.qt.io/qt-5/qstyleoptionrubberband.html).
+/// Binding for C++ class [QStyleOptionRubberBand](https://doc.qt.io/qt-6/qstyleoptionrubberband.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionRubberBand
 {
     public QStyleOption base0;
@@ -811,7 +898,7 @@ protected:
 /+ #endif +/ // QT_CONFIG(rubberband)
 
 // -------------------------- Complex style options -------------------------------
-/// Binding for C++ class [QStyleOptionComplex](https://doc.qt.io/qt-5/qstyleoptioncomplex.html).
+/// Binding for C++ class [QStyleOptionComplex](https://doc.qt.io/qt-6/qstyleoptioncomplex.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionComplex
 {
     public QStyleOption base0;
@@ -837,7 +924,7 @@ public:
 }
 
 /+ #if QT_CONFIG(slider) +/
-/// Binding for C++ class [QStyleOptionSlider](https://doc.qt.io/qt-5/qstyleoptionslider.html).
+/// Binding for C++ class [QStyleOptionSlider](https://doc.qt.io/qt-6/qstyleoptionslider.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionSlider
 {
     public QStyleOptionComplex base0;
@@ -859,6 +946,7 @@ public:
     int pageStep;
     qreal notchTarget;
     bool dialWrapping;
+    /+ Qt:: +/qt.core.namespace.KeyboardModifiers keyboardModifiers;
 
     @disable this();
     pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
@@ -885,7 +973,7 @@ protected:
 /+ #endif // QT_CONFIG(slider)
 
 #if QT_CONFIG(spinbox) +/
-/// Binding for C++ class [QStyleOptionSpinBox](https://doc.qt.io/qt-5/qstyleoptionspinbox.html).
+/// Binding for C++ class [QStyleOptionSpinBox](https://doc.qt.io/qt-6/qstyleoptionspinbox.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionSpinBox
 {
     public QStyleOptionComplex base0;
@@ -923,7 +1011,7 @@ protected:
 }
 /+ #endif +/ // QT_CONFIG(spinbox)
 
-/// Binding for C++ class [QStyleOptionToolButton](https://doc.qt.io/qt-5/qstyleoptiontoolbutton.html).
+/// Binding for C++ class [QStyleOptionToolButton](https://doc.qt.io/qt-6/qstyleoptiontoolbutton.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionToolButton
 {
     public QStyleOptionComplex base0;
@@ -972,10 +1060,22 @@ protected:
 }
 /+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator &(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator &(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionToolButton::ToolButtonFeatures) +/
-/// Binding for C++ class [QStyleOptionComboBox](https://doc.qt.io/qt-5/qstyleoptioncombobox.html).
+/// Binding for C++ class [QStyleOptionComboBox](https://doc.qt.io/qt-6/qstyleoptioncombobox.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionComboBox
 {
     public QStyleOptionComplex base0;
@@ -991,6 +1091,7 @@ public:
     QString currentText;
     QIcon currentIcon;
     QSize iconSize;
+    /+ Qt:: +/qt.core.namespace.Alignment textAlignment = /+ Qt:: +/qt.core.namespace.AlignmentFlag.AlignLeft | /+ Qt:: +/qt.core.namespace.AlignmentFlag.AlignVCenter;
 
     @disable this();
     pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
@@ -1016,7 +1117,7 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QStyleOptionTitleBar](https://doc.qt.io/qt-5/qstyleoptiontitlebar.html).
+/// Binding for C++ class [QStyleOptionTitleBar](https://doc.qt.io/qt-6/qstyleoptiontitlebar.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionTitleBar
 {
     public QStyleOptionComplex base0;
@@ -1055,7 +1156,7 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QStyleOptionGroupBox](https://doc.qt.io/qt-5/qstyleoptiongroupbox.html).
+/// Binding for C++ class [QStyleOptionGroupBox](https://doc.qt.io/qt-6/qstyleoptiongroupbox.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionGroupBox
 {
     public QStyleOptionComplex base0;
@@ -1095,7 +1196,7 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QStyleOptionSizeGrip](https://doc.qt.io/qt-5/qstyleoptionsizegrip.html).
+/// Binding for C++ class [QStyleOptionSizeGrip](https://doc.qt.io/qt-6/qstyleoptionsizegrip.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionSizeGrip
 {
     public QStyleOptionComplex base0;
@@ -1129,7 +1230,7 @@ protected:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QStyleOptionGraphicsItem](https://doc.qt.io/qt-5/qstyleoptiongraphicsitem.html).
+/// Binding for C++ class [QStyleOptionGraphicsItem](https://doc.qt.io/qt-6/qstyleoptiongraphicsitem.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleOptionGraphicsItem
 {
     public QStyleOption base0;
@@ -1140,8 +1241,6 @@ public:
     enum StyleOptionVersion { Version = 1 }
 
     QRectF exposedRect;
-    QMatrix matrix;
-    qreal levelOfDetail;
 
     @disable this();
     pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
@@ -1189,7 +1288,7 @@ T qstyleoption_cast(T)(QStyleOption* opt)
 }
 
 // -------------------------- QStyleHintReturn -------------------------------
-/// Binding for C++ class [QStyleHintReturn](https://doc.qt.io/qt-5/qstylehintreturn.html).
+/// Binding for C++ class [QStyleHintReturn](https://doc.qt.io/qt-6/qstylehintreturn.html).
 extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleHintReturn {
 public:
     enum HintReturnType {
@@ -1209,7 +1308,7 @@ public:
 }
 
 /+
-/// Binding for C++ class [QStyleHintReturnMask](https://doc.qt.io/qt-5/qstylehintreturnmask.html).
+/// Binding for C++ class [QStyleHintReturnMask](https://doc.qt.io/qt-6/qstylehintreturnmask.html).
 class /+ Q_WIDGETS_EXPORT +/ QStyleHintReturnMask : QStyleHintReturn {
 public:
     enum StyleOptionType { Type = HintReturnType.SH_Mask }
@@ -1222,7 +1321,7 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QStyleHintReturnVariant](https://doc.qt.io/qt-5/qstylehintreturnvariant.html).
+/// Binding for C++ class [QStyleHintReturnVariant](https://doc.qt.io/qt-6/qstylehintreturnvariant.html).
 class /+ Q_WIDGETS_EXPORT +/ QStyleHintReturnVariant : QStyleHintReturn {
 public:
     enum StyleOptionType { Type = HintReturnType.SH_Variant }

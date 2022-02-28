@@ -22,90 +22,136 @@ struct CGPoint;
 #endif +/
 
 
-
-/// Binding for C++ class [QPoint](https://doc.qt.io/qt-5/qpoint.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPoint
+/// Binding for C++ class [QPoint](https://doc.qt.io/qt-6/qpoint.html).
+@Q_PRIMITIVE_TYPE extern(C++, class) struct QPoint
 {
 public:
-    /+pragma(inline, true) this()
+    /+pragma(inline, true) this()/+ noexcept+/
     {
         this.xp = 0;
         this.yp = 0;
     }+/
-    pragma(inline, true) this(int xpos, int ypos)
+    pragma(inline, true) this(int xpos, int ypos)/+ noexcept+/
     {
         this.xp = xpos;
         this.yp = ypos;
     }
 
-    pragma(inline, true) bool isNull() const
-    { return xp == 0 && yp == 0; }
+    pragma(inline, true) bool isNull() const/+ noexcept+/
+    {
+        return xp == 0 && yp == 0;
+    }
 
-    pragma(inline, true) int x() const
-    { return xp; }
-    pragma(inline, true) int y() const
-    { return yp; }
-    pragma(inline, true) void setX(int xpos)
-    { xp = xpos; }
-    pragma(inline, true) void setY(int ypos)
-    { yp = ypos; }
+    pragma(inline, true) int x() const/+ noexcept+/
+    {
+        return xp;
+    }
+    pragma(inline, true) int y() const/+ noexcept+/
+    {
+        return yp;
+    }
+    pragma(inline, true) void setX(int xpos)/+ noexcept+/
+    {
+        xp = xpos;
+    }
+    pragma(inline, true) void setY(int ypos)/+ noexcept+/
+    {
+        yp = ypos;
+    }
 
     pragma(inline, true) int manhattanLength() const
-    { return qAbs(x())+qAbs(y()); }
+    {
+        return qAbs(x()) + qAbs(y());
+    }
 
     QPoint transposed() const/+ noexcept+/ { return QPoint(yp, xp); }
 
-    pragma(inline, true) ref int rx() return
-    { return xp; }
-    pragma(inline, true) ref int ry() return
-    { return yp; }
+    pragma(inline, true) ref int rx()/+ noexcept+/ return
+    {
+        return xp;
+    }
+    pragma(inline, true) ref int ry()/+ noexcept+/ return
+    {
+        return yp;
+    }
 
     pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if(op == "+")
-    { xp+=p.xp; yp+=p.yp; return this; }
+    {
+        xp += p.xp;
+        yp += p.yp;
+        return this;
+    }
     pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if(op == "-")
-    { xp-=p.xp; yp-=p.yp; return this; }
+    {
+        xp -= p.xp;
+        yp -= p.yp;
+        return this;
+    }
 
     /+pragma(inline, true) ref QPoint operator *=(float factor)
-    { xp = qRound(xp*factor); yp = qRound(yp*factor); return this; }+/
+    {
+        xp = qRound(xp * factor);
+        yp = qRound(yp * factor);
+        return this;
+    }+/
     /+pragma(inline, true) ref QPoint operator *=(double factor)
-    { xp = qRound(xp*factor); yp = qRound(yp*factor); return this; }+/
+    {
+        xp = qRound(xp * factor);
+        yp = qRound(yp * factor);
+        return this;
+    }+/
     /+pragma(inline, true) ref QPoint operator *=(int factor)
-    { xp = xp*factor; yp = yp*factor; return this; }+/
+    {
+        xp = xp * factor;
+        yp = yp * factor;
+        return this;
+    }+/
 
     /+pragma(inline, true) ref QPoint operator /=(qreal c)
     {
-        xp = qRound(xp/c);
-        yp = qRound(yp/c);
+        xp = qRound(xp / c);
+        yp = qRound(yp / c);
         return this;
     }+/
 
     pragma(inline, true) static int dotProduct(ref const(QPoint) p1, ref const(QPoint) p2)
     { return p1.xp * p2.xp + p1.yp * p2.yp; }
 
-    /+ friend inline bool operator==(const QPoint &, const QPoint &); +/
-    /+ friend inline bool operator!=(const QPoint &, const QPoint &); +/
-    /+ friend inline const QPoint operator+(const QPoint &, const QPoint &); +/
-
-    /+ Q_DECL_CONSTEXPR +/ pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint)  p2) const if(op == "+")
-    { return QPoint(this.xp+p2.xp, this.yp+p2.yp); }
-
-    /+ friend inline const QPoint operator-(const QPoint &, const QPoint &); +/
-    /+ friend inline const QPoint operator*(const QPoint &, float); +/
-    /+ friend inline const QPoint operator*(float, const QPoint &); +/
-    /+ friend inline const QPoint operator*(const QPoint &, double); +/
-    /+ friend inline const QPoint operator*(double, const QPoint &); +/
-    /+ friend inline const QPoint operator*(const QPoint &, int); +/
-    /+ friend inline const QPoint operator*(int, const QPoint &); +/
-    /+ friend inline const QPoint operator+(const QPoint &); +/
-    /+ friend inline const QPoint operator-(const QPoint &); +/
-    /+ friend inline const QPoint operator/(const QPoint &, qreal); +/
+    /+ friend constexpr inline bool operator==(const QPoint &p1, const QPoint &p2) noexcept
+    { return p1.xp == p2.xp && p1.yp == p2.yp; } +/
+    /+ friend constexpr inline bool operator!=(const QPoint &p1, const QPoint &p2) noexcept
+    { return p1.xp != p2.xp || p1.yp != p2.yp; } +/
+    /+ friend constexpr inline QPoint operator+(const QPoint &p1, const QPoint &p2) noexcept
+    { return QPoint(p1.xp + p2.xp, p1.yp + p2.yp); } +/
+    /+ friend constexpr inline QPoint operator-(const QPoint &p1, const QPoint &p2) noexcept
+    { return QPoint(p1.xp - p2.xp, p1.yp - p2.yp); } +/
+    /+ friend constexpr inline QPoint operator*(const QPoint &p, float factor)
+    { return QPoint(qRound(p.xp * factor), qRound(p.yp * factor)); } +/
+    /+ friend constexpr inline QPoint operator*(const QPoint &p, double factor)
+    { return QPoint(qRound(p.xp * factor), qRound(p.yp * factor)); } +/
+    /+ friend constexpr inline QPoint operator*(const QPoint &p, int factor) noexcept
+    { return QPoint(p.xp * factor, p.yp * factor); } +/
+    /+ friend constexpr inline QPoint operator*(float factor, const QPoint &p)
+    { return QPoint(qRound(p.xp * factor), qRound(p.yp * factor)); } +/
+    /+ friend constexpr inline QPoint operator*(double factor, const QPoint &p)
+    { return QPoint(qRound(p.xp * factor), qRound(p.yp * factor)); } +/
+    /+ friend constexpr inline QPoint operator*(int factor, const QPoint &p) noexcept
+    { return QPoint(p.xp * factor, p.yp * factor); } +/
+    /+ friend constexpr inline QPoint operator+(const QPoint &p) noexcept
+    { return p; } +/
+    /+ friend constexpr inline QPoint operator-(const QPoint &p) noexcept
+    { return QPoint(-p.xp, -p.yp); } +/
+    /+ friend constexpr inline QPoint operator/(const QPoint &p, qreal c)
+    { return QPoint(qRound(p.xp / c), qRound(p.yp / c)); } +/
 
     static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
-        /+ Q_REQUIRED_RESULT CGPoint toCGPoint() const noexcept; +/
+        /+ [[nodiscard]] Q_CORE_EXPORT CGPoint toCGPoint() const noexcept; +/
     }
 
 
+    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if(op == "+")
+    { return QPoint(xp+p2.xp, yp+p2.yp); }
 
     pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if(op == "-")
     { return QPoint(xp-p2.xp, yp-p2.yp); }
@@ -115,10 +161,22 @@ private:
     /+ friend class QTransform; +/
     int xp = 0;
     int yp = 0;
+
+    /+ template <std::size_t I,
+              typename P,
+              std::enable_if_t<(I < 2), bool> = true,
+              std::enable_if_t<std::is_same_v<std::decay_t<P>, QPoint>, bool> = true> +/
+    /+ friend constexpr decltype(auto) get(P &&p) noexcept
+    {
+        static if (I == 0)
+            return (std::forward<P>(p).xp);
+        else static if (I == 1)
+            return (std::forward<P>(p).yp);
+    } +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_TYPEINFO(QPoint, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QPoint, Q_PRIMITIVE_TYPE);
 
 /*****************************************************************************
   QPoint stream functions
@@ -126,71 +184,36 @@ private:
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QPoint &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPoint &);
-#endif +/
+#endif
 
 /*****************************************************************************
   QPoint inline functions
  *****************************************************************************/
 
-/+pragma(inline, true) bool operator ==(ref const(QPoint) p1, ref const(QPoint) p2)
-{ return p1.xp == p2.xp && p1.yp == p2.yp; }+/
-
-/+pragma(inline, true) bool operator !=(ref const(QPoint) p1, ref const(QPoint) p2)
-{ return p1.xp != p2.xp || p1.yp != p2.yp; }+/
-
-
-/+pragma(inline, true) const(QPoint) operator *(ref const(QPoint) p, float factor)
-{ return QPoint(qRound(p.xp*factor), qRound(p.yp*factor)); }+/
-
-/+pragma(inline, true) const(QPoint) operator *(ref const(QPoint) p, double factor)
-{ return QPoint(qRound(p.xp*factor), qRound(p.yp*factor)); }+/
-
-/+pragma(inline, true) const(QPoint) operator *(ref const(QPoint) p, int factor)
-{ return QPoint(p.xp*factor, p.yp*factor); }+/
-
-/+pragma(inline, true) const(QPoint) operator *(float factor, ref const(QPoint) p)
-{ return QPoint(qRound(p.xp*factor), qRound(p.yp*factor)); }+/
-
-/+pragma(inline, true) const(QPoint) operator *(double factor, ref const(QPoint) p)
-{ return QPoint(qRound(p.xp*factor), qRound(p.yp*factor)); }+/
-
-/+pragma(inline, true) const(QPoint) operator *(int factor, ref const(QPoint) p)
-{ return QPoint(p.xp*factor, p.yp*factor); }+/
-
-/+pragma(inline, true) const(QPoint) operator +(ref const(QPoint) p)
-{ return p; }+/
-
-/+pragma(inline, true) const(QPoint) operator -(ref const(QPoint) p)
-{ return QPoint(-p.xp, -p.yp); }+/
-
-/+pragma(inline, true) const(QPoint) operator /(ref const(QPoint) p, qreal c)
-{
-    return QPoint(qRound(p.xp/c), qRound(p.yp/c));
-}+/
-
-/+ #ifndef QT_NO_DEBUG_STREAM
+#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QPoint &);
-#endif +/
+#endif
+
+Q_CORE_EXPORT size_t qHash(QPoint key, size_t seed = 0) noexcept; +/
 
 
 
 
-
-/// Binding for C++ class [QPointF](https://doc.qt.io/qt-5/qpointf.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QPointF
+/// Binding for C++ class [QPointF](https://doc.qt.io/qt-6/qpointf.html).
+@Q_PRIMITIVE_TYPE extern(C++, class) struct QPointF
 {
 public:
-    /+pragma(inline, true) this()
+    /+pragma(inline, true) this()/+ noexcept+/
     {
         this.xp = 0;
         this.yp = 0;
     }+/
-    pragma(inline, true) this(ref const(QPoint) p)
+    pragma(inline, true) this(ref const(QPoint) p)/+ noexcept+/
     {
         this.xp = p.x();
         this.yp = p.y();
     }
-    pragma(inline, true) this(qreal xpos, qreal ypos)
+    pragma(inline, true) this(qreal xpos, qreal ypos)/+ noexcept+/
     {
         this.xp = xpos;
         this.yp = ypos;
@@ -198,81 +221,103 @@ public:
 
     pragma(inline, true) qreal manhattanLength() const
     {
-        return qAbs(x())+qAbs(y());
+        return qAbs(x()) + qAbs(y());
     }
 
-    pragma(inline, true) bool isNull() const
+    pragma(inline, true) bool isNull() const/+ noexcept+/
     {
         return qIsNull(xp) && qIsNull(yp);
     }
 
-    pragma(inline, true) qreal x() const
+    pragma(inline, true) qreal x() const/+ noexcept+/
     {
         return xp;
     }
-    pragma(inline, true) qreal y() const
+    pragma(inline, true) qreal y() const/+ noexcept+/
     {
         return yp;
     }
-    pragma(inline, true) void setX(qreal xpos)
+    pragma(inline, true) void setX(qreal xpos)/+ noexcept+/
     {
         xp = xpos;
     }
-    pragma(inline, true) void setY(qreal ypos)
+    pragma(inline, true) void setY(qreal ypos)/+ noexcept+/
     {
         yp = ypos;
     }
 
     QPointF transposed() const/+ noexcept+/ { return QPointF(yp, xp); }
 
-    pragma(inline, true) ref qreal rx() return
+    pragma(inline, true) ref qreal rx() return /+ noexcept+/
     {
         return xp;
     }
-    pragma(inline, true) ref qreal ry() return
+    pragma(inline, true) ref qreal ry() return /+ noexcept+/
     {
         return yp;
     }
 
     pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if(op == "+")
     {
-        xp+=p.xp;
-        yp+=p.yp;
+        xp += p.xp;
+        yp += p.yp;
         return this;
     }
     pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if(op == "-")
     {
-        xp-=p.xp; yp-=p.yp; return this;
+        xp -= p.xp;
+        yp -= p.yp;
+        return this;
     }
     /+pragma(inline, true) ref QPointF operator *=(qreal c)
     {
-        xp*=c; yp*=c; return this;
+        xp *= c;
+        yp *= c;
+        return this;
     }+/
     /+pragma(inline, true) ref QPointF operator /=(qreal divisor)
     {
-        xp/=divisor;
-        yp/=divisor;
+        (mixin(Q_ASSERT(q{divisor > 0 || divisor < 0})));
+        xp /= divisor;
+        yp /= divisor;
         return this;
     }+/
 
     pragma(inline, true) static qreal dotProduct(ref const(QPointF) p1, ref const(QPointF) p2)
-    { return p1.xp * p2.xp + p1.yp * p2.yp; }
-
-    /+ friend inline bool operator==(const QPointF &, const QPointF &); +/
-    /+ friend inline bool operator!=(const QPointF &, const QPointF &); +/
-    /+ friend inline const QPointF operator+(const QPointF &, const QPointF &); +/
-
-    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF)  p2) const if(op == "+")
     {
-        return QPointF(this.xp+p2.xp, this.yp+p2.yp);
+        return p1.xp * p2.xp + p1.yp * p2.yp;
     }
 
-    /+ friend inline const QPointF operator-(const QPointF &, const QPointF &); +/
-    /+ friend inline const QPointF operator*(qreal, const QPointF &); +/
-    /+ friend inline const QPointF operator*(const QPointF &, qreal); +/
-    /+ friend inline const QPointF operator+(const QPointF &); +/
-    /+ friend inline const QPointF operator-(const QPointF &); +/
-    /+ friend inline const QPointF operator/(const QPointF &, qreal); +/
+    /+ QT_WARNING_PUSH
+    QT_WARNING_DISABLE_FLOAT_COMPARE +/
+    /+ friend constexpr inline bool operator==(const QPointF &p1, const QPointF &p2)
+    {
+        return ((!p1.xp || !p2.xp) ? qFuzzyIsNull(p1.xp - p2.xp) : qFuzzyCompare(p1.xp, p2.xp))
+            && ((!p1.yp || !p2.yp) ? qFuzzyIsNull(p1.yp - p2.yp) : qFuzzyCompare(p1.yp, p2.yp));
+    } +/
+    /+ friend constexpr inline bool operator!=(const QPointF &p1, const QPointF &p2)
+    {
+        return !(p1 == p2);
+    } +/
+    /+ QT_WARNING_POP +/
+
+    /+ friend constexpr inline QPointF operator+(const QPointF &p1, const QPointF &p2)
+    { return QPointF(p1.xp + p2.xp, p1.yp + p2.yp); } +/
+    /+ friend constexpr inline QPointF operator-(const QPointF &p1, const QPointF &p2)
+    { return QPointF(p1.xp - p2.xp, p1.yp - p2.yp); } +/
+    /+ friend constexpr inline QPointF operator*(const QPointF &p, qreal c)
+    { return QPointF(p.xp * c, p.yp * c); } +/
+    /+ friend constexpr inline QPointF operator*(qreal c, const QPointF &p)
+    { return QPointF(p.xp * c, p.yp * c); } +/
+    /+ friend constexpr inline QPointF operator+(const QPointF &p)
+    { return p; } +/
+    /+ friend constexpr inline QPointF operator-(const QPointF &p)
+    { return QPointF(-p.xp, -p.yp); } +/
+    /+ friend constexpr inline QPointF operator/(const QPointF &p, qreal divisor)
+    {
+        Q_ASSERT(divisor < 0 || divisor > 0);
+        return QPointF(p.xp / divisor, p.yp / divisor);
+    } +/
 
     pragma(inline, true) QPoint toPoint() const
     {
@@ -281,20 +326,39 @@ public:
 
     static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
-        /+ Q_REQUIRED_RESULT static QPointF fromCGPoint(CGPoint point) noexcept; +/
-        /+ Q_REQUIRED_RESULT CGPoint toCGPoint() const noexcept; +/
+        /+ [[nodiscard]] Q_CORE_EXPORT static QPointF fromCGPoint(CGPoint point) noexcept; +/
+        /+ [[nodiscard]] Q_CORE_EXPORT CGPoint toCGPoint() const noexcept; +/
     }
 
+    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const if(op == "+")
+    { return QPointF(xp+p2.xp, yp+p2.yp); }
+
+    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const if(op == "-")
+    { return QPointF(xp-p2.xp, yp-p2.yp); }
+
 private:
-    /+ friend class QMatrix; +/
     /+ friend class QTransform; +/
 
     qreal xp = 0;
     qreal yp = 0;
+
+    /+ template <std::size_t I,
+              typename P,
+              std::enable_if_t<(I < 2), bool> = true,
+              std::enable_if_t<std::is_same_v<std::decay_t<P>, QPointF>, bool> = true> +/
+    /+ friend constexpr decltype(auto) get(P &&p) noexcept
+    {
+        static if (I == 0)
+            return (std::forward<P>(p).xp);
+        else static if (I == 1)
+            return (std::forward<P>(p).yp);
+    } +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_TYPEINFO(QPointF, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QPointF, Q_PRIMITIVE_TYPE);
+
+size_t qHash(QPointF, size_t seed = 0) = delete;
 
 /*****************************************************************************
   QPointF stream functions
@@ -308,60 +372,28 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QPointF &);
   QPointF inline functions
  *****************************************************************************/
 
-QT_WARNING_PUSH
-QT_WARNING_DISABLE_CLANG("-Wfloat-equal")
-QT_WARNING_DISABLE_GCC("-Wfloat-equal")
-QT_WARNING_DISABLE_INTEL(1572) +/
-
-/+pragma(inline, true) bool operator ==(ref const(QPointF) p1, ref const(QPointF) p2)
-{
-    return ((!p1.xp || !p2.xp) ? qFuzzyIsNull(p1.xp - p2.xp) : qFuzzyCompare(p1.xp, p2.xp))
-        && ((!p1.yp || !p2.yp) ? qFuzzyIsNull(p1.yp - p2.yp) : qFuzzyCompare(p1.yp, p2.yp));
-}+/
-
-/+pragma(inline, true) bool operator !=(ref const(QPointF) p1, ref const(QPointF) p2)
-{
-    return !(p1 == p2);
-}+/
-
-/+ QT_WARNING_POP +/
-
-/+pragma(inline, true) const(QPointF) operator +(ref const(QPointF) p1, ref const(QPointF) p2)
-{
-    return QPointF(p1.xp+p2.xp, p1.yp+p2.yp);
-}+/
-
-/+pragma(inline, true) const(QPointF) operator -(ref const(QPointF) p1, ref const(QPointF) p2)
-{
-    return QPointF(p1.xp-p2.xp, p1.yp-p2.yp);
-}+/
-
-/+pragma(inline, true) const(QPointF) operator *(ref const(QPointF) p, qreal c)
-{
-    return QPointF(p.xp*c, p.yp*c);
-}+/
-
-/+pragma(inline, true) const(QPointF) operator *(qreal c, ref const(QPointF) p)
-{
-    return QPointF(p.xp*c, p.yp*c);
-}+/
-
-/+pragma(inline, true) const(QPointF) operator +(ref const(QPointF) p)
-{
-    return p;
-}+/
-
-/+pragma(inline, true) const(QPointF) operator -(ref const(QPointF) p)
-{
-    return QPointF(-p.xp, -p.yp);
-}+/
-
-/+pragma(inline, true) const(QPointF) operator /(ref const(QPointF) p, qreal divisor)
-{
-    return QPointF(p.xp/divisor, p.yp/divisor);
-}+/
-
-/+ #ifndef QT_NO_DEBUG_STREAM
+#ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug d, const QPointF &p);
-#endif +/
+#endif
+
+
+/*****************************************************************************
+  QPoint/QPointF tuple protocol
+ *****************************************************************************/
+
+namespace std {
+    template <>
+    class tuple_size<QT_PREPEND_NAMESPACE(QPoint)> : public integral_constant<size_t, 2> {};
+    template <>
+    class tuple_element<0, QT_PREPEND_NAMESPACE(QPoint)> { public: using type = int; };
+    template <>
+    class tuple_element<1, QT_PREPEND_NAMESPACE(QPoint)> { public: using type = int; };
+
+    template <>
+    class tuple_size<QT_PREPEND_NAMESPACE(QPointF)> : public integral_constant<size_t, 2> {};
+    template <>
+    class tuple_element<0, QT_PREPEND_NAMESPACE(QPointF)> { public: using type = QT_PREPEND_NAMESPACE(qreal); };
+    template <>
+    class tuple_element<1, QT_PREPEND_NAMESPACE(QPointF)> { public: using type = QT_PREPEND_NAMESPACE(qreal); };
+} +/
 

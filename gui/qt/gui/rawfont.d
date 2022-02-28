@@ -26,7 +26,6 @@ version(QT_NO_RAWFONT){}else
     import qt.core.shareddata;
     import qt.core.string;
     import qt.core.typeinfo;
-    import qt.core.vector;
     import qt.gui.font;
     import qt.gui.fontdatabase;
     import qt.gui.image;
@@ -40,8 +39,8 @@ version(QT_NO_RAWFONT){}else
 
 
 extern(C++, class) struct QRawFontPrivate;
-/// Binding for C++ class [QRawFont](https://doc.qt.io/qt-5/qrawfont.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRawFont
+/// Binding for C++ class [QRawFont](https://doc.qt.io/qt-6/qrawfont.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRawFont
 {
 public:
     enum AntialiasingType {
@@ -74,7 +73,7 @@ alias LayoutFlags = QFlags!(LayoutFlag);
                  QFont.HintingPreference hintingPreference = QFont.HintingPreference.PreferDefaultHinting);
     @disable this(this);
     this(ref const(QRawFont) other);
-    /+ QRawFont &operator=(QRawFont &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QRawFont) +/
     /+ref QRawFont operator =(ref const(QRawFont) other);+/
     ~this();
 
@@ -92,18 +91,19 @@ alias LayoutFlags = QFlags!(LayoutFlag);
     QFont.Style style() const;
     int weight() const;
 
-    QVector!(quint32) glyphIndexesForString(ref const(QString) text) const;
-    pragma(inline, true) QVector!(QPointF) advancesForGlyphIndexes(ref const(QVector!(quint32)) glyphIndexes) const
+    /+ QList!(quint32) glyphIndexesForString(ref const(QString) text) const;
+    pragma(inline, true) QList!(QPointF) advancesForGlyphIndexes(ref const(QList!(quint32)) glyphIndexes) const
     {
         return advancesForGlyphIndexes(glyphIndexes, QRawFont.LayoutFlags.SeparateAdvances);
     }
-    pragma(inline, true) QVector!(QPointF) advancesForGlyphIndexes(ref const(QVector!(quint32)) glyphIndexes, LayoutFlags layoutFlags) const
+    pragma(inline, true) QList!(QPointF) advancesForGlyphIndexes(ref const(QList!(quint32)) glyphIndexes,
+                                                      LayoutFlags layoutFlags) const
     {
-        auto advances = QVector!(QPointF)(glyphIndexes.size());
-        if (advancesForGlyphIndexes(cast(const(quint32)*)(glyphIndexes.constData()), advances.data(), glyphIndexes.size(), layoutFlags))
+        auto advances = QList!(QPointF)(glyphIndexes.size());
+        if (advancesForGlyphIndexes(glyphIndexes.constData(), advances.data(), glyphIndexes.size(), layoutFlags))
             return advances;
-        return QVector!(QPointF).create();
-    }
+        return QList!(QPointF)();
+    } +/
     bool glyphIndexesForChars(const(QChar)* chars, int numChars, quint32* glyphIndexes, int* numGlyphs) const;
     bool advancesForGlyphIndexes(const(quint32)* glyphIndexes, QPointF* advances, int numGlyphs) const;
     bool advancesForGlyphIndexes(const(quint32)* glyphIndexes, QPointF* advances, int numGlyphs, LayoutFlags layoutFlags) const;
@@ -158,12 +158,24 @@ private:
 }
 /+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator |(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/{return QFlags!(QRawFont.LayoutFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator |(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator &(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/{return QFlags!(QRawFont.LayoutFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator &(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QRawFont.LayoutFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QRawFont.LayoutFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QRawFont.LayoutFlags.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_SHARED(QRawFont)
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QRawFont::LayoutFlags)
-Q_GUI_EXPORT uint qHash(const QRawFont &font, uint seed = 0) noexcept; +/
+Q_GUI_EXPORT size_t qHash(const QRawFont &font, size_t seed = 0) noexcept; +/
 
 
 }

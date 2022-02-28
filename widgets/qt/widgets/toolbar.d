@@ -20,11 +20,10 @@ import qt.core.point;
 import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
+import qt.gui.action;
 import qt.gui.event;
 import qt.gui.icon;
 import qt.helpers;
-import qt.widgets.action;
-import qt.widgets.event;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
 
@@ -33,14 +32,17 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QToolBarPrivate;
 
-/// Binding for C++ class [QToolBar](https://doc.qt.io/qt-5/qtoolbar.html).
+
+/// Binding for C++ class [QToolBar](https://doc.qt.io/qt-6/qtoolbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QToolBar : QWidget
 {
     mixin(Q_OBJECT);
 
     /+ Q_PROPERTY(bool movable READ isMovable WRITE setMovable NOTIFY movableChanged)
-    Q_PROPERTY(Qt::ToolBarAreas allowedAreas READ allowedAreas WRITE setAllowedAreas NOTIFY allowedAreasChanged)
-    Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
+    Q_PROPERTY(Qt::ToolBarAreas allowedAreas READ allowedAreas WRITE setAllowedAreas
+               NOTIFY allowedAreasChanged)
+    Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation
+               NOTIFY orientationChanged)
     Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged)
     Q_PROPERTY(Qt::ToolButtonStyle toolButtonStyle READ toolButtonStyle WRITE setToolButtonStyle
                NOTIFY toolButtonStyleChanged)
@@ -165,7 +167,7 @@ protected:
     override void changeEvent(QEvent event);
     override void paintEvent(QPaintEvent event);
     override bool event(QEvent event);
-    final void initStyleOption(QStyleOptionToolBar* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionToolBar* option) const;
 
 
 private:

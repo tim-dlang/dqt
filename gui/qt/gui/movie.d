@@ -17,6 +17,7 @@ import qt.core.bytearray;
 import qt.core.iodevice;
 import qt.core.list;
 import qt.core.object;
+import qt.core.property;
 import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
@@ -31,13 +32,13 @@ import qt.helpers;
 
 
 extern(C++, class) struct QMoviePrivate;
-/// Binding for C++ class [QMovie](https://doc.qt.io/qt-5/qmovie.html).
+/// Binding for C++ class [QMovie](https://doc.qt.io/qt-6/qmovie.html).
 class /+ Q_GUI_EXPORT +/ QMovie : QObject
 {
     mixin(Q_OBJECT);
     /+ Q_DECLARE_PRIVATE(QMovie) +/
-    /+ Q_PROPERTY(int speed READ speed WRITE setSpeed)
-    Q_PROPERTY(CacheMode cacheMode READ cacheMode WRITE setCacheMode) +/
+    /+ Q_PROPERTY(int speed READ speed WRITE setSpeed BINDABLE bindableSpeed)
+    Q_PROPERTY(CacheMode cacheMode READ cacheMode WRITE setCacheMode BINDABLE bindableCacheMode) +/
 public:
     enum MovieState {
         NotRunning,
@@ -87,12 +88,14 @@ public:
     final int currentFrameNumber() const;
 
     final int speed() const;
+    final QBindable!(int) bindableSpeed();
 
     final QSize scaledSize();
     final void setScaledSize(ref const(QSize) size);
 
     final CacheMode cacheMode() const;
     final void setCacheMode(CacheMode mode);
+    final QBindable!(CacheMode) bindableCacheMode();
 
 /+ Q_SIGNALS +/public:
     @QSignal final void started();

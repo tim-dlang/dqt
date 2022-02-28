@@ -33,7 +33,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QTableViewPrivate;
 
-/// Binding for C++ class [QTableView](https://doc.qt.io/qt-5/qtableview.html).
+/// Binding for C++ class [QTableView](https://doc.qt.io/qt-6/qtableview.html).
 class /+ Q_WIDGETS_EXPORT +/ QTableView : QAbstractItemView
 {
     mixin(Q_OBJECT);
@@ -114,10 +114,6 @@ public /+ Q_SLOTS +/:
     @QSlot final void resizeRowsToContents();
     @QSlot final void resizeColumnToContents(int column);
     @QSlot final void resizeColumnsToContents();
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X ("Use QTableView::sortByColumn(int column, Qt::SortOrder order) instead") +/
-        @QSlot final void sortByColumn(int column);
-/+ #endif +/
     @QSlot final void sortByColumn(int column, /+ Qt:: +/qt.core.namespace.SortOrder order);
     @QSlot final void setShowGrid(bool show);
 
@@ -133,7 +129,7 @@ protected:
     this(ref QTableViewPrivate , QWidget parent);
     override void scrollContentsBy(int dx, int dy);
 
-    override QStyleOptionViewItem viewOptions() const;
+    override void initViewItemOption(QStyleOptionViewItem* option) const;
     override void paintEvent(QPaintEvent e);
 
     override void timerEvent(QTimerEvent event);

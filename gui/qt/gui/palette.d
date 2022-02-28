@@ -24,8 +24,8 @@ import qt.helpers;
 
 extern(C++, class) struct QPalettePrivate;
 
-/// Binding for C++ class [QPalette](https://doc.qt.io/qt-5/qpalette.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPalette
+/// Binding for C++ class [QPalette](https://doc.qt.io/qt-6/qpalette.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPalette
 {
     mixin(Q_GADGET);
 public:
@@ -52,18 +52,14 @@ public:
     ~this();
     /+ref QPalette operator =(ref const(QPalette) palette);+/
     /+ QPalette(QPalette &&other) noexcept
-        : d(other.d), data(other.data)
-    { other.d = nullptr; } +/
-    /+ inline QPalette &operator=(QPalette &&other) noexcept
-    {
-        for_faster_swapping_dont_use = other.for_faster_swapping_dont_use;
-        qSwap(d, other.d); return *this;
-    } +/
+        : d(qExchange(other.d, nullptr)), currentGroup(other.currentGroup)
+    {} +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPalette) +/
 
     /+ void swap(QPalette &other) noexcept
     {
+        qSwap(currentGroup, other.currentGroup);
         qSwap(d, other.d);
-        qSwap(for_faster_swapping_dont_use, other.for_faster_swapping_dont_use);
     } +/
 
     /+auto opCast(T : QVariant)() const;+/
@@ -80,15 +76,11 @@ public:
                      ToolTipBase, ToolTipText,
                      PlaceholderText,
                      NColorRoles = ColorRole.PlaceholderText + 1,
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-                     Foreground /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Use QPalette::WindowText instead") +/ = ColorRole.WindowText,
-                     Background /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Use QPalette::Window instead") +/ = ColorRole.Window
-/+ #endif +/
                    }
     /+ Q_ENUM(ColorRole) +/
 
-    pragma(inline, true) ColorGroup currentColorGroup() const { return static_cast!(ColorGroup)(data.current_group); }
-    pragma(inline, true) void setCurrentColorGroup(ColorGroup cg) { data.current_group = cg; }
+    pragma(inline, true) ColorGroup currentColorGroup() const { return currentGroup; }
+    pragma(inline, true) void setCurrentColorGroup(ColorGroup cg) { currentGroup = cg; }
 
     pragma(inline, true) ref const(QColor) color(ColorGroup cg, ColorRole cr) const
     { return brush(cg, cr).color(); }
@@ -129,25 +121,18 @@ public:
     pragma(inline, true) ref const(QBrush) link() const { return brush(ColorRole.Link); }
     pragma(inline, true) ref const(QBrush) linkVisited() const { return brush(ColorRole.LinkVisited); }
     pragma(inline, true) ref const(QBrush) placeholderText() const { return brush(ColorRole.PlaceholderText); }
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use QPalette::windowText() instead") +/
-        pragma(inline, true) ref const(QBrush) foreground() const { return windowText(); }
-    /+ QT_DEPRECATED_X("Use QPalette::window() instead") +/
-        pragma(inline, true) ref const(QBrush) background() const { return window(); }
-/+ #endif +/
 
     /+bool operator ==(ref const(QPalette) p) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QPalette) p) const { return !(operator==(p)); }+/
     bool isCopyOf(ref const(QPalette) p) const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    QT_DEPRECATED inline int serialNumber() const { return cacheKey() >> 32; }
-#endif +/
     qint64 cacheKey() const;
 
-    QPalette resolve(ref const(QPalette) ) const;
-    pragma(inline, true) uint resolve() const { return data.resolve_mask; }
-    pragma(inline, true) void resolve(uint mask) { data.resolve_mask = mask; }
+    QPalette resolve(ref const(QPalette) other) const;
+
+    alias ResolveMask = quint64;
+    ResolveMask resolveMask() const;
+    void setResolveMask(ResolveMask mask);
 
 private:
     void setColorGroup(ColorGroup cr, ref const(QBrush) windowText, ref const(QBrush) button,
@@ -171,33 +156,8 @@ private:
     void detach();
 
     QPalettePrivate* d;
-    struct Data {
-        /+ uint current_group : 4; +/
-        uint bitfieldData_current_group;
-        final uint current_group() const
-        {
-            return (bitfieldData_current_group >> 0) & 0xf;
-        }
-        final uint current_group(uint value)
-        {
-            bitfieldData_current_group = (bitfieldData_current_group & ~0xf) | ((value & 0xf) << 0);
-            return value;
-        }
-        /+ uint resolve_mask : 28; +/
-        final uint resolve_mask() const
-        {
-            return (bitfieldData_current_group >> 4) & 0xfffffff;
-        }
-        final uint resolve_mask(uint value)
-        {
-            bitfieldData_current_group = (bitfieldData_current_group & ~0xfffffff0) | ((value & 0xfffffff) << 4);
-            return value;
-        }
-    }
-    union {
-        Data data;
-        quint32 for_faster_swapping_dont_use;
-    }
+    ColorGroup currentGroup = ColorGroup(ColorGroup.Active);
+
     /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &s, const QPalette &p); +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }

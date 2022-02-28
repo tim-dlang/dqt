@@ -250,7 +250,7 @@ template globalInitVar(T)
     else static if(__traits(compiles, {T x;}))
         immutable __gshared T globalInitVar/* = immutable(T).init*/;
     else
-        static assert(false, T.stringof);
+        static assert(false, typeof({T x;}));
 }
 
 private struct FunctionManglingCpp
@@ -277,7 +277,7 @@ version(Windows)
             if(mangling[i] == '_')
             {
                 enforce(i + 1 < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
-                if(mangling[i + 1] == 'N')
+                if((mangling[i + 1] >= 'D' && mangling[i + 1] <= 'N') || mangling[i + 1] == 'Q' || mangling[i + 1] == 'S' || mangling[i + 1] == 'U' || mangling[i + 1] == 'W')
                 {
                     // basic types
                     i += 2;
@@ -379,6 +379,11 @@ version(Windows)
                     {
                         break;
                     }
+                    else if(i + 1 < mangling.length && mangling[i] >= '0' && mangling[i] <= '9' && mangling[i + 1] == '@')
+                    {
+                        i += 2;
+                        break;
+                    }
                     else
                     {
                         enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
@@ -411,6 +416,11 @@ version(Windows)
                 {
                     enforce(i + 1 < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
                     enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                    if(mangling[i] >= '0' && mangling[i] <= '9' && mangling[i + 1] == '@')
+                    {
+                        i += 2;
+                        break;
+                    }
                     if(mangling[i] == '@' && mangling[i + 1] == '@')
                     {
                         i += 2;
@@ -1184,8 +1194,8 @@ enum CREATE_CONVENIENCE_WRAPPERS = q{
     }
 };
 
-package alias parentOf(alias sym) = __traits(parent, sym);
-package alias parentOf(alias sym : T!Args, alias T, Args...) = __traits(parent, T);
+private alias parentOf(alias sym) = __traits(parent, sym);
+private alias parentOf(alias sym : T!Args, alias T, Args...) = __traits(parent, T);
 
 // Like std.traits.packageName, but allows modules without package.
 package template packageName(alias T)

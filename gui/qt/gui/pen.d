@@ -14,10 +14,10 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
+import qt.core.list;
 import qt.core.namespace;
 import qt.core.typeinfo;
 import qt.core.variant;
-import qt.core.vector;
 import qt.gui.brush;
 import qt.gui.color;
 import qt.helpers;
@@ -29,8 +29,8 @@ Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPen &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPen &);
 #endif +/
 
-/// Binding for C++ class [QPen](https://doc.qt.io/qt-5/qpen.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPen
+/// Binding for C++ class [QPen](https://doc.qt.io/qt-6/qpen.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPen
 {
 public:
     @disable this();
@@ -54,16 +54,15 @@ public:
 
     /+ref QPen operator =(ref const(QPen) pen)/+ noexcept+/;+/
     /+ QPen(QPen &&other) noexcept
-        : d(other.d) { other.d = nullptr; } +/
-    /+ QPen &operator=(QPen &&other) noexcept
-    { qSwap(d, other.d); return *this; } +/
+        : d(qExchange(other.d, nullptr)) {} +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPen) +/
     /+ void swap(QPen &other) noexcept { qSwap(d, other.d); } +/
 
     /+ Qt:: +/qt.core.namespace.PenStyle style() const;
     void setStyle(/+ Qt:: +/qt.core.namespace.PenStyle);
 
-    QVector!(qreal) dashPattern() const;
-    void setDashPattern(ref const(QVector!(qreal)) pattern);
+    QList!(qreal) dashPattern() const;
+    void setDashPattern(ref const(QList!(qreal)) pattern);
 
     qreal dashOffset() const;
     void setDashOffset(qreal doffset);

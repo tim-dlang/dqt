@@ -25,14 +25,13 @@ version(QT_NO_CLIPBOARD)
 extern(C++, class) struct QClipboard;
 }
 
-
 alias QWindowList = QList!(QWindow*);
 
 
 // Window system dependent definitions
 
 
-/+ #if defined(Q_OS_WIN)
+/+ #if defined(Q_OS_WIN) || defined(Q_QDOC)
 #endif +/ // Q_OS_WIN
 
 
@@ -44,8 +43,6 @@ alias QWindowList = QList!(QWindow*);
 
 
 /+ typedef QHash<WId, QWidget *> QWidgetMapper;
-
-template<class V> class QSet;
 typedef QSet<QWidget *> QWidgetSet;
 
 

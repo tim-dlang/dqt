@@ -19,6 +19,7 @@ import qt.core.coreevent;
 import qt.core.global;
 import qt.core.list;
 import qt.core.namespace;
+import qt.core.nativeinterface;
 import qt.core.object;
 import qt.core.point;
 import qt.core.string;
@@ -50,16 +51,19 @@ extern(C++, class) struct QPlatformIntegration;
 #endif
 #define qGuiApp (static_cast<QGuiApplication *>(QCoreApplication::instance())) +/
 
-/// Binding for C++ class [QGuiApplication](https://doc.qt.io/qt-5/qguiapplication.html).
+/// Binding for C++ class [QGuiApplication](https://doc.qt.io/qt-6/qguiapplication.html).
 class /+ Q_GUI_EXPORT +/ QGuiApplication : QCoreApplication
 {
     mixin(Q_OBJECT);
     /+ Q_PROPERTY(QIcon windowIcon READ windowIcon WRITE setWindowIcon)
-    Q_PROPERTY(QString applicationDisplayName READ applicationDisplayName WRITE setApplicationDisplayName NOTIFY applicationDisplayNameChanged)
+    Q_PROPERTY(QString applicationDisplayName READ applicationDisplayName
+               WRITE setApplicationDisplayName NOTIFY applicationDisplayNameChanged)
     Q_PROPERTY(QString desktopFileName READ desktopFileName WRITE setDesktopFileName)
-    Q_PROPERTY(Qt::LayoutDirection layoutDirection READ layoutDirection WRITE setLayoutDirection NOTIFY layoutDirectionChanged)
+    Q_PROPERTY(Qt::LayoutDirection layoutDirection READ layoutDirection WRITE setLayoutDirection
+               NOTIFY layoutDirectionChanged)
     Q_PROPERTY(QString platformName READ platformName STORED false)
-    Q_PROPERTY(bool quitOnLastWindowClosed  READ quitOnLastWindowClosed WRITE setQuitOnLastWindowClosed)
+    Q_PROPERTY(bool quitOnLastWindowClosed  READ quitOnLastWindowClosed
+               WRITE setQuitOnLastWindowClosed)
     Q_PROPERTY(QScreen *primaryScreen READ primaryScreen NOTIFY primaryScreenChanged STORED false) +/
 
 public:
@@ -155,10 +159,9 @@ public:
         final QString sessionId() const;
         final QString sessionKey() const;
         final bool isSavingSession() const;
-
-        static bool isFallbackSessionManagementEnabled();
-        static void setFallbackSessionManagementEnabled(bool);
     }
+
+    mixin(QT_DECLARE_NATIVE_INTERFACE_ACCESSOR(q{ValueClass!(QGuiApplication)}));
 
     static void sync();
 /+ Q_SIGNALS +/public:
@@ -176,10 +179,11 @@ public:
         @QSignal final void commitDataRequest(ref QSessionManager sessionManager);
         @QSignal final void saveStateRequest(ref QSessionManager sessionManager);
     }
-    @QSignal final void paletteChanged(ref const(QPalette) pal);
     @QSignal final void applicationDisplayNameChanged();
-    @QSignal final void fontChanged(ref const(QFont) font);
-
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Handle QEvent::ApplicationPaletteChange instead") +/ @QSignal final void paletteChanged(ref const(QPalette) pal);
+    /+ QT_DEPRECATED_VERSION_X_6_0("Handle QEvent::ApplicationFontChange instead") +/  @QSignal final void fontChanged(ref const(QFont) font);
+/+ #endif +/
 protected:
     override bool event(QEvent );
     override bool compressEvent(QEvent , QObject receiver, QPostEventList* );

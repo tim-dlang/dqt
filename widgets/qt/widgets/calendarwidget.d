@@ -32,7 +32,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QCalendarWidgetPrivate;
 
-/// Binding for C++ class [QCalendarWidget](https://doc.qt.io/qt-5/qcalendarwidget.html).
+/// Binding for C++ class [QCalendarWidget](https://doc.qt.io/qt-6/qcalendarwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QCalendarWidget : QWidget
 {
     mixin(Q_OBJECT);
@@ -43,8 +43,10 @@ class /+ Q_WIDGETS_EXPORT +/ QCalendarWidget : QWidget
     Q_PROPERTY(Qt::DayOfWeek firstDayOfWeek READ firstDayOfWeek WRITE setFirstDayOfWeek)
     Q_PROPERTY(bool gridVisible READ isGridVisible WRITE setGridVisible)
     Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode)
-    Q_PROPERTY(HorizontalHeaderFormat horizontalHeaderFormat READ horizontalHeaderFormat WRITE setHorizontalHeaderFormat)
-    Q_PROPERTY(VerticalHeaderFormat verticalHeaderFormat READ verticalHeaderFormat WRITE setVerticalHeaderFormat)
+    Q_PROPERTY(HorizontalHeaderFormat horizontalHeaderFormat READ horizontalHeaderFormat
+               WRITE setHorizontalHeaderFormat)
+    Q_PROPERTY(VerticalHeaderFormat verticalHeaderFormat READ verticalHeaderFormat
+               WRITE setVerticalHeaderFormat)
     Q_PROPERTY(bool navigationBarVisible READ isNavigationBarVisible WRITE setNavigationBarVisible)
     Q_PROPERTY(bool dateEditEnabled READ isDateEditEnabled WRITE setDateEditEnabled)
     Q_PROPERTY(int dateEditAcceptDelay READ dateEditAcceptDelay WRITE setDateEditAcceptDelay) +/
@@ -82,10 +84,10 @@ public:
     final int monthShown() const;
 
     final QDate minimumDate() const;
-    final void setMinimumDate(ref const(QDate) date);
+    final void setMinimumDate(QDate date);
 
     final QDate maximumDate() const;
-    final void setMaximumDate(ref const(QDate) date);
+    final void setMaximumDate(QDate date);
 
     final /+ Qt:: +/qt.core.namespace.DayOfWeek firstDayOfWeek() const;
     final void setFirstDayOfWeek(/+ Qt:: +/qt.core.namespace.DayOfWeek dayOfWeek);
@@ -111,9 +113,9 @@ public:
     final QTextCharFormat weekdayTextFormat(/+ Qt:: +/qt.core.namespace.DayOfWeek dayOfWeek) const;
     final void setWeekdayTextFormat(/+ Qt:: +/qt.core.namespace.DayOfWeek dayOfWeek, ref const(QTextCharFormat) format);
 
-//    final QMap!(QDate, QTextCharFormat) dateTextFormat() const;
-    final QTextCharFormat dateTextFormat(ref const(QDate) date) const;
-    final void setDateTextFormat(ref const(QDate) date, ref const(QTextCharFormat) format);
+    final QMap!(QDate, QTextCharFormat) dateTextFormat() const;
+    final QTextCharFormat dateTextFormat(QDate date) const;
+    final void setDateTextFormat(QDate date, ref const(QTextCharFormat) format);
 
     final bool isDateEditEnabled() const;
     final void setDateEditEnabled(bool enable);
@@ -128,13 +130,13 @@ protected:
     override void resizeEvent(QResizeEvent  event);
     override void keyPressEvent(QKeyEvent  event);
 
-    /+ virtual +/ void paintCell(QPainter* painter, ref const(QRect) rect, ref const(QDate) date) const;
-    final void updateCell(ref const(QDate) date);
+    /+ virtual +/ void paintCell(QPainter* painter, ref const(QRect) rect, QDate date) const;
+    final void updateCell(QDate date);
     final void updateCells();
 
 public /+ Q_SLOTS +/:
-    @QSlot final void setSelectedDate(ref const(QDate) date);
-    @QSlot final void setDateRange(ref const(QDate) min, ref const(QDate) max);
+    @QSlot final void setSelectedDate(QDate date);
+    @QSlot final void setDateRange(QDate min, QDate max);
     @QSlot final void setCurrentPage(int year, int month);
     @QSlot final void setGridVisible(bool show);
     @QSlot final void setNavigationBarVisible(bool visible);
@@ -147,17 +149,17 @@ public /+ Q_SLOTS +/:
 
 /+ Q_SIGNALS +/public:
     @QSignal final void selectionChanged();
-    @QSignal final void clicked(ref const(QDate) date);
-    @QSignal final void activated(ref const(QDate) date);
+    @QSignal final void clicked(QDate date);
+    @QSignal final void activated(QDate date);
     @QSignal final void currentPageChanged(int year, int month);
 
 private:
     /+ Q_DECLARE_PRIVATE(QCalendarWidget) +/
     /+ Q_DISABLE_COPY(QCalendarWidget) +/
 
-    /+ Q_PRIVATE_SLOT(d_func(), void _q_slotShowDate(const QDate &date))
-    Q_PRIVATE_SLOT(d_func(), void _q_slotChangeDate(const QDate &date))
-    Q_PRIVATE_SLOT(d_func(), void _q_slotChangeDate(const QDate &date, bool changeMonth))
+    /+ Q_PRIVATE_SLOT(d_func(), void _q_slotShowDate(QDate date))
+    Q_PRIVATE_SLOT(d_func(), void _q_slotChangeDate(QDate date))
+    Q_PRIVATE_SLOT(d_func(), void _q_slotChangeDate(QDate date, bool changeMonth))
     Q_PRIVATE_SLOT(d_func(), void _q_editingFinished())
     Q_PRIVATE_SLOT(d_func(), void _q_prevMonthClicked())
     Q_PRIVATE_SLOT(d_func(), void _q_nextMonthClicked())

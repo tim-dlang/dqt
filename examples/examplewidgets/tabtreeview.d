@@ -69,7 +69,7 @@ public:
     {
         RandomTreeItem* item = getItem(parent);
         if(item)
-            return item.childs.length();
+            return cast(int)item.childs.length();
         return 0;
     }
     extern(C++) override QVariant data(ref const(QModelIndex) index, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) const

@@ -13,13 +13,13 @@ module qt.gui.abstracttextdocumentlayout;
 extern(C++):
 
 import qt.config;
+import qt.core.list;
 import qt.core.namespace;
 import qt.core.object;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
-import qt.core.vector;
 import qt.gui.paintdevice;
 import qt.gui.painter;
 import qt.gui.palette;
@@ -32,7 +32,7 @@ import qt.helpers;
 
 extern(C++, class) struct QAbstractTextDocumentLayoutPrivate;
 
-/// Binding for C++ class [QAbstractTextDocumentLayout](https://doc.qt.io/qt-5/qabstracttextdocumentlayout.html).
+/// Binding for C++ class [QAbstractTextDocumentLayout](https://doc.qt.io/qt-6/qabstracttextdocumentlayout.html).
 abstract class /+ Q_GUI_EXPORT +/ QAbstractTextDocumentLayout : QObject
 {
     mixin(Q_OBJECT);
@@ -56,7 +56,7 @@ public:
         int cursorPosition = -1;
         QPalette palette;
         QRectF clip;
-        QVector!(Selection) selections;
+        QList!(Selection) selections;
     }
 
     /+ virtual +/ abstract void draw(QPainter* painter, ref const(PaintContext) context);
@@ -117,7 +117,7 @@ private:
 /+ Q_DECLARE_TYPEINFO(QAbstractTextDocumentLayout::Selection,    Q_RELOCATABLE_TYPE);
 Q_DECLARE_TYPEINFO(QAbstractTextDocumentLayout::PaintContext, Q_RELOCATABLE_TYPE); +/
 
-/// Binding for C++ class [QTextObjectInterface](https://doc.qt.io/qt-5/qtextobjectinterface.html).
+/// Binding for C++ class [QTextObjectInterface](https://doc.qt.io/qt-6/qtextobjectinterface.html).
 abstract class /+ Q_GUI_EXPORT +/ QTextObjectInterface
 {
 public:

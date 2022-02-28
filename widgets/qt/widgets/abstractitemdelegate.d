@@ -15,13 +15,10 @@ extern(C++):
 import qt.config;
 import qt.core.abstractitemmodel;
 import qt.core.coreevent;
-import qt.core.namespace;
+import qt.core.list;
 import qt.core.object;
 import qt.core.size;
-import qt.core.string;
-import qt.core.vector;
 import qt.gui.event;
-import qt.gui.fontmetrics;
 import qt.gui.painter;
 import qt.helpers;
 import qt.widgets.abstractitemview;
@@ -33,7 +30,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QAbstractItemDelegatePrivate;
 
-/// Binding for C++ class [QAbstractItemDelegate](https://doc.qt.io/qt-5/qabstractitemdelegate.html).
+/// Binding for C++ class [QAbstractItemDelegate](https://doc.qt.io/qt-6/qabstractitemdelegate.html).
 abstract class /+ Q_WIDGETS_EXPORT +/ QAbstractItemDelegate : QObject
 {
     mixin(Q_OBJECT);
@@ -84,18 +81,12 @@ public:
                                  ref const(QStyleOptionViewItem) option,
                                  ref const(QModelIndex) index);
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use QFontMetrics::elidedText() instead") +/
-        static QString elidedText(ref const(QFontMetrics) fontMetrics, int width,
-                                  /+ Qt:: +/qt.core.namespace.TextElideMode mode, ref const(QString) text);
-/+ #endif +/
-
     /+ virtual +/ bool helpEvent(QHelpEvent event,
                                QAbstractItemView view,
                                ref const(QStyleOptionViewItem) option,
                                ref const(QModelIndex) index);
 
-    /+ virtual +/ QVector!(int) paintingRoles() const;
+    /+ virtual +/ QList!(int) paintingRoles() const;
 
 /+ Q_SIGNALS +/public:
     @QSignal final void commitData(QWidget editor);

@@ -13,10 +13,10 @@ module qt.core.basicatomic;
 extern(C++):
 
 import core.atomic;
+import core.stdc.config;
 import qt.config;
+import qt.core.typeinfo;
 import qt.helpers;
-version(D_LP64)
-    import core.stdc.config;
 
 /+ #ifndef QBASICATOMIC_H +/
 /+ #define QBASICATOMIC_H
@@ -25,9 +25,7 @@ version(D_LP64)
 // If C++11 atomics are supported, use them!
 // Note that constexpr support is sometimes disabled in QNX or INTEGRITY builds,
 // but their libraries have <atomic>.
-#elif defined(Q_COMPILER_ATOMICS) && (defined(Q_COMPILER_CONSTEXPR) || defined(Q_OS_QNX) || defined(Q_OS_INTEGRITY))
-// We only support one fallback: MSVC, because even on version 2015, it lacks full constexpr support
-#elif defined(Q_CC_MSVC)
+#elif defined(Q_COMPILER_ATOMICS)
 // No fallback
 #else
 #  error "Qt requires C++11 support"
@@ -45,16 +43,7 @@ QT_WARNING_DISABLE_MSVC(4522)
 
 // New atomics
 
-#if defined(Q_COMPILER_CONSTEXPR)
-# if defined(Q_CC_CLANG) && Q_CC_CLANG < 303
-   /*
-      Do not define QT_BASIC_ATOMIC_HAS_CONSTRUCTORS for Clang before version 3.3.
-      For details about the bug: see http://llvm.org/bugs/show_bug.cgi?id=12670
-    */
-# else
-#  define QT_BASIC_ATOMIC_HAS_CONSTRUCTORS
-# endif
-#endif +/
+#define QT_BASIC_ATOMIC_HAS_CONSTRUCTORS +/
 
 extern(C++, class) struct QBasicAtomicInteger(T)
 {
@@ -62,16 +51,13 @@ public:
     alias Type = T;
     //alias Ops = QAtomicOps!(T);
     // static check that this is a valid integer
-    /+ Q_STATIC_ASSERT_X(QTypeInfo<T>::isIntegral, "template parameter is not an integral type") +/
-    // /+ Q_STATIC_ASSERT_X(QAtomicOpsSupport<sizeof(T)>::IsSupported, "template parameter is an integral of a size not supported on this platform") +/static assert(cast(bool)(QAtomicOpsSupport!(T.sizeof).IsSupported),"template parameter is an integral of a size not supported on this platform");
+    static assert(QTypeInfo!(T).isIntegral, "template parameter is not an integral type");
+//    static assert(QAtomicOpsSupport!(T.sizeof).IsSupported, "template parameter is an integral of a size not supported on this platform");
 
     Type _q_value;
 
-    // Everything below is either implemented in ../arch/qatomic_XXX.h or (as fallback) in qgenericatomic.h
-/+ #if QT_DEPRECATED_SINCE(5, 14) +/
-//    /+ QT_DEPRECATED_VERSION_X_5_14("Use loadRelaxed") +/ T load() const/+ noexcept+/ { return loadRelaxed(); }
-//    /+ QT_DEPRECATED_VERSION_X_5_14("Use storeRelaxed") +/ void store(T newValue)/+ noexcept+/ { storeRelaxed(newValue); }
-/+ #endif +/
+    // Everything below is either implemented in ../arch/qatomic_XXX.h or (as
+    // fallback) in qgenericatomic.h
 
     T loadRelaxed() const/+ noexcept+/
     {
@@ -221,11 +207,6 @@ public:
 
     AtomicType _q_value;
 
-#if QT_DEPRECATED_SINCE(5, 14)
-    QT_DEPRECATED_VERSION_X_5_14("Use loadRelaxed") Type load() const noexcept { return loadRelaxed(); }
-    QT_DEPRECATED_VERSION_X_5_14("Use storeRelaxed") void store(Type newValue) noexcept { storeRelaxed(newValue); }
-#endif
-
     Type loadRelaxed() const noexcept { return Ops::loadRelaxed(_q_value); }
     void storeRelaxed(Type newValue) noexcept { Ops::storeRelaxed(_q_value, newValue); }
 
@@ -236,8 +217,8 @@ public:
     Type loadAcquire() const noexcept { return Ops::loadAcquire(_q_value); }
     void storeRelease(Type newValue) noexcept { Ops::storeRelease(_q_value, newValue); }
 
-    static bool isTestAndSetNative() noexcept { return Ops::isTestAndSetNative(); }
-    static bool isTestAndSetWaitFree() noexcept { return Ops::isTestAndSetWaitFree(); }
+    static constexpr bool isTestAndSetNative() noexcept { return Ops::isTestAndSetNative(); }
+    static constexpr bool isTestAndSetWaitFree() noexcept { return Ops::isTestAndSetWaitFree(); }
 
     bool testAndSetRelaxed(Type expectedValue, Type newValue) noexcept
     { return Ops::testAndSetRelaxed(_q_value, expectedValue, newValue); }
@@ -257,8 +238,8 @@ public:
     bool testAndSetOrdered(Type expectedValue, Type newValue, Type &currentValue) noexcept
     { return Ops::testAndSetOrdered(_q_value, expectedValue, newValue, &currentValue); }
 
-    static bool isFetchAndStoreNative() noexcept { return Ops::isFetchAndStoreNative(); }
-    static bool isFetchAndStoreWaitFree() noexcept { return Ops::isFetchAndStoreWaitFree(); }
+    static constexpr bool isFetchAndStoreNative() noexcept { return Ops::isFetchAndStoreNative(); }
+    static constexpr bool isFetchAndStoreWaitFree() noexcept { return Ops::isFetchAndStoreWaitFree(); }
 
     Type fetchAndStoreRelaxed(Type newValue) noexcept
     { return Ops::fetchAndStoreRelaxed(_q_value, newValue); }
@@ -269,8 +250,8 @@ public:
     Type fetchAndStoreOrdered(Type newValue) noexcept
     { return Ops::fetchAndStoreOrdered(_q_value, newValue); }
 
-    static bool isFetchAndAddNative() noexcept { return Ops::isFetchAndAddNative(); }
-    static bool isFetchAndAddWaitFree() noexcept { return Ops::isFetchAndAddWaitFree(); }
+    static constexpr bool isFetchAndAddNative() noexcept { return Ops::isFetchAndAddNative(); }
+    static constexpr bool isFetchAndAddWaitFree() noexcept { return Ops::isFetchAndAddWaitFree(); }
 
     Type fetchAndAddRelaxed(qptrdiff valueToAdd) noexcept
     { return Ops::fetchAndAddRelaxed(_q_value, valueToAdd); }

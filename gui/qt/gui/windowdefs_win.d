@@ -42,8 +42,12 @@ import qt.helpers;
 #ifndef HINSTANCE +/
 struct HINSTANCE__;
 /+ Q_DECLARE_HANDLE(HINSTANCE) +/alias HINSTANCE = HINSTANCE__*;
-/+ #endif
-#ifndef HDC +/
+/+ #endif +/
+static if(!defined!"HMODULE")
+{
+alias HMODULE = HINSTANCE;
+}
+/+ #ifndef HDC +/
 struct HDC__;
 /+ Q_DECLARE_HANDLE(HDC) +/alias HDC = HDC__*;
 /+ #endif
@@ -85,8 +89,13 @@ struct HRGN__;
 #ifndef HMONITOR +/
 struct HMONITOR__;
 /+ Q_DECLARE_HANDLE(HMONITOR) +/alias HMONITOR = HMONITOR__*;
-/+ #endif
-#ifndef _HRESULT_DEFINED +/
+/+ #endif +/
+static if(!defined!"HGLRC")
+{
+struct HGLRC__;
+/+ Q_DECLARE_HANDLE(HGLRC) +/alias HGLRC = HGLRC__*;
+}
+/+ #ifndef _HRESULT_DEFINED +/
 alias HRESULT = cpp_long;
 /+ #endif +/
 

@@ -52,49 +52,41 @@ template QTypeInfo(T)
     {
         enum isRelocatable = true;
         enum isComplex = false;
-        enum isStatic = false;
     }
-    else static if(is(T == int) || is(T == uint) || is(T == double) || is(T == char))
+    else static if(is(T == int) || is(T == uint) || is(T == double))
     {
         enum isRelocatable = true;
         enum isComplex = false;
-        enum isStatic = false;
     }
     else static if(is(T == void))
     {
         enum isRelocatable = false;
         enum isComplex = false;
-        enum isStatic = false;
     }
     else static if(is(T == enum))
     {
         enum isRelocatable = true;
         enum isComplex = false;
-        enum isStatic = true;
     }
-    else static if(fullyQualifiedName!T.startsWith("qt.core.pair.QPair!"))
+    else static if(fullyQualifiedName!T.startsWith("qt.core.pair.pair!"))
     {
         enum isRelocatable = QTypeInfo!(T.first_type).isRelocatable && QTypeInfo!(T.second_type).isRelocatable;
         enum isComplex = QTypeInfo!(T.first_type).isComplex || QTypeInfo!(T.second_type).isComplex;
-        enum isStatic = QTypeInfo!(T.first_type).isStatic || QTypeInfo!(T.second_type).isStatic;
     }
     else static if(fullyQualifiedName!T.startsWith("qt.core.list.QList!") || fullyQualifiedName!T.startsWith("qt.core.vector.QVector!"))
     {
         enum isRelocatable = true;
         enum isComplex = true;
-        enum isStatic = false;
     }
     else static if(fullyQualifiedName!T.startsWith("qt.core.flags.QFlags!"))
     {
         enum isRelocatable = true;
         enum isComplex = false;
-        enum isStatic = false;
     }
     else static if(qIsTrivial!T)
     {
         enum isRelocatable = qIsRelocatable!T;
         enum isComplex = !qIsTrivial!T;
-        enum isStatic = true;
     }
     else static if(getUDAs!(T, QTypeInfoFlags).length)
     {
@@ -107,17 +99,17 @@ template QTypeInfo(T)
             return r;
         }();
         enum isComplex = (combinedFlags & Q_PRIMITIVE_TYPE) == 0 && !qIsTrivial!T;
-        enum isStatic = (combinedFlags & (Q_MOVABLE_TYPE | Q_PRIMITIVE_TYPE)) == 0;
-        enum isRelocatable = !isStatic || ((combinedFlags) & Q_RELOCATABLE_TYPE) || qIsRelocatable!T;
+        enum isRelocatable = !isComplex || ((combinedFlags) & Q_RELOCATABLE_TYPE) || qIsRelocatable!T;
     }
     else
     {
         enum isRelocatable = qIsRelocatable!T;
         enum isComplex = !qIsTrivial!T;
-        enum isStatic = true;
     }
     enum isLarge = T.sizeof > (void*).sizeof;
+    enum isIntegral = is_integral!T;
+    enum isPointer = is(T == X*, X);
 
-    //pragma(msg, T.stringof, " ", isRelocatable, isComplex, isStatic, isLarge);
+    //pragma(msg, T.stringof, " ", isRelocatable, isComplex, isLarge);
 }
 alias QTypeInfoQuery = QTypeInfo;

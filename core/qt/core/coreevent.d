@@ -14,16 +14,30 @@ extern(C++):
 
 import qt.config;
 import qt.core.bytearray;
+import qt.core.global;
 import qt.core.metamacros;
 import qt.core.object;
 import qt.helpers;
 
+/+ #define Q_EVENT_DISABLE_COPY(Class) \
+protected: \
+    Class(const Class &) = default; \
+    Class(Class &&) = delete; \
+    Class &operator=(const Class &other) = default; \
+    Class &operator=(Class &&) = delete +/
+
 extern(C++, class) struct QEventPrivate;
-/// Binding for C++ class [QEvent](https://doc.qt.io/qt-5/qevent.html).
+/// Binding for C++ class [QEvent](https://doc.qt.io/qt-6/qevent.html).
 class /+ Q_CORE_EXPORT +/ QEvent           // event base class
 {
     mixin(Q_GADGET);
-    /+ QDOC_PROPERTY(bool accepted READ isAccepted WRITE setAccepted) +/
+    /+ QDOC_PROPERTY(bool accepted READ isAccepted WRITE setAccepted)
+
+    Q_EVENT_DISABLE_COPY(QEvent) +/protected:/+ ; +/    
+    this(const QEvent other)
+    {
+        this.tupleof = (cast(typeof(this))other).tupleof;
+    }
 public:
     mixin("enum Type {"
         ~ q{
@@ -182,6 +196,7 @@ public:
             GraphicsSceneDragLeave = 166,
             GraphicsSceneDrop = 167,
             GraphicsSceneWheel = 168,
+            GraphicsSceneLeave = 220,
 
             KeyboardLayoutChange = 169,             // keyboard layout changed
 
@@ -215,7 +230,6 @@ public:
             UngrabMouse = 187,
             GrabKeyboard = 188,
             UngrabKeyboard = 189,
-            MacGLClearDrawable = 191,               // Internal Cocoa, the window has changed, so we must clear
 
             StateMachineSignal = 192,
             StateMachineWrapped = 193,
@@ -266,7 +280,7 @@ public:
 
             PlatformSurface = 217,                  // Platform surface created or about to be destroyed
 
-            Pointer = 218,                          // QQuickPointerEvent; ### Qt 6: QPointerEvent
+            Pointer = 218,                          // Qt 5: QQuickPointerEvent; Qt 6: unused so far
 
             TabletTrackingChange = 219,             // tablet tracking state has changed
 
@@ -282,64 +296,100 @@ public:
     /+ Q_ENUM(Type) +/
 
     /+ explicit +/this(Type type);
-    /+ QEvent(const QEvent &other); +/
     /+ virtual +/~this();
-    /+ QEvent &operator=(const QEvent &other); +/
     pragma(inline, true) final Type type() const { return static_cast!(Type)(t); }
-    pragma(inline, true) final bool spontaneous() const { return (spont) != 0; }
+    pragma(inline, true) final bool spontaneous() const { return m_spont; }
 
-    pragma(inline, true) final void setAccepted(bool accepted) { m_accept = accepted; }
-    pragma(inline, true) final bool isAccepted() const { return (m_accept) != 0; }
+    /+ virtual +/ pragma(inline, true) void setAccepted(bool accepted) { m_accept = accepted; }
+    pragma(inline, true) final bool isAccepted() const { return m_accept; }
 
     pragma(inline, true) final void accept() { m_accept = true; }
     pragma(inline, true) final void ignore() { m_accept = false; }
 
+    pragma(inline, true) final bool isInputEvent() const/+ noexcept+/ { return (m_inputEvent) != 0; }
+    pragma(inline, true) final bool isPointerEvent() const/+ noexcept+/ { return (m_pointerEvent) != 0; }
+    pragma(inline, true) final bool isSinglePointEvent() const/+ noexcept+/ { return (m_singlePointEvent) != 0; }
+
     static int registerEventType(int hint = -1)/+ noexcept+/;
 
+    /+ virtual +/ QEvent clone() const;
+
 protected:
-    QEventPrivate* d;
-    ushort t;
+    struct InputEventTag { /+ explicit InputEventTag() = default; +/ }
+    this(Type type, InputEventTag)
+    {
+        this(type);
+        m_inputEvent = true;
+    }
+    struct PointerEventTag { /+ explicit PointerEventTag() = default; +/ }
+    this(Type type, PointerEventTag)
+    {
+        this(type, InputEventTag());
+        m_pointerEvent = true;
+    }
+    struct SinglePointEventTag { /+ explicit SinglePointEventTag() = default; +/ }
+    this(Type type, SinglePointEventTag)
+    {
+        this(type, PointerEventTag());
+        m_singlePointEvent = true;
+    }
+    quint16 t;
 
 private:
-    /+ ushort posted : 1; +/
-    ushort bitfieldData_posted;
-    ushort posted() const
+    /*
+        We can assume that C++ types are 8-byte aligned, and we can't assume that compilers
+        coalesce data members from subclasses. Use bitfields to fill up to next 8-byte
+        aligned size, which is 16 bytes. That way we don't waste memory, and have plenty of room
+        for future flags.
+        Don't use bitfields for the most important flags, as that would generate more code, and
+        access is always inline. Bytes used are:
+        8 vptr + 2 type + 3 bool flags => 3 bytes left, so 24 bits. However, compilers will word-
+        align the quint16s after the bools, so add another unused bool to fill that gap, which
+        leaves us with 16 bits.
+    */
+    bool m_posted = false;
+    bool m_spont = false;
+    bool m_accept = true;
+    bool m_unused = false;
+    /+ quint16 m_reserved : 13; +/
+    ushort bitfieldData_m_reserved;
+    quint16 m_reserved() const
     {
-        return (bitfieldData_posted >> 0) & 0x1;
+        return (bitfieldData_m_reserved >> 0) & 0x1fff;
     }
-    ushort posted(ushort value)
+    quint16 m_reserved(quint16 value)
     {
-        bitfieldData_posted = (bitfieldData_posted & ~0x1) | ((value & 0x1) << 0);
+        bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x1fff) | ((value & 0x1fff) << 0);
         return value;
     }
-    /+ ushort spont : 1; +/
-    ushort spont() const
+    /+ quint16 m_inputEvent : 1; +/
+    quint16 m_inputEvent() const
     {
-        return (bitfieldData_posted >> 1) & 0x1;
+        return (bitfieldData_m_reserved >> 13) & 0x1;
     }
-    ushort spont(ushort value)
+    quint16 m_inputEvent(quint16 value)
     {
-        bitfieldData_posted = (bitfieldData_posted & ~0x2) | ((value & 0x1) << 1);
+        bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x2000) | ((value & 0x1) << 13);
         return value;
     }
-    /+ ushort m_accept : 1; +/
-    ushort m_accept() const
+    /+ quint16 m_pointerEvent : 1; +/
+    quint16 m_pointerEvent() const
     {
-        return (bitfieldData_posted >> 2) & 0x1;
+        return (bitfieldData_m_reserved >> 14) & 0x1;
     }
-    ushort m_accept(ushort value)
+    quint16 m_pointerEvent(quint16 value)
     {
-        bitfieldData_posted = (bitfieldData_posted & ~0x4) | ((value & 0x1) << 2);
+        bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x4000) | ((value & 0x1) << 14);
         return value;
     }
-    /+ ushort reserved : 13; +/
-    ushort reserved() const
+    /+ quint16 m_singlePointEvent : 1; +/
+    quint16 m_singlePointEvent() const
     {
-        return (bitfieldData_posted >> 3) & 0x1fff;
+        return (bitfieldData_m_reserved >> 15) & 0x1;
     }
-    ushort reserved(ushort value)
+    quint16 m_singlePointEvent(quint16 value)
     {
-        bitfieldData_posted = (bitfieldData_posted & ~0xfff8) | ((value & 0x1fff) << 3);
+        bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x8000) | ((value & 0x1) << 15);
         return value;
     }
 
@@ -347,54 +397,86 @@ private:
     /+ friend class QCoreApplicationPrivate; +/
     /+ friend class QThreadData; +/
     /+ friend class QApplication; +/
-    /+ friend class QShortcutMap; +/
-    /+ friend class QGraphicsView; +/
-    /+ friend class QGraphicsScene; +/
     /+ friend class QGraphicsScenePrivate; +/
     // from QtTest:
     /+ friend class QSpontaneKeyEvent; +/
     // needs this:
     /+ Q_ALWAYS_INLINE +/
-        pragma(inline, true) final void setSpontaneous() { spont = true; }
+        pragma(inline, true) final void setSpontaneous() { m_spont = true; }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QTimerEvent](https://doc.qt.io/qt-5/qtimerevent.html).
+/// Binding for C++ class [QTimerEvent](https://doc.qt.io/qt-6/qtimerevent.html).
 class /+ Q_CORE_EXPORT +/ QTimerEvent : QEvent
 {
+    /+ Q_EVENT_DISABLE_COPY(QTimerEvent) +/protected:/+ ; +/
+    this(const typeof(this) other)
+    {
+        super(other);
+        this.tupleof = (cast(typeof(this))other).tupleof;
+    }
 public:
-    /+ explicit +/this( int timerId );
+    /+ explicit +/this(int timerId);
     ~this();
     final int timerId() const { return id; }
+
+    override QTimerEvent clone() const {
+        import core.stdcpp.new_;
+        return cpp_new!QTimerEvent(this);
+    }/+ ; +/
+
 protected:
     int id;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 
-/// Binding for C++ class [QChildEvent](https://doc.qt.io/qt-5/qchildevent.html).
+/// Binding for C++ class [QChildEvent](https://doc.qt.io/qt-6/qchildevent.html).
 class /+ Q_CORE_EXPORT +/ QChildEvent : QEvent
 {
+    /+ Q_EVENT_DISABLE_COPY(QChildEvent) +/protected:/+ ; +/
+    this(const typeof(this) other)
+    {
+        super(other);
+        this.c = cast(QObject)other.c;
+    }
 public:
-    this( Type type, QObject child );
+    this(Type type, QObject child);
     ~this();
     final QObject child() const { return (cast(QChildEvent)this).c; }
     final bool added() const { return type() == Type.ChildAdded; }
     final bool polished() const { return type() == Type.ChildPolished; }
     final bool removed() const { return type() == Type.ChildRemoved; }
+
+    override QChildEvent clone() const {
+        import core.stdcpp.new_;
+        return cpp_new!QChildEvent(this);
+    }/+ ; +/
+
 protected:
     QObject c;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QDynamicPropertyChangeEvent](https://doc.qt.io/qt-5/qdynamicpropertychangeevent.html).
+/// Binding for C++ class [QDynamicPropertyChangeEvent](https://doc.qt.io/qt-6/qdynamicpropertychangeevent.html).
 class /+ Q_CORE_EXPORT +/ QDynamicPropertyChangeEvent : QEvent
 {
+    /+ Q_EVENT_DISABLE_COPY(QDynamicPropertyChangeEvent) +/protected:/+ ; +/
+    this(const typeof(this) other)
+    {
+        super(other);
+        this.n = *cast(QByteArray*)&other.n;
+    }
 public:
     /+ explicit +/this(ref const(QByteArray) name);
     ~this();
 
     pragma(inline, true) final QByteArray propertyName() const { return *cast(QByteArray*)&n; }
+
+    override QDynamicPropertyChangeEvent clone() const {
+        import core.stdcpp.new_;
+        return cpp_new!QDynamicPropertyChangeEvent(this);
+    }/+ ; +/
 
 private:
     QByteArray n;
@@ -403,10 +485,22 @@ private:
 
 class /+ Q_CORE_EXPORT +/ QDeferredDeleteEvent : QEvent
 {
+    /+ Q_EVENT_DISABLE_COPY(QDeferredDeleteEvent) +/protected:/+ ; +/
+    this(const typeof(this) other)
+    {
+        super(other);
+        this.tupleof = (cast(typeof(this))other).tupleof;
+    }
 public:
     /+ explicit +/this();
     ~this();
     final int loopLevel() const { return level; }
+
+    override QDeferredDeleteEvent clone() const {
+        import core.stdcpp.new_;
+        return cpp_new!QDeferredDeleteEvent(this);
+    }/+ ; +/
+
 private:
     int level;
     /+ friend class QCoreApplication; +/

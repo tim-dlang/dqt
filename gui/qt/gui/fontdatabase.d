@@ -25,15 +25,11 @@ import qt.helpers;
 struct QFontDef;
 extern(C++, class) struct QFontEngine;
 
-extern(C++, class) struct QFontDatabasePrivate;
-
-/// Binding for C++ class [QFontDatabase](https://doc.qt.io/qt-5/qfontdatabase.html).
+/// Binding for C++ class [QFontDatabase](https://doc.qt.io/qt-6/qfontdatabase.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontDatabase
 {
     mixin(Q_GADGET);
 public:
-    // do not re-order or delete entries from this enum without updating the
-    // QPF2 format and makeqpf!!
     enum WritingSystem {
         Any,
 
@@ -88,40 +84,35 @@ public:
 
     static QList!(int) standardSizes();
 
-    @disable this();
-    pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-    ref typeof(this) rawConstructor();
-    static typeof(this) create()
-    {
-        typeof(this) r = typeof(this).init;
-        r.rawConstructor();
-        return r;
-    }
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Call the static functions instead") explicit QFontDatabase() = default; +/
+/+ #else
+    QFontDatabase() = delete;
+#endif +/
 
+    static QList!(WritingSystem) writingSystems();
+    static QList!(WritingSystem) writingSystems(ref const(QString) family);
 
-    QList!(WritingSystem) writingSystems() const;
-    QList!(WritingSystem) writingSystems(ref const(QString) family) const;
+    static QStringList families(WritingSystem writingSystem = WritingSystem.Any);
+    static QStringList styles(ref const(QString) family);
+    static QList!(int) pointSizes(ref const(QString) family, ref const(QString) style = globalInitVar!QString);
+    static QList!(int) smoothSizes(ref const(QString) family, ref const(QString) style);
+    static QString styleString(ref const(QFont) font);
+    static QString styleString(ref const(QFontInfo) fontInfo);
 
-    QStringList families(WritingSystem writingSystem = WritingSystem.Any) const;
-    QStringList styles(ref const(QString) family) const;
-    QList!(int) pointSizes(ref const(QString) family, ref const(QString) style = globalInitVar!QString);
-    QList!(int) smoothSizes(ref const(QString) family, ref const(QString) style);
-    QString styleString(ref const(QFont) font);
-    QString styleString(ref const(QFontInfo) fontInfo);
+    static QFont font(ref const(QString) family, ref const(QString) style, int pointSize);
 
-    QFont font(ref const(QString) family, ref const(QString) style, int pointSize) const;
+    static bool isBitmapScalable(ref const(QString) family, ref const(QString) style = globalInitVar!QString);
+    static bool isSmoothlyScalable(ref const(QString) family, ref const(QString) style = globalInitVar!QString);
+    static bool isScalable(ref const(QString) family, ref const(QString) style = globalInitVar!QString);
+    static bool isFixedPitch(ref const(QString) family, ref const(QString) style = globalInitVar!QString);
 
-    bool isBitmapScalable(ref const(QString) family, ref const(QString) style = globalInitVar!QString) const;
-    bool isSmoothlyScalable(ref const(QString) family, ref const(QString) style = globalInitVar!QString) const;
-    bool isScalable(ref const(QString) family, ref const(QString) style = globalInitVar!QString) const;
-    bool isFixedPitch(ref const(QString) family, ref const(QString) style = globalInitVar!QString) const;
+    static bool italic(ref const(QString) family, ref const(QString) style);
+    static bool bold(ref const(QString) family, ref const(QString) style);
+    static int weight(ref const(QString) family, ref const(QString) style);
 
-    bool italic(ref const(QString) family, ref const(QString) style) const;
-    bool bold(ref const(QString) family, ref const(QString) style) const;
-    int weight(ref const(QString) family, ref const(QString) style) const;
-
-    bool hasFamily(ref const(QString) family) const;
-    bool isPrivateFamily(ref const(QString) family) const;
+    static bool hasFamily(ref const(QString) family);
+    static bool isPrivateFamily(ref const(QString) family);
 
     static QString writingSystemName(WritingSystem writingSystem);
     static QString writingSystemSample(WritingSystem writingSystem);
@@ -132,27 +123,7 @@ public:
     static bool removeApplicationFont(int id);
     static bool removeAllApplicationFonts();
 
-/+ #if QT_DEPRECATED_SINCE(5, 2) +/
-    /+ QT_DEPRECATED +/ static bool supportsThreadedFontRendering();
-/+ #endif +/
-
     static QFont systemFont(SystemFont type);
-
-private:
-    static void createDatabase();
-    static void parseFontName(ref const(QString) name, ref QString foundry, ref QString family);
-    static QString resolveFontFamilyAlias(ref const(QString) family);
-    static QFontEngine* findFont(ref const(QFontDef) request, int script /* QChar::Script */);
-    static void load(const(QFontPrivate)* d, int script /* QChar::Script */);
-
-    /+ friend struct QFontDef; +/
-    /+ friend class QFontPrivate; +/
-    /+ friend class QFontDialog; +/
-    /+ friend class QFontDialogPrivate; +/
-    /+ friend class QFontEngineMulti; +/
-    /+ friend class QRawFont; +/
-
-    QFontDatabasePrivate* d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

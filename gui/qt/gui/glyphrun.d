@@ -18,11 +18,11 @@ version(QT_NO_RAWFONT){}else
 {
     import qt.core.flags;
     import qt.core.global;
+    import qt.core.list;
     import qt.core.point;
     import qt.core.rect;
     import qt.core.shareddata;
     import qt.core.typeinfo;
-    import qt.core.vector;
     import qt.gui.rawfont;
 }
 
@@ -32,8 +32,8 @@ version(QT_NO_RAWFONT){}else
 
 
 extern(C++, class) struct QGlyphRunPrivate;
-/// Binding for C++ class [QGlyphRun](https://doc.qt.io/qt-5/qglyphrun.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QGlyphRun
+/// Binding for C++ class [QGlyphRun](https://doc.qt.io/qt-6/qglyphrun.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QGlyphRun
 {
 public:
     enum GlyphRunFlag {
@@ -57,7 +57,7 @@ alias GlyphRunFlags = QFlags!(GlyphRunFlag);
 
     @disable this(this);
     this(ref const(QGlyphRun) other);
-    /+ QGlyphRun &operator=(QGlyphRun &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QGlyphRun) +/
     /+ref QGlyphRun operator =(ref const(QGlyphRun) other);+/
     ~this();
 
@@ -70,11 +70,11 @@ alias GlyphRunFlags = QFlags!(GlyphRunFlag);
                         const(QPointF)* glyphPositionArray,
                         int size);
 
-    QVector!(quint32) glyphIndexes() const;
-    void setGlyphIndexes(ref const(QVector!(quint32)) glyphIndexes);
+    QList!(quint32) glyphIndexes() const;
+    void setGlyphIndexes(ref const(QList!(quint32)) glyphIndexes);
 
-    QVector!(QPointF) positions() const;
-    void setPositions(ref const(QVector!(QPointF)) positions);
+    QList!(QPointF) positions() const;
+    void setPositions(ref const(QList!(QPointF)) positions);
 
     void clear();
 

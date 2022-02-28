@@ -20,7 +20,6 @@ import qt.core.locale;
 import qt.core.shareddata;
 import qt.core.string;
 import qt.core.typeinfo;
-import qt.core.vector;
 import qt.helpers;
 
 /+ QT_REQUIRE_CONFIG(timezone);
@@ -33,8 +32,8 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSTimeZone);
 
 extern(C++, class) struct QTimeZonePrivate;
 
-/// Binding for C++ class [QTimeZone](https://doc.qt.io/qt-5/qtimezone.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTimeZone
+/// Binding for C++ class [QTimeZone](https://doc.qt.io/qt-6/qtimezone.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTimeZone
 {
 public:
     // Sane UTC offsets range from -14 to +14 hours:
@@ -59,7 +58,7 @@ public:
     }
 
     // Workaround for https://issues.dlang.org/show_bug.cgi?id=20701
-    @Q_MOVABLE_TYPE extern(C++, struct) struct OffsetData {
+    @Q_RELOCATABLE_TYPE extern(C++, struct) struct OffsetData {
         QString abbreviation;
         QDateTime atUtc;
         int offsetFromUtc;
@@ -70,10 +69,10 @@ public:
         {
             import core.lifetime;
             this.abbreviation = QString.create;
-            emplace!QDateTime(&this.atUtc);
+      //TODO      emplace!QDateTime(&this.atUtc);
         }
     }
-    alias OffsetDataList = QVector!(OffsetData);
+    //alias OffsetDataList = QList!(OffsetData);
 
     @disable this();
     pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
@@ -87,15 +86,15 @@ public:
 
     /+ explicit +/this(ref const(QByteArray) ianaId);
     /+ explicit +/this(int offsetSeconds);
-    /*implicit*/ this(ref const(QByteArray) zoneId, int offsetSeconds, ref const(QString) name,
-                  ref const(QString) abbreviation, QLocale.Country country = QLocale.Country.AnyCountry,
+    this(ref const(QByteArray) zoneId, int offsetSeconds, ref const(QString) name,
+                  ref const(QString) abbreviation, QLocale.Territory territory = QLocale.Country.AnyTerritory,
                   ref const(QString) comment = globalInitVar!QString);
     @disable this(this);
     this(ref const(QTimeZone) other);
     ~this();
 
     /+ref QTimeZone operator =(ref const(QTimeZone) other);+/
-    /+ QTimeZone &operator=(QTimeZone &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QTimeZone) +/
 
     /+ void swap(QTimeZone &other) noexcept
     { d.swap(other.d); } +/
@@ -106,7 +105,11 @@ public:
     bool isValid() const;
 
     QByteArray id() const;
-    QLocale.Country country() const;
+    QLocale.Territory territory() const;
+/+ #if QT_DEPRECATED_SINCE(6, 6) +/
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use territory() instead") +/
+        QLocale.Country country() const;
+/+ #endif +/
     QString comment() const;
 
     QString displayName(ref const(QDateTime) atDateTime,
@@ -129,7 +132,7 @@ public:
     bool hasTransitions() const;
     OffsetData nextTransition(ref const(QDateTime) afterDateTime) const;
     OffsetData previousTransition(ref const(QDateTime) beforeDateTime) const;
-    OffsetDataList transitions(ref const(QDateTime) fromDateTime, ref const(QDateTime) toDateTime) const;
+    //OffsetDataList transitions(ref const(QDateTime) fromDateTime, ref const(QDateTime) toDateTime) const;
 
     static QByteArray systemTimeZoneId();
     static QTimeZone systemTimeZone();
@@ -138,16 +141,16 @@ public:
     static bool isTimeZoneIdAvailable(ref const(QByteArray) ianaId);
 
     static QList!(QByteArray) availableTimeZoneIds();
-    static QList!(QByteArray) availableTimeZoneIds(QLocale.Country country);
+    static QList!(QByteArray) availableTimeZoneIds(QLocale.Territory territory);
     static QList!(QByteArray) availableTimeZoneIds(int offsetSeconds);
 
     static QByteArray ianaIdToWindowsId(ref const(QByteArray) ianaId);
     static QByteArray windowsIdToDefaultIanaId(ref const(QByteArray) windowsId);
     static QByteArray windowsIdToDefaultIanaId(ref const(QByteArray) windowsId,
-                                                    QLocale.Country country);
+                                                   QLocale.Territory territory);
     static QList!(QByteArray) windowsIdToIanaIds(ref const(QByteArray) windowsId);
     static QList!(QByteArray) windowsIdToIanaIds(ref const(QByteArray) windowsId,
-                                                     QLocale.Country country);
+                                                    QLocale.Territory territory);
 
     static if((!versionIsSet!("QT_NO_SYSTEMLOCALE") && (versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS"))))
     {
@@ -170,7 +173,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_TYPEINFO(QTimeZone::OffsetData, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QTimeZone::OffsetData, Q_RELOCATABLE_TYPE);
 Q_DECLARE_SHARED(QTimeZone)
 
 #ifndef QT_NO_DATASTREAM

@@ -13,65 +13,35 @@ module qt.core.stringliteral;
 extern(C++):
 
 import qt.config;
-import qt.core.arraydata;
+import qt.core.arraydatapointer;
+import qt.core.global;
 import qt.helpers;
 
 /+ #if 0
 #pragma qt_class(QStringLiteral)
-#endif +/
+#endif
 
-
-alias QStringData = QTypedArrayData!(ushort);
 
 // all our supported compilers support Unicode string literals,
 // even if their Q_COMPILER_UNICODE_STRING has been revoked due
 // to lacking stdlib support. But QStringLiteral only needs the
 // core language feature, so just use u"" here unconditionally:
 
-alias qunicodechar = wchar;
+#define QT_UNICODE_LITERAL(str) u"" str +/
 
-/+ Q_STATIC_ASSERT_X(sizeof(qunicodechar) == 2,
-        "qunicodechar must typedef an integral type of size 2");
+alias QStringPrivate = QArrayDataPointer!(wchar);
 
-#define QT_UNICODE_LITERAL(str) u"" str
-#define QStringLiteral(str) \
-    ([]() noexcept -> QString { \
-        enum { Size = sizeof(QT_UNICODE_LITERAL(str))/2 - 1 }; \
-        static const QStaticStringData<Size> qstring_literal = { \
-            Q_STATIC_STRING_DATA_HEADER_INITIALIZER(Size), \
-            QT_UNICODE_LITERAL(str) }; \
-        QStringDataPtr holder = { qstring_literal.data_ptr() }; \
-        return QString(holder); \
-    }()) \
-    /**/
-
-#define Q_STATIC_STRING_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, offset) \
-    { Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, offset } \
-    /**/
-
-#define Q_STATIC_STRING_DATA_HEADER_INITIALIZER(size) \
-    Q_STATIC_STRING_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, sizeof(QStringData)) \
-    /**/
-
-#if QT_DEPRECATED_SINCE(5, 14)
-# define QStringViewLiteral(str) QStringView(QT_UNICODE_LITERAL(str), QtPrivate::Deprecated)
-#endif
-
-template <int N>
-struct QStaticStringData
+extern(C++, "QtPrivate") {
+/+ /+ Q_ALWAYS_INLINE +/ pragma(inline, true) QStringPrivate qMakeStringPrivate(qsizetype N)(ref const(wchar)[N] literal)
 {
-    QArrayData str;
-    qunicodechar data[N + 1];
-
-    QStringData *data_ptr() const
-    {
-        Q_ASSERT(str.ref.isStatic());
-        return const_cast<QStringData *>(static_cast<const QStringData*>(&str));
-    }
-}; +/
-
-struct QStringDataPtr
-{
-    QStringData* ptr;
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
+    auto str = const_cast!(wchar*)(literal);
+    return { null, str, N - 1} ;
+}+/
 }
+
+/+ #define QStringLiteral(str) \
+    (QString(QtPrivate::qMakeStringPrivate(QT_UNICODE_LITERAL(str)))) \
+    /**/ +/
+
 

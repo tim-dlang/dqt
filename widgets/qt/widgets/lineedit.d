@@ -21,10 +21,10 @@ import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
 import qt.core.variant;
+import qt.gui.action;
 import qt.gui.event;
 import qt.gui.icon;
 import qt.helpers;
-import qt.widgets.action;
 import qt.widgets.completer;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
@@ -37,7 +37,7 @@ version(QT_NO_VALIDATOR){}else
 
 extern(C++, class) struct QLineEditPrivate;
 
-/// Binding for C++ class [QLineEdit](https://doc.qt.io/qt-5/qlineedit.html).
+/// Binding for C++ class [QLineEdit](https://doc.qt.io/qt-6/qlineedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QLineEdit : QWidget
 {
     mixin(Q_OBJECT);
@@ -157,10 +157,6 @@ public:
 
     final void setTextMargins(int left, int top, int right, int bottom);
     final void setTextMargins(ref const(QMargins) margins);
-/+ #if QT_DEPRECATED_SINCE(5, 14) +/
-    /+ QT_DEPRECATED_X("use textMargins()") +/
-        final void getTextMargins(int* left, int* top, int* right, int* bottom) const;
-/+ #endif +/
     final QMargins textMargins() const;
 
 /+ #if QT_CONFIG(action) +/
@@ -205,6 +201,7 @@ protected:
     override void mouseReleaseEvent(QMouseEvent );
     override void mouseDoubleClickEvent(QMouseEvent );
     override void keyPressEvent(QKeyEvent );
+    override void keyReleaseEvent(QKeyEvent );
     override void focusInEvent(QFocusEvent );
     override void focusOutEvent(QFocusEvent );
     override void paintEvent(QPaintEvent );
@@ -221,10 +218,11 @@ protected:
     }
 
     override void inputMethodEvent(QInputMethodEvent );
-    final void initStyleOption(QStyleOptionFrame* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionFrame* option) const;
 public:
     override QVariant inputMethodQuery(/+ Qt:: +/qt.core.namespace.InputMethodQuery) const;
     @QInvokable final QVariant inputMethodQuery(/+ Qt:: +/qt.core.namespace.InputMethodQuery property, QVariant argument) const;
+    override void timerEvent(QTimerEvent );
     override bool event(QEvent );
 protected:
     final QRect cursorRect() const;
@@ -253,7 +251,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_selectionChanged())
     Q_PRIVATE_SLOT(d_func(), void _q_updateNeeded(const QRect &))
     Q_PRIVATE_SLOT(d_func(), void _q_textChanged(const QString &))
-    Q_PRIVATE_SLOT(d_func(), void _q_clearButtonClicked()) +/
+    Q_PRIVATE_SLOT(d_func(), void _q_clearButtonClicked())
+    Q_PRIVATE_SLOT(d_func(), void _q_controlEditingFinished()) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

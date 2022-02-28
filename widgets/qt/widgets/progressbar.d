@@ -27,7 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QProgressBarPrivate;
 
-/// Binding for C++ class [QProgressBar](https://doc.qt.io/qt-5/qprogressbar.html).
+/// Binding for C++ class [QProgressBar](https://doc.qt.io/qt-6/qprogressbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QProgressBar : QWidget
 {
     mixin(Q_OBJECT);
@@ -89,7 +89,7 @@ public /+ Q_SLOTS +/:
 protected:
     override bool event(QEvent e);
     override void paintEvent(QPaintEvent );
-    final void initStyleOption(QStyleOptionProgressBar* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionProgressBar* option) const;
 
 private:
     /+ Q_DECLARE_PRIVATE(QProgressBar) +/

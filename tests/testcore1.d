@@ -137,15 +137,11 @@ unittest
     assert(s.toConstWString == "QString::fromUcs4: abc äöüÄÖÜßẞ αβ ∃∀ ∨∧⊥¬ ≤≥≠ 𝕆🎵🎶"w);
 }
 
-void checkType(T, bool relocatable, bool complex, bool static_)()
+void checkType(T, bool relocatable, bool complex)()
 {
-    //writefln("checkType!(%s, %d, %d, %d, %d)();", T.stringof, QTypeInfo!T.isRelocatable, QTypeInfo!T.isComplex, QTypeInfo!T.isStatic);
+    //writefln("checkType!(%s, %d, %d)();\n", T.stringof, QTypeInfo!T.isRelocatable, QTypeInfo!T.isComplex);
     static assert(QTypeInfo!(T).isRelocatable == relocatable);
     static assert(QTypeInfo!(T).isComplex == complex);
-    static assert(QTypeInfo!(T).isStatic == static_);
-    static assert(QTypeInfoQuery!(T).isRelocatable == relocatable);
-    static assert(QTypeInfoQuery!(T).isComplex == complex);
-    static assert(QTypeInfoQuery!(T).isStatic == static_);
 }
 
 unittest
@@ -164,45 +160,45 @@ unittest
     import qt.core.timezone;
     import qt.core.url;
 
-    checkType!(double, 1, 0, 0)();
-    checkType!(int, 1, 0, 0)();
-    checkType!(uint, 1, 0, 0)();
-    checkType!(int*, 1, 0, 0)();
-    checkType!(void*, 1, 0, 0)();
-    checkType!(void, 0, 0, 0)();
-    checkType!(char, 1, 0, 0)();
-    checkType!(wchar, 1, 0, 1)();
-    checkType!(wchar_t, 1, 0, 1)();
-    checkType!(QLocale.Country, 1, 0, 1)();
-    checkType!(/+ Qt:: +/qt.core.namespace.DayOfWeek, 1, 0, 1)();
-    checkType!(QTimeZone.OffsetData, 1, 1, 0)();
-    checkType!(QByteArray, 1, 1, 0)();
-    checkType!(QItemSelectionRange, 1, 1, 0)();
-    checkType!(QLine, 1, 1, 0)();
-    checkType!(QLineF, 1, 1, 0)();
-    checkType!(QLocale, 1, 1, 0)();
-    checkType!(QModelIndex, 1, 1, 0)();
-    checkType!(QObject, 1, 0, 0)();
-    checkType!(QPair!(double, QSize), 1, 1, 0)();
-    checkType!(QPersistentModelIndex, 1, 1, 0)();
-    checkType!(QPoint, 1, 1, 0)();
-    checkType!(QPointF, 1, 1, 0)();
-    checkType!(QSize, 1, 1, 0)();
-    checkType!(QString, 1, 1, 0)();
-    checkType!(QStringRef, 1, 0, 0)();
-    checkType!(QStringView, 1, 0, 0)();
-    checkType!(QUrl, 1, 1, 0)();
-    checkType!(QVariant, 1, 1, 0)();
-    checkType!(QAbstractItemModel, 1, 0, 0)();
-    checkType!(QTimeZone.OffsetData, 1, 1, 0)();
-    checkType!(QList!(int), 1, 1, 0)();
-    checkType!(QList!(void*), 1, 1, 0)();
-    checkType!(QList!(QSize), 1, 1, 0)();
-    checkType!(QVector!(int), 1, 1, 0)();
-    checkType!(QVector!(void*), 1, 1, 0)();
-    checkType!(QVector!(QSize), 1, 1, 0)();
-    checkType!(/+ Qt:: +/qt.core.namespace.Edge, 1, 0, 1)();
-    checkType!(/+ Qt:: +/qt.core.namespace.Edges, 1, 0, 0)();
+    checkType!(double, 1, 0)();
+    checkType!(int, 1, 0)();
+    checkType!(uint, 1, 0)();
+    checkType!(int*, 1, 0)();
+    checkType!(void*, 1, 0)();
+    checkType!(void, 0, 0)();
+    checkType!(ubyte, 1, 0)();
+    checkType!(char, 1, 0)();
+    checkType!(wchar, 1, 0)();
+    checkType!(wchar_t, 1, 0)();
+    checkType!(QLocale.Country, 1, 0)();
+    checkType!(/+ Qt:: +/qt.core.namespace.DayOfWeek, 1, 0)();
+    checkType!(QTimeZone.OffsetData, 1, 1)();
+    checkType!(QByteArray, 1, 1)();
+    checkType!(QItemSelectionRange, 1, 1)();
+    checkType!(QLine, 1, 1)();
+    checkType!(QLineF, 1, 1)();
+    checkType!(QLocale, 1, 1)();
+    checkType!(QModelIndex, 1, 1)();
+    checkType!(QObject, 1, 0)();
+    checkType!(qt.core.pair.QPair!(double, QSize), 1, 1)();
+    checkType!(QPersistentModelIndex, 1, 1)();
+    checkType!(QPoint, 1, 0)();
+    checkType!(QPointF, 1, 0)();
+    checkType!(QSize, 1, 1)();
+    checkType!(QString, 1, 1)();
+    checkType!(QStringView, 1, 0)();
+    checkType!(QUrl, 1, 1)();
+    checkType!(QVariant, 1, 1)();
+    checkType!(QAbstractItemModel, 1, 0)();
+    checkType!(QTimeZone.OffsetData, 1, 1)();
+    checkType!(QList!(int), 1, 1)();
+    checkType!(QList!(void*), 1, 1)();
+    checkType!(QList!(QSize), 1, 1)();
+    checkType!(QVector!(int), 1, 1)();
+    checkType!(QVector!(void*), 1, 1)();
+    checkType!(QVector!(QSize), 1, 1)();
+    checkType!(/+ Qt:: +/qt.core.namespace.Edge, 1, 0)();
+    checkType!(/+ Qt:: +/qt.core.namespace.Edges, 1, 0)();
 }
 
 unittest
@@ -259,7 +255,7 @@ unittest
 
     method = mo.method(mo.methodOffset() + 6);
     assert(method.name().toConstCharArray() == "signalVectorInt");
-    assert(method.methodSignature().toConstCharArray() == "signalVectorInt(QVector<int>)");
+    assert(method.methodSignature().toConstCharArray() == "signalVectorInt(QList<int>)");
     assert(method.parameterCount() == 1);
 
     method = mo.method(mo.methodOffset() + 7);
@@ -389,15 +385,30 @@ void compareVariant(ref const(QVariant) v, const(char)* expected)
 unittest
 {
     QVariant v;
-    compareVariant(v, "00000000 ???????? 00000080");
+    static if((void*).sizeof == 8)
+        compareVariant(v, "00000000 00000000 00000000 00000000 00000000 00000000 02000000 00000000");
+    else
+        compareVariant(v, "00000000 00000000 00000000 02000000");
     v = QVariant(5);
-    compareVariant(v, "05000000 ???????? 02000000");
+    static if((void*).sizeof == 8)
+        compareVariant(v, "05000000 00000000 00000000 00000000 00000000 00000000 ???????? ????????");
+    else
+        compareVariant(v, "05000000 00000000 00000000 ????????");
     v = QVariant(100.0f);
-    compareVariant(v, "0000C842 ???????? 26000000");
+    static if((void*).sizeof == 8)
+        compareVariant(v, "0000C842 00000000 00000000 00000000 00000000 00000000 ???????? ????????");
+    else
+        compareVariant(v, "0000C842 00000000 00000000 ????????");
     v = QVariant(100.0);
-    compareVariant(v, "00000000 00005940 06000000");
+    static if((void*).sizeof == 8)
+        compareVariant(v, "00000000 00005940 00000000 00000000 00000000 00000000 ???????? ????????");
+    else
+        compareVariant(v, "00000000 00005940 00000000 ????????");
     v = QVariant(cast(int)'A');
-    compareVariant(v, "41000000 ???????? 02000000");
+    static if((void*).sizeof == 8)
+        compareVariant(v, "41000000 00000000 00000000 00000000 00000000 00000000 ???????? ????????");
+    else
+        compareVariant(v, "41000000 00000000 00000000 ????????");
 }
 
 unittest

@@ -19,10 +19,12 @@ import qt.core.rect;
 import qt.core.refcount;
 import qt.core.typeinfo;
 import qt.core.variant;
-import qt.core.vector;
 import qt.gui.bitmap;
 import qt.gui.polygon;
 import qt.helpers;
+version(Cygwin){}else
+version(Windows)
+    import qt.gui.windowdefs_win;
 version(QT_NO_DATASTREAM){}else
 {
     import qt.core.bytearray;
@@ -34,10 +36,11 @@ version(QT_NO_DATASTREAM){}else
 
 
 
+
 struct QRegionPrivate;
 
 
-/// Binding for C++ class [QRegion](https://doc.qt.io/qt-5/qregion.html).
+/// Binding for C++ class [QRegion](https://doc.qt.io/qt-6/qregion.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QRegion
 {
 public:
@@ -69,12 +72,11 @@ public:
     @disable this(this);
     this(ref const(QRegion) region);
     /+ QRegion(QRegion &&other) noexcept
-        : d(other.d) { other.d = const_cast<QRegionData*>(&shared_empty); } +/
+        : d(qExchange(other.d, const_cast<QRegionData*>(&shared_empty))) {} +/
     this(ref const(QBitmap) bitmap);
     ~this();
     /+ref QRegion operator =(ref const(QRegion) );+/
-    /+ inline QRegion &operator=(QRegion &&other) noexcept
-    { qSwap(d, other.d); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QRegion) +//+ ; +/
     /+ inline void swap(QRegion &other) noexcept { qSwap(d, other.d); } +/
     bool isEmpty() const;
     bool isNull() const;
@@ -96,56 +98,31 @@ public:
 
     void translate(int dx, int dy);
     pragma(inline, true) void translate(ref const(QPoint) p) { translate(p.x(), p.y()); }
-    /+ Q_REQUIRED_RESULT +/ QRegion translated(int dx, int dy) const;
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRegion translated(ref const(QPoint) p) const { return translated(p.x(), p.y()); }
+    /+ [[nodiscard]] +/ QRegion translated(int dx, int dy) const;
+    /+ [[nodiscard]] +/ pragma(inline, true) QRegion translated(ref const(QPoint) p) const { return translated(p.x(), p.y()); }
 
-    /+ Q_REQUIRED_RESULT +/ QRegion united(ref const(QRegion) r) const;
-    /+ Q_REQUIRED_RESULT +/ QRegion united(ref const(QRect) r) const;
-    /+ Q_REQUIRED_RESULT +/ QRegion intersected(ref const(QRegion) r) const;
-    /+ Q_REQUIRED_RESULT +/ QRegion intersected(ref const(QRect) r) const;
-    /+ Q_REQUIRED_RESULT +/ QRegion subtracted(ref const(QRegion) r) const;
-    /+ Q_REQUIRED_RESULT +/ QRegion xored(ref const(QRegion) r) const;
-
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    Q_REQUIRED_RESULT inline QT_DEPRECATED QRegion unite(const QRegion &r) const { return united(r); }
-    Q_REQUIRED_RESULT inline QT_DEPRECATED QRegion unite(const QRect &r) const { return united(r); }
-    Q_REQUIRED_RESULT inline QT_DEPRECATED QRegion intersect(const QRegion &r) const { return intersected(r); }
-    Q_REQUIRED_RESULT inline QT_DEPRECATED QRegion intersect(const QRect &r) const { return intersected(r); }
-    Q_REQUIRED_RESULT inline QT_DEPRECATED QRegion subtract(const QRegion &r) const { return subtracted(r); }
-    Q_REQUIRED_RESULT inline QT_DEPRECATED QRegion eor(const QRegion &r) const { return xored(r); }
-#endif +/
+    /+ [[nodiscard]] +/ QRegion united(ref const(QRegion) r) const;
+    /+ [[nodiscard]] +/ QRegion united(ref const(QRect) r) const;
+    /+ [[nodiscard]] +/ QRegion intersected(ref const(QRegion) r) const;
+    /+ [[nodiscard]] +/ QRegion intersected(ref const(QRect) r) const;
+    /+ [[nodiscard]] +/ QRegion subtracted(ref const(QRegion) r) const;
+    /+ [[nodiscard]] +/ QRegion xored(ref const(QRegion) r) const;
 
     bool intersects(ref const(QRegion) r) const;
     bool intersects(ref const(QRect) r) const;
 
     QRect boundingRect() const/+ noexcept+/;
-/+ #if QT_DEPRECATED_SINCE(5, 11) +/
-    /+ QT_DEPRECATED_X("Use begin()/end() instead") +/
-        QVector!(QRect) rects() const;
-/+ #endif +/
     void setRects(const(QRect)* rect, int num);
     int rectCount() const/+ noexcept+/;
-    static if(defined!"Q_COMPILER_MANGLES_RETURN_TYPE")
-    {
-        // ### Qt 6: remove these, they're kept for MSVC compat
-        /+const(QRegion) operator |(ref const(QRegion) r) const;+/
-        /+const(QRegion) operator +(ref const(QRegion) r) const;+/
-        /+const(QRegion) operator +(ref const(QRect) r) const;+/
-        /+const(QRegion) operator &(ref const(QRegion) r) const;+/
-        /+const(QRegion) operator &(ref const(QRect) r) const;+/
-        /+const(QRegion) operator -(ref const(QRegion) r) const;+/
-        /+const(QRegion) operator ^(ref const(QRegion) r) const;+/
-    }
-    else
-    {
-        /+QRegion operator |(ref const(QRegion) r) const;+/
-        /+QRegion operator +(ref const(QRegion) r) const;+/
-        /+QRegion operator +(ref const(QRect) r) const;+/
-        /+QRegion operator &(ref const(QRegion) r) const;+/
-        /+QRegion operator &(ref const(QRect) r) const;+/
-        /+QRegion operator -(ref const(QRegion) r) const;+/
-        /+QRegion operator ^(ref const(QRegion) r) const;+/
-    }
+
+    QRegion opBinary(string op)(ref const(QRegion) r) const if(op == "|");
+    QRegion opBinary(string op)(ref const(QRegion) r) const if(op == "+");
+    QRegion opBinary(string op)(ref const(QRect) r) const if(op == "+");
+    QRegion opBinary(string op)(ref const(QRegion) r) const if(op == "&");
+    QRegion opBinary(string op)(ref const(QRect) r) const if(op == "&");
+    QRegion opBinary(string op)(ref const(QRegion) r) const if(op == "-");
+    /+QRegion operator ^(ref const(QRegion) r) const;+/
+
     ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "|");
     ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "+");
     ref QRegion opOpAssign(string op)(ref const(QRect) r) if(op == "+");
@@ -158,11 +135,22 @@ public:
     /+pragma(inline, true) bool operator !=(ref const(QRegion) r) const { return !(operator==(r)); }+/
     /+auto opCast(T : QVariant)() const;+/
 
+    // Platform specific conversion functions
+/+ #if defined(Q_OS_WIN) || defined(Q_QDOC) +/
+    static if((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    {
+        HRGN toHRGN() const;
+        static QRegion fromHRGN(HRGN hrgn);
+    }
+/+ #endif
+
+#ifndef QT_NO_DATASTREAM +/
     version(QT_NO_DATASTREAM){}else
     {
         /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QRegion &); +/
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QRegion &); +/
     }
+/+ #endif +/
 private:
     /+ QRegion copy() const; +/   // helper of detach.
     void detach();
@@ -196,7 +184,7 @@ private:
     static void cleanUp(QRegionData* x);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QRegion)
+/+ Q_DECLARE_SHARED(QRegion)
 
 /*****************************************************************************
   QRegion stream functions

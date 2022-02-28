@@ -27,8 +27,8 @@ import qt.helpers;
 
 extern(C++, class) struct QTextCursorPrivate;
 
-/// Binding for C++ class [QTextCursor](https://doc.qt.io/qt-5/qtextcursor.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextCursor
+/// Binding for C++ class [QTextCursor](https://doc.qt.io/qt-6/qtextcursor.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextCursor
 {
 public:
     /+this();+/
@@ -40,7 +40,7 @@ public:
     /+ explicit +/this(ref const(QTextBlock) block);
     //@disable this(this);
     //this(ref const(QTextCursor) cursor);
-    /+ QTextCursor &operator=(QTextCursor &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QTextCursor) +/
     /+ref QTextCursor operator =(ref const(QTextCursor) other);+/
     ~this();
 

@@ -33,7 +33,7 @@ version(QT_NO_VALIDATOR){}else
 
 extern(C++, class) struct QAbstractSpinBoxPrivate;
 
-/// Binding for C++ class [QAbstractSpinBox](https://doc.qt.io/qt-5/qabstractspinbox.html).
+/// Binding for C++ class [QAbstractSpinBox](https://doc.qt.io/qt-6/qabstractspinbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QAbstractSpinBox : QWidget
 {
     mixin(Q_OBJECT);
@@ -141,7 +141,7 @@ protected:
     override void timerEvent(QTimerEvent event);
     override void paintEvent(QPaintEvent event);
     override void showEvent(QShowEvent event);
-    final void initStyleOption(QStyleOptionSpinBox* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionSpinBox* option) const;
 
     final QLineEdit lineEdit() const;
     final void setLineEdit(QLineEdit edit);
@@ -163,5 +163,17 @@ private:
 }
 /+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator |(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/{return QFlags!(QAbstractSpinBox.StepEnabled.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator |(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator &(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/{return QFlags!(QAbstractSpinBox.StepEnabled.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator &(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)/+noexcept+/;+/
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractSpinBox::StepEnabled) +/

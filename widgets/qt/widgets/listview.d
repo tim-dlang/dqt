@@ -16,11 +16,11 @@ import qt.config;
 import qt.core.abstractitemmodel;
 import qt.core.coreevent;
 import qt.core.itemselectionmodel;
+import qt.core.list;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.size;
-import qt.core.vector;
 import qt.gui.event;
 import qt.gui.region;
 import qt.helpers;
@@ -33,7 +33,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QListViewPrivate;
 
-/// Binding for C++ class [QListView](https://doc.qt.io/qt-5/qlistview.html).
+/// Binding for C++ class [QListView](https://doc.qt.io/qt-6/qlistview.html).
 class /+ Q_WIDGETS_EXPORT +/ QListView : QAbstractItemView
 {
     mixin(Q_OBJECT);
@@ -135,7 +135,8 @@ protected:
     final void resizeContents(int width, int height);
     final QSize contentsSize() const;
 
-    override void dataChanged(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight, ref const(QVector!(int)) roles = globalInitVar!(QVector!(int)));
+    override void dataChanged(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight,
+                         ref const(QList!(int)) roles = globalInitVar!(QList!(int)));
     override void rowsInserted(ref const(QModelIndex) parent, int start, int end);
     override void rowsAboutToBeRemoved(ref const(QModelIndex) parent, int start, int end);
 
@@ -154,7 +155,7 @@ protected:
     override void startDrag(/+ Qt:: +/qt.core.namespace.DropActions supportedActions);
 /+ #endif +/ // QT_CONFIG(draganddrop)
 
-    override QStyleOptionViewItem viewOptions() const;
+    override void initViewItemOption(QStyleOptionViewItem* option) const;
     override void paintEvent(QPaintEvent e);
 
     override int horizontalOffset() const;
@@ -178,6 +179,7 @@ protected:
 
 private:
     final int visualIndex(ref const(QModelIndex) index) const;
+    /+ friend class QCommonListViewBase; +/
 
     /+ Q_DECLARE_PRIVATE(QListView) +/
     /+ Q_DISABLE_COPY(QListView) +/

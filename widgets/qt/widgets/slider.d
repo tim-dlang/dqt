@@ -26,7 +26,7 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QSliderPrivate;
-/// Binding for C++ class [QSlider](https://doc.qt.io/qt-5/qslider.html).
+/// Binding for C++ class [QSlider](https://doc.qt.io/qt-6/qslider.html).
 class /+ Q_WIDGETS_EXPORT +/ QSlider : QAbstractSlider
 {
     mixin(Q_OBJECT);
@@ -66,7 +66,7 @@ protected:
     override void mousePressEvent(QMouseEvent ev);
     override void mouseReleaseEvent(QMouseEvent ev);
     override void mouseMoveEvent(QMouseEvent ev);
-    final void initStyleOption(QStyleOptionSlider* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionSlider* option) const;
 
 
 private:

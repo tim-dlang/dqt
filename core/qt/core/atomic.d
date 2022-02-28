@@ -28,7 +28,7 @@ QT_WARNING_DISABLE_GCC("-Wextra")
 #endif +/
 
 // High-level atomic integer operations
-/// Binding for C++ class [QAtomicInteger](https://doc.qt.io/qt-5/qatomicinteger.html).
+/// Binding for C++ class [QAtomicInteger](https://doc.qt.io/qt-6/qatomicinteger.html).
 extern(C++, class) struct QAtomicInteger(T)
 {
     public QBasicAtomicInteger!(T) base0;
@@ -61,40 +61,38 @@ public:
     }+/
 
 /+ #ifdef Q_CLANG_QDOC
-    T load() const;
     T loadRelaxed() const;
     T loadAcquire() const;
-    void store(T newValue);
     void storeRelaxed(T newValue);
     void storeRelease(T newValue);
 
     operator T() const;
     QAtomicInteger &operator=(T);
 
-    static bool isReferenceCountingNative();
-    static bool isReferenceCountingWaitFree();
+    static constexpr bool isReferenceCountingNative();
+    static constexpr bool isReferenceCountingWaitFree();
 
     bool ref();
     bool deref();
 
-    static bool isTestAndSetNative();
-    static bool isTestAndSetWaitFree();
+    static constexpr bool isTestAndSetNative();
+    static constexpr bool isTestAndSetWaitFree();
 
     bool testAndSetRelaxed(T expectedValue, T newValue);
     bool testAndSetAcquire(T expectedValue, T newValue);
     bool testAndSetRelease(T expectedValue, T newValue);
     bool testAndSetOrdered(T expectedValue, T newValue);
 
-    static bool isFetchAndStoreNative();
-    static bool isFetchAndStoreWaitFree();
+    static constexpr bool isFetchAndStoreNative();
+    static constexpr bool isFetchAndStoreWaitFree();
 
     T fetchAndStoreRelaxed(T newValue);
     T fetchAndStoreAcquire(T newValue);
     T fetchAndStoreRelease(T newValue);
     T fetchAndStoreOrdered(T newValue);
 
-    static bool isFetchAndAddNative();
-    static bool isFetchAndAddWaitFree();
+    static constexpr bool isFetchAndAddNative();
+    static constexpr bool isFetchAndAddWaitFree();
 
     T fetchAndAddRelaxed(T valueToAdd);
     T fetchAndAddAcquire(T valueToAdd);
@@ -133,7 +131,7 @@ public:
 #endif +/
 }
 
-/// Binding for C++ class [QAtomicInt](https://doc.qt.io/qt-5/qatomicint.html).
+/// Binding for C++ class [QAtomicInt](https://doc.qt.io/qt-6/qatomicint.html).
 extern(C++, class) struct QAtomicInt
 {
     public QAtomicInteger!(int) base0;
@@ -154,7 +152,7 @@ public:
 }
 
 // High-level atomic pointer operations
-/// Binding for C++ class [QAtomicPointer](https://doc.qt.io/qt-5/qatomicpointer.html).
+/// Binding for C++ class [QAtomicPointer](https://doc.qt.io/qt-6/qatomicpointer.html).
 extern(C++, class) struct QAtomicPointer(T)
 {
     public QBasicAtomicPointer!(T) base0;
@@ -185,31 +183,29 @@ public:
     }+/
 
 /+ #ifdef Q_QDOC
-    T *load() const;
     T *loadAcquire() const;
     T *loadRelaxed() const;
-    void store(T *newValue);
     void storeRelaxed(T *newValue);
     void storeRelease(T *newValue);
 
-    static bool isTestAndSetNative();
-    static bool isTestAndSetWaitFree();
+    static constexpr bool isTestAndSetNative();
+    static constexpr bool isTestAndSetWaitFree();
 
     bool testAndSetRelaxed(T *expectedValue, T *newValue);
     bool testAndSetAcquire(T *expectedValue, T *newValue);
     bool testAndSetRelease(T *expectedValue, T *newValue);
     bool testAndSetOrdered(T *expectedValue, T *newValue);
 
-    static bool isFetchAndStoreNative();
-    static bool isFetchAndStoreWaitFree();
+    static constexpr bool isFetchAndStoreNative();
+    static constexpr bool isFetchAndStoreWaitFree();
 
     T *fetchAndStoreRelaxed(T *newValue);
     T *fetchAndStoreAcquire(T *newValue);
     T *fetchAndStoreRelease(T *newValue);
     T *fetchAndStoreOrdered(T *newValue);
 
-    static bool isFetchAndAddNative();
-    static bool isFetchAndAddWaitFree();
+    static constexpr bool isFetchAndAddNative();
+    static constexpr bool isFetchAndAddWaitFree();
 
     T *fetchAndAddRelaxed(qptrdiff valueToAdd);
     T *fetchAndAddAcquire(qptrdiff valueToAdd);

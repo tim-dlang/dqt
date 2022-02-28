@@ -21,7 +21,6 @@ import qt.core.global;
 import qt.core.list;
 import qt.core.metamacros;
 import qt.core.namespace;
-import qt.core.qchar;
 import qt.core.shareddata;
 import qt.core.string;
 import qt.core.stringlist;
@@ -34,14 +33,13 @@ class QTextStreamPrivate; +/
 
 extern(C++, class) struct QLocalePrivate;
 
-/+ Q_CORE_EXPORT uint qHash(const QLocale &key, uint seed = 0) noexcept; +/
+/+ Q_CORE_EXPORT size_t qHash(const QLocale &key, size_t seed = 0) noexcept; +/
 
-/// Binding for C++ class [QLocale](https://doc.qt.io/qt-5/qlocale.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLocale
+/// Binding for C++ class [QLocale](https://doc.qt.io/qt-6/qlocale.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLocale
 {
     mixin(Q_GADGET);
     /+ friend class QString; +/
-    /+ friend class QStringRef; +/
     /+ friend class QByteArray; +/
     /+ friend class QIntValidator; +/
     /+ friend class QDoubleValidatorPrivate; +/
@@ -51,876 +49,808 @@ extern(C++, class) struct QLocalePrivate;
 public:
 // see qlocale_data_p.h for more info on generated data
 // GENERATED PART STARTS HERE
-    enum Language {
+    enum Language : ushort {
         AnyLanguage = 0,
         C = 1,
         Abkhazian = 2,
-        Oromo = 3,
-        Afar = 4,
-        Afrikaans = 5,
-        Albanian = 6,
-        Amharic = 7,
-        Arabic = 8,
-        Armenian = 9,
-        Assamese = 10,
-        Aymara = 11,
-        Azerbaijani = 12,
-        Bashkir = 13,
-        Basque = 14,
-        Bengali = 15,
-        Dzongkha = 16,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Bihari /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 17,
-/+ #endif +/
-        Bislama = 18,
-        Breton = 19,
-        Bulgarian = 20,
-        Burmese = 21,
-        Belarusian = 22,
-        Khmer = 23,
-        Catalan = 24,
-        Chinese = 25,
-        Corsican = 26,
-        Croatian = 27,
-        Czech = 28,
-        Danish = 29,
-        Dutch = 30,
-        English = 31,
-        Esperanto = 32,
-        Estonian = 33,
-        Faroese = 34,
-        Fijian = 35,
-        Finnish = 36,
-        French = 37,
-        WesternFrisian = 38,
-        Gaelic = 39,
-        Galician = 40,
-        Georgian = 41,
-        German = 42,
-        Greek = 43,
-        Greenlandic = 44,
-        Guarani = 45,
-        Gujarati = 46,
-        Hausa = 47,
-        Hebrew = 48,
-        Hindi = 49,
-        Hungarian = 50,
-        Icelandic = 51,
-        Indonesian = 52,
-        Interlingua = 53,
-        Interlingue = 54,
-        Inuktitut = 55,
-        Inupiak = 56,
-        Irish = 57,
-        Italian = 58,
-        Japanese = 59,
-        Javanese = 60,
-        Kannada = 61,
-        Kashmiri = 62,
-        Kazakh = 63,
-        Kinyarwanda = 64,
-        Kirghiz = 65,
-        Korean = 66,
-        Kurdish = 67,
-        Rundi = 68,
-        Lao = 69,
-        Latin = 70,
-        Latvian = 71,
-        Lingala = 72,
-        Lithuanian = 73,
-        Macedonian = 74,
-        Malagasy = 75,
-        Malay = 76,
-        Malayalam = 77,
-        Maltese = 78,
-        Maori = 79,
-        Marathi = 80,
-        Marshallese = 81,
-        Mongolian = 82,
-        NauruLanguage = 83,
-        Nepali = 84,
-        NorwegianBokmal = 85,
-        Occitan = 86,
-        Oriya = 87,
-        Pashto = 88,
-        Persian = 89,
-        Polish = 90,
-        Portuguese = 91,
-        Punjabi = 92,
-        Quechua = 93,
-        Romansh = 94,
-        Romanian = 95,
-        Russian = 96,
-        Samoan = 97,
-        Sango = 98,
-        Sanskrit = 99,
-        Serbian = 100,
-        Ossetic = 101,
-        SouthernSotho = 102,
-        Tswana = 103,
-        Shona = 104,
-        Sindhi = 105,
-        Sinhala = 106,
-        Swati = 107,
-        Slovak = 108,
-        Slovenian = 109,
-        Somali = 110,
-        Spanish = 111,
-        Sundanese = 112,
-        Swahili = 113,
-        Swedish = 114,
-        Sardinian = 115,
-        Tajik = 116,
-        Tamil = 117,
-        Tatar = 118,
-        Telugu = 119,
-        Thai = 120,
-        Tibetan = 121,
-        Tigrinya = 122,
-        Tongan = 123,
-        Tsonga = 124,
-        Turkish = 125,
-        Turkmen = 126,
-        Tahitian = 127,
-        Uighur = 128,
-        Ukrainian = 129,
-        Urdu = 130,
-        Uzbek = 131,
-        Vietnamese = 132,
-        Volapuk = 133,
-        Welsh = 134,
-        Wolof = 135,
-        Xhosa = 136,
-        Yiddish = 137,
-        Yoruba = 138,
-        Zhuang = 139,
-        Zulu = 140,
-        NorwegianNynorsk = 141,
-        Bosnian = 142,
-        Divehi = 143,
-        Manx = 144,
-        Cornish = 145,
-        Akan = 146,
-        Konkani = 147,
-        Ga = 148,
-        Igbo = 149,
-        Kamba = 150,
-        Syriac = 151,
-        Blin = 152,
-        Geez = 153,
-        Koro = 154,
-        Sidamo = 155,
-        Atsam = 156,
-        Tigre = 157,
-        Jju = 158,
-        Friulian = 159,
-        Venda = 160,
-        Ewe = 161,
-        Walamo = 162,
-        Hawaiian = 163,
-        Tyap = 164,
-        Nyanja = 165,
-        Filipino = 166,
-        SwissGerman = 167,
-        SichuanYi = 168,
-        Kpelle = 169,
-        LowGerman = 170,
-        SouthNdebele = 171,
-        NorthernSotho = 172,
-        NorthernSami = 173,
-        Taroko = 174,
-        Gusii = 175,
-        Taita = 176,
-        Fulah = 177,
-        Kikuyu = 178,
-        Samburu = 179,
-        Sena = 180,
-        NorthNdebele = 181,
-        Rombo = 182,
-        Tachelhit = 183,
-        Kabyle = 184,
-        Nyankole = 185,
-        Bena = 186,
-        Vunjo = 187,
-        Bambara = 188,
-        Embu = 189,
-        Cherokee = 190,
-        Morisyen = 191,
-        Makonde = 192,
-        Langi = 193,
-        Ganda = 194,
-        Bemba = 195,
-        Kabuverdianu = 196,
-        Meru = 197,
-        Kalenjin = 198,
-        Nama = 199,
-        Machame = 200,
-        Colognian = 201,
-        Masai = 202,
-        Soga = 203,
-        Luyia = 204,
-        Asu = 205,
-        Teso = 206,
-        Saho = 207,
-        KoyraChiini = 208,
-        Rwa = 209,
-        Luo = 210,
-        Chiga = 211,
-        CentralMoroccoTamazight = 212,
-        KoyraboroSenni = 213,
-        Shambala = 214,
-        Bodo = 215,
-        Avaric = 216,
-        Chamorro = 217,
-        Chechen = 218,
-        Church = 219,
-        Chuvash = 220,
-        Cree = 221,
-        Haitian = 222,
-        Herero = 223,
-        HiriMotu = 224,
-        Kanuri = 225,
-        Komi = 226,
-        Kongo = 227,
-        Kwanyama = 228,
-        Limburgish = 229,
-        LubaKatanga = 230,
-        Luxembourgish = 231,
-        Navaho = 232,
-        Ndonga = 233,
-        Ojibwa = 234,
-        Pali = 235,
-        Walloon = 236,
-        Aghem = 237,
-        Basaa = 238,
-        Zarma = 239,
-        Duala = 240,
-        JolaFonyi = 241,
-        Ewondo = 242,
-        Bafia = 243,
-        MakhuwaMeetto = 244,
-        Mundang = 245,
-        Kwasio = 246,
-        Nuer = 247,
-        Sakha = 248,
-        Sangu = 249,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        CongoSwahili /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 250,
-/+ #endif +/
-        Tasawaq = 251,
-        Vai = 252,
-        Walser = 253,
-        Yangben = 254,
-        Avestan = 255,
-        Asturian = 256,
-        Ngomba = 257,
-        Kako = 258,
-        Meta = 259,
-        Ngiemboon = 260,
-        Aragonese = 261,
-        Akkadian = 262,
-        AncientEgyptian = 263,
-        AncientGreek = 264,
-        Aramaic = 265,
-        Balinese = 266,
-        Bamun = 267,
-        BatakToba = 268,
-        Buginese = 269,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Buhid /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 270,
-        Carian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 271,
-/+ #endif +/
-        Chakma = 272,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        ClassicalMandaic /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 273,
-/+ #endif +/
-        Coptic = 274,
-        Dogri = 275,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        EasternCham /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 276,
-        EasternKayah /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 277,
-        Etruscan /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 278,
-/+ #endif +/
-        Gothic = 279,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Hanunoo /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 280,
-/+ #endif +/
-        Ingush = 281,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        LargeFloweryMiao /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 282,
-        Lepcha /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 283,
-        Limbu /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 284,
-        Lisu /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 285,
-        Lu /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 286,
-        Lycian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 287,
-        Lydian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 288,
-/+ #endif +/
-        Mandingo = 289,
-        Manipuri = 290,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Meroitic /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 291,
-        NorthernThai /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 292,
-/+ #endif +/
-        OldIrish = 293,
-        OldNorse = 294,
-        OldPersian = 295,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        OldTurkish /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 296,
-/+ #endif +/
-        Pahlavi = 297,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Parthian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 298,
-/+ #endif +/
-        Phoenician = 299,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        PrakritLanguage /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 300,
-        Rejang /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 301,
-        Sabaean /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 302,
-        Samaritan /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 303,
-/+ #endif +/
-        Santali = 304,
-        Saurashtra = 305,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Sora /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 306,
-        Sylheti /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 307,
-        Tagbanwa /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 308,
-/+ #endif +/
-        TaiDam = 309,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        TaiNua /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 310,
-/+ #endif +/
-        Ugaritic = 311,
-        Akoose = 312,
-        Lakota = 313,
-        StandardMoroccanTamazight = 314,
-        Mapuche = 315,
-        CentralKurdish = 316,
-        LowerSorbian = 317,
-        UpperSorbian = 318,
-        Kenyang = 319,
-        Mohawk = 320,
-        Nko = 321,
-        Prussian = 322,
-        Kiche = 323,
-        SouthernSami = 324,
-        LuleSami = 325,
-        InariSami = 326,
-        SkoltSami = 327,
-        Warlpiri = 328,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        ManichaeanMiddlePersian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 329,
-/+ #endif +/
-        Mende = 330,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        AncientNorthArabian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 331,
-        LinearA /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 332,
-        HmongNjua /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 333,
-        Ho /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 334,
-/+ #endif +/
-        Lezghian = 335,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Bassa /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 336,
-        Mono /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 337,
-        TedimChin /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 338,
-/+ #endif +/
-        Maithili = 339,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Ahom /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 340,
-/+ #endif +/
-        AmericanSignLanguage = 341,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        ArdhamagadhiPrakrit /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 342,
-/+ #endif +/
-        Bhojpuri = 343,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        HieroglyphicLuwian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 344,
-/+ #endif +/
-        LiteraryChinese = 345,
-        Mazanderani = 346,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Mru /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 347,
-/+ #endif +/
-        Newari = 348,
-        NorthernLuri = 349,
-        Palauan = 350,
-        Papiamento = 351,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Saraiki /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 352,
-/+ #endif +/
-        TokelauLanguage = 353,
-        TokPisin = 354,
-        TuvaluLanguage = 355,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        UncodedLanguages /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 356,
-/+ #endif +/
-        Cantonese = 357,
-        Osage = 358,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Tangut /+ Q_DECL_ENUMERATOR_DEPRECATED_X("No locale data for this language") +/ = 359,
-/+ #endif +/
-        Ido = 360,
-        Lojban = 361,
-        Sicilian = 362,
-        SouthernKurdish = 363,
-        WesternBalochi = 364,
-        Cebuano = 365,
-        Erzya = 366,
-        Chickasaw = 367,
-        Muscogee = 368,
-        Silesian = 369,
-        NigerianPidgin = 370,
+        Afar = 3,
+        Afrikaans = 4,
+        Aghem = 5,
+        Akan = 6,
+        Akkadian = 7,
+        Akoose = 8,
+        Albanian = 9,
+        AmericanSignLanguage = 10,
+        Amharic = 11,
+        AncientEgyptian = 12,
+        AncientGreek = 13,
+        Arabic = 14,
+        Aragonese = 15,
+        Aramaic = 16,
+        Armenian = 17,
+        Assamese = 18,
+        Asturian = 19,
+        Asu = 20,
+        Atsam = 21,
+        Avaric = 22,
+        Avestan = 23,
+        Aymara = 24,
+        Azerbaijani = 25,
+        Bafia = 26,
+        Balinese = 27,
+        Bambara = 28,
+        Bamun = 29,
+        Bangla = 30,
+        Basaa = 31,
+        Bashkir = 32,
+        Basque = 33,
+        BatakToba = 34,
+        Belarusian = 35,
+        Bemba = 36,
+        Bena = 37,
+        Bhojpuri = 38,
+        Bislama = 39,
+        Blin = 40,
+        Bodo = 41,
+        Bosnian = 42,
+        Breton = 43,
+        Buginese = 44,
+        Bulgarian = 45,
+        Burmese = 46,
+        Cantonese = 47,
+        Catalan = 48,
+        Cebuano = 49,
+        CentralAtlasTamazight = 50,
+        CentralKurdish = 51,
+        Chakma = 52,
+        Chamorro = 53,
+        Chechen = 54,
+        Cherokee = 55,
+        Chickasaw = 56,
+        Chiga = 57,
+        Chinese = 58,
+        Church = 59,
+        Chuvash = 60,
+        Colognian = 61,
+        Coptic = 62,
+        Cornish = 63,
+        Corsican = 64,
+        Cree = 65,
+        Croatian = 66,
+        Czech = 67,
+        Danish = 68,
+        Divehi = 69,
+        Dogri = 70,
+        Duala = 71,
+        Dutch = 72,
+        Dzongkha = 73,
+        Embu = 74,
+        English = 75,
+        Erzya = 76,
+        Esperanto = 77,
+        Estonian = 78,
+        Ewe = 79,
+        Ewondo = 80,
+        Faroese = 81,
+        Fijian = 82,
+        Filipino = 83,
+        Finnish = 84,
+        French = 85,
+        Friulian = 86,
+        Fulah = 87,
+        Gaelic = 88,
+        Ga = 89,
+        Galician = 90,
+        Ganda = 91,
+        Geez = 92,
+        Georgian = 93,
+        German = 94,
+        Gothic = 95,
+        Greek = 96,
+        Guarani = 97,
+        Gujarati = 98,
+        Gusii = 99,
+        Haitian = 100,
+        Hausa = 101,
+        Hawaiian = 102,
+        Hebrew = 103,
+        Herero = 104,
+        Hindi = 105,
+        HiriMotu = 106,
+        Hungarian = 107,
+        Icelandic = 108,
+        Ido = 109,
+        Igbo = 110,
+        InariSami = 111,
+        Indonesian = 112,
+        Ingush = 113,
+        Interlingua = 114,
+        Interlingue = 115,
+        Inuktitut = 116,
+        Inupiaq = 117,
+        Irish = 118,
+        Italian = 119,
+        Japanese = 120,
+        Javanese = 121,
+        Jju = 122,
+        JolaFonyi = 123,
+        Kabuverdianu = 124,
+        Kabyle = 125,
+        Kako = 126,
+        Kalaallisut = 127,
+        Kalenjin = 128,
+        Kamba = 129,
+        Kannada = 130,
+        Kanuri = 131,
+        Kashmiri = 132,
+        Kazakh = 133,
+        Kenyang = 134,
+        Khmer = 135,
+        Kiche = 136,
+        Kikuyu = 137,
+        Kinyarwanda = 138,
+        Komi = 139,
+        Kongo = 140,
+        Konkani = 141,
+        Korean = 142,
+        Koro = 143,
+        KoyraboroSenni = 144,
+        KoyraChiini = 145,
+        Kpelle = 146,
+        Kuanyama = 147,
+        Kurdish = 148,
+        Kwasio = 149,
+        Kyrgyz = 150,
+        Lakota = 151,
+        Langi = 152,
+        Lao = 153,
+        Latin = 154,
+        Latvian = 155,
+        Lezghian = 156,
+        Limburgish = 157,
+        Lingala = 158,
+        LiteraryChinese = 159,
+        Lithuanian = 160,
+        Lojban = 161,
+        LowerSorbian = 162,
+        LowGerman = 163,
+        LubaKatanga = 164,
+        LuleSami = 165,
+        Luo = 166,
+        Luxembourgish = 167,
+        Luyia = 168,
+        Macedonian = 169,
+        Machame = 170,
+        Maithili = 171,
+        MakhuwaMeetto = 172,
+        Makonde = 173,
+        Malagasy = 174,
+        Malayalam = 175,
+        Malay = 176,
+        Maltese = 177,
+        Mandingo = 178,
+        Manipuri = 179,
+        Manx = 180,
+        Maori = 181,
+        Mapuche = 182,
+        Marathi = 183,
+        Marshallese = 184,
+        Masai = 185,
+        Mazanderani = 186,
+        Mende = 187,
+        Meru = 188,
+        Meta = 189,
+        Mohawk = 190,
+        Mongolian = 191,
+        Morisyen = 192,
+        Mundang = 193,
+        Muscogee = 194,
+        Nama = 195,
+        NauruLanguage = 196,
+        Navajo = 197,
+        Ndonga = 198,
+        Nepali = 199,
+        Newari = 200,
+        Ngiemboon = 201,
+        Ngomba = 202,
+        NigerianPidgin = 203,
+        Nko = 204,
+        NorthernLuri = 205,
+        NorthernSami = 206,
+        NorthernSotho = 207,
+        NorthNdebele = 208,
+        NorwegianBokmal = 209,
+        NorwegianNynorsk = 210,
+        Nuer = 211,
+        Nyanja = 212,
+        Nyankole = 213,
+        Occitan = 214,
+        Odia = 215,
+        Ojibwa = 216,
+        OldIrish = 217,
+        OldNorse = 218,
+        OldPersian = 219,
+        Oromo = 220,
+        Osage = 221,
+        Ossetic = 222,
+        Pahlavi = 223,
+        Palauan = 224,
+        Pali = 225,
+        Papiamento = 226,
+        Pashto = 227,
+        Persian = 228,
+        Phoenician = 229,
+        Polish = 230,
+        Portuguese = 231,
+        Prussian = 232,
+        Punjabi = 233,
+        Quechua = 234,
+        Romanian = 235,
+        Romansh = 236,
+        Rombo = 237,
+        Rundi = 238,
+        Russian = 239,
+        Rwa = 240,
+        Saho = 241,
+        Sakha = 242,
+        Samburu = 243,
+        Samoan = 244,
+        Sango = 245,
+        Sangu = 246,
+        Sanskrit = 247,
+        Santali = 248,
+        Sardinian = 249,
+        Saurashtra = 250,
+        Sena = 251,
+        Serbian = 252,
+        Shambala = 253,
+        Shona = 254,
+        SichuanYi = 255,
+        Sicilian = 256,
+        Sidamo = 257,
+        Silesian = 258,
+        Sindhi = 259,
+        Sinhala = 260,
+        SkoltSami = 261,
+        Slovak = 262,
+        Slovenian = 263,
+        Soga = 264,
+        Somali = 265,
+        SouthernKurdish = 266,
+        SouthernSami = 267,
+        SouthernSotho = 268,
+        SouthNdebele = 269,
+        Spanish = 270,
+        StandardMoroccanTamazight = 271,
+        Sundanese = 272,
+        Swahili = 273,
+        Swati = 274,
+        Swedish = 275,
+        SwissGerman = 276,
+        Syriac = 277,
+        Tachelhit = 278,
+        Tahitian = 279,
+        TaiDam = 280,
+        Taita = 281,
+        Tajik = 282,
+        Tamil = 283,
+        Taroko = 284,
+        Tasawaq = 285,
+        Tatar = 286,
+        Telugu = 287,
+        Teso = 288,
+        Thai = 289,
+        Tibetan = 290,
+        Tigre = 291,
+        Tigrinya = 292,
+        TokelauLanguage = 293,
+        TokPisin = 294,
+        Tongan = 295,
+        Tsonga = 296,
+        Tswana = 297,
+        Turkish = 298,
+        Turkmen = 299,
+        TuvaluLanguage = 300,
+        Tyap = 301,
+        Ugaritic = 302,
+        Ukrainian = 303,
+        UpperSorbian = 304,
+        Urdu = 305,
+        Uyghur = 306,
+        Uzbek = 307,
+        Vai = 308,
+        Venda = 309,
+        Vietnamese = 310,
+        Volapuk = 311,
+        Vunjo = 312,
+        Walloon = 313,
+        Walser = 314,
+        Warlpiri = 315,
+        Welsh = 316,
+        WesternBalochi = 317,
+        WesternFrisian = 318,
+        Wolaytta = 319,
+        Wolof = 320,
+        Xhosa = 321,
+        Yangben = 322,
+        Yiddish = 323,
+        Yoruba = 324,
+        Zarma = 325,
+        Zhuang = 326,
+        Zulu = 327,
 
         Afan = Language.Oromo,
+        Bengali = Language.Bangla,
         Bhutani = Language.Dzongkha,
         Byelorussian = Language.Belarusian,
         Cambodian = Language.Khmer,
+        CentralMoroccoTamazight = Language.CentralAtlasTamazight,
         Chewa = Language.Nyanja,
         Frisian = Language.WesternFrisian,
+        Greenlandic = Language.Kalaallisut,
+        Inupiak = Language.Inupiaq,
+        Kirghiz = Language.Kyrgyz,
         Kurundi = Language.Rundi,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Moldavian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Obsolete name, use Romanian") +/ = Language.Romanian,
-        Norwegian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Obsolete name, use NorwegianBokmal") +/ = Language.NorwegianBokmal,
-/+ #endif +/
+        Kwanyama = Language.Kuanyama,
+        Navaho = Language.Navajo,
+        Oriya = Language.Odia,
         RhaetoRomance = Language.Romansh,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        SerboCroatian /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Obsolete name, use Serbian") +/ = Language.Serbian,
-        Tagalog /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Obsolete name, use Filipino") +/ = Language.Filipino,
-        Twi /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Obsolete name, use Akan") +/ = Language.Akan,
-/+ #endif +/
-        Uigur = Language.Uighur,
+        Uighur = Language.Uyghur,
+        Uigur = Language.Uyghur,
+        Walamo = Language.Wolaytta,
 
-        LastLanguage = Language.NigerianPidgin
+        LastLanguage = Language.Zulu
     }
 
-    enum Script {
+    enum Script : ushort {
         AnyScript = 0,
-        ArabicScript = 1,
-        CyrillicScript = 2,
-        DeseretScript = 3,
-        GurmukhiScript = 4,
-        SimplifiedHanScript = 5,
-        TraditionalHanScript = 6,
-        LatinScript = 7,
-        MongolianScript = 8,
-        TifinaghScript = 9,
-        ArmenianScript = 10,
-        BengaliScript = 11,
-        CherokeeScript = 12,
-        DevanagariScript = 13,
-        EthiopicScript = 14,
-        GeorgianScript = 15,
-        GreekScript = 16,
-        GujaratiScript = 17,
-        HebrewScript = 18,
-        JapaneseScript = 19,
-        KhmerScript = 20,
-        KannadaScript = 21,
-        KoreanScript = 22,
-        LaoScript = 23,
-        MalayalamScript = 24,
-        MyanmarScript = 25,
-        OriyaScript = 26,
-        TamilScript = 27,
-        TeluguScript = 28,
-        ThaanaScript = 29,
-        ThaiScript = 30,
-        TibetanScript = 31,
-        SinhalaScript = 32,
-        SyriacScript = 33,
-        YiScript = 34,
-        VaiScript = 35,
-        AvestanScript = 36,
-        BalineseScript = 37,
-        BamumScript = 38,
-        BatakScript = 39,
-        BopomofoScript = 40,
-        BrahmiScript = 41,
-        BugineseScript = 42,
-        BuhidScript = 43,
-        CanadianAboriginalScript = 44,
-        CarianScript = 45,
-        ChakmaScript = 46,
-        ChamScript = 47,
-        CopticScript = 48,
-        CypriotScript = 49,
-        EgyptianHieroglyphsScript = 50,
-        FraserScript = 51,
-        GlagoliticScript = 52,
-        GothicScript = 53,
-        HanScript = 54,
-        HangulScript = 55,
-        HanunooScript = 56,
-        ImperialAramaicScript = 57,
-        InscriptionalPahlaviScript = 58,
-        InscriptionalParthianScript = 59,
-        JavaneseScript = 60,
-        KaithiScript = 61,
-        KatakanaScript = 62,
-        KayahLiScript = 63,
-        KharoshthiScript = 64,
-        LannaScript = 65,
-        LepchaScript = 66,
-        LimbuScript = 67,
-        LinearBScript = 68,
-        LycianScript = 69,
-        LydianScript = 70,
-        MandaeanScript = 71,
-        MeiteiMayekScript = 72,
-        MeroiticScript = 73,
-        MeroiticCursiveScript = 74,
-        NkoScript = 75,
-        NewTaiLueScript = 76,
-        OghamScript = 77,
-        OlChikiScript = 78,
-        OldItalicScript = 79,
-        OldPersianScript = 80,
-        OldSouthArabianScript = 81,
-        OrkhonScript = 82,
-        OsmanyaScript = 83,
-        PhagsPaScript = 84,
-        PhoenicianScript = 85,
-        PollardPhoneticScript = 86,
-        RejangScript = 87,
-        RunicScript = 88,
-        SamaritanScript = 89,
-        SaurashtraScript = 90,
-        SharadaScript = 91,
-        ShavianScript = 92,
-        SoraSompengScript = 93,
-        CuneiformScript = 94,
-        SundaneseScript = 95,
-        SylotiNagriScript = 96,
-        TagalogScript = 97,
-        TagbanwaScript = 98,
-        TaiLeScript = 99,
-        TaiVietScript = 100,
-        TakriScript = 101,
-        UgariticScript = 102,
-        BrailleScript = 103,
-        HiraganaScript = 104,
-        CaucasianAlbanianScript = 105,
-        BassaVahScript = 106,
-        DuployanScript = 107,
-        ElbasanScript = 108,
-        GranthaScript = 109,
-        PahawhHmongScript = 110,
-        KhojkiScript = 111,
-        LinearAScript = 112,
-        MahajaniScript = 113,
-        ManichaeanScript = 114,
-        MendeKikakuiScript = 115,
-        ModiScript = 116,
-        MroScript = 117,
-        OldNorthArabianScript = 118,
-        NabataeanScript = 119,
-        PalmyreneScript = 120,
-        PauCinHauScript = 121,
-        OldPermicScript = 122,
-        PsalterPahlaviScript = 123,
-        SiddhamScript = 124,
-        KhudawadiScript = 125,
-        TirhutaScript = 126,
-        VarangKshitiScript = 127,
-        AhomScript = 128,
-        AnatolianHieroglyphsScript = 129,
-        HatranScript = 130,
-        MultaniScript = 131,
-        OldHungarianScript = 132,
-        SignWritingScript = 133,
-        AdlamScript = 134,
-        BhaiksukiScript = 135,
-        MarchenScript = 136,
-        NewaScript = 137,
-        OsageScript = 138,
-        TangutScript = 139,
-        HanWithBopomofoScript = 140,
-        JamoScript = 141,
+        AdlamScript = 1,
+        AhomScript = 2,
+        AnatolianHieroglyphsScript = 3,
+        ArabicScript = 4,
+        ArmenianScript = 5,
+        AvestanScript = 6,
+        BalineseScript = 7,
+        BamumScript = 8,
+        BanglaScript = 9,
+        BassaVahScript = 10,
+        BatakScript = 11,
+        BhaiksukiScript = 12,
+        BopomofoScript = 13,
+        BrahmiScript = 14,
+        BrailleScript = 15,
+        BugineseScript = 16,
+        BuhidScript = 17,
+        CanadianAboriginalScript = 18,
+        CarianScript = 19,
+        CaucasianAlbanianScript = 20,
+        ChakmaScript = 21,
+        ChamScript = 22,
+        CherokeeScript = 23,
+        CopticScript = 24,
+        CuneiformScript = 25,
+        CypriotScript = 26,
+        CyrillicScript = 27,
+        DeseretScript = 28,
+        DevanagariScript = 29,
+        DuployanScript = 30,
+        EgyptianHieroglyphsScript = 31,
+        ElbasanScript = 32,
+        EthiopicScript = 33,
+        FraserScript = 34,
+        GeorgianScript = 35,
+        GlagoliticScript = 36,
+        GothicScript = 37,
+        GranthaScript = 38,
+        GreekScript = 39,
+        GujaratiScript = 40,
+        GurmukhiScript = 41,
+        HangulScript = 42,
+        HanScript = 43,
+        HanunooScript = 44,
+        HanWithBopomofoScript = 45,
+        HatranScript = 46,
+        HebrewScript = 47,
+        HiraganaScript = 48,
+        ImperialAramaicScript = 49,
+        InscriptionalPahlaviScript = 50,
+        InscriptionalParthianScript = 51,
+        JamoScript = 52,
+        JapaneseScript = 53,
+        JavaneseScript = 54,
+        KaithiScript = 55,
+        KannadaScript = 56,
+        KatakanaScript = 57,
+        KayahLiScript = 58,
+        KharoshthiScript = 59,
+        KhmerScript = 60,
+        KhojkiScript = 61,
+        KhudawadiScript = 62,
+        KoreanScript = 63,
+        LannaScript = 64,
+        LaoScript = 65,
+        LatinScript = 66,
+        LepchaScript = 67,
+        LimbuScript = 68,
+        LinearAScript = 69,
+        LinearBScript = 70,
+        LycianScript = 71,
+        LydianScript = 72,
+        MahajaniScript = 73,
+        MalayalamScript = 74,
+        MandaeanScript = 75,
+        ManichaeanScript = 76,
+        MarchenScript = 77,
+        MeiteiMayekScript = 78,
+        MendeScript = 79,
+        MeroiticCursiveScript = 80,
+        MeroiticScript = 81,
+        ModiScript = 82,
+        MongolianScript = 83,
+        MroScript = 84,
+        MultaniScript = 85,
+        MyanmarScript = 86,
+        NabataeanScript = 87,
+        NewaScript = 88,
+        NewTaiLueScript = 89,
+        NkoScript = 90,
+        OdiaScript = 91,
+        OghamScript = 92,
+        OlChikiScript = 93,
+        OldHungarianScript = 94,
+        OldItalicScript = 95,
+        OldNorthArabianScript = 96,
+        OldPermicScript = 97,
+        OldPersianScript = 98,
+        OldSouthArabianScript = 99,
+        OrkhonScript = 100,
+        OsageScript = 101,
+        OsmanyaScript = 102,
+        PahawhHmongScript = 103,
+        PalmyreneScript = 104,
+        PauCinHauScript = 105,
+        PhagsPaScript = 106,
+        PhoenicianScript = 107,
+        PollardPhoneticScript = 108,
+        PsalterPahlaviScript = 109,
+        RejangScript = 110,
+        RunicScript = 111,
+        SamaritanScript = 112,
+        SaurashtraScript = 113,
+        SharadaScript = 114,
+        ShavianScript = 115,
+        SiddhamScript = 116,
+        SignWritingScript = 117,
+        SimplifiedHanScript = 118,
+        SinhalaScript = 119,
+        SoraSompengScript = 120,
+        SundaneseScript = 121,
+        SylotiNagriScript = 122,
+        SyriacScript = 123,
+        TagalogScript = 124,
+        TagbanwaScript = 125,
+        TaiLeScript = 126,
+        TaiVietScript = 127,
+        TakriScript = 128,
+        TamilScript = 129,
+        TangutScript = 130,
+        TeluguScript = 131,
+        ThaanaScript = 132,
+        ThaiScript = 133,
+        TibetanScript = 134,
+        TifinaghScript = 135,
+        TirhutaScript = 136,
+        TraditionalHanScript = 137,
+        UgariticScript = 138,
+        VaiScript = 139,
+        VarangKshitiScript = 140,
+        YiScript = 141,
 
+        BengaliScript = Script.BanglaScript,
+        MendeKikakuiScript = Script.MendeScript,
+        OriyaScript = Script.OdiaScript,
         SimplifiedChineseScript = Script.SimplifiedHanScript,
         TraditionalChineseScript = Script.TraditionalHanScript,
 
-        LastScript = Script.JamoScript
+        LastScript = Script.YiScript
     }
 
-    enum Country {
-        AnyCountry = 0,
+    // ### Qt 7: Rename to Territory
+    enum Country : ushort {
+        AnyTerritory = 0,
         Afghanistan = 1,
-        Albania = 2,
-        Algeria = 3,
-        AmericanSamoa = 4,
-        Andorra = 5,
-        Angola = 6,
-        Anguilla = 7,
-        Antarctica = 8,
-        AntiguaAndBarbuda = 9,
-        Argentina = 10,
-        Armenia = 11,
-        Aruba = 12,
-        Australia = 13,
-        Austria = 14,
-        Azerbaijan = 15,
-        Bahamas = 16,
-        Bahrain = 17,
-        Bangladesh = 18,
-        Barbados = 19,
-        Belarus = 20,
-        Belgium = 21,
-        Belize = 22,
-        Benin = 23,
-        Bermuda = 24,
-        Bhutan = 25,
-        Bolivia = 26,
-        BosniaAndHerzegowina = 27,
-        Botswana = 28,
-        BouvetIsland = 29,
-        Brazil = 30,
-        BritishIndianOceanTerritory = 31,
-        Brunei = 32,
-        Bulgaria = 33,
-        BurkinaFaso = 34,
-        Burundi = 35,
-        Cambodia = 36,
-        Cameroon = 37,
-        Canada = 38,
-        CapeVerde = 39,
-        CaymanIslands = 40,
-        CentralAfricanRepublic = 41,
-        Chad = 42,
-        Chile = 43,
-        China = 44,
-        ChristmasIsland = 45,
-        CocosIslands = 46,
-        Colombia = 47,
-        Comoros = 48,
-        CongoKinshasa = 49,
-        CongoBrazzaville = 50,
-        CookIslands = 51,
-        CostaRica = 52,
-        IvoryCoast = 53,
-        Croatia = 54,
-        Cuba = 55,
-        Cyprus = 56,
-        CzechRepublic = 57,
-        Denmark = 58,
-        Djibouti = 59,
-        Dominica = 60,
-        DominicanRepublic = 61,
-        EastTimor = 62,
-        Ecuador = 63,
-        Egypt = 64,
-        ElSalvador = 65,
-        EquatorialGuinea = 66,
-        Eritrea = 67,
-        Estonia = 68,
-        Ethiopia = 69,
-        FalklandIslands = 70,
-        FaroeIslands = 71,
-        Fiji = 72,
-        Finland = 73,
-        France = 74,
-        Guernsey = 75,
-        FrenchGuiana = 76,
-        FrenchPolynesia = 77,
-        FrenchSouthernTerritories = 78,
-        Gabon = 79,
-        Gambia = 80,
-        Georgia = 81,
-        Germany = 82,
-        Ghana = 83,
-        Gibraltar = 84,
-        Greece = 85,
-        Greenland = 86,
-        Grenada = 87,
-        Guadeloupe = 88,
-        Guam = 89,
-        Guatemala = 90,
-        Guinea = 91,
-        GuineaBissau = 92,
-        Guyana = 93,
-        Haiti = 94,
-        HeardAndMcDonaldIslands = 95,
-        Honduras = 96,
-        HongKong = 97,
-        Hungary = 98,
-        Iceland = 99,
-        India = 100,
-        Indonesia = 101,
-        Iran = 102,
-        Iraq = 103,
-        Ireland = 104,
-        Israel = 105,
-        Italy = 106,
-        Jamaica = 107,
-        Japan = 108,
-        Jordan = 109,
-        Kazakhstan = 110,
-        Kenya = 111,
-        Kiribati = 112,
-        NorthKorea = 113,
-        SouthKorea = 114,
-        Kuwait = 115,
-        Kyrgyzstan = 116,
-        Laos = 117,
-        Latvia = 118,
-        Lebanon = 119,
-        Lesotho = 120,
-        Liberia = 121,
-        Libya = 122,
-        Liechtenstein = 123,
-        Lithuania = 124,
-        Luxembourg = 125,
-        Macau = 126,
-        Macedonia = 127,
-        Madagascar = 128,
-        Malawi = 129,
-        Malaysia = 130,
-        Maldives = 131,
-        Mali = 132,
-        Malta = 133,
-        MarshallIslands = 134,
-        Martinique = 135,
-        Mauritania = 136,
-        Mauritius = 137,
-        Mayotte = 138,
-        Mexico = 139,
-        Micronesia = 140,
-        Moldova = 141,
-        Monaco = 142,
-        Mongolia = 143,
-        Montserrat = 144,
-        Morocco = 145,
-        Mozambique = 146,
-        Myanmar = 147,
-        Namibia = 148,
-        NauruCountry = 149,
-        Nepal = 150,
-        Netherlands = 151,
-        CuraSao = 152,
-        NewCaledonia = 153,
-        NewZealand = 154,
-        Nicaragua = 155,
-        Niger = 156,
-        Nigeria = 157,
-        Niue = 158,
-        NorfolkIsland = 159,
-        NorthernMarianaIslands = 160,
-        Norway = 161,
-        Oman = 162,
-        Pakistan = 163,
-        Palau = 164,
-        PalestinianTerritories = 165,
-        Panama = 166,
-        PapuaNewGuinea = 167,
-        Paraguay = 168,
-        Peru = 169,
-        Philippines = 170,
-        Pitcairn = 171,
-        Poland = 172,
-        Portugal = 173,
-        PuertoRico = 174,
-        Qatar = 175,
-        Reunion = 176,
-        Romania = 177,
-        Russia = 178,
-        Rwanda = 179,
-        SaintKittsAndNevis = 180,
-        SaintLucia = 181,
-        SaintVincentAndTheGrenadines = 182,
-        Samoa = 183,
-        SanMarino = 184,
-        SaoTomeAndPrincipe = 185,
-        SaudiArabia = 186,
-        Senegal = 187,
-        Seychelles = 188,
-        SierraLeone = 189,
-        Singapore = 190,
-        Slovakia = 191,
-        Slovenia = 192,
-        SolomonIslands = 193,
-        Somalia = 194,
-        SouthAfrica = 195,
-        SouthGeorgiaAndTheSouthSandwichIslands = 196,
-        Spain = 197,
-        SriLanka = 198,
-        SaintHelena = 199,
+        AlandIslands = 2,
+        Albania = 3,
+        Algeria = 4,
+        AmericanSamoa = 5,
+        Andorra = 6,
+        Angola = 7,
+        Anguilla = 8,
+        Antarctica = 9,
+        AntiguaAndBarbuda = 10,
+        Argentina = 11,
+        Armenia = 12,
+        Aruba = 13,
+        AscensionIsland = 14,
+        Australia = 15,
+        Austria = 16,
+        Azerbaijan = 17,
+        Bahamas = 18,
+        Bahrain = 19,
+        Bangladesh = 20,
+        Barbados = 21,
+        Belarus = 22,
+        Belgium = 23,
+        Belize = 24,
+        Benin = 25,
+        Bermuda = 26,
+        Bhutan = 27,
+        Bolivia = 28,
+        BosniaAndHerzegovina = 29,
+        Botswana = 30,
+        BouvetIsland = 31,
+        Brazil = 32,
+        BritishIndianOceanTerritory = 33,
+        BritishVirginIslands = 34,
+        Brunei = 35,
+        Bulgaria = 36,
+        BurkinaFaso = 37,
+        Burundi = 38,
+        Cambodia = 39,
+        Cameroon = 40,
+        Canada = 41,
+        CanaryIslands = 42,
+        CapeVerde = 43,
+        CaribbeanNetherlands = 44,
+        CaymanIslands = 45,
+        CentralAfricanRepublic = 46,
+        CeutaAndMelilla = 47,
+        Chad = 48,
+        Chile = 49,
+        China = 50,
+        ChristmasIsland = 51,
+        ClippertonIsland = 52,
+        CocosIslands = 53,
+        Colombia = 54,
+        Comoros = 55,
+        CongoBrazzaville = 56,
+        CongoKinshasa = 57,
+        CookIslands = 58,
+        CostaRica = 59,
+        Croatia = 60,
+        Cuba = 61,
+        Curacao = 62,
+        Cyprus = 63,
+        Czechia = 64,
+        Denmark = 65,
+        DiegoGarcia = 66,
+        Djibouti = 67,
+        Dominica = 68,
+        DominicanRepublic = 69,
+        Ecuador = 70,
+        Egypt = 71,
+        ElSalvador = 72,
+        EquatorialGuinea = 73,
+        Eritrea = 74,
+        Estonia = 75,
+        Eswatini = 76,
+        Ethiopia = 77,
+        Europe = 78,
+        EuropeanUnion = 79,
+        FalklandIslands = 80,
+        FaroeIslands = 81,
+        Fiji = 82,
+        Finland = 83,
+        France = 84,
+        FrenchGuiana = 85,
+        FrenchPolynesia = 86,
+        FrenchSouthernTerritories = 87,
+        Gabon = 88,
+        Gambia = 89,
+        Georgia = 90,
+        Germany = 91,
+        Ghana = 92,
+        Gibraltar = 93,
+        Greece = 94,
+        Greenland = 95,
+        Grenada = 96,
+        Guadeloupe = 97,
+        Guam = 98,
+        Guatemala = 99,
+        Guernsey = 100,
+        GuineaBissau = 101,
+        Guinea = 102,
+        Guyana = 103,
+        Haiti = 104,
+        HeardAndMcDonaldIslands = 105,
+        Honduras = 106,
+        HongKong = 107,
+        Hungary = 108,
+        Iceland = 109,
+        India = 110,
+        Indonesia = 111,
+        Iran = 112,
+        Iraq = 113,
+        Ireland = 114,
+        IsleOfMan = 115,
+        Israel = 116,
+        Italy = 117,
+        IvoryCoast = 118,
+        Jamaica = 119,
+        Japan = 120,
+        Jersey = 121,
+        Jordan = 122,
+        Kazakhstan = 123,
+        Kenya = 124,
+        Kiribati = 125,
+        Kosovo = 126,
+        Kuwait = 127,
+        Kyrgyzstan = 128,
+        Laos = 129,
+        LatinAmerica = 130,
+        Latvia = 131,
+        Lebanon = 132,
+        Lesotho = 133,
+        Liberia = 134,
+        Libya = 135,
+        Liechtenstein = 136,
+        Lithuania = 137,
+        Luxembourg = 138,
+        Macao = 139,
+        Macedonia = 140,
+        Madagascar = 141,
+        Malawi = 142,
+        Malaysia = 143,
+        Maldives = 144,
+        Mali = 145,
+        Malta = 146,
+        MarshallIslands = 147,
+        Martinique = 148,
+        Mauritania = 149,
+        Mauritius = 150,
+        Mayotte = 151,
+        Mexico = 152,
+        Micronesia = 153,
+        Moldova = 154,
+        Monaco = 155,
+        Mongolia = 156,
+        Montenegro = 157,
+        Montserrat = 158,
+        Morocco = 159,
+        Mozambique = 160,
+        Myanmar = 161,
+        Namibia = 162,
+        NauruTerritory = 163,
+        Nepal = 164,
+        Netherlands = 165,
+        NewCaledonia = 166,
+        NewZealand = 167,
+        Nicaragua = 168,
+        Nigeria = 169,
+        Niger = 170,
+        Niue = 171,
+        NorfolkIsland = 172,
+        NorthernMarianaIslands = 173,
+        NorthKorea = 174,
+        Norway = 175,
+        Oman = 176,
+        OutlyingOceania = 177,
+        Pakistan = 178,
+        Palau = 179,
+        PalestinianTerritories = 180,
+        Panama = 181,
+        PapuaNewGuinea = 182,
+        Paraguay = 183,
+        Peru = 184,
+        Philippines = 185,
+        Pitcairn = 186,
+        Poland = 187,
+        Portugal = 188,
+        PuertoRico = 189,
+        Qatar = 190,
+        Reunion = 191,
+        Romania = 192,
+        Russia = 193,
+        Rwanda = 194,
+        SaintBarthelemy = 195,
+        SaintHelena = 196,
+        SaintKittsAndNevis = 197,
+        SaintLucia = 198,
+        SaintMartin = 199,
         SaintPierreAndMiquelon = 200,
-        Sudan = 201,
-        Suriname = 202,
-        SvalbardAndJanMayenIslands = 203,
-        Swaziland = 204,
-        Sweden = 205,
-        Switzerland = 206,
-        Syria = 207,
-        Taiwan = 208,
-        Tajikistan = 209,
-        Tanzania = 210,
-        Thailand = 211,
-        Togo = 212,
-        TokelauCountry = 213,
-        Tonga = 214,
-        TrinidadAndTobago = 215,
-        Tunisia = 216,
-        Turkey = 217,
-        Turkmenistan = 218,
-        TurksAndCaicosIslands = 219,
-        TuvaluCountry = 220,
-        Uganda = 221,
-        Ukraine = 222,
-        UnitedArabEmirates = 223,
-        UnitedKingdom = 224,
-        UnitedStates = 225,
-        UnitedStatesMinorOutlyingIslands = 226,
-        Uruguay = 227,
-        Uzbekistan = 228,
-        Vanuatu = 229,
-        VaticanCityState = 230,
-        Venezuela = 231,
-        Vietnam = 232,
-        BritishVirginIslands = 233,
-        UnitedStatesVirginIslands = 234,
-        WallisAndFutunaIslands = 235,
-        WesternSahara = 236,
-        Yemen = 237,
-        CanaryIslands = 238,
-        Zambia = 239,
-        Zimbabwe = 240,
-        ClippertonIsland = 241,
-        Montenegro = 242,
-        Serbia = 243,
-        SaintBarthelemy = 244,
-        SaintMartin = 245,
-        LatinAmerica = 246,
-        AscensionIsland = 247,
-        AlandIslands = 248,
-        DiegoGarcia = 249,
-        CeutaAndMelilla = 250,
-        IsleOfMan = 251,
-        Jersey = 252,
-        TristanDaCunha = 253,
-        SouthSudan = 254,
-        Bonaire = 255,
-        SintMaarten = 256,
-        Kosovo = 257,
-        EuropeanUnion = 258,
-        OutlyingOceania = 259,
-        World = 260,
-        Europe = 261,
+        SaintVincentAndGrenadines = 201,
+        Samoa = 202,
+        SanMarino = 203,
+        SaoTomeAndPrincipe = 204,
+        SaudiArabia = 205,
+        Senegal = 206,
+        Serbia = 207,
+        Seychelles = 208,
+        SierraLeone = 209,
+        Singapore = 210,
+        SintMaarten = 211,
+        Slovakia = 212,
+        Slovenia = 213,
+        SolomonIslands = 214,
+        Somalia = 215,
+        SouthAfrica = 216,
+        SouthGeorgiaAndSouthSandwichIslands = 217,
+        SouthKorea = 218,
+        SouthSudan = 219,
+        Spain = 220,
+        SriLanka = 221,
+        Sudan = 222,
+        Suriname = 223,
+        SvalbardAndJanMayen = 224,
+        Sweden = 225,
+        Switzerland = 226,
+        Syria = 227,
+        Taiwan = 228,
+        Tajikistan = 229,
+        Tanzania = 230,
+        Thailand = 231,
+        TimorLeste = 232,
+        Togo = 233,
+        TokelauTerritory = 234,
+        Tonga = 235,
+        TrinidadAndTobago = 236,
+        TristanDaCunha = 237,
+        Tunisia = 238,
+        Turkey = 239,
+        Turkmenistan = 240,
+        TurksAndCaicosIslands = 241,
+        TuvaluTerritory = 242,
+        Uganda = 243,
+        Ukraine = 244,
+        UnitedArabEmirates = 245,
+        UnitedKingdom = 246,
+        UnitedStatesOutlyingIslands = 247,
+        UnitedStates = 248,
+        UnitedStatesVirginIslands = 249,
+        Uruguay = 250,
+        Uzbekistan = 251,
+        Vanuatu = 252,
+        VaticanCity = 253,
+        Venezuela = 254,
+        Vietnam = 255,
+        WallisAndFutuna = 256,
+        WesternSahara = 257,
+        World = 258,
+        Yemen = 259,
+        Zambia = 260,
+        Zimbabwe = 261,
 
+        AnyCountry = Country.AnyTerritory,
+        Bonaire = Country.CaribbeanNetherlands,
+        BosniaAndHerzegowina = Country.BosniaAndHerzegovina,
+        CuraSao = Country.Curacao,
+        CzechRepublic = Country.Czechia,
         DemocraticRepublicOfCongo = Country.CongoKinshasa,
         DemocraticRepublicOfKorea = Country.NorthKorea,
+        EastTimor = Country.TimorLeste,
         LatinAmericaAndTheCaribbean = Country.LatinAmerica,
+        Macau = Country.Macao,
+        NauruCountry = Country.NauruTerritory,
         PeoplesRepublicOfCongo = Country.CongoBrazzaville,
         RepublicOfKorea = Country.SouthKorea,
         RussianFederation = Country.Russia,
+        SaintVincentAndTheGrenadines = Country.SaintVincentAndGrenadines,
+        SouthGeorgiaAndTheSouthSandwichIslands = Country.SouthGeorgiaAndSouthSandwichIslands,
+        SvalbardAndJanMayenIslands = Country.SvalbardAndJanMayen,
+        Swaziland = Country.Eswatini,
         SyrianArabRepublic = Country.Syria,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        Tokelau /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Obsolete name, use TokelauCountry") +/ = Country.TokelauCountry,
-        Tuvalu /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Obsolete name, use TuvaluCountry") +/ = Country.TuvaluCountry,
-/+ #endif +/
+        TokelauCountry = Country.TokelauTerritory,
+        TuvaluCountry = Country.TuvaluTerritory,
+        UnitedStatesMinorOutlyingIslands = Country.UnitedStatesOutlyingIslands,
+        VaticanCityState = Country.VaticanCity,
+        WallisAndFutunaIslands = Country.WallisAndFutuna,
 
-        LastCountry = Country.Europe
+        LastTerritory = Country.Zimbabwe,
+        LastCountry = Country.LastTerritory
     }
 // GENERATED PART ENDS HERE
+
+    alias Territory = Country; // ### Qt 7: reverse
 
     /+ Q_ENUM(Language) +/
     /+ Q_ENUM(Country) +/
@@ -979,12 +909,12 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
         return r;
     }
 
-    this(ref const(QString) name);
-    this(Language language, Country country = Country.AnyCountry);
-    this(Language language, Script script, Country country);
+    /+ explicit +/this(ref const(QString) name);
+    this(Language language, Territory territory);
+    this(Language language, Script script = Script.AnyScript, Territory territory = Country.AnyTerritory);
     @disable this(this);
     this(ref const(QLocale) other);
-    /+ QLocale &operator=(QLocale &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QLocale) +/
     /+ref QLocale operator =(ref const(QLocale) other);+/
     ~this();
 
@@ -992,37 +922,46 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
 
     Language language() const;
     Script script() const;
-    Country country() const;
+    Territory territory() const;
+/+ #if QT_DEPRECATED_SINCE(6, 6) +/
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use territory() instead") +/
+        Country country() const;
+/+ #endif +/
     QString name() const;
 
     QString bcp47Name() const;
     QString nativeLanguageName() const;
-    QString nativeCountryName() const;
+    QString nativeTerritoryName() const;
+/+ #if QT_DEPRECATED_SINCE(6, 6) +/
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use nativeTerritoryName() instead") +/
+        QString nativeCountryName() const;
+/+ #endif
 
+#if QT_STRINGVIEW_LEVEL < 2 +/
     static if(QT_STRINGVIEW_LEVEL < 2)
     {
-        short toShort(ref const(QString) s, bool* ok = null) const;
-        ushort toUShort(ref const(QString) s, bool* ok = null) const;
-        int toInt(ref const(QString) s, bool* ok = null) const;
-        uint toUInt(ref const(QString) s, bool* ok = null) const;
-        cpp_long toLong(ref const(QString) s, bool* ok = null) const;
-        cpp_ulong toULong(ref const(QString) s, bool* ok = null) const;
-        qlonglong toLongLong(ref const(QString) s, bool* ok = null) const;
-        qulonglong toULongLong(ref const(QString) s, bool* ok = null) const;
-        float toFloat(ref const(QString) s, bool* ok = null) const;
-        double toDouble(ref const(QString) s, bool* ok = null) const;
-
-        short toShort(ref const(QStringRef) s, bool* ok = null) const;
-        ushort toUShort(ref const(QStringRef) s, bool* ok = null) const;
-        int toInt(ref const(QStringRef) s, bool* ok = null) const;
-        uint toUInt(ref const(QStringRef) s, bool* ok = null) const;
-        cpp_long toLong(ref const(QStringRef) s, bool* ok = null) const;
-        cpp_ulong toULong(ref const(QStringRef) s, bool* ok = null) const;
-        qlonglong toLongLong(ref const(QStringRef) s, bool* ok = null) const;
-        qulonglong toULongLong(ref const(QStringRef) s, bool* ok = null) const;
-        float toFloat(ref const(QStringRef) s, bool* ok = null) const;
-        double toDouble(ref const(QStringRef) s, bool* ok = null) const;
+        short toShort(ref const(QString) s, bool* ok = null) const
+        { return toShort(qToStringViewIgnoringNull(s), ok); }
+        ushort toUShort(ref const(QString) s, bool* ok = null) const
+        { return toUShort(qToStringViewIgnoringNull(s), ok); }
+        int toInt(ref const(QString) s, bool* ok = null) const
+        { return toInt(qToStringViewIgnoringNull(s), ok); }
+        uint toUInt(ref const(QString) s, bool* ok = null) const
+        { return toUInt(qToStringViewIgnoringNull(s), ok); }
+        cpp_long toLong(ref const(QString) s, bool* ok = null) const
+        { return toLong(qToStringViewIgnoringNull(s), ok); }
+        cpp_ulong toULong(ref const(QString) s, bool* ok = null) const
+        { return toULong(qToStringViewIgnoringNull(s), ok); }
+        qlonglong toLongLong(ref const(QString) s, bool* ok = null) const
+        { return toLongLong(qToStringViewIgnoringNull(s), ok); }
+        qulonglong toULongLong(ref const(QString) s, bool* ok = null) const
+        { return toULongLong(qToStringViewIgnoringNull(s), ok); }
+        float toFloat(ref const(QString) s, bool* ok = null) const
+        { return toFloat(qToStringViewIgnoringNull(s), ok); }
+        double toDouble(ref const(QString) s, bool* ok = null) const
+        { return toDouble(qToStringViewIgnoringNull(s), ok); }
     }
+/+ #endif +/
 
     short toShort(QStringView s, bool* ok = null) const;
     ushort toUShort(QStringView s, bool* ok = null) const;
@@ -1037,42 +976,39 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
 
     QString toString(qlonglong i) const;
     QString toString(qulonglong i) const;
-    pragma(inline, true) QString toString(cpp_long i) const
-        { return toString(qlonglong(i)); }
-    pragma(inline, true) QString toString(cpp_ulong i) const
-        { return toString(qulonglong(i)); }
-    pragma(inline, true) QString toString(short i) const
-        { return toString(qlonglong(i)); }
-    pragma(inline, true) QString toString(ushort i) const
-        { return toString(qulonglong(i)); }
-    pragma(inline, true) QString toString(int i) const
-        { return toString(qlonglong(i)); }
-    pragma(inline, true) QString toString(uint i) const
-        { return toString(qulonglong(i)); }
-    QString toString(double i, char f = 'g', int prec = 6) const;
-    pragma(inline, true) QString toString(float i, char f = 'g', int prec = 6) const
-        { return toString(double(i), f, prec); }
+    QString toString(cpp_long i) const { return toString(qlonglong(i)); }
+    QString toString(cpp_ulong i) const { return toString(qulonglong(i)); }
+    QString toString(short i) const { return toString(qlonglong(i)); }
+    QString toString(ushort i) const { return toString(qulonglong(i)); }
+    QString toString(int i) const { return toString(qlonglong(i)); }
+    QString toString(uint i) const { return toString(qulonglong(i)); }
+    QString toString(double f, char format = 'g', int precision = 6) const;
+    QString toString(float f, char format = 'g', int precision = 6) const
+    { return toString(double(f), format, precision); }
 
     static if(QT_STRINGVIEW_LEVEL < 2)
     {
-        QString toString(ref const(QDate) date, ref const(QString) formatStr) const;
-        QString toString(ref const(QTime) time, ref const(QString) formatStr) const;
-        QString toString(ref const(QDateTime) dateTime, ref const(QString) format) const;
+        // (Can't inline first two: passing by value doesn't work when only forward-declared.)
+        QString toString(QDate date, ref const(QString) format) const;
+        QString toString(QTime time, ref const(QString) format) const;
+        QString toString(ref const(QDateTime) dateTime, ref const(QString) format) const
+        { return toString(dateTime, qToStringViewIgnoringNull(format)); }
     }
-    QString toString(ref const(QDate) date, QStringView formatStr) const;
-    QString toString(ref const(QTime) time, QStringView formatStr) const;
+    QString toString(QDate date, QStringView format) const;
+    QString toString(QTime time, QStringView format) const;
     QString toString(ref const(QDateTime) dateTime, QStringView format) const;
-    QString toString(ref const(QDate) date, FormatType format = FormatType.LongFormat) const;
-    QString toString(ref const(QTime) time, FormatType format = FormatType.LongFormat) const;
+    QString toString(QDate date, FormatType format = FormatType.LongFormat) const;
+    QString toString(QTime time, FormatType format = FormatType.LongFormat) const;
     QString toString(ref const(QDateTime) dateTime, FormatType format = FormatType.LongFormat) const;
-    /* Removing default value for `format' is done intentionally,
-     * after all tests we will remove non-calendar-aware version of these functions,
-     * and add a default value for both calendar instance, and format
+    /* We can't pass a default for QCalendar (its declaration mentions
+     * QLocale::FormatType, so it has to #include this header, which thus can't
+     * #include its, so we can't instantiate QCalendar() as default). This
+     * precludes any default for format, too.
      */
-    QString toString(ref const(QDate) date, QStringView formatStr, QCalendar cal) const;
-    QString toString(ref const(QDate) date, FormatType format, QCalendar cal) const;
+    QString toString(QDate date, QStringView format, QCalendar cal) const;
+    QString toString(QDate date, FormatType format, QCalendar cal) const;
     QString toString(ref const(QDateTime) dateTime, FormatType format, QCalendar cal) const;
-    QString toString(ref const(QDateTime) dateTime, QStringView formatStr, QCalendar cal) const;
+    QString toString(ref const(QDateTime) dateTime, QStringView format, QCalendar cal) const;
 
     QString dateFormat(FormatType format = FormatType.LongFormat) const;
     QString timeFormat(FormatType format = FormatType.LongFormat) const;
@@ -1089,23 +1025,15 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     QDateTime toDateTime(ref const(QString) string, FormatType format, QCalendar cal) const;
     QDate toDate(ref const(QString) string, ref const(QString) format, QCalendar cal) const;
     QDateTime toDateTime(ref const(QString) string, ref const(QString) format, QCalendar cal) const;
-/+ # if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_X("Calendar is ignored when parsing times") +/
-        QTime toTime(ref const(QString) string, FormatType format, QCalendar cal) const;
-    /+ QT_DEPRECATED_X("Calendar is ignored when parsing times") +/
-        QTime toTime(ref const(QString) string, ref const(QString) format, QCalendar cal) const;
-/+ # endif // 5.15
-#endif +/
+/+ #endif +/
 
-    // ### Qt 6: We need to return QString from these function since
-    //           UTF-16 may need surrogate pairs to represent these fields.
-    QChar decimalPoint() const;
-    QChar groupSeparator() const;
-    QChar percent() const;
-    QChar zeroDigit() const;
-    QChar negativeSign() const;
-    QChar positiveSign() const;
-    QChar exponential() const;
+    QString decimalPoint() const;
+    QString groupSeparator() const;
+    QString percent() const;
+    QString zeroDigit() const;
+    QString negativeSign() const;
+    QString positiveSign() const;
+    QString exponential() const;
 
     QString monthName(int, FormatType format = FormatType.LongFormat) const;
     QString standaloneMonthName(int, FormatType format = FormatType.LongFormat) const;
@@ -1128,71 +1056,94 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     QString currencySymbol(CurrencySymbolFormat /+ = CurrencySymbol +/) const;
     QString toCurrencyString(qlonglong, ref const(QString) symbol = globalInitVar!QString) const;
     QString toCurrencyString(qulonglong, ref const(QString) symbol = globalInitVar!QString) const;
-    pragma(inline, true) QString toCurrencyString(short i, ref const(QString) symbol = globalInitVar!QString) const
-        { return toCurrencyString(qlonglong(i), symbol); }
-    pragma(inline, true) QString toCurrencyString(ushort i, ref const(QString) symbol = globalInitVar!QString) const
-        { return toCurrencyString(qulonglong(i), symbol); }
-    pragma(inline, true) QString toCurrencyString(int i, ref const(QString) symbol = globalInitVar!QString) const
+    QString toCurrencyString(short i, ref const(QString) symbol = globalInitVar!QString) const
     { return toCurrencyString(qlonglong(i), symbol); }
-    pragma(inline, true) QString toCurrencyString(uint i, ref const(QString) symbol = globalInitVar!QString) const
+    QString toCurrencyString(ushort i, ref const(QString) symbol = globalInitVar!QString) const
     { return toCurrencyString(qulonglong(i), symbol); }
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-    QString toCurrencyString(double, const QString &symbol = QString(), int precision = -1) const;
-    inline QString toCurrencyString(float i, const QString &symbol = QString(), int precision = -1) const
+    QString toCurrencyString(int i, ref const(QString) symbol = globalInitVar!QString) const
+    { return toCurrencyString(qlonglong(i), symbol); }
+    QString toCurrencyString(uint i, ref const(QString) symbol = globalInitVar!QString) const
+    { return toCurrencyString(qulonglong(i), symbol); }
+    QString toCurrencyString(double, ref const(QString) symbol = globalInitVar!QString, int precision = -1) const;
+    QString toCurrencyString(float i, ref const(QString) symbol = globalInitVar!QString, int precision = -1) const
     { return toCurrencyString(double(i), symbol, precision); }
-#else +/
-    QString toCurrencyString(double, ref const(QString) symbol = globalInitVar!QString) const;
-    QString toCurrencyString(double, ref const(QString) symbol, int precision) const;
-    pragma(inline, true) QString toCurrencyString(float i, ref const(QString) symbol = globalInitVar!QString) const
-    { return toCurrencyString(double(i), symbol); }
-    pragma(inline, true) QString toCurrencyString(float i, ref const(QString) symbol, int precision) const
-    { return toCurrencyString(double(i), symbol, precision); }
-/+ #endif
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    QString formattedDataSize(qint64 bytes, int precision = 2, DataSizeFormats format = DataSizeFormat.DataSizeIecFormat);
-/+ #endif +/
     QString formattedDataSize(qint64 bytes, int precision = 2, DataSizeFormats format = DataSizeFormat.DataSizeIecFormat) const;
 
     QStringList uiLanguages() const;
 
-    /+bool operator ==(ref const(QLocale) other) const;+/
-    /+bool operator !=(ref const(QLocale) other) const;+/
+    static QString languageToCode(Language language);
+    static Language codeToLanguage(QStringView languageCode)/+ noexcept+/;
+    static QString territoryToCode(Territory territory);
+    static Territory codeToTerritory(QStringView territoryCode)/+ noexcept+/;
+/+ #if QT_DEPRECATED_SINCE(6, 6) +/
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use territoryToCode(Territory) instead") +/
+        static QString countryToCode(Country country);
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use codeToTerritory(QStringView) instead") +/
+        static Country codeToCountry(QStringView countryCode)/+ noexcept+/;
+/+ #endif +/
+    static QString scriptToCode(Script script);
+    static Script codeToScript(QStringView scriptCode)/+ noexcept+/;
 
     static QString languageToString(Language language);
-    static QString countryToString(Country country);
+    static QString territoryToString(Territory territory);
+/+ #if QT_DEPRECATED_SINCE(6, 6) +/
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use territoryToString(Territory) instead") +/
+        static QString countryToString(Country country);
+/+ #endif +/
     static QString scriptToString(Script script);
     static void setDefault(ref const(QLocale) locale);
 
     static QLocale c() { return QLocale(Language.C); }
     static QLocale system();
 
-    static QList!(QLocale) matchingLocales(Language language, Script script, Country country);
-    static QList!(Country) countriesForLanguage(Language lang);
+    /*static QList!(QLocale) matchingLocales(Language language, Script script,
+                                              Territory territory);*/
+/+ #if QT_DEPRECATED_SINCE(6, 6) +/
+    /+ QT_DEPRECATED_VERSION_X_6_6("Query territory() on each entry from matchingLocales() instead") +/
+        static QList!(Country) countriesForLanguage(Language lang);
+/+ #endif +/
 
     void setNumberOptions(NumberOptions options);
     NumberOptions numberOptions() const;
 
     enum QuotationStyle { StandardQuotation, AlternateQuotation }
-    QString quoteString(ref const(QString) str, QuotationStyle style = QuotationStyle.StandardQuotation) const;
-    QString quoteString(ref const(QStringRef) str, QuotationStyle style = QuotationStyle.StandardQuotation) const;
+    QString quoteString(ref const(QString) str, QuotationStyle style = QuotationStyle.StandardQuotation) const
+    { return quoteString(QStringView(str), style); }
+    QString quoteString(QStringView str, QuotationStyle style = QuotationStyle.StandardQuotation) const;
 
     QString createSeparatedList(ref const(QStringList) strl) const;
 
 private:
     this(ref QLocalePrivate dd);
+    bool equals(ref const(QLocale) other) const;
     /+ friend class QLocalePrivate; +/
     /+ friend class QSystemLocale; +/
     /+ friend class QCalendarBackend; +/
     /+ friend class QGregorianCalendar; +/
-    /+ friend Q_CORE_EXPORT uint qHash(const QLocale &key, uint seed) noexcept; +/
+    /+ friend Q_CORE_EXPORT size_t qHash(const QLocale &key, size_t seed) noexcept; +/
+
+    /+ friend bool operator==(const QLocale &lhs, const QLocale &rhs) { return lhs.equals(rhs); } +/
+    /+ friend bool operator!=(const QLocale &lhs, const QLocale &rhs) { return !lhs.equals(rhs); } +/
 
     QSharedDataPointer!(QLocalePrivate) d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/{return QFlags!(QLocale.NumberOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator &(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/{return QFlags!(QLocale.NumberOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator &(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+ Q_DECLARE_SHARED(QLocale)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QLocale::NumberOptions)
 #ifndef QT_NO_DATASTREAM

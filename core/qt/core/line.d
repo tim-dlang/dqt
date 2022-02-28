@@ -22,8 +22,8 @@ import qt.helpers;
  * class QLine
  *******************************************************************************/
 
-/// Binding for C++ class [QLine](https://doc.qt.io/qt-5/qline.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLine
+/// Binding for C++ class [QLine](https://doc.qt.io/qt-6/qline.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLine
 {
 public:
     /+pragma(inline, true) this() { }+/
@@ -89,16 +89,16 @@ public:
         auto tmp=QPoint(adx, ady); this.translate(tmp);
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLine translated(ref const(QPoint) p) const
+    /+ [[nodiscard]] +/ pragma(inline, true) QLine translated(ref const(QPoint) p) const
     {
         return QLine(pt1 + p, pt2 + p);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLine translated(int adx, int ady) const
+    /+ [[nodiscard]] +/ pragma(inline, true) QLine translated(int adx, int ady) const
     {
         auto tmp = QPoint(adx, ady); return translated(tmp);
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QPoint center() const
+    /+ [[nodiscard]] +/ pragma(inline, true) QPoint center() const
     {
         return QPoint(cast(int)((qint64(pt1.x()) + pt2.x()) / 2), cast(int)((qint64(pt1.y()) + pt2.y()) / 2));
     }
@@ -122,17 +122,17 @@ public:
         pt2 = QPoint(aX2, aY2);
     }
 
-    /+pragma(inline, true) bool operator ==(ref const(QLine) d) const
+    /+pragma(inline, true) bool operator ==(ref const(QLine) d) const/+ noexcept+/
     {
         return pt1 == d.pt1 && pt2 == d.pt2;
     }+/
-    /+pragma(inline, true) bool operator !=(ref const(QLine) d) const { return !(this == d); }+/
+    /+pragma(inline, true) bool operator !=(ref const(QLine) d) const/+ noexcept+/ { return !(this == d); }+/
 
 private:
     QPoint pt1; QPoint pt2;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QLine, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QLine, Q_RELOCATABLE_TYPE);
 
 /*******************************************************************************
  * class QLine inline members
@@ -150,12 +150,13 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLine &);
 /*******************************************************************************
  * class QLineF
  *******************************************************************************/
-/// Binding for C++ class [QLineF](https://doc.qt.io/qt-5/qlinef.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLineF {
+/// Binding for C++ class [QLineF](https://doc.qt.io/qt-6/qlinef.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLineF
+{
 public:
 
-    enum IntersectType { NoIntersection, BoundedIntersection, UnboundedIntersection }
-    alias IntersectionType = IntersectType;
+    enum IntersectionType { NoIntersection, BoundedIntersection, UnboundedIntersection }
+    alias IntersectType = IntersectionType; // deprecated name
 
     /+pragma(inline, true) this()
     {
@@ -176,7 +177,7 @@ public:
         this.pt2 = line.p2();
     }+/
 
-    /+ Q_REQUIRED_RESULT +/ static QLineF fromPolar(qreal length, qreal angle);
+    /+ [[nodiscard]] +/ static QLineF fromPolar(qreal length, qreal angle);
 
     pragma(inline, true) bool isNull() const
     {
@@ -220,35 +221,29 @@ public:
     }
 
     qreal length() const;
-    void setLength(qreal len)
+/+    void setLength(qreal len)
     {
-        if (isNull())
-            return;
-        (mixin(Q_ASSERT(q{QLineF.length() > 0})));
-        const(QLineF) v = unitVector();
-        len /= v.length(); // In case it's not quite exactly 1.
-        pt2 = QPointF(pt1.x() + len * v.dx(), pt1.y() + len * v.dy());
-    }
+        (mixin(Q_ASSERT(q{qIsFinite(len)})));
+        const(qreal) oldLength = length();
+        (mixin(Q_ASSERT(q{qIsFinite(oldLength)})));
+        // Scale len by dx() / length() and dy() / length(), two O(1) quantities,
+        // rather than scaling dx() and dy() by len / length(), which might overflow.
+        if (oldLength > 0)
+            pt2 = QPointF(pt1.x() + len * (dx() / oldLength), pt1.y() + len * (dy() / oldLength));
+    }+/
 
     qreal angle() const;
     void setAngle(qreal angle);
 
     qreal angleTo(ref const(QLineF) l) const;
 
-    /+ Q_REQUIRED_RESULT +/ QLineF unitVector() const;
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLineF normalVector() const
+    /+ [[nodiscard]] +/ QLineF unitVector() const;
+    /+ [[nodiscard]] +/ pragma(inline, true) QLineF normalVector() const
     {
         auto tmp = p1(); return QLineF(tmp, p1() + QPointF(dy(), -dx()));
     }
 
-    IntersectionType intersects(ref const(QLineF) l, QPointF* intersectionPoint) const;
-
-/+ #if QT_DEPRECATED_SINCE(5, 14) +/
-    /+ QT_DEPRECATED_VERSION_X(5, 14, "Use intersects() instead") +/
-        IntersectType intersect(ref const(QLineF) l, QPointF* intersectionPoint) const;
-    /+ QT_DEPRECATED_X("Use qMin(l1.angleTo(l2), l2.angleTo(l1)) instead") +/
-        qreal angle(ref const(QLineF) l) const;
-/+ #endif +/
+    IntersectionType intersects(ref const(QLineF) l, QPointF* intersectionPoint = null) const;
 
     pragma(inline, true) QPointF pointAt(qreal t) const
     {
@@ -264,16 +259,16 @@ public:
         auto tmp = QPointF(adx, ady); this.translate(tmp);
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLineF translated(ref const(QPointF) p) const
+    /+ [[nodiscard]] +/ pragma(inline, true) QLineF translated(ref const(QPointF) p) const
     {
         return QLineF(pt1 + p, pt2 + p);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLineF translated(qreal adx, qreal ady) const
+    /+ [[nodiscard]] +/ pragma(inline, true) QLineF translated(qreal adx, qreal ady) const
     {
         auto tmp = QPointF(adx, ady); return translated(tmp);
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QPointF center() const
+    /+ [[nodiscard]] +/ pragma(inline, true) QPointF center() const
     {
         return QPointF(0.5 * pt1.x() + 0.5 * pt2.x(), 0.5 * pt1.y() + 0.5 * pt2.y());
     }
@@ -312,7 +307,7 @@ private:
     QPointF pt1; QPointF pt2;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QLineF, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QLineF, Q_RELOCATABLE_TYPE);
 
 /*******************************************************************************
  * class QLineF inline members

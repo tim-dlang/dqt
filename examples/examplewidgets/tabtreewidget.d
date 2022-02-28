@@ -33,10 +33,10 @@ private /+ slots +/:
     {
         import core.stdcpp.new_;
         import qt.core.namespace;
+        import qt.gui.action;
         import qt.gui.brush;
         import qt.gui.color;
         import qt.gui.font;
-        import qt.widgets.action;
         import qt.widgets.colordialog;
         import qt.widgets.fontdialog;
         import qt.widgets.menu;

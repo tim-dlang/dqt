@@ -20,6 +20,7 @@ import qt.core.string;
 import qt.gui.event;
 import qt.gui.movie;
 import qt.gui.pixmap;
+import qt.gui.textdocument;
 import qt.helpers;
 import qt.widgets.frame;
 import qt.widgets.widget;
@@ -32,7 +33,7 @@ version(QT_NO_PICTURE){}else
 
 extern(C++, class) struct QLabelPrivate;
 
-/// Binding for C++ class [QLabel](https://doc.qt.io/qt-5/qlabel.html).
+/// Binding for C++ class [QLabel](https://doc.qt.io/qt-6/qlabel.html).
 class /+ Q_WIDGETS_EXPORT +/ QLabel : QFrame
 {
     mixin(Q_OBJECT);
@@ -45,7 +46,8 @@ class /+ Q_WIDGETS_EXPORT +/ QLabel : QFrame
     Q_PROPERTY(int margin READ margin WRITE setMargin)
     Q_PROPERTY(int indent READ indent WRITE setIndent)
     Q_PROPERTY(bool openExternalLinks READ openExternalLinks WRITE setOpenExternalLinks)
-    Q_PROPERTY(Qt::TextInteractionFlags textInteractionFlags READ textInteractionFlags WRITE setTextInteractionFlags)
+    Q_PROPERTY(Qt::TextInteractionFlags textInteractionFlags READ textInteractionFlags
+               WRITE setTextInteractionFlags)
     Q_PROPERTY(bool hasSelectedText READ hasSelectedText)
     Q_PROPERTY(QString selectedText READ selectedText) +/
 
@@ -56,34 +58,29 @@ public:
 
     final QString text() const;
 
-/+ #if QT_DEPRECATED_SINCE(5,15) +/
-    /+ QT_DEPRECATED_VERSION_X(5, 15, "Use the other overload which returns QPixmap by-value") +/
-        final const(QPixmap)* pixmap() const; // ### Qt 7: Remove function
+/+ #if QT_DEPRECATED_SINCE(6,6) +/
+    final QPixmap pixmap(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const { return pixmap(); }
+/+ #endif +/
+    final QPixmap pixmap() const;
 
-    final QPixmap pixmap(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const;
-/+ #else
-    QPixmap pixmap(Qt::ReturnByValueConstant = Qt::ReturnByValue) const; // ### Qt 7: Remove arg
-#endif // QT_DEPRECATED_SINCE(5,15)
-
-#ifndef QT_NO_PICTURE
-#  if QT_DEPRECATED_SINCE(5,15) +/
+/+ #ifndef QT_NO_PICTURE
+#if QT_DEPRECATED_SINCE(6,6) +/
     version(QT_NO_PICTURE){}else
     {
-        /+ QT_DEPRECATED_VERSION_X(5, 15, "Use the other overload which returns QPicture by-value") +/
-            final const(QPicture)* picture() const; // ### Qt 7: Remove function
-
-        final QPicture picture(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const;
+        final QPicture picture(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const { return picture(); }
+    /+ #endif +/
+        final QPicture picture() const;
     }
-/+ #  else
-    QPicture picture(Qt::ReturnByValueConstant = Qt::ReturnByValue) const; // ### Qt 7: Remove arg
-#  endif // QT_DEPRECATED_SINCE(5,15)
-#endif
+/+ #endif
 #if QT_CONFIG(movie) +/
     final QMovie movie() const;
 /+ #endif +/
 
     final /+ Qt:: +/qt.core.namespace.TextFormat textFormat() const;
     final void setTextFormat(/+ Qt:: +/qt.core.namespace.TextFormat);
+
+    /*final QTextDocument.ResourceProvider resourceProvider() const;
+    final void setResourceProvider(ref const(QTextDocument.ResourceProvider) provider);*/
 
     final /+ Qt:: +/qt.core.namespace.Alignment alignment() const;
     final void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment);

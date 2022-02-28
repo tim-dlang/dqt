@@ -22,124 +22,89 @@ import qt.helpers;
 import std.traits;
 import std.meta;
 
-/+ #ifndef Q_MOC_OUTPUT_REVISION
-#define Q_MOC_OUTPUT_REVISION 67
-#endif
-
-// The following macros can be defined by tools that understand Qt
-// to have the information from the macro.
-#ifndef QT_ANNOTATE_CLASS
-# define QT_ANNOTATE_CLASS(type, ...)
-#endif
-#ifndef QT_ANNOTATE_CLASS2
+static if(!defined!"Q_MOC_OUTPUT_REVISION")
+{
+/+ #define Q_MOC_OUTPUT_REVISION 68 +/
+}
+static if(false)
+{
+/+ # define QT_ANNOTATE_CLASS(type, ...)
 # define QT_ANNOTATE_CLASS2(type, a1, a2)
-#endif
-#ifndef QT_ANNOTATE_FUNCTION
 # define QT_ANNOTATE_FUNCTION(x)
-#endif
-#ifndef QT_ANNOTATE_ACCESS_SPECIFIER
 # define QT_ANNOTATE_ACCESS_SPECIFIER(x)
-#endif
-
-// The following macros are our "extensions" to C++
-// They are used, strictly speaking, only by the moc.
-
-#ifndef Q_MOC_RUN +/
-/+ #ifndef QT_NO_META_MACROS
-# if defined(QT_NO_KEYWORDS)
-#  define QT_NO_EMIT
-# else
-#   ifndef QT_NO_SIGNALS_SLOTS_KEYWORDS
-#     define slots Q_SLOTS
+#  define QT_NO_EMIT +/
+}
+/+ #     define slots Q_SLOTS
 #     define signals Q_SIGNALS
-#   endif
-# endif
 # define Q_SLOTS QT_ANNOTATE_ACCESS_SPECIFIER(qt_slot)
 # define Q_SIGNALS public QT_ANNOTATE_ACCESS_SPECIFIER(qt_signal)
 # define Q_PRIVATE_SLOT(d, signature) QT_ANNOTATE_CLASS2(qt_private_slot, d, signature)
 # define Q_EMIT
-#ifndef QT_NO_EMIT
-# define emit
-#endif
-#ifndef Q_CLASSINFO
-# define Q_CLASSINFO(name, value)
-#endif
-#define Q_PLUGIN_METADATA(x) QT_ANNOTATE_CLASS(qt_plugin_metadata, x)
+# define emit +/
+static if(!defined!"Q_CLASSINFO")
+{
+/+ # define Q_CLASSINFO(name, value) +/
+}
+/+ #define Q_PLUGIN_METADATA(x) QT_ANNOTATE_CLASS(qt_plugin_metadata, x)
 #define Q_INTERFACES(x) QT_ANNOTATE_CLASS(qt_interfaces, x)
 #define Q_PROPERTY(...) QT_ANNOTATE_CLASS(qt_property, __VA_ARGS__)
-#define Q_PRIVATE_PROPERTY(d, text) QT_ANNOTATE_CLASS2(qt_private_property, d, text)
-#ifndef Q_REVISION
-# define Q_REVISION(v)
-#endif
-#define Q_OVERRIDE(text) QT_ANNOTATE_CLASS(qt_override, text)
+#define Q_PRIVATE_PROPERTY(d, text) QT_ANNOTATE_CLASS2(qt_private_property, d, text) +/
+static if(!defined!"Q_REVISION")
+{
+/+ # define Q_REVISION(...) +/
+}
+/+ #define Q_OVERRIDE(text) QT_ANNOTATE_CLASS(qt_override, text)
 #define QDOC_PROPERTY(text) QT_ANNOTATE_CLASS(qt_qdoc_property, text)
 #define Q_ENUMS(x) QT_ANNOTATE_CLASS(qt_enums, x)
 #define Q_FLAGS(x) QT_ANNOTATE_CLASS(qt_enums, x)
 #define Q_ENUM_IMPL(ENUM) \
-    friend Q_DECL_CONSTEXPR const QMetaObject *qt_getEnumMetaObject(ENUM) noexcept { return &staticMetaObject; } \
-    friend Q_DECL_CONSTEXPR const char *qt_getEnumName(ENUM) noexcept { return #ENUM; }
+    friend constexpr const QMetaObject *qt_getEnumMetaObject(ENUM) noexcept { return &staticMetaObject; } \
+    friend constexpr const char *qt_getEnumName(ENUM) noexcept { return #ENUM; }
 #define Q_ENUM(x) Q_ENUMS(x) Q_ENUM_IMPL(x)
 #define Q_FLAG(x) Q_FLAGS(x) Q_ENUM_IMPL(x)
 #define Q_ENUM_NS_IMPL(ENUM) \
-    inline Q_DECL_CONSTEXPR const QMetaObject *qt_getEnumMetaObject(ENUM) noexcept { return &staticMetaObject; } \
-    inline Q_DECL_CONSTEXPR const char *qt_getEnumName(ENUM) noexcept { return #ENUM; }
+    inline constexpr const QMetaObject *qt_getEnumMetaObject(ENUM) noexcept { return &staticMetaObject; } \
+    inline constexpr const char *qt_getEnumName(ENUM) noexcept { return #ENUM; }
 #define Q_ENUM_NS(x) Q_ENUMS(x) Q_ENUM_NS_IMPL(x)
 #define Q_FLAG_NS(x) Q_FLAGS(x) Q_ENUM_NS_IMPL(x)
 #define Q_SCRIPTABLE QT_ANNOTATE_FUNCTION(qt_scriptable)
 #define Q_INVOKABLE  QT_ANNOTATE_FUNCTION(qt_invokable)
 #define Q_SIGNAL QT_ANNOTATE_FUNCTION(qt_signal)
 #define Q_SLOT QT_ANNOTATE_FUNCTION(qt_slot)
-#endif +/ // QT_NO_META_MACROS
-
+#define Q_MOC_INCLUDE(...) QT_ANNOTATE_CLASS(qt_moc_include, __VA_ARGS__) +/
 version(QT_NO_TRANSLATION){}else
 {
-// full set of tr functions
 /+ #  define QT_TR_FUNCTIONS \
     static inline QString tr(const char *s, const char *c = nullptr, int n = -1) \
-        { return staticMetaObject.tr(s, c, n); } \
-    QT_DEPRECATED static inline QString trUtf8(const char *s, const char *c = nullptr, int n = -1) \
         { return staticMetaObject.tr(s, c, n); } +/
 enum QT_TR_FUNCTIONS =
         q{pragma(inline, true) static dqtimported!"qt.core.string".QString tr(const(char)* s, const(char)* c = null, int n = -1)
-            { return staticMetaObject.tr(s, c, n); }
-        /+ QT_DEPRECATED +/ pragma(inline, true) static dqtimported!"qt.core.string".QString trUtf8(const(char)* s, const(char)* c = null, int n = -1)
             { return staticMetaObject.tr(s, c, n); }};
 }
 version(QT_NO_TRANSLATION)
 {
-// inherit the ones from QObject
 /+ # define QT_TR_FUNCTIONS +/
 }
-
-/+ #ifdef Q_CLANG_QDOC
-#define QT_TR_FUNCTIONS
-#endif
-
-// ### Qt6: remove
-#define Q_OBJECT_CHECK  /* empty, unused since Qt 5.2 */
-
-#if defined(Q_CC_INTEL)
-// Cannot redefine the visibility of a method in an exported class
-# define Q_DECL_HIDDEN_STATIC_METACALL
-#else
-# define Q_DECL_HIDDEN_STATIC_METACALL Q_DECL_HIDDEN
-#endif
-
-#if defined(Q_CC_CLANG) && Q_CC_CLANG >= 306
-#  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_CLANG("-Winconsistent-missing-override")
-#elif defined(Q_CC_GNU) && !defined(Q_CC_INTEL) && Q_CC_GNU >= 501
-#  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_GCC("-Wsuggest-override")
-#else
-#  define Q_OBJECT_NO_OVERRIDE_WARNING
-#endif
-
-#if defined(Q_CC_GNU) && !defined(Q_CC_INTEL) && Q_CC_GNU >= 600
-#  define Q_OBJECT_NO_ATTRIBUTES_WARNING    QT_WARNING_DISABLE_GCC("-Wattributes")
-#else
-#  define Q_OBJECT_NO_ATTRIBUTES_WARNING
-#endif +/
-
-/* qmake ignore Q_OBJECT */
+static if(false)
+{
+/+ #define QT_TR_FUNCTIONS
+# define Q_DECL_HIDDEN_STATIC_METACALL +/
+}
+/+ # define Q_DECL_HIDDEN_STATIC_METACALL Q_DECL_HIDDEN +/
+static if(false)
+{
+/+ #  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_CLANG("-Winconsistent-missing-override") +/
+}
+/+ #  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_GCC("-Wsuggest-override") +/
+static if(false)
+{
+/+ #  define Q_OBJECT_NO_OVERRIDE_WARNING +/
+}
+/+ #  define Q_OBJECT_NO_ATTRIBUTES_WARNING    QT_WARNING_DISABLE_GCC("-Wattributes") +/
+static if(false)
+{
+/+ #  define Q_OBJECT_NO_ATTRIBUTES_WARNING +/
+}
 /+ #define Q_OBJECT \
 public: \
     QT_WARNING_PUSH \
@@ -172,11 +137,6 @@ q{    public:
         extern(C++) struct QPrivateSignal {}};
         /+ QT_ANNOTATE_CLASS(qt_qobject, "") +/
 
-/* qmake ignore Q_OBJECT */
-/+ #define Q_OBJECT_FAKE Q_OBJECT QT_ANNOTATE_CLASS(qt_fake, "")
-
-#ifndef QT_NO_META_MACROS +/
-/* qmake ignore Q_GADGET */
 
 struct CPPMemberFunctionPointer(T)
 {
@@ -237,7 +197,7 @@ template MetaObjectImpl(T)
         {
             if(s in stringCache)
                 return stringCache[s];
-            stringLiteralsCode ~= text("QT_MOC_LITERAL(", numStrings, ", ", concatenatedStrings.length, ", " , s.length, "),\n");
+            stringLiteralsCode ~= text("cast(uint)(stringdata_t.stringdata0.offsetof + ", concatenatedStrings.length, "), ", s.length, ",\n");
             concatenatedStrings ~= s;
             concatenatedStrings ~= "\0";
             stringCache[s] = numStrings;
@@ -247,6 +207,8 @@ template MetaObjectImpl(T)
         addString(__traits(identifier, T));
 
         size_t currentOutputIndex = 0;
+        size_t initialMetatypeOffsets = 0;
+        string metaTypes;
 
         currentOutputIndex += 14;
 
@@ -254,7 +216,7 @@ template MetaObjectImpl(T)
 
         string metaDataCode = mixin(interpolateMixin(q{
              // content:
-                   8,       // revision
+                   9,       // revision
                    0,       // classname
                    0,    0, // classinfo
                    $(text(allMethods.length)),   $(text(methodsStartIndex)), // methods
@@ -267,7 +229,7 @@ template MetaObjectImpl(T)
         }));
 
         assert(methodsStartIndex == currentOutputIndex);
-        currentOutputIndex += 5 * allMethods.length;
+        currentOutputIndex += 6 * allMethods.length;
 
         string typeToMeta(T2)()
         {
@@ -300,17 +262,24 @@ template MetaObjectImpl(T)
         void addMethods(M...)(string typename, uint type)
         {
             if(M.length)
-                metaDataCode ~= "    // " ~ typename ~ ": name, argc, parameters, tag, flags\n";
+                metaDataCode ~= "    // " ~ typename ~ ": name, argc, parameters, tag, flags, initial metatype offsets\n";
             static foreach(i; 0..M.length)
             {{
                 size_t nameId = addString(__traits(identifier, M[i]));
                 size_t parameterCount = Parameters!(M[i]).length;
                 uint flags;
                 flags |= 2; // Public // TODO
+                if(typename == "signals")
+                    flags |= 4;
+                if(typename == "slots")
+                    flags |= 8;
                 metaDataCode ~= mixin(interpolateMixin(q{
-                       $(text(nameId)),    $(text(parameterCount)),   $(text(currentOutputIndex)),    2, $(text(flags)), $("// " ~ __traits(identifier, M[i]))
+                       $(text(nameId)),    $(text(parameterCount)),   $(text(currentOutputIndex)),    2, $(text(flags)), $(text(initialMetatypeOffsets)), $("// " ~ __traits(identifier, M[i]))
                 }));
                 currentOutputIndex += 1 + 2 * parameterCount;
+                initialMetatypeOffsets += 1 + parameterCount;
+                foreach(j; 0 .. 1 + parameterCount)
+                    metaTypes ~= ", null";
             }}
         }
         addMethods!(allSignals)("signals", 4);
@@ -358,22 +327,9 @@ template MetaObjectImpl(T)
 
         return mixin(interpolateMixin(q{
             extern(C++) struct stringdata_t {
-                QByteArrayData[$(text(numStrings))] data;
+                uint[$(text(numStrings*2))] offsetsAndSize;
                 char[$(text(concatenatedStrings.length))] stringdata0;
             };
-
-            extern(C++) const(QByteArrayData) Q_STATIC_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(int size, size_t offset)
-            {
-                return const(QByteArrayData)(Q_REFCOUNT_INITIALIZE_STATIC, size, 0,/* 0,*/ offset);
-            }
-
-            extern(C++) const(QByteArrayData) QT_MOC_LITERAL(size_t idx, size_t ofs, int len)
-            {
-                return Q_STATIC_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len,
-                    ptrdiff_t(stringdata_t.stringdata0.offsetof + ofs
-                        - idx * QByteArrayData.sizeof)
-                    );
-            }
 
             extern(C++) static __gshared const stringdata_t stringdata = {
                 [
@@ -396,6 +352,7 @@ template MetaObjectImpl(T)
                     meta_data.ptr,
                     &T.qt_static_metacall,
                     null,
+                    qt_incomplete_metaTypeArray!(stringdata_t$(metaTypes)).ptr,
                     null
                 } };
                 shared static this()
@@ -413,12 +370,12 @@ template MetaObjectImpl(T)
                     meta_data.ptr,
                     &T.qt_static_metacall,
                     null,
+                    qt_incomplete_metaTypeArray!(stringdata_t$(metaTypes)).ptr,
                     null
                 } };
             }
         }));
     }();
-    //pragma(msg, CODE);
     mixin(CODE);
 }
 
@@ -524,6 +481,7 @@ enum Q_SIGNAL_IMPL_D = q{
     qt.core.objectdefs.QMetaObject.activate(this, &staticMetaObject, dqtimported!q{qt.core.metamacros}.MetaObjectImpl!(typeof(this)).signalIndex!(__traits(parent, Dummy)), _a.ptr);
 };
 
+/+ #define Q_OBJECT_FAKE Q_OBJECT QT_ANNOTATE_CLASS(qt_fake, "") +/
 /+ #define Q_GADGET \
 public: \
     static const QMetaObject staticMetaObject; \
@@ -549,21 +507,15 @@ q{    public:
         /+ QT_WARNING_POP
         QT_ANNOTATE_CLASS(qt_qgadget, "") +/
         /*end*/
-
-/* qmake ignore Q_NAMESPACE_EXPORT */
 /+ #define Q_NAMESPACE_EXPORT(...) \
     extern __VA_ARGS__ const QMetaObject staticMetaObject; \
     QT_ANNOTATE_CLASS(qt_qnamespace, "") \
     /*end*/
-
-/* qmake ignore Q_NAMESPACE */
 #define Q_NAMESPACE Q_NAMESPACE_EXPORT() \
     /*end*/ +/
-
-/+ #endif +/ // QT_NO_META_MACROS
-
-/+ #else // Q_MOC_RUN
-#define slots slots
+static if(false)
+{
+/+ #define slots slots
 #define signals signals
 #define Q_SLOTS Q_SLOTS
 #define Q_SIGNALS Q_SIGNALS
@@ -571,21 +523,22 @@ q{    public:
 #define Q_INTERFACES(x) Q_INTERFACES(x)
 #define Q_PROPERTY(text) Q_PROPERTY(text)
 #define Q_PRIVATE_PROPERTY(d, text) Q_PRIVATE_PROPERTY(d, text)
-#define Q_REVISION(v) Q_REVISION(v)
+#define Q_PRIVATE_QPROPERTY(accessor, type, name, setter, ...) Q_PRIVATE_QPROPERTY(accessor, type, name, setter, __VA_ARGS__)
+#define Q_PRIVATE_QPROPERTIES_BEGIN
+#define Q_PRIVATE_QPROPERTY_IMPL(name)
+#define Q_PRIVATE_QPROPERTIES_END
+#define Q_REVISION(...) Q_REVISION(__VA_ARGS__)
 #define Q_OVERRIDE(text) Q_OVERRIDE(text)
 #define Q_ENUMS(x) Q_ENUMS(x)
 #define Q_FLAGS(x) Q_FLAGS(x)
 #define Q_ENUM(x) Q_ENUM(x)
 #define Q_FLAGS(x) Q_FLAGS(x)
- /* qmake ignore Q_OBJECT */
 #define Q_OBJECT Q_OBJECT
- /* qmake ignore Q_OBJECT */
 #define Q_OBJECT_FAKE Q_OBJECT_FAKE
- /* qmake ignore Q_GADGET */
 #define Q_GADGET Q_GADGET
 #define Q_SCRIPTABLE Q_SCRIPTABLE
 #define Q_INVOKABLE Q_INVOKABLE
 #define Q_SIGNAL Q_SIGNAL
-#define Q_SLOT Q_SLOT
-#endif +/ //Q_MOC_RUN
+#define Q_SLOT Q_SLOT +/
+}
 

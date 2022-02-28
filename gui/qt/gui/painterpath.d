@@ -19,11 +19,10 @@ import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.scopedpointer;
+import qt.core.shareddata;
 import qt.core.string;
 import qt.core.typeinfo;
-import qt.core.vector;
 import qt.gui.font;
-import qt.gui.matrix;
 import qt.gui.pen;
 import qt.gui.polygon;
 import qt.gui.region;
@@ -32,11 +31,10 @@ import qt.helpers;
 
 extern(C++, class) struct QPainterPathPrivate;
 struct QPainterPathPrivateDeleter;
-extern(C++, class) struct QPainterPathData;
 extern(C++, class) struct QPainterPathStrokerPrivate;
 extern(C++, class) struct QVectorPath;
 
-/// Binding for C++ class [QPainterPath](https://doc.qt.io/qt-5/qpainterpath.html).
+/// Binding for C++ class [QPainterPath](https://doc.qt.io/qt-6/qpainterpath.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPainterPath
 {
 public:
@@ -78,8 +76,7 @@ public:
     @disable this(this);
     this(ref const(QPainterPath) other);
     /+ref QPainterPath operator =(ref const(QPainterPath) other);+/
-    /+ inline QPainterPath &operator=(QPainterPath &&other) noexcept
-    { qSwap(d_ptr, other.d_ptr); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPainterPath) +/
     ~this();
 
     /+ inline void swap(QPainterPath &other) noexcept { d_ptr.swap(other.d_ptr); } +/
@@ -161,19 +158,6 @@ public:
         auto tmp = QRectF(x, y, w, h); addRoundedRect(tmp, xRadius, yRadius, mode);
     }
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use addRoundedRect(..., Qt::RelativeSize) instead") +/
-        void addRoundRect(ref const(QRectF) rect, int xRnd, int yRnd);
-    /+ QT_DEPRECATED_X("Use addRoundedRect(..., Qt::RelativeSize) instead") +/
-        void addRoundRect(qreal x, qreal y, qreal w, qreal h,
-                          int xRnd, int yRnd);
-    /+ QT_DEPRECATED_X("Use addRoundedRect(..., Qt::RelativeSize) instead") +/
-        void addRoundRect(ref const(QRectF) rect, int roundness);
-    /+ QT_DEPRECATED_X("Use addRoundedRect(..., Qt::RelativeSize) instead") +/
-        void addRoundRect(qreal x, qreal y, qreal w, qreal h,
-                          int roundness);
-/+ #endif +/
-
     void connectPath(ref const(QPainterPath) path);
 
     bool contains(ref const(QPointF) pt) const;
@@ -184,8 +168,8 @@ public:
     pragma(inline, true) void translate(ref const(QPointF) offset)
     { translate(offset.x(), offset.y()); }
 
-    /+ Q_REQUIRED_RESULT +/ QPainterPath translated(qreal dx, qreal dy) const;
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QPainterPath translated(ref const(QPointF) offset) const
+    /+ [[nodiscard]] +/ QPainterPath translated(qreal dx, qreal dy) const;
+    /+ [[nodiscard]] +/ pragma(inline, true) QPainterPath translated(ref const(QPointF) offset) const
     { return translated(offset.x(), offset.y()); }
 
     QRectF boundingRect() const;
@@ -196,16 +180,8 @@ public:
 
     bool isEmpty() const;
 
-    /+ Q_REQUIRED_RESULT +/ QPainterPath toReversed() const;
+    /+ [[nodiscard]] +/ QPainterPath toReversed() const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_X("Use toSubpathPolygons(const QTransform &)") +/
-        QList!(QPolygonF) toSubpathPolygons(ref const(QMatrix) matrix) const;
-    /+ QT_DEPRECATED_X("Use toFillPolygons(const QTransform &") +/
-        QList!(QPolygonF) toFillPolygons(ref const(QMatrix) matrix) const;
-    /+ QT_DEPRECATED_X("Use toFillPolygon(const QTransform &)") +/
-        QPolygonF toFillPolygon(ref const(QMatrix) matrix) const;
-/+ #endif +/ // QT_DEPRECATED_SINCE(5, 15)
     QList!(QPolygonF) toSubpathPolygons(ref const(QTransform) matrix = globalInitVar!QTransform) const;
     QList!(QPolygonF) toFillPolygons(ref const(QTransform) matrix = globalInitVar!QTransform) const;
     QPolygonF toFillPolygon(ref const(QTransform) matrix = globalInitVar!QTransform) const;
@@ -222,15 +198,11 @@ public:
 
     bool intersects(ref const(QPainterPath) p) const;
     bool contains(ref const(QPainterPath) p) const;
-    /+ Q_REQUIRED_RESULT +/ QPainterPath united(ref const(QPainterPath) r) const;
-    /+ Q_REQUIRED_RESULT +/ QPainterPath intersected(ref const(QPainterPath) r) const;
-    /+ Q_REQUIRED_RESULT +/ QPainterPath subtracted(ref const(QPainterPath) r) const;
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use r.subtracted() instead") +/
-        /+ Q_REQUIRED_RESULT +/ QPainterPath subtractedInverted(ref const(QPainterPath) r) const;
-/+ #endif +/
+    /+ [[nodiscard]] +/ QPainterPath united(ref const(QPainterPath) r) const;
+    /+ [[nodiscard]] +/ QPainterPath intersected(ref const(QPainterPath) r) const;
+    /+ [[nodiscard]] +/ QPainterPath subtracted(ref const(QPainterPath) r) const;
 
-    /+ Q_REQUIRED_RESULT +/ QPainterPath simplified() const;
+    /+ [[nodiscard]] +/ QPainterPath simplified() const;
 
     /+bool operator ==(ref const(QPainterPath) other) const;+/
     /+bool operator !=(ref const(QPainterPath) other) const;+/
@@ -245,22 +217,19 @@ public:
     ref QPainterPath opOpAssign(string op)(ref const(QPainterPath) other) if(op == "-");
 
 private:
-    QScopedPointer!(QPainterPathPrivate, QPainterPathPrivateDeleter) d_ptr;
+    QExplicitlySharedDataPointer!(QPainterPathPrivate) d_ptr;
 
 //    pragma(inline, true) void ensureData() { if (!d_ptr) ensureData_helper(); }
     void ensureData_helper();
     void detach();
-    void detach_helper();
     void setDirty(bool);
     void computeBoundingRect() const;
     void computeControlPointRect() const;
 
-    /+ QPainterPathData *d_func() const { return reinterpret_cast<QPainterPathData *>(d_ptr.data()); } +/
+    /+ QPainterPathPrivate *d_func() const { return d_ptr.data(); } +/
 
-    /+ friend class QPainterPathData; +/
     /+ friend class QPainterPathStroker; +/
     /+ friend class QPainterPathStrokerPrivate; +/
-    /+ friend class QMatrix; +/
     /+ friend class QTransform; +/
     /+ friend class QVectorPath; +/
     /+ friend Q_GUI_EXPORT const QVectorPath &qtVectorPathForPath(const QPainterPath &); +/
@@ -273,7 +242,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QPainterPath)
+/+ Q_DECLARE_SHARED(QPainterPath)
 Q_DECLARE_TYPEINFO(QPainterPath::Element, Q_PRIMITIVE_TYPE);
 
 #ifndef QT_NO_DATASTREAM
@@ -281,7 +250,7 @@ Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &);
 #endif +/
 
-/// Binding for C++ class [QPainterPathStroker](https://doc.qt.io/qt-5/qpainterpathstroker.html).
+/// Binding for C++ class [QPainterPathStroker](https://doc.qt.io/qt-6/qpainterpathstroker.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPainterPathStroker
 {
 private:
@@ -316,8 +285,8 @@ public:
     qreal curveThreshold() const;
 
     void setDashPattern(/+ Qt:: +/qt.core.namespace.PenStyle);
-    void setDashPattern(ref const(QVector!(qreal)) dashPattern);
-    QVector!(qreal) dashPattern() const;
+    void setDashPattern(ref const(QList!(qreal)) dashPattern);
+    QList!(qreal) dashPattern() const;
 
     void setDashOffset(qreal offset);
     qreal dashOffset() const;

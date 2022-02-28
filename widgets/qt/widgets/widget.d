@@ -12,7 +12,6 @@
 module qt.widgets.widget;
 extern(C++):
 
-import core.stdc.config;
 import qt.config;
 import qt.core.bytearray;
 import qt.core.coreevent;
@@ -47,22 +46,22 @@ import qt.widgets.layout;
 import qt.widgets.sizepolicy;
 import qt.widgets.style;
 version(QT_NO_ACTION){}else
-{
-    import qt.widgets.action;
-    import qt.widgets.event;
-}
+    import qt.gui.action;
 version(QT_NO_CURSOR){}else
     import qt.gui.cursor;
 version(QT_NO_SHORTCUT){}else
     import qt.gui.keysequence;
 
+
 alias QWidgetList = QList!(QWidget);
-/+ #ifdef QT_INCLUDE_COMPAT
+/+ #if QT_CONFIG(shortcut)
+#endif
+
+#ifdef QT_INCLUDE_COMPAT
 #endif +/
 
 
 
-extern(C++, class) struct QWSRegionManager;
 extern(C++, class) struct QBackingStore;
 extern(C++, class) struct QPlatformWindow;
 extern(C++, class) struct QGraphicsProxyWidget;
@@ -198,7 +197,7 @@ public:
 
 extern(C++, class) struct QWidgetPrivate;
 
-/// Binding for C++ class [QWidget](https://doc.qt.io/qt-5/qwidget.html).
+/// Binding for C++ class [QWidget](https://doc.qt.io/qt-6/qwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QWidget : QObject, QPaintDeviceInterface
 {
     import qt.core.namespace;
@@ -226,10 +225,14 @@ class /+ Q_WIDGETS_EXPORT +/ QWidget : QObject, QPaintDeviceInterface
     Q_PROPERTY(QSizePolicy sizePolicy READ sizePolicy WRITE setSizePolicy)
     Q_PROPERTY(QSize minimumSize READ minimumSize WRITE setMinimumSize)
     Q_PROPERTY(QSize maximumSize READ maximumSize WRITE setMaximumSize)
-    Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth STORED false DESIGNABLE false)
-    Q_PROPERTY(int minimumHeight READ minimumHeight WRITE setMinimumHeight STORED false DESIGNABLE false)
-    Q_PROPERTY(int maximumWidth READ maximumWidth WRITE setMaximumWidth STORED false DESIGNABLE false)
-    Q_PROPERTY(int maximumHeight READ maximumHeight WRITE setMaximumHeight STORED false DESIGNABLE false)
+    Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth STORED false
+               DESIGNABLE false)
+    Q_PROPERTY(int minimumHeight READ minimumHeight WRITE setMinimumHeight STORED false
+               DESIGNABLE false)
+    Q_PROPERTY(int maximumWidth READ maximumWidth WRITE setMaximumWidth STORED false
+               DESIGNABLE false)
+    Q_PROPERTY(int maximumHeight READ maximumHeight WRITE setMaximumHeight STORED false
+               DESIGNABLE false)
     Q_PROPERTY(QSize sizeIncrement READ sizeIncrement WRITE setSizeIncrement)
     Q_PROPERTY(QSize baseSize READ baseSize WRITE setBaseSize)
     Q_PROPERTY(QPalette palette READ palette WRITE setPalette)
@@ -256,7 +259,7 @@ class /+ Q_WIDGETS_EXPORT +/ QWidget : QObject, QPaintDeviceInterface
     Q_PROPERTY(QString windowIconText READ windowIconText WRITE setWindowIconText NOTIFY windowIconTextChanged) // deprecated
     Q_PROPERTY(double windowOpacity READ windowOpacity WRITE setWindowOpacity)
     Q_PROPERTY(bool windowModified READ isWindowModified WRITE setWindowModified)
-#ifndef QT_NO_TOOLTIP
+#if QT_CONFIG(tooltip)
     Q_PROPERTY(QString toolTip READ toolTip WRITE setToolTip)
     Q_PROPERTY(int toolTipDuration READ toolTipDuration WRITE setToolTipDuration)
 #endif
@@ -303,8 +306,11 @@ alias RenderFlags = QFlags!(RenderFlag);
     final void setStyle(QStyle );
     // Widget types and states
 
-    pragma(inline, true) final bool isTopLevel() const
+/+ #if QT_DEPRECATED_SINCE(6, 1) +/
+    /+ QT_DEPRECATED_VERSION_X_6_1("Use isWindow()") +/
+        pragma(inline, true) final bool isTopLevel() const
     { return (cast(bool)(windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
+/+ #endif +/
     pragma(inline, true) final bool isWindow() const
     { return (cast(bool)(windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
 
@@ -318,11 +324,6 @@ alias RenderFlags = QFlags!(RenderFlag);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final bool isEnabledTo(const(QWidget) ) const;
     }));
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X ("Use isEnabled() instead") +/
-        pragma(inline, true) final bool isEnabledToTLW() const
-    { return isEnabled(); }
-/+ #endif +/
 
 public /+ Q_SLOTS +/:
     @QSlot final void setEnabled(bool);
@@ -393,12 +394,22 @@ public:
 
     // Widget coordinate mapping
 
+    final QPointF mapToGlobal(ref const(QPointF) ) const;
     final QPoint mapToGlobal(ref const(QPoint) ) const;
+    final QPointF mapFromGlobal(ref const(QPointF) ) const;
     final QPoint mapFromGlobal(ref const(QPoint) ) const;
+    final QPointF mapToParent(ref const(QPointF) ) const;
     final QPoint mapToParent(ref const(QPoint) ) const;
+    final QPointF mapFromParent(ref const(QPointF) ) const;
     final QPoint mapFromParent(ref const(QPoint) ) const;
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    final QPointF mapTo(const(QWidget) , ref const(QPointF) ) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QPoint mapTo(const(QWidget) , ref const(QPoint) ) const;
+    }));
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    final QPointF mapFrom(const(QWidget) , ref const(QPointF) ) const;
     }));
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QPoint mapFrom(const(QWidget) , ref const(QPoint) ) const;
@@ -498,14 +509,11 @@ public:
     final qreal windowOpacity() const;
 
     final bool isWindowModified() const;
-/+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
-    {
-        final void setToolTip(ref const(QString) );
-        final QString toolTip() const;
-        final void setToolTipDuration(int msec);
-        final int toolTipDuration() const;
-    }
+/+ #if QT_CONFIG(tooltip) +/
+    final void setToolTip(ref const(QString) );
+    final QString toolTip() const;
+    final void setToolTipDuration(int msec);
+    final int toolTipDuration() const;
 /+ #endif
 #if QT_CONFIG(statustip) +/
     final void setStatusTip(ref const(QString) );
@@ -658,10 +666,6 @@ public:
 
     final void setContentsMargins(int left, int top, int right, int bottom);
     final void setContentsMargins(ref const(QMargins) margins);
-/+ #if QT_DEPRECATED_SINCE(5, 14) +/
-    /+ QT_DEPRECATED_X("use contentsMargins()") +/
-        final void getContentsMargins(int* left, int* top, int* right, int* bottom) const;
-/+ #endif +/
     final QMargins contentsMargins() const;
 
     final QRect contentsRect() const;
@@ -691,13 +695,8 @@ public:
     {
         //actions
         final void addAction(QAction action);
-    /+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-        void addActions(const QList<QAction*> &actions);
-        void insertActions(QAction *before, const QList<QAction*> &actions);
-    #else +/
-        final void addActions(QList!(QAction) actions);
-        final void insertActions(QAction before, QList!(QAction) actions);
-    /+ #endif +/
+        final void addActions(ref const(QList!(QAction)) actions);
+        final void insertActions(QAction before, ref const(QList!(QAction)) actions);
         final void insertAction(QAction before, QAction action);
         final void removeAction(QAction action);
         final QList!(QAction) actions() const;
@@ -749,10 +748,9 @@ public:
 
     final QWindow* windowHandle() const;
     final QScreen screen() const;
+    final void setScreen(QScreen );
 
     static QWidget createWindowContainer(QWindow* window, QWidget parent=null, /+ Qt:: +/qt.core.namespace.WindowFlags flags=/+ Qt:: +/qt.core.namespace.WindowFlags());
-
-    /+ friend class QDesktopScreenWidget; +/
 
 /+ Q_SIGNALS +/public:
     @QSignal final void windowTitleChanged(ref const(QString) title);
@@ -774,7 +772,7 @@ protected:
     /+ virtual +/ void keyReleaseEvent(QKeyEvent event);
     /+ virtual +/ void focusInEvent(QFocusEvent event);
     /+ virtual +/ void focusOutEvent(QFocusEvent event);
-    /+ virtual +/ void enterEvent(QEvent event);
+    /+ virtual +/ void enterEvent(QEnterEvent event);
     /+ virtual +/ void leaveEvent(QEvent event);
     /+ virtual +/ void paintEvent(QPaintEvent event);
     /+ virtual +/ void moveEvent(QMoveEvent event);
@@ -806,11 +804,7 @@ protected:
     /+ virtual +/ void showEvent(QShowEvent event);
     /+ virtual +/ void hideEvent(QHideEvent event);
 
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    virtual bool nativeEvent(const QByteArray &eventType, void *message, qintptr *result);
-#else +/
-    /+ virtual +/ bool nativeEvent(ref const(QByteArray) eventType, void* message, cpp_long* result);
-/+ #endif +/
+    /+ virtual +/ bool nativeEvent(ref const(QByteArray) eventType, void* message, qintptr* result);
 
     // Misc. protected functions
     /+ virtual +/ void changeEvent(QEvent );
@@ -828,7 +822,7 @@ public:
     final void setInputMethodHints(/+ Qt:: +/qt.core.namespace.InputMethodHints hints);
 
 protected /+ Q_SLOTS +/:
-    @QSlot final void updateMicroFocus();
+    @QSlot final void updateMicroFocus(/+ Qt:: +/qt.core.namespace.InputMethodQuery query = /+ Qt:: +/qt.core.namespace.InputMethodQuery.ImQueryAll);
 protected:
 
     /+ void create(WId = 0, bool initializeWindow = true,
@@ -865,9 +859,6 @@ private:
     /+ friend class QLayout; +/
     /+ friend class QWidgetItem; +/
     /+ friend class QWidgetItemV2; +/
-    /+ friend class QGLContext; +/
-    /+ friend class QGLWidget; +/
-    /+ friend class QGLWindowSurface; +/
     /+ friend class QX11PaintEngine; +/
     /+ friend class QWin32PaintEngine; +/
     /+ friend class QShortcutPrivate; +/
@@ -896,14 +887,27 @@ private:
 
 private:
     /+ Q_DISABLE_COPY(QWidget) +/
-    /+ Q_PRIVATE_SLOT(d_func(), void _q_showIfNotHidden()) +/
+    /+ Q_PRIVATE_SLOT(d_func(), void _q_showIfNotHidden())
+    Q_PRIVATE_SLOT(d_func(), QWindow *_q_closestWindowHandle()) +/
 
     QWidgetData* data;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator |(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QWidget.RenderFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator |(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator &(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QWidget.RenderFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator &(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QWidget::RenderFlags)
 #ifndef Q_QDOC
@@ -919,7 +923,7 @@ template <> inline const QWidget *qobject_cast<const QWidget*>(const QObject *o)
 }
 #endif // !Q_QDOC
 
-#if QT_DEPRECATED_SINCE(5, 13)
+#if QT_DEPRECATED_SINCE(6, 1)
 #endif
 
 

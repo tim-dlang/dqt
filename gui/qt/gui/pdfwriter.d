@@ -21,10 +21,12 @@ static if(!defined!"QT_NO_PDF")
 {
     import qt.core.bytearray;
     import qt.core.iodevice;
+    import qt.core.margins;
     import qt.core.object;
-    import qt.core.size;
     import qt.core.string;
     import qt.gui.pagedpaintdevice;
+    import qt.gui.pagelayout;
+    import qt.gui.pagesize;
     import qt.gui.paintengine;
 }
 
@@ -34,7 +36,7 @@ static if(!defined!"QT_NO_PDF")
 
 extern(C++, class) struct QPdfWriterPrivate;
 
-/// Binding for C++ class [QPdfWriter](https://doc.qt.io/qt-5/qpdfwriter.html).
+/// Binding for C++ class [QPdfWriter](https://doc.qt.io/qt-6/qpdfwriter.html).
 class /+ Q_GUI_EXPORT +/ QPdfWriter : QObject, QPagedPaintDeviceInterface
 {
     QPagedPaintDeviceFakeInheritance baseQPagedPaintDeviceInterface;
@@ -64,26 +66,6 @@ public:
 
     final void addFileAttachment(ref const(QString) fileName, ref const(QByteArray) data, ref const(QString) mimeType = globalInitVar!QString);
 
-/+ #ifdef Q_QDOC
-    bool setPageLayout(const QPageLayout &pageLayout);
-    bool setPageSize(const QPageSize &pageSize);
-    bool setPageOrientation(QPageLayout::Orientation orientation);
-    bool setPageMargins(const QMarginsF &margins);
-    bool setPageMargins(const QMarginsF &margins, QPageLayout::Unit units);
-    QPageLayout pageLayout() const;
-#else +/
-    /+ using QPagedPaintDevice::setPageSize; +/
-/+ #endif
-
-#if QT_DEPRECATED_SINCE(5, 14) +/
-    /+ QT_DEPRECATED_X("Use setPageSize(QPageSize(id)) instead") +/
-        override void setPageSize(PageSize size);
-    /+ QT_DEPRECATED_X("Use setPageSize(QPageSize(size, QPageSize::Millimeter)) instead") +/
-        override void setPageSizeMM(ref const(QSizeF) size);
-    /+ QT_DEPRECATED_X("Use setPageMargins(QMarginsF(l, t, r, b), QPageLayout::Millimeter) instead") +/
-        override void setMargins(ref const(Margins) m);
-/+ #endif +/
-
 protected:
     override QPaintEngine paintEngine() const;
     override int metric(PaintDeviceMetric id) const;
@@ -109,6 +91,28 @@ protected:
     final QPainter* sharedPainter() const
     {
         assert(false);
+    }
+
+public:
+    final bool setPageLayout(ref const(QPageLayout) pageLayout)
+    {
+        QPagedPaintDeviceInterface dev = this;
+        return dev.setPageLayout(pageLayout);
+    }
+    final bool setPageSize(ref const(QPageSize) pageSize)
+    {
+        QPagedPaintDeviceInterface dev = this;
+        return dev.setPageSize(pageSize);
+    }
+    final bool setPageOrientation(QPageLayout.Orientation orientation)
+    {
+        QPagedPaintDeviceInterface dev = this;
+        return dev.setPageOrientation(orientation);
+    }
+    final bool setPageMargins(ref const(QMarginsF) margins, QPageLayout.Unit units = QPageLayout.Unit.Millimeter)
+    {
+        QPagedPaintDeviceInterface dev = this;
+        return dev.setPageMargins(margins, units);
     }
 }
 

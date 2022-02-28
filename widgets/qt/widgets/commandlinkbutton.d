@@ -19,6 +19,7 @@ import qt.core.string;
 import qt.gui.event;
 import qt.helpers;
 import qt.widgets.pushbutton;
+import qt.widgets.styleoption;
 import qt.widgets.widget;
 
 /+ QT_REQUIRE_CONFIG(commandlinkbutton); +/
@@ -27,7 +28,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QCommandLinkButtonPrivate;
 
-/// Binding for C++ class [QCommandLinkButton](https://doc.qt.io/qt-5/qcommandlinkbutton.html).
+/// Binding for C++ class [QCommandLinkButton](https://doc.qt.io/qt-6/qcommandlinkbutton.html).
 class /+ Q_WIDGETS_EXPORT +/ QCommandLinkButton: QPushButton
 {
     mixin(Q_OBJECT);
@@ -44,15 +45,11 @@ public:
     final QString description() const;
     final void setDescription(ref const(QString) description);
 
-    // QTBUG-68722
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-protected:
-/+ #else
-public:
-#endif +/
     override QSize sizeHint() const;
     override int heightForWidth(int) const;
     override QSize minimumSizeHint() const;
+    override void initStyleOption(QStyleOptionButton* option) const;
+
 protected:
     override bool event(QEvent e);
     override void paintEvent(QPaintEvent );

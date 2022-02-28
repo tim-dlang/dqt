@@ -27,7 +27,7 @@ extern(C++, class) struct QDragPrivate;
 extern(C++, class) struct QDragManager;
 
 
-/// Binding for C++ class [QDrag](https://doc.qt.io/qt-5/qdrag.html).
+/// Binding for C++ class [QDrag](https://doc.qt.io/qt-6/qdrag.html).
 class /+ Q_GUI_EXPORT +/ QDrag : QObject
 {
     mixin(Q_OBJECT);
@@ -48,10 +48,6 @@ public:
     final QObject source() const;
     final QObject target() const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use QDrag::exec() instead") +/
-        final /+ Qt:: +/qt.core.namespace.DropAction start(/+ Qt:: +/qt.core.namespace.DropActions supportedActions = /+ Qt:: +/qt.core.namespace.DropAction.CopyAction);
-/+ #endif +/
     final /+ Qt:: +/qt.core.namespace.DropAction exec(/+ Qt:: +/qt.core.namespace.DropActions supportedActions = /+ Qt:: +/qt.core.namespace.DropAction.MoveAction);
     final /+ Qt:: +/qt.core.namespace.DropAction exec(/+ Qt:: +/qt.core.namespace.DropActions supportedActions, /+ Qt:: +/qt.core.namespace.DropAction defaultAction);
 

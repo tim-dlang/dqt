@@ -30,35 +30,20 @@ import qt.helpers;
 
 
 
-
-
-
-/// Binding for C++ class [QFontMetrics](https://doc.qt.io/qt-5/qfontmetrics.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontMetrics
+/// Binding for C++ class [QFontMetrics](https://doc.qt.io/qt-6/qfontmetrics.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontMetrics
 {
 public:
     /+ explicit +/this(ref const(QFont) );
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    this(ref const(QFont) font, QPaintDevice pd);
-/+ #ifndef Q_QDOC +/
-    // the template is necessary to make QFontMetrics(font,nullptr) and QFontMetrics(font,NULL)
-    // not ambiguous. Implementation detail that should not be documented.
-    /+ template<char = 0>
-#endif +/
-    this(ref const(QFont) font, const(QPaintDevice) pd)
-    {
-        this(font, const_cast!(QPaintDevice)(pd));
-    }
-/+ #else
-    QFontMetrics(const QFont &font, const QPaintDevice *pd);
-#endif +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    this(ref const(QFont) font, const(QPaintDevice) pd);
+    }));
     @disable this(this);
     this(ref const(QFontMetrics) );
     ~this();
 
     /+ref QFontMetrics operator =(ref const(QFontMetrics) );+/
-    /+ inline QFontMetrics &operator=(QFontMetrics &&other) noexcept
-    { qSwap(d, other.d); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QFontMetrics) +/
 
     /+ void swap(QFontMetrics &other) noexcept
     { qSwap(d, other.d); } +/
@@ -82,21 +67,8 @@ public:
     int leftBearing(QChar) const;
     int rightBearing(QChar) const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 11) +/
-    /+ QT_DEPRECATED_X("Use QFontMetrics::horizontalAdvance") +/
-        int width(ref const(QString) , int len = -1) const;
-    /+ QT_DEPRECATED_X("Use QFontMetrics::horizontalAdvance") +/
-        int width(ref const(QString) , int len, int flags) const;
-    /+ QT_DEPRECATED_X("Use QFontMetrics::horizontalAdvance") +/
-        int width(QChar) const;
-/+ #endif +/
-
     int horizontalAdvance(ref const(QString) , int len = -1) const;
     int horizontalAdvance(QChar) const;
-
-/+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0) +/
-    /+ QT_DEPRECATED +/ int charWidth(ref const(QString) str, int pos) const;
-/+ #endif +/
 
     QRect boundingRect(QChar) const;
 
@@ -131,25 +103,14 @@ private:
 
 /+ Q_DECLARE_SHARED(QFontMetrics) +/
 
-/// Binding for C++ class [QFontMetricsF](https://doc.qt.io/qt-5/qfontmetricsf.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontMetricsF
+/// Binding for C++ class [QFontMetricsF](https://doc.qt.io/qt-6/qfontmetricsf.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontMetricsF
 {
 public:
     /+ explicit +/this(ref const(QFont) font);
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    this(ref const(QFont) font, QPaintDevice pd);
-/+ #ifndef Q_QDOC +/
-    // the template is necessary to make QFontMetrics(font,nullptr) and QFontMetrics(font,NULL)
-    // not ambiguous. Implementation detail that should not be documented.
-    /+ template<char = 0>
-#endif +/
-    this(ref const(QFont) font, const(QPaintDevice) pd)
-    {
-        this(font, const_cast!(QPaintDevice)(pd));
-    }
-/+ #else
-    QFontMetricsF(const QFont &font, const QPaintDevice *pd);
-#endif +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    this(ref const(QFont) font, const(QPaintDevice) pd);
+    }));
     this(ref const(QFontMetrics) );
     @disable this(this);
     this(ref const(QFontMetricsF) );
@@ -157,8 +118,7 @@ public:
 
     /+ref QFontMetricsF operator =(ref const(QFontMetricsF) );+/
     /+ref QFontMetricsF operator =(ref const(QFontMetrics) );+/
-    /+ inline QFontMetricsF &operator=(QFontMetricsF &&other) noexcept
-    { qSwap(d, other.d); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QFontMetricsF) +/
 
     /+ void swap(QFontMetricsF &other) noexcept { qSwap(d, other.d); } +/
 
@@ -180,11 +140,6 @@ public:
 
     qreal leftBearing(QChar) const;
     qreal rightBearing(QChar) const;
-
-/+ #if QT_DEPRECATED_SINCE(5, 11) +/
-    qreal width(ref const(QString) string) const;
-    qreal width(QChar) const;
-/+ #endif +/
 
     qreal horizontalAdvance(ref const(QString) string, int length = -1) const;
     qreal horizontalAdvance(QChar) const;

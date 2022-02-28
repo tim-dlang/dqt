@@ -21,8 +21,8 @@ import qt.helpers;
   QMargins class
  *****************************************************************************/
 
-/// Binding for C++ class [QMargins](https://doc.qt.io/qt-5/qmargins.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct QMargins
+/// Binding for C++ class [QMargins](https://doc.qt.io/qt-6/qmargins.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct QMargins
 {
 public:
     /+pragma(inline, true) this()/+ noexcept+/
@@ -114,12 +114,39 @@ private:
     int m_right = 0;
     int m_bottom = 0;
 
-    /+ friend inline bool operator==(const QMargins &, const QMargins &) noexcept; +/
-    /+ friend inline bool operator!=(const QMargins &, const QMargins &) noexcept; +/
+    /+ friend constexpr inline bool operator==(const QMargins &m1, const QMargins &m2) noexcept
+    {
+        return
+                m1.m_left == m2.m_left &&
+                m1.m_top == m2.m_top &&
+                m1.m_right == m2.m_right &&
+                m1.m_bottom == m2.m_bottom;
+    } +/
+
+    /+ friend constexpr inline bool operator!=(const QMargins &m1, const QMargins &m2) noexcept
+    {
+        return !(m1 == m2);
+    } +/
+
+    /+ template <std::size_t I,
+              typename M,
+              std::enable_if_t<(I < 4), bool> = true,
+              std::enable_if_t<std::is_same_v<std::decay_t<M>, QMargins>, bool> = true> +/
+    /+ friend constexpr decltype(auto) get(M &&m) noexcept
+    {
+        static if (I == 0)
+            return (std::forward<M>(m).m_left);
+        else static if (I == 1)
+            return (std::forward<M>(m).m_top);
+        else static if (I == 2)
+            return (std::forward<M>(m).m_right);
+        else static if (I == 3)
+            return (std::forward<M>(m).m_bottom);
+    } +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_TYPEINFO(QMargins, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QMargins, Q_RELOCATABLE_TYPE);
 
 /*****************************************************************************
   QMargins stream functions
@@ -133,24 +160,6 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QMargins &);
   QMargins inline functions
  *****************************************************************************/
 
-
-/+pragma(inline, true) bool operator ==(ref const(QMargins) m1, ref const(QMargins) m2)/+ noexcept+/
-{
-    return
-            m1.m_left == m2.m_left &&
-            m1.m_top == m2.m_top &&
-            m1.m_right == m2.m_right &&
-            m1.m_bottom == m2.m_bottom;
-}+/
-
-/+pragma(inline, true) bool operator !=(ref const(QMargins) m1, ref const(QMargins) m2)/+ noexcept+/
-{
-    return
-            m1.m_left != m2.m_left ||
-            m1.m_top != m2.m_top ||
-            m1.m_right != m2.m_right ||
-            m1.m_bottom != m2.m_bottom;
-}+/
 
 /+pragma(inline, true) QMargins operator +(ref const(QMargins) m1, ref const(QMargins) m2)/+ noexcept+/
 {
@@ -218,6 +227,12 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QMargins &);
                     qRound(margins.right() / divisor), qRound(margins.bottom() / divisor));
 }+/
 
+/+pragma(inline, true) QMargins operator |(ref const(QMargins) m1, ref const(QMargins) m2)/+ noexcept+/
+{
+    return QMargins(qMax(m1.left(), m2.left()), qMax(m1.top(), m2.top()),
+                    qMax(m1.right(), m2.right()), qMax(m1.bottom(), m2.bottom()));
+}+/
+
 /+pragma(inline, true) QMargins operator +(ref const(QMargins) margins)/+ noexcept+/
 {
     return margins;
@@ -236,8 +251,8 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QMargins &);
   QMarginsF class
  *****************************************************************************/
 
-/// Binding for C++ class [QMarginsF](https://doc.qt.io/qt-5/qmarginsf.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct QMarginsF
+/// Binding for C++ class [QMarginsF](https://doc.qt.io/qt-6/qmarginsf.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct QMarginsF
 {
 public:
     /+pragma(inline, true) this()/+ noexcept+/
@@ -330,10 +345,39 @@ private:
     qreal m_top = 0;
     qreal m_right = 0;
     qreal m_bottom = 0;
+
+    /+ friend constexpr inline bool operator==(const QMarginsF &lhs, const QMarginsF &rhs) noexcept
+    {
+        return qFuzzyCompare(lhs.left(), rhs.left())
+            && qFuzzyCompare(lhs.top(), rhs.top())
+            && qFuzzyCompare(lhs.right(), rhs.right())
+            && qFuzzyCompare(lhs.bottom(), rhs.bottom());
+    } +/
+
+    /+ friend constexpr inline bool operator!=(const QMarginsF &lhs, const QMarginsF &rhs) noexcept
+    {
+        return !(lhs == rhs);
+    } +/
+
+    /+ template <std::size_t I,
+              typename M,
+              std::enable_if_t<(I < 4), bool> = true,
+              std::enable_if_t<std::is_same_v<std::decay_t<M>, QMarginsF>, bool> = true> +/
+    /+ friend constexpr decltype(auto) get(M &&m) noexcept
+    {
+        static if (I == 0)
+            return (std::forward<M>(m).m_left);
+        else static if (I == 1)
+            return (std::forward<M>(m).m_top);
+        else static if (I == 2)
+            return (std::forward<M>(m).m_right);
+        else static if (I == 3)
+            return (std::forward<M>(m).m_bottom);
+    } +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_TYPEINFO(QMarginsF, Q_MOVABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QMarginsF, Q_RELOCATABLE_TYPE);
 
 /*****************************************************************************
   QMarginsF stream functions
@@ -348,19 +392,6 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QMarginsF &);
   QMarginsF inline functions
  *****************************************************************************/
 
-
-/+pragma(inline, true) bool operator ==(ref const(QMarginsF) lhs, ref const(QMarginsF) rhs)/+ noexcept+/
-{
-    return qFuzzyCompare(lhs.left(), rhs.left())
-           && qFuzzyCompare(lhs.top(), rhs.top())
-           && qFuzzyCompare(lhs.right(), rhs.right())
-           && qFuzzyCompare(lhs.bottom(), rhs.bottom());
-}+/
-
-/+pragma(inline, true) bool operator !=(ref const(QMarginsF) lhs, ref const(QMarginsF) rhs)/+ noexcept+/
-{
-    return !operator==(lhs, rhs);
-}+/
 
 /+pragma(inline, true) QMarginsF operator +(ref const(QMarginsF) lhs, ref const(QMarginsF) rhs)/+ noexcept+/
 {
@@ -406,8 +437,15 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QMarginsF &);
 
 /+pragma(inline, true) QMarginsF operator /(ref const(QMarginsF) lhs, qreal divisor)
 {
+    (mixin(Q_ASSERT(q{divisor < 0 || divisor > 0})));
     return QMarginsF(lhs.left() / divisor, lhs.top() / divisor,
                      lhs.right() / divisor, lhs.bottom() / divisor);
+}+/
+
+/+pragma(inline, true) QMarginsF operator |(ref const(QMarginsF) m1, ref const(QMarginsF) m2)/+ noexcept+/
+{
+    return QMarginsF(qMax(m1.left(), m2.left()), qMax(m1.top(), m2.top()),
+                     qMax(m1.right(), m2.right()), qMax(m1.bottom(), m2.bottom()));
 }+/
 
 /+pragma(inline, true) QMarginsF operator +(ref const(QMarginsF) margins)/+ noexcept+/
@@ -422,5 +460,34 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QMarginsF &);
 
 /+ #ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QMarginsF &);
-#endif +/
+#endif
+
+
+/*****************************************************************************
+  QMargins/QMarginsF tuple protocol
+ *****************************************************************************/
+
+namespace std {
+    template <>
+    class tuple_size<QT_PREPEND_NAMESPACE(QMargins)> : public integral_constant<size_t, 4> {};
+    template <>
+    class tuple_element<0, QT_PREPEND_NAMESPACE(QMargins)> { public: using type = int; };
+    template <>
+    class tuple_element<1, QT_PREPEND_NAMESPACE(QMargins)> { public: using type = int; };
+    template <>
+    class tuple_element<2, QT_PREPEND_NAMESPACE(QMargins)> { public: using type = int; };
+    template <>
+    class tuple_element<3, QT_PREPEND_NAMESPACE(QMargins)> { public: using type = int; };
+
+    template <>
+    class tuple_size<QT_PREPEND_NAMESPACE(QMarginsF)> : public integral_constant<size_t, 4> {};
+    template <>
+    class tuple_element<0, QT_PREPEND_NAMESPACE(QMarginsF)> { public: using type = QT_PREPEND_NAMESPACE(qreal); };
+    template <>
+    class tuple_element<1, QT_PREPEND_NAMESPACE(QMarginsF)> { public: using type = QT_PREPEND_NAMESPACE(qreal); };
+    template <>
+    class tuple_element<2, QT_PREPEND_NAMESPACE(QMarginsF)> { public: using type = QT_PREPEND_NAMESPACE(qreal); };
+    template <>
+    class tuple_element<3, QT_PREPEND_NAMESPACE(QMarginsF)> { public: using type = QT_PREPEND_NAMESPACE(qreal); };
+} +/
 

@@ -28,7 +28,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QBoxLayoutPrivate;
 
-/// Binding for C++ class [QBoxLayout](https://doc.qt.io/qt-5/qboxlayout.html).
+/// Binding for C++ class [QBoxLayout](https://doc.qt.io/qt-6/qboxlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QBoxLayout : QLayout
 {
     mixin(Q_OBJECT);
@@ -59,8 +59,8 @@ public:
     final void insertLayout(int index, QLayout layout, int stretch = 0);
     final void insertItem(int index, QLayoutItem );
 
-//    final int spacing() const;
-//    final void setSpacing(int spacing);
+    override int spacing() const;
+    override void setSpacing(int spacing);
 
     final bool setStretchFactor(QWidget w, int stretch);
     final bool setStretchFactor(QLayout l, int stretch);
@@ -87,7 +87,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QHBoxLayout](https://doc.qt.io/qt-5/qhboxlayout.html).
+/// Binding for C++ class [QHBoxLayout](https://doc.qt.io/qt-6/qhboxlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QHBoxLayout : QBoxLayout
 {
     mixin(Q_OBJECT);
@@ -102,7 +102,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/// Binding for C++ class [QVBoxLayout](https://doc.qt.io/qt-5/qvboxlayout.html).
+/// Binding for C++ class [QVBoxLayout](https://doc.qt.io/qt-6/qvboxlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QVBoxLayout : QBoxLayout
 {
     mixin(Q_OBJECT);

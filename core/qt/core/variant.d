@@ -12,12 +12,12 @@
 module qt.core.variant;
 extern(C++):
 
-import core.stdc.config;
 import qt.config;
 import qt.core.abstractitemmodel;
 import qt.core.atomic;
 import qt.core.bitarray;
 import qt.core.bytearray;
+import qt.core.compare;
 import qt.core.datetime;
 import qt.core.easingcurve;
 import qt.core.global;
@@ -27,7 +27,6 @@ import qt.core.locale;
 import qt.core.map;
 import qt.core.metatype;
 import qt.core.namespace;
-import qt.core.object;
 import qt.core.qchar;
 import qt.core.regularexpression;
 import qt.core.string;
@@ -45,12 +44,11 @@ version(QT_NO_GEOM_VARIANT){}else
     import qt.core.rect;
     import qt.core.size;
 }
-version(QT_NO_REGEXP){}else
-    import qt.core.regexp;
 
-/+ #ifndef QT_BOOTSTRAPPED
+/+ #ifndef QT_NO_DEBUG_STREAM
 #endif
-
+#ifndef QT_BOOTSTRAPPED
+#endif
 #if __has_include(<variant>) && __cplusplus >= 201703L
 #elif defined(Q_CLANG_QDOC)
 namespace std { template<typename...> struct variant; }
@@ -61,51 +59,17 @@ namespace std { template<typename...> struct variant; }
 #if QT_CONFIG(easingcurve)
 class QEasingCurve;
 #endif
-#ifndef QT_NO_REGEXP
-#endif // QT_NO_REGEXP
 #if QT_CONFIG(regularexpression)
 class QRegularExpression;
 #endif +/ // QT_CONFIG(regularexpression)
 
-// pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) );
-
-extern(C++, "QtPrivate") {
-
-    struct ObjectInvoker(Derived, Argument, ReturnType)
-    {
-        static ReturnType invoke(Argument a)
-        {
-            return Derived.object(a);
-        }
-    }
-
-    struct MetaTypeInvoker(Derived, Argument, ReturnType)
-    {
-        static ReturnType invoke(Argument a)
-        {
-            return Derived.metaType(a);
-        }
-    }
-
-    struct TreatAsQObjectBeforeMetaType(Derived, T, Argument, ReturnType, /+ bool +/ /+ = IsPointerToTypeDerivedFromQObject<T>::Value +/)
-    {
-        ObjectInvoker!(Derived, Argument, ReturnType) base0;
-        alias base0 this;
-    }
-
-    /+ template <typename Derived, typename T, typename Argument, typename ReturnType>
-    struct TreatAsQObjectBeforeMetaType<Derived, T, Argument, ReturnType, false> : MetaTypeInvoker<Derived, Argument, ReturnType>
-    {
-    };
-
-    template<typename T> struct QVariantValueHelper; +/
-}
-
-/// Binding for C++ class [QVariant](https://doc.qt.io/qt-5/qvariant.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QVariant
+/// Binding for C++ class [QVariant](https://doc.qt.io/qt-6/qvariant.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QVariant
 {
  public:
-    enum Type {
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    enum /+ QT_DEPRECATED_VERSION_X_6_0("Use QMetaType::Type instead.") +/ Type
+    {
         Invalid = QMetaType.Type.UnknownType,
         Bool = QMetaType.Type.Bool,
         Int = QMetaType.Type.Int,
@@ -133,8 +97,9 @@ extern(C++, "QtPrivate") {
         LineF = QMetaType.Type.QLineF,
         Point = QMetaType.Type.QPoint,
         PointF = QMetaType.Type.QPointF,
-        RegExp = QMetaType.Type.QRegExp,
+/+ #if QT_CONFIG(regularexpression) +/
         RegularExpression = QMetaType.Type.QRegularExpression,
+/+ #endif +/
         Hash = QMetaType.Type.QVariantHash,
 /+ #if QT_CONFIG(easingcurve) +/
         EasingCurve = QMetaType.Type.QEasingCurve,
@@ -156,11 +121,12 @@ extern(C++, "QtPrivate") {
         Region = QMetaType.Type.QRegion,
         Bitmap = QMetaType.Type.QBitmap,
         Cursor = QMetaType.Type.QCursor,
+/+ #if QT_CONFIG(shortcut) +/
         KeySequence = QMetaType.Type.QKeySequence,
+/+ #endif +/
         Pen = QMetaType.Type.QPen,
         TextLength = QMetaType.Type.QTextLength,
         TextFormat = QMetaType.Type.QTextFormat,
-        Matrix = QMetaType.Type.QMatrix,
         Transform = QMetaType.Type.QTransform,
         Matrix4x4 = QMetaType.Type.QMatrix4x4,
         Vector2D = QMetaType.Type.QVector2D,
@@ -176,22 +142,15 @@ extern(C++, "QtPrivate") {
         UserType = QMetaType.Type.User,
 //        LastType = 0xffffffff // need this so that gcc >= 3.4 allocates 32 bits for Type
     }
-
+/+ #endif +/
     /+this()/+ noexcept+/
     {
         this.d = typeof(this.d)();
     }+/
     ~this();
-    this(Type type);
-    this(int typeId, const(void)* copy);
-    this(int typeId, const(void)* copy, uint flags);
+    /+ explicit +/this(QMetaType type, const(void)* copy = null);
     @disable this(this);
     this(ref const(QVariant) other);
-
-    version(QT_NO_DATASTREAM){}else
-    {
-        this(ref QDataStream s);
-    }
 
     this(int i);
     this(uint ui);
@@ -201,7 +160,9 @@ extern(C++, "QtPrivate") {
     this(double d);
     this(float f);
 /+ #ifndef QT_NO_CAST_FROM_ASCII
-    QT_ASCII_CAST_WARN QVariant(const char *str);
+    QT_ASCII_CAST_WARN QVariant(const char *str)
+        : QVariant(QString::fromUtf8(str))
+    {}
 #endif +/
 
     this(ref const(QByteArray) bytearray);
@@ -210,12 +171,12 @@ extern(C++, "QtPrivate") {
     this(QLatin1String string);
     this(ref const(QStringList) stringlist);
     this(QChar qchar);
-    this(ref const(QDate) date);
-    this(ref const(QTime) time);
+    this(QDate date);
+    this(QTime time);
     this(ref const(QDateTime) datetime);
     this(ref const(QList!(QVariant)) list);
-//    this(ref const(QMap!(QString,QVariant)) map);
-//    this(ref const(QHash!(QString,QVariant)) hash);
+//    this(ref const(QMap!(QString, QVariant)) map);
+//    this(ref const(QHash!(QString, QVariant)) hash);
     version(QT_NO_GEOM_VARIANT){}else
     {
         this(ref const(QSize) size);
@@ -228,13 +189,7 @@ extern(C++, "QtPrivate") {
         this(ref const(QRectF) rect);
     }
     this(ref const(QLocale) locale);
-/+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
-    {
-        this(ref const(QRegExp) regExp);
-    }
-/+ #endif // QT_NO_REGEXP
-#if QT_CONFIG(regularexpression) +/
+/+ #if QT_CONFIG(regularexpression) +/
     this(ref const(QRegularExpression) re);
 /+ #endif // QT_CONFIG(regularexpression)
 #if QT_CONFIG(easingcurve) +/
@@ -256,19 +211,36 @@ extern(C++, "QtPrivate") {
     /+ref QVariant operator =(ref const(QVariant) other);+/
     /+ inline QVariant(QVariant &&other) noexcept : d(other.d)
     { other.d = Private(); } +/
-    /+ inline QVariant &operator=(QVariant &&other) noexcept
-    { qSwap(d, other.d); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QVariant) +/
 
     /+ inline void swap(QVariant &other) noexcept { qSwap(d, other.d); } +/
 
-    Type type() const;
-    int userType() const;
+    int userType() const { return typeId(); }
+    int typeId() const { return metaType().id(); }
+
     const(char)* typeName() const;
+    QMetaType metaType() const;
 
-    bool canConvert(int targetTypeId) const;
-    bool convert(int targetTypeId);
+    bool canConvert(QMetaType targetType) const
+    { return QMetaType.canConvert(d.type(), targetType); }
+    bool convert(QMetaType type);
 
-    pragma(inline, true) bool isValid() const { return d.type != Type.Invalid; }
+    bool canView(QMetaType targetType) const
+    { return QMetaType.canView(d.type(), targetType); }
+
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+ QT_DEPRECATED_VERSION_6_0 +/
+        bool canConvert(int targetTypeId) const
+    { return QMetaType.canConvert(d.type(), QMetaType(targetTypeId)); }
+    /+ QT_DEPRECATED_VERSION_6_0 +/
+        bool convert(int targetTypeId)
+    { return convert(QMetaType(targetTypeId)); }
+/+ #endif +/
+
+    pragma(inline, true) bool isValid() const
+    {
+        return d.type().isValid();
+    }
     bool isNull() const;
 
     void clear();
@@ -309,13 +281,7 @@ extern(C++, "QtPrivate") {
         QRectF toRectF() const;
     }
     QLocale toLocale() const;
-/+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
-    {
-        QRegExp toRegExp() const;
-    }
-/+ #endif // QT_NO_REGEXP
-#if QT_CONFIG(regularexpression) +/
+/+ #if QT_CONFIG(regularexpression) +/
     QRegularExpression toRegularExpression() const;
 /+ #endif // QT_CONFIG(regularexpression)
 #if QT_CONFIG(easingcurve) +/
@@ -340,217 +306,272 @@ extern(C++, "QtPrivate") {
         void load(ref QDataStream ds);
         void save(ref QDataStream ds) const;
     }
-/+ #endif +/
-    static const(char)* typeToName(int typeId);
-    static Type nameToType(const(char)* name);
+/+ #endif
+#if QT_DEPRECATED_SINCE(6, 0)
+    QT_WARNING_PUSH
+    QT_WARNING_DISABLE_DEPRECATED +/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use the constructor taking a QMetaType instead.") +/
+        /+ explicit +/this(Type type)
+        {
+            this(QMetaType(int(type)));
+        }
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use typeId() or metaType().") +/
+        Type type() const
+    {
+        int type = d.typeId();
+        return type >= QMetaType.Type.User ? Type.UserType : static_cast!(Type)(type);
+    }
+    /+ QT_DEPRECATED_VERSION_6_0 +/
+        static const(char)* typeToName(int typeId)
+    { return QMetaType(typeId).name(); }
+    /+ QT_DEPRECATED_VERSION_6_0 +/
+        static Type nameToType(const(char)* name)
+    {
+        import qt.core.bytearrayview;
+
+        int metaType = QMetaType.fromName(cast(QByteArrayView)(name)).id();
+        return metaType <= int(Type.UserType) ? cast(QVariant.Type)(metaType) : Type.UserType;
+    }
+    /+ QT_WARNING_POP
+#endif +/
 
     void* data();
-    const(void)* constData() const;
+    const(void)* constData() const
+    { return d.storage(); }
     pragma(inline, true) const(void)* data() const { return constData(); }
 
-    /+ template<typename T> +/
-    pragma(inline, true) void setValue(T)(ref const(T) avalue)
+    /+ template<typename T, typename = std::enable_if_t<!std::is_same_v<std::decay_t<T>, QVariant>>> +/
+    /+ void setValue(T &&avalue)
     {
-        import core.lifetime;
-
+        using VT = std::decay_t<T>;
+        QMetaType metaType = QMetaType::fromType<VT>();
         // If possible we reuse the current QVariant private.
-        const(uint) type = qMetaTypeId!(T)();
-        if (isDetached() && (type == d.type || (type <= uint(QVariant.Type.Char) && d.type <= uint(QVariant.Type.Char)))) {
-            d.type = type;
-            d.is_null = false;
-            T* old = reinterpret_cast!(T*)(d.is_shared ? d.data.shared_.ptr : &d.data.ptr);
-            if (QTypeInfo!(T).isComplex)
-                destroy!false(old);
-            emplace!T(old, avalue); // call the copy constructor
+        if (isDetached() && d.type() == metaType) {
+            *reinterpret_cast<VT *>(const_cast<void *>(constData())) = std::forward<T>(avalue);
         } else {
-            this = QVariant(type, &avalue, QTypeInfo!(T).isPointer);
+            *this = QVariant::fromValue<VT>(std::forward<T>(avalue));
         }
+    } +/
+
+    void setValue(ref const(QVariant) avalue)
+    {
+        this = avalue;
     }
+
+    /+ void setValue(QVariant &&avalue)
+    {
+        *this = std::move(avalue);
+    } +/
 
     pragma(inline, true) T value(T)() const
-    { return qvariant_cast!T(this); }
+    { return qvariant_cast!(T)(this); }
 
-    static QVariant fromValue(T)(ref const T value)
+    /+ template<typename T> +/
+    /+ pragma(inline, true) T view(T)()
     {
-        import std.traits;
-        return QVariant(qMetaTypeId!T(), &value, isPointer!T);
+        T t T();
+        QMetaType.view(metaType(), data(), QMetaType.fromType!(T)(), &t);
+        return t;
+    } +/
+
+    /+ template<typename T>
+#ifndef Q_CLANG_QDOC +/
+    pragma(inline, true) static QVariant fromValue(T)(ref const T value)/+ ->
+        std::enable_if_t<std::is_copy_constructible_v<T>, QVariant> +/
+/+ #else
+    static inline QVariant fromValue(const T &value)
+#endif +/
+    {
+        return QVariant(QMetaType.fromType!(T)(), &value);
     }
 
-/+ #if (__has_include(<variant>) && __cplusplus >= 201703L) || defined(Q_CLANG_QDOC)
-    template<typename... Types>
-    static inline QVariant fromStdVariant(const std::variant<Types...> &value)
+/+ #if (__has_include(<variant>) && __cplusplus >= 201703L) || defined(Q_CLANG_QDOC) +/
+    /+ template<typename... Types> +/
+    /+ static inline QVariant fromStdVariant(const std::variant<Types...> &value)
     {
         if (value.valueless_by_exception())
             return QVariant();
         return std::visit([](const auto &arg) { return fromValue(arg); }, value);
-    }
-#endif +/
+    } +/
+/+ #endif +/
 
     /+ template<typename T> +/
     bool canConvert(T)() const
-    { return canConvert(qMetaTypeId!(T)()); }
+    { return canConvert(QMetaType.fromType!(T)()); }
 
- public:
+    /+ template<typename T> +/
+    bool canView(T)() const
+    { return canView(QMetaType.fromType!(T)()); }
+
+public:
     struct PrivateShared
     {
-        pragma(inline, true) this(void* v)
+    private:
+        @disable this();
+        /+pragma(inline, true) this()
         {
-            this.ptr = v;
             this.ref_ = 1;
+        }+/
+    public:
+        /+ static PrivateShared *create(const QtPrivate::QMetaTypeInterface *type)
+        {
+            Q_ASSERT(type);
+            size_t size = type->size;
+            size_t align = type->alignment;
+
+            size += sizeof(PrivateShared);
+            if (align > sizeof(PrivateShared)) {
+                // The alignment is larger than the alignment we can guarantee for the pointer
+                // directly following PrivateShared, so we need to allocate some additional
+                // memory to be able to fit the object into the available memory with suitable
+                // alignment.
+                size += align - sizeof(PrivateShared);
+            }
+            void *data = operator new(size);
+            auto *ps = new (data) QVariant::PrivateShared();
+            ps->offset = int(((quintptr(ps) + sizeof(PrivateShared) + align - 1) & ~(align - 1)) - quintptr(ps));
+            return ps;
+        } +/
+        static void free(PrivateShared* p)
+        {
+            destroy!false(p);
+//            operator delete(p);
         }
-        void* ptr;
-        QAtomicInt ref_;
+
+        /+ alignas(8) +/ QAtomicInt ref_ = QAtomicInt(1);
+        int offset;
+
+        const(void)* data() const
+        { return reinterpret_cast!(const(ubyte)*)(&this) + offset; }
+        void* data()
+        { return reinterpret_cast!(ubyte*)(&this) + offset; }
     }
     struct Private
     {
-        /+pragma(inline, true) this()/+ noexcept+/
+        extern(D) static immutable size_t MaxInternalSize = 3*(void*).sizeof;
+        /+ template<typename T> +/
+        /+ static constexpr bool CanUseInternalSpace = (QTypeInfo<T>::isRelocatable && sizeof(T) <= MaxInternalSize && alignof(T) <= alignof(double)); +/
+        static bool canUseInternalSpace(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface* type)
         {
-            this.type = Type.Invalid;
+            import qt.core.flags;
+
+            (mixin(Q_ASSERT(q{type})));
+            return QMetaType.TypeFlags(cast(QFlag)(type.flags)) & QMetaType.TypeFlag.RelocatableType &&
+                   size_t(type.size) <= MaxInternalSize && size_t(type.alignment) <= double.alignof;
+        }
+
+        union generated_qvariant_0
+        {
+            uchar[MaxInternalSize] data = [0];
+            PrivateShared* shared_;
+            double _forAlignment; // we want an 8byte alignment on 32bit systems as well
+        }generated_qvariant_0 data;
+        quintptr bitfield = 1 << 1;
+        /+ quintptr is_shared : 1; +/
+        final quintptr is_shared() const
+        {
+            return (bitfield >> 0) & 0x1;
+        }
+        final quintptr is_shared(quintptr value)
+        {
+            bitfield = (bitfield & ~0x1) | ((value & 0x1) << 0);
+            return value;
+        }
+        /+ quintptr is_null : 1; +/
+        final quintptr is_null() const
+        {
+            return (bitfield >> 1) & 0x1;
+        }
+        final quintptr is_null(quintptr value)
+        {
+            bitfield = (bitfield & ~0x2) | ((value & 0x1) << 1);
+            return value;
+        }
+        /+ quintptr packedType : sizeof(QMetaType) * 8 - 2; +/
+        final quintptr packedType() const
+        {
+            return (bitfield >> 2) & 0x1;
+        }
+        final quintptr packedType(quintptr value)
+        {
+            bitfield = (bitfield & ~0x4) | ((value & 0x1) << 2);
+            return value;
+        }
+
+        //@disable this();
+        /+this()/+ noexcept+/
+        {
             this.is_shared = false;
             this.is_null = true;
-            data.ptr = null;
+            this.packedType = 0;
         }+/
-
-        // Internal constructor for initialized variants.
-        /+ explicit +/ pragma(inline, true) this(uint variantType)/+ noexcept+/
+        /+ explicit +/this(QMetaType type)/+ noexcept+/
         {
-            this.type = variantType;
             this.is_shared = false;
             this.is_null = false;
+
+            quintptr mt = cast(quintptr)(type.d_ptr);
+            (mixin(Q_ASSERT(q{(mt & 0x3) == 0})));
+            packedType = mt >> 2;
+        }
+        /+ explicit +/this(int type)/+ noexcept+/
+        {
+            this(QMetaType(type));
         }
 
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-        @disable this(this);
-        this(ref const(Private) other)/+ noexcept+/
+        const(void)* storage() const return
+        { return is_shared ? data.shared_.data() : &data.data; }
+
+        const(void)* internalStorage() const return
+        { (mixin(Q_ASSERT(q{QVariant.Private.is_shared}))); return &data.data; }
+
+        // determine internal storage at compile time
+        /+ template<typename T> +/
+        ref const(T) get(T)() const
+        { return *static_cast!(const(T)*)(storage()); }
+        /+ template<typename T> +/
+        void set(T)(ref const(T) t)
+        { *static_cast!(T*)(CanUseInternalSpace!(T) ? &data.data : data.shared_.data()) = t; }
+
+        pragma(inline, true) QMetaType type() const
         {
-            this.data = *cast(Data*)&other.data;
-            this.type = other.type;
-            this.is_shared = other.is_shared;
-            this.is_null = other.is_null;
+            return QMetaType(reinterpret_cast!(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface*)(packedType << 2));
         }
-        /+ Private &operator=(const Private &other) noexcept = default; +/
-/+ #endif +/
-        union Data
+
+        pragma(inline, true) /+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface*  typeInterface() const
         {
-            QObject o = null;
-            char c;
-            uchar uc;
-            short s;
-            byte  sc;
-            ushort us;
-            int i;
-            uint u;
-            cpp_long l;
-            cpp_ulong ul;
-            bool b;
-            double d;
-            float f;
-            qreal real_;
-            qlonglong ll;
-            qulonglong ull;
-            void* ptr;
-            PrivateShared* shared_;
-        }Data data;
-        /+ uint type : 30; +/
-        uint bitfieldData_type = Type.Invalid | (uint(1) << 31);
-        final uint type() const
-        {
-            return (bitfieldData_type >> 0) & 0x3fffffff;
+            return reinterpret_cast!(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface*)(packedType << 2);
         }
-        final uint type(uint value)
+
+        pragma(inline, true) int typeId() const
         {
-            bitfieldData_type = (bitfieldData_type & ~0x3fffffff) | ((value & 0x3fffffff) << 0);
-            return value;
-        }
-        /+ uint is_shared : 1; +/
-        final uint is_shared() const
-        {
-            return (bitfieldData_type >> 30) & 0x1;
-        }
-        final uint is_shared(uint value)
-        {
-            bitfieldData_type = (bitfieldData_type & ~0x40000000) | ((value & 0x1) << 30);
-            return value;
-        }
-        /+ uint is_null : 1; +/
-        final uint is_null() const
-        {
-            return (bitfieldData_type >> 31) & 0x1;
-        }
-        final uint is_null(uint value)
-        {
-            bitfieldData_type = (bitfieldData_type & ~0x80000000) | ((value & 0x1) << 31);
-            return value;
+            return type().id();
         }
     }
  public:
-    alias f_construct = ExternCPPFunc!(void function(Private* , const(void)* ));
-    alias f_clear = ExternCPPFunc!(void function(Private* ));
-    alias f_null = ExternCPPFunc!(bool function(const(Private)* ));
-    version(QT_NO_DATASTREAM){}else
-    {
-        alias f_load = ExternCPPFunc!(void function(Private* , ref QDataStream ));
-        alias f_save = ExternCPPFunc!(void function(const(Private)* , ref QDataStream ));
-    }
-    alias f_compare = ExternCPPFunc!(bool function(const(Private)* , const(Private)* ));
-    alias f_convert = ExternCPPFunc!(bool function(const(Private)* d, int t, void* , bool* ));
-    alias f_canConvert = ExternCPPFunc!(bool function(const(Private)* d, int t));
-    /+ typedef void (*f_debugStream)(QDebug, const QVariant &); +/
-    /+ struct Handler {
-        f_construct construct;
-        f_clear clear;
-        f_null isNull;
-#ifndef QT_NO_DATASTREAM
-        f_load load;
-        f_save save;
-#endif
-        f_compare compare;
-        f_convert convert;
-        f_canConvert canConvert;
-        f_debugStream debugStream;
-    }; +/
+    static QPartialOrdering compare(ref const(QVariant) lhs, ref const(QVariant) rhs);
 
-    /+pragma(inline, true) bool operator ==(ref const(QVariant) v) const
-    { return cmp(v); }+/
-    /+pragma(inline, true) bool operator !=(ref const(QVariant) v) const
-    { return !cmp(v); }+/
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+/+ QT_DEPRECATED +/ pragma(inline, true) bool operator <(ref const(QVariant) v) const
-    { return compare(v) < 0; }+/
-    /+/+ QT_DEPRECATED +/ pragma(inline, true) bool operator <=(ref const(QVariant) v) const
-    { return compare(v) <= 0; }+/
-    /+/+ QT_DEPRECATED +/ pragma(inline, true) bool operator >(ref const(QVariant) v) const
-    { return compare(v) > 0; }+/
-    /+/+ QT_DEPRECATED +/ pragma(inline, true) bool operator >=(ref const(QVariant) v) const
-    { return compare(v) >= 0; }+/
-/+ #endif +/
-
-protected:
-    /+ friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &); +/
+private:
+    /+ friend inline bool operator==(const QVariant &a, const QVariant &b)
+    { return a.equals(b); } +/
+    /+ friend inline bool operator!=(const QVariant &a, const QVariant &b)
+    { return !a.equals(b); } +/
 /+ #ifndef QT_NO_DEBUG_STREAM
-    friend Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
-#endif
-// ### Qt6: FIXME: Remove the special Q_CC_MSVC handling, it was introduced to maintain BC for QTBUG-41810 .
-#if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC) +/
-    /*static if(!defined!"Q_NO_TEMPLATE_FRIENDS")
-    {
-        /+ template<typename T> +/
-        /+ friend inline T qvariant_cast(const QVariant &); +/
-        /+ template<typename T> +/ /+ friend struct QtPrivate::QVariantValueHelper; +/
-    protected:
+    template <typename T>
+    friend auto operator<<(const QDebug &debug, const T &variant) -> std::enable_if_t<std::is_same_v<T, QVariant>, QDebug> {
+        return  variant.qdebugHelper(debug);
     }
-    else
-    {
-    /+ #else +/
-    public:
-    }*/
-    public:
-/+ #endif +/
+    QDebug qdebugHelper(QDebug) const;
+#endif +/
+    /+ template<typename T> +/
+    /+ friend inline T qvariant_cast(const QVariant &); +/
+protected:
     Private d;
     /+ void create(int type, const void *copy); +/
-    bool cmp(ref const(QVariant) other) const;
-    int compare(ref const(QVariant) other) const;
-    bool convert(const(int) t, void* ptr) const; // ### Qt6: drop const
+    /+ void create(QMetaType type, const void *copy); +/
+    bool equals(ref const(QVariant) other) const;
+    bool convert(int type, void* ptr) const;
+    bool view(int type, void* ptr);
 
 private:
     // force compile error, prevent QVariant(bool) to be called
@@ -563,7 +584,7 @@ private:
     // int variant, so delete this constructor:
     @disable this(QMetaType.Type) /+ = delete +/;
 
-    // These constructors don't create QVariants of the type associcated
+    // These constructors don't create QVariants of the type associated
     // with the enum, as expected, but they would create a QVariant of
     // type int with the value of the enum value.
     // Use QVariant v = QColor(Qt::red) instead of QVariant v = Qt::red for
@@ -583,21 +604,7 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ #if QT_DEPRECATED_SINCE(5, 14) +/
-/+ QT_DEPRECATED_X("Use QVariant::fromValue() instead.") +/
-pragma(inline, true) QVariant qVariantFromValue(T)(ref const(T) t)
-{
-    return QVariant.fromValue(t);
-}
-
-/+ QT_DEPRECATED_X("Use QVariant::setValue() instead.") +/
-pragma(inline, true) void qVariantSetValue(T)(ref QVariant v, ref const(T) t)
-{
-    v.setValue(t);
-}
-/+ #endif
-
-template<>
+/+ template<>
 #if __has_include(<variant>) && __cplusplus >= 201703L
 template<>
 inline QVariant QVariant::fromValue(const std::monostate &)
@@ -606,313 +613,142 @@ inline QVariant QVariant::fromValue(const std::monostate &)
 }
 #endif
 
-template<>
 #ifndef QT_NO_DATASTREAM
-Q_CORE_EXPORT QDataStream& operator>> (QDataStream& s, QVariant& p);
-Q_CORE_EXPORT QDataStream& operator<< (QDataStream& s, const QVariant& p);
-Q_CORE_EXPORT QDataStream& operator>> (QDataStream& s, QVariant::Type& p);
-Q_CORE_EXPORT QDataStream& operator<< (QDataStream& s, const QVariant::Type p);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &s, QVariant &p);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &s, const QVariant &p);
+
+#if QT_DEPRECATED_SINCE(6, 0)
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
+QT_DEPRECATED_VERSION_6_0
+inline QDataStream &operator>>(QDataStream &s, QVariant::Type &p)
+{
+    quint32 u;
+    s >> u;
+    p = static_cast<QVariant::Type>(u);
+    return s;
+}
+QT_DEPRECATED_VERSION_6_0
+inline QDataStream &operator<<(QDataStream &s, const QVariant::Type p)
+{
+    s << static_cast<quint32>(p);
+    return s;
+}
+QT_WARNING_POP
 #endif
 
+#endif
 
-#ifdef Q_QDOC
-    inline bool operator==(const QVariant &v1, const QVariant &v2);
-    inline bool operator!=(const QVariant &v1, const QVariant &v2);
-#else +/
-
-/* Helper class to add one more level of indirection to prevent
-   implicit casts.
-*/
-extern(C++, class) struct QVariantComparisonHelper
-{
-public:
-    pragma(inline, true) this(ref const(QVariant) var)
-    {
-        this.v = &var;
-    }
-private:
-    /+ friend inline bool operator==(const QVariant &, const QVariantComparisonHelper &); +/
-    const(QVariant)* v;
-    mixin(CREATE_CONVENIENCE_WRAPPERS);
-}
-
-/+pragma(inline, true) bool operator ==(ref const(QVariant) v1, ref const(QVariantComparisonHelper) v2)
-{
-    return v1.cmp(*v2.v);
-}+/
-
-/+pragma(inline, true) bool operator !=(ref const(QVariant) v1, ref const(QVariantComparisonHelper) v2)
-{
-    return !operator==(v1, v2);
-}+/
-/+ #endif
 Q_DECLARE_SHARED(QVariant) +/
-
-/+
-/// Binding for C++ class [QSequentialIterable](https://doc.qt.io/qt-5/qsequentialiterable.html).
-extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSequentialIterable
-{
-private:
-    /+ QtMetaTypePrivate:: +/QSequentialIterableImpl m_impl;
-public:
-    struct /+ Q_CORE_EXPORT +/ const_iterator
-    {
-    private:
-        /+ QtMetaTypePrivate:: +/QSequentialIterableImpl m_impl;
-        QAtomicInt* ref_;
-        /+ friend class QSequentialIterable; +/
-        /+ explicit +/this(ref const(QSequentialIterable) iter, QAtomicInt* ref_);
-
-        /+ explicit +/this(ref const(/+ QtMetaTypePrivate:: +/QSequentialIterableImpl) impl, QAtomicInt* ref_);
-
-        void begin();
-        void end();
-    public:
-        ~this();
-
-        @disable this(this);
-        this(ref const(const_iterator) other);
-
-        /+ref const_iterator operator =(ref const(const_iterator) other);+/
-
-        const(QVariant) opUnary(string op)() const if(op == "*");
-        /+bool operator ==(ref const(const_iterator) o) const;+/
-        /+bool operator !=(ref const(const_iterator) o) const;+/
-        ref const_iterator opUnary(string op)() if(op == "++");
-        /+const_iterator operator ++(int);+/
-        ref const_iterator opUnary(string op)() if(op == "--");
-        /+const_iterator operator --(int);+/
-        ref const_iterator opOpAssign(string op)(int j) if(op == "+");
-        ref const_iterator opOpAssign(string op)(int j) if(op == "-");
-        const_iterator opBinary(string op)(int j) const if(op == "+");
-        const_iterator opBinary(string op)(int j) const if(op == "-");
-        /+ friend inline const_iterator operator+(int j, const_iterator k) { return k + j; } +/
-    }
-
-    /+ friend struct const_iterator; +/
-
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    /+ explicit +/this(/+ QtMetaTypePrivate:: +/QSequentialIterableImpl impl);
-/+ #else
-    explicit QSequentialIterable(const QtMetaTypePrivate::QSequentialIterableImpl &impl);
-#endif +/
-
-    const_iterator begin() const;
-    const_iterator end() const;
-
-    QVariant at(int idx) const;
-    int size() const;
-
-    bool canReverseIterate() const;
-    mixin(CREATE_CONVENIENCE_WRAPPERS);
-}+/
-
-/+
-/// Binding for C++ class [QAssociativeIterable](https://doc.qt.io/qt-5/qassociativeiterable.html).
-extern(C++, class) struct /+ Q_CORE_EXPORT +/ QAssociativeIterable
-{
-private:
-    /+ QtMetaTypePrivate:: +/QAssociativeIterableImpl m_impl;
-public:
-    struct /+ Q_CORE_EXPORT +/ const_iterator
-    {
-    private:
-        /+ QtMetaTypePrivate:: +/QAssociativeIterableImpl m_impl;
-        QAtomicInt* ref_;
-        /+ friend class QAssociativeIterable; +/
-        /+ explicit +/this(ref const(QAssociativeIterable) iter, QAtomicInt* ref_);
-
-        /+ explicit +/this(ref const(/+ QtMetaTypePrivate:: +/QAssociativeIterableImpl) impl, QAtomicInt* ref_);
-
-        void begin();
-        void end();
-        /+ void find(const QVariant &key); +/
-    public:
-        ~this();
-        @disable this(this);
-        this(ref const(const_iterator) other);
-
-        /+ref const_iterator operator =(ref const(const_iterator) other);+/
-
-        const(QVariant) key() const;
-
-        const(QVariant) value() const;
-
-        const(QVariant) opUnary(string op)() const if(op == "*");
-        /+bool operator ==(ref const(const_iterator) o) const;+/
-        /+bool operator !=(ref const(const_iterator) o) const;+/
-        ref const_iterator opUnary(string op)() if(op == "++");
-        /+const_iterator operator ++(int);+/
-        ref const_iterator opUnary(string op)() if(op == "--");
-        /+const_iterator operator --(int);+/
-        ref const_iterator opOpAssign(string op)(int j) if(op == "+");
-        ref const_iterator opOpAssign(string op)(int j) if(op == "-");
-        const_iterator opBinary(string op)(int j) const if(op == "+");
-        const_iterator opBinary(string op)(int j) const if(op == "-");
-        /+ friend inline const_iterator operator+(int j, const_iterator k) { return k + j; } +/
-    }
-
-    /+ friend struct const_iterator; +/
-
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    /+ explicit +/this(/+ QtMetaTypePrivate:: +/QAssociativeIterableImpl impl);
-/+ #else
-    explicit QAssociativeIterable(const QtMetaTypePrivate::QAssociativeIterableImpl &impl);
-#endif +/
-
-    const_iterator begin() const;
-    const_iterator end() const;
-    /+ const_iterator find(const QVariant &key) const; +/
-
-    QVariant value(ref const(QVariant) key) const;
-
-    int size() const;
-    mixin(CREATE_CONVENIENCE_WRAPPERS);
-}+/
 
 version(QT_MOC){}else
 {
-/+extern(C++, "QtPrivate") {
-    /+ template<typename T>
-    struct QVariantValueHelper : TreatAsQObjectBeforeMetaType<QVariantValueHelper<T>, T, const QVariant &, T>
-    {
-        static T metaType(const QVariant &v)
-        {
-            const int vid = qMetaTypeId<T>();
-            if (vid == v.userType())
-                return *reinterpret_cast<const T *>(v.constData());
-            T t;
-            if (v.convert(vid, &t))
-                return t;
-            return T();
-        }
-#ifndef QT_NO_QOBJECT
-        static T object(const QVariant &v)
-        {
-            return qobject_cast<T>(QMetaType::typeFlags(v.userType()) & QMetaType::PointerToQObject
-                ? v.d.data.o
-                : QVariantValueHelper::metaType(v));
-        }
-#endif
-    }; +/
 
-    struct QVariantValueHelperInterface(T)
-    {
-        QVariantValueHelper!(T) base0;
-        alias base0 this;
+/+pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) v)
+{
+    QMetaType targetType = QMetaType.fromType!(T)();
+    if (v.d.type() == targetType)
+        return v.d.get<TT>();
+    static if (/+ std:: +/is_same_v!(T,const(/+ std:: +/remove_const_t!(/+ std:: +/remove_pointer_t!(T)))*)) {
+        alias nonConstT = /+ std:: +/remove_const_t!(/+ std:: +/remove_pointer_t!(T))*;
+        QMetaType nonConstTargetType = QMetaType.fromType!(nonConstT)();
+        if (v.d.type() == nonConstTargetType)
+            return v.d.get<nonConstTnonConstT>();
     }
 
-    /+ template<>
-    struct QVariantValueHelperInterface<QSequentialIterable>
-    {
-        static QSequentialIterable invoke(const QVariant &v)
-        {
-            const int typeId = v.userType();
-            if (typeId == qMetaTypeId<QVariantList>()) {
-                return QSequentialIterable(QtMetaTypePrivate::QSequentialIterableImpl(reinterpret_cast<const QVariantList*>(v.constData())));
-            }
-            if (typeId == qMetaTypeId<QStringList>()) {
-                return QSequentialIterable(QtMetaTypePrivate::QSequentialIterableImpl(reinterpret_cast<const QStringList*>(v.constData())));
-            }
-#ifndef QT_BOOTSTRAPPED
-            if (typeId == qMetaTypeId<QByteArrayList>()) {
-                return QSequentialIterable(QtMetaTypePrivate::QSequentialIterableImpl(reinterpret_cast<const QByteArrayList*>(v.constData())));
-            }
-#endif
-            return QSequentialIterable(qvariant_cast<QtMetaTypePrivate::QSequentialIterableImpl>(v));
-        }
-    };
-    template<>
-    struct QVariantValueHelperInterface<QAssociativeIterable>
-    {
-        static QAssociativeIterable invoke(const QVariant &v)
-        {
-            const int typeId = v.userType();
-            if (typeId == qMetaTypeId<QVariantMap>()) {
-                return QAssociativeIterable(QtMetaTypePrivate::QAssociativeIterableImpl(reinterpret_cast<const QVariantMap*>(v.constData())));
-            }
-            if (typeId == qMetaTypeId<QVariantHash>()) {
-                return QAssociativeIterable(QtMetaTypePrivate::QAssociativeIterableImpl(reinterpret_cast<const QVariantHash*>(v.constData())));
-            }
-            return QAssociativeIterable(qvariant_cast<QtMetaTypePrivate::QAssociativeIterableImpl>(v));
-        }
-    };
-    template<>
-    struct QVariantValueHelperInterface<QVariantList>
-    {
-        static QVariantList invoke(const QVariant &v)
-        {
-            const int typeId = v.userType();
-            if (typeId == qMetaTypeId<QStringList>() || typeId == qMetaTypeId<QByteArrayList>() ||
-                (QMetaType::hasRegisteredConverterFunction(typeId, qMetaTypeId<QtMetaTypePrivate::QSequentialIterableImpl>()) && !QMetaType::hasRegisteredConverterFunction(typeId, qMetaTypeId<QVariantList>()))) {
-                QSequentialIterable iter = QVariantValueHelperInterface<QSequentialIterable>::invoke(v);
-                QVariantList l;
-                l.reserve(iter.size());
-                for (QSequentialIterable::const_iterator it = iter.begin(), end = iter.end(); it != end; ++it)
-                    l << *it;
-                return l;
-            }
-            return QVariantValueHelper<QVariantList>::invoke(v);
-        }
-    };
-    template<>
-    struct QVariantValueHelperInterface<QVariantHash>
-    {
-        static QVariantHash invoke(const QVariant &v)
-        {
-            const int typeId = v.userType();
-            if (typeId == qMetaTypeId<QVariantMap>() || ((QMetaType::hasRegisteredConverterFunction(typeId, qMetaTypeId<QtMetaTypePrivate::QAssociativeIterableImpl>())) && !QMetaType::hasRegisteredConverterFunction(typeId, qMetaTypeId<QVariantHash>()))) {
-                QAssociativeIterable iter = QVariantValueHelperInterface<QAssociativeIterable>::invoke(v);
-                QVariantHash l;
-                l.reserve(iter.size());
-                for (QAssociativeIterable::const_iterator it = iter.begin(), end = iter.end(); it != end; ++it)
-                    static_cast<QMultiHash<QString, QVariant> &>(l).insert(it.key().toString(), it.value());
-                return l;
-            }
-            return QVariantValueHelper<QVariantHash>::invoke(v);
-        }
-    };
-    template<>
-    struct QVariantValueHelperInterface<QVariantMap>
-    {
-        static QVariantMap invoke(const QVariant &v)
-        {
-            const int typeId = v.userType();
-            if (typeId == qMetaTypeId<QVariantHash>() || (QMetaType::hasRegisteredConverterFunction(typeId, qMetaTypeId<QtMetaTypePrivate::QAssociativeIterableImpl>()) && !QMetaType::hasRegisteredConverterFunction(typeId, qMetaTypeId<QVariantMap>()))) {
-                QAssociativeIterable iter = QVariantValueHelperInterface<QAssociativeIterable>::invoke(v);
-                QVariantMap l;
-                for (QAssociativeIterable::const_iterator it = iter.begin(), end = iter.end(); it != end; ++it)
-                    static_cast<QMultiMap<QString, QVariant> &>(l).insert(it.key().toString(), it.value());
-                return l;
-            }
-            return QVariantValueHelper<QVariantMap>::invoke(v);
-        }
-    };
-    template<>
-    struct QVariantValueHelperInterface<QPair<QVariant, QVariant> >
-    {
-        static QPair<QVariant, QVariant> invoke(const QVariant &v)
-        {
-            const int typeId = v.userType();
+    T t T();
+    QMetaType.convert(v.metaType(), v.constData(), targetType, &t);
+    return t;
+}
 
-            if (QMetaType::hasRegisteredConverterFunction(typeId, qMetaTypeId<QtMetaTypePrivate::QPairVariantInterfaceImpl>()) && !(typeId == qMetaTypeId<QPair<QVariant, QVariant> >())) {
-                QtMetaTypePrivate::QPairVariantInterfaceImpl pi = v.value<QtMetaTypePrivate::QPairVariantInterfaceImpl>();
-                const QtMetaTypePrivate::VariantData d1 = pi.first();
-                QVariant v1(d1.metaTypeId, d1.data, d1.flags);
-                if (d1.metaTypeId == qMetaTypeId<QVariant>())
-                    v1 = *reinterpret_cast<const QVariant*>(d1.data);
-
-                const QtMetaTypePrivate::VariantData d2 = pi.second();
-                QVariant v2(d2.metaTypeId, d2.data, d2.flags);
-                if (d2.metaTypeId == qMetaTypeId<QVariant>())
-                    v2 = *reinterpret_cast<const QVariant*>(d2.data);
-
-                return QPair<QVariant, QVariant>(v1, v2);
-            }
-            return QVariantValueHelper<QPair<QVariant, QVariant> >::invoke(v);
-        }
-    }; +/
+/+ template<> +/ 
+pragma(inline, true) QVariant qvariant_cast(ref const(QVariant) v)
+{
+    if (v.metaType().id() == QMetaType.Type.QVariant)
+        return *reinterpret_cast!(const(QVariant)*)(v.constData());
+    return v;
 }+/
+
+}
+
+/+ #ifndef QT_NO_DEBUG_STREAM
+#if QT_DEPRECATED_SINCE(6, 0)
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_DEPRECATED
+QT_DEPRECATED_VERSION_6_0
+Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
+QT_WARNING_POP
+#endif
+#endif +/
+
+extern(C++, "QtPrivate") {
+extern(C++, class) struct /+ Q_CORE_EXPORT +/ QVariantTypeCoercer
+{
+public:
+    const(void)* convert(ref const(QVariant) value, ref const(QMetaType) type);
+    const(void)* coerce(ref const(QVariant) value, ref const(QMetaType) type);
+
+private:
+    QVariant converted;
+}
+}
+
+/// Binding for C++ class [QVariantRef](https://doc.qt.io/qt-6/qvariantref.html).
+extern(C++, class) struct QVariantRef(Pointer)
+{
+private:
+    const(Pointer)* m_pointer = null;
+
+public:
+    /+ explicit +/this(const(Pointer)* reference)
+    {
+        this.m_pointer = reference;
+    }
+    /+ QVariantRef(const QVariantRef &) = default; +/
+    /+ QVariantRef(QVariantRef &&) = default; +/
+    /+ ~QVariantRef() = default; +/
+
+    /+auto opCast(T : QVariant)() const;+/
+    /+ref QVariantRef operator =(ref const(QVariant) value);+/
+    /+ref QVariantRef operator =(ref const(QVariantRef) value) { return operator=(QVariant(value)); }+/
+    /+ QVariantRef &operator=(QVariantRef &&value) { return operator=(QVariant(value)); } +/
+
+    /+ friend void swap(QVariantRef a, QVariantRef b)
+    {
+        QVariant tmp = a;
+        a = b;
+        b = std::move(tmp);
+    } +/
+}
+
+/// Binding for C++ class [QVariantConstPointer](https://doc.qt.io/qt-6/qvariantconstpointer.html).
+extern(C++, class) struct /+ Q_CORE_EXPORT +/ QVariantConstPointer
+{
+private:
+    QVariant m_variant;
+
+public:
+    /+ explicit +/this(QVariant variant);
+
+    QVariant opUnary(string op)() const if(op == "*");
+    /+const(QVariant)* operator ->() const;+/
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
+}
+
+/// Binding for C++ class [QVariantPointer](https://doc.qt.io/qt-6/qvariantpointer.html).
+class QVariantPointer(Pointer)
+{
+private:
+    const(Pointer)* m_pointer = null;
+
+public:
+    /+ explicit +/this(const(Pointer)* pointer)
+    {
+        this.m_pointer = pointer;
+    }
+    //final QVariantRef!(Pointer) opUnary(string op)() const if(op == "*") { return QVariantRef!(Pointer)(cast(QVariantRef && )(m_pointer)); }
+    /+final Pointer operator ->() const { return *m_pointer; }+/
+}
 
 pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) v)
 {
@@ -940,21 +776,4 @@ pragma(inline, true) T qvariant_cast(T)(const(QVariant) v)
 {
     return qvariant_cast!T(v);
 }
-
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-template<typename T>
-inline QT_DEPRECATED T qVariantValue(const QVariant &variant)
-{ return qvariant_cast<T>(variant); }
-
-template<typename T>
-inline QT_DEPRECATED bool qVariantCanConvert(const QVariant &variant)
-{ return variant.template canConvert<T>(); }
-#endif +/
-
-}
-
-/+ #ifndef QT_NO_DEBUG_STREAM
-Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant &);
-Q_CORE_EXPORT QDebug operator<<(QDebug, const QVariant::Type);
-#endif +/
 

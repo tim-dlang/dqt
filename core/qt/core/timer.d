@@ -16,6 +16,7 @@ import qt.config;
 import qt.core.coreevent;
 import qt.core.namespace;
 import qt.core.object;
+import qt.core.property;
 import qt.helpers;
 
 /+ #ifndef QT_NO_QOBJECT +/
@@ -24,33 +25,37 @@ import qt.helpers;
 #endif +/
 
 
-
-/// Binding for C++ class [QTimer](https://doc.qt.io/qt-5/qtimer.html).
+extern(C++, class) struct QTimerPrivate;
+/// Binding for C++ class [QTimer](https://doc.qt.io/qt-6/qtimer.html).
 class /+ Q_CORE_EXPORT +/ QTimer : QObject
 {
     mixin(Q_OBJECT);
-    /+ Q_PROPERTY(bool singleShot READ isSingleShot WRITE setSingleShot)
-    Q_PROPERTY(int interval READ interval WRITE setInterval)
+    /+ Q_PROPERTY(bool singleShot READ isSingleShot WRITE setSingleShot BINDABLE bindableSingleShot)
+    Q_PROPERTY(int interval READ interval WRITE setInterval BINDABLE bindableInterval)
     Q_PROPERTY(int remainingTime READ remainingTime)
-    Q_PROPERTY(Qt::TimerType timerType READ timerType WRITE setTimerType)
-    Q_PROPERTY(bool active READ isActive) +/
+    Q_PROPERTY(Qt::TimerType timerType READ timerType WRITE setTimerType BINDABLE bindableTimerType)
+    Q_PROPERTY(bool active READ isActive STORED false BINDABLE bindableActive) +/
 public:
     /+ explicit +/this(QObject parent = null);
     ~this();
 
-    pragma(inline, true) final bool isActive() const { return id >= 0; }
-    final int timerId() const { return id; }
+    final bool isActive() const;
+    final QBindable!(bool) bindableActive();
+    final int timerId() const;
 
     final void setInterval(int msec);
-    final int interval() const { return inter; }
+    final int interval() const;
+    final QBindable!(int) bindableInterval();
 
     final int remainingTime() const;
 
-    final void setTimerType(/+ Qt:: +/qt.core.namespace.TimerType atype) { this.type = atype; }
-    final /+ Qt:: +/qt.core.namespace.TimerType timerType() const { return cast(/+ Qt:: +/qt.core.namespace.TimerType)(type); }
+    final void setTimerType(/+ Qt:: +/qt.core.namespace.TimerType atype);
+    final /+ Qt:: +/qt.core.namespace.TimerType timerType() const;
+    final QBindable!(/+ Qt:: +/qt.core.namespace.TimerType) bindableTimerType();
 
-    pragma(inline, true) final void setSingleShot(bool asingleShot) { single = asingleShot; }
-    pragma(inline, true) final bool isSingleShot() const { return (single) != 0; }
+    final void setSingleShot(bool singleShot);
+    final bool isSingleShot() const;
+    final QBindable!(bool) bindableSingleShot();
 
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static void singleShot(int msec, const(QObject) receiver, const(char)* member);
@@ -92,7 +97,7 @@ public:
         typedef QtPrivate::FunctionPointer<Func1> SlotType;
 
         //compilation error if the slot has arguments.
-        Q_STATIC_ASSERT_X(int(SlotType::ArgumentCount) == 0,
+        static_assert(int(SlotType::ArgumentCount) == 0,
                           "The slot must not have any arguments.");
 
         singleShotImpl(interval, timerType, receiver,
@@ -128,7 +133,7 @@ public:
     {
         //compilation error if the slot has arguments.
         typedef QtPrivate::FunctionPointer<Func1> SlotType;
-        Q_STATIC_ASSERT_X(int(SlotType::ArgumentCount) <= 0,  "The slot must not have any arguments.");
+        static_assert(int(SlotType::ArgumentCount) <= 0,  "The slot must not have any arguments.");
 
         singleShotImpl(interval, timerType, context,
                        new QtPrivate::QFunctorSlotObject<Func1, 0,
@@ -190,6 +195,7 @@ protected:
 
 private:
     /+ Q_DISABLE_COPY(QTimer) +/
+    /+ Q_DECLARE_PRIVATE(QTimer) +/
 
     pragma(inline, true) final int startTimer(int){ return -1;}
     pragma(inline, true) final void killTimer(int){}
@@ -212,40 +218,6 @@ private:
                        timerType, receiver, slotObj);
     } +/
 /+ #endif +/
-
-    int id; int inter; int del;
-    /+ uint single : 1; +/
-    ubyte bitfieldData_single;
-    uint single() const
-    {
-        return (bitfieldData_single >> 0) & 0x1;
-    }
-    uint single(uint value)
-    {
-        bitfieldData_single = (bitfieldData_single & ~0x1) | ((value & 0x1) << 0);
-        return value;
-    }
-    /+ uint nulltimer : 1; +/
-    uint nulltimer() const
-    {
-        return (bitfieldData_single >> 1) & 0x1;
-    }
-    uint nulltimer(uint value)
-    {
-        bitfieldData_single = (bitfieldData_single & ~0x2) | ((value & 0x1) << 1);
-        return value;
-    }
-    /+ uint type : 2; +/
-    uint type() const
-    {
-        return (bitfieldData_single >> 2) & 0x3;
-    }
-    uint type(uint value)
-    {
-        bitfieldData_single = (bitfieldData_single & ~0xc) | ((value & 0x3) << 2);
-        return value;
-    }
-    // reserved : 28
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

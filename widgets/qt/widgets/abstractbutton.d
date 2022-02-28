@@ -25,13 +25,15 @@ import qt.widgets.widget;
 version(QT_NO_SHORTCUT){}else
     import qt.gui.keysequence;
 
-/+ QT_REQUIRE_CONFIG(abstractbutton); +/
+/+ #if QT_CONFIG(shortcut)
+#endif
+QT_REQUIRE_CONFIG(abstractbutton); +/
 
 
 
 extern(C++, class) struct QAbstractButtonPrivate;
 
-/// Binding for C++ class [QAbstractButton](https://doc.qt.io/qt-5/qabstractbutton.html).
+/// Binding for C++ class [QAbstractButton](https://doc.qt.io/qt-6/qabstractbutton.html).
 abstract class /+ Q_WIDGETS_EXPORT +/ QAbstractButton : QWidget
 {
     mixin(Q_OBJECT);
@@ -101,7 +103,7 @@ public:
 
 public /+ Q_SLOTS +/:
     @QSlot final void setIconSize(ref const(QSize) size);
-    @QSlot final void animateClick(int msec = 100);
+    @QSlot final void animateClick();
     @QSlot final void click();
     @QSlot final void toggle();
     @QSlot final void setChecked(bool);

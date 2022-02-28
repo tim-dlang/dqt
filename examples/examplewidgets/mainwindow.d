@@ -4,8 +4,8 @@ import qt.config;
 import qt.core.coreevent;
 import qt.core.string;
 import qt.core.translator;
+import qt.gui.action;
 import qt.helpers;
-import qt.widgets.action;
 import qt.widgets.mainwindow;
 import qt.widgets.ui;
 import qt.widgets.widget;
@@ -30,7 +30,7 @@ public:
     {
         import core.stdcpp.new_;
         import qt.core.coreapplication;
-        import qt.widgets.actiongroup;
+        import qt.gui.actiongroup;
         super(parent);
         this.ui = cpp_new!(typeof(*ui));
 
@@ -40,14 +40,14 @@ public:
          * The menu will contain entries for English and German.
          * Only some parts of the UI are translated as an example.
          * English is the default and already used in the *.ui files.
-         * See https://doc.qt.io/qt-5/internationalization.html for
+         * See https://doc.qt.io/qt-6/internationalization.html for
          * general information about translating Qt applications. The
          * translatable texts are first collected with the following
          * commands:
          * lupdate examples/examplewidgets/*.ui -locations none -no-obsolete -ts examples/examplewidgets/examplewidgets_en.ts
          * lupdate examples/examplewidgets/*.ui -locations none -no-obsolete -ts examples/examplewidgets/examplewidgets_de.ts
          *
-         * The translations can then be changed with linguist (https://doc.qt.io/qt-5/qtlinguist-index.html).
+         * The translations can then be changed with linguist (https://doc.qt.io/qt-6/qtlinguist-index.html).
          * No changes are used for English, because that is the default.
          * The *.ts files now have to be converted to *.qm files, which
          * are used by the application:

@@ -27,7 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QToolBoxPrivate;
 
-/// Binding for C++ class [QToolBox](https://doc.qt.io/qt-5/qtoolbox.html).
+/// Binding for C++ class [QToolBox](https://doc.qt.io/qt-6/qtoolbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QToolBox : QFrame
 {
     mixin(Q_OBJECT);
@@ -57,16 +57,17 @@ public:
     final void setItemIcon(int index, ref const(QIcon) icon);
     final QIcon itemIcon(int index) const;
 
-    version(QT_NO_TOOLTIP){}else
-    {
-        final void setItemToolTip(int index, ref const(QString) toolTip);
-        final QString itemToolTip(int index) const;
-    }
+/+ #if QT_CONFIG(tooltip) +/
+    final void setItemToolTip(int index, ref const(QString) toolTip);
+    final QString itemToolTip(int index) const;
+/+ #endif +/
 
     final int currentIndex() const;
     final QWidget currentWidget() const;
     final QWidget widget(int index) const;
-    final int indexOf(QWidget widget) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    final int indexOf(const(QWidget) widget) const;
+    }));
     final int count() const;
 
 public /+ Q_SLOTS +/:

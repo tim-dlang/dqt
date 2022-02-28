@@ -16,12 +16,12 @@ import qt.config;
 import qt.core.abstractitemmodel;
 import qt.core.coreevent;
 import qt.core.itemselectionmodel;
+import qt.core.list;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
-import qt.core.vector;
 import qt.gui.event;
 import qt.gui.painter;
 import qt.gui.region;
@@ -37,7 +37,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QTreeViewPrivate;
 
-/// Binding for C++ class [QTreeView](https://doc.qt.io/qt-5/qtreeview.html).
+/// Binding for C++ class [QTreeView](https://doc.qt.io/qt-6/qtreeview.html).
 class /+ Q_WIDGETS_EXPORT +/ QTreeView : QAbstractItemView
 {
     mixin(Q_OBJECT);
@@ -129,8 +129,8 @@ public:
     override void doItemsLayout();
     override void reset();
 
-
-    override void dataChanged(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight, ref const(QVector!(int)) roles = globalInitVar!(QVector!(int)));
+    override void dataChanged(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight,
+                         ref const(QList!(int)) roles = globalInitVar!(QList!(int)));
     override void selectAll();
 
 /+ Q_SIGNALS +/public:
@@ -143,10 +143,6 @@ public /+ Q_SLOTS +/:
     @QSlot final void expand(ref const(QModelIndex) index);
     @QSlot final void collapse(ref const(QModelIndex) index);
     @QSlot final void resizeColumnToContents(int column);
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X ("Use QTreeView::sortByColumn(int column, Qt::SortOrder order) instead") +/
-        @QSlot final void sortByColumn(int column);
-/+ #endif +/
     @QSlot final void sortByColumn(int column, /+ Qt:: +/qt.core.namespace.SortOrder order);
     @QSlot final void expandAll();
     @QSlot final void expandRecursively(ref const(QModelIndex) index, int depth = -1);
@@ -175,6 +171,7 @@ protected:
     override QRegion visualRegionForSelection(ref const(QItemSelection) selection) const;
     override QModelIndexList selectedIndexes() const;
 
+    override void changeEvent(QEvent event);
     override void timerEvent(QTimerEvent event);
     override void paintEvent(QPaintEvent event);
 

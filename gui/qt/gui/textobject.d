@@ -18,7 +18,6 @@ import qt.core.namespace;
 import qt.core.object;
 import qt.core.string;
 import qt.core.typeinfo;
-import qt.core.vector;
 import qt.gui.textcursor;
 import qt.gui.textdocument;
 import qt.gui.textformat;
@@ -30,7 +29,7 @@ version(QT_NO_RAWFONT){}else
 
 extern(C++, class) struct QTextObjectPrivate;
 
-/// Binding for C++ class [QTextObject](https://doc.qt.io/qt-5/qtextobject.html).
+/// Binding for C++ class [QTextObject](https://doc.qt.io/qt-6/qtextobject.html).
 class /+ Q_GUI_EXPORT +/ QTextObject : QObject
 {
     mixin(Q_OBJECT);
@@ -51,8 +50,6 @@ public:
 
     final int objectIndex() const;
 
-    final QTextDocumentPrivate* docHandle() const;
-
 protected:
     this(ref QTextObjectPrivate p, QTextDocument doc);
 
@@ -64,7 +61,7 @@ private:
 }
 
 extern(C++, class) struct QTextBlockGroupPrivate;
-/// Binding for C++ class [QTextBlockGroup](https://doc.qt.io/qt-5/qtextblockgroup.html).
+/// Binding for C++ class [QTextBlockGroup](https://doc.qt.io/qt-6/qtextblockgroup.html).
 class /+ Q_GUI_EXPORT +/ QTextBlockGroup : QTextObject
 {
     mixin(Q_OBJECT);
@@ -94,7 +91,7 @@ public:
 }
 
 extern(C++, class) struct QTextFramePrivate;
-/// Binding for C++ class [QTextFrame](https://doc.qt.io/qt-5/qtextframe.html).
+/// Binding for C++ class [QTextFrame](https://doc.qt.io/qt-6/qtextframe.html).
 class /+ Q_GUI_EXPORT +/ QTextFrame : QTextObject
 {
     mixin(Q_OBJECT);
@@ -118,42 +115,38 @@ public:
     final QList!(QTextFrame) childFrames() const;
     final QTextFrame parentFrame() const;
 
-    extern(C++, class) struct /+ Q_GUI_EXPORT +/ iterator {
+    extern(C++, class) struct iterator {
     private:
-        QTextFrame f;
-        int b;
-        int e;
-        QTextFrame cf;
-        int cb;
+        QTextFrame f = null;
+        int b = 0;
+        int e = 0;
+        QTextFrame cf = null;
+        int cb = 0;
 
         /+ friend class QTextFrame; +/
         /+ friend class QTextTableCell; +/
         /+ friend class QTextDocumentLayoutPrivate; +/
-        this(QTextFrame frame, int block, int begin, int end);
+        pragma(inline, true) this(QTextFrame frame, int block, int begin, int end)
+        {
+            this.f = frame;
+            this.b = begin;
+            this.e = end;
+            this.cb = block;
+        }
     public:
- // ### Qt 6: inline
-/+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0) +/
-        @disable this(this);
-        this(ref const(iterator) o)/+ noexcept+/; // = default
-        /+ref iterator operator =(ref const(iterator) o)/+ noexcept+/;+/ // = default
-        /+ iterator(iterator &&other) noexcept // = default
-        { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(iterator)); } +/
-        /+ iterator &operator=(iterator &&other) noexcept // = default
-        { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(iterator)); return *this; } +/
-/+ #endif +/
+        /+ constexpr iterator() noexcept = default; +/
+        //QTextFrame parentFrame() const { return f; }
 
-        QTextFrame parentFrame() const { return cast(QTextFrame)f; }
-
-        QTextFrame currentFrame() const;
-        QTextBlock currentBlock() const;
+        //QTextFrame currentFrame() const { return cf; }
+        /+ Q_GUI_EXPORT +/ QTextBlock currentBlock() const;
 
         bool atEnd() const { return !cf && cb == e; }
 
         /+pragma(inline, true) bool operator ==(ref const(iterator) o) const { return f == o.f && cf == o.cf && cb == o.cb; }+/
         /+pragma(inline, true) bool operator !=(ref const(iterator) o) const { return f != o.f || cf != o.cf || cb != o.cb; }+/
-        ref iterator opUnary(string op)() if(op == "++");
+        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if(op == "++");
         /+pragma(inline, true) iterator operator ++(int) { iterator tmp = this; operator++(); return tmp; }+/
-        ref iterator opUnary(string op)() if(op == "--");
+        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if(op == "--");
         /+pragma(inline, true) iterator operator --(int) { iterator tmp = this; operator--(); return tmp; }+/
     }
 
@@ -172,16 +165,16 @@ private:
     /+ Q_DISABLE_COPY(QTextFrame) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QTextFrame::iterator, Q_MOVABLE_TYPE); +/
+/+ Q_DECLARE_TYPEINFO(QTextFrame::iterator, Q_RELOCATABLE_TYPE); +/
 
-/// Binding for C++ class [QTextBlockUserData](https://doc.qt.io/qt-5/qtextblockuserdata.html).
+/// Binding for C++ class [QTextBlockUserData](https://doc.qt.io/qt-6/qtextblockuserdata.html).
 class /+ Q_GUI_EXPORT +/ QTextBlockUserData {
 public:
     /+ virtual +/~this();
 }
 
-/// Binding for C++ class [QTextBlock](https://doc.qt.io/qt-5/qtextblock.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextBlock
+/// Binding for C++ class [QTextBlock](https://doc.qt.io/qt-6/qtextblock.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextBlock
 {
 private:
     /+ friend class QSyntaxHighlighter; +/
@@ -224,7 +217,7 @@ public:
 
     QString text() const;
 
-    QVector!(QTextLayout.FormatRange) textFormats() const;
+    QList!(QTextLayout.FormatRange) textFormats() const;
 
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     const(QTextDocument) document() const;
@@ -250,7 +243,7 @@ public:
     void setLineCount(int count);
     int lineCount() const;
 
-    extern(C++, class) struct /+ Q_GUI_EXPORT +/ iterator {
+    extern(C++, class) struct iterator {
     private:
         const(QTextDocumentPrivate)* p = null;
         int b = 0;
@@ -265,35 +258,17 @@ public:
             this.n = f;
         }
     public:
-        @disable this();
-        /+this()
-        {
-            this.p = null;
-            this.b = 0;
-            this.e = 0;
-            this.n = 0;
-        }+/
-/+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0) +/
-        @disable this(this);
-        this(ref const(iterator) o)
-        {
-            this.p = o.p;
-            this.b = o.b;
-            this.e = o.e;
-            this.n = o.n;
-        }
-        /+ iterator &operator=(const iterator &o) = default; +/
-/+ #endif +/
+        /+ constexpr iterator() = default; +/
 
-        QTextFragment fragment() const;
+        /+ Q_GUI_EXPORT +/ QTextFragment fragment() const;
 
         bool atEnd() const { return n == e; }
 
         /+pragma(inline, true) bool operator ==(ref const(iterator) o) const { return p == o.p && n == o.n; }+/
         /+pragma(inline, true) bool operator !=(ref const(iterator) o) const { return p != o.p || n != o.n; }+/
-        ref iterator opUnary(string op)() if(op == "++");
+        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if(op == "++");
         /+pragma(inline, true) iterator operator ++(int) { iterator tmp = this; operator++(); return tmp; }+/
-        ref iterator opUnary(string op)() if(op == "--");
+        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if(op == "--");
         /+pragma(inline, true) iterator operator --(int) { iterator tmp = this; operator--(); return tmp; }+/
     }
 
@@ -306,7 +281,6 @@ public:
     QTextBlock next() const;
     QTextBlock previous() const;
 
-    pragma(inline, true) QTextDocumentPrivate* docHandle() const { return cast(QTextDocumentPrivate*)p; }
     pragma(inline, true) int fragmentIndex() const { return n; }
 
 private:
@@ -317,12 +291,12 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_TYPEINFO(QTextBlock, Q_MOVABLE_TYPE);
-Q_DECLARE_TYPEINFO(QTextBlock::iterator, Q_MOVABLE_TYPE); +/
+/+ Q_DECLARE_TYPEINFO(QTextBlock, Q_RELOCATABLE_TYPE);
+Q_DECLARE_TYPEINFO(QTextBlock::iterator, Q_RELOCATABLE_TYPE); +/
 
 
-/// Binding for C++ class [QTextFragment](https://doc.qt.io/qt-5/qtextfragment.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFragment
+/// Binding for C++ class [QTextFragment](https://doc.qt.io/qt-6/qtextfragment.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFragment
 {
 public:
     pragma(inline, true) this(const(QTextDocumentPrivate)* priv, int f, int fe)
@@ -373,5 +347,5 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_TYPEINFO(QTextFragment, Q_MOVABLE_TYPE); +/
+/+ Q_DECLARE_TYPEINFO(QTextFragment, Q_RELOCATABLE_TYPE); +/
 

@@ -18,30 +18,30 @@ import qt.helpers;
 alias QRgb = uint;                        // RGB triplet
 
 // non-namespaced Qt global variable
-/+ Q_DECL_UNUSED +/ __gshared const(QRgb)  RGB_MASK    = 0x00ffffff;     // masks RGB values
+extern(D) immutable QRgb RGB_MASK = 0x00ffffff;     // masks RGB values
 
-pragma(inline, true) int qRed(QRgb rgb)                // get red part of RGB
+pragma(inline, true) int qRed(QRgb rgb)                     // get red part of RGB
 { return ((rgb >> 16) & 0xff); }
 
-pragma(inline, true) int qGreen(QRgb rgb)                // get green part of RGB
+pragma(inline, true) int qGreen(QRgb rgb)                   // get green part of RGB
 { return ((rgb >> 8) & 0xff); }
 
-pragma(inline, true) int qBlue(QRgb rgb)                // get blue part of RGB
+pragma(inline, true) int qBlue(QRgb rgb)                    // get blue part of RGB
 { return (rgb & 0xff); }
 
-pragma(inline, true) int qAlpha(QRgb rgb)                // get alpha part of RGBA
+pragma(inline, true) int qAlpha(QRgb rgb)                   // get alpha part of RGBA
 { return rgb >> 24; }
 
-pragma(inline, true) QRgb qRgb(int r, int g, int b)// set RGB value
+pragma(inline, true) QRgb qRgb(int r, int g, int b)         // set RGB value
 { return (0xffu << 24) | ((r & 0xffu) << 16) | ((g & 0xffu) << 8) | (b & 0xffu); }
 
-pragma(inline, true) QRgb qRgba(int r, int g, int b, int a)// set RGBA value
+pragma(inline, true) QRgb qRgba(int r, int g, int b, int a) // set RGBA value
 { return ((a & 0xffu) << 24) | ((r & 0xffu) << 16) | ((g & 0xffu) << 8) | (b & 0xffu); }
 
-pragma(inline, true) int qGray(int r, int g, int b)// convert R,G,B to gray 0..255
+pragma(inline, true) int qGray(int r, int g, int b)         // convert R,G,B to gray 0..255
 { return (r*11+g*16+b*5)/32; }
 
-pragma(inline, true) int qGray(QRgb rgb)                // convert RGB to gray 0..255
+pragma(inline, true) int qGray(QRgb rgb)                    // convert RGB to gray 0..255
 { return qGray(qRed(rgb), qGreen(rgb), qBlue(rgb)); }
 
 pragma(inline, true) bool qIsGray(QRgb rgb)

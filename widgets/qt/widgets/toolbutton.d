@@ -17,11 +17,10 @@ import qt.core.coreevent;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.size;
+import qt.gui.action;
 import qt.gui.event;
 import qt.helpers;
 import qt.widgets.abstractbutton;
-import qt.widgets.action;
-import qt.widgets.event;
 import qt.widgets.menu;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
@@ -31,7 +30,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QToolButtonPrivate;
 
-/// Binding for C++ class [QToolButton](https://doc.qt.io/qt-5/qtoolbutton.html).
+/// Binding for C++ class [QToolButton](https://doc.qt.io/qt-6/qtoolbutton.html).
 class /+ Q_WIDGETS_EXPORT +/ QToolButton : QAbstractButton
 {
     mixin(Q_OBJECT);
@@ -92,14 +91,15 @@ protected:
     override void paintEvent(QPaintEvent );
     override void actionEvent(QActionEvent );
 
-    override void enterEvent(QEvent );
+    override void enterEvent(QEnterEvent );
     override void leaveEvent(QEvent );
     override void timerEvent(QTimerEvent );
     override void changeEvent(QEvent );
 
     override bool hitButton(ref const(QPoint) pos) const;
+    override void checkStateSet();
     override void nextCheckState();
-    final void initStyleOption(QStyleOptionToolButton* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionToolButton* option) const;
 
 private:
     /+ Q_DISABLE_COPY(QToolButton) +/

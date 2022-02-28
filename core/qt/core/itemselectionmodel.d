@@ -17,38 +17,19 @@ import qt.core.abstractitemmodel;
 import qt.core.flags;
 import qt.core.list;
 import qt.core.object;
+import qt.core.property;
 import qt.core.typeinfo;
 import qt.helpers;
 
 /+ QT_REQUIRE_CONFIG(itemmodel); +/
 
 
-/// Binding for C++ class [QItemSelectionRange](https://doc.qt.io/qt-5/qitemselectionrange.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelectionRange
+/// Binding for C++ class [QItemSelectionRange](https://doc.qt.io/qt-6/qitemselectionrange.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelectionRange
 {
 
 public:
-    @disable this();
-    /+pragma(inline, true) this()
-    {
-        this.tl = typeof(this.tl)();
-        this.br = typeof(this.br)();
-    }+/
-/+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0) +/
-    // ### Qt 6: remove them all, the compiler-generated ones are fine
-    @disable this(this);
-    pragma(inline, true) this(ref const(QItemSelectionRange) other)
-    {
-        this.tl = other.tl;
-        this.br = other.br;
-    }
-    /+ QItemSelectionRange(QItemSelectionRange &&other) noexcept
-        : tl(std::move(other.tl)), br(std::move(other.br)) {} +/
-    /+ QItemSelectionRange &operator=(QItemSelectionRange &&other) noexcept
-    { tl = std::move(other.tl); br = std::move(other.br); return *this; } +/
-    /+ref QItemSelectionRange operator =(ref const(QItemSelectionRange) other)
-    { tl = other.tl; br = other.br; return this; }+/
-/+ #endif +/ // Qt < 6
+    /+ QItemSelectionRange() = default; +/
     this(ref const(QModelIndex) topL, ref const(QModelIndex) bottomR)
     {
         this.tl = topL;
@@ -93,10 +74,6 @@ public:
     }
 
     bool intersects(ref const(QItemSelectionRange) other) const;
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    inline QItemSelectionRange intersect(const QItemSelectionRange &other) const
-        { return intersected(other); }
-#endif +/
     QItemSelectionRange intersected(ref const(QItemSelectionRange) other) const;
 
 
@@ -104,9 +81,6 @@ public:
         { return (tl == other.tl && br == other.br); }+/
     /+pragma(inline, true) bool operator !=(ref const(QItemSelectionRange) other) const
         { return !operator==(other); }+/
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+/+ QT_DEPRECATED +/ bool operator <(ref const(QItemSelectionRange) other) const;+/
-/+ #endif +/
 
     pragma(inline, true) bool isValid() const
     {
@@ -122,19 +96,24 @@ private:
     QPersistentModelIndex tl; QPersistentModelIndex br;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QItemSelectionRange, Q_MOVABLE_TYPE); +/
+/+ Q_DECLARE_TYPEINFO(QItemSelectionRange, Q_RELOCATABLE_TYPE); +/
 
 extern(C++, class) struct QItemSelectionModelPrivate;
 
-/// Binding for C++ class [QItemSelectionModel](https://doc.qt.io/qt-5/qitemselectionmodel.html).
+/// Binding for C++ class [QItemSelectionModel](https://doc.qt.io/qt-6/qitemselectionmodel.html).
 class /+ Q_CORE_EXPORT +/ QItemSelectionModel : QObject
 {
     mixin(Q_OBJECT);
-    /+ Q_PROPERTY(QAbstractItemModel *model READ model WRITE setModel NOTIFY modelChanged)
-    Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged STORED false DESIGNABLE false)
-    Q_PROPERTY(QModelIndex currentIndex READ currentIndex NOTIFY currentChanged STORED false DESIGNABLE false)
-    Q_PROPERTY(QItemSelection selection READ selection NOTIFY selectionChanged STORED false DESIGNABLE false)
-    Q_PROPERTY(QModelIndexList selectedIndexes READ selectedIndexes NOTIFY selectionChanged STORED false DESIGNABLE false)
+    /+ Q_PROPERTY(QAbstractItemModel *model READ model WRITE setModel NOTIFY modelChanged
+               BINDABLE bindableModel)
+    Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged STORED false
+               DESIGNABLE false)
+    Q_PROPERTY(QModelIndex currentIndex READ currentIndex NOTIFY currentChanged STORED false
+               DESIGNABLE false)
+    Q_PROPERTY(QItemSelection selection READ selection NOTIFY selectionChanged STORED false
+               DESIGNABLE false)
+    Q_PROPERTY(QModelIndexList selectedIndexes READ selectedIndexes NOTIFY selectionChanged
+               STORED false DESIGNABLE false)
 
     Q_DECLARE_PRIVATE(QItemSelectionModel) +/
 
@@ -179,11 +158,11 @@ alias SelectionFlags = QFlags!(SelectionFlag);    /+ Q_FLAG(SelectionFlags) +/
     final const(QItemSelection) selection() const;
     }));
 
-    // ### Qt 6: Merge these two as "QAbstractItemModel *model() const"
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final const(QAbstractItemModel) model() const;
     }));
     final QAbstractItemModel model();
+    final QBindable!(QAbstractItemModel) bindableModel();
 
     final void setModel(QAbstractItemModel model);
 
@@ -215,60 +194,50 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_columnsAboutToBeInserted(const QModelIndex&, int, int))
     Q_PRIVATE_SLOT(d_func(), void _q_rowsAboutToBeInserted(const QModelIndex&, int, int))
     Q_PRIVATE_SLOT(d_func(), void _q_layoutAboutToBeChanged(const QList<QPersistentModelIndex> &parents = QList<QPersistentModelIndex>(), QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoHint))
-    Q_PRIVATE_SLOT(d_func(), void _q_layoutChanged(const QList<QPersistentModelIndex> &parents = QList<QPersistentModelIndex>(), QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoHint)) +/
+    Q_PRIVATE_SLOT(d_func(), void _q_layoutChanged(const QList<QPersistentModelIndex> &parents = QList<QPersistentModelIndex>(), QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoHint))
+    Q_PRIVATE_SLOT(d_func(), void _q_modelDestroyed()) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator &(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator &(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/;+/
 
-/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QItemSelectionModel::SelectionFlags)
-// dummy implentation of qHash() necessary for instantiating QList<QItemSelectionRange>::toSet() with MSVC
-inline uint qHash(const QItemSelectionRange &) { return 0; }
-
-#ifdef Q_CC_MSVC
-
-/*
-   ### Qt 6:
-   ### This needs to be removed for next releases of Qt. It is a workaround for vc++ because
-   ### Qt exports QItemSelection that inherits QList<QItemSelectionRange>.
-*/
-
-# ifndef Q_TEMPLATE_EXTERN
-#  if defined(QT_BUILD_CORE_LIB)
-#   define Q_TEMPLATE_EXTERN
-#  else
-#   define Q_TEMPLATE_EXTERN extern
-#  endif
-# endif
-Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QList<QItemSelectionRange>;
-#endif +/ // Q_CC_MSVC
-
-/// Binding for C++ class [QItemSelection](https://doc.qt.io/qt-5/qitemselection.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelection
+/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QItemSelectionModel::SelectionFlags) +/
+// We export each out-of-line method individually to prevent MSVC from
+// exporting the whole QList class.
+/// Binding for C++ class [QItemSelection](https://doc.qt.io/qt-6/qitemselection.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct QItemSelection
 {
     public QList!(QItemSelectionRange) base0;
     alias base0 this;
 public:
-    @disable this();
-    /+this()/+ noexcept+/
-    {
-        this.QList!(QItemSelectionRange) = typeof(this.QList!(QItemSelectionRange))();
-    }+/
-    this(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight);
+    /+ using QList<QItemSelectionRange>::QList; +/
+    /+ Q_CORE_EXPORT +/this(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight);
 
     // reusing QList::swap() here is OK!
 
-    void select(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight);
-    bool contains(ref const(QModelIndex) index) const;
-    QModelIndexList indexes() const;
-    void merge(ref const(QItemSelection) other, QItemSelectionModel.SelectionFlags command);
-    static void split(ref const(QItemSelectionRange) range,
+    /+ Q_CORE_EXPORT +/ void select(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight);
+    /+ Q_CORE_EXPORT +/ bool contains(ref const(QModelIndex) index) const;
+    /+ Q_CORE_EXPORT +/ QModelIndexList indexes() const;
+    /+ Q_CORE_EXPORT +/ void merge(ref const(QItemSelection) other, QItemSelectionModel.SelectionFlags command);
+    /+ Q_CORE_EXPORT +/ static void split(ref const(QItemSelectionRange) range,
                           ref const(QItemSelectionRange) other,
                           QItemSelection* result);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QItemSelection)
+/+ Q_DECLARE_SHARED(QItemSelection)
 
 #ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QItemSelectionRange &);

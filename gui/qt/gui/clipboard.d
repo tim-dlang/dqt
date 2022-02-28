@@ -27,7 +27,7 @@ version(QT_NO_CLIPBOARD){}else
 {
 
 
-/// Binding for C++ class [QClipboard](https://doc.qt.io/qt-5/qclipboard.html).
+/// Binding for C++ class [QClipboard](https://doc.qt.io/qt-6/qclipboard.html).
 class /+ Q_GUI_EXPORT +/ QClipboard : QObject
 {
     mixin(Q_OBJECT);

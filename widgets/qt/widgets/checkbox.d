@@ -30,7 +30,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QCheckBoxPrivate;
 
-/// Binding for C++ class [QCheckBox](https://doc.qt.io/qt-5/qcheckbox.html).
+/// Binding for C++ class [QCheckBox](https://doc.qt.io/qt-6/qcheckbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QCheckBox : QAbstractButton
 {
     mixin(Q_OBJECT);
@@ -61,7 +61,7 @@ protected:
     override void nextCheckState();
     override void paintEvent(QPaintEvent );
     override void mouseMoveEvent(QMouseEvent );
-    final void initStyleOption(QStyleOptionButton* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionButton* option) const;
 
 
 private:

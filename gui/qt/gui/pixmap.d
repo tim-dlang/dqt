@@ -17,8 +17,6 @@ import qt.core.bytearray;
 import qt.core.global;
 import qt.core.iodevice;
 import qt.core.namespace;
-import qt.core.object;
-import qt.core.point;
 import qt.core.rect;
 import qt.core.shareddata;
 import qt.core.size;
@@ -30,18 +28,16 @@ import qt.gui.color;
 import qt.gui.image;
 import qt.gui.imagereader;
 import qt.gui.imagewriter;
-import qt.gui.matrix;
 import qt.gui.paintdevice;
 import qt.gui.paintengine;
 import qt.gui.region;
 import qt.gui.transform;
-import qt.gui.windowdefs;
 import qt.helpers;
 
 extern(C++, class) struct QPlatformPixmap;
-
-/// Binding for C++ class [QPixmap](https://doc.qt.io/qt-5/qpixmap.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPixmap
+/+ QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QPlatformPixmap, Q_GUI_EXPORT) +/
+/// Binding for C++ class [QPixmap](https://doc.qt.io/qt-6/qpixmap.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPixmap
 {
 private:
     immutable void *vtbl;
@@ -69,15 +65,17 @@ public:
     }
     @disable this(this);
     this(ref const(QPixmap) );
+    /+ QPixmap(QPixmap &&other) noexcept : QPaintDevice(), data(std::move(other.data)) {} +/
     mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     ~this();
     }));
 
     /+ref QPixmap operator =(ref const(QPixmap) );+/
-    /+ inline QPixmap &operator=(QPixmap &&other) noexcept
-    { qSwap(data, other.data); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QPixmap) +/
     /+ inline void swap(QPixmap &other) noexcept
     { qSwap(data, other.data); } +/
+    /+bool operator ==(ref const(QPixmap) ) const /+ = delete +/;+/
+    /+bool operator !=(ref const(QPixmap) ) const /+ = delete +/;+/
 
     /+auto opCast(T : QVariant)() const;+/
 
@@ -95,22 +93,13 @@ public:
     static int defaultDepth();
 
     void fill(ref const(QColor) fillColor /+ = Qt::white +/);
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X("Use QPainter or fill(QColor)") +/
-        void fill(const(QPaintDevice) device, ref const(QPoint) ofs);
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X("Use QPainter or fill(QColor)") +/
-        void fill(const(QPaintDevice) device, int xofs, int yofs);
-    }));
-/+ #endif +/
 
     QBitmap mask() const;
     void setMask(ref const(QBitmap) );
 
     qreal devicePixelRatio() const;
     void setDevicePixelRatio(qreal scaleFactor);
+    QSizeF deviceIndependentSize() const;
 
     bool hasAlpha() const;
     bool hasAlphaChannel() const;
@@ -121,15 +110,6 @@ public:
     }
     QBitmap createMaskFromColor(ref const(QColor) maskColor, /+ Qt:: +/qt.core.namespace.MaskMode mode = /+ Qt:: +/qt.core.namespace.MaskMode.MaskInColor) const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use QScreen::grabWindow() instead") +/
-        static QPixmap grabWindow(WId, int x = 0, int y = 0, int w = -1, int h = -1);
-    /+ QT_DEPRECATED_X("Use QWidget::grab() instead") +/
-        static QPixmap grabWidget(QObject widget, ref const(QRect) rect);
-    /+ QT_DEPRECATED_X("Use QWidget::grab() instead") +/
-        static QPixmap grabWidget(QObject widget, int x = 0, int y = 0, int w = -1, int h = -1);
-/+ #endif +/
-
     pragma(inline, true) QPixmap scaled(int w, int h, /+ Qt:: +/qt.core.namespace.AspectRatioMode aspectMode = /+ Qt:: +/qt.core.namespace.AspectRatioMode.IgnoreAspectRatio,
                               /+ Qt:: +/qt.core.namespace.TransformationMode mode = /+ Qt:: +/qt.core.namespace.TransformationMode.FastTransformation) const
         { auto tmp = QSize(w, h); return scaled(tmp, aspectMode, mode); }
@@ -137,12 +117,6 @@ public:
                        /+ Qt:: +/qt.core.namespace.TransformationMode mode = /+ Qt:: +/qt.core.namespace.TransformationMode.FastTransformation) const;
     QPixmap scaledToWidth(int w, /+ Qt:: +/qt.core.namespace.TransformationMode mode = /+ Qt:: +/qt.core.namespace.TransformationMode.FastTransformation) const;
     QPixmap scaledToHeight(int h, /+ Qt:: +/qt.core.namespace.TransformationMode mode = /+ Qt:: +/qt.core.namespace.TransformationMode.FastTransformation) const;
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_X("Use transformed(const QTransform &, Qt::TransformationMode mode)") +/
-        QPixmap transformed(ref const(QMatrix) , /+ Qt:: +/qt.core.namespace.TransformationMode mode = /+ Qt:: +/qt.core.namespace.TransformationMode.FastTransformation) const;
-    /+ QT_DEPRECATED_X("Use trueMatrix(const QTransform &m, int w, int h)") +/
-        static QMatrix trueMatrix(ref const(QMatrix) m, int w, int h);
-/+ #endif +/ // QT_DEPRECATED_SINCE(5, 15)
     QPixmap transformed(ref const(QTransform) , /+ Qt:: +/qt.core.namespace.TransformationMode mode = /+ Qt:: +/qt.core.namespace.TransformationMode.FastTransformation) const;
     static QTransform trueMatrix(ref const(QTransform) m, int w, int h);
 
@@ -174,9 +148,6 @@ public:
     }
     void scroll(int dx, int dy, ref const(QRect) rect, QRegion* exposed = null);
 
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    QT_DEPRECATED inline int serialNumber() const { return cacheKey() >> 32; }
-#endif +/
     qint64 cacheKey() const;
 
     bool isDetached() const;
@@ -189,11 +160,6 @@ public:
     }));
 
     /+pragma(inline, true) bool operator !() const { return isNull(); }+/
-
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    QT_DEPRECATED inline QPixmap alphaChannel() const;
-    QT_DEPRECATED inline void setAlphaChannel(const QPixmap &);
-#endif +/
 
 protected:
     mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
@@ -237,23 +203,6 @@ inline QPixmap QPixmap::copy(int ax, int ay, int awidth, int aheight) const
     return copy(QRect(ax, ay, awidth, aheight));
 }
 
-#if QT_DEPRECATED_SINCE(5, 0)
-inline QPixmap QPixmap::alphaChannel() const
-{
-    QT_WARNING_PUSH
-    QT_WARNING_DISABLE_DEPRECATED
-    return QPixmap::fromImage(toImage().alphaChannel());
-    QT_WARNING_POP
-}
-
-inline void QPixmap::setAlphaChannel(const QPixmap &p)
-{
-    QImage image = toImage();
-    image.setAlphaChannel(p.toImage());
-    *this = QPixmap::fromImage(image);
-
-}
-#endif
 
 /*****************************************************************************
  QPixmap stream functions

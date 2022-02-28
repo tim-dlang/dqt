@@ -13,19 +13,17 @@ module qt.gui.textdocument;
 extern(C++):
 
 import qt.config;
-import qt.core.bytearray;
 import qt.core.flags;
 import qt.core.global;
+import qt.core.list;
 import qt.core.namespace;
 import qt.core.object;
 import qt.core.qchar;
 import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
-import qt.core.textcodec;
 import qt.core.url;
 import qt.core.variant;
-import qt.core.vector;
 import qt.gui.abstracttextdocumentlayout;
 import qt.gui.font;
 import qt.gui.painter;
@@ -38,15 +36,16 @@ version(QT_NO_PRINTER){}else
     import qt.gui.pagedpaintdevice;
 
 extern(C++, class) struct QTextDocumentPrivate;
+/+ Q_MOC_INCLUDE(<QtGui/qtextcursor.h>) +/
+
+
+
+extern(C++, class) struct QTextFormatCollection;
 
 extern(C++, "Qt")
 {
     /+ Q_GUI_EXPORT +/ bool mightBeRichText(ref const(QString));
     /+ Q_GUI_EXPORT +/ QString convertFromPlainText(ref const(QString) plain, qt.core.namespace.WhiteSpaceMode mode = qt.core.namespace.WhiteSpaceMode.WhiteSpacePre);
-
-/+ #if QT_CONFIG(textcodec) || defined(Q_CLANG_QDOC) +/
-    /+ Q_GUI_EXPORT +/ QTextCodec codecForHtml(ref const(QByteArray) ba);
-/+ #endif +/
 }
 
 abstract class /+ Q_GUI_EXPORT +/ QAbstractUndoItem
@@ -59,7 +58,7 @@ public:
 }
 
 
-/// Binding for C++ class [QTextDocument](https://doc.qt.io/qt-5/qtextdocument.html).
+/// Binding for C++ class [QTextDocument](https://doc.qt.io/qt-6/qtextdocument.html).
 class /+ Q_GUI_EXPORT +/ QTextDocument : QObject
 {
     mixin(Q_OBJECT);
@@ -115,7 +114,7 @@ public:
 /+ #ifndef QT_NO_TEXTHTMLPARSER +/
     version(QT_NO_TEXTHTMLPARSER){}else
     {
-        final QString toHtml(ref const(QByteArray) encoding = globalInitVar!QByteArray) const;
+        final QString toHtml() const;
         final void setHtml(ref const(QString) html);
     }
 /+ #endif
@@ -124,7 +123,7 @@ public:
     enum MarkdownFeature {
         MarkdownNoHTML = 0x0020 | 0x0040,
         MarkdownDialectCommonMark = 0,
-        MarkdownDialectGitHub = 0x0004 | 0x0008 | 0x0400 | 0x0100 | 0x0200 | 0x0800
+        MarkdownDialectGitHub = 0x0004 | 0x0008 | 0x0400 | 0x0100 | 0x0200 | 0x0800 | 0x4000
     }
     /+ Q_DECLARE_FLAGS(MarkdownFeatures, MarkdownFeature) +/
 alias MarkdownFeatures = QFlags!(MarkdownFeature);    /+ Q_FLAG(MarkdownFeatures) +/
@@ -155,15 +154,7 @@ alias FindFlags = QFlags!(FindFlag);
     /+ QTextCursor find(const QString &subString, int from = 0, FindFlags options = FindFlags()) const; +/
     /+ QTextCursor find(const QString &subString, const QTextCursor &cursor, FindFlags options = FindFlags()) const; +/
 
-/+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
-    {
-        /+ QTextCursor find(const QRegExp &expr, int from = 0, FindFlags options = FindFlags()) const; +/
-        /+ QTextCursor find(const QRegExp &expr, const QTextCursor &cursor, FindFlags options = FindFlags()) const; +/
-    }
-/+ #endif
-
-#if QT_CONFIG(regularexpression) +/
+/+ #if QT_CONFIG(regularexpression) +/
     /+ QTextCursor find(const QRegularExpression &expr, int from = 0, FindFlags options = FindFlags()) const; +/
     /+ QTextCursor find(const QRegularExpression &expr, const QTextCursor &cursor, FindFlags options = FindFlags()) const; +/
 /+ #endif +/
@@ -189,6 +180,15 @@ alias FindFlags = QFlags!(FindFlag);
     final void setDefaultFont(ref const(QFont) font);
     final QFont defaultFont() const;
 
+    final void setSuperScriptBaseline(qreal baseline);
+    final qreal superScriptBaseline() const;
+
+    final void setSubScriptBaseline(qreal baseline);
+    final qreal subScriptBaseline() const;
+
+    final void setBaselineOffset(qreal baseline);
+    final qreal baselineOffset() const;
+
     final int pageCount() const;
 
     final bool isModified() const;
@@ -212,7 +212,15 @@ alias FindFlags = QFlags!(FindFlag);
     final QVariant resource(int type, ref const(QUrl) name) const;
     final void addResource(int type, ref const(QUrl) name, ref const(QVariant) resource);
 
-    final QVector!(QTextFormat) allFormats() const;
+    //alias ResourceProvider = /+ std:: +/function_!(ExternCPPFunc!(QVariant function(ref const(QUrl))));
+
+    /*final ResourceProvider resourceProvider() const;
+    final void setResourceProvider(ref const(ResourceProvider) provider);
+
+    static ResourceProvider defaultResourceProvider();
+    static void setDefaultResourceProvider(ref const(ResourceProvider) provider);*/
+
+    final QList!(QTextFormat) allFormats() const;
 
     final void markContentsDirty(int from, int length);
 
@@ -290,8 +298,6 @@ protected:
     /+ virtual +/ @QInvokable QVariant loadResource(int type, ref const(QUrl) name);
 
     this(ref QTextDocumentPrivate dd, QObject parent);
-public:
-    final QTextDocumentPrivate* docHandle() const;
 private:
     /+ Q_DISABLE_COPY(QTextDocument) +/
     /+ Q_DECLARE_PRIVATE(QTextDocument) +/
@@ -300,6 +306,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator |(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextDocument.FindFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator |(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator &(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextDocument.FindFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator &(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QTextDocument.FindFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextDocument.FindFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextDocument.FindFlags.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextDocument::FindFlags) +/

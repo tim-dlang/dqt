@@ -27,7 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QRubberBandPrivate;
 
-/// Binding for C++ class [QRubberBand](https://doc.qt.io/qt-5/qrubberband.html).
+/// Binding for C++ class [QRubberBand](https://doc.qt.io/qt-6/qrubberband.html).
 class /+ Q_WIDGETS_EXPORT +/ QRubberBand : QWidget
 {
     mixin(Q_OBJECT);
@@ -59,7 +59,7 @@ protected:
     override void showEvent(QShowEvent );
     override void resizeEvent(QResizeEvent );
     override void moveEvent(QMoveEvent );
-    final void initStyleOption(QStyleOptionRubberBand* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionRubberBand* option) const;
 
 private:
     /+ Q_DECLARE_PRIVATE(QRubberBand) +/

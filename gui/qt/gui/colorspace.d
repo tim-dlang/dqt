@@ -14,16 +14,20 @@ extern(C++):
 
 import qt.config;
 import qt.core.bytearray;
+import qt.core.list;
 import qt.core.metamacros;
 import qt.core.point;
+import qt.core.shareddata;
+import qt.core.string;
 import qt.core.typeinfo;
 import qt.core.variant;
 import qt.gui.colortransform;
 import qt.helpers;
 
 
-/// Binding for C++ class [QColorSpace](https://doc.qt.io/qt-5/qcolorspace.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColorSpace
+/+ QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QColorSpacePrivate, Q_GUI_EXPORT) +/
+/// Binding for C++ class [QColorSpace](https://doc.qt.io/qt-6/qcolorspace.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColorSpace
 {
     mixin(Q_GADGET);
 public:
@@ -52,37 +56,35 @@ public:
     }
     /+ Q_ENUM(TransferFunction) +/
 
-    @disable this();
-    pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-    ref typeof(this) rawConstructor();
-    static typeof(this) create()
-    {
-        typeof(this) r = typeof(this).init;
-        r.rawConstructor();
-        return r;
-    }
-
+    /+ QColorSpace() noexcept = default; +/
     this(NamedColorSpace namedColorSpace);
-    this(Primaries primaries, TransferFunction fun, float gamma = 0.0f);
+    this(Primaries primaries, TransferFunction transferFunction, float gamma = 0.0f);
     this(Primaries primaries, float gamma);
+    this(Primaries primaries, ref const(QList!(ushort)) transferFunctionTable);
     this(ref const(QPointF) whitePoint, ref const(QPointF) redPoint,
                     ref const(QPointF) greenPoint, ref const(QPointF) bluePoint,
-                    TransferFunction fun, float gamma = 0.0f);
+                    TransferFunction transferFunction, float gamma = 0.0f);
+    this(ref const(QPointF) whitePoint, ref const(QPointF) redPoint,
+                    ref const(QPointF) greenPoint, ref const(QPointF) bluePoint,
+                    ref const(QList!(ushort)) transferFunctionTable);
+    this(ref const(QPointF) whitePoint, ref const(QPointF) redPoint,
+                    ref const(QPointF) greenPoint, ref const(QPointF) bluePoint,
+                    ref const(QList!(ushort)) redTransferFunctionTable,
+                    ref const(QList!(ushort)) greenTransferFunctionTable,
+                    ref const(QList!(ushort)) blueTransferFunctionTable);
     ~this();
 
     @disable this(this);
-    this(ref const(QColorSpace) colorSpace);
-    /+ref QColorSpace operator =(ref const(QColorSpace) colorSpace);+/
-
-    /+ QColorSpace(QColorSpace &&colorSpace) noexcept
-            : d_ptr(qExchange(colorSpace.d_ptr, nullptr))
-    { } +/
-    /+ QColorSpace &operator=(QColorSpace &&colorSpace) noexcept
+    this(ref const(QColorSpace) colorSpace)/+ noexcept+/;
+    /+ref QColorSpace operator =(ref const(QColorSpace) colorSpace)/+ noexcept+/
     {
-        // Make the deallocation of this->d_ptr happen in ~QColorSpace()
-        QColorSpace(std::move(colorSpace)).swap(*this);
-        return *this;
-    } +/
+        auto copy = QColorSpace(colorSpace);
+        swap(copy);
+        return this;
+    }+/
+
+    /+ QColorSpace(QColorSpace &&colorSpace) noexcept = default; +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QColorSpace) +/
 
     /+ void swap(QColorSpace &colorSpace) noexcept
     { qSwap(d_ptr, colorSpace.d_ptr); } +/
@@ -91,17 +93,31 @@ public:
     TransferFunction transferFunction() const/+ noexcept+/;
     float gamma() const/+ noexcept+/;
 
+    QString description() const/+ noexcept+/;
+    void setDescription(ref const(QString) description);
+
     void setTransferFunction(TransferFunction transferFunction, float gamma = 0.0f);
+    void setTransferFunction(ref const(QList!(ushort)) transferFunctionTable);
+    void setTransferFunctions(ref const(QList!(ushort)) redTransferFunctionTable,
+                                  ref const(QList!(ushort)) greenTransferFunctionTable,
+                                  ref const(QList!(ushort)) blueTransferFunctionTable);
     QColorSpace withTransferFunction(TransferFunction transferFunction, float gamma = 0.0f) const;
+    QColorSpace withTransferFunction(ref const(QList!(ushort)) transferFunctionTable) const;
+    QColorSpace withTransferFunctions(ref const(QList!(ushort)) redTransferFunctionTable,
+                                          ref const(QList!(ushort)) greenTransferFunctionTable,
+                                          ref const(QList!(ushort)) blueTransferFunctionTable) const;
 
     void setPrimaries(Primaries primariesId);
     void setPrimaries(ref const(QPointF) whitePoint, ref const(QPointF) redPoint,
                           ref const(QPointF) greenPoint, ref const(QPointF) bluePoint);
 
+    void detach();
     bool isValid() const/+ noexcept+/;
 
-    /+ friend Q_GUI_EXPORT bool operator==(const QColorSpace &colorSpace1, const QColorSpace &colorSpace2); +/
-    /+ friend inline bool operator!=(const QColorSpace &colorSpace1, const QColorSpace &colorSpace2); +/
+    /+ friend inline bool operator==(const QColorSpace &colorSpace1, const QColorSpace &colorSpace2)
+    { return colorSpace1.equals(colorSpace2); } +/
+    /+ friend inline bool operator!=(const QColorSpace &colorSpace1, const QColorSpace &colorSpace2)
+    { return !(colorSpace1 == colorSpace2); } +/
 
     static QColorSpace fromIccProfile(ref const(QByteArray) iccProfile);
     QByteArray iccProfile() const;
@@ -111,20 +127,16 @@ public:
     /+auto opCast(T : QVariant)() const;+/
 
 private:
-    /+ Q_DECLARE_PRIVATE(QColorSpace) +/
-    QColorSpacePrivate* d_ptr = null;
+    /+ friend class QColorSpacePrivate; +/
+    bool equals(ref const(QColorSpace) other) const;
+
+    QExplicitlySharedDataPointer!(QColorSpacePrivate) d_ptr;
 
 /+ #ifndef QT_NO_DEBUG_STREAM
     friend Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QColorSpace &colorSpace);
 #endif +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-
-/+bool /+ Q_GUI_EXPORT +/ operator ==(ref const(QColorSpace) colorSpace1, ref const(QColorSpace) colorSpace2);+/
-/+pragma(inline, true) bool operator !=(ref const(QColorSpace) colorSpace1, ref const(QColorSpace) colorSpace2)
-{
-    return !(colorSpace1 == colorSpace2);
-}+/
 
 /+ Q_DECLARE_SHARED(QColorSpace)
 

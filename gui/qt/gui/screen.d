@@ -16,6 +16,7 @@ import qt.config;
 import qt.core.global;
 import qt.core.list;
 import qt.core.namespace;
+import qt.core.nativeinterface;
 import qt.core.object;
 import qt.core.point;
 import qt.core.rect;
@@ -32,7 +33,7 @@ extern(C++, class) struct QScreenPrivate;
 class QDebug;
 #endif +/
 
-/// Binding for C++ class [QScreen](https://doc.qt.io/qt-5/qscreen.html).
+/// Binding for C++ class [QScreen](https://doc.qt.io/qt-6/qscreen.html).
 class /+ Q_GUI_EXPORT +/ QScreen : QObject
 {
     mixin(Q_OBJECT);
@@ -50,16 +51,20 @@ class /+ Q_GUI_EXPORT +/ QScreen : QObject
     Q_PROPERTY(QRect geometry READ geometry NOTIFY geometryChanged)
     Q_PROPERTY(QRect availableGeometry READ availableGeometry NOTIFY availableGeometryChanged)
     Q_PROPERTY(QRect virtualGeometry READ virtualGeometry NOTIFY virtualGeometryChanged)
-    Q_PROPERTY(QRect availableVirtualGeometry READ availableVirtualGeometry NOTIFY virtualGeometryChanged)
+    Q_PROPERTY(QRect availableVirtualGeometry READ availableVirtualGeometry
+               NOTIFY virtualGeometryChanged)
     Q_PROPERTY(QSizeF physicalSize READ physicalSize NOTIFY physicalSizeChanged)
-    Q_PROPERTY(qreal physicalDotsPerInchX READ physicalDotsPerInchX NOTIFY physicalDotsPerInchChanged)
-    Q_PROPERTY(qreal physicalDotsPerInchY READ physicalDotsPerInchY NOTIFY physicalDotsPerInchChanged)
+    Q_PROPERTY(qreal physicalDotsPerInchX READ physicalDotsPerInchX
+               NOTIFY physicalDotsPerInchChanged)
+    Q_PROPERTY(qreal physicalDotsPerInchY READ physicalDotsPerInchY
+               NOTIFY physicalDotsPerInchChanged)
     Q_PROPERTY(qreal physicalDotsPerInch READ physicalDotsPerInch NOTIFY physicalDotsPerInchChanged)
     Q_PROPERTY(qreal logicalDotsPerInchX READ logicalDotsPerInchX NOTIFY logicalDotsPerInchChanged)
     Q_PROPERTY(qreal logicalDotsPerInchY READ logicalDotsPerInchY NOTIFY logicalDotsPerInchChanged)
     Q_PROPERTY(qreal logicalDotsPerInch READ logicalDotsPerInch NOTIFY logicalDotsPerInchChanged)
     Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio NOTIFY physicalDotsPerInchChanged)
-    Q_PROPERTY(Qt::ScreenOrientation primaryOrientation READ primaryOrientation NOTIFY primaryOrientationChanged)
+    Q_PROPERTY(Qt::ScreenOrientation primaryOrientation READ primaryOrientation
+               NOTIFY primaryOrientationChanged)
     Q_PROPERTY(Qt::ScreenOrientation orientation READ orientation NOTIFY orientationChanged)
     Q_PROPERTY(Qt::ScreenOrientation nativeOrientation READ nativeOrientation)
     Q_PROPERTY(qreal refreshRate READ refreshRate NOTIFY refreshRateChanged) +/
@@ -107,9 +112,6 @@ public:
     final /+ Qt:: +/qt.core.namespace.ScreenOrientation orientation() const;
     final /+ Qt:: +/qt.core.namespace.ScreenOrientation nativeOrientation() const;
 
-    final /+ Qt:: +/qt.core.namespace.ScreenOrientations orientationUpdateMask() const;
-    final void setOrientationUpdateMask(/+ Qt:: +/qt.core.namespace.ScreenOrientations mask);
-
     final int angleBetween(/+ Qt:: +/qt.core.namespace.ScreenOrientation a, /+ Qt:: +/qt.core.namespace.ScreenOrientation b) const;
     final QTransform transformBetween(/+ Qt:: +/qt.core.namespace.ScreenOrientation a, /+ Qt:: +/qt.core.namespace.ScreenOrientation b, ref const(QRect) target) const;
     final QRect mapBetween(/+ Qt:: +/qt.core.namespace.ScreenOrientation a, /+ Qt:: +/qt.core.namespace.ScreenOrientation b, ref const(QRect) rect) const;
@@ -117,9 +119,11 @@ public:
     final bool isPortrait(/+ Qt:: +/qt.core.namespace.ScreenOrientation orientation) const;
     final bool isLandscape(/+ Qt:: +/qt.core.namespace.ScreenOrientation orientation) const;
 
-    final QPixmap grabWindow(WId window, int x = 0, int y = 0, int w = -1, int h = -1);
+    final QPixmap grabWindow(WId window = 0, int x = 0, int y = 0, int w = -1, int h = -1);
 
     final qreal refreshRate() const;
+
+    mixin(QT_DECLARE_NATIVE_INTERFACE_ACCESSOR(q{ValueClass!(QScreen)}));
 
 /+ Q_SIGNALS +/public:
     @QSignal final void geometryChanged(ref const(QRect) geometry);

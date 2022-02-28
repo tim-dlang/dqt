@@ -17,14 +17,13 @@ import qt.core.bytearray;
 import qt.core.iodevice;
 import qt.core.list;
 import qt.core.string;
-import qt.core.textcodec;
 import qt.gui.textdocument;
 import qt.gui.textdocumentfragment;
 import qt.helpers;
 
 extern(C++, class) struct QTextDocumentWriterPrivate;
 
-/// Binding for C++ class [QTextDocumentWriter](https://doc.qt.io/qt-5/qtextdocumentwriter.html).
+/// Binding for C++ class [QTextDocumentWriter](https://doc.qt.io/qt-6/qtextdocumentwriter.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextDocumentWriter
 {
 public:
@@ -54,11 +53,6 @@ public:
     bool write(const(QTextDocument) document);
     }));
     bool write(ref const(QTextDocumentFragment) fragment);
-
-/+ #if QT_CONFIG(textcodec) +/
-    void setCodec(QTextCodec codec);
-    QTextCodec codec() const;
-/+ #endif +/
 
     static QList!(QByteArray) supportedDocumentFormats();
 

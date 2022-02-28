@@ -13,282 +13,146 @@ module qt.core.stringlist;
 extern(C++):
 
 import qt.config;
+import qt.core.global;
 import qt.core.list;
 import qt.core.namespace;
 import qt.core.qchar;
 import qt.core.regularexpression;
 import qt.core.string;
 import qt.core.stringview;
-import qt.core.typeinfo;
 import qt.helpers;
-version(QT_NO_REGEXP){}else
-    import qt.core.regexp;
 
-version(QT_NO_REGEXP){}else
-{
-}
-
+/// Binding for C++ class [QStringList](https://doc.qt.io/qt-6/qstringlist.html).
+alias QStringList = QList!(QString);
 /+ #ifndef QSTRINGLIST_H +/
 /+ #define QSTRINGLIST_H
 
 
+
 #if !defined(QT_NO_JAVA_STYLE_ITERATORS)
-typedef QListIterator<QString> QStringListIterator;
-typedef QMutableListIterator<QString> QMutableStringListIterator;
-#endif
+using QStringListIterator = QListIterator<QString>;
+using QMutableStringListIterator = QMutableListIterator<QString>;
+#endif +/
 
-
-#ifdef Q_QDOC
-class QStringList : public QList<QString>
-#else
-template <> struct QListSpecialMethods<QString>
-#endif
-{
-#ifndef Q_QDOC
-protected:
-    ~QListSpecialMethods() = default;
-#endif
-public:
-    inline void sort(Qt::CaseSensitivity cs = Qt::CaseSensitive);
-    inline int removeDuplicates();
-
-#if QT_STRINGVIEW_LEVEL < 2
-    inline QString join(const QString &sep) const;
-#endif
-    inline QString join(QStringView sep) const;
-    inline QString join(QLatin1String sep) const;
-    inline QString join(QChar sep) const;
-
-    inline QStringList filter(QStringView str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-    inline QStringList &replaceInStrings(QStringView before, QStringView after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
-#if QT_STRINGVIEW_LEVEL < 2
-    inline QStringList filter(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
-    inline QStringList &replaceInStrings(const QString &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
-    inline QStringList &replaceInStrings(const QString &before, QStringView after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
-    inline QStringList &replaceInStrings(QStringView before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive);
-#endif
-
-#ifndef QT_NO_REGEXP
-    inline QStringList filter(const QRegExp &rx) const;
-    inline QStringList &replaceInStrings(const QRegExp &rx, const QString &after);
-#endif
-
-#if QT_CONFIG(regularexpression)
-    inline QStringList filter(const QRegularExpression &re) const;
-    inline QStringList &replaceInStrings(const QRegularExpression &re, const QString &after);
-#endif // QT_CONFIG(regularexpression)
-
-#ifndef Q_QDOC
-private:
-    inline QStringList *self();
-    inline const QStringList *self() const;
-}; +/
-
-// ### Qt6: check if there's a better way
-/// Binding for C++ class [QStringList](https://doc.qt.io/qt-5/qstringlist.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct QStringList
-{
-    public QList!(QString) base0;
-    alias base0 this;
-/+ #endif +/
-public:
-    version(Windows)
-        @disable this();
-    /+pragma(inline, true) this()/+ noexcept+/ { }+/
-
-    static QStringList create()
-    {
-        QStringList r = QStringList.init;
-        r.base0 = QList!QString.create;
-        return r;
-    }
-
-    /+ explicit +/pragma(inline, true) this(ref const(QString) i)
-    {
-        base0 = QList!QString.create;
-        append(i); 
-    }
-    pragma(inline, true) this(ref const(QList!(QString)) l)
-    {
-        this.base0 = *cast(QList!(QString)*)&l;
-    }
-    /+ inline QStringList(QList<QString> &&l) noexcept : QList<QString>(std::move(l)) { } +/
-    /+ inline QStringList(std::initializer_list<QString> args) : QList<QString>(args) { } +/
-    /+ template <typename InputIterator, QtPrivate::IfIsInputIterator<InputIterator> = true> +/
-    pragma(inline, true) this(InputIterator,)(InputIterator first, InputIterator last)
-    {
-        this.QList!(QString) = typeof(this.QList!(QString))(first, last);
-    }
-
-    /+ref QStringList operator =(ref const(QList!(QString)) other)
-    { QList!(QString).operator=(other); return this; }+/
-    /+ QStringList &operator=(QList<QString> &&other) noexcept
-    { QList<QString>::operator=(std::move(other)); return *this; } +/
-
-    static if(QT_STRINGVIEW_LEVEL < 2)
-    {
-        pragma(inline, true) bool contains(ref const(QString) str, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
-        {
-            return /+ QtPrivate:: +/QStringList_contains(&this, str, cs);
-        }
-    }
-    pragma(inline, true) bool contains(QLatin1String str, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
-    {
-        return /+ QtPrivate:: +/QStringList_contains(&this, str, cs);
-    }
-
-    auto opSlice() const
-    {
-        return base0.opSlice();
-    }
-
-    pragma(inline, true) bool contains(QStringView str, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
-    {
-        return /+ QtPrivate:: +/QStringList_contains(&this, str, cs);
-    }
-
-    extern(D) pragma(inline, true) QStringList opBinary(string op)(ref const(QStringList) other) const if(op == "~")
-    { QStringList n = this; n ~= other; return n; }
-    /+pragma(inline, true) ref QStringList operator <<(ref const(QString) str)
-    { append(str); return this; }+/
-    /+pragma(inline, true) ref QStringList operator <<(ref const(QStringList) l)
-    { this += l; return this; }+/
-    /+pragma(inline, true) ref QStringList operator <<(ref const(QList!(QString)) l)
-    { this += l; return this; }+/
-
-    pragma(inline, true) int indexOf(QStringView string, int from = 0) const
-    {
-        return /+ QtPrivate:: +/qt.core.list.indexOf!(QString, QStringView)(this, string, from);
-    }
-    pragma(inline, true) int indexOf(QLatin1String string, int from = 0) const
-    {
-        return /+ QtPrivate:: +/qt.core.list.indexOf!(QString, QLatin1String)(this, string, from);
-    }
-
-    pragma(inline, true) int lastIndexOf(QStringView string, int from = -1) const
-    {
-        return /+ QtPrivate:: +/qt.core.list.lastIndexOf!(QString, QStringView)(this, string, from);
-    }
-    pragma(inline, true) int lastIndexOf(QLatin1String string, int from = -1) const
-    {
-        return /+ QtPrivate:: +/qt.core.list.lastIndexOf!(QString, QLatin1String)(this, string, from);
-    }
-
-/+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
-    {
-        pragma(inline, true) int indexOf(ref const(QRegExp) rx, int from = 0) const
-        {
-            return /+ QtPrivate:: +/QStringList_indexOf(&this, rx, from);
-        }
-        pragma(inline, true) int lastIndexOf(ref const(QRegExp) rx, int from = -1) const
-        {
-            return /+ QtPrivate:: +/QStringList_lastIndexOf(&this, rx, from);
-        }
-        pragma(inline, true) int indexOf(ref QRegExp rx, int from = 0) const
-        {
-            return /+ QtPrivate:: +/QStringList_indexOf(&this, rx, from);
-        }
-        pragma(inline, true) int lastIndexOf(ref QRegExp rx, int from = -1) const
-        {
-            return /+ QtPrivate:: +/QStringList_lastIndexOf(&this, rx, from);
-        }
-    }
-/+ #endif
-
-#if QT_CONFIG(regularexpression) +/
-    pragma(inline, true) int indexOf(ref const(QRegularExpression) rx, int from = 0) const
-    {
-        return /+ QtPrivate:: +/QStringList_indexOf(&this, rx, from);
-    }
-    pragma(inline, true) int lastIndexOf(ref const(QRegularExpression) rx, int from = -1) const
-    {
-        return /+ QtPrivate:: +/QStringList_lastIndexOf(&this, rx, from);
-    }
-/+ #endif +/ // QT_CONFIG(regularexpression)
-
-    /+ using QList<QString>::indexOf; +/
-    /+ using QList<QString>::lastIndexOf; +/
-    mixin(CREATE_CONVENIENCE_WRAPPERS);
-}
-
-/+ Q_DECLARE_TYPEINFO(QStringList, Q_MOVABLE_TYPE);
-
-#ifndef Q_QDOC +/
 
 extern(C++, "QtPrivate") {
     void /+ Q_CORE_EXPORT +/ QStringList_sort(QStringList* that, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
-    int /+ Q_CORE_EXPORT +/ QStringList_removeDuplicates(QStringList* that);
+    qsizetype /+ Q_CORE_EXPORT +/ QStringList_removeDuplicates(QStringList* that);
     QString /+ Q_CORE_EXPORT +/ QStringList_join(const(QStringList)* that, QStringView sep);
-    QString /+ Q_CORE_EXPORT +/ QStringList_join(const(QStringList)* that, const(QChar)* sep, int seplen);
+    QString /+ Q_CORE_EXPORT +/ QStringList_join(const(QStringList)* that, const(QChar)* sep, qsizetype seplen);
     /+ Q_CORE_EXPORT +/ QString QStringList_join(ref const(QStringList) list, QLatin1String sep);
     QStringList /+ Q_CORE_EXPORT +/ QStringList_filter(const(QStringList)* that, QStringView str,
                                                    /+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    QStringList /+ Q_CORE_EXPORT +/ QStringList_filter(const(QStringList)* that, ref const(QString) str,
-                                                   /+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
-/+ #endif
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    bool /+ Q_CORE_EXPORT +/ QStringList_contains(const(QStringList)* that, ref const(QString) str, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
-/+ #endif +/
     bool /+ Q_CORE_EXPORT +/ QStringList_contains(const(QStringList)* that, QStringView str, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
     bool /+ Q_CORE_EXPORT +/ QStringList_contains(const(QStringList)* that, QLatin1String str, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
     void /+ Q_CORE_EXPORT +/ QStringList_replaceInStrings(QStringList* that, QStringView before, QStringView after,
                                           /+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    void /+ Q_CORE_EXPORT +/ QStringList_replaceInStrings(QStringList* that, ref const(QString) before, ref const(QString) after,
-                                          /+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
-/+ #endif +/
-
-version(QT_NO_REGEXP){}else
-{
-    void /+ Q_CORE_EXPORT +/ QStringList_replaceInStrings(QStringList* that, ref const(QRegExp) rx, ref const(QString) after);
-    QStringList /+ Q_CORE_EXPORT +/ QStringList_filter(const(QStringList)* that, ref const(QRegExp) re);
-    int /+ Q_CORE_EXPORT +/ QStringList_indexOf(const(QStringList)* that, ref const(QRegExp) rx, int from);
-    int /+ Q_CORE_EXPORT +/ QStringList_lastIndexOf(const(QStringList)* that, ref const(QRegExp) rx, int from);
-    int /+ Q_CORE_EXPORT +/ QStringList_indexOf(const(QStringList)* that, ref QRegExp rx, int from);
-    int /+ Q_CORE_EXPORT +/ QStringList_lastIndexOf(const(QStringList)* that, ref QRegExp rx, int from);
-}
 
 /+ #if QT_CONFIG(regularexpression) +/
     void /+ Q_CORE_EXPORT +/ QStringList_replaceInStrings(QStringList* that, ref const(QRegularExpression) rx, ref const(QString) after);
     QStringList /+ Q_CORE_EXPORT +/ QStringList_filter(const(QStringList)* that, ref const(QRegularExpression) re);
-    int /+ Q_CORE_EXPORT +/ QStringList_indexOf(const(QStringList)* that, ref const(QRegularExpression) re, int from);
-    int /+ Q_CORE_EXPORT +/ QStringList_lastIndexOf(const(QStringList)* that, ref const(QRegularExpression) re, int from);
+    qsizetype /+ Q_CORE_EXPORT +/ QStringList_indexOf(const(QStringList)* that, ref const(QRegularExpression) re, qsizetype from);
+    qsizetype /+ Q_CORE_EXPORT +/ QStringList_lastIndexOf(const(QStringList)* that, ref const(QRegularExpression) re, qsizetype from);
 /+ #endif +/ // QT_CONFIG(regularexpression)
 }
 
-/+ #if QT_STRINGVIEW_LEVEL < 2
+/+ #ifdef Q_QDOC
+class QStringList : public QList<QString>
+#else
+template <> struct QListSpecialMethods<QString> : QListSpecialMethodsBase<QString>
 #endif
-
-#if QT_STRINGVIEW_LEVEL < 2
-#endif
-
-#if QT_STRINGVIEW_LEVEL < 2
-#endif
-
-#if QT_STRINGVIEW_LEVEL < 2
-#endif +/
-
-/+pragma(inline, true) QStringList operator +(ref const(QList!(QString)) one, ref const(QStringList) other)
 {
-    QStringList n = one;
-    n ~= other;
-    return n;
-}+/
+#ifdef Q_QDOC
+public:
+    using QList<QString>::QList;
+    QStringList(const QString &str);
+    QStringList(const QList<QString> &other);
+    QStringList(QList<QString> &&other);
 
-/+ #ifndef QT_NO_REGEXP
+    QStringList &operator=(const QList<QString> &other);
+    QStringList &operator=(QList<QString> &&other);
+    QStringList operator+(const QStringList &other) const;
+    QStringList &operator<<(const QString &str);
+    QStringList &operator<<(const QStringList &other);
+    QStringList &operator<<(const QList<QString> &other);
+private:
+#endif
+
+public:
+    inline void sort(Qt::CaseSensitivity cs = Qt::CaseSensitive)
+    { QtPrivate::QStringList_sort(self(), cs); }
+    inline qsizetype removeDuplicates()
+    { return QtPrivate::QStringList_removeDuplicates(self()); }
+
+    inline QString join(QStringView sep) const
+    { return QtPrivate::QStringList_join(self(), sep); }
+    inline QString join(QLatin1String sep) const
+    { return QtPrivate::QStringList_join(*self(), sep); }
+    inline QString join(QChar sep) const
+    { return QtPrivate::QStringList_join(self(), &sep, 1); }
+
+    inline QStringList filter(QStringView str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const
+    { return QtPrivate::QStringList_filter(self(), str, cs); }
+    inline QStringList &replaceInStrings(QStringView before, QStringView after, Qt::CaseSensitivity cs = Qt::CaseSensitive)
+    {
+        QtPrivate::QStringList_replaceInStrings(self(), before, after, cs);
+        return *self();
+    }
+
+#if QT_STRINGVIEW_LEVEL < 2
+    inline QString join(const QString &sep) const
+    { return QtPrivate::QStringList_join(self(), sep.constData(), sep.length()); }
+    inline QStringList filter(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const
+    { return QtPrivate::QStringList_filter(self(), str, cs); }
+    inline QStringList &replaceInStrings(const QString &before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive)
+    {
+        QtPrivate::QStringList_replaceInStrings(self(), before, after, cs);
+        return *self();
+    }
+    inline QStringList &replaceInStrings(const QString &before, QStringView after, Qt::CaseSensitivity cs = Qt::CaseSensitive)
+    {
+        QtPrivate::QStringList_replaceInStrings(self(), before, after, cs);
+        return *self();
+    }
+    inline QStringList &replaceInStrings(QStringView before, const QString &after, Qt::CaseSensitivity cs = Qt::CaseSensitive)
+    {
+        QtPrivate::QStringList_replaceInStrings(self(), before, after, cs);
+        return *self();
+    }
+#endif
+    using QListSpecialMethodsBase<QString>::contains;
+    using QListSpecialMethodsBase<QString>::indexOf;
+    using QListSpecialMethodsBase<QString>::lastIndexOf;
+
+    inline bool contains(QLatin1String str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const noexcept
+    { return QtPrivate::QStringList_contains(self(), str, cs); }
+    inline bool contains(QStringView str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const noexcept
+    { return QtPrivate::QStringList_contains(self(), str, cs); }
+
+#if QT_STRINGVIEW_LEVEL < 2
+    inline bool contains(const QString &str, Qt::CaseSensitivity cs = Qt::CaseSensitive) const noexcept
+    { return QtPrivate::QStringList_contains(self(), str, cs); }
+    qsizetype indexOf(const QString &str, qsizetype from = 0) const noexcept
+    { return indexOf(QStringView(str), from); }
+    qsizetype lastIndexOf(const QString &str, qsizetype from = -1) const noexcept
+    { return lastIndexOf(QStringView(str), from); }
 #endif
 
 #if QT_CONFIG(regularexpression)
-#endif +/ // QT_CONFIG(regularexpression)
-/+ #endif +/ // Q_QDOC
+    inline QStringList filter(const QRegularExpression &re) const
+    { return QtPrivate::QStringList_filter(self(), re); }
+    inline QStringList &replaceInStrings(const QRegularExpression &re, const QString &after)
+    {
+        QtPrivate::QStringList_replaceInStrings(self(), re, after);
+        return *self();
+    }
+    inline qsizetype indexOf(const QRegularExpression &re, qsizetype from = 0) const
+    { return QtPrivate::QStringList_indexOf(self(), re, from); }
+    inline qsizetype lastIndexOf(const QRegularExpression &re, qsizetype from = -1) const
+    { return QtPrivate::QStringList_lastIndexOf(self(), re, from); }
+#endif // QT_CONFIG(regularexpression)
+}; +/
 
 
 /+ #endif +/ // QSTRINGLIST_H
-static if(!defined!"QT_NO_DESKTOPSERVICES")
-{
-
-}
 

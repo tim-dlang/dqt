@@ -230,62 +230,42 @@ extern(C++, "QtPrivate") {
         static void call(Function &f, void *, void **arg) {
             FunctorCall<typename Indexes<N>::Value, SignalArgs, R, Function>::call(f, arg);
         }
-    };
+    }; +/
 
-    /*
-        Logic that checks if the underlying type of an enum is signed or not.
-        Needs an external, explicit check that E is indeed an enum. Works
-        around the fact that it's undefined behavior to instantiate
-        std::underlying_type on non-enums (cf. §20.13.7.6 [meta.trans.other]).
-    */
-    template<typename E, typename Enable = void>
-    struct IsEnumUnderlyingTypeSigned : std::false_type
-    {
-    };
+    // Traits to detect if there is a conversion between two types,
+    // and that conversion does not include a narrowing conversion.
+    struct NarrowingDetector(T) { T[1] t; } // from P0608
 
-    template<typename E>
-    struct IsEnumUnderlyingTypeSigned<E, typename std::enable_if<std::is_enum<E>::value>::type>
-            : std::integral_constant<bool, std::is_signed<typename std::underlying_type<E>::type>::value>
-    {
-    };
+    struct IsConvertibleWithoutNarrowing(From, To, Enable) {
+        /+ std:: +/false_type base0;
+        alias base0 this;
+}
 
-    /*
-       Logic that checks if the argument of the slot does not narrow the
-       argument of the signal when used in list initialization. Cf. §8.5.4.7
-       [dcl.init.list] for the definition of narrowing.
-       For incomplete From/To types, there's no narrowing.
-    */
-    template<typename From, typename To, typename Enable = void>
-    struct AreArgumentsNarrowedBase : std::false_type
-    {
-    };
+    /+ template <typename From, typename To>
+    struct IsConvertibleWithoutNarrowing<From, To,
+            std::void_t< decltype( NarrowingDetector<To>{ {std::declval<From>()} } ) >
+        > : std::true_type {}; +/
 
-    template <typename T>
-    using is_bool = std::is_same<bool, typename std::decay<T>::type>;
+    // Check for the actual arguments. If they are exactly the same,
+    // then don't bother checking for narrowing; as a by-product,
+    // this solves the problem of incomplete types (which must be supported,
+    // or they would error out in the trait above).
+    struct AreArgumentsConvertibleWithoutNarrowingBase(From, To, Enable) {
+        /+ std:: +/false_type base0;
+        alias base0 this;
+}
 
-    template<typename From, typename To>
-    struct AreArgumentsNarrowedBase<From, To, typename std::enable_if<sizeof(From) && sizeof(To)>::type>
-        : std::integral_constant<bool,
-              (std::is_floating_point<From>::value && std::is_integral<To>::value) ||
-              (std::is_floating_point<From>::value && std::is_floating_point<To>::value && sizeof(From) > sizeof(To)) ||
-              ((std::is_pointer<From>::value || std::is_member_pointer<From>::value) && QtPrivate::is_bool<To>::value) ||
-              ((std::is_integral<From>::value || std::is_enum<From>::value) && std::is_floating_point<To>::value) ||
-              (std::is_integral<From>::value && std::is_integral<To>::value
-               && (sizeof(From) > sizeof(To)
-                   || (std::is_signed<From>::value ? !std::is_signed<To>::value
-                       : (std::is_signed<To>::value && sizeof(From) == sizeof(To))))) ||
-              (std::is_enum<From>::value && std::is_integral<To>::value
-               && (sizeof(From) > sizeof(To)
-                   || (IsEnumUnderlyingTypeSigned<From>::value ? !std::is_signed<To>::value
-                       : (std::is_signed<To>::value && sizeof(From) == sizeof(To)))))
-              >
-    {
-    };
+    /+ template <typename From, typename To>
+    struct AreArgumentsConvertibleWithoutNarrowingBase<From, To,
+        std::enable_if_t<
+            std::disjunction_v<std::is_same<From, To>, IsConvertibleWithoutNarrowing<From, To>>
+        >
+    > : std::true_type {};
 
     /*
        Logic that check if the arguments of the slot matches the argument of the signal.
        To be used like this:
-       Q_STATIC_ASSERT(CheckCompatibleArguments<FunctionPointer<Signal>::Arguments, FunctionPointer<Slot>::Arguments>::value)
+       static_assert(CheckCompatibleArguments<FunctionPointer<Signal>::Arguments, FunctionPointer<Slot>::Arguments>::value)
     */
     template<typename A1, typename A2> struct AreArgumentsCompatible {
         static int test(const typename RemoveRef<A2>::Type&);
@@ -293,8 +273,8 @@ extern(C++, "QtPrivate") {
         static const typename RemoveRef<A1>::Type &dummy();
         enum { value = sizeof(test(dummy())) == sizeof(int) };
 #ifdef QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
-        using AreArgumentsNarrowed = AreArgumentsNarrowedBase<typename RemoveRef<A1>::Type, typename RemoveRef<A2>::Type>;
-        Q_STATIC_ASSERT_X(!AreArgumentsNarrowed::value, "Signal and slot arguments are not compatible (narrowing)");
+        using AreArgumentsConvertibleWithoutNarrowing = AreArgumentsConvertibleWithoutNarrowingBase<std::decay_t<A1>, std::decay_t<A2>>;
+        static_assert(AreArgumentsConvertibleWithoutNarrowing::value, "Signal and slot arguments are not compatible (narrowing)");
 #endif
     };
     template<typename A1, typename A2> struct AreArgumentsCompatible<A1, A2&> { enum { value = false }; };

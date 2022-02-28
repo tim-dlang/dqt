@@ -34,10 +34,10 @@ private /+ slots +/:
     @QSlot final void on_tableWidget_customContextMenuRequested(ref const(QPoint) pos)
     {
         import core.stdcpp.new_;
+        import qt.gui.action;
         import qt.gui.brush;
         import qt.gui.color;
         import qt.gui.font;
-        import qt.widgets.action;
         import qt.widgets.colordialog;
         import qt.widgets.fontdialog;
         import qt.widgets.inputdialog;

@@ -24,7 +24,7 @@ import qt.helpers;
 /+ QT_REQUIRE_CONFIG(stringlistmodel); +/
 
 
-/// Binding for C++ class [QStringListModel](https://doc.qt.io/qt-5/qstringlistmodel.html).
+/// Binding for C++ class [QStringListModel](https://doc.qt.io/qt-6/qstringlistmodel.html).
 class /+ Q_CORE_EXPORT +/ QStringListModel : QAbstractListModel
 {
     mixin(Q_OBJECT);
@@ -37,9 +37,7 @@ public:
 
     override QVariant data(ref const(QModelIndex) index, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) const;
     override bool setData(ref const(QModelIndex) index, ref const(QVariant) value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.EditRole);
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    bool clearItemData(const QModelIndex &index) override;
-#endif +/
+    override bool clearItemData(ref const(QModelIndex) index);
 
     override /+ Qt:: +/qt.core.namespace.ItemFlags flags(ref const(QModelIndex) index) const;
 

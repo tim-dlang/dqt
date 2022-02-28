@@ -22,14 +22,13 @@ import qt.core.typeinfo;
 import qt.core.variant;
 import qt.gui.color;
 import qt.gui.image;
-import qt.gui.matrix;
 import qt.gui.pixmap;
 import qt.gui.transform;
 import qt.helpers;
 
 
-/// Binding for C++ class [QBitmap](https://doc.qt.io/qt-5/qbitmap.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBitmap
+/// Binding for C++ class [QBitmap](https://doc.qt.io/qt-6/qbitmap.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBitmap
 {
     public QPixmap base0;
     alias base0 this;
@@ -44,27 +43,16 @@ public:
         return r;
     }
 
-    this(ref const(QPixmap) );
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use fromPixmap instead.") +/ /+ explicit +/this(ref const(QPixmap) );
+/+ #endif +/
     this(int w, int h);
     /+ explicit +/this(ref const(QSize) );
     /+ explicit +/this(ref const(QString) fileName, const(char)* format = null);
-    // ### Qt 6: don't inherit QPixmap
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    @disable this(this);
-    this(ref const(QBitmap) other)
-    {
-        this.base0 = QPixmap(other.base0);
-    }
-    // QBitmap(QBitmap &&other) : QPixmap(std::move(other)) {} // QPixmap doesn't, yet, have a move ctor
-    /+ref QBitmap operator =(ref const(QBitmap) other) { QPixmap.operator=(other); return this; }+/
-    /+ QBitmap &operator=(QBitmap &&other) noexcept { QPixmap::operator=(std::move(other)); return *this; } +/
-    extern(D) ~this()
-    {
-        // TODO
-    }
-/+ #endif +/
 
-    /+ref QBitmap operator =(ref const(QPixmap) );+/
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+/+ QT_DEPRECATED_VERSION_X_6_0("Use fromPixmap instead.") +/ ref QBitmap operator =(ref const(QPixmap) );+/
+/+ #endif +/
     /+ inline void swap(QBitmap &other) { QPixmap::swap(other); } +/ // prevent QBitmap<->QPixmap swaps
     /+auto opCast(T : QVariant)() const;+/
 
@@ -74,11 +62,8 @@ public:
     /+ static QBitmap fromImage(QImage &&image, Qt::ImageConversionFlags flags = Qt::AutoColor); +/
     static QBitmap fromData(ref const(QSize) size, const(uchar)* bits,
                                 QImage.Format monoFormat = QImage.Format.Format_MonoLSB);
+    static QBitmap fromPixmap(ref const(QPixmap) pixmap);
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use QBitmap::transformed(QTransform) instead") +/
-        QBitmap transformed(ref const(QMatrix) ) const;
-/+ #endif +/
     QBitmap transformed(ref const(QTransform) matrix) const;
 
     alias DataPtr = QExplicitlySharedDataPointer!(QPlatformPixmap);

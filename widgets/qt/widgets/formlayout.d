@@ -28,15 +28,19 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QFormLayoutPrivate;
 
-/// Binding for C++ class [QFormLayout](https://doc.qt.io/qt-5/qformlayout.html).
+/// Binding for C++ class [QFormLayout](https://doc.qt.io/qt-6/qformlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QFormLayout : QLayout
 {
     mixin(Q_OBJECT);
     /+ Q_DECLARE_PRIVATE(QFormLayout) +/
-    /+ Q_PROPERTY(FieldGrowthPolicy fieldGrowthPolicy READ fieldGrowthPolicy WRITE setFieldGrowthPolicy RESET resetFieldGrowthPolicy)
-    Q_PROPERTY(RowWrapPolicy rowWrapPolicy READ rowWrapPolicy WRITE setRowWrapPolicy RESET resetRowWrapPolicy)
-    Q_PROPERTY(Qt::Alignment labelAlignment READ labelAlignment WRITE setLabelAlignment RESET resetLabelAlignment)
-    Q_PROPERTY(Qt::Alignment formAlignment READ formAlignment WRITE setFormAlignment RESET resetFormAlignment)
+    /+ Q_PROPERTY(FieldGrowthPolicy fieldGrowthPolicy READ fieldGrowthPolicy WRITE setFieldGrowthPolicy
+               RESET resetFieldGrowthPolicy)
+    Q_PROPERTY(RowWrapPolicy rowWrapPolicy READ rowWrapPolicy WRITE setRowWrapPolicy
+               RESET resetRowWrapPolicy)
+    Q_PROPERTY(Qt::Alignment labelAlignment READ labelAlignment WRITE setLabelAlignment
+               RESET resetLabelAlignment)
+    Q_PROPERTY(Qt::Alignment formAlignment READ formAlignment WRITE setFormAlignment
+               RESET resetFormAlignment)
     Q_PROPERTY(int horizontalSpacing READ horizontalSpacing WRITE setHorizontalSpacing)
     Q_PROPERTY(int verticalSpacing READ verticalSpacing WRITE setVerticalSpacing) +/
 
@@ -84,8 +88,8 @@ public:
     final void setVerticalSpacing(int spacing);
     final int verticalSpacing() const;
 
-//    final int spacing() const;
-//    final void setSpacing(int);
+    override int spacing() const;
+    override void setSpacing(int);
 
     final void addRow(QWidget label, QWidget field);
     final void addRow(QWidget label, QLayout field);

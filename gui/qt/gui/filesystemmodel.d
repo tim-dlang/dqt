@@ -9,11 +9,12 @@
  * ensure the GNU Lesser General Public License version 3 requirements
  * will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
  */
-module qt.widgets.filesystemmodel;
+module qt.gui.filesystemmodel;
 extern(C++):
 
 import qt.config;
 import qt.core.abstractitemmodel;
+import qt.core.bytearray;
 import qt.core.coreevent;
 import qt.core.datetime;
 import qt.core.dir;
@@ -21,15 +22,16 @@ import qt.core.file;
 import qt.core.fileinfo;
 import qt.core.flags;
 import qt.core.global;
+import qt.core.hash;
 import qt.core.mimedata;
 import qt.core.namespace;
 import qt.core.object;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.core.variant;
+import qt.gui.abstractfileiconprovider;
 import qt.gui.icon;
 import qt.helpers;
-import qt.widgets.fileiconprovider;
 
 /+ QT_REQUIRE_CONFIG(filesystemmodel); +/
 
@@ -37,8 +39,8 @@ import qt.widgets.fileiconprovider;
 extern(C++, class) struct ExtendedInformation;
 extern(C++, class) struct QFileSystemModelPrivate;
 
-/// Binding for C++ class [QFileSystemModel](https://doc.qt.io/qt-5/qfilesystemmodel.html).
-class /+ Q_WIDGETS_EXPORT +/ QFileSystemModel : QAbstractItemModel
+/// Binding for C++ class [QFileSystemModel](https://doc.qt.io/qt-6/qfilesystemmodel.html).
+class /+ Q_GUI_EXPORT +/ QFileSystemModel : QAbstractItemModel
 {
     mixin(Q_OBJECT);
     /+ Q_PROPERTY(bool resolveSymlinks READ resolveSymlinks WRITE setResolveSymlinks)
@@ -52,12 +54,12 @@ class /+ Q_WIDGETS_EXPORT +/ QFileSystemModel : QAbstractItemModel
     @QSignal final void directoryLoaded(ref const(QString) path);
 
 public:
-/*    enum Roles {
-        FileIconRole = /+ Qt:: +/qt.core.namespace.ItemDataRole.DecorationRole,
+    enum Roles {
+        FileIconRole = uint(/+ Qt:: +/qt.core.namespace.ItemDataRole.DecorationRole),
         FilePathRole = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole + 1,
         FileNameRole = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole + 2,
         FilePermissions = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole + 3
-    }*/
+    }
 
     enum Option
     {
@@ -100,14 +102,15 @@ alias Options = QFlags!(Option);
                           int row, int column, ref const(QModelIndex) parent);
     }));
     override /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;
+    override QHash!(int, QByteArray) roleNames() const;
 
     // QFileSystemModel specific API
     final QModelIndex setRootPath(ref const(QString) path);
     final QString rootPath() const;
     final QDir rootDirectory() const;
 
-    final void setIconProvider(QFileIconProvider provider);
-    final QFileIconProvider iconProvider() const;
+    final void setIconProvider(QAbstractFileIconProvider provider);
+    final QAbstractFileIconProvider iconProvider() const;
 
     final void setFilter(QDir.Filters filters);
     final QDir.Filters filter() const;
@@ -139,8 +142,8 @@ alias Options = QFlags!(Option);
     final bool rmdir(ref const(QModelIndex) index);
     pragma(inline, true) final QString fileName(ref const(QModelIndex) aindex) const
     { return aindex.data(/+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole).toString(); }
-/+    pragma(inline, true) final QIcon fileIcon(ref const(QModelIndex) aindex) const
-    { return qvariant_cast!(QIcon)(aindex.data(/+ Qt:: +/qt.core.namespace.ItemDataRole.DecorationRole)); }+/
+    pragma(inline, true) final QIcon fileIcon(ref const(QModelIndex) aindex) const
+    { return qvariant_cast!(QIcon)(aindex.data(/+ Qt:: +/qt.core.namespace.ItemDataRole.DecorationRole)); }
     final QFile.Permissions permissions(ref const(QModelIndex) index) const;
     final QFileInfo fileInfo(ref const(QModelIndex) index) const;
     final bool remove(ref const(QModelIndex) index);
@@ -156,7 +159,9 @@ private:
 
     /+ Q_PRIVATE_SLOT(d_func(), void _q_directoryChanged(const QString &directory, const QStringList &list))
     Q_PRIVATE_SLOT(d_func(), void _q_performDelayedSort())
-    Q_PRIVATE_SLOT(d_func(), void _q_fileSystemChanged(const QString &path, const QVector<QPair<QString, QFileInfo> > &))
+    Q_PRIVATE_SLOT(d_func(),
+                   void _q_fileSystemChanged(const QString &path,
+                                             const QList<QPair<QString, QFileInfo>> &))
     Q_PRIVATE_SLOT(d_func(), void _q_resolvedName(const QString &fileName, const QString &resolvedName)) +/
 
     /+ friend class QFileDialogPrivate; +/
@@ -164,6 +169,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator |(QFileSystemModel.Options.enum_type f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/{return QFlags!(QFileSystemModel.Options.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator |(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator &(QFileSystemModel.Options.enum_type f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/{return QFlags!(QFileSystemModel.Options.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator &(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QFileSystemModel.Options.enum_type f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QFileSystemModel.Options.enum_type f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QFileSystemModel.Options.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QFileSystemModel.Options.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QFileSystemModel.Options.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QFileSystemModel::Options) +/

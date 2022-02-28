@@ -24,8 +24,8 @@ import qt.helpers;
 
 extern(C++, class) struct QDirPrivate;
 
-/// Binding for C++ class [QDir](https://doc.qt.io/qt-5/qdir.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDir
+/// Binding for C++ class [QDir](https://doc.qt.io/qt-6/qdir.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDir
 {
 public:
     enum Filter { Dirs        = 0x001,
@@ -78,30 +78,63 @@ alias SortFlags = QFlags!(SortFlag);
     this(ref const(QString) path/* = globalInitVar!QString*/);
     this(ref const(QString) path, ref const(QString) nameFilter,
              SortFlags sort = SortFlags(SortFlag.Name | SortFlag.IgnoreCase), Filters filter = Filter.AllEntries);
+/+ #ifdef Q_CLANG_QDOC
+    QDir(const std::filesystem::path &path);
+    QDir(const std::filesystem::path &path, const QString &nameFilter,
+         SortFlags sort = SortFlags(Name | IgnoreCase), Filters filter = AllEntries);
+#elif QT_CONFIG(cxx17_filesystem)
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    QDir(const T &path) : QDir(QtPrivate::fromFilesystemPath(path))
+    {
+    }
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    QDir(const T &path, const QString &nameFilter,
+         SortFlags sort = SortFlags(Name | IgnoreCase), Filters filter = AllEntries)
+         : QDir(QtPrivate::fromFilesystemPath(path), nameFilter, sort, filter)
+    {
+    }
+#endif +/ // QT_CONFIG(cxx17_filesystem)
     ~this();
 
     /+ref QDir operator =(ref const(QDir) );+/
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+/+ QT_DEPRECATED_X("Use QDir::setPath() instead") +/
-        ref QDir operator =(ref const(QString) path);+/
-/+ #endif +/
-    /+ QDir &operator=(QDir &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QDir) +/
 
     /+ void swap(QDir &other) noexcept
     { qSwap(d_ptr, other.d_ptr); } +/
 
     void setPath(ref const(QString) path);
+/+ #ifdef Q_CLANG_QDOC
+    void setPath(const std::filesystem::path &path);
+#elif QT_CONFIG(cxx17_filesystem)
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    void setPath(const T &path)
+    {
+        setPath(QtPrivate::fromFilesystemPath(path));
+    }
+#endif +/ // QT_CONFIG(cxx17_filesystem)
     QString path() const;
     QString absolutePath() const;
     QString canonicalPath() const;
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use QDir::addSearchPath() instead") +/
-        static void addResourceSearchPath(ref const(QString) path);
-/+ #endif +/
+/+ #if QT_CONFIG(cxx17_filesystem) || defined(Q_CLANG_QDOC)
+    std::filesystem::path filesystemPath() const
+    { return QtPrivate::toFilesystemPath(path()); }
+    std::filesystem::path filesystemAbsolutePath() const
+    { return QtPrivate::toFilesystemPath(absolutePath()); }
+    std::filesystem::path filesystemCanonicalPath() const
+    { return QtPrivate::toFilesystemPath(canonicalPath()); }
+#endif +/ // QT_CONFIG(cxx17_filesystem)
 
     static void setSearchPaths(ref const(QString) prefix, ref const(QStringList) searchPaths);
     static void addSearchPath(ref const(QString) prefix, ref const(QString) path);
+/+ #ifdef Q_CLANG_QDOC
+    static void addSearchPath(const QString &prefix, const std::filesystem::path &path);
+#elif QT_CONFIG(cxx17_filesystem)
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    static void addSearchPath(const QString &prefix, const T &path)
+    {
+        addSearchPath(prefix, QtPrivate::fromFilesystemPath(path));
+    }
+#endif +/ // QT_CONFIG(cxx17_filesystem)
     static QStringList searchPaths(ref const(QString) prefix);
 
     QString dirName() const;
@@ -134,9 +167,9 @@ alias SortFlags = QFlags!(SortFlag);
     QStringList entryList(ref const(QStringList) nameFilters, Filters filters = Filter.NoFilter,
                               SortFlags sort = SortFlag.NoSort) const;
 
-    QFileInfoList entryInfoList(Filters filters = Filter.NoFilter, SortFlags sort = SortFlag.NoSort) const;
+    /+QFileInfoList entryInfoList(Filters filters = Filter.NoFilter, SortFlags sort = SortFlag.NoSort) const;
     QFileInfoList entryInfoList(ref const(QStringList) nameFilters, Filters filters = Filter.NoFilter,
-                                    SortFlags sort = SortFlag.NoSort) const;
+                                    SortFlags sort = SortFlag.NoSort) const;+/
 
     bool mkdir(ref const(QString) dirName) const;
     bool rmdir(ref const(QString) dirName) const;
@@ -156,13 +189,13 @@ alias SortFlags = QFlags!(SortFlag);
     bool makeAbsolute();
 
     /+bool operator ==(ref const(QDir) dir) const;+/
-    /+pragma(inline, true) bool operator !=(ref const(QDir) dir) const {  return !operator==(dir); }+/
+    /+pragma(inline, true) bool operator !=(ref const(QDir) dir) const { return !operator==(dir); }+/
 
     bool remove(ref const(QString) fileName);
     bool rename(ref const(QString) oldName, ref const(QString) newName);
     bool exists(ref const(QString) name) const;
 
-    static QFileInfoList drives();
+    //static QFileInfoList drives();
 
     pragma(inline, true) static QChar listSeparator()/+ noexcept+/
     {
@@ -176,7 +209,17 @@ alias SortFlags = QFlags!(SortFlag);
         }
     }
 
-    static QChar separator(); // ### Qt6: Make it inline
+    static QChar separator()
+    {
+        static if((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+        {
+            return QChar(QLatin1Char('\\'));
+        }
+        else
+        {
+            return QChar(QLatin1Char('/'));
+        }
+    }
 
     static bool setCurrent(ref const(QString) path);
     pragma(inline, true) static QDir current() { auto tmp = currentPath(); return QDir(tmp); }
@@ -205,23 +248,43 @@ protected:
 private:
     /+ friend class QDirIterator; +/
     // Q_DECLARE_PRIVATE equivalent for shared data pointers
-    /+ QDirPrivate* d_func(); +/
-    /+ inline const QDirPrivate* d_func() const
-    {
-        return d_ptr.constData();
-    } +/
-
+    /+ QDirPrivate *d_func(); +/
+    /+ const QDirPrivate *d_func() const { return d_ptr.constData(); } +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator |(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/{return QFlags!(QDir.Filters.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator |(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator &(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/{return QFlags!(QDir.Filters.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator &(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QDir.Filters.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QDir.Filters.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDir.Filters.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QDir.Filters.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDir.Filters.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_SHARED(QDir)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::Filters) +/
 /+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator |(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)/+noexcept+/{return QFlags!(QDir.SortFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator |(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator &(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)/+noexcept+/{return QFlags!(QDir.SortFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator &(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QDir.SortFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QDir.SortFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDir.SortFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QDir.SortFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDir.SortFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::SortFlags)
 #ifndef QT_NO_DEBUG_STREAM
 class QDebug;

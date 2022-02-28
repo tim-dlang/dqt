@@ -25,7 +25,6 @@ import qt.core.size;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.core.variant;
-import qt.core.vector;
 import qt.gui.brush;
 import qt.gui.color;
 import qt.gui.event;
@@ -45,7 +44,7 @@ version(QT_NO_DATASTREAM){}else
 
 extern(C++, class) struct QTreeWidgetItemPrivate;
 
-/// Binding for C++ class [QTreeWidgetItem](https://doc.qt.io/qt-5/qtreewidgetitem.html).
+/// Binding for C++ class [QTreeWidgetItem](https://doc.qt.io/qt-6/qtreewidgetitem.html).
 class /+ Q_WIDGETS_EXPORT +/ QTreeWidgetItem
 {
 private:
@@ -110,14 +109,11 @@ public:
     pragma(inline, true) final void setStatusTip(int column, ref const(QString) astatusTip)
     { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole, astatusTip); }
 
-/+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
-    {
-        pragma(inline, true) final QString toolTip(int column) const
-            { return data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole).toString(); }
-        pragma(inline, true) final void setToolTip(int column, ref const(QString) atoolTip)
-        { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole, atoolTip); }
-    }
+/+ #if QT_CONFIG(tooltip) +/
+    pragma(inline, true) final QString toolTip(int column) const
+        { return data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole).toString(); }
+    pragma(inline, true) final void setToolTip(int column, ref const(QString) atoolTip)
+    { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole, atoolTip); }
 /+ #endif
 
 #if QT_CONFIG(whatsthis) +/
@@ -137,30 +133,12 @@ public:
     pragma(inline, true) final void setTextAlignment(int column, int alignment)
         { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole, alignment); }
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::background() instead") +/
-        pragma(inline, true) final QColor backgroundColor(int column) const
-        { return qvariant_cast!(QColor)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setBackground() instead") +/
-        pragma(inline, true) final void setBackgroundColor(int column, ref const(QColor) color)
-        { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, color); }
-/+ #endif +/
-
     pragma(inline, true) final QBrush background(int column) const
         { return qvariant_cast!(QBrush)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
     pragma(inline, true) final void setBackground(int column, ref const(QBrush) brush)
         { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, brush.style() != /+ Qt:: +/qt.core.namespace.BrushStyle.NoBrush ? QVariant.fromValue(brush) : QVariant()); }
     pragma(inline, true) final void setBackground(int column, const(QColor) color)
         { setBackground(column, QBrush(color)); }
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::foreground() instead") +/
-        pragma(inline, true) final QColor textColor(int column) const
-        { return qvariant_cast!(QColor)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole)); }
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setForeground() instead") +/
-        pragma(inline, true) final void setTextColor(int column, ref const(QColor) color)
-        { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole, color); }
-/+ #endif +/
 
     pragma(inline, true) final QBrush foreground(int column) const
         { return qvariant_cast!(QBrush)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole)); }
@@ -205,10 +183,10 @@ public:
         executePendingSort();
         return cast(QTreeWidgetItem)children.at(index);
     }
-    pragma(inline, true) final int childCount() const { return children.count(); }
-    pragma(inline, true) final int columnCount() const { return values.count(); }
+    pragma(inline, true) final int childCount() const { return cast(int)children.count(); }
+    pragma(inline, true) final int columnCount() const { return cast(int)values.count(); }
     pragma(inline, true) final int indexOfChild(QTreeWidgetItem achild) const
-    { executePendingSort(); return children.indexOf(achild); }
+    { executePendingSort(); return cast(int)children.indexOf(achild); }
 
     final void addChild(QTreeWidgetItem child);
     final void insertChild(int index, QTreeWidgetItem child);
@@ -235,7 +213,7 @@ private:
 
     int rtti;
     // One item has a vector of column entries. Each column has a vector of (role, value) pairs.
-     QVector!( QVector!(QWidgetItemData)) values;
+    QList!(QList!(QWidgetItemData)) values;
     QTreeWidget view;
     QTreeWidgetItemPrivate* d;
     QTreeWidgetItem par;
@@ -247,7 +225,7 @@ private:
 /+ #if QT_CONFIG(statustip)
 #endif
 
-#ifndef QT_NO_TOOLTIP
+#if QT_CONFIG(tooltip)
 #endif
 
 #if QT_CONFIG(whatsthis)
@@ -260,7 +238,7 @@ Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &in, QTreeWidgetItem &item)
 
 extern(C++, class) struct QTreeWidgetPrivate;
 
-/// Binding for C++ class [QTreeWidget](https://doc.qt.io/qt-5/qtreewidget.html).
+/// Binding for C++ class [QTreeWidget](https://doc.qt.io/qt-6/qtreewidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QTreeWidget : QTreeView
 {
     mixin(Q_OBJECT);
@@ -320,48 +298,9 @@ public:
     pragma(inline, true) final void removeItemWidget(QTreeWidgetItem item, int column)
     { setItemWidget(item, column, null); }
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::isSelected() instead") +/
-        final bool isItemSelected(const(QTreeWidgetItem) item) const;
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setSelected() instead") +/
-        final void setItemSelected(const(QTreeWidgetItem) item, bool select);
-    }));
-/+ #endif +/
     final QList!(QTreeWidgetItem) selectedItems() const;
     final QList!(QTreeWidgetItem) findItems(ref const(QString) text, /+ Qt:: +/qt.core.namespace.MatchFlags flags,
                                           int column = 0) const;
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::isHidden() instead") +/
-        final bool isItemHidden(const(QTreeWidgetItem) item) const;
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setHidden() instead") +/
-        final void setItemHidden(const(QTreeWidgetItem) item, bool hide);
-    }));
-
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::isExpanded() instead") +/
-        final bool isItemExpanded(const(QTreeWidgetItem) item) const;
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setExpanded() instead") +/
-        final void setItemExpanded(const(QTreeWidgetItem) item, bool expand);
-    }));
-
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::isFirstColumnSpanned() instead") +/
-        final bool isFirstItemColumnSpanned(const(QTreeWidgetItem) item) const;
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::setFirstColumnSpanned() instead") +/
-        final void setFirstItemColumnSpanned(const(QTreeWidgetItem) item, bool span);
-    }));
-/+ #endif +/
 
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QTreeWidgetItem itemAbove(const(QTreeWidgetItem) item) const;
@@ -369,6 +308,11 @@ public:
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QTreeWidgetItem itemBelow(const(QTreeWidgetItem) item) const;
     }));
+
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    final QModelIndex indexFromItem(const(QTreeWidgetItem) item, int column = 0) const;
+    }));
+    final QTreeWidgetItem itemFromIndex(ref const(QModelIndex) index) const;
 
     override void setSelectionModel(QItemSelectionModel selectionModel);
 
@@ -391,7 +335,6 @@ public /+ Q_SLOTS +/:
     @QSignal final void itemDoubleClicked(QTreeWidgetItem item, int column);
     @QSignal final void itemActivated(QTreeWidgetItem item, int column);
     @QSignal final void itemEntered(QTreeWidgetItem item, int column);
-    // ### Qt 6: add changed roles
     @QSignal final void itemChanged(QTreeWidgetItem item, int column);
     @QSignal final void itemExpanded(QTreeWidgetItem item);
     @QSignal final void itemCollapsed(QTreeWidgetItem item);
@@ -401,35 +344,13 @@ public /+ Q_SLOTS +/:
 protected:
     override bool event(QEvent e);
     /+ virtual +/ QStringList mimeTypes() const;
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-    virtual QMimeData *mimeData(const QList<QTreeWidgetItem *> &items) const;
-#else +/
-    /+ virtual +/ QMimeData mimeData(const(QList!(QTreeWidgetItem)) items) const;
-/+ #endif +/
+    /+ virtual +/ QMimeData mimeData(ref const(QList!(QTreeWidgetItem)) items) const;
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ bool dropMimeData(QTreeWidgetItem parent, int index,
                                   const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action);
     }));
     /+ virtual +/ /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;
 
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-public:
-#else +/
-protected:
-/+ #endif +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QList!(QTreeWidgetItem) items(const(QMimeData) data) const;
-    }));
-
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QModelIndex indexFromItem(const(QTreeWidgetItem) item, int column = 0) const;
-    }));
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    final QModelIndex indexFromItem(QTreeWidgetItem item, int column = 0) const; // ### Qt 6: remove
-/+ #endif +/
-    final QTreeWidgetItem itemFromIndex(ref const(QModelIndex) index) const;
-
-protected:
 /+ #if QT_CONFIG(draganddrop) +/
     override void dropEvent(QDropEvent event);
 /+ #endif +/

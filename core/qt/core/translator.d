@@ -32,7 +32,7 @@ version(QT_NO_TRANSLATION){}else
 
 extern(C++, class) struct QTranslatorPrivate;
 
-/// Binding for C++ class [QTranslator](https://doc.qt.io/qt-5/qtranslator.html).
+/// Binding for C++ class [QTranslator](https://doc.qt.io/qt-6/qtranslator.html).
 class /+ Q_CORE_EXPORT +/ QTranslator : QObject
 {
     mixin(Q_OBJECT);
@@ -48,16 +48,17 @@ public:
     final QString language() const;
     final QString filePath() const;
 
-    final bool load(ref const(QString)  filename,
-                  ref const(QString)  directory = globalInitVar!QString,
-                  ref const(QString)  search_delimiters = globalInitVar!QString,
-                  ref const(QString)  suffix = globalInitVar!QString);
-    final bool load(ref const(QLocale)  locale,
-                  ref const(QString)  filename,
-                  ref const(QString)  prefix = globalInitVar!QString,
-                  ref const(QString)  directory = globalInitVar!QString,
-                  ref const(QString)  suffix = globalInitVar!QString);
-    final bool load(const(uchar)* data, int len, ref const(QString) directory = globalInitVar!QString);
+    /+ [[nodiscard]] +/ final bool load(ref const(QString)  filename,
+                                ref const(QString)  directory = globalInitVar!QString,
+                                ref const(QString)  search_delimiters = globalInitVar!QString,
+                                ref const(QString)  suffix = globalInitVar!QString);
+    /+ [[nodiscard]] +/ final bool load(ref const(QLocale)  locale,
+                                ref const(QString)  filename,
+                                ref const(QString)  prefix = globalInitVar!QString,
+                                ref const(QString)  directory = globalInitVar!QString,
+                                ref const(QString)  suffix = globalInitVar!QString);
+    /+ [[nodiscard]] +/ final bool load(const(uchar)* data, int len,
+                                ref const(QString) directory = globalInitVar!QString);
 
 private:
     /+ Q_DISABLE_COPY(QTranslator) +/

@@ -24,7 +24,6 @@ import qt.core.string;
 import qt.core.stringlist;
 import qt.core.typeinfo;
 import qt.core.variant;
-import qt.core.vector;
 import qt.gui.brush;
 import qt.gui.color;
 import qt.gui.font;
@@ -33,7 +32,6 @@ import qt.gui.textoption;
 import qt.helpers;
 
 
-extern(C++, class) struct QTextFormatCollection;
 extern(C++, class) struct QTextFormatPrivate;
 
 /+ #ifndef QT_NO_DATASTREAM
@@ -45,8 +43,8 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextLength &);
 #endif +/
 
-/// Binding for C++ class [QTextLength](https://doc.qt.io/qt-5/qtextlength.html).
-extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLength
+/// Binding for C++ class [QTextLength](https://doc.qt.io/qt-6/qtextlength.html).
+@Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextLength
 {
 public:
     enum Type { VariableLength = 0, FixedLength, PercentageLength }
@@ -92,7 +90,7 @@ private:
     /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &); +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QTextLength, QT_VERSION >= QT_VERSION_CHECK(6,0,0) ? Q_PRIMITIVE_TYPE : Q_RELOCATABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QTextLength, Q_PRIMITIVE_TYPE);
 
 #ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextFormat &);
@@ -103,8 +101,8 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &);
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextFormat &);
 #endif +/
 
-/// Binding for C++ class [QTextFormat](https://doc.qt.io/qt-5/qtextformat.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFormat
+/// Binding for C++ class [QTextFormat](https://doc.qt.io/qt-6/qtextformat.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFormat
 {
     mixin(Q_GADGET);
 public:
@@ -113,9 +111,6 @@ public:
         BlockFormat = 1,
         CharFormat = 2,
         ListFormat = 3,
-/+ #if QT_DEPRECATED_SINCE(5, 3) +/
-        TableFormat = 4,
-/+ #endif +/
         FrameFormat = 5,
 
         UserFormat = 100
@@ -157,17 +152,19 @@ public:
         // character properties
         FirstFontProperty = 0x1FE0,
         FontCapitalization = Property.FirstFontProperty,
-        FontLetterSpacingType = 0x2033,
         FontLetterSpacing = 0x1FE1,
         FontWordSpacing = 0x1FE2,
-        FontStretch = 0x2034,
         FontStyleHint = 0x1FE3,
         FontStyleStrategy = 0x1FE4,
         FontKerning = 0x1FE5,
         FontHintingPreference = 0x1FE6,
         FontFamilies = 0x1FE7,
         FontStyleName = 0x1FE8,
+        FontLetterSpacingType = 0x1FE9,
+        FontStretch = 0x1FEA,
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
         FontFamily = 0x2000,
+/+ #endif +/
         FontPointSize = 0x2001,
         FontSizeAdjustment = 0x2002,
         FontSizeIncrement = Property.FontSizeAdjustment, // old name, compat
@@ -180,15 +177,25 @@ public:
         FontPixelSize = 0x2009,
         LastFontProperty = Property.FontPixelSize,
 
-        TextUnderlineColor = 0x2010,
+        TextUnderlineColor = 0x2020,
         TextVerticalAlignment = 0x2021,
         TextOutline = 0x2022,
         TextUnderlineStyle = 0x2023,
         TextToolTip = 0x2024,
+        TextSuperScriptBaseline = 0x2025,
+        TextSubScriptBaseline = 0x2026,
+        TextBaselineOffset = 0x2027,
 
         IsAnchor = 0x2030,
         AnchorHref = 0x2031,
         AnchorName = 0x2032,
+
+        // Included for backwards compatibility with old QDataStreams.
+        // Should not be referenced in user code.
+        OldFontLetterSpacingType = 0x2033,
+        OldFontStretch = 0x2034,
+        OldTextUnderlineColor = 0x2010,
+
         ObjectType = 0x2f00,
 
         // list properties
@@ -330,9 +337,9 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
     QPen penProperty(int propertyId) const;
     QBrush brushProperty(int propertyId) const;
     QTextLength lengthProperty(int propertyId) const;
-    QVector!(QTextLength) lengthVectorProperty(int propertyId) const;
+    QList!(QTextLength) lengthVectorProperty(int propertyId) const;
 
-    void setProperty(int propertyId, ref const(QVector!(QTextLength)) lengths);
+    void setProperty(int propertyId, ref const(QList!(QTextLength)) lengths);
 
 //    QMap!(int, QVariant) properties() const;
     int propertyCount() const;
@@ -395,11 +402,23 @@ private:
 /+ Q_DECLARE_SHARED(QTextFormat) +/
 /+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator |(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator |(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator &(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator &(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextFormat::PageBreakFlags) +/
-/// Binding for C++ class [QTextCharFormat](https://doc.qt.io/qt-5/qtextcharformat.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextCharFormat
+/// Binding for C++ class [QTextCharFormat](https://doc.qt.io/qt-6/qtextcharformat.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextCharFormat
 {
     public QTextFormat base0 = QTextFormat(QTextFormat.FormatType.CharFormat);
     alias base0 this;
@@ -432,14 +451,15 @@ public:
         FontPropertiesSpecifiedOnly,
         FontPropertiesAll
     }
-    void setFont(ref const(QFont) font, FontPropertiesInheritanceBehavior behavior);
-    void setFont(ref const(QFont) font); // ### Qt6: Merge with above
+    void setFont(ref const(QFont) font, FontPropertiesInheritanceBehavior behavior = FontPropertiesInheritanceBehavior.FontPropertiesAll);
     QFont font() const;
 
-    pragma(inline, true) void setFontFamily(ref const(QString) family)
-    { setProperty(Property.FontFamily, family); }
-    pragma(inline, true) QString fontFamily() const
-    { return stringProperty(Property.FontFamily); }
+/+ #if QT_DEPRECATED_SINCE(6, 1) +/
+    /+ /+ QT_DEPRECATED_VERSION_X_6_1("Use setFontFamilies instead") +/ pragma(inline, true) void setFontFamily(ref const(QString) family)
+    { auto tmp = QVariant(QStringList(family)); setProperty(Property.FontFamilies, tmp); }
+    /+ QT_DEPRECATED_VERSION_X_6_1("Use fontFamilies instead") +/ pragma(inline, true) QString fontFamily() const
+    { return property(Property.FontFamilies).toStringList().first(); } +/
+/+ #endif +/
 
     pragma(inline, true) void setFontFamilies(ref const(QStringList) families)
     { auto tmp = QVariant(families); setProperty(Property.FontFamilies, tmp); }
@@ -543,15 +563,30 @@ public:
     pragma(inline, true) VerticalAlignment verticalAlignment() const
     { return static_cast!(VerticalAlignment)(intProperty(Property.TextVerticalAlignment)); }
 
-    pragma(inline, true) void setTextOutline(ref const(QPen) pen)
+/*    pragma(inline, true) void setTextOutline(ref const(QPen) pen)
     { setProperty(Property.TextOutline, pen); }
     pragma(inline, true) QPen textOutline() const
-    { return penProperty(Property.TextOutline); }
+    { return penProperty(Property.TextOutline); }*/
 
     pragma(inline, true) void setToolTip(ref const(QString) tip)
     { setProperty(Property.TextToolTip, tip); }
     pragma(inline, true) QString toolTip() const
     { return stringProperty(Property.TextToolTip); }
+
+    pragma(inline, true) void setSuperScriptBaseline(qreal baseline)
+    { setProperty(Property.TextSuperScriptBaseline, baseline); }
+    pragma(inline, true) qreal superScriptBaseline() const
+    { return hasProperty(Property.TextSuperScriptBaseline) ? doubleProperty(Property.TextSuperScriptBaseline) : 50.0; }
+
+    pragma(inline, true) void setSubScriptBaseline(qreal baseline)
+    { setProperty(Property.TextSubScriptBaseline, baseline); }
+    pragma(inline, true) qreal subScriptBaseline() const
+    { return hasProperty(Property.TextSubScriptBaseline) ? doubleProperty(Property.TextSubScriptBaseline) : 100.0 / 6.0; }
+
+    pragma(inline, true) void setBaselineOffset(qreal baseline)
+    { setProperty(Property.TextBaselineOffset, baseline); }
+    pragma(inline, true) qreal baselineOffset() const
+    { return hasProperty(Property.TextBaselineOffset) ? doubleProperty(Property.TextBaselineOffset) : 0.0; }
 
     pragma(inline, true) void setAnchor(bool anchor)
     { setProperty(Property.IsAnchor, anchor); }
@@ -563,17 +598,9 @@ public:
     pragma(inline, true) QString anchorHref() const
     { return stringProperty(Property.AnchorHref); }
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use setAnchorNames() instead") +/
-        pragma(inline, true) void setAnchorName(ref const(QString) name)
-    { QStringList tmp = QStringList.create(); tmp ~= name; setAnchorNames(tmp); }
-    /+ QT_DEPRECATED_X("Use anchorNames() instead") +/
-        QString anchorName() const;
-/+ #endif +/
-
-    pragma(inline, true) void setAnchorNames(ref const(QStringList) names)
+/+    pragma(inline, true) void setAnchorNames(ref const(QStringList) names)
     { base0.setProperty!(const(QStringList))(Property.AnchorName, names); }
-    QStringList anchorNames() const;
+    QStringList anchorNames() const;+/
 
     pragma(inline, true) void setTableCellRowSpan(int _tableCellRowSpan)
     {
@@ -602,8 +629,8 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextCharFormat) +/
 
-/// Binding for C++ class [QTextBlockFormat](https://doc.qt.io/qt-5/qtextblockformat.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextBlockFormat
+/// Binding for C++ class [QTextBlockFormat](https://doc.qt.io/qt-6/qtextblockformat.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextBlockFormat
 {
     public QTextFormat base0 = QTextFormat(QTextFormat.FormatType.BlockFormat);
     alias base0 this;
@@ -720,8 +747,8 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextBlockFormat) +/
 
-/// Binding for C++ class [QTextListFormat](https://doc.qt.io/qt-5/qtextlistformat.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextListFormat
+/// Binding for C++ class [QTextListFormat](https://doc.qt.io/qt-6/qtextlistformat.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextListFormat
 {
     public QTextFormat base0 = QTextFormat(QTextFormat.FormatType.ListFormat);
     alias base0 this;
@@ -770,8 +797,8 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextListFormat) +/
 
-/// Binding for C++ class [QTextImageFormat](https://doc.qt.io/qt-5/qtextimageformat.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextImageFormat
+/// Binding for C++ class [QTextImageFormat](https://doc.qt.io/qt-6/qtextimageformat.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextImageFormat
 {
     public QTextCharFormat base0;
     alias base0 this;
@@ -817,8 +844,8 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextImageFormat) +/
 
-/// Binding for C++ class [QTextFrameFormat](https://doc.qt.io/qt-5/qtextframeformat.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFrameFormat
+/// Binding for C++ class [QTextFrameFormat](https://doc.qt.io/qt-6/qtextframeformat.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextFrameFormat
 {
     public QTextFormat base0 = QTextFormat(QTextFormat.FormatType.FrameFormat);
     alias base0 this;
@@ -923,8 +950,8 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextFrameFormat) +/
 
-/// Binding for C++ class [QTextTableFormat](https://doc.qt.io/qt-5/qtexttableformat.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextTableFormat
+/// Binding for C++ class [QTextTableFormat](https://doc.qt.io/qt-6/qtexttableformat.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextTableFormat
 {
     public QTextFrameFormat base0;
     alias base0 this;
@@ -951,10 +978,10 @@ public:
         setProperty(Property.TableColumns, acolumns);
     }
 
-    pragma(inline, true) void setColumnWidthConstraints(ref const(QVector!(QTextLength)) constraints)
+    pragma(inline, true) void setColumnWidthConstraints(ref const(QList!(QTextLength)) constraints)
     { setProperty(Property.TableColumnWidthConstraints, constraints); }
 
-    pragma(inline, true) QVector!(QTextLength) columnWidthConstraints() const
+    pragma(inline, true) QList!(QTextLength) columnWidthConstraints() const
     { return lengthVectorProperty(Property.TableColumnWidthConstraints); }
 
     pragma(inline, true) void clearColumnWidthConstraints()
@@ -993,8 +1020,8 @@ protected:
 
 /+ Q_DECLARE_SHARED(QTextTableFormat) +/
 
-/// Binding for C++ class [QTextTableCellFormat](https://doc.qt.io/qt-5/qtexttablecellformat.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextTableCellFormat
+/// Binding for C++ class [QTextTableCellFormat](https://doc.qt.io/qt-6/qtexttablecellformat.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextTableCellFormat
 {
     public QTextCharFormat base0;
     alias base0 this;

@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.bytearray;
 import qt.core.list;
+import qt.core.metatype;
 import qt.core.object;
 import qt.core.string;
 import qt.core.stringlist;
@@ -24,7 +25,7 @@ import qt.helpers;
 
 extern(C++, class) struct QMimeDataPrivate;
 
-/// Binding for C++ class [QMimeData](https://doc.qt.io/qt-5/qmimedata.html).
+/// Binding for C++ class [QMimeData](https://doc.qt.io/qt-6/qmimedata.html).
 class /+ Q_CORE_EXPORT +/ QMimeData : QObject
 {
     mixin(Q_OBJECT);
@@ -60,9 +61,10 @@ public:
     /+ virtual +/ QStringList formats() const;
 
     final void clear();
+
 protected:
-    /+ virtual +/ QVariant retrieveData(ref const(QString) mimetype,
-                                          QVariant.Type preferredType) const;
+    /+ virtual +/ QVariant retrieveData(ref const(QString) mimetype, QMetaType preferredType) const;
+
 private:
     /+ Q_DISABLE_COPY(QMimeData) +/
     /+ Q_DECLARE_PRIVATE(QMimeData) +/

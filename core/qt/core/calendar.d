@@ -57,7 +57,7 @@ import qt.helpers;
 
 extern(C++, class) struct QCalendarBackend;
 
-/// Binding for C++ class [QCalendar](https://doc.qt.io/qt-5/qcalendar.html).
+/// Binding for C++ class [QCalendar](https://doc.qt.io/qt-6/qcalendar.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QCalendar
 {
     mixin(Q_GADGET);
@@ -109,6 +109,30 @@ public:
     // New entries must be added to the \enum doc in qcalendar.cpp and
     // handled in QCalendarBackend::fromEnum()
     /+ Q_ENUM(System) +/
+    extern(C++, class) struct SystemId
+    {
+    private:
+        size_t id = ~size_t(0);
+        /+ friend class QCalendarBackend; +/
+        bool isInEnum() const { return id <= size_t(QCalendar.System.Last); }
+        /+ explicit +/this(QCalendar.System e)
+        {
+            this.id = size_t(e);
+        }
+        /+ explicit +/this(size_t i)
+        {
+            this.id = i;
+        }
+
+    public:
+        @disable this();
+        /+this()
+        {
+            this.id = UnresolvedMergeConflict!(q{~size_t(0)},q{~size_t(0)});
+        }+/
+        size_t index() const/+ noexcept+/ { return id; }
+        bool isValid() const/+ noexcept+/ { return (~id) != 0; }
+    }
 
     @disable this();
     /+ explicit +/pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
@@ -121,11 +145,14 @@ public:
     }
  // Gregorian, optimised
     /+ explicit +/this(System system);
+    // ### Qt 7: remove
     /+ explicit +/this(QLatin1String name);
+    // ### Qt 7: use QAnyStringView
     /+ explicit +/this(QStringView name);
+    /+ explicit +/this(SystemId id);
 
     // QCalendar is a trivially copyable value type.
-    bool isValid() const { return d !is null; }
+    bool isValid() const { return d_ptr !is null; }
 
     // Date queries:
     int daysInMonth(int month, int year = Unspecified) const;
@@ -166,14 +193,17 @@ public:
 
     // Formatting of date-times:
     QString dateTimeToString(QStringView format, ref const(QDateTime) datetime,
-                                 ref const(QDate) dateOnly, ref const(QTime) timeOnly,
+                                 QDate dateOnly, QTime timeOnly,
                                  ref const(QLocale) locale) const;
 
     // What's available ?
     static QStringList availableCalendars();
 private:
     // Always supplied by QCalendarBackend and expected to be a singleton
-    const(QCalendarBackend)* d;
+    // Note that the calendar registry destroys all backends when it is itself
+    // destroyed. The code should check if the registry is destroyed before
+    // dereferencing this pointer.
+    const(QCalendarBackend)* d_ptr;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

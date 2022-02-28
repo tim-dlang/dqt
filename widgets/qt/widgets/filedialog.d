@@ -24,10 +24,10 @@ import qt.core.object;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.core.url;
+import qt.gui.abstractfileiconprovider;
 import qt.helpers;
 import qt.widgets.abstractitemdelegate;
 import qt.widgets.dialog;
-import qt.widgets.fileiconprovider;
 import qt.widgets.widget;
 
 /+ QT_REQUIRE_CONFIG(filedialog); +/
@@ -36,7 +36,7 @@ import qt.widgets.widget;
 struct QFileDialogArgs;
 extern(C++, class) struct QFileDialogPrivate;
 
-/// Binding for C++ class [QFileDialog](https://doc.qt.io/qt-5/qfiledialog.html).
+/// Binding for C++ class [QFileDialog](https://doc.qt.io/qt-6/qfiledialog.html).
 class /+ Q_WIDGETS_EXPORT +/ QFileDialog : QDialog
 {
     mixin(Q_OBJECT);
@@ -44,38 +44,28 @@ class /+ Q_WIDGETS_EXPORT +/ QFileDialog : QDialog
     Q_PROPERTY(FileMode fileMode READ fileMode WRITE setFileMode)
     Q_PROPERTY(AcceptMode acceptMode READ acceptMode WRITE setAcceptMode)
     Q_PROPERTY(QString defaultSuffix READ defaultSuffix WRITE setDefaultSuffix)
-#if QT_DEPRECATED_SINCE(5, 13)
-    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE false)
-    Q_PROPERTY(bool confirmOverwrite READ confirmOverwrite WRITE setConfirmOverwrite DESIGNABLE false)
-    Q_PROPERTY(bool resolveSymlinks READ resolveSymlinks WRITE setResolveSymlinks DESIGNABLE false)
-    Q_PROPERTY(bool nameFilterDetailsVisible READ isNameFilterDetailsVisible
-               WRITE setNameFilterDetailsVisible DESIGNABLE false)
-#endif
     Q_PROPERTY(Options options READ options WRITE setOptions)
     Q_PROPERTY(QStringList supportedSchemes READ supportedSchemes WRITE setSupportedSchemes) +/
 
 public:
     enum ViewMode { Detail, List }
     /+ Q_ENUM(ViewMode) +/
-    enum FileMode { AnyFile, ExistingFile, Directory, ExistingFiles,
-                    DirectoryOnly /+ Q_DECL_ENUMERATOR_DEPRECATED_X("Use setOption(ShowDirsOnly, true) instead") +/}
+    enum FileMode { AnyFile, ExistingFile, Directory, ExistingFiles }
     /+ Q_ENUM(FileMode) +/
     enum AcceptMode { AcceptOpen, AcceptSave }
     /+ Q_ENUM(AcceptMode) +/
     enum DialogLabel { LookIn, FileName, FileType, Accept, Reject }
 
+    // keep this in sync with QFileDialogOption::FileDialogOptions
     enum Option
     {
         ShowDirsOnly                = 0x00000001,
         DontResolveSymlinks         = 0x00000002,
         DontConfirmOverwrite        = 0x00000004,
-/+ #if QT_DEPRECATED_SINCE(5, 14) +/
-        DontUseSheet /+ Q_DECL_ENUMERATOR_DEPRECATED +/ = 0x00000008,
-/+ #endif +/
-        DontUseNativeDialog         = 0x00000010,
-        ReadOnly                    = 0x00000020,
-        HideNameFilterDetails       = 0x00000040,
-        DontUseCustomDirectoryIcons = 0x00000080
+        DontUseNativeDialog         = 0x00000008,
+        ReadOnly                    = 0x00000010,
+        HideNameFilterDetails       = 0x00000020,
+        DontUseCustomDirectoryIcons = 0x00000040
     }
     /+ Q_ENUM(Option) +/
     /+ Q_DECLARE_FLAGS(Options, Option) +/
@@ -102,13 +92,6 @@ alias Options = QFlags!(Option);    /+ Q_FLAG(Options) +/
     final void selectUrl(ref const(QUrl) url);
     final QList!(QUrl) selectedUrls() const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use setOption(HideNameFilterDetails, !enabled) instead") +/
-        final void setNameFilterDetailsVisible(bool enabled);
-    /+ QT_DEPRECATED_X("Use !testOption(HideNameFilterDetails) instead") +/
-        final bool isNameFilterDetailsVisible() const;
-/+ #endif +/
-
     final void setNameFilter(ref const(QString) filter);
     final void setNameFilters(ref const(QStringList) filters);
     final QStringList nameFilters() const;
@@ -134,28 +117,11 @@ alias Options = QFlags!(Option);    /+ Q_FLAG(Options) +/
     final void setAcceptMode(AcceptMode mode);
     final AcceptMode acceptMode() const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    final void setReadOnly(bool enabled);
-    final bool isReadOnly() const;
-
-    /+ QT_DEPRECATED_X("Use setOption(DontResolveSymlinks, !enabled) instead") +/
-        final void setResolveSymlinks(bool enabled);
-    /+ QT_DEPRECATED_X("Use !testOption(DontResolveSymlinks) instead") +/
-        final bool resolveSymlinks() const;
-/+ #endif +/
-
     final void setSidebarUrls(ref const(QList!(QUrl)) urls);
     final QList!(QUrl) sidebarUrls() const;
 
     final QByteArray saveState() const;
     final bool restoreState(ref const(QByteArray) state);
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use setOption(DontConfirmOverwrite, !enabled) instead") +/
-        final void setConfirmOverwrite(bool enabled);
-    /+ QT_DEPRECATED_X("Use !testOption(DontConfirmOverwrite) instead") +/
-        final bool confirmOverwrite() const;
-/+ #endif +/
 
     final void setDefaultSuffix(ref const(QString) suffix);
     final QString defaultSuffix() const;
@@ -166,8 +132,8 @@ alias Options = QFlags!(Option);    /+ Q_FLAG(Options) +/
     final void setItemDelegate(QAbstractItemDelegate delegate_);
     final QAbstractItemDelegate itemDelegate() const;
 
-    final void setIconProvider(QFileIconProvider provider);
-    final QFileIconProvider iconProvider() const;
+    final void setIconProvider(QAbstractFileIconProvider provider);
+    final QAbstractFileIconProvider iconProvider() const;
 
     final void setLabelText(DialogLabel label, ref const(QString) text);
     final QString labelText(DialogLabel label) const;
@@ -309,6 +275,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QFileDialog.Options.enum_type) operator |(QFileDialog.Options.enum_type f1, QFileDialog.Options.enum_type f2)/+noexcept+/{return QFlags!(QFileDialog.Options.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QFileDialog.Options.enum_type) operator |(QFileDialog.Options.enum_type f1, QFlags!(QFileDialog.Options.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QFileDialog.Options.enum_type) operator &(QFileDialog.Options.enum_type f1, QFileDialog.Options.enum_type f2)/+noexcept+/{return QFlags!(QFileDialog.Options.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QFileDialog.Options.enum_type) operator &(QFileDialog.Options.enum_type f1, QFlags!(QFileDialog.Options.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QFileDialog.Options.enum_type f1, QFileDialog.Options.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QFileDialog.Options.enum_type f1, QFlags!(QFileDialog.Options.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QFileDialog.Options.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QFileDialog.Options.enum_type f1, QFileDialog.Options.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QFileDialog.Options.enum_type f1, QFlags!(QFileDialog.Options.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QFileDialog.Options.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QFileDialog.Options.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QFileDialog.Options.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QFileDialog.Options.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFileDialog.Options.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QFileDialog.Options.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QFileDialog::Options) +/

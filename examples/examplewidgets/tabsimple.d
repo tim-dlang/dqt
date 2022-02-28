@@ -1,7 +1,6 @@
 module examplewidgets.tabsimple;
 
 import qt.config;
-import qt.core.string;
 import qt.helpers;
 import qt.widgets.ui;
 import qt.widgets.widget;

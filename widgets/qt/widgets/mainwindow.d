@@ -40,7 +40,7 @@ QT_REQUIRE_CONFIG(mainwindow); +/
 
 extern(C++, class) struct QMainWindowPrivate;
 
-/// Binding for C++ class [QMainWindow](https://doc.qt.io/qt-5/qmainwindow.html).
+/// Binding for C++ class [QMainWindow](https://doc.qt.io/qt-6/qmainwindow.html).
 class /+ Q_WIDGETS_EXPORT +/ QMainWindow : QWidget
 {
     mixin(Q_OBJECT);
@@ -59,7 +59,8 @@ class /+ Q_WIDGETS_EXPORT +/ QMainWindow : QWidget
 #endif // QT_CONFIG(dockwidget)
     Q_PROPERTY(DockOptions dockOptions READ dockOptions WRITE setDockOptions)
 #if QT_CONFIG(toolbar)
-    Q_PROPERTY(bool unifiedTitleAndToolBarOnMac READ unifiedTitleAndToolBarOnMac WRITE setUnifiedTitleAndToolBarOnMac)
+    Q_PROPERTY(bool unifiedTitleAndToolBarOnMac READ unifiedTitleAndToolBarOnMac
+               WRITE setUnifiedTitleAndToolBarOnMac)
 #endif +/
 
 public:
@@ -142,13 +143,12 @@ alias DockOptions = QFlags!(DockOption);    /+ Q_FLAG(DockOptions) +/
 
     final bool unifiedTitleAndToolBarOnMac() const;
 
-    final /+ Qt:: +/qt.core.namespace.ToolBarArea toolBarArea(
-    /+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-            const
-    #endif +/
-            QToolBar toolbar) const;
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    final /+ Qt:: +/qt.core.namespace.ToolBarArea toolBarArea(const(QToolBar) toolbar) const;
+    }));
     final bool toolBarBreak(QToolBar toolbar) const;
-/+ #endif
+/+ #endif // QT_CONFIG(toolbar)
+
 #if QT_CONFIG(dockwidget) +/
     final void addDockWidget(/+ Qt:: +/qt.core.namespace.DockWidgetArea area, QDockWidget dockwidget);
     final void addDockWidget(/+ Qt:: +/qt.core.namespace.DockWidgetArea area, QDockWidget dockwidget,
@@ -205,6 +205,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator |(QMainWindow.DockOptions.enum_type f1, QMainWindow.DockOptions.enum_type f2)/+noexcept+/{return QFlags!(QMainWindow.DockOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator |(QMainWindow.DockOptions.enum_type f1, QFlags!(QMainWindow.DockOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator &(QMainWindow.DockOptions.enum_type f1, QMainWindow.DockOptions.enum_type f2)/+noexcept+/{return QFlags!(QMainWindow.DockOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator &(QMainWindow.DockOptions.enum_type f1, QFlags!(QMainWindow.DockOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QMainWindow.DockOptions.enum_type f1, QMainWindow.DockOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QMainWindow.DockOptions.enum_type f1, QFlags!(QMainWindow.DockOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QMainWindow.DockOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QMainWindow.DockOptions.enum_type f1, QMainWindow.DockOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QMainWindow.DockOptions.enum_type f1, QFlags!(QMainWindow.DockOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QMainWindow.DockOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QMainWindow.DockOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QMainWindow.DockOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QMainWindow.DockOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QMainWindow.DockOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QMainWindow.DockOptions.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QMainWindow::DockOptions) +/

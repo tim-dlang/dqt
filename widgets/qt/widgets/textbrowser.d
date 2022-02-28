@@ -29,7 +29,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QTextBrowserPrivate;
 
-/// Binding for C++ class [QTextBrowser](https://doc.qt.io/qt-5/qtextbrowser.html).
+/// Binding for C++ class [QTextBrowser](https://doc.qt.io/qt-6/qtextbrowser.html).
 class /+ Q_WIDGETS_EXPORT +/ QTextBrowser : QTextEdit
 {
     mixin(Q_OBJECT);
@@ -70,12 +70,7 @@ public:
     final void setOpenLinks(bool open);
 
 public /+ Q_SLOTS +/:
-/+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0) +/
-    /+ virtual +/ @QSlot void setSource(ref const(QUrl) name);
-    @QSlot final void setSource(ref const(QUrl) name, QTextDocument.ResourceType type);
-/+ #else
-    void setSource(const QUrl &name, QTextDocument::ResourceType type = QTextDocument::UnknownResource);
-#endif +/
+    @QSlot final void setSource(ref const(QUrl) name, QTextDocument.ResourceType type = QTextDocument.ResourceType.UnknownResource);
     /+ virtual +/ @QSlot void backward();
     /+ virtual +/ @QSlot void forward();
     /+ virtual +/ @QSlot void home();
@@ -87,10 +82,6 @@ public /+ Q_SLOTS +/:
     @QSignal final void historyChanged();
     @QSignal final void sourceChanged(ref const(QUrl) );
     @QSignal final void highlighted(ref const(QUrl) );
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_VERSION_X_5_15("Use QTextBrowser::highlighted(QUrl) instead") +/
-        @QSignal final void highlighted(ref const(QString) );
-/+ #endif +/
     @QSignal final void anchorClicked(ref const(QUrl) );
 
 protected:
@@ -102,10 +93,7 @@ protected:
     /+ virtual +/ override void focusOutEvent(QFocusEvent ev);
     /+ virtual +/ override bool focusNextPrevChild(bool next);
     /+ virtual +/ override void paintEvent(QPaintEvent e);
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-    virtual
-#endif +/
-    final void doSetSource(ref const(QUrl) name, QTextDocument.ResourceType type = QTextDocument.ResourceType.UnknownResource);
+    /+ virtual +/ void doSetSource(ref const(QUrl) name, QTextDocument.ResourceType type = QTextDocument.ResourceType.UnknownResource);
 
 private:
     /+ Q_DISABLE_COPY(QTextBrowser) +/

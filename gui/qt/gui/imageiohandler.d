@@ -18,6 +18,7 @@ import qt.core.flags;
 import qt.core.iodevice;
 import qt.core.rect;
 import qt.core.scopedpointer;
+import qt.core.size;
 import qt.core.variant;
 import qt.gui.image;
 import qt.helpers;
@@ -26,7 +27,7 @@ static if(!defined!"QT_NO_IMAGEFORMATPLUGIN")
 
 
 extern(C++, class) struct QImageIOHandlerPrivate;
-/// Binding for C++ class [QImageIOHandler](https://doc.qt.io/qt-5/qimageiohandler.html).
+/// Binding for C++ class [QImageIOHandler](https://doc.qt.io/qt-6/qimageiohandler.html).
 abstract class /+ Q_GUI_EXPORT +/ QImageIOHandler
 {
 private:
@@ -43,9 +44,6 @@ public:
     final void setFormat(ref const(QByteArray) format);
     final void setFormat(ref const(QByteArray) format) const;
     final QByteArray format() const;
-
-    /+ QT_DEPRECATED_X("Use QImageIOHandler::format() instead") +/
-        /+ virtual +/ QByteArray name() const;
 
     /+ virtual +/ abstract bool canRead() const;
     /+ virtual +/ abstract bool read(QImage* image);
@@ -71,9 +69,6 @@ public:
         OptimizedWrite,
         ProgressiveScanWrite,
         ImageTransformation
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-        , TransformedByDefault
-/+ #endif +/
     }
 
     enum Transformation {
@@ -101,6 +96,8 @@ alias Transformations = QFlags!(Transformation);
     /+ virtual +/ int currentImageNumber() const;
     /+ virtual +/ QRect currentImageRect() const;
 
+    static bool allocateImage(QSize size, QImage.Format format, QImage* image);
+
 protected:
     mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this(ref QImageIOHandlerPrivate dd);
@@ -116,7 +113,7 @@ static if(!defined!"QT_NO_IMAGEFORMATPLUGIN")
 
 /+ #define QImageIOHandlerFactoryInterface_iid "org.qt-project.Qt.QImageIOHandlerFactoryInterface" +/
 
-/// Binding for C++ class [QImageIOPlugin](https://doc.qt.io/qt-5/qimageioplugin.html).
+/// Binding for C++ class [QImageIOPlugin](https://doc.qt.io/qt-6/qimageioplugin.html).
 abstract class /+ Q_GUI_EXPORT +/ QImageIOPlugin : QObject
 {
     mixin(Q_OBJECT);
@@ -139,7 +136,19 @@ alias Capabilities = QFlags!(Capability);
 }
 /+pragma(inline, true) QFlags!(QImageIOPlugin.Capabilities.enum_type) operator |(QImageIOPlugin.Capabilities.enum_type f1, QImageIOPlugin.Capabilities.enum_type f2)/+noexcept+/{return QFlags!(QImageIOPlugin.Capabilities.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QImageIOPlugin.Capabilities.enum_type) operator |(QImageIOPlugin.Capabilities.enum_type f1, QFlags!(QImageIOPlugin.Capabilities.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QImageIOPlugin.Capabilities.enum_type) operator &(QImageIOPlugin.Capabilities.enum_type f1, QImageIOPlugin.Capabilities.enum_type f2)/+noexcept+/{return QFlags!(QImageIOPlugin.Capabilities.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QImageIOPlugin.Capabilities.enum_type) operator &(QImageIOPlugin.Capabilities.enum_type f1, QFlags!(QImageIOPlugin.Capabilities.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QImageIOPlugin.Capabilities.enum_type f1, QImageIOPlugin.Capabilities.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QImageIOPlugin.Capabilities.enum_type f1, QFlags!(QImageIOPlugin.Capabilities.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QImageIOPlugin.Capabilities.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QImageIOPlugin.Capabilities.enum_type f1, QImageIOPlugin.Capabilities.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QImageIOPlugin.Capabilities.enum_type f1, QFlags!(QImageIOPlugin.Capabilities.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QImageIOPlugin.Capabilities.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QImageIOPlugin.Capabilities.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QImageIOPlugin.Capabilities.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QImageIOPlugin.Capabilities.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QImageIOPlugin.Capabilities.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QImageIOPlugin.Capabilities.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QImageIOPlugin::Capabilities) +/
 }

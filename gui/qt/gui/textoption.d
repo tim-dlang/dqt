@@ -22,7 +22,7 @@ import qt.helpers;
 
 struct QTextOptionPrivate;
 
-/// Binding for C++ class [QTextOption](https://doc.qt.io/qt-5/qtextoption.html).
+/// Binding for C++ class [QTextOption](https://doc.qt.io/qt-6/qtextoption.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextOption
 {
 public:
@@ -73,7 +73,7 @@ public:
         return r;
     }*/
 
-    /*implicit*/ this(/+ Qt:: +/qt.core.namespace.Alignment alignment);
+    /+ Q_IMPLICIT +/ this(/+ Qt:: +/qt.core.namespace.Alignment alignment);
     ~this();
 
     @disable this(this);
@@ -110,12 +110,6 @@ alias Flags = QFlags!(Flag);    pragma(inline, true) void setFlags(Flags aflags)
 { f = cast(uint)(aflags); }
 //    pragma(inline, true) Flags flags() const { return Flags(cast(QFlag)(f)); }
 
-/+ #if QT_DEPRECATED_SINCE(5, 10) +/
-    /+ QT_DEPRECATED +/ pragma(inline, true) void setTabStop(qreal atabStop)
-    { setTabStopDistance(atabStop); }
-    /+ QT_DEPRECATED +/ pragma(inline, true) qreal tabStop() const { return tabStopDistance(); }
-/+ #endif +/
-
     pragma(inline, true) void setTabStopDistance(qreal atabStop)
     { tab = atabStop; }
     pragma(inline, true) qreal tabStopDistance() const { return tab; }
@@ -123,65 +117,64 @@ alias Flags = QFlags!(Flag);    pragma(inline, true) void setFlags(Flags aflags)
     void setTabArray(ref const(QList!(qreal)) tabStops);
     QList!(qreal) tabArray() const;
 
-    void setTabs(ref const(QList!(Tab)) tabStops);
-    QList!(Tab) tabs() const;
+    /*void setTabs(ref const(QList!(Tab)) tabStops);
+    QList!(Tab) tabs() const;*/
 
     void setUseDesignMetrics(bool b) { design = b; }
     bool useDesignMetrics() const { return (design) != 0; }
 
 private:
-    /+ uint align : 8; +/
-    uint bitfieldData_align = (WrapMode.WordWrap << 8) | (AlignmentFlag.AlignLeft);
+    /+ uint align : 9; +/
+    uint bitfieldData_align;
     final uint align_() const
     {
-        return (bitfieldData_align >> 0) & 0xff;
+        return (bitfieldData_align >> 0) & 0x1ff;
     }
     final uint align_(uint value)
     {
-        bitfieldData_align = (bitfieldData_align & ~0xff) | ((value & 0xff) << 0);
+        bitfieldData_align = (bitfieldData_align & ~0x1ff) | ((value & 0x1ff) << 0);
         return value;
     }
     /+ uint wordWrap : 4; +/
     final uint wordWrap() const
     {
-        return (bitfieldData_align >> 8) & 0xf;
+        return (bitfieldData_align >> 9) & 0xf;
     }
     final uint wordWrap(uint value)
     {
-        bitfieldData_align = (bitfieldData_align & ~0xf00) | ((value & 0xf) << 8);
+        bitfieldData_align = (bitfieldData_align & ~0x1e00) | ((value & 0xf) << 9);
         return value;
     }
     /+ uint design : 1; +/
     final uint design() const
     {
-        return (bitfieldData_align >> 12) & 0x1;
+        return (bitfieldData_align >> 13) & 0x1;
     }
     final uint design(uint value)
     {
-        bitfieldData_align = (bitfieldData_align & ~0x1000) | ((value & 0x1) << 12);
+        bitfieldData_align = (bitfieldData_align & ~0x2000) | ((value & 0x1) << 13);
         return value;
     }
     /+ uint direction : 2; +/
     final uint direction() const
     {
-        return (bitfieldData_align >> 13) & 0x3;
+        return (bitfieldData_align >> 14) & 0x3;
     }
     final uint direction(uint value)
     {
-        bitfieldData_align = (bitfieldData_align & ~0x6000) | ((value & 0x3) << 13);
+        bitfieldData_align = (bitfieldData_align & ~0xc000) | ((value & 0x3) << 14);
         return value;
     }
-    /+ uint unused : 17; +/
+    /+ uint unused : 16; +/
     final uint unused() const
     {
-        return (bitfieldData_align >> 15) & 0x1ffff;
+        return (bitfieldData_align >> 16) & 0xffff;
     }
     final uint unused(uint value)
     {
-        bitfieldData_align = (bitfieldData_align & ~0xffff8000) | ((value & 0x1ffff) << 15);
+        bitfieldData_align = (bitfieldData_align & ~0xffff0000) | ((value & 0xffff) << 16);
         return value;
     }
-    uint unused2; // ### Qt 6: remove unnecessary, extra 32 bits
     uint f;
     qreal tab = -1;
     QTextOptionPrivate* d;
@@ -189,12 +182,21 @@ private:
 }
 /+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator |(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/{return QFlags!(QTextOption.Flags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator |(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator &(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/{return QFlags!(QTextOption.Flags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator &(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QTextOption.Flags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QTextOption.Flags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextOption.Flags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QTextOption.Flags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextOption.Flags.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextOption::Flags)
-#if QT_DEPRECATED_SINCE(5, 10)
-#endif
-
 
 Q_DECLARE_METATYPE( QTextOption::Tab ) +/
 

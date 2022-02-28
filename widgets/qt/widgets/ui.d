@@ -1244,7 +1244,7 @@ private struct UICodeWriter()
 
 
 /++
-    Generates code from *.ui file created with [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html).
+    Generates code from *.ui file created with [Qt Designer](https://doc.qt.io/qt-6/qtdesigner-manual.html).
 
     The generated code contains multiple declarations:
     Every widget in the *.ui file is declared as a variable.
@@ -1265,7 +1265,7 @@ string generateUICode()(string xml, string customWidgetPackage = "")
 }
 
 /++
-    Struct for using a *.ui file created with [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html).
+    Struct for using a *.ui file created with [Qt Designer](https://doc.qt.io/qt-6/qtdesigner-manual.html).
 
     The *.ui file is read at compile time with the [import expression](https://dlang.org/spec/expression.html#import_expressions).
     Use the dmd option -J for setting the search path for those files.

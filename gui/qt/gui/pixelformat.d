@@ -17,7 +17,7 @@ import qt.core.global;
 import qt.core.typeinfo;
 import qt.helpers;
 
-/// Binding for C++ class [QPixelFormat](https://doc.qt.io/qt-5/qpixelformat.html).
+/// Binding for C++ class [QPixelFormat](https://doc.qt.io/qt-6/qpixelformat.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QPixelFormat
 {
 private:
@@ -67,8 +67,8 @@ private:
         TotalFieldWidthByOffsets = Field.UnusedField + int(FieldWidth.UnusedFieldWidth)
     }
 
-    mixin(Q_STATIC_ASSERT(q{uint(QPixelFormat.FieldWidth.TotalFieldWidthByWidths) == uint(QPixelFormat.Field.TotalFieldWidthByOffsets)}));
-    mixin(Q_STATIC_ASSERT(q{uint(QPixelFormat.FieldWidth.TotalFieldWidthByWidths) == 8 * quint64.sizeof}));
+    static assert(uint(FieldWidth.TotalFieldWidthByWidths) == uint(Field.TotalFieldWidthByOffsets));
+    static assert(uint(FieldWidth.TotalFieldWidthByWidths) == 8 * quint64.sizeof);
 
     pragma(inline, true) uchar get(Field offset, FieldWidth width) const/+ noexcept+/
     { return cast(uchar)((data >> uint(offset)) & ((1uL << uint(width)) - 1uL)); }
@@ -219,14 +219,14 @@ private:
 private:
     quint64 data = 0;
 
-    /+ friend Q_DECL_CONST_FUNCTION inline bool operator==(QPixelFormat fmt1, QPixelFormat fmt2)
+    /+ friend Q_DECL_CONST_FUNCTION constexpr inline bool operator==(QPixelFormat fmt1, QPixelFormat fmt2)
     { return fmt1.data == fmt2.data; } +/
 
-    /+ friend Q_DECL_CONST_FUNCTION inline bool operator!=(QPixelFormat fmt1, QPixelFormat fmt2)
+    /+ friend Q_DECL_CONST_FUNCTION constexpr inline bool operator!=(QPixelFormat fmt1, QPixelFormat fmt2)
     { return !(fmt1 == fmt2); } +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_STATIC_ASSERT(sizeof(QPixelFormat) == sizeof(quint64));
+/+ static_assert(sizeof(QPixelFormat) == sizeof(quint64));
 Q_DECLARE_TYPEINFO(QPixelFormat, Q_PRIMITIVE_TYPE); +/
 
 
@@ -241,13 +241,13 @@ extern(C++, "QtPrivate") {
 }
 
 /+pragma(inline, true) QPixelFormat qPixelFormatRgba(uchar red,
-                                                      uchar green,
-                                                      uchar blue,
-                                                      uchar alfa,
-                                                      QPixelFormat.AlphaUsage usage,
-                                                      QPixelFormat.AlphaPosition position,
-                                                      QPixelFormat.AlphaPremultiplied pmul=QPixelFormat.AlphaPremultiplied.NotPremultiplied,
-                                                      QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
+                                               uchar green,
+                                               uchar blue,
+                                               uchar alfa,
+                                               QPixelFormat.AlphaUsage usage,
+                                               QPixelFormat.AlphaPosition position,
+                                               QPixelFormat.AlphaPremultiplied pmul=QPixelFormat.AlphaPremultiplied.NotPremultiplied,
+                                               QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
 {
     return QPixelFormat(QPixelFormat.ColorModel.RGB,
                         red,
@@ -263,7 +263,7 @@ extern(C++, "QtPrivate") {
 }
 
 pragma(inline, true) QPixelFormat qPixelFormatGrayscale(uchar channelSize,
-                                                           QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
+                                                    QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
 {
     return QPixelFormat(QPixelFormat.ColorModel.Grayscale,
                         channelSize,
@@ -279,7 +279,7 @@ pragma(inline, true) QPixelFormat qPixelFormatGrayscale(uchar channelSize,
 }
 
 pragma(inline, true) QPixelFormat qPixelFormatAlpha(uchar channelSize,
-                                                       QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
+                                                QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
 {
     return QPixelFormat(QPixelFormat.ColorModel.Alpha,
                         0,
@@ -295,10 +295,10 @@ pragma(inline, true) QPixelFormat qPixelFormatAlpha(uchar channelSize,
 }
 
 pragma(inline, true) QPixelFormat qPixelFormatCmyk(uchar channelSize,
-                                                      uchar alfa=0,
-                                                      QPixelFormat.AlphaUsage usage=QPixelFormat.AlphaUsage.IgnoresAlpha,
-                                                      QPixelFormat.AlphaPosition position=QPixelFormat.AlphaPosition.AtBeginning,
-                                                      QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
+                                               uchar alfa=0,
+                                               QPixelFormat.AlphaUsage usage=QPixelFormat.AlphaUsage.IgnoresAlpha,
+                                               QPixelFormat.AlphaPosition position=QPixelFormat.AlphaPosition.AtBeginning,
+                                               QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
 {
     return QPixelFormat(QPixelFormat.ColorModel.CMYK,
                         channelSize,
@@ -314,10 +314,10 @@ pragma(inline, true) QPixelFormat qPixelFormatCmyk(uchar channelSize,
 }
 
 pragma(inline, true) QPixelFormat qPixelFormatHsl(uchar channelSize,
-                                                     uchar alfa=0,
-                                                     QPixelFormat.AlphaUsage usage=QPixelFormat.AlphaUsage.IgnoresAlpha,
-                                                     QPixelFormat.AlphaPosition position=QPixelFormat.AlphaPosition.AtBeginning,
-                                                     QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.FloatingPoint)/+ noexcept+/
+                                              uchar alfa=0,
+                                              QPixelFormat.AlphaUsage usage=QPixelFormat.AlphaUsage.IgnoresAlpha,
+                                              QPixelFormat.AlphaPosition position=QPixelFormat.AlphaPosition.AtBeginning,
+                                              QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.FloatingPoint)/+ noexcept+/
 {
     return QPixelFormat(QPixelFormat.ColorModel.HSL,
                         channelSize,
@@ -333,10 +333,10 @@ pragma(inline, true) QPixelFormat qPixelFormatHsl(uchar channelSize,
 }
 
 pragma(inline, true) QPixelFormat qPixelFormatHsv(uchar channelSize,
-                                                     uchar alfa=0,
-                                                     QPixelFormat.AlphaUsage usage=QPixelFormat.AlphaUsage.IgnoresAlpha,
-                                                     QPixelFormat.AlphaPosition position=QPixelFormat.AlphaPosition.AtBeginning,
-                                                     QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.FloatingPoint)/+ noexcept+/
+                                              uchar alfa=0,
+                                              QPixelFormat.AlphaUsage usage=QPixelFormat.AlphaUsage.IgnoresAlpha,
+                                              QPixelFormat.AlphaPosition position=QPixelFormat.AlphaPosition.AtBeginning,
+                                              QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.FloatingPoint)/+ noexcept+/
 {
     return QPixelFormat(QPixelFormat.ColorModel.HSV,
                         channelSize,

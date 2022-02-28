@@ -16,6 +16,7 @@ import qt.config;
 import qt.core.bytearray;
 import qt.core.flags;
 import qt.core.global;
+import qt.core.iodevicebase;
 import qt.core.object;
 import qt.core.string;
 import qt.helpers;
@@ -31,30 +32,22 @@ import qt.helpers;
 
 extern(C++, class) struct QIODevicePrivate;
 
-/// Binding for C++ class [QIODevice](https://doc.qt.io/qt-5/qiodevice.html).
+/// Binding for C++ class [QIODevice](https://doc.qt.io/qt-6/qiodevice.html).
 abstract class /+ Q_CORE_EXPORT +/ QIODevice
 /+ #ifndef QT_NO_QOBJECT +/
     : QObject
-/+ #endif +/
+/+ #else
+    :
+#endif +/
+    //  QIODeviceBase
 {
 /+ #ifndef QT_NO_QOBJECT +/
     mixin(Q_OBJECT);
 /+ #endif +/
+    alias OpenModeFlag = QIODeviceBase.OpenModeFlag;
+    alias OpenMode = QIODeviceBase.OpenMode;
 public:
-    enum OpenModeFlag {
-        NotOpen = 0x0000,
-        ReadOnly = 0x0001,
-        WriteOnly = 0x0002,
-        ReadWrite = OpenModeFlag.ReadOnly | OpenModeFlag.WriteOnly,
-        Append = 0x0004,
-        Truncate = 0x0008,
-        Text = 0x0010,
-        Unbuffered = 0x0020,
-        NewOnly = 0x0040,
-        ExistingOnly = 0x0080
-    }
-    /+ Q_DECLARE_FLAGS(OpenMode, OpenModeFlag) +/
-alias OpenMode = QFlags!(OpenModeFlag);
+
     mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
     this();
     }));
@@ -65,7 +58,7 @@ alias OpenMode = QFlags!(OpenModeFlag);
 /+ #endif +/
     /+ virtual +/~this();
 
-    final OpenMode openMode() const;
+    final QIODeviceBase.OpenMode openMode() const;
 
     final void setTextModeEnabled(bool enabled);
     final bool isTextModeEnabled() const;
@@ -82,10 +75,10 @@ alias OpenMode = QFlags!(OpenModeFlag);
     final int currentWriteChannel() const;
     final void setCurrentWriteChannel(int channel);
 
-    /+ virtual +/ bool open(OpenMode mode);
+    /+ virtual +/ bool open(QIODeviceBase.OpenMode mode);
     /+ virtual +/ void close();
 
-    // ### Qt 6: pos() and seek() should not be virtual, and
+    // ### Qt 7 - QTBUG-76492: pos() and seek() should not be virtual, and
     // ### seek() should call a virtual seekData() function.
     /+ virtual +/ qint64 pos() const;
     /+ virtual +/ qint64 size() const;
@@ -110,8 +103,7 @@ alias OpenMode = QFlags!(OpenModeFlag);
 
     final qint64 write(const(char)* data, qint64 len);
     final qint64 write(const(char)* data);
-    pragma(inline, true) final qint64 write(ref const(QByteArray) data)
-    { return write(data.constData(), data.size()); }
+    final qint64 write(ref const(QByteArray) data);
 
     final qint64 peek(char* data, qint64 maxlen);
     final QByteArray peek(qint64 maxlen);
@@ -146,9 +138,10 @@ protected:
 /+ #endif +/
     /+ virtual +/ abstract qint64 readData(char* data, qint64 maxlen);
     /+ virtual +/ qint64 readLineData(char* data, qint64 maxlen);
+    /+ virtual +/ qint64 skipData(qint64 maxSize);
     /+ virtual +/ abstract qint64 writeData(const(char)* data, qint64 len);
 
-    final void setOpenMode(OpenMode openMode);
+    final void setOpenMode(QIODeviceBase.OpenMode openMode);
 
     final void setErrorString(ref const(QString) errorString);
 
@@ -163,7 +156,19 @@ private:
 }
 /+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/{return QFlags!(QIODevice.OpenMode.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator &(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/{return QFlags!(QIODevice.OpenMode.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator &(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QIODevice.OpenMode.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QIODevice.OpenMode.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QIODevice.OpenMode.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QIODevice::OpenMode)
 #if !defined(QT_NO_DEBUG_STREAM)

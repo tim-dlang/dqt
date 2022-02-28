@@ -33,7 +33,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QMessageBoxPrivate;
 
-/// Binding for C++ class [QMessageBox](https://doc.qt.io/qt-5/qmessagebox.html).
+/// Binding for C++ class [QMessageBox](https://doc.qt.io/qt-6/qmessagebox.html).
 class /+ Q_WIDGETS_EXPORT +/ QMessageBox : QDialog
 {
     mixin(Q_OBJECT);
@@ -46,7 +46,8 @@ class /+ Q_WIDGETS_EXPORT +/ QMessageBox : QDialog
     Q_PROPERTY(QString detailedText READ detailedText WRITE setDetailedText)
 #endif
     Q_PROPERTY(QString informativeText READ informativeText WRITE setInformativeText)
-    Q_PROPERTY(Qt::TextInteractionFlags textInteractionFlags READ textInteractionFlags WRITE setTextInteractionFlags) +/
+    Q_PROPERTY(Qt::TextInteractionFlags textInteractionFlags READ textInteractionFlags
+               WRITE setTextInteractionFlags) +/
 
 public:
     enum Icon {
@@ -108,9 +109,11 @@ public:
         FlagMask           = 0x00000300,        // obsolete
         ButtonMask         = ~StandardButton.FlagMask          // obsolete
     }
-    alias Button = StandardButton;  // obsolete
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/
+    alias Button = StandardButton;
+/+ #endif
 
-    /+ Q_DECLARE_FLAGS(StandardButtons, StandardButton) +/
+    Q_DECLARE_FLAGS(StandardButtons, StandardButton) +/
 alias StandardButtons = QFlags!(StandardButton);    /+ Q_FLAG(StandardButtons) +/
 
     /+ explicit +/this(QWidget parent = null);
@@ -166,87 +169,110 @@ alias StandardButtons = QFlags!(StandardButton);    /+ Q_FLAG(StandardButtons) +
     static StandardButton information(QWidget parent, ref const(QString) title,
              ref const(QString) text, StandardButtons buttons = StandardButton.Ok,
              StandardButton defaultButton = StandardButton.NoButton);
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/ // needed as long as we have int overloads
+    pragma(inline, true) static StandardButton information(QWidget parent, ref const(QString) title,
+                                      ref const(QString) text,
+                                      StandardButton button0, StandardButton button1 = StandardButton.NoButton)
+    { return information(parent, title, text, StandardButtons(button0), button1); }
+/+ #endif +/
+
     static StandardButton question(QWidget parent, ref const(QString) title,
              ref const(QString) text, StandardButtons buttons = StandardButtons(StandardButton.Yes | StandardButton.No),
              StandardButton defaultButton = StandardButton.NoButton);
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/
+    pragma(inline, true) static int question(QWidget parent, ref const(QString) title,
+                                   ref const(QString) text,
+                                   StandardButton button0, StandardButton button1)
+    { return question(parent, title, text, StandardButtons(button0), button1); }
+/+ #endif +/
+
     static StandardButton warning(QWidget parent, ref const(QString) title,
              ref const(QString) text, StandardButtons buttons = StandardButton.Ok,
              StandardButton defaultButton = StandardButton.NoButton);
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/
+    pragma(inline, true) static int warning(QWidget parent, ref const(QString) title,
+                                  ref const(QString) text,
+                                  StandardButton button0, StandardButton button1)
+    { return warning(parent, title, text, StandardButtons(button0), button1); }
+/+ #endif +/
+
     static StandardButton critical(QWidget parent, ref const(QString) title,
              ref const(QString) text, StandardButtons buttons = StandardButton.Ok,
              StandardButton defaultButton = StandardButton.NoButton);
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/
+    pragma(inline, true) static int critical(QWidget parent, ref const(QString) title,
+                                   ref const(QString) text,
+                                   StandardButton button0, StandardButton button1)
+    { return critical(parent, title, text, StandardButtons(button0), button1); }
+/+ #endif +/
+
     static void about(QWidget parent, ref const(QString) title, ref const(QString) text);
     static void aboutQt(QWidget parent, ref const(QString) title = globalInitVar!QString);
 
+/+ #if QT_DEPRECATED_SINCE(6,2) +/
     // the following functions are obsolete:
-
-    this(ref const(QString) title, ref const(QString) text, Icon icon,
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use the overload taking StandardButtons instead.") +/this(ref const(QString) title, ref const(QString) text, Icon icon,
                       int button0, int button1, int button2,
                       QWidget parent = null,
                       /+ Qt:: +/qt.core.namespace.WindowFlags f = /+ Qt:: +/qt.core.namespace.WindowType.Dialog | /+ Qt:: +/qt.core.namespace.WindowType.MSWindowsFixedSizeDialogHint);
 
-    static int information(QWidget parent, ref const(QString) title,
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use the overload taking StandardButtons instead.") +/
+        static int information(QWidget parent, ref const(QString) title,
                                ref const(QString) text,
                                int button0, int button1 = 0, int button2 = 0);
-    static int information(QWidget parent, ref const(QString) title,
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use the overload taking StandardButtons instead.") +/
+        static int information(QWidget parent, ref const(QString) title,
                                ref const(QString) text,
                                ref const(QString) button0Text,
                                ref const(QString) button1Text = globalInitVar!QString,
                                ref const(QString) button2Text = globalInitVar!QString,
                                int defaultButtonNumber = 0,
                                int escapeButtonNumber = -1);
-    pragma(inline, true) static StandardButton information(QWidget parent, ref const(QString) title,
-                                      ref const(QString) text,
-                                      StandardButton button0, StandardButton button1 = StandardButton.NoButton)
-    { return information(parent, title, text, StandardButtons(button0), button1); }
 
-    static int question(QWidget parent, ref const(QString) title,
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use the overload taking StandardButtons instead.") +/
+        static int question(QWidget parent, ref const(QString) title,
                             ref const(QString) text,
                             int button0, int button1 = 0, int button2 = 0);
-    static int question(QWidget parent, ref const(QString) title,
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use the overload taking StandardButtons instead.") +/
+        static int question(QWidget parent, ref const(QString) title,
                             ref const(QString) text,
                             ref const(QString) button0Text,
                             ref const(QString) button1Text = globalInitVar!QString,
                             ref const(QString) button2Text = globalInitVar!QString,
                             int defaultButtonNumber = 0,
                             int escapeButtonNumber = -1);
-    pragma(inline, true) static int question(QWidget parent, ref const(QString) title,
-                                   ref const(QString) text,
-                                   StandardButton button0, StandardButton button1)
-    { return question(parent, title, text, StandardButtons(button0), button1); }
 
-    static int warning(QWidget parent, ref const(QString) title,
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use the overload taking StandardButtons instead.") +/
+        static int warning(QWidget parent, ref const(QString) title,
                            ref const(QString) text,
                            int button0, int button1, int button2 = 0);
-    static int warning(QWidget parent, ref const(QString) title,
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use the overload taking StandardButtons instead.") +/
+        static int warning(QWidget parent, ref const(QString) title,
                            ref const(QString) text,
                            ref const(QString) button0Text,
                            ref const(QString) button1Text = globalInitVar!QString,
                            ref const(QString) button2Text = globalInitVar!QString,
                            int defaultButtonNumber = 0,
                            int escapeButtonNumber = -1);
-    pragma(inline, true) static int warning(QWidget parent, ref const(QString) title,
-                                  ref const(QString) text,
-                                  StandardButton button0, StandardButton button1)
-    { return warning(parent, title, text, StandardButtons(button0), button1); }
 
-    static int critical(QWidget parent, ref const(QString) title,
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use the overload taking StandardButtons instead.") +/
+        static int critical(QWidget parent, ref const(QString) title,
                             ref const(QString) text,
                             int button0, int button1, int button2 = 0);
-    static int critical(QWidget parent, ref const(QString) title,
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use the overload taking StandardButtons instead.") +/
+        static int critical(QWidget parent, ref const(QString) title,
                             ref const(QString) text,
                             ref const(QString) button0Text,
                             ref const(QString) button1Text = globalInitVar!QString,
                             ref const(QString) button2Text = globalInitVar!QString,
                             int defaultButtonNumber = 0,
                             int escapeButtonNumber = -1);
-    pragma(inline, true) static int critical(QWidget parent, ref const(QString) title,
-                                   ref const(QString) text,
-                                   StandardButton button0, StandardButton button1)
-    { return critical(parent, title, text, StandardButtons(button0), button1); }
 
-    final QString buttonText(int button) const;
-    final void setButtonText(int button, ref const(QString) text);
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use button() and QPushButton::text() instead.") +/
+        final QString buttonText(int button) const;
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use addButton() instead.") +/
+        final void setButtonText(int button, ref const(QString) text);
+/+ #endif +/
 
     final QString informativeText() const;
     final void setInformativeText(ref const(QString) text);
@@ -259,8 +285,10 @@ alias StandardButtons = QFlags!(StandardButton);    /+ Q_FLAG(StandardButtons) +
 //    final void setWindowTitle(ref const(QString) title);
 //    final void setWindowModality(/+ Qt:: +/qt.core.namespace.WindowModality windowModality);
 
-
-    static QPixmap standardIcon(Icon icon);
+/+ #if QT_DEPRECATED_SINCE(6,2) +/
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use QStyle::standardIcon() instead.") +/
+        static QPixmap standardIcon(Icon icon);
+/+ #endif +/
 
 /+ Q_SIGNALS +/public:
     @QSignal final void buttonClicked(QAbstractButton button);
@@ -288,7 +316,19 @@ private:
 }
 /+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator |(QMessageBox.StandardButtons.enum_type f1, QMessageBox.StandardButtons.enum_type f2)/+noexcept+/{return QFlags!(QMessageBox.StandardButtons.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator |(QMessageBox.StandardButtons.enum_type f1, QFlags!(QMessageBox.StandardButtons.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator &(QMessageBox.StandardButtons.enum_type f1, QMessageBox.StandardButtons.enum_type f2)/+noexcept+/{return QFlags!(QMessageBox.StandardButtons.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator &(QMessageBox.StandardButtons.enum_type f1, QFlags!(QMessageBox.StandardButtons.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QMessageBox.StandardButtons.enum_type f1, QMessageBox.StandardButtons.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QMessageBox.StandardButtons.enum_type f1, QFlags!(QMessageBox.StandardButtons.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QMessageBox.StandardButtons.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QMessageBox.StandardButtons.enum_type f1, QMessageBox.StandardButtons.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QMessageBox.StandardButtons.enum_type f1, QFlags!(QMessageBox.StandardButtons.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QMessageBox.StandardButtons.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QMessageBox.StandardButtons.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QMessageBox.StandardButtons.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QMessageBox.StandardButtons.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QMessageBox.StandardButtons.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QMessageBox.StandardButtons.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QMessageBox::StandardButtons)
 #define QT_REQUIRE_VERSION(argc, argv, str) { QString s = QString::fromLatin1(str);\

@@ -13,7 +13,7 @@
 			"targetType": "library",
 			"sourcePaths": ["core"],
 			"importPaths": ["core"],
-			"libs": ["Qt5Core"],
+			"libs": ["Qt6Core"],
 			"libs-posix": ["stdc++"]
 		},
 		{
@@ -21,7 +21,7 @@
 			"targetType": "library",
 			"sourcePaths": ["gui"],
 			"importPaths": ["gui"],
-			"libs": ["Qt5Gui"],
+			"libs": ["Qt6Gui"],
 			"dependencies": {"dqt:core":"*"}
 		},
 		{
@@ -29,7 +29,7 @@
 			"targetType": "library",
 			"sourcePaths": ["widgets"],
 			"importPaths": ["widgets"],
-			"libs": ["Qt5Widgets"],
+			"libs": ["Qt6Widgets"],
 			"dependencies": {"dqt:gui":"*"}
 		},
 		{

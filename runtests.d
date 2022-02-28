@@ -89,9 +89,9 @@ int main(string[] args)
         if(qtPath.length == 0)
         {
             if(model == "64")
-                qtPath = "C:\\Qt\\5.15.2\\msvc2019_64";
+                qtPath = "C:\\Qt\\6.2.3\\msvc2019_64";
             else
-                qtPath = "C:\\Qt\\5.15.2\\msvc2019";
+                qtPath = "C:\\Qt\\6.2.3\\msvc2019";
         }
     }
 
@@ -271,14 +271,14 @@ int main(string[] args)
         foreach_reverse(m; test.qtModules)
         {
             version(Windows)
-                dmdArgs ~= "Qt5" ~ capitalize(m) ~ ".lib";
+                dmdArgs ~= "Qt6" ~ capitalize(m) ~ "d.lib";
             else version(OSX)
             {
                 dmdArgs ~= "-L-framework";
                 dmdArgs ~= "-LQt" ~ capitalize(m);
             }
             else
-                dmdArgs ~= "-L-lQt5" ~ capitalize(m);
+                dmdArgs ~= "-L-lQt6" ~ capitalize(m);
         }
         dmdArgs ~= "-od" ~ resultDir;
         dmdArgs ~= "-of" ~ executable;

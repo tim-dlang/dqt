@@ -16,28 +16,20 @@ import qt.config;
 import qt.core.atomic;
 import qt.helpers;
 
-/+ #if QT_DEPRECATED_SINCE(5, 6)
-#endif +/
 
-
-
-/// Binding for C++ class [QSharedData](https://doc.qt.io/qt-5/qshareddata.html).
-extern(C++, class) struct
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-Q_CORE_EXPORT
-#endif +/
-QSharedData
+/// Binding for C++ class [QSharedData](https://doc.qt.io/qt-6/qshareddata.html).
+extern(C++, class) struct QSharedData
 {
 public:
     /+ mutable +/ QAtomicInt ref_/* = 0*/;
 
     @disable this();
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+this()/+ noexcept+/
     {
         this.ref_ = 0;
     }+/
     @disable this(this);
-    pragma(inline, true) this(ref const(QSharedData) )/+ noexcept+/
+    this(ref const(QSharedData) )/+ noexcept+/
     {
         this.ref_ = 0;
     }
@@ -47,29 +39,49 @@ public:
     /+ ~QSharedData() = default; +/
 }
 
-/// Binding for C++ class [QSharedDataPointer](https://doc.qt.io/qt-5/qshareddatapointer.html).
+struct QAdoptSharedDataTag { /+ explicit constexpr QAdoptSharedDataTag() = default; +/     mixin(CREATE_CONVENIENCE_WRAPPERS);
+}
+/+ #define DECLARE_COMPARE_SET(T1, A1, T2, A2) \
+    friend bool operator<(T1, T2) noexcept \
+    { return std::less<T*>{}(A1, A2); } \
+    friend bool operator<=(T1, T2) noexcept \
+    { return !std::less<T*>{}(A2, A1); } \
+    friend bool operator>(T1, T2) noexcept \
+    { return std::less<T*>{}(A2, A1); } \
+    friend bool operator>=(T1, T2) noexcept \
+    { return !std::less<T*>{}(A1, A2); } \
+    friend bool operator==(T1, T2) noexcept \
+    { return A1 == A2; } \
+    friend bool operator!=(T1, T2) noexcept \
+    { return A1 != A2; } \
+ +/
+
+/// Binding for C++ class [QSharedDataPointer](https://doc.qt.io/qt-6/qshareddatapointer.html).
 extern(C++, class) struct QSharedDataPointer(T)
 {
 public:
     alias Type = T;
     alias pointer = T*;
 
-    pragma(inline, true) void detach()() { if (d && d.ref_.loadRelaxed() != 1) detach_helper(); }
-    pragma(inline, true) ref T opUnary(string op)() if(op == "*") { detach(); return *d; }
-    pragma(inline, true) ref const(T) opUnary(string op)() const if(op == "*") { return *d; }
-    /+pragma(inline, true) T* operator ->() { detach(); return d; }+/
-    /+pragma(inline, true) const(T)* operator ->() const { return d; }+/
-    /+pragma(inline, true) auto opCast(T : T)() { detach(); return d; }+/
-    /+pragma(inline, true) auto opCast(T : const(T))() const { return d; }+/
-    pragma(inline, true) T* data()() { detach(); return d; }
-    pragma(inline, true) const(T)* data()() const { return d; }
-    pragma(inline, true) const(T)* constData() const { return d; }
+    void detach()() { if (d && d.ref_.loadRelaxed() != 1) detach_helper(); }
+    ref T opUnary(string op)() if(op == "*") { detach(); return *d; }
+    ref const(T) opUnary(string op)() const if(op == "*") { return *d; }
+    /+T* operator ->() { detach(); return d; }+/
+    /+const(T)* operator ->() const/+ noexcept+/ { return d; }+/
+    /+auto opCast(T : T)() { detach(); return d; }+/
+    /+auto opCast(T : const(T))() const/+ noexcept+/ { return d; }+/
+    T* data()() { detach(); return d; }
+    T* get()() { detach(); return d; }
+    const(T)* data() const/+ noexcept+/ { return d; }
+    const(T)* get() const/+ noexcept+/ { return d; }
+    const(T)* constData() const/+ noexcept+/ { return d; }
+//    T* take()/+ noexcept+/ { return qExchange(d, cast(U && )(null)); }
 
-    /+pragma(inline, true) bool operator ==(ref const(QSharedDataPointer!(T)) other) const { return d == other.d; }+/
-    /+pragma(inline, true) bool operator !=(ref const(QSharedDataPointer!(T)) other) const { return d != other.d; }+/
-
-    /+pragma(inline, true) this() { d = null; }+/
-    pragma(inline, true) ~this() {
+    /+this()/+ noexcept+/
+    {
+        this.d = null;
+    }+/
+    ~this() {
         import core.stdcpp.new_;
         static if(__traits(compiles, (*d).sizeof))
         {
@@ -80,12 +92,17 @@ public:
             assert(false);
     }
 
-/+    /+ explicit +/pragma(inline, true) this(T* adata)/+ noexcept+/
+/+    /+ explicit +/this(T* data)/+ noexcept+/
     {
-        this.d = adata;
+        this.d = data;
         if (d) d.ref_.ref_();
     }+/
-    pragma(inline, true) this(this)
+    this(T* data, QAdoptSharedDataTag)/+ noexcept+/
+    {
+        this.d = data;
+    }
+    @disable this(this);
+    this(ref const(QSharedDataPointer) o)/+ noexcept+/
     {
         static if(__traits(compiles, d.ref_))
         {
@@ -94,46 +111,61 @@ public:
         else
             assert(0);
     }
-    /+pragma(inline, true) ref QSharedDataPointer!(T)  operator =(ref const(QSharedDataPointer!(T)) o) {
-        import core.stdcpp.new_;
 
-        if (o.d != d) {
-            if (o.d)
-                o.d.ref_.ref_();
-            T* old = d;
-            d = o.d;
-            if (old && !old.ref_.deref())
-                cpp_delete(old);
-        }
-        return this;
-    }+/
-    /+pragma(inline, true) ref QSharedDataPointer operator =(T* o) {
-        import core.stdcpp.new_;
-
-        if (o != d) {
-            if (o)
-                o.ref_.ref_();
-            T* old = d;
-            d = o;
-            if (old && !old.ref_.deref())
-                cpp_delete(old);
-        }
-        return this;
-    }+/
-    /+ QSharedDataPointer(QSharedDataPointer &&o) noexcept : d(o.d) { o.d = nullptr; } +/
-    /+ inline QSharedDataPointer<T> &operator=(QSharedDataPointer<T> &&other) noexcept
+/+    void reset(T* ptr = null)/+ noexcept+/
     {
-        QSharedDataPointer moved(std::move(other));
-        swap(moved);
-        return *this;
-    } +/
+        import core.stdcpp.new_;
 
-    /+pragma(inline, true) bool operator !() const { return !d; }+/
+        if (ptr != d) {
+            if (ptr)
+                ptr.ref_.ref_();
+            T* old = qExchange(d, cast(U && )(ptr));
+            if (old && !old.ref_.deref())
+                cpp_delete(old);
+        }
+    }+/
 
-    /+ inline void swap(QSharedDataPointer &other) noexcept
+    /+ref QSharedDataPointer operator =(ref const(QSharedDataPointer) o)/+ noexcept+/
+    {
+        reset(o.d);
+        return this;
+    }+/
+    /+pragma(inline, true) ref QSharedDataPointer operator =(T* o)/+ noexcept+/
+    {
+        reset(o);
+        return this;
+    }+/
+    /+ QSharedDataPointer(QSharedDataPointer &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QSharedDataPointer) +/
+
+    /+auto opCast(T : bool) () const/+ noexcept+/ { return d !is null; }+/
+    /+bool operator !() const/+ noexcept+/ { return d is null; }+/
+
+    /+ void swap(QSharedDataPointer &other) noexcept
     { qSwap(d, other.d); } +/
 
+/+ #define DECLARE_COMPARE_SET(T1, A1, T2, A2) \
+    friend bool operator<(T1, T2) noexcept \
+    { return std::less<T*>{}(A1, A2); } \
+    friend bool operator<=(T1, T2) noexcept \
+    { return !std::less<T*>{}(A2, A1); } \
+    friend bool operator>(T1, T2) noexcept \
+    { return std::less<T*>{}(A2, A1); } \
+    friend bool operator>=(T1, T2) noexcept \
+    { return !std::less<T*>{}(A1, A2); } \
+    friend bool operator==(T1, T2) noexcept \
+    { return A1 == A2; } \
+    friend bool operator!=(T1, T2) noexcept \
+    { return A1 != A2; } \
+
+    DECLARE_COMPARE_SET(const QSharedDataPointer &p1, p1.d, const QSharedDataPointer &p2, p2.d) +/
+    /+ DECLARE_COMPARE_SET(const QSharedDataPointer &p1, p1.d, const T *ptr, ptr) +/
+    /+ DECLARE_COMPARE_SET(const T *ptr, ptr, const QSharedDataPointer &p2, p2.d) +/
+    /+ DECLARE_COMPARE_SET(const QSharedDataPointer &p1, p1.d, std::nullptr_t, nullptr) +/
+    /+ DECLARE_COMPARE_SET(std::nullptr_t, nullptr, const QSharedDataPointer &p2, p2.d) +/
+
 protected:
+    // Declared here and as Q_OUTOFLINE_TEMPLATE to work-around MSVC bug causing missing symbols at link time.
     pragma(inline, true) T* clone()()
     {
         import core.stdcpp.new_;
@@ -153,56 +185,33 @@ private:
         d = x;
     }
 
-    T* d;
+    T* d = null;
 }
 
-/+pragma(inline, true) bool operator ==(T)(/+ std:: +/nullptr_t p1, ref const(QSharedDataPointer!(T)) p2)
-{
-    /+ Q_UNUSED(p1) +/
-    return !p2;
-}+/
-
-/+pragma(inline, true) bool operator ==(T)(ref const(QSharedDataPointer!(T)) p1, /+ std:: +/nullptr_t p2)
-{
-    /+ Q_UNUSED(p2) +/
-    return !p1;
-}+/
-
-/// Binding for C++ class [QExplicitlySharedDataPointer](https://doc.qt.io/qt-5/qexplicitlyshareddatapointer.html).
+/// Binding for C++ class [QExplicitlySharedDataPointer](https://doc.qt.io/qt-6/qexplicitlyshareddatapointer.html).
 extern(C++, class) struct QExplicitlySharedDataPointer(T)
 {
 public:
     alias Type = T;
     alias pointer = T*;
 
-    pragma(inline, true) ref T opUnary(string op)() const if(op == "*") { return *d; }
-    /+pragma(inline, true) T* operator ->() { return d; }+/
-    /+pragma(inline, true) T* operator ->() const { return d; }+/
-    pragma(inline, true) T* data() const { return cast(T*)d; }
-    pragma(inline, true) const(T)* constData() const { return d; }
-    pragma(inline, true) T* take() { T* x = d; d = null; return x; }
+    ref T opUnary(string op)() const if(op == "*") { return *d; }
+    /+T* operator ->()/+ noexcept+/ { return d; }+/
+    /+T* operator ->() const/+ noexcept+/ { return d; }+/
+    /+/+ explicit +/ auto opCast(T : T)() { return d; }+/
+    /+/+ explicit +/ auto opCast(T : const(T))() const/+ noexcept+/ { return d; }+/
+    T* data() /*const*/ /+ noexcept+/ { return d; }
+    T* get() /*const*/ /+ noexcept+/ { return d; }
+    const(T)* constData() const/+ noexcept+/ { return d; }
+//    T* take()/+ noexcept+/ { return qExchange(d, cast(U && )(null)); }
 
-    pragma(inline, true) void detach()() { if (d && d.ref_.loadRelaxed() != 1) detach_helper(); }
+    void detach()() { if (d && d.ref_.loadRelaxed() != 1) detach_helper(); }
 
-    pragma(inline, true) void reset()()
+    /+this()/+ noexcept+/
     {
-        import core.stdcpp.new_;
-
-        if(d && !d.ref_.deref())
-            cpp_delete(d);
-
-        d = null;
-    }
-
-    /+pragma(inline, true) auto opCast(T : bool) () const { return d !is null; }+/
-
-    /+pragma(inline, true) bool operator ==(ref const(QExplicitlySharedDataPointer!(T)) other) const { return d == other.d; }+/
-    /+pragma(inline, true) bool operator !=(ref const(QExplicitlySharedDataPointer!(T)) other) const { return d != other.d; }+/
-    /+pragma(inline, true) bool operator ==(const(T)* ptr) const { return d == ptr; }+/
-    /+pragma(inline, true) bool operator !=(const(T)* ptr) const { return d != ptr; }+/
-
-    /+pragma(inline, true) this() { d = null; }+/
-    pragma(inline, true) ~this() {
+        this.d = null;
+    }+/
+    ~this() {
         static if(__traits(compiles, (*d).sizeof))
         {
             import core.stdcpp.new_;
@@ -212,13 +221,17 @@ public:
             assert(false);
     }
 
-/+    /+ explicit +/pragma(inline, true) this(T* adata)/+ noexcept+/
+    /+ /+ explicit +/this(T* data)/+ noexcept+/
     {
-        this.d = adata;
+        this.d = data;
         if (d) d.ref_.ref_();
     }+/
+    this(T* data, QAdoptSharedDataTag)/+ noexcept+/
+    {
+        this.d = data;
+    }
     @disable this(this);
-    pragma(inline, true) this(ref const(QExplicitlySharedDataPointer!(T)) o)
+    /+this(ref const(QExplicitlySharedDataPointer) o)/+ noexcept+/
     {
         static if(__traits(compiles, (*d).sizeof))
         {
@@ -227,67 +240,66 @@ public:
         }
         else
             assert(false);
-    }
+    }+/
 
-    /+ template<class X> +/
-    /+@disable this(this);
-    pragma(inline, true) this(X)(ref const(QExplicitlySharedDataPointer!(X)) o)/+ #ifdef QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST +/
+    /+ template<typename X> +/
+    /+ @disable this(this);
+    this(X)(ref const(QExplicitlySharedDataPointer!(X)) o)/+ noexcept+//+ #ifdef QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST +/
 /+ #endif +/
+{
+    static if(defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
     {
-        static if(defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
-        {
-            this.d = static_cast!(T*)(o.data());
+        this.d = static_cast!(T*)(o.data());
 
-        }
-        else
-        {
-            /+ #else +/
-                    this.d = o.data();
+    }
+    else
+    {
+        /+ #else +/
+                this.d = o.data();
 
-        }
+    }
+    if (d) d.ref_.ref_();
+} +/
 
-        if(d)
-            d.ref_.ref_();
-    }+/
-
-    /+pragma(inline, true) ref QExplicitlySharedDataPointer!(T)  operator =(ref const(QExplicitlySharedDataPointer!(T)) o) {
+/+    void reset(T* ptr = null)/+ noexcept+/
+    {
         import core.stdcpp.new_;
 
-        if (o.d != d) {
-            if (o.d)
-                o.d.ref_.ref_();
-            T* old = d;
-            d = o.d;
+        if (ptr != d) {
+            if (ptr)
+                ptr.ref_.ref_();
+            T* old = qExchange(d, cast(U && )(ptr));
             if (old && !old.ref_.deref())
                 cpp_delete(old);
         }
-        return this;
     }+/
-    /+pragma(inline, true) ref QExplicitlySharedDataPointer operator =(T* o) {
-        import core.stdcpp.new_;
 
-        if (o != d) {
-            if (o)
-                o.ref_.ref_();
-            T* old = d;
-            d = o;
-            if (old && !old.ref_.deref())
-                cpp_delete(old);
-        }
-        return this;
-    }+/
-    /+ inline QExplicitlySharedDataPointer(QExplicitlySharedDataPointer &&o) noexcept : d(o.d) { o.d = nullptr; } +/
-    /+ inline QExplicitlySharedDataPointer<T> &operator=(QExplicitlySharedDataPointer<T> &&other) noexcept
+    /+ref QExplicitlySharedDataPointer operator =(ref const(QExplicitlySharedDataPointer) o)/+ noexcept+/
     {
-        QExplicitlySharedDataPointer moved(std::move(other));
-        swap(moved);
-        return *this;
-    } +/
+        reset(o.d);
+        return this;
+    }+/
+    /+ref QExplicitlySharedDataPointer operator =(T* o)/+ noexcept+/
+    {
+        reset(o);
+        return this;
+    }+/
+    /+ QExplicitlySharedDataPointer(QExplicitlySharedDataPointer &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QExplicitlySharedDataPointer) +/
 
-    /+pragma(inline, true) bool operator !() const { return !d; }+/
+    /+auto opCast(T : bool) () const/+ noexcept+/ { return d !is null; }+/
+    /+bool operator !() const/+ noexcept+/ { return d is null; }+/
 
-    /+ inline void swap(QExplicitlySharedDataPointer &other) noexcept
+    /+ void swap(QExplicitlySharedDataPointer &other) noexcept
     { qSwap(d, other.d); } +/
+
+    /+ DECLARE_COMPARE_SET(const QExplicitlySharedDataPointer &p1, p1.d, const QExplicitlySharedDataPointer &p2, p2.d) +/
+    /+ DECLARE_COMPARE_SET(const QExplicitlySharedDataPointer &p1, p1.d, const T *ptr, ptr) +/
+    /+ DECLARE_COMPARE_SET(const T *ptr, ptr, const QExplicitlySharedDataPointer &p2, p2.d) +/
+    /+ DECLARE_COMPARE_SET(const QExplicitlySharedDataPointer &p1, p1.d, std::nullptr_t, nullptr) +/
+    /+ DECLARE_COMPARE_SET(std::nullptr_t, nullptr, const QExplicitlySharedDataPointer &p2, p2.d) +/
+
+/+ #undef DECLARE_COMPARE_SET +/
 
 protected:
     pragma(inline, true) T* clone()()
@@ -309,40 +321,55 @@ private:
         d = x;
     }
 
-    T* d;
+    T* d = null;
 }
 
-/+pragma(inline, true) bool operator ==(T)(/+ std:: +/nullptr_t p1, ref const(QExplicitlySharedDataPointer!(T)) p2)
-{
-    /+ Q_UNUSED(p1) +/
-    return !p2;
-}+/
-
-/+pragma(inline, true) bool operator ==(T)(ref const(QExplicitlySharedDataPointer!(T)) p1, /+ std:: +/nullptr_t p2)
-{
-    /+ Q_UNUSED(p2) +/
-    return !p1;
-}+/
-
-/+ template <class T>
-void swap(QSharedDataPointer<T> &p1, QSharedDataPointer<T> &p2)
+/+ template <typename T>
+void swap(QSharedDataPointer<T> &p1, QSharedDataPointer<T> &p2) noexcept
 { p1.swap(p2); }
 
-template <class T>
-void swap(QExplicitlySharedDataPointer<T> &p1, QExplicitlySharedDataPointer<T> &p2)
+template <typename T>
+void swap(QExplicitlySharedDataPointer<T> &p1, QExplicitlySharedDataPointer<T> &p2) noexcept
 { p1.swap(p2); }
 
-template <class T>
-uint qHash(const QSharedDataPointer<T> &ptr, uint seed = 0) noexcept
+template <typename T>
+size_t qHash(const QSharedDataPointer<T> &ptr, size_t seed = 0) noexcept
 {
     return qHash(ptr.data(), seed);
 }
-template <class T>
-uint qHash(const QExplicitlySharedDataPointer<T> &ptr, uint seed = 0) noexcept
+template <typename T>
+size_t qHash(const QExplicitlySharedDataPointer<T> &ptr, size_t seed = 0) noexcept
 {
     return qHash(ptr.data(), seed);
 }
 
-template<typename T> Q_DECLARE_TYPEINFO_BODY(QSharedDataPointer<T>, Q_MOVABLE_TYPE);
-template<typename T> Q_DECLARE_TYPEINFO_BODY(QExplicitlySharedDataPointer<T>, Q_MOVABLE_TYPE); +/
+template<typename T> Q_DECLARE_TYPEINFO_BODY(QSharedDataPointer<T>, Q_RELOCATABLE_TYPE);
+template<typename T> Q_DECLARE_TYPEINFO_BODY(QExplicitlySharedDataPointer<T>, Q_RELOCATABLE_TYPE);
+
+#define QT_DECLARE_QSDP_SPECIALIZATION_DTOR(Class) \
+    template<> QSharedDataPointer<Class>::~QSharedDataPointer();
+
+#define QT_DECLARE_QSDP_SPECIALIZATION_DTOR_WITH_EXPORT(Class, ExportMacro) \
+    template<> ExportMacro QSharedDataPointer<Class>::~QSharedDataPointer();
+
+#define QT_DEFINE_QSDP_SPECIALIZATION_DTOR(Class) \
+    template<> QSharedDataPointer<Class>::~QSharedDataPointer() \
+    { \
+        if (d && !d->ref.deref()) \
+            delete d; \
+    }
+
+#define QT_DECLARE_QESDP_SPECIALIZATION_DTOR(Class) \
+    template<> QExplicitlySharedDataPointer<Class>::~QExplicitlySharedDataPointer();
+
+#define QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(Class, ExportMacro) \
+    template<> ExportMacro QExplicitlySharedDataPointer<Class>::~QExplicitlySharedDataPointer();
+
+#define QT_DEFINE_QESDP_SPECIALIZATION_DTOR(Class) \
+    template<> QExplicitlySharedDataPointer<Class>::~QExplicitlySharedDataPointer() \
+    { \
+        if (d && !d->ref.deref()) \
+            delete d; \
+    } +/
+
 

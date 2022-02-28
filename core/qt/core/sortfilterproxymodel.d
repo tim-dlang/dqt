@@ -19,7 +19,7 @@ import qt.core.itemselectionmodel;
 import qt.core.mimedata;
 import qt.core.namespace;
 import qt.core.object;
-import qt.core.regexp;
+import qt.core.property;
 import qt.core.regularexpression;
 import qt.core.size;
 import qt.core.string;
@@ -27,10 +27,7 @@ import qt.core.stringlist;
 import qt.core.variant;
 import qt.helpers;
 
-/+ #if QT_CONFIG(regularexpression)
-#endif
-
-QT_REQUIRE_CONFIG(sortfilterproxymodel); +/
+/+ QT_REQUIRE_CONFIG(sortfilterproxymodel); +/
 
 
 
@@ -38,7 +35,7 @@ extern(C++, class) struct QSortFilterProxyModelPrivate;
 extern(C++, class) struct QSortFilterProxyModelLessThan;
 extern(C++, class) struct QSortFilterProxyModelGreaterThan;
 
-/// Binding for C++ class [QSortFilterProxyModel](https://doc.qt.io/qt-5/qsortfilterproxymodel.html).
+/// Binding for C++ class [QSortFilterProxyModel](https://doc.qt.io/qt-6/qsortfilterproxymodel.html).
 class /+ Q_CORE_EXPORT +/ QSortFilterProxyModel : QAbstractProxyModel
 {
 private:
@@ -46,18 +43,29 @@ private:
     /+ friend class QSortFilterProxyModelGreaterThan; +/
 
     mixin(Q_OBJECT);
-    /+ Q_PROPERTY(QRegExp filterRegExp READ filterRegExp WRITE setFilterRegExp)
-#if QT_CONFIG(regularexpression)
-    Q_PROPERTY(QRegularExpression filterRegularExpression READ filterRegularExpression WRITE setFilterRegularExpression)
-#endif
-    Q_PROPERTY(int filterKeyColumn READ filterKeyColumn WRITE setFilterKeyColumn)
-    Q_PROPERTY(bool dynamicSortFilter READ dynamicSortFilter WRITE setDynamicSortFilter)
-    Q_PROPERTY(Qt::CaseSensitivity filterCaseSensitivity READ filterCaseSensitivity WRITE setFilterCaseSensitivity NOTIFY filterCaseSensitivityChanged)
-    Q_PROPERTY(Qt::CaseSensitivity sortCaseSensitivity READ sortCaseSensitivity WRITE setSortCaseSensitivity NOTIFY sortCaseSensitivityChanged)
-    Q_PROPERTY(bool isSortLocaleAware READ isSortLocaleAware WRITE setSortLocaleAware NOTIFY sortLocaleAwareChanged)
-    Q_PROPERTY(int sortRole READ sortRole WRITE setSortRole NOTIFY sortRoleChanged)
-    Q_PROPERTY(int filterRole READ filterRole WRITE setFilterRole NOTIFY filterRoleChanged)
-    Q_PROPERTY(bool recursiveFilteringEnabled READ isRecursiveFilteringEnabled WRITE setRecursiveFilteringEnabled NOTIFY recursiveFilteringEnabledChanged) +/
+    /+ Q_PROPERTY(QRegularExpression filterRegularExpression READ filterRegularExpression
+               WRITE setFilterRegularExpression BINDABLE bindableFilterRegularExpression)
+    Q_PROPERTY(int filterKeyColumn READ filterKeyColumn WRITE setFilterKeyColumn
+               BINDABLE bindableFilterKeyColumn)
+    Q_PROPERTY(bool dynamicSortFilter READ dynamicSortFilter WRITE setDynamicSortFilter
+               BINDABLE bindableDynamicSortFilter)
+    Q_PROPERTY(Qt::CaseSensitivity filterCaseSensitivity READ filterCaseSensitivity
+               WRITE setFilterCaseSensitivity NOTIFY filterCaseSensitivityChanged
+               BINDABLE bindableFilterCaseSensitivity)
+    Q_PROPERTY(Qt::CaseSensitivity sortCaseSensitivity READ sortCaseSensitivity
+               WRITE setSortCaseSensitivity NOTIFY sortCaseSensitivityChanged
+               BINDABLE bindableSortCaseSensitivity)
+    Q_PROPERTY(bool isSortLocaleAware READ isSortLocaleAware WRITE setSortLocaleAware
+               NOTIFY sortLocaleAwareChanged BINDABLE bindableIsSortLocaleAware)
+    Q_PROPERTY(int sortRole READ sortRole WRITE setSortRole NOTIFY sortRoleChanged
+               BINDABLE bindableSortRole)
+    Q_PROPERTY(int filterRole READ filterRole WRITE setFilterRole NOTIFY filterRoleChanged
+               BINDABLE bindableFilterRole)
+    Q_PROPERTY(bool recursiveFilteringEnabled READ isRecursiveFilteringEnabled
+               WRITE setRecursiveFilteringEnabled NOTIFY recursiveFilteringEnabledChanged
+               BINDABLE bindableRecursiveFilteringEnabled)
+    Q_PROPERTY(bool autoAcceptChildRows READ autoAcceptChildRows WRITE setAutoAcceptChildRows
+               NOTIFY autoAcceptChildRowsChanged BINDABLE bindableAutoAcceptChildRows) +/
 
 public:
     /+ explicit +/this(QObject parent = null);
@@ -71,51 +79,53 @@ public:
     override QItemSelection mapSelectionToSource(ref const(QItemSelection) proxySelection) const;
     override QItemSelection mapSelectionFromSource(ref const(QItemSelection) sourceSelection) const;
 
-    final QRegExp filterRegExp() const;
-
-/+ #if QT_CONFIG(regularexpression) +/
     final QRegularExpression filterRegularExpression() const;
-/+ #endif +/
+    //final QBindable!(QRegularExpression) bindableFilterRegularExpression();
 
     final int filterKeyColumn() const;
     final void setFilterKeyColumn(int column);
+    final QBindable!(int) bindableFilterKeyColumn();
 
     final /+ Qt:: +/qt.core.namespace.CaseSensitivity filterCaseSensitivity() const;
     final void setFilterCaseSensitivity(/+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
+    final QBindable!(/+ Qt:: +/qt.core.namespace.CaseSensitivity) bindableFilterCaseSensitivity();
 
     final /+ Qt:: +/qt.core.namespace.CaseSensitivity sortCaseSensitivity() const;
     final void setSortCaseSensitivity(/+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
+    final QBindable!(/+ Qt:: +/qt.core.namespace.CaseSensitivity) bindableSortCaseSensitivity();
 
     final bool isSortLocaleAware() const;
     final void setSortLocaleAware(bool on);
+    final QBindable!(bool) bindableIsSortLocaleAware();
 
     final int sortColumn() const;
     final /+ Qt:: +/qt.core.namespace.SortOrder sortOrder() const;
 
     final bool dynamicSortFilter() const;
     final void setDynamicSortFilter(bool enable);
+    final QBindable!(bool) bindableDynamicSortFilter();
 
     final int sortRole() const;
     final void setSortRole(int role);
+    final QBindable!(int) bindableSortRole();
 
     final int filterRole() const;
     final void setFilterRole(int role);
+    final QBindable!(int) bindableFilterRole();
 
     final bool isRecursiveFilteringEnabled() const;
     final void setRecursiveFilteringEnabled(bool recursive);
+    final QBindable!(bool) bindableRecursiveFilteringEnabled();
+
+    final bool autoAcceptChildRows() const;
+    final void setAutoAcceptChildRows(bool accept);
+    final QBindable!(bool) bindableAutoAcceptChildRows();
 
 public /+ Q_SLOTS +/:
-    @QSlot final void setFilterRegExp(ref const(QString) pattern);
-    @QSlot final void setFilterRegExp(ref const(QRegExp) regExp);
-/+ #if QT_CONFIG(regularexpression) +/
     @QSlot final void setFilterRegularExpression(ref const(QString) pattern);
     @QSlot final void setFilterRegularExpression(ref const(QRegularExpression) regularExpression);
-/+ #endif +/
     @QSlot final void setFilterWildcard(ref const(QString) pattern);
     @QSlot final void setFilterFixedString(ref const(QString) pattern);
-/+ #if QT_DEPRECATED_SINCE(5, 11) +/
-    /+ QT_DEPRECATED_X("Use QSortFilterProxyModel::invalidate") +/ @QSlot final void clear();
-/+ #endif +/
     @QSlot final void invalidate();
 
 protected:
@@ -123,10 +133,9 @@ protected:
     /+ virtual +/ bool filterAcceptsColumn(int source_column, ref const(QModelIndex) source_parent) const;
     /+ virtual +/ bool lessThan(ref const(QModelIndex) source_left, ref const(QModelIndex) source_right) const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 11) +/
-    /+ QT_DEPRECATED_X("Use QSortFilterProxyModel::invalidateFilter") +/ final void filterChanged();
-/+ #endif +/
     final void invalidateFilter();
+    final void invalidateRowsFilter();
+    final void invalidateColumnsFilter();
 
 public:
     /+ using QObject::parent; +/
@@ -180,12 +189,15 @@ public:
     @QSignal final void sortRoleChanged(int sortRole);
     @QSignal final void filterRoleChanged(int filterRole);
     @QSignal final void recursiveFilteringEnabledChanged(bool recursiveFilteringEnabled);
+    @QSignal final void autoAcceptChildRowsChanged(bool autoAcceptChildRows);
 
 private:
     /+ Q_DECLARE_PRIVATE(QSortFilterProxyModel) +/
     /+ Q_DISABLE_COPY(QSortFilterProxyModel) +/
 
-    /+ Q_PRIVATE_SLOT(d_func(), void _q_sourceDataChanged(const QModelIndex &source_top_left, const QModelIndex &source_bottom_right, const QVector<int> &roles))
+    /+ Q_PRIVATE_SLOT(d_func(),
+                   void _q_sourceDataChanged(const QModelIndex &source_top_left, const QModelIndex &source_bottom_right,
+                                             const QList<int> &roles))
     Q_PRIVATE_SLOT(d_func(), void _q_sourceHeaderDataChanged(Qt::Orientation orientation, int start, int end))
     Q_PRIVATE_SLOT(d_func(), void _q_sourceAboutToBeReset())
     Q_PRIVATE_SLOT(d_func(), void _q_sourceReset())

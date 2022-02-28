@@ -20,12 +20,12 @@ import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.scopedpointer;
+import qt.core.size;
 import qt.core.string;
 import qt.core.typeinfo;
 import qt.gui.brush;
 import qt.gui.font;
 import qt.gui.image;
-import qt.gui.matrix;
 import qt.gui.paintdevice;
 import qt.gui.painter;
 import qt.gui.painterpath;
@@ -39,7 +39,7 @@ extern(C++, class) struct QPaintEnginePrivate;
 struct QGlyphLayout;
 extern(C++, class) struct QTextItemInt;
 
-/// Binding for C++ class [QTextItem](https://doc.qt.io/qt-5/qtextitem.html).
+/// Binding for C++ class [QTextItem](https://doc.qt.io/qt-6/qtextitem.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextItem {
 public:
     enum RenderFlag {
@@ -63,7 +63,7 @@ alias RenderFlags = QFlags!(RenderFlag);    qreal descent() const;
 /+ Q_DECLARE_TYPEINFO(QTextItem, Q_PRIMITIVE_TYPE); +/
 
 
-/// Binding for C++ class [QPaintEngine](https://doc.qt.io/qt-5/qpaintengine.html).
+/// Binding for C++ class [QPaintEngine](https://doc.qt.io/qt-6/qpaintengine.html).
 abstract class /+ Q_GUI_EXPORT +/ QPaintEngine
 {
 private:
@@ -179,7 +179,6 @@ alias DirtyFlags = QFlags!(DirtyFlag);
         Windows,
         QuickDraw, CoreGraphics, MacPrinter,
         QWindowSystem,
-        PostScript,   // ### Qt 6: Remove, update documentation
         OpenGL,
         Picture,
         SVG,
@@ -229,6 +228,9 @@ alias DirtyFlags = QFlags!(DirtyFlag);
 
     final void syncState();
     pragma(inline, true) final bool isExtended() const { return (extended) != 0; }
+
+    /+ virtual +/ QPixmap createPixmap(QSize size);
+    /+ virtual +/ QPixmap createPixmapFromImage(QImage image, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor);
 
 protected:
     mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
@@ -297,7 +299,7 @@ private:
 }
 
 
-/// Binding for C++ class [QPaintEngineState](https://doc.qt.io/qt-5/qpaintenginestate.html).
+/// Binding for C++ class [QPaintEngineState](https://doc.qt.io/qt-6/qpaintenginestate.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPaintEngineState
 {
 public:
@@ -309,9 +311,6 @@ public:
     QBrush backgroundBrush() const;
     /+ Qt:: +/qt.core.namespace.BGMode backgroundMode() const;
     QFont font() const;
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_X("Use transform()") +/ QMatrix matrix() const;
-/+ #endif +/ // QT_DEPRECATED_SINCE(5, 15)
     QTransform transform() const;
 
     /+ Qt:: +/qt.core.namespace.ClipOperation clipOperation() const;
@@ -345,14 +344,50 @@ protected:
 //
 /+pragma(inline, true) QFlags!(QTextItem.RenderFlags.enum_type) operator |(QTextItem.RenderFlags.enum_type f1, QTextItem.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextItem.RenderFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTextItem.RenderFlags.enum_type) operator |(QTextItem.RenderFlags.enum_type f1, QFlags!(QTextItem.RenderFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QTextItem.RenderFlags.enum_type) operator &(QTextItem.RenderFlags.enum_type f1, QTextItem.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextItem.RenderFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QTextItem.RenderFlags.enum_type) operator &(QTextItem.RenderFlags.enum_type f1, QFlags!(QTextItem.RenderFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QTextItem.RenderFlags.enum_type f1, QTextItem.RenderFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextItem.RenderFlags.enum_type f1, QFlags!(QTextItem.RenderFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QTextItem.RenderFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextItem.RenderFlags.enum_type f1, QTextItem.RenderFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextItem.RenderFlags.enum_type f1, QFlags!(QTextItem.RenderFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QTextItem.RenderFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QTextItem.RenderFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QTextItem.RenderFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextItem.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QTextItem.RenderFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextItem.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextItem::RenderFlags) +/
 /+pragma(inline, true) QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) operator |(QPaintEngine.PaintEngineFeatures.enum_type f1, QPaintEngine.PaintEngineFeatures.enum_type f2)/+noexcept+/{return QFlags!(QPaintEngine.PaintEngineFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) operator |(QPaintEngine.PaintEngineFeatures.enum_type f1, QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) operator &(QPaintEngine.PaintEngineFeatures.enum_type f1, QPaintEngine.PaintEngineFeatures.enum_type f2)/+noexcept+/{return QFlags!(QPaintEngine.PaintEngineFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) operator &(QPaintEngine.PaintEngineFeatures.enum_type f1, QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QPaintEngine.PaintEngineFeatures.enum_type f1, QPaintEngine.PaintEngineFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QPaintEngine.PaintEngineFeatures.enum_type f1, QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QPaintEngine.PaintEngineFeatures.enum_type f1, QPaintEngine.PaintEngineFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QPaintEngine.PaintEngineFeatures.enum_type f1, QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QPaintEngine.PaintEngineFeatures.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QPaintEngine.PaintEngineFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QPaintEngine.PaintEngineFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QPaintEngine.PaintEngineFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QPaintEngine.PaintEngineFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QPaintEngine.PaintEngineFeatures.enum_type f1, int f2)/+noexcept+/;+/
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QPaintEngine::PaintEngineFeatures) +/
 /+pragma(inline, true) QFlags!(QPaintEngine.DirtyFlags.enum_type) operator |(QPaintEngine.DirtyFlags.enum_type f1, QPaintEngine.DirtyFlags.enum_type f2)/+noexcept+/{return QFlags!(QPaintEngine.DirtyFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QPaintEngine.DirtyFlags.enum_type) operator |(QPaintEngine.DirtyFlags.enum_type f1, QFlags!(QPaintEngine.DirtyFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QPaintEngine.DirtyFlags.enum_type) operator &(QPaintEngine.DirtyFlags.enum_type f1, QPaintEngine.DirtyFlags.enum_type f2)/+noexcept+/{return QFlags!(QPaintEngine.DirtyFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QPaintEngine.DirtyFlags.enum_type) operator &(QPaintEngine.DirtyFlags.enum_type f1, QFlags!(QPaintEngine.DirtyFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QPaintEngine.DirtyFlags.enum_type f1, QPaintEngine.DirtyFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QPaintEngine.DirtyFlags.enum_type f1, QFlags!(QPaintEngine.DirtyFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QPaintEngine.DirtyFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QPaintEngine.DirtyFlags.enum_type f1, QPaintEngine.DirtyFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QPaintEngine.DirtyFlags.enum_type f1, QFlags!(QPaintEngine.DirtyFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QPaintEngine.DirtyFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QPaintEngine.DirtyFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QPaintEngine.DirtyFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QPaintEngine.DirtyFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QPaintEngine.DirtyFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QPaintEngine.DirtyFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QPaintEngine::DirtyFlags) +/

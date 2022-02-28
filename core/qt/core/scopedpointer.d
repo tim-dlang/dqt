@@ -45,7 +45,7 @@ struct QScopedPointerDeleter(T)
 /+ template <typename T>
 struct QScopedPointerArrayDeleter
 {
-    static inline void cleanup(T *pointer)
+    static inline void cleanup(T *pointer) noexcept
     {
         // Enforce a complete type.
         // If you get a compile error here, read the section on forward declared
@@ -53,25 +53,31 @@ struct QScopedPointerArrayDeleter
         typedef char IsIncompleteType[ sizeof(T) ? 1 : -1 ];
         (void) sizeof(IsIncompleteType);
 
-        delete [] pointer;
+        delete[] pointer;
+    }
+    void operator()(T *pointer) const noexcept
+    {
+        cleanup(pointer);
     }
 };
 
 struct QScopedPointerPodDeleter
 {
-    static inline void cleanup(void *pointer) { if (pointer) free(pointer); }
+    static inline void cleanup(void *pointer) noexcept { free(pointer); }
+    void operator()(void *pointer) const noexcept { cleanup(pointer); }
 };
 
 #ifndef QT_NO_QOBJECT +/
 struct QScopedPointerObjectDeleteLater(T) if(is(T : QObject))
 {
     pragma(inline, true) static void cleanup(T pointer) { if (pointer) pointer.deleteLater(); }
+    /+void operator ()(T* pointer) const { cleanup(pointer); }+/
 }
 
 alias QScopedPointerDeleteLater = QScopedPointerObjectDeleteLater!(QObject);
 /+ #endif +/
 
-/// Binding for C++ class [QScopedPointer](https://doc.qt.io/qt-5/qscopedpointer.html).
+/// Binding for C++ class [QScopedPointer](https://doc.qt.io/qt-6/qscopedpointer.html).
 extern(C++, class) struct QScopedPointer(T, Cleanup = QScopedPointerDeleter!T)
 {
 private:
@@ -84,7 +90,6 @@ private:
         alias P = T*;
     }
 
-    alias RestrictedBool = P/+ QScopedPointer:: * +/*;
 public:
     /+ explicit +/this(P p/+ = null+/)/+ noexcept+/
     {
@@ -116,17 +121,10 @@ public:
         return !d;
     }+/
 
-/+ #if defined(Q_QDOC)
-    inline operator bool() const
+    /+/+ explicit +/ auto opCast(T : bool)() const
     {
-        return isNull() ? nullptr : &QScopedPointer::d;
-    }
-#else +/
-    /+auto opCast(T : RestrictedBool)() const/+ noexcept+/
-    {
-        return isNull() ? null : &QScopedPointer.d;
+        return !isNull();
     }+/
-/+ #endif +/
 
     P data() const/+ noexcept+/
     {
@@ -149,68 +147,74 @@ public:
     {
         if (d == other)
             return;
-        P oldD = d;
-        d = other;
+        T* oldD = qExchange(d, cast(U && )(other));
         Cleanup.cleanup(oldD);
     }+/
 
-  /+  P take()/+ noexcept+/
+/+ #if QT_DEPRECATED_SINCE(6, 1) +/
+    /+ QT_DEPRECATED_VERSION_X_6_1("Use std::unique_ptr instead, and call release().") +/
+/+        T* take()/+ noexcept+/
     {
-        P oldD = d;
-        d = null;
+        T* oldD = qExchange(d, cast(U && )(null));
         return oldD;
     }+/
+/+ #endif
 
-    /+ void swap(QScopedPointer<T, Cleanup> &other) noexcept
+#if QT_DEPRECATED_SINCE(6, 2) +/
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use std::unique_ptr instead of QScopedPointer.")
+    void swap(QScopedPointer<T, Cleanup> &other) noexcept
     {
         qSwap(d, other.d);
     } +/
+/+ #endif +/
 
     alias pointer = P;
 
+    /+ friend bool operator==(const QScopedPointer<T, Cleanup> &lhs, const QScopedPointer<T, Cleanup> &rhs) noexcept
+    {
+        return lhs.data() == rhs.data();
+    } +/
+
+    /+ friend bool operator!=(const QScopedPointer<T, Cleanup> &lhs, const QScopedPointer<T, Cleanup> &rhs) noexcept
+    {
+        return lhs.data() != rhs.data();
+    } +/
+
+    /+ friend bool operator==(const QScopedPointer<T, Cleanup> &lhs, std::nullptr_t) noexcept
+    {
+        return lhs.isNull();
+    } +/
+
+    /+ friend bool operator==(std::nullptr_t, const QScopedPointer<T, Cleanup> &rhs) noexcept
+    {
+        return rhs.isNull();
+    } +/
+
+    /+ friend bool operator!=(const QScopedPointer<T, Cleanup> &lhs, std::nullptr_t) noexcept
+    {
+        return !lhs.isNull();
+    } +/
+
+    /+ friend bool operator!=(std::nullptr_t, const QScopedPointer<T, Cleanup> &rhs) noexcept
+    {
+        return !rhs.isNull();
+    } +/
+
+/+ #if QT_DEPRECATED_SINCE(6, 2) +/
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use std::unique_ptr instead of QScopedPointer.")
+    friend void swap(QScopedPointer<T, Cleanup> &p1, QScopedPointer<T, Cleanup> &p2) noexcept
+    { p1.swap(p2); } +/
+/+ #endif +/
+
 protected:
-    P d = null;
+    P d;
 
 private:
     /+ Q_DISABLE_COPY(QScopedPointer) +/
 @disable this(this);
 /+this(ref const(QScopedPointer));+//+ref QScopedPointer operator =(ref const(QScopedPointer));+/}
 
-/+pragma(inline, true) bool operator ==(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, ref const(QScopedPointer!(T, Cleanup)) rhs)/+ noexcept+/
-{
-    return lhs.data() == rhs.data();
-}+/
-
-/+pragma(inline, true) bool operator !=(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, ref const(QScopedPointer!(T, Cleanup)) rhs)/+ noexcept+/
-{
-    return lhs.data() != rhs.data();
-}+/
-
-/+pragma(inline, true) bool operator ==(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, /+ std:: +/nullptr_t)/+ noexcept+/
-{
-    return lhs.isNull();
-}+/
-
-/+pragma(inline, true) bool operator ==(T, Cleanup)(/+ std:: +/nullptr_t, ref const(QScopedPointer!(T, Cleanup)) rhs)/+ noexcept+/
-{
-    return rhs.isNull();
-}+/
-
-/+pragma(inline, true) bool operator !=(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, /+ std:: +/nullptr_t)/+ noexcept+/
-{
-    return !lhs.isNull();
-}+/
-
-/+pragma(inline, true) bool operator !=(T, Cleanup)(/+ std:: +/nullptr_t, ref const(QScopedPointer!(T, Cleanup)) rhs)/+ noexcept+/
-{
-    return !rhs.isNull();
-}+/
-
-/+ template <class T, class Cleanup>
-inline void swap(QScopedPointer<T, Cleanup> &p1, QScopedPointer<T, Cleanup> &p2) noexcept
-{ p1.swap(p2); } +/
-
-/// Binding for C++ class [QScopedArrayPointer](https://doc.qt.io/qt-5/qscopedarraypointer.html).
+/// Binding for C++ class [QScopedArrayPointer](https://doc.qt.io/qt-6/qscopedarraypointer.html).
 class QScopedArrayPointer(T, Cleanup ) : QScopedPointer!(T, Cleanup)
 {
 private:
@@ -238,11 +242,15 @@ public:
         return this.d[i];
     }
 
-    /+ void swap(QScopedArrayPointer &other) noexcept // prevent QScopedPointer <->QScopedArrayPointer swaps
+/+ #if QT_DEPRECATED_SINCE(6, 2) +/
+    /+ QT_DEPRECATED_VERSION_X_6_2("Use std::unique_ptr instead of QScopedArrayPointer.")
+    void swap(QScopedArrayPointer &other) noexcept // prevent QScopedPointer <->QScopedArrayPointer swaps
     { QScopedPointer<T, Cleanup>::swap(other); } +/
+/+ #endif +/
 
 private:
-    /+ explicit +/ pragma(inline, true) this(void* ) {
+    /+ explicit +/ pragma(inline, true) this(void* )
+    {
         // Enforce the same type.
 
         // If you get a compile error here, make sure you declare
@@ -256,7 +264,10 @@ private:
     /+ Q_DISABLE_COPY(QScopedArrayPointer) +/
 }
 
-/+ template <typename T, typename Cleanup>
+/+ #if QT_DEPRECATED_SINCE(6, 2)
+template <typename T, typename Cleanup>
+QT_DEPRECATED_VERSION_X_6_2("Use std::unique_ptr instead of QScopedArrayPointer.")
 inline void swap(QScopedArrayPointer<T, Cleanup> &lhs, QScopedArrayPointer<T, Cleanup> &rhs) noexcept
-{ lhs.swap(rhs); } +/
+{ lhs.swap(rhs); }
+#endif +/
 

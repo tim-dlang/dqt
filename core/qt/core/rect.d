@@ -29,8 +29,8 @@ struct CGRect;
 #endif +/
 
 
-/// Binding for C++ class [QRect](https://doc.qt.io/qt-5/qrect.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRect
+/// Binding for C++ class [QRect](https://doc.qt.io/qt-6/qrect.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRect
 {
 public:
     /+this()/+ noexcept+/
@@ -77,7 +77,7 @@ public:
     { return x2; }
     pragma(inline, true) int bottom() const/+ noexcept+/
     { return y2; }
-    /+ Q_REQUIRED_RESULT +/ QRect normalized() const/+ noexcept+/;
+    /+ [[nodiscard]] +/ QRect normalized() const/+ noexcept+/;
 
     pragma(inline, true) int x() const/+ noexcept+/
     { return x1; }
@@ -175,11 +175,11 @@ public:
         x2 += p.x();
         y2 += p.y();
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect translated(int dx, int dy) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRect translated(int dx, int dy) const/+ noexcept+/
     { auto tmp = QPoint(x1 + dx, y1 + dy); auto tmp__1 = QPoint(x2 + dx, y2 + dy); return QRect(tmp, tmp__1); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect translated(ref const(QPoint) p) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRect translated(ref const(QPoint) p) const/+ noexcept+/
     { auto tmp = QPoint(x1 + p.x(), y1 + p.y()); auto tmp__1 = QPoint(x2 + p.x(), y2 + p.y()); return QRect(tmp, tmp__1); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect transposed() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRect transposed() const/+ noexcept+/
     { auto tmp = topLeft(); auto tmp__1 = size().transposed(); return QRect(tmp, tmp__1); }
 
     pragma(inline, true) void moveTo(int ax, int ay)/+ noexcept+/
@@ -234,7 +234,7 @@ public:
         x2 += dx2;
         y2 += dy2;
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect adjusted(int xp1, int yp1, int xp2, int yp2) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRect adjusted(int xp1, int yp1, int xp2, int yp2) const/+ noexcept+/
     { auto tmp = QPoint(x1 + xp1, y1 + yp1); auto tmp__1 = QPoint(x2 + xp2, y2 + yp2); return QRect(tmp, tmp__1); }
 
     pragma(inline, true) QSize size() const/+ noexcept+/
@@ -267,7 +267,7 @@ public:
     }
 
     bool contains(ref const(QRect) r, bool proper = false) const/+ noexcept+/;
-    bool contains(ref const(QPoint) p, bool proper=false) const/+ noexcept+/;
+    bool contains(ref const(QPoint) p, bool proper = false) const/+ noexcept+/;
     pragma(inline, true) bool contains(int ax, int ay) const/+ noexcept+/
     {
         auto tmp = QPoint(ax, ay); return contains(tmp, false);
@@ -276,11 +276,11 @@ public:
     {
         auto tmp = QPoint(ax, ay); return contains(tmp, aproper);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect united(ref const(QRect) r) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRect united(ref const(QRect) r) const/+ noexcept+/
     {
         return this | r;
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect intersected(ref const(QRect) other) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRect intersected(ref const(QRect) other) const/+ noexcept+/
     {
         return this & other;
     }
@@ -307,17 +307,21 @@ public:
         return this;
     }
 
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    Q_REQUIRED_RESULT QT_DEPRECATED QRect unite(const QRect &r) const noexcept { return united(r); }
-    Q_REQUIRED_RESULT QT_DEPRECATED QRect intersect(const QRect &r) const noexcept { return intersected(r); }
-#endif +/
+    /+ [[nodiscard]] +/ pragma(inline, true) static QRect span(ref const(QPoint) p1, ref const(QPoint) p2)/+ noexcept+/
+    {
+        auto tmp = QPoint(qMin(p1.x(), p2.x()), qMin(p1.y(), p2.y())); auto tmp__1 = QPoint(qMax(p1.x(), p2.x()), qMax(p1.y(), p2.y())); return QRect(tmp,
+                     tmp__1);
+    }
 
-    /+ friend inline bool operator==(const QRect &, const QRect &) noexcept; +/
-    /+ friend inline bool operator!=(const QRect &, const QRect &) noexcept; +/
+    /+ friend constexpr inline bool operator==(const QRect &r1, const QRect &r2) noexcept
+    { return r1.x1==r2.x1 && r1.x2==r2.x2 && r1.y1==r2.y1 && r1.y2==r2.y2; } +/
+    /+ friend constexpr inline bool operator!=(const QRect &r1, const QRect &r2) noexcept
+    { return r1.x1!=r2.x1 || r1.x2!=r2.x2 || r1.y1!=r2.y1 || r1.y2!=r2.y2; } +/
+    /+ friend constexpr inline size_t qHash(const QRect &, size_t) noexcept; +/
 
     static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
-        /+ Q_REQUIRED_RESULT CGRect toCGRect() const noexcept; +/
+        /+ [[nodiscard]] CGRect toCGRect() const noexcept; +/
     }
 
 private:
@@ -327,10 +331,7 @@ private:
     int y2 = -1;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QRect, Q_MOVABLE_TYPE);
-
-inline bool operator==(const QRect &, const QRect &) noexcept;
-inline bool operator!=(const QRect &, const QRect &) noexcept;
+/+ Q_DECLARE_TYPEINFO(QRect, Q_RELOCATABLE_TYPE);
 
 
 /*****************************************************************************
@@ -339,21 +340,16 @@ inline bool operator!=(const QRect &, const QRect &) noexcept;
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QRect &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QRect &);
-#endif +/
+#endif
 
 /*****************************************************************************
   QRect inline member functions
  *****************************************************************************/
 
-/+pragma(inline, true) bool operator ==(ref const(QRect) r1, ref const(QRect) r2)/+ noexcept+/
+constexpr inline size_t qHash(const QRect &r, size_t seed = 0) noexcept
 {
-    return r1.x1==r2.x1 && r1.x2==r2.x2 && r1.y1==r2.y1 && r1.y2==r2.y2;
-}+/
-
-/+pragma(inline, true) bool operator !=(ref const(QRect) r1, ref const(QRect) r2)/+ noexcept+/
-{
-    return r1.x1!=r2.x1 || r1.x2!=r2.x2 || r1.y1!=r2.y1 || r1.y2!=r2.y2;
-}+/
+    return qHashMulti(seed, r.x1, r.x2, r.y1, r.y2);
+} +/
 
 /+pragma(inline, true) QRect operator +(ref const(QRect) rectangle, ref const(QMargins) margins)/+ noexcept+/
 {
@@ -378,8 +374,8 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QRect &);
 #endif +/
 
 
-/// Binding for C++ class [QRectF](https://doc.qt.io/qt-5/qrectf.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRectF
+/// Binding for C++ class [QRectF](https://doc.qt.io/qt-6/qrectf.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRectF
 {
 public:
     /+this()/+ noexcept+/
@@ -424,7 +420,7 @@ public:
     { return w <= 0. || h <= 0.; }
     pragma(inline, true) bool isValid() const/+ noexcept+/
     { return w > 0. && h > 0.; }
-    /+ Q_REQUIRED_RESULT +/ QRectF normalized() const/+ noexcept+/;
+    /+ [[nodiscard]] +/ QRectF normalized() const/+ noexcept+/;
 
     pragma(inline, true) qreal left() const/+ noexcept+/ { return xp; }
     pragma(inline, true) qreal top() const/+ noexcept+/ { return yp; }
@@ -492,12 +488,14 @@ public:
         yp += p.y();
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF translated(qreal dx, qreal dy) const/+ noexcept+/
-    { return QRectF(xp + dx, yp + dy, w, h); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF translated(ref const(QPointF) p) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRectF translated(qreal dx, qreal dy) const/+ noexcept+/
+    {
+        return QRectF(xp + dx, yp + dy, w, h);
+    }
+    /+ [[nodiscard]] +/ pragma(inline, true) QRectF translated(ref const(QPointF) p) const/+ noexcept+/
     { return QRectF(xp + p.x(), yp + p.y(), w, h); }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF transposed() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRectF transposed() const/+ noexcept+/
     { auto tmp = topLeft(); auto tmp__1 = size().transposed(); return QRectF(tmp, tmp__1); }
 
     pragma(inline, true) void moveTo(qreal ax, qreal ay)/+ noexcept+/
@@ -542,9 +540,16 @@ public:
     }
 
     pragma(inline, true) void adjust(qreal xp1, qreal yp1, qreal xp2, qreal yp2)/+ noexcept+/
-    { xp += xp1; yp += yp1; w += xp2 - xp1; h += yp2 - yp1; }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF adjusted(qreal xp1, qreal yp1, qreal xp2, qreal yp2) const/+ noexcept+/
-    { return QRectF(xp + xp1, yp + yp1, w + xp2 - xp1, h + yp2 - yp1); }
+    {
+        xp += xp1;
+        yp += yp1;
+        w += xp2 - xp1;
+        h += yp2 - yp1;
+    }
+    /+ [[nodiscard]] +/ pragma(inline, true) QRectF adjusted(qreal xp1, qreal yp1, qreal xp2, qreal yp2) const/+ noexcept+/
+    {
+        return QRectF(xp + xp1, yp + yp1, w + xp2 - xp1, h + yp2 - yp1);
+    }
 
     pragma(inline, true) QSizeF size() const/+ noexcept+/
     { return QSizeF(w, h); }
@@ -581,11 +586,11 @@ public:
     {
         auto tmp = QPointF(ax, ay); return contains(tmp);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF united(ref const(QRectF) r) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRectF united(ref const(QRectF) r) const/+ noexcept+/
     {
         return this | r;
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF intersected(ref const(QRectF) r) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) QRectF intersected(ref const(QRectF) r) const/+ noexcept+/
     {
         return this & r;
     }
@@ -612,24 +617,34 @@ public:
         return this;
     }
 
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    Q_REQUIRED_RESULT QT_DEPRECATED QRectF unite(const QRectF &r) const noexcept { return united(r); }
-    Q_REQUIRED_RESULT QT_DEPRECATED QRectF intersect(const QRectF &r) const noexcept { return intersected(r); }
-#endif +/
-
-    /+ friend inline bool operator==(const QRectF &, const QRectF &) noexcept; +/
-    /+ friend inline bool operator!=(const QRectF &, const QRectF &) noexcept; +/
-
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect toRect() const/+ noexcept+/
+    /+ friend constexpr inline bool operator==(const QRectF &r1, const QRectF &r2) noexcept
     {
-        auto tmp = QPoint(qRound(xp), qRound(yp)); auto tmp__1 = QPoint(qRound(xp + w) - 1, qRound(yp + h) - 1); return QRect(tmp, tmp__1);
+        return r1.topLeft() == r2.topLeft()
+            && r1.size() == r2.size();
+    } +/
+    /+ friend constexpr inline bool operator!=(const QRectF &r1, const QRectF &r2) noexcept
+    {
+        return r1.topLeft() != r2.topLeft()
+            || r1.size() != r2.size();
+    } +/
+
+    /+ [[nodiscard]] +/ pragma(inline, true) QRect toRect() const/+ noexcept+/
+    {
+        // This rounding is designed to minimize the maximum possible difference
+        // in topLeft(), bottomRight(), and size() after rounding.
+        // All dimensions are at most off by 0.75, and topLeft by at most 0.5.
+        const(int) nxp = qRound(xp);
+        const(int) nyp = qRound(yp);
+        const(int) nw = qRound(w + (xp - nxp) / 2);
+        const(int) nh = qRound(h + (yp - nyp) / 2);
+        return QRect(nxp, nyp, nw, nh);
     }
-    /+ Q_REQUIRED_RESULT +/ QRect toAlignedRect() const/+ noexcept+/;
+    /+ [[nodiscard]] +/ QRect toAlignedRect() const/+ noexcept+/;
 
     static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
-        /+ Q_REQUIRED_RESULT static QRectF fromCGRect(CGRect rect) noexcept; +/
-        /+ Q_REQUIRED_RESULT CGRect toCGRect() const noexcept; +/
+        /+ [[nodiscard]] static QRectF fromCGRect(CGRect rect) noexcept; +/
+        /+ [[nodiscard]] CGRect toCGRect() const noexcept; +/
     }
 
 private:
@@ -639,10 +654,7 @@ private:
     qreal h = 0.;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QRectF, Q_MOVABLE_TYPE);
-
-inline bool operator==(const QRectF &, const QRectF &) noexcept;
-inline bool operator!=(const QRectF &, const QRectF &) noexcept;
+/+ Q_DECLARE_TYPEINFO(QRectF, Q_RELOCATABLE_TYPE);
 
 
 /*****************************************************************************
@@ -659,23 +671,9 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QRectF &);
 
 
 QT_WARNING_PUSH
-QT_WARNING_DISABLE_CLANG("-Wfloat-equal")
-QT_WARNING_DISABLE_GCC("-Wfloat-equal")
-QT_WARNING_DISABLE_INTEL(1572)
+QT_WARNING_DISABLE_FLOAT_COMPARE
 
 QT_WARNING_POP +/
-
-/+pragma(inline, true) bool operator ==(ref const(QRectF) r1, ref const(QRectF) r2)/+ noexcept+/
-{
-    return qFuzzyCompare(r1.xp, r2.xp) && qFuzzyCompare(r1.yp, r2.yp)
-           && qFuzzyCompare(r1.w, r2.w) && qFuzzyCompare(r1.h, r2.h);
-}+/
-
-/+pragma(inline, true) bool operator !=(ref const(QRectF) r1, ref const(QRectF) r2)/+ noexcept+/
-{
-    return !qFuzzyCompare(r1.xp, r2.xp) || !qFuzzyCompare(r1.yp, r2.yp)
-           || !qFuzzyCompare(r1.w, r2.w) || !qFuzzyCompare(r1.h, r2.h);
-}+/
 
 /+pragma(inline, true) QRectF operator +(ref const(QRectF) lhs, ref const(QMarginsF) rhs)/+ noexcept+/
 {

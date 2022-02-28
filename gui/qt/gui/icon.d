@@ -30,8 +30,8 @@ import qt.helpers;
 extern(C++, class) struct QIconPrivate;
 extern(C++, class) struct QIconEngine;
 
-/// Binding for C++ class [QIcon](https://doc.qt.io/qt-5/qicon.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QIcon
+/// Binding for C++ class [QIcon](https://doc.qt.io/qt-6/qicon.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QIcon
 {
 public:
     enum Mode { Normal, Disabled, Active, Selected }
@@ -43,16 +43,17 @@ public:
     @disable this(this);
     this(ref const(QIcon) other);
     /+ QIcon(QIcon &&other) noexcept
-        : d(other.d)
-    { other.d = nullptr; } +/
+        : d(qExchange(other.d, nullptr))
+    {} +/
     /+ explicit +/this(ref const(QString) fileName); // file or resource name
     /+ explicit +/this(QIconEngine* engine);
     ~this();
     /+ref QIcon operator =(ref const(QIcon) other);+/
-    /+ inline QIcon &operator=(QIcon &&other) noexcept
-    { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QIcon) +/
     /+ inline void swap(QIcon &other) noexcept
     { qSwap(d, other.d); } +/
+    /+bool operator ==(ref const(QIcon) ) const /+ = delete +/;+/
+    /+bool operator !=(ref const(QIcon) ) const /+ = delete +/;+/
 
     /+auto opCast(T : QVariant)() const;+/
 
@@ -61,10 +62,17 @@ public:
         { auto tmp = QSize(w, h); return pixmap(tmp, mode, state); }
     pragma(inline, true) QPixmap pixmap(int extent, Mode mode = Mode.Normal, State state = State.Off) const
         { auto tmp = QSize(extent, extent); return pixmap(tmp, mode, state); }
-    QPixmap pixmap(QWindow* window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
+    QPixmap pixmap(ref const(QSize) size, qreal devicePixelRatio, Mode mode = Mode.Normal, State state = State.Off) const;
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use pixmap(size, devicePixelRatio) instead") +/
+        QPixmap pixmap(QWindow* window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
+/+ #endif +/
 
     QSize actualSize(ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
-    QSize actualSize(QWindow* window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use actualSize(size) instead") +/
+        QSize actualSize(QWindow* window, ref const(QSize) size, Mode mode = Mode.Normal, State state = State.Off) const;
+/+ #endif +/
 
     QString name() const;
 
@@ -76,9 +84,6 @@ public:
     bool isDetached() const;
     void detach();
 
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    QT_DEPRECATED inline int serialNumber() const { return cacheKey() >> 32; }
-#endif +/
     qint64 cacheKey() const;
 
     void addPixmap(ref const(QPixmap) pixmap, Mode mode = Mode.Normal, State state = State.Off);

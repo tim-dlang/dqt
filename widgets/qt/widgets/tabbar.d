@@ -32,7 +32,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QTabBarPrivate;
 
-/// Binding for C++ class [QTabBar](https://doc.qt.io/qt-5/qtabbar.html).
+/// Binding for C++ class [QTabBar](https://doc.qt.io/qt-6/qtabbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QTabBar: QWidget
 {
     mixin(Q_OBJECT);
@@ -45,7 +45,8 @@ class /+ Q_WIDGETS_EXPORT +/ QTabBar: QWidget
     Q_PROPERTY(Qt::TextElideMode elideMode READ elideMode WRITE setElideMode)
     Q_PROPERTY(bool usesScrollButtons READ usesScrollButtons WRITE setUsesScrollButtons)
     Q_PROPERTY(bool tabsClosable READ tabsClosable WRITE setTabsClosable)
-    Q_PROPERTY(SelectionBehavior selectionBehaviorOnRemove READ selectionBehaviorOnRemove WRITE setSelectionBehaviorOnRemove)
+    Q_PROPERTY(SelectionBehavior selectionBehaviorOnRemove READ selectionBehaviorOnRemove
+               WRITE setSelectionBehaviorOnRemove)
     Q_PROPERTY(bool expanding READ expanding WRITE setExpanding)
     Q_PROPERTY(bool movable READ isMovable WRITE setMovable)
     Q_PROPERTY(bool documentMode READ documentMode WRITE setDocumentMode)
@@ -102,12 +103,9 @@ public:
     final /+ Qt:: +/qt.core.namespace.TextElideMode elideMode() const;
     final void setElideMode(/+ Qt:: +/qt.core.namespace.TextElideMode mode);
 
-/+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
-    {
-        final void setTabToolTip(int index, ref const(QString) tip);
-        final QString tabToolTip(int index) const;
-    }
+/+ #if QT_CONFIG(tooltip) +/
+    final void setTabToolTip(int index, ref const(QString) tip);
+    final QString tabToolTip(int index) const;
 /+ #endif
 
 #if QT_CONFIG(whatsthis) +/
@@ -188,16 +186,17 @@ protected:
     override void showEvent(QShowEvent );
     override void hideEvent(QHideEvent );
     override void paintEvent(QPaintEvent );
-    override void mousePressEvent (QMouseEvent );
-    override void mouseMoveEvent (QMouseEvent );
-    override void mouseReleaseEvent (QMouseEvent );
+    override void mousePressEvent(QMouseEvent );
+    override void mouseMoveEvent(QMouseEvent );
+    override void mouseReleaseEvent(QMouseEvent );
+    override void mouseDoubleClickEvent(QMouseEvent );
 /+ #if QT_CONFIG(wheelevent) +/
     override void wheelEvent(QWheelEvent event);
 /+ #endif +/
     override void keyPressEvent(QKeyEvent );
     override void changeEvent(QEvent );
     override void timerEvent(QTimerEvent event);
-    final void initStyleOption(QStyleOptionTab* option, int tabIndex) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionTab* option, int tabIndex) const;
 
     version(QT_NO_ACCESSIBILITY){}else
     {

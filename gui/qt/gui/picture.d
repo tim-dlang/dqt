@@ -16,14 +16,11 @@ import qt.config;
 import qt.helpers;
 version(QT_NO_PICTURE){}else
 {
-    import qt.core.bytearray;
     import qt.core.datastream;
     import qt.core.iodevice;
-    import qt.core.list;
     import qt.core.rect;
     import qt.core.shareddata;
     import qt.core.string;
-    import qt.core.stringlist;
     import qt.core.typeinfo;
     import qt.gui.paintdevice;
     import qt.gui.paintengine;
@@ -34,8 +31,8 @@ version(QT_NO_PICTURE){}else
 {
 
 extern(C++, class) struct QPicturePrivate;
-/// Binding for C++ class [QPicture](https://doc.qt.io/qt-5/qpicture.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPicture
+/// Binding for C++ class [QPicture](https://doc.qt.io/qt-6/qpicture.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPicture
 {
 private:
     immutable void *vtbl;
@@ -72,17 +69,16 @@ public:
 
     bool play(QPainter* p);
 
-    bool load(QIODevice dev, const(char)* format = null);
-    bool load(ref const(QString) fileName, const(char)* format = null);
-    bool save(QIODevice dev, const(char)* format = null);
-    bool save(ref const(QString) fileName, const(char)* format = null);
+    bool load(QIODevice dev);
+    bool load(ref const(QString) fileName);
+    bool save(QIODevice dev);
+    bool save(ref const(QString) fileName);
 
     QRect boundingRect() const;
     void setBoundingRect(ref const(QRect) r);
 
     /+ref QPicture operator =(ref const(QPicture) p);+/
-    /+ inline QPicture &operator=(QPicture &&other) noexcept
-    { qSwap(d_ptr, other.d_ptr); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPicture) +/
     /+ inline void swap(QPicture &other) noexcept
     { d_ptr.swap(other.d_ptr); } +/
     void detach();
@@ -90,14 +86,6 @@ public:
 
     /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QPicture &p); +/
     /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QPicture &p); +/
-
-/+ #if QT_DEPRECATED_SINCE(5, 10) +/
-    /+ QT_DEPRECATED +/ static const(char)* pictureFormat(ref const(QString) fileName);
-    /+ QT_DEPRECATED +/ static QList!(QByteArray) inputFormats();
-    /+ QT_DEPRECATED +/ static QList!(QByteArray) outputFormats();
-    /+ QT_DEPRECATED +/ static QStringList inputFormatList();
-    /+ QT_DEPRECATED +/ static QStringList outputFormatList();
-/+ #endif +/ // QT_DEPRECATED_SINCE(5, 10)
 
     mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
     QPaintEngine paintEngine() const;
@@ -124,85 +112,13 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_SHARED(QPicture) +/
-
-
-static if(!defined!"QT_NO_PICTUREIO")
-{
-alias picture_io_handler = ExternCPPFunc!(void function(QPictureIO* )); // picture IO handler
-
-struct QPictureIOData;
-
-/// Binding for C++ class [QPictureIO](https://doc.qt.io/qt-5/qpictureio.html).
-extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPictureIO
-{
-public:
-    @disable this();
-    pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-    ref typeof(this) rawConstructor();
-    static typeof(this) create()
-    {
-        typeof(this) r = typeof(this).init;
-        r.rawConstructor();
-        return r;
-    }
-
-    this(QIODevice ioDevice, const(char)* format);
-    this(ref const(QString) fileName, const(char)* format);
-    ~this();
-
-    ref const(QPicture) picture() const;
-    int status() const;
-    const(char)* format() const;
-    QIODevice ioDevice() const;
-    QString fileName() const;
-    int quality() const;
-    QString description() const;
-    const(char)* parameters() const;
-    float gamma() const;
-
-    void setPicture(ref const(QPicture) );
-    void setStatus(int);
-    void setFormat(const(char)* );
-    void setIODevice(QIODevice );
-    void setFileName(ref const(QString) );
-    void setQuality(int);
-    void setDescription(ref const(QString) );
-    void setParameters(const(char)* );
-    void setGamma(float);
-
-    bool read();
-    bool write();
-
-    static QByteArray pictureFormat(ref const(QString) fileName);
-    static QByteArray pictureFormat(QIODevice );
-    static QList!(QByteArray) inputFormats();
-    static QList!(QByteArray) outputFormats();
-
-    static void defineIOHandler(const(char)* format,
-                                    const(char)* header,
-                                    const(char)* flags,
-                                    picture_io_handler read_picture,
-                                    picture_io_handler write_picture);
-
-private:
-    /+ Q_DISABLE_COPY(QPictureIO) +/
-@disable this(this);
-/+this(ref const(QPictureIO));+//+ref QPictureIO operator =(ref const(QPictureIO));+/
-    //void init_();
-
-    QPictureIOData* d;
-    mixin(CREATE_CONVENIENCE_WRAPPERS);
-}
-
-}
-
+/+ Q_DECLARE_SHARED(QPicture)
 
 /*****************************************************************************
   QPicture stream functions
  *****************************************************************************/
 
-/+ #ifndef QT_NO_DATASTREAM
+#ifndef QT_NO_DATASTREAM
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPicture &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPicture &);
 #endif +/

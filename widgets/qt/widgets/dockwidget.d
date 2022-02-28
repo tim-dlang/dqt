@@ -22,7 +22,7 @@ import qt.helpers;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
 version(QT_NO_ACTION){}else
-    import qt.widgets.action;
+    import qt.gui.action;
 
 /+ QT_REQUIRE_CONFIG(dockwidget); +/
 
@@ -30,7 +30,7 @@ version(QT_NO_ACTION){}else
 extern(C++, class) struct QDockAreaLayout;
 extern(C++, class) struct QDockWidgetPrivate;
 
-/// Binding for C++ class [QDockWidget](https://doc.qt.io/qt-5/qdockwidget.html).
+/// Binding for C++ class [QDockWidget](https://doc.qt.io/qt-6/qdockwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QDockWidget : QWidget
 {
     mixin(Q_OBJECT);
@@ -57,10 +57,6 @@ public:
         DockWidgetVerticalTitleBar = 0x08,
 
         DockWidgetFeatureMask = 0x0f,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        AllDockWidgetFeatures /+ Q_DECL_ENUMERATOR_DEPRECATED +/ =
-            DockWidgetFeature.DockWidgetClosable|DockWidgetFeature.DockWidgetMovable|DockWidgetFeature.DockWidgetFloatable, // ### Qt 6: remove
-/+ #endif +/
         NoDockWidgetFeatures  = 0x00,
 
         Reserved              = 0xff
@@ -100,7 +96,7 @@ protected:
     override void closeEvent(QCloseEvent event);
     override void paintEvent(QPaintEvent event);
     override bool event(QEvent event);
-//    final void initStyleOption(QStyleOptionDockWidget* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionDockWidget* option) const;
 
 private:
     /+ Q_DECLARE_PRIVATE(QDockWidget) +/
@@ -116,6 +112,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QDockWidget.DockWidgetFeatures.enum_type) operator |(QDockWidget.DockWidgetFeatures.enum_type f1, QDockWidget.DockWidgetFeatures.enum_type f2)/+noexcept+/{return QFlags!(QDockWidget.DockWidgetFeatures.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDockWidget.DockWidgetFeatures.enum_type) operator |(QDockWidget.DockWidgetFeatures.enum_type f1, QFlags!(QDockWidget.DockWidgetFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QDockWidget.DockWidgetFeatures.enum_type) operator &(QDockWidget.DockWidgetFeatures.enum_type f1, QDockWidget.DockWidgetFeatures.enum_type f2)/+noexcept+/{return QFlags!(QDockWidget.DockWidgetFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QDockWidget.DockWidgetFeatures.enum_type) operator &(QDockWidget.DockWidgetFeatures.enum_type f1, QFlags!(QDockWidget.DockWidgetFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QDockWidget.DockWidgetFeatures.enum_type f1, QDockWidget.DockWidgetFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDockWidget.DockWidgetFeatures.enum_type f1, QFlags!(QDockWidget.DockWidgetFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QDockWidget.DockWidgetFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDockWidget.DockWidgetFeatures.enum_type f1, QDockWidget.DockWidgetFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDockWidget.DockWidgetFeatures.enum_type f1, QFlags!(QDockWidget.DockWidgetFeatures.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QDockWidget.DockWidgetFeatures.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QDockWidget.DockWidgetFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QDockWidget.DockWidgetFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDockWidget.DockWidgetFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QDockWidget.DockWidgetFeatures.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDockWidget.DockWidgetFeatures.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QDockWidget::DockWidgetFeatures) +/

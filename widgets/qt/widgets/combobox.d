@@ -37,14 +37,15 @@ version(QT_NO_VALIDATOR){}else
 
 extern(C++, class) struct QComboBoxPrivate;
 
-/// Binding for C++ class [QComboBox](https://doc.qt.io/qt-5/qcombobox.html).
+/// Binding for C++ class [QComboBox](https://doc.qt.io/qt-6/qcombobox.html).
 class /+ Q_WIDGETS_EXPORT +/ QComboBox : QWidget
 {
     mixin(Q_OBJECT);
 
     /+ Q_PROPERTY(bool editable READ isEditable WRITE setEditable)
     Q_PROPERTY(int count READ count)
-    Q_PROPERTY(QString currentText READ currentText WRITE setCurrentText NOTIFY currentTextChanged USER true)
+    Q_PROPERTY(QString currentText READ currentText WRITE setCurrentText NOTIFY currentTextChanged
+               USER true)
     Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex NOTIFY currentIndexChanged)
     Q_PROPERTY(QVariant currentData READ currentData)
     Q_PROPERTY(int maxVisibleItems READ maxVisibleItems WRITE setMaxVisibleItems)
@@ -54,14 +55,6 @@ class /+ Q_WIDGETS_EXPORT +/ QComboBox : QWidget
     Q_PROPERTY(int minimumContentsLength READ minimumContentsLength WRITE setMinimumContentsLength)
     Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize)
     Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText)
-
-#if QT_CONFIG(completer)
-#if QT_DEPRECATED_SINCE(5, 13)
-    Q_PROPERTY(bool autoCompletion READ autoCompletion WRITE setAutoCompletion DESIGNABLE false)
-    Q_PROPERTY(Qt::CaseSensitivity autoCompletionCaseSensitivity READ autoCompletionCaseSensitivity WRITE setAutoCompletionCaseSensitivity DESIGNABLE false)
-#endif
-#endif // QT_CONFIG(completer)
-
     Q_PROPERTY(bool duplicatesEnabled READ duplicatesEnabled WRITE setDuplicatesEnabled)
     Q_PROPERTY(bool frame READ hasFrame WRITE setFrame)
     Q_PROPERTY(int modelColumn READ modelColumn WRITE setModelColumn) +/
@@ -76,19 +69,6 @@ public:
     final int count() const;
     final void setMaxCount(int max);
     final int maxCount() const;
-
-/+ #if QT_CONFIG(completer)
-#if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use completer() instead.") +/
-        final bool autoCompletion() const;
-    /+ QT_DEPRECATED_X("Use setCompleter() instead.") +/
-        final void setAutoCompletion(bool enable);
-    /+ QT_DEPRECATED_X("Use completer()->caseSensitivity() instead.") +/
-        final /+ Qt:: +/qt.core.namespace.CaseSensitivity autoCompletionCaseSensitivity() const;
-    /+ QT_DEPRECATED_X("Use completer()->setCaseSensitivity() instead.") +/
-        final void setAutoCompletionCaseSensitivity(/+ Qt:: +/qt.core.namespace.CaseSensitivity sensitivity);
-/+ #endif
-#endif +/
 
     final bool duplicatesEnabled() const;
     final void setDuplicatesEnabled(bool enable);
@@ -119,11 +99,7 @@ public:
     enum SizeAdjustPolicy {
         AdjustToContents,
         AdjustToContentsOnFirstShow,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        AdjustToMinimumContentsLength /+ Q_DECL_ENUMERATOR_DEPRECATED_X(
-            "Use AdjustToContents or AdjustToContentsOnFirstShow") +/, // ### Qt 6: remove
-/+ #endif +/
-        AdjustToMinimumContentsLengthWithIcon = SizeAdjustPolicy.AdjustToContentsOnFirstShow + 2
+        AdjustToMinimumContentsLengthWithIcon
     }
     /+ Q_ENUM(SizeAdjustPolicy) +/
 
@@ -162,7 +138,7 @@ public:
     final void setItemDelegate(QAbstractItemDelegate delegate_);
 
     final QAbstractItemModel model() const;
-    final void setModel(QAbstractItemModel model);
+    /+ virtual +/ void setModel(QAbstractItemModel model);
 
     final QModelIndex rootModelIndex() const;
     final void setRootModelIndex(ref const(QModelIndex) index);
@@ -226,18 +202,7 @@ public /+ Q_SLOTS +/:
     @QSignal final void highlighted(int index);
     @QSignal final void textHighlighted(ref const(QString) );
     @QSignal final void currentIndexChanged(int index);
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_VERSION_X_5_15(
-                "Use currentIndexChanged(int) instead, and get the text using itemText(index)") +/
-        @QSignal final void currentIndexChanged(ref const(QString) );
-/+ #endif +/
     @QSignal final void currentTextChanged(ref const(QString) );
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_VERSION_X(5, 15, "Use textActivated() instead") +/
-        @QSignal final void activated(ref const(QString) );
-    /+ QT_DEPRECATED_VERSION_X(5, 15, "Use textHighlighted() instead") +/
-        @QSignal final void highlighted(ref const(QString) );
-/+ #endif +/
 
 protected:
     override void focusInEvent(QFocusEvent e);
@@ -261,7 +226,7 @@ protected:
     }
 /+ #endif +/ // QT_NO_CONTEXTMENU
     override void inputMethodEvent(QInputMethodEvent );
-    final void initStyleOption(QStyleOptionComboBox* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionComboBox* option) const;
 
 
 protected:

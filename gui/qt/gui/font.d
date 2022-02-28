@@ -25,8 +25,8 @@ import qt.helpers;
 
 extern(C++, class) struct QFontPrivate;                                     /* don't touch */
 
-/// Binding for C++ class [QFont](https://doc.qt.io/qt-5/qfont.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFont
+/// Binding for C++ class [QFont](https://doc.qt.io/qt-6/qfont.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFont
 {
     mixin(Q_GADGET);
 public:
@@ -53,10 +53,6 @@ public:
         PreferQuality       = 0x0040,
         PreferAntialias     = 0x0080,
         NoAntialias         = 0x0100,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-        OpenGLCompatible /+ Q_DECL_ENUMERATOR_DEPRECATED +/ = 0x0200,
-        ForceIntegerMetrics /+ Q_DECL_ENUMERATOR_DEPRECATED +/ = 0x0400,
-/+ #endif +/
         NoSubpixelAntialias = 0x0800,
         PreferNoShaping     = 0x1000,
         NoFontMerging       = 0x8000
@@ -71,17 +67,16 @@ public:
     }
     /+ Q_ENUM(HintingPreference) +/
 
-    // Mapping OpenType weight value.
     enum Weight {
-        Thin     = 0,    // 100
-        ExtraLight = 12, // 200
-        Light    = 25,   // 300
-        Normal   = 50,   // 400
-        Medium   = 57,   // 500
-        DemiBold = 63,   // 600
-        Bold     = 75,   // 700
-        ExtraBold = 81,  // 800
-        Black    = 87    // 900
+        Thin = 100,
+        ExtraLight = 200,
+        Light = 300,
+        Normal = 400,
+        Medium = 500,
+        DemiBold = 600,
+        Bold = 700,
+        ExtraBold = 800,
+        Black = 900
     }
     /+ Q_ENUM(Weight) +/
 
@@ -155,10 +150,9 @@ public:
         return r;
     }
 
+
     this(ref const(QString) family, int pointSize = -1, int weight = -1, bool italic = false);
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    this(ref const(QFont) font, QPaintDevice pd);
-/+ #endif +/
+    /+ explicit +/this(ref const(QStringList) families, int pointSize = -1, int weight = -1, bool italic = false);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QFont) font, const(QPaintDevice) pd);
     }));
@@ -186,8 +180,8 @@ public:
     int pixelSize() const;
     void setPixelSize(int);
 
-    int weight() const;
-    void setWeight(int);
+    Weight weight() const;
+    void setWeight(Weight weight);
 
     pragma(inline, true) bool bold() const
     { return weight() > Weight.Medium; }
@@ -241,11 +235,6 @@ public:
     void setHintingPreference(HintingPreference hintingPreference);
     HintingPreference hintingPreference() const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 5) +/
-    bool rawMode() const;
-    void setRawMode(bool);
-/+ #endif +/
-
     // dupicated from QFontInfo
     bool exactMatch() const;
 
@@ -255,14 +244,7 @@ public:
     /+bool operator <(ref const(QFont) ) const;+/
     /+auto opCast(T : QVariant)() const;+/
     bool isCopyOf(ref const(QFont) ) const;
-    /+ inline QFont &operator=(QFont &&other) noexcept
-    { qSwap(d, other.d); qSwap(resolve_mask, other.resolve_mask);  return *this; } +/
-
-/+ #if QT_DEPRECATED_SINCE(5, 3) +/
-    // needed for X11
-    /+ QT_DEPRECATED +/ void setRawName(ref const(QString) );
-    /+ QT_DEPRECATED +/ QString rawName() const;
-/+ #endif +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QFont) +/
 
     QString key() const;
 
@@ -275,22 +257,20 @@ public:
     static void insertSubstitution(ref const(QString), ref const(QString) );
     static void insertSubstitutions(ref const(QString), ref const(QStringList) );
     static void removeSubstitutions(ref const(QString) );
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    static QT_DEPRECATED void removeSubstitution(const QString &family) { removeSubstitutions(family); }
-#endif +/
     static void initialize();
     static void cleanup();
     static void cacheStatistics();
 
     QString defaultFamily() const;
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED +/ QString lastResortFamily() const;
-    /+ QT_DEPRECATED +/ QString lastResortFont() const;
-/+ #endif +/
 
     QFont resolve(ref const(QFont) ) const;
-    pragma(inline, true) uint resolve() const { return resolve_mask; }
-    pragma(inline, true) void resolve(uint mask) { resolve_mask = mask; }
+    pragma(inline, true) uint resolveMask() const { return resolve_mask; }
+    pragma(inline, true) void setResolveMask(uint mask) { resolve_mask = mask; }
+
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use setWeight() instead") +/ void setLegacyWeight(int legacyWeight);
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use weight() instead") +/ int legacyWeight() const;
+/+ #endif +/
 
 private:
     /+ explicit +/this(QFontPrivate* );
@@ -343,7 +323,7 @@ private:
 
 /+ Q_DECLARE_SHARED(QFont)
 
-Q_GUI_EXPORT uint qHash(const QFont &font, uint seed = 0) noexcept;
+Q_GUI_EXPORT size_t qHash(const QFont &font, size_t seed = 0) noexcept;
 
 
 

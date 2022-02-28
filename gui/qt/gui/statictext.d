@@ -25,8 +25,8 @@ import qt.gui.transform;
 import qt.helpers;
 
 extern(C++, class) struct QStaticTextPrivate;
-/// Binding for C++ class [QStaticText](https://doc.qt.io/qt-5/qstatictext.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QStaticText
+/// Binding for C++ class [QStaticText](https://doc.qt.io/qt-6/qstatictext.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QStaticText
 {
 public:
     enum PerformanceHint {
@@ -47,7 +47,7 @@ public:
     /+ explicit +/this(ref const(QString) text);
     @disable this(this);
     this(ref const(QStaticText) other);
-    /+ QStaticText &operator=(QStaticText &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QStaticText) +/
     /+ref QStaticText operator =(ref const(QStaticText) );+/
     ~this();
 

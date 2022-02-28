@@ -21,15 +21,11 @@ import qt.core.namespace;
 import qt.core.object;
 import qt.helpers;
 
-// For QThread::create. The configure-time test just checks for the availability
-// of std::future and std::async; for the C++17 codepath we perform some extra
-// checks here (for std::invoke and C++14 lambdas).
+// For QThread::create
 /+ #if QT_CONFIG(cxx11_future)
-#  if defined(__cpp_lib_invoke) && __cpp_lib_invoke >= 201411 \
-      && defined(__cpp_init_captures) && __cpp_init_captures >= 201304 \
-      && defined(__cpp_generic_lambdas) &&  __cpp_generic_lambdas >= 201304
-#    define QTHREAD_HAS_VARIADIC_CREATE
-#  endif
+#endif
+// internal compiler error with mingw 8.1
+#if defined(Q_CC_MSVC) && defined(Q_PROCESSOR_X86)
 #endif +/
 
 
@@ -37,12 +33,12 @@ import qt.helpers;
 extern(C++, class) struct QThreadData;
 extern(C++, class) struct QThreadPrivate;
 
-/// Binding for C++ class [QThread](https://doc.qt.io/qt-5/qthread.html).
+/// Binding for C++ class [QThread](https://doc.qt.io/qt-6/qthread.html).
 class /+ Q_CORE_EXPORT +/ QThread : QObject
 {
     mixin(Q_OBJECT);
 public:
-    static /+ Qt:: +/qt.core.namespace.HANDLE currentThreadId()/+ noexcept /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
+    /+ static Qt::HANDLE currentThreadId() noexcept Q_DECL_PURE_FUNCTION; +/
     static QThread currentThread();
     static int idealThreadCount()/+ noexcept+/;
     static void yieldCurrentThread();
@@ -76,46 +72,36 @@ public:
     final void setStackSize(uint stackSize);
     final uint stackSize() const;
 
-    final void exit(int retcode = 0);
-
     final QAbstractEventDispatcher* eventDispatcher() const;
     final void setEventDispatcher(QAbstractEventDispatcher* eventDispatcher);
 
     override bool event(QEvent event);
     final int loopLevel() const;
 
-/+ #ifdef Q_CLANG_QDOC
-    template <typename Function, typename... Args>
-    static QThread *create(Function &&f, Args &&... args);
-    template <typename Function>
-    static QThread *create(Function &&f);
-#else
-#  if QT_CONFIG(cxx11_future)
-#    ifdef QTHREAD_HAS_VARIADIC_CREATE +/
-    static if(defined!"QTHREAD_HAS_VARIADIC_CREATE")
-    {
-        /+ template <typename Function, typename... Args> +/
-        /+ static QThread *create(Function &&f, Args &&... args); +/
-    }
-    else
-    {
-    /+ #    else +/
-        /+ template <typename Function> +/
-        /+ static QThread *create(Function &&f); +/
-    }
-/+ #    endif // QTHREAD_HAS_VARIADIC_CREATE
-#  endif // QT_CONFIG(cxx11_future)
-#endif +/ // Q_CLANG_QDOC
+/+ #if QT_CONFIG(cxx11_future) || defined(Q_CLANG_QDOC) +/
+    /+ template <typename Function, typename... Args> +/
+    /+ [[nodiscard]] static QThread *create(Function &&f, Args &&... args); +/
+/+ #endif +/
 
 public /+ Q_SLOTS +/:
     @QSlot final void start(Priority = Priority.InheritPriority);
     @QSlot final void terminate();
+    @QSlot final void exit(int retcode = 0);
     @QSlot final void quit();
 
 public:
     final bool wait(QDeadlineTimer deadline = QDeadlineTimer(QDeadlineTimer.ForeverConstant.Forever));
-    // ### Qt6 inline this function
-    final bool wait(cpp_ulong  time);
+/+    final bool wait(cpp_ulong  time)
+    {
+        static if(versionIsSet!("CPPCONV_OS_LINUX") && !defined!"__WEBOS__" && (defined!"ANDROID" || defined!"__ANDROID__"))
+            import qt.core.global;
+        static if(!versionIsSet!("CPPCONV_OS_LINUX") || defined!"__WEBOS__" || (!defined!"ANDROID" && !defined!"__ANDROID__"))
+            import libc.time;
+
+        if (time == (/+ std:: +/numeric_limits!(cpp_ulong).max)())
+            return wait(QDeadlineTimer(QDeadlineTimer.ForeverConstant.Forever));
+        return wait(QDeadlineTimer(cast(Identity!(mixin((true)?q{duration!(Rep, Period)}:q{qint64})))(time)));
+    }+/
 
     static void sleep(cpp_ulong );
     static void msleep(cpp_ulong );
@@ -138,18 +124,16 @@ private:
     /+ Q_DECLARE_PRIVATE(QThread) +/
 
 /+ #if QT_CONFIG(cxx11_future) +/
-    /+ static QThread *createThreadImpl(std::future<void> &&future); +/
+    /+ [[nodiscard]] static QThread *createThreadImpl(std::future<void> &&future); +/
 /+ #endif +/
+    static /+ Qt:: +/qt.core.namespace.HANDLE currentThreadIdImpl()/+ noexcept /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
 
     /+ friend class QCoreApplication; +/
     /+ friend class QThreadData; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ #if QT_CONFIG(cxx11_future) +/
-
-/+ #if defined(QTHREAD_HAS_VARIADIC_CREATE) || defined(Q_CLANG_QDOC)
-// C++17: std::thread's constructor complying call
+/+ #if QT_CONFIG(cxx11_future)
 template <typename Function, typename... Args>
 QThread *QThread::create(Function &&f, Args &&... args)
 {
@@ -164,57 +148,61 @@ QThread *QThread::create(Function &&f, Args &&... args)
                                        std::move(threadFunction),
                                        std::forward<Args>(args)...));
 }
-#elif defined(__cpp_init_captures) && __cpp_init_captures >= 201304
-// C++14: implementation for just one callable
-template <typename Function>
-QThread *QThread::create(Function &&f)
+#endif // QT_CONFIG(cxx11_future)
+
+/*
+    On architectures and platforms we know, interpret the thread control
+    block (TCB) as a unique identifier for a thread within a process. Otherwise,
+    fall back to a slower but safe implementation.
+
+    As per the documentation of currentThreadId, we return an opaque handle
+    as a thread identifier, and application code is not supposed to use that
+    value for anything. In Qt we use the handle to check if threads are identical,
+    for which the TCB is sufficient.
+
+    So we use the fastest possible way, rather than spend time on returning
+    some pseudo-interoperable value.
+*/
+inline Qt::HANDLE QThread::currentThreadId() noexcept
 {
-    using DecayedFunction = typename std::decay<Function>::type;
-    auto threadFunction =
-        [f = static_cast<DecayedFunction>(std::forward<Function>(f))]() mutable -> void
-        {
-            (void)f();
-        };
-
-    return createThreadImpl(std::async(std::launch::deferred, std::move(threadFunction)));
-}
-#else +/
-static if(!defined!"QTHREAD_HAS_VARIADIC_CREATE")
-{
-// C++11: same as C++14, but with a workaround for not having generalized lambda captures
-extern(C++, "QtPrivate") {
-struct Callable(Function)
-{
-    /+ explicit Callable(Function &&f)
-        : m_function(std::forward<Function>(f))
-    {
-    } +/
-
-    // Apply the same semantics of a lambda closure type w.r.t. the special
-    // member functions, if possible: delete the copy assignment operator,
-    // bring back all the others as per the RO5 (cf. §8.1.5.1/11 [expr.prim.lambda.closure])
-    /+ ~Callable() = default; +/
-    /+ Callable(const Callable &) = default; +/
-    /+ Callable(Callable &&) = default; +/
-    /+ref Callable operator =(ref const(Callable) ) /+ = delete +/;+/
-    /+ Callable &operator=(Callable &&) = default; +/
-
-    /+void operator ()()
-    {
-        cast(void)m_function();
-    }+/
-
-    /+ std:: +/decay!(Function).type m_function;
-}
-} // namespace QtPrivate
-
-/+ template <typename Function>
-QThread *QThread::create(Function &&f)
-{
-    return createThreadImpl(std::async(std::launch::deferred, QtPrivate::Callable<Function>(std::forward<Function>(f))));
+    // define is undefed if we have to fall back to currentThreadIdImpl
+#define QT_HAS_FAST_CURRENT_THREAD_ID
+    Qt::HANDLE tid; // typedef to void*
+    static_assert(sizeof(tid) == sizeof(void*));
+    // See https://akkadia.org/drepper/tls.pdf for x86 ABI
+#if defined(Q_PROCESSOR_X86_32) && defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID) // x86 32-bit always uses GS
+    __asm__("movl %%gs:0, %0" : "=r" (tid) : : );
+#elif defined(Q_PROCESSOR_X86_64) && defined(Q_OS_DARWIN64)
+    // 64bit macOS uses GS, see https://github.com/apple/darwin-xnu/blob/master/libsyscall/os/tsd.h
+    __asm__("movq %%gs:0, %0" : "=r" (tid) : : );
+#elif defined(Q_PROCESSOR_X86_64) && (defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)) && !defined(Q_OS_ANDROID)
+    // x86_64 Linux, BSD uses FS
+    __asm__("movq %%fs:0, %0" : "=r" (tid) : : );
+#elif defined(Q_PROCESSOR_X86_64) && defined(Q_OS_WIN)
+    // See https://en.wikipedia.org/wiki/Win32_Thread_Information_Block
+    // First get the pointer to the TIB
+    quint8 *tib;
+# if defined(Q_CC_MINGW) // internal compiler error when using the intrinsics
+    __asm__("movq %%gs:0x30, %0" : "=r" (tib) : :);
+# else
+    tib = reinterpret_cast<quint8 *>(__readgsqword(0x30));
+# endif
+    // Then read the thread ID
+    tid = *reinterpret_cast<Qt::HANDLE *>(tib + 0x48);
+#elif defined(Q_PROCESSOR_X86_32) && defined(Q_OS_WIN)
+    // First get the pointer to the TIB
+    quint8 *tib;
+# if defined(Q_CC_MINGW) // internal compiler error when using the intrinsics
+    __asm__("movl %%fs:0x18, %0" : "=r" (tib) : :);
+# else
+    tib = reinterpret_cast<quint8 *>(__readfsdword(0x18));
+# endif
+    // Then read the thread ID
+    tid = *reinterpret_cast<Qt::HANDLE *>(tib + 0x24);
+#else
+#undef QT_HAS_FAST_CURRENT_THREAD_ID
+    tid = currentThreadIdImpl();
+#endif
+    return tid;
 } +/
-}
-/+ #endif +/ // QTHREAD_HAS_VARIADIC_CREATE
-
-/+ #endif +/ // QT_CONFIG(cxx11_future)
 

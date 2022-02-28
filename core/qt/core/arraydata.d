@@ -13,355 +13,185 @@ module qt.core.arraydata;
 extern(C++):
 
 import qt.config;
+import qt.core.basicatomic;
 import qt.core.flags;
 import qt.core.global;
-import qt.core.refcount;
+import qt.core.pair;
 import qt.helpers;
 
-struct /+ Q_CORE_EXPORT +/ QArrayData
+
+struct QArrayData
 {
-    /+ QtPrivate:: +/qt.core.refcount.RefCount ref_;
-    int size;
-    /+ uint alloc : 31; +/
-    uint bitfieldData_alloc;
-    final uint alloc() const
-    {
-        return (bitfieldData_alloc >> 0) & 0x7fffffff;
-    }
-    final uint alloc(uint value)
-    {
-        bitfieldData_alloc = (bitfieldData_alloc & ~0x7fffffff) | ((value & 0x7fffffff) << 0);
-        return value;
-    }
-    /+ uint capacityReserved : 1; +/
-    final uint capacityReserved() const
-    {
-        return (bitfieldData_alloc >> 31) & 0x1;
-    }
-    final uint capacityReserved(uint value)
-    {
-        bitfieldData_alloc = (bitfieldData_alloc & ~0x80000000) | ((value & 0x1) << 31);
-        return value;
+    enum AllocationOption {
+        Grow,
+        KeepSize
     }
 
-    qptrdiff offset; // in bytes from beginning of header
-
-    void* data()
-    {
-        (mixin(Q_ASSERT(q{QArrayData.size == 0
-                    || QArrayData.offset < 0 || size_t(QArrayData.offset) >= QArrayData.sizeof})));
-        return reinterpret_cast!(char*)(&this) + offset;
+    enum GrowthPosition {
+        GrowsAtEnd,
+        GrowsAtBeginning
     }
 
-    const(void)* data() const
+   enum ArrayOption {
+        ArrayOptionDefault = 0,
+        CapacityReserved     = 0x1  //!< the capacity was reserved by the user, try to keep it
+    }
+    /+ Q_DECLARE_FLAGS(ArrayOptions, ArrayOption) +/
+alias ArrayOptions = QFlags!(ArrayOption);
+    QBasicAtomicInt ref__;
+    ArrayOptions flags;
+    qsizetype alloc;
+
+    qsizetype allocatedCapacity()/+ noexcept+/
     {
-        (mixin(Q_ASSERT(q{QArrayData.size == 0
-                    || QArrayData.offset < 0 || size_t(QArrayData.offset) >= QArrayData.sizeof})));
-        return reinterpret_cast!(const(char)*)(&this) + offset;
+        return alloc;
     }
 
-    // This refers to array data mutability, not "header data" represented by
-    // data members in QArrayData. Shared data (array and header) must still
-    // follow COW principles.
-    bool isMutable() const
+    qsizetype constAllocatedCapacity() const/+ noexcept+/
     {
-        return alloc != 0;
+        return alloc;
     }
 
-    mixin("enum AllocationOption {"
-        ~ q{
-            CapacityReserved    = 0x1,
-        }
-        ~ (!versionIsSet!("QT_NO_UNSHARABLE_CONTAINERS") ? q{
-    /+ #if !defined(QT_NO_UNSHARABLE_CONTAINERS) +/
-            Unsharable          = 0x2,
-        }:"")
-        ~ q{
-    /+ #endif +/
-            RawData             = 0x4,
-            Grow                = 0x8,
-
-            Default = 0
-        }
-        ~ "}"
-    );
-
-    /+ Q_DECLARE_FLAGS(AllocationOptions, AllocationOption) +/
-alias AllocationOptions = QFlags!(AllocationOption);
-    size_t detachCapacity(size_t newSize) const
+    /// Returns true if sharing took place
+    bool ref_()/+ noexcept+/
     {
-        if (capacityReserved && newSize < alloc)
-            return alloc;
+        ref__.ref_();
+        return true;
+    }
+
+    /// Returns false if deallocation is necessary
+    bool deref()/+ noexcept+/
+    {
+        return ref__.deref();
+    }
+
+    bool isShared() const/+ noexcept+/
+    {
+        return ref__.loadRelaxed() != 1;
+    }
+
+    // Returns true if a detach is necessary before modifying the data
+    // This method is intentionally not const: if you want to know whether
+    // detaching is necessary, you should be in a non-const function already
+    bool needsDetach() const/+ noexcept+/
+    {
+        return ref__.loadRelaxed() > 1;
+    }
+
+    qsizetype detachCapacity(qsizetype newSize) const/+ noexcept+/
+    {
+        if (flags & ArrayOption.CapacityReserved && newSize < constAllocatedCapacity())
+            return constAllocatedCapacity();
         return newSize;
     }
 
-    AllocationOptions detachFlags() const
-    {
-        AllocationOptions result;
-        if (capacityReserved)
-            result |= AllocationOption.CapacityReserved;
-        return result;
-    }
-
-    AllocationOptions cloneFlags() const
-    {
-        AllocationOptions result;
-        if (capacityReserved)
-            result |= AllocationOption.CapacityReserved;
-        return result;
-    }
-
-    /+ Q_REQUIRED_RESULT +/ static QArrayData* allocate(size_t objectSize, size_t alignment,
-                size_t capacity, AllocationOptions options = AllocationOptions.Default)/+ noexcept+/;
-    /+ Q_REQUIRED_RESULT +/ static QArrayData* reallocateUnaligned(QArrayData* data, size_t objectSize,
-                size_t newCapacity, AllocationOptions newOptions = AllocationOption.Default)/+ noexcept+/;
-    static void deallocate(QArrayData* data, size_t objectSize,
-                size_t alignment)/+ noexcept+/;
-
-    mixin(mangleWindows("?shared_null@QArrayData@@2QBU1@B", exportOnWindows ~ q{
-    extern static __gshared const(const(QArrayData)[2]) shared_null;
-    }));
-    static QArrayData* sharedNull()/+ noexcept+/ { return const_cast!(QArrayData*)(shared_null.ptr); }
+    /+ [[nodiscard]] +/
+    /+ #if defined(Q_CC_GNU) +/
+        /+ __attribute__((__malloc__)) +/
+    /+ #endif +/
+        /+ Q_CORE_EXPORT +/ static void* allocate(QArrayData** pdata, qsizetype objectSize, qsizetype alignment,
+                qsizetype capacity, AllocationOption option = AllocationOption.KeepSize)/+ noexcept+/;
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static qt.core.pair.QPair!(QArrayData*, void*) reallocateUnaligned(QArrayData* data, void* dataPointer,
+                qsizetype objectSize, qsizetype newCapacity, AllocationOption option)/+ noexcept+/;
+    /+ Q_CORE_EXPORT +/ static void deallocate(QArrayData* data, qsizetype objectSize,
+                qsizetype alignment)/+ noexcept+/;
 }
-/+pragma(inline, true) QFlags!(QArrayData.AllocationOptions.enum_type) operator |(QArrayData.AllocationOptions.enum_type f1, QArrayData.AllocationOptions.enum_type f2)/+noexcept+/{return QFlags!(QArrayData.AllocationOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QArrayData.AllocationOptions.enum_type) operator |(QArrayData.AllocationOptions.enum_type f1, QFlags!(QArrayData.AllocationOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QArrayData.AllocationOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator |(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator |(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator &(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator &(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/;+/
 
-/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QArrayData::AllocationOptions) +/
+/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QArrayData::ArrayOptions) +/
 struct QTypedArrayData(T)
-
 {
     QArrayData base0;
     alias base0 this;
     alias AllocationOption = QArrayData.AllocationOption;
-    alias AllocationOptions = QArrayData.AllocationOptions;
+    struct AlignmentDummy { QArrayData header; T data; }
 
-/+ #ifdef QT_STRICT_ITERATORS
-    class iterator {
-    public:
-        T *i;
-        typedef std::random_access_iterator_tag  iterator_category;
-        typedef int difference_type;
-        typedef T value_type;
-        typedef T *pointer;
-        typedef T &reference;
-
-        inline iterator() : i(nullptr) {}
-        inline iterator(T *n) : i(n) {}
-        inline iterator(const iterator &o): i(o.i){} // #### Qt 6: remove, the implicit version is fine
-        inline T &operator*() const { return *i; }
-        inline T *operator->() const { return i; }
-        inline T &operator[](int j) const { return *(i + j); }
-        inline bool operator==(const iterator &o) const { return i == o.i; }
-        inline bool operator!=(const iterator &o) const { return i != o.i; }
-        inline bool operator<(const iterator& other) const { return i < other.i; }
-        inline bool operator<=(const iterator& other) const { return i <= other.i; }
-        inline bool operator>(const iterator& other) const { return i > other.i; }
-        inline bool operator>=(const iterator& other) const { return i >= other.i; }
-        inline iterator &operator++() { ++i; return *this; }
-        inline iterator operator++(int) { T *n = i; ++i; return n; }
-        inline iterator &operator--() { i--; return *this; }
-        inline iterator operator--(int) { T *n = i; i--; return n; }
-        inline iterator &operator+=(int j) { i+=j; return *this; }
-        inline iterator &operator-=(int j) { i-=j; return *this; }
-        inline iterator operator+(int j) const { return iterator(i+j); }
-        inline iterator operator-(int j) const { return iterator(i-j); }
-        friend inline iterator operator+(int j, iterator k) { return k + j; }
-        inline int operator-(iterator j) const { return i - j.i; }
-        inline operator T*() const { return i; }
-    };
-    friend class iterator;
-
-    class const_iterator {
-    public:
-        const T *i;
-        typedef std::random_access_iterator_tag  iterator_category;
-        typedef int difference_type;
-        typedef T value_type;
-        typedef const T *pointer;
-        typedef const T &reference;
-
-        inline const_iterator() : i(nullptr) {}
-        inline const_iterator(const T *n) : i(n) {}
-        inline const_iterator(const const_iterator &o): i(o.i) {} // #### Qt 6: remove, the default version is fine
-        inline explicit const_iterator(const iterator &o): i(o.i) {}
-        inline const T &operator*() const { return *i; }
-        inline const T *operator->() const { return i; }
-        inline const T &operator[](int j) const { return *(i + j); }
-        inline bool operator==(const const_iterator &o) const { return i == o.i; }
-        inline bool operator!=(const const_iterator &o) const { return i != o.i; }
-        inline bool operator<(const const_iterator& other) const { return i < other.i; }
-        inline bool operator<=(const const_iterator& other) const { return i <= other.i; }
-        inline bool operator>(const const_iterator& other) const { return i > other.i; }
-        inline bool operator>=(const const_iterator& other) const { return i >= other.i; }
-        inline const_iterator &operator++() { ++i; return *this; }
-        inline const_iterator operator++(int) { const T *n = i; ++i; return n; }
-        inline const_iterator &operator--() { i--; return *this; }
-        inline const_iterator operator--(int) { const T *n = i; i--; return n; }
-        inline const_iterator &operator+=(int j) { i+=j; return *this; }
-        inline const_iterator &operator-=(int j) { i-=j; return *this; }
-        inline const_iterator operator+(int j) const { return const_iterator(i+j); }
-        inline const_iterator operator-(int j) const { return const_iterator(i-j); }
-        friend inline const_iterator operator+(int j, const_iterator k) { return k + j; }
-        inline int operator-(const_iterator j) const { return i - j.i; }
-        inline operator const T*() const { return i; }
-    };
-    friend class const_iterator;
-#else +/
-    alias iterator = T*;
-    alias const_iterator = const(T)*;
-/+ #endif +/
-
-    T* data() { return static_cast!(T*)(base0.data()); }
-    const(T)* data() const { return static_cast!(const(T)*)(base0.data()); }
-
-    iterator begin(/+iterator  = iterator() +/) { return data(); }
-    iterator end(/+iterator  = iterator() +/) { return data() + size; }
-    const_iterator begin(/+const_iterator  = const_iterator() +/) const { return data(); }
-    const_iterator end(/+const_iterator  = const_iterator() +/) const { return data() + size; }
-    const_iterator constBegin(/+const_iterator  = const_iterator() +/) const { return data(); }
-    const_iterator constEnd(/+ const_iterator = const_iterator() +/) const { return data() + size; }
-
-    extern(C++, class) struct AlignmentDummy {
-    private:
- QArrayData header; T data; }
-
-    /+ Q_REQUIRED_RESULT +/ static QTypedArrayData* allocate(size_t capacity,
-                AllocationOptions options = AllocationOptions.Default)
+    /+ [[nodiscard]] +/ static qt.core.pair.QPair!(QTypedArrayData*, T*) allocate(qsizetype capacity, AllocationOption option = QArrayData.AllocationOption.KeepSize)
     {
-        mixin(Q_STATIC_ASSERT(q{QTypedArrayData.sizeof == QArrayData.sizeof}));
-        return static_cast!(QTypedArrayData*)(QArrayData.allocate(T.sizeof,
-                    /+ Q_ALIGNOF +/AlignmentDummy.alignof, capacity, options));
-    }
-
-    static QTypedArrayData* reallocateUnaligned(QTypedArrayData* data, size_t capacity,
-                AllocationOptions options = AllocationOptions.Default)
-    {
-        mixin(Q_STATIC_ASSERT(q{QTypedArrayData.sizeof == QArrayData.sizeof}));
-        return static_cast!(QTypedArrayData*)(QArrayData.reallocateUnaligned(&data.base0, T.sizeof,
-                    capacity, options));
-    }
-
-    static void deallocate(QArrayData* data)
-    {
-        mixin(Q_STATIC_ASSERT(q{QTypedArrayData.sizeof == QArrayData.sizeof}));
-        QArrayData.deallocate(data, T.sizeof, /+ Q_ALIGNOF +/AlignmentDummy.alignof);
-    }
-
-    static void deallocate(QTypedArrayData * data)
-    {
-        deallocate(&data.base0);
-    }
-
-    static QTypedArrayData* fromRawData(const(T)* data, size_t n,
-                AllocationOptions options = AllocationOption.Default)
-    {
-        mixin(Q_STATIC_ASSERT(q{QTypedArrayData.sizeof == QArrayData.sizeof}));
-        QTypedArrayData* result = allocate(0, options | AllocationOption.RawData);
-        if (result) {
-            (mixin(Q_ASSERT(q{!result.ref_.isShared()}))); // No shared empty, please!
-
-            result.offset = reinterpret_cast!(const(char)*)(data)
-                - reinterpret_cast!(const(char)*)(result);
-            result.size = cast(int)(n);
-        }
-        return result;
-    }
-
-    static QTypedArrayData* sharedNull()/+ noexcept+/
-    {
-        mixin(Q_STATIC_ASSERT(q{QTypedArrayData.sizeof == QArrayData.sizeof}));
-        return static_cast!(QTypedArrayData*)(QArrayData.sharedNull());
-    }
-
-    static QTypedArrayData* sharedEmpty()
-    {
-        mixin(Q_STATIC_ASSERT(q{QTypedArrayData.sizeof == QArrayData.sizeof}));
-        return allocate(/* capacity */ 0);
-    }
-
-    version(QT_NO_UNSHARABLE_CONTAINERS){}else
-    {
-        static QTypedArrayData* unsharableEmpty()
+        static assert(QTypedArrayData.sizeof == QArrayData.sizeof);
+        QArrayData* d;
+        void* result = QArrayData.allocate(&d, T.sizeof, AlignmentDummy.alignof, capacity, option);
+        static if((configValue!"__has_builtin___builtin_assume_aligned" && defined!"__has_builtin___builtin_assume_aligned"))
         {
-            mixin(Q_STATIC_ASSERT(q{QTypedArrayData.sizeof == QArrayData.sizeof}));
-            return allocate(/* capacity */ 0, AllocationOptions.Unsharable);
+            result = __builtin_assume_aligned(result, /+ Q_ALIGNOF +/AlignmentDummy.alignof);
         }
+        return qMakePair(static_cast!(QTypedArrayData*)(d), static_cast!(T*)(result));
+    }
+
+    static qt.core.pair.QPair!(QTypedArrayData*, T*)
+        reallocateUnaligned(QTypedArrayData* data, T* dataPointer, qsizetype capacity, AllocationOption option)
+    {
+        static assert(QTypedArrayData.sizeof == QArrayData.sizeof);
+        qt.core.pair.QPair!(QArrayData*, void*) pair =
+                QArrayData.reallocateUnaligned(cast(QArrayData*)data, dataPointer, T.sizeof, capacity, option);
+        return qMakePair(static_cast!(QTypedArrayData*)(pair.first), static_cast!(T*)(pair.second));
+    }
+
+    static void deallocate(QArrayData* data)/+ noexcept+/
+    {
+        static assert(QTypedArrayData.sizeof == QArrayData.sizeof);
+        QArrayData.deallocate(data, T.sizeof, AlignmentDummy.alignof);
+    }
+
+    static T* dataStart(QArrayData* data, qsizetype alignment)/+ noexcept+/
+    {
+        // Alignment is a power of two
+        (mixin(Q_ASSERT(q{alignment >= qsizetype(QArrayData.alignof) && !(alignment & (alignment - 1))})));
+        void* start =  reinterpret_cast!(void*)(
+            (cast(quintptr)(data) + QArrayData.sizeof + alignment - 1) & ~(alignment - 1));
+        return static_cast!(T*)(start);
     }
 }
-
-struct QStaticArrayData(T, size_t N)
-{
-    QArrayData header;
-    T[N] data;
-}
-
-// Support for returning QArrayDataPointer<T> from functions
-struct QArrayDataPointerRef(T)
-{
-    QTypedArrayData!(T)* ptr;
-}
-
-/+ #define Q_STATIC_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(size, offset) \
-    { Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, offset } \
-    /**/
-
-#define Q_STATIC_ARRAY_DATA_HEADER_INITIALIZER(type, size) \
-    Q_STATIC_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(size,\
-        ((sizeof(QArrayData) + (Q_ALIGNOF(type) - 1)) & ~(Q_ALIGNOF(type) - 1) )) \
-    /**/
-
-////////////////////////////////////////////////////////////////////////////////
-//  Q_ARRAY_LITERAL
-
-// The idea here is to place a (read-only) copy of header and array data in an
-// mmappable portion of the executable (typically, .rodata section). This is
-// accomplished by hiding a static const instance of QStaticArrayData, which is
-// POD.
-
-// Hide array inside a lambda
-#define Q_ARRAY_LITERAL(Type, ...)                                              \
-    ([]() -> QArrayDataPointerRef<Type> {                                       \
-            /* MSVC 2010 Doesn't support static variables in a lambda, but */   \
-            /* happily accepts them in a static function of a lambda-local */   \
-            /* struct :-) */                                                    \
-            struct StaticWrapper {                                              \
-                static QArrayDataPointerRef<Type> get()                         \
-                {                                                               \
-                    Q_ARRAY_LITERAL_IMPL(Type, __VA_ARGS__)                     \
-                    return ref;                                                 \
-                }                                                               \
-            };                                                                  \
-            return StaticWrapper::get();                                        \
-        }())                                                                    \
-    /**/
-
-#ifdef Q_COMPILER_CONSTEXPR
-#define Q_ARRAY_LITERAL_CHECK_LITERAL_TYPE(Type) Q_STATIC_ASSERT(std::is_literal_type<Type>::value)
-#else
-#define Q_ARRAY_LITERAL_CHECK_LITERAL_TYPE(Type) do {} while (0)
-#endif
-
-#define Q_ARRAY_LITERAL_IMPL(Type, ...)                                         \
-    Q_ARRAY_LITERAL_CHECK_LITERAL_TYPE(Type);                                   \
-                                                                                \
-    /* Portable compile-time array size computation */                          \
-    Q_CONSTEXPR Type data[] = { __VA_ARGS__ }; Q_UNUSED(data);                  \
-    enum { Size = sizeof(data) / sizeof(data[0]) };                             \
-                                                                                \
-    static const QStaticArrayData<Type, Size> literal = {                       \
-        Q_STATIC_ARRAY_DATA_HEADER_INITIALIZER(Type, Size), { __VA_ARGS__ } };  \
-                                                                                \
-    QArrayDataPointerRef<Type> ref =                                            \
-        { static_cast<QTypedArrayData<Type> *>(                                 \
-            const_cast<QArrayData *>(&literal.header)) };                       \
-    /**/ +/
 
 extern(C++, "QtPrivate") {
 struct /+ Q_CORE_EXPORT +/ QContainerImplHelper
 {
     enum CutResult { Null, Empty, Full, Subset }
-    static CutResult mid(int originalLength, int* position, int* length);
+    /+ static CutResult mid(qsizetype originalLength, qsizetype* _position, qsizetype* _length)
+    {
+        ref qsizetype position = *_position;
+        ref qsizetype length = *_length;
+        if (position > originalLength) {
+            position = 0;
+            length = 0;
+            return CutResult.Null;
+        }
+
+        if (position < 0) {
+            if (length < 0 || length + position >= originalLength) {
+                position = 0;
+                length = originalLength;
+                return CutResult.Full;
+            }
+            if (length + position <= 0) {
+                position = length = 0;
+                return CutResult.Null;
+            }
+            length += position;
+            position = 0;
+        } else if (size_t(length) > size_t(originalLength - position)) {
+            length = originalLength - position;
+        }
+
+        if (position == 0 && length == originalLength)
+            return CutResult.Full;
+
+        return length > 0 ? CutResult.Subset : CutResult.Empty;
+    } +/
 }
 }
 

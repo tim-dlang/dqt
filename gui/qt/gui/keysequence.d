@@ -13,24 +13,22 @@ module qt.gui.keysequence;
 extern(C++):
 
 import qt.config;
+import qt.core.list;
+import qt.core.metamacros;
+import qt.core.namespace;
+import qt.core.string;
 import qt.core.typeinfo;
+import qt.core.variant;
 import qt.helpers;
-version(QT_NO_SHORTCUT){}else
-{
-    import qt.core.list;
-    import qt.core.metamacros;
-    import qt.core.string;
-    import qt.core.variant;
-}
 
-version(QT_NO_SHORTCUT){}else
-{
+/+ QT_REQUIRE_CONFIG(shortcut);
+
 
 
 /*****************************************************************************
   QKeySequence stream functions
  *****************************************************************************/
-/+ #if !defined(QT_NO_DATASTREAM) || defined(Q_CLANG_QDOC)
+#if !defined(QT_NO_DATASTREAM) || defined(Q_CLANG_QDOC)
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QKeySequence &ks);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &out, QKeySequence &ks);
 #endif
@@ -41,10 +39,10 @@ void qt_set_sequence_auto_mnemonic(bool b);
 
 extern(C++, class) struct QKeySequencePrivate;
 
-/+ Q_GUI_EXPORT Q_DECL_PURE_FUNCTION uint qHash(const QKeySequence &key, uint seed = 0) noexcept; +/
+/+ Q_GUI_EXPORT Q_DECL_PURE_FUNCTION size_t qHash(const QKeySequence &key, size_t seed = 0) noexcept; +/
 
-/// Binding for C++ class [QKeySequence](https://doc.qt.io/qt-5/qkeysequence.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QKeySequence
+/// Binding for C++ class [QKeySequence](https://doc.qt.io/qt-6/qkeysequence.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QKeySequence
 {
     mixin(Q_GADGET);
 
@@ -141,6 +139,10 @@ public:
 
     this(ref const(QString) key, SequenceFormat format = SequenceFormat.NativeText);
     this(int k1, int k2 = 0, int k3 = 0, int k4 = 0);
+    this(QKeyCombination k1,
+                     QKeyCombination k2 = QKeyCombination.fromCombined(0),
+                     QKeyCombination k3 = QKeyCombination.fromCombined(0),
+                     QKeyCombination k4 = QKeyCombination.fromCombined(0));
     @disable this(this);
     this(ref const(QKeySequence) ks);
     this(StandardKey key);
@@ -158,21 +160,17 @@ public:
     QString toString(SequenceFormat format = SequenceFormat.PortableText) const;
     static QKeySequence fromString(ref const(QString) str, SequenceFormat format = SequenceFormat.PortableText);
 
-    static QList!(QKeySequence) listFromString(ref const(QString) str, SequenceFormat format = SequenceFormat.PortableText);
-    static QString listToString(ref const(QList!(QKeySequence)) list, SequenceFormat format = SequenceFormat.PortableText);
+    /+ static QList!(QKeySequence) listFromString(ref const(QString) str, SequenceFormat format = SequenceFormat.PortableText);
+    static QString listToString(ref const(QList!(QKeySequence)) list, SequenceFormat format = SequenceFormat.PortableText); +/
 
     SequenceMatch matches(ref const(QKeySequence) seq) const;
     static QKeySequence mnemonic(ref const(QString) text);
-    static QList!(QKeySequence) keyBindings(StandardKey key);
+    // static QList!(QKeySequence) keyBindings(StandardKey key);
 
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    QT_DEPRECATED operator QString() const { return toString(QKeySequence::NativeText); }
-    QT_DEPRECATED operator int() const { if (1 <= count()) return operator [](0); return 0; }
-#endif +/
     /+auto opCast(T : QVariant)() const;+/
-    /+int operator [](uint i) const;+/
+    QKeyCombination opIndex(uint i) const;
     /+ref QKeySequence operator =(ref const(QKeySequence) other);+/
-    /+ QKeySequence &operator=(QKeySequence &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QKeySequence) +/
     /+ void swap(QKeySequence &other) noexcept { qSwap(d, other.d); } +/
 
     /+bool operator ==(ref const(QKeySequence) other) const;+/
@@ -192,13 +190,13 @@ private:
     static QString encodeString(int key);
     int assign(ref const(QString) str);
     int assign(ref const(QString) str, SequenceFormat format);
-    void setKey(int key, int index);
+    void setKey(QKeyCombination key, int index);
 
     QKeySequencePrivate* d;
 
     /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &in, const QKeySequence &ks); +/
     /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QKeySequence &ks); +/
-    /+ friend Q_GUI_EXPORT uint qHash(const QKeySequence &key, uint seed) noexcept; +/
+    /+ friend Q_GUI_EXPORT size_t qHash(const QKeySequence &key, size_t seed) noexcept; +/
     /+ friend class QShortcutMap; +/
     /+ friend class QShortcut; +/
 
@@ -213,20 +211,4 @@ public:
 #if !defined(QT_NO_DEBUG_STREAM) || defined(Q_CLANG_QDOC)
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QKeySequence &);
 #endif +/
-
-}
-version(QT_NO_SHORTCUT)
-{
-
-/// Binding for C++ class [QKeySequence](https://doc.qt.io/qt-5/qkeysequence.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QKeySequence
-{
-public:
-    @disable this();
-    /+this() {}+/
-    this(int) {}
-    mixin(CREATE_CONVENIENCE_WRAPPERS);
-}
-
-}
 

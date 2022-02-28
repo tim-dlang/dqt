@@ -26,17 +26,13 @@ import qt.helpers;
 
 extern(C++, class) struct QPageSizePrivate;
 
-/// Binding for C++ class [QPageSize](https://doc.qt.io/qt-5/qpagesize.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageSize
+/// Binding for C++ class [QPageSize](https://doc.qt.io/qt-6/qpagesize.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageSize
 {
 public:
 
-    // ### Qt6 Re-order and remove duplicates
-    // NOTE: Must keep in sync with QPagedPrintEngine and QPrinter
     enum PageSizeId {
-        // Existing Qt sizes
-        A4,
-        B5,
+        // Old Qt sizes
         Letter,
         Legal,
         Executive,
@@ -44,21 +40,24 @@ public:
         A1,
         A2,
         A3,
+        A4,
         A5,
         A6,
         A7,
         A8,
         A9,
+        A10,
         B0,
         B1,
-        B10,
         B2,
         B3,
         B4,
+        B5,
         B6,
         B7,
         B8,
         B9,
+        B10,
         C5E,
         Comm10E,
         DLE,
@@ -68,7 +67,6 @@ public:
         Custom,
 
         // New values derived from PPD standard
-        A10,
         A3Extra,
         A4Extra,
         A4Plus,
@@ -171,10 +169,8 @@ public:
         EnvelopePrc10,
         EnvelopeYou4,
 
-        // Last item, with commonly used synynoms from QPagedPrintEngine / QPrinter
+        // Last item
         LastPageSize = PageSizeId.EnvelopeYou4,
-        NPageSize = PageSizeId.LastPageSize,
-        NPaperSize = PageSizeId.LastPageSize,
 
         // Convenience overloads for naming consistency
         AnsiA = PageSizeId.Letter,
@@ -210,7 +206,7 @@ public:
         return r;
     }
 
-    /+ explicit +/this(PageSizeId pageSizeId);
+    /+ Q_IMPLICIT +/ this(PageSizeId pageSizeId);
     /+ explicit +/this(ref const(QSize) pointSize,
                            ref const(QString) name = globalInitVar!QString,
                            SizeMatchPolicy matchPolicy = SizeMatchPolicy.FuzzyMatch);
@@ -219,7 +215,7 @@ public:
                            SizeMatchPolicy matchPolicy = SizeMatchPolicy.FuzzyMatch);
     @disable this(this);
     this(ref const(QPageSize) other);
-    /+ QPageSize &operator=(QPageSize &&other) noexcept { swap(other); return *this; } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPageSize) +/
     /+ref QPageSize operator =(ref const(QPageSize) other);+/
     ~this();
 
@@ -270,6 +266,13 @@ public:
 private:
     /+ friend class QPageSizePrivate; +/
     /+ friend class QPlatformPrintDevice; +/
+
+    bool equals(ref const(QPageSize) other) const;
+    /+ friend inline bool operator==(const QPageSize &lhs, const QPageSize &rhs)
+    { return lhs.equals(rhs); } +/
+    /+ friend inline bool operator!=(const QPageSize &lhs, const QPageSize &rhs)
+    { return !(lhs == rhs); } +/
+
     this(ref const(QString) key, ref const(QSize) pointSize, ref const(QString) name);
     this(int windowsId, ref const(QSize) pointSize, ref const(QString) name);
     this(ref QPageSizePrivate dd);
@@ -277,13 +280,9 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_SHARED(QPageSize) +/
+/+ Q_DECLARE_SHARED(QPageSize)
 
-/+/+ Q_GUI_EXPORT +/ bool operator ==(ref const(QPageSize) lhs, ref const(QPageSize) rhs);+/
-/+pragma(inline, true) bool operator !=(ref const(QPageSize) lhs, ref const(QPageSize) rhs)
-{ return !operator==(lhs, rhs); }+/
-
-/+ #ifndef QT_NO_DEBUG_STREAM
+#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QPageSize &pageSize);
 #endif
 

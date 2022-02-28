@@ -44,7 +44,7 @@ version(QT_NO_CONTEXTMENU){}else
 extern(C++, class) struct QStyleSheet;
 extern(C++, class) struct QTextEditPrivate;
 
-/// Binding for C++ class [QTextEdit](https://doc.qt.io/qt-5/qtextedit.html).
+/// Binding for C++ class [QTextEdit](https://doc.qt.io/qt-6/qtextedit.html).
 class /+ Q_WIDGETS_EXPORT +/ QTextEdit : QAbstractScrollArea
 {
     mixin(Q_OBJECT);
@@ -65,13 +65,11 @@ class /+ Q_WIDGETS_EXPORT +/ QTextEdit : QAbstractScrollArea
 #endif
     Q_PROPERTY(QString plainText READ toPlainText WRITE setPlainText DESIGNABLE false)
     Q_PROPERTY(bool overwriteMode READ overwriteMode WRITE setOverwriteMode)
-#if QT_DEPRECATED_SINCE(5, 10)
-    Q_PROPERTY(int tabStopWidth READ tabStopWidth WRITE setTabStopWidth)
-#endif
     Q_PROPERTY(qreal tabStopDistance READ tabStopDistance WRITE setTabStopDistance)
     Q_PROPERTY(bool acceptRichText READ acceptRichText WRITE setAcceptRichText)
     Q_PROPERTY(int cursorWidth READ cursorWidth WRITE setCursorWidth)
-    Q_PROPERTY(Qt::TextInteractionFlags textInteractionFlags READ textInteractionFlags WRITE setTextInteractionFlags)
+    Q_PROPERTY(Qt::TextInteractionFlags textInteractionFlags READ textInteractionFlags
+               WRITE setTextInteractionFlags)
     Q_PROPERTY(QTextDocument *document READ document WRITE setDocument DESIGNABLE false)
     Q_PROPERTY(QString placeholderText READ placeholderText WRITE setPlaceholderText) +/
 public:
@@ -152,13 +150,7 @@ alias AutoFormatting = QFlags!(AutoFormattingFlag);    /+ Q_FLAG(AutoFormatting)
     final void setWordWrapMode(QTextOption.WrapMode policy);
 
     /+ bool find(const QString &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags()); +/
-/+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
-    {
-        /+ bool find(const QRegExp &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags()); +/
-    }
-/+ #endif
-#if QT_CONFIG(regularexpression) +/
+/+ #if QT_CONFIG(regularexpression) +/
     /+ bool find(const QRegularExpression &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags()); +/
 /+ #endif +/
 
@@ -190,11 +182,6 @@ alias AutoFormatting = QFlags!(AutoFormattingFlag);    /+ Q_FLAG(AutoFormatting)
 
     final bool overwriteMode() const;
     final void setOverwriteMode(bool overwrite);
-
-/+ #if QT_DEPRECATED_SINCE(5, 10) +/
-    /+ QT_DEPRECATED +/ final int tabStopWidth() const;
-    /+ QT_DEPRECATED +/ final void setTabStopWidth(int width);
-/+ #endif +/
 
     final qreal tabStopDistance() const;
     final void setTabStopDistance(qreal distance);
@@ -346,6 +333,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator |(QTextEdit.AutoFormatting.enum_type f1, QTextEdit.AutoFormatting.enum_type f2)/+noexcept+/{return QFlags!(QTextEdit.AutoFormatting.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator |(QTextEdit.AutoFormatting.enum_type f1, QFlags!(QTextEdit.AutoFormatting.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator &(QTextEdit.AutoFormatting.enum_type f1, QTextEdit.AutoFormatting.enum_type f2)/+noexcept+/{return QFlags!(QTextEdit.AutoFormatting.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator &(QTextEdit.AutoFormatting.enum_type f1, QFlags!(QTextEdit.AutoFormatting.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QTextEdit.AutoFormatting.enum_type f1, QTextEdit.AutoFormatting.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextEdit.AutoFormatting.enum_type f1, QFlags!(QTextEdit.AutoFormatting.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QTextEdit.AutoFormatting.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextEdit.AutoFormatting.enum_type f1, QTextEdit.AutoFormatting.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextEdit.AutoFormatting.enum_type f1, QFlags!(QTextEdit.AutoFormatting.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QTextEdit.AutoFormatting.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QTextEdit.AutoFormatting.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QTextEdit.AutoFormatting.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QTextEdit.AutoFormatting.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QTextEdit.AutoFormatting.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QTextEdit.AutoFormatting.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextEdit::AutoFormatting) +/

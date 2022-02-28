@@ -27,7 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QFontComboBoxPrivate;
 
-/// Binding for C++ class [QFontComboBox](https://doc.qt.io/qt-5/qfontcombobox.html).
+/// Binding for C++ class [QFontComboBox](https://doc.qt.io/qt-6/qfontcombobox.html).
 class /+ Q_WIDGETS_EXPORT +/ QFontComboBox : QComboBox
 {
     mixin(Q_OBJECT);
@@ -76,6 +76,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator |(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/{return QFlags!(QFontComboBox.FontFilters.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator |(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator &(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/{return QFlags!(QFontComboBox.FontFilters.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator &(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QFontComboBox.FontFilters.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QFontComboBox.FontFilters.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QFontComboBox.FontFilters.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QFontComboBox::FontFilters) +/

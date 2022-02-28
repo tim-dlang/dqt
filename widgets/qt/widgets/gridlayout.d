@@ -28,7 +28,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QGridLayoutPrivate;
 
-/// Binding for C++ class [QGridLayout](https://doc.qt.io/qt-5/qgridlayout.html).
+/// Binding for C++ class [QGridLayout](https://doc.qt.io/qt-6/qgridlayout.html).
 class /+ Q_WIDGETS_EXPORT +/ QGridLayout : QLayout
 {
     mixin(Q_OBJECT);
@@ -37,9 +37,7 @@ class /+ Q_WIDGETS_EXPORT +/ QGridLayout : QLayout
     QDOC_PROPERTY(int verticalSpacing READ verticalSpacing WRITE setVerticalSpacing) +/
 
 public:
-    /+ explicit +/this(QWidget parent);
-    this();
-
+    /+ explicit +/this(QWidget parent = null);
     ~this();
 
     override QSize sizeHint() const;
@@ -50,8 +48,8 @@ public:
     final int horizontalSpacing() const;
     final void setVerticalSpacing(int spacing);
     final int verticalSpacing() const;
-//    final void setSpacing(int spacing);
-//    final int spacing() const;
+    override void setSpacing(int spacing);
+    override int spacing() const;
 
     final void setRowStretch(int row, int stretch);
     final void setColumnStretch(int column, int stretch);

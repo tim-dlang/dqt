@@ -22,17 +22,31 @@ import qt.core.qchar;
 import qt.core.regularexpression;
 import qt.core.string;
 import qt.core.typeinfo;
-import qt.core.vector;
 import qt.helpers;
 
+/*
+    This macro enables three "levels" of QStringView support:
+
+    1. offer QStringView, overload some functions taking QString with
+    QStringView
+
+    2. Obsolete: QStringRef and its overloads have been removed.
+
+    3. like 2, but replace functions taking QString, too.
+*/
 /+ #ifndef QT_STRINGVIEW_LEVEL
 #  define QT_STRINGVIEW_LEVEL 1
 #endif
 
+#if defined(Q_OS_DARWIN) || defined(Q_QDOC)
+Q_FORWARD_DECLARE_CF_TYPE(CFString);
+Q_FORWARD_DECLARE_OBJC_CLASS(NSString);
+#endif +/
 
 
-namespace QtPrivate {
-template <typename Char>
+
+extern(C++, "QtPrivate") {
+/+ template <typename Char>
 struct IsCompatibleCharTypeHelper
     : std::integral_constant<bool,
                              std::is_same<Char, QChar>::value ||
@@ -43,15 +57,6 @@ template <typename Char>
 struct IsCompatibleCharType
     : IsCompatibleCharTypeHelper<typename std::remove_cv<typename std::remove_reference<Char>::type>::type> {};
 
-template <typename Array>
-struct IsCompatibleArrayHelper : std::false_type {};
-template <typename Char, size_t N>
-struct IsCompatibleArrayHelper<Char[N]>
-    : IsCompatibleCharType<Char> {};
-template <typename Array>
-struct IsCompatibleArray
-    : IsCompatibleArrayHelper<typename std::remove_cv<typename std::remove_reference<Array>::type>::type> {};
-
 template <typename Pointer>
 struct IsCompatiblePointerHelper : std::false_type {};
 template <typename Char>
@@ -59,23 +64,35 @@ struct IsCompatiblePointerHelper<Char*>
     : IsCompatibleCharType<Char> {};
 template <typename Pointer>
 struct IsCompatiblePointer
-    : IsCompatiblePointerHelper<typename std::remove_cv<typename std::remove_reference<Pointer>::type>::type> {};
+    : IsCompatiblePointerHelper<typename std::remove_cv<typename std::remove_reference<Pointer>::type>::type> {}; +/
 
-template <typename T>
-struct IsCompatibleStdBasicStringHelper : std::false_type {};
-template <typename Char, typename...Args>
-struct IsCompatibleStdBasicStringHelper<std::basic_string<Char, Args...> >
-    : IsCompatibleCharType<Char> {};
+struct IsContainerCompatibleWithQStringView(T, Enable) {
+    /+ std:: +/false_type base0;
+    alias base0 this;
+}
 
-template <typename T>
-struct IsCompatibleStdBasicString
-    : IsCompatibleStdBasicStringHelper<
-        typename std::remove_cv<typename std::remove_reference<T>::type>::type
-      > {};
+/+ template <typename T>
+struct IsContainerCompatibleWithQStringView<T, std::enable_if_t<std::conjunction_v<
+            // lacking concepts and ranges, we accept any T whose std::data yields a suitable pointer ...
+            IsCompatiblePointer<decltype( std::data(std::declval<const T &>()) )>,
+            // ... and that has a suitable size ...
+            std::is_convertible<decltype( std::size(std::declval<const T &>()) ), qsizetype>,
+            // ... and it's a range as it defines an iterator-like API
+            IsCompatibleCharType<typename std::iterator_traits<decltype( std::begin(std::declval<const T &>()) )>::value_type>,
+            std::is_convertible<
+                decltype( std::begin(std::declval<const T &>()) != std::end(std::declval<const T &>()) ),
+                bool>,
 
-} +/ // namespace QtPrivate
+            // These need to be treated specially due to the empty vs null distinction
+            std::negation<std::is_same<std::decay_t<T>, QString>>,
 
-/// Binding for C++ class [QStringView](https://doc.qt.io/qt-5/qstringview.html).
+            // Don't make an accidental copy constructor
+            std::negation<std::is_same<std::decay_t<T>, QStringView>>
+        >>> : std::true_type {}; +/
+
+} // namespace QtPrivate
+
+/// Binding for C++ class [QStringView](https://doc.qt.io/qt-6/qstringview.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QStringView
 {
 public:
@@ -97,44 +114,49 @@ private:
     /+ template <typename Char> +/
     /+ using if_compatible_char = typename std::enable_if<QtPrivate::IsCompatibleCharType<Char>::value, bool>::type; +/
 
-    /+ template <typename Array> +/
-    /+ using if_compatible_array = typename std::enable_if<QtPrivate::IsCompatibleArray<Array>::value, bool>::type; +/
-
     /+ template <typename Pointer> +/
     /+ using if_compatible_pointer = typename std::enable_if<QtPrivate::IsCompatiblePointer<Pointer>::value, bool>::type; +/
 
     /+ template <typename T> +/
-    /+ using if_compatible_string = typename std::enable_if<QtPrivate::IsCompatibleStdBasicString<T>::value, bool>::type; +/
+    /+ using if_compatible_qstring_like = typename std::enable_if<std::is_same<T, QString>::value, bool>::type; +/
 
     /+ template <typename T> +/
-    /+ using if_compatible_qstring_like = typename std::enable_if<std::is_same<T, QString>::value || std::is_same<T, QStringRef>::value, bool>::type; +/
-
-    /+ template <typename Char, size_t N> +/
-    /+ static qsizetype lengthHelperArray(const Char (&)[N]) noexcept
-    {
-        return qsizetype(N - 1);
-    } +/
+    alias if_compatible_container(T) = UnknownType!q{/+ std:: +/enable_if!(/+ QtPrivate:: +/IsContainerCompatibleWithQStringView!(T).value, bool).type};
 
     /+ template <typename Char> +/
     /+ static qsizetype lengthHelperPointer(const Char *str) noexcept
     {
-#if defined(Q_CC_GNU) && !defined(Q_CC_CLANG) && !defined(Q_CC_INTEL)
-        if (__builtin_constant_p(*str)) {
-            qsizetype result = 0;
-            while (*str++)
-                ++result;
-            return result;
-        }
+#if defined(__cpp_lib_is_constant_evaluated)
+        if (std::is_constant_evaluated())
+            return std::char_traits<Char>::length(str);
+#elif defined(Q_CC_GNU) && !defined(Q_CC_CLANG) && !defined(Q_CC_INTEL)
+        if (__builtin_constant_p(*str))
+            return std::char_traits<Char>::length(str);
 #endif
-        return QtPrivate::qustrlen(reinterpret_cast<const ushort *>(str));
+        return QtPrivate::qustrlen(reinterpret_cast<const char16_t *>(str));
     } +/
     /+ static qsizetype lengthHelperPointer(const QChar *str) noexcept
     {
-        return QtPrivate::qustrlen(reinterpret_cast<const ushort *>(str));
+        return QtPrivate::qustrlen(reinterpret_cast<const char16_t *>(str));
     } +/
 
-    static const(storage_type) *castHelper(Char)(const Char *str) /*noexcept*/
-    { return reinterpret_cast!(const storage_type*)(str); }
+    /+ template <typename Container> +/
+    static qsizetype lengthHelperContainer(Container)(ref const(Container) c)/+ noexcept+/
+    {
+        return qsizetype(/+ std:: +/size(c));
+    }
+
+    /+ template <typename Char, size_t N> +/
+    static qsizetype lengthHelperContainer(Char,size_t N)(ref const(Char)[N] str)/+ noexcept+/
+    {
+        const it = /+ std:: +/char_traits!(Char).find(str.ptr, N, Char(0));
+        const end = it ? it : /+ std:: +/end(str);
+        return qsizetype(/+ std:: +/distance(str, end));
+    }
+
+    /+ template <typename Char> +/
+    static const(storage_type)* castHelper(Char)(const(Char)* str)/+ noexcept+/
+    { return reinterpret_cast!(const(storage_type)*)(str); }
     static const(storage_type)* castHelper(const(storage_type)* str)/+ noexcept+/
     { return str; }
 
@@ -150,52 +172,39 @@ public:
     }
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    this(Char)(const Char *str, qsizetype len) if(is(Char == QChar) || is(Char == ushort) || is(Char == wchar))
+    this(Char,)(const(Char)* str, qsizetype len)
     {
-        assert(len >= 0);
-        assert(str || !len);
-        m_size = len;
-        m_data = castHelper(str);
+        this.m_size = ((){(){ (mixin(Q_ASSERT(q{len >= 0})));
+        return /+ Q_ASSERT(str || !len) +/ mixin(Q_ASSERT(q{str || !len}));
+        }();
+        return len;
+        }());
+        this.m_data = castHelper(str);
     }
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    this(Char,)(const(Char)* f, const(Char)* l) if(is(Char == QChar) || is(Char == ushort) || is(Char == wchar))
+    this(Char,)(const(Char)* f, const(Char)* l)
     {
         this(f, l - f);
     }
 
 /+ #ifdef Q_CLANG_QDOC
     template <typename Char, size_t N>
-    QStringView(const Char (&array)[N]) noexcept;
+    constexpr QStringView(const Char (&array)[N]) noexcept;
 
     template <typename Char>
-    QStringView(const Char *str) noexcept;
-#else
-#if QT_DEPRECATED_SINCE(5, 14) +/
-    /+ template <typename Array, if_compatible_array<Array> = true> +/
-    /+ QT_DEPRECATED_VERSION_X_5_14(R"(Use u"~~~" or QStringView(u"~~~") instead of QStringViewLiteral("~~~"))") +/
-        this(Array,)(ref const(Array) str, /+ QtPrivate:: +/qt.core.global.Deprecated_t)/+ noexcept+/
-        {
-            this(str, lengthHelperArray(str));
-        }
-/+ #endif +/ // QT_DEPRECATED_SINCE
-
-    /+ template <typename Array, if_compatible_array<Array> = true> +/
-    /+ this(Array,)(ref const(Array) str)/+ noexcept+/
-    {
-        this(str, lengthHelperArray(str));
-    } +/
+    constexpr QStringView(const Char *str) noexcept;
+#else +/
 
     /+ template <typename Pointer, if_compatible_pointer<Pointer> = true> +/
-    /+ this(Pointer,)(ref const(Pointer) str)/+ noexcept+/
+    this(Pointer,)(ref const(Pointer) str)/+ noexcept+/ if(is(Pointer: const(wchar)*))
     {
         this(str, str ? lengthHelperPointer(str) : 0);
-    } +/
+    }
 /+ #endif
 
 #ifdef Q_CLANG_QDOC
     QStringView(const QString &str) noexcept;
-    QStringView(const QStringRef &str) noexcept;
 #else +/
     /+ template <typename String, if_compatible_qstring_like<String> = true> +/
     this(String)(ref const(String) str)/+ noexcept+/
@@ -204,25 +213,33 @@ public:
     }
 /+ #endif +/
 
-    /+ template <typename StdBasicString, if_compatible_string<StdBasicString> = true> +/
-    /+ this(StdBasicString,)(ref const(StdBasicString) str)/+ noexcept+/
+    /+ template <typename Container, if_compatible_container<Container> = true> +/
+    /+this(Container,)(ref const(Container) c)/+ noexcept+/
     {
-        this(str.data(), qsizetype(str.size()));
-    } +/
+        this(/+ std:: +/data(c), lengthHelperContainer(c));
+    }+/
 
-    //
-    // QStringView inline members that require QString:
-    //
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QString toString() const
+    /+ template <typename Char, size_t Size, if_compatible_char<Char> = true> +/
+    /+ [[nodiscard]] +/ static QStringView fromArray(Char,size_t Size,)(ref const(Char)[Size] string)/+ noexcept+/
+    { return QStringView(string.ptr, Size); }
+
+    /+ [[nodiscard]] +/ pragma(inline, true) QString toString() const
     { return (){ (mixin(Q_ASSERT(q{QStringView.size() == QStringView.length()})));
     return QString(data(), length());
     }(); } // defined in qstring.h
+    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    {
+        // defined in qcore_foundation.mm
+        /+ [[nodiscard]] Q_CORE_EXPORT CFStringRef toCFString() const Q_DECL_CF_RETURNS_RETAINED; +/
+        /+ [[nodiscard]] Q_CORE_EXPORT NSString *toNSString() const Q_DECL_NS_RETURNS_AUTORELEASED; +/
+    }
 
-    /+ Q_REQUIRED_RESULT +/ qsizetype size() const/+ noexcept+/ { return m_size; }
-    /+ Q_REQUIRED_RESULT +/ const_pointer data() const/+ noexcept+/ { return reinterpret_cast!(const_pointer)(m_data); }
-    /+ Q_REQUIRED_RESULT +/ const(storage_type)* utf16() const/+ noexcept+/ { return m_data; }
+    /+ [[nodiscard]] +/ qsizetype size() const/+ noexcept+/ { return m_size; }
+    /+ [[nodiscard]] +/ const_pointer data() const/+ noexcept+/ { return reinterpret_cast!(const_pointer)(m_data); }
+    /+ [[nodiscard]] +/ const_pointer constData() const/+ noexcept+/ { return data(); }
+    /+ [[nodiscard]] +/ const(storage_type)* utf16() const/+ noexcept+/ { return m_data; }
 
-    /+ Q_REQUIRED_RESULT +/ QChar opIndex(qsizetype n) const
+    /+ [[nodiscard]] +/ QChar opIndex(qsizetype n) const
     { return (){(){ (mixin(Q_ASSERT(q{n >= 0})));
 return /+ Q_ASSERT(n < size()) +/ mixin(Q_ASSERT(q{n < QStringView.size()}));
 }();
@@ -234,61 +251,79 @@ return QChar(m_data[n]);
     //
 
     /+ template <typename...Args> +/
-    /+ Q_REQUIRED_RESULT inline QString arg(Args &&...args) const; +/ // defined in qstring.h
+    /+ [[nodiscard]] inline QString arg(Args &&...args) const; +/ // defined in qstring.h
 
-    /+ Q_REQUIRED_RESULT +/ QByteArray toLatin1() const {
+    /+ [[nodiscard]] +/ QByteArray toLatin1() const {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.convertToLatin1(this);
     }
-    /+ Q_REQUIRED_RESULT +/ QByteArray toUtf8() const {
+    /+ [[nodiscard]] +/ QByteArray toUtf8() const {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.convertToUtf8(this);
     }
-    /+ Q_REQUIRED_RESULT +/ QByteArray toLocal8Bit() const {
+    /+ [[nodiscard]] +/ QByteArray toLocal8Bit() const {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.convertToLocal8Bit(this);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QVector!(uint) toUcs4() const {
+    // ### Qt 7 char32_t
+    /+ [[nodiscard]] +/ pragma(inline, true) QList!(uint) toUcs4() const {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.convertToUcs4(this);
-    } // defined in qvector.h
+    } // defined in qlist.h ### Qt 7 char32_t
 
-    /+ Q_REQUIRED_RESULT +/ QChar at(qsizetype n) const { return (this)[n]; }
+    /+ [[nodiscard]] +/ QChar at(qsizetype n) const/+ noexcept+/ { return (this)[n]; }
 
-    /+ Q_REQUIRED_RESULT +/ QStringView mid(qsizetype pos) const
+/+    /+ [[nodiscard]] +/ QStringView mid(qsizetype pos, qsizetype n = -1) const/+ noexcept+/
     {
-        return QStringView(m_data + qBound(qsizetype(0), pos, m_size), m_size - qBound(qsizetype(0), pos, m_size));
-    }
-    /+ Q_REQUIRED_RESULT +/ QStringView mid(qsizetype pos, qsizetype n) const
+        //using namespace QtPrivate;
+        auto result = QContainerImplHelper.mid(size(), &pos, &n);
+        return result == QContainerImplHelper.Null ? QStringView() : QStringView(m_data + pos, n);
+    }+/
+    /+ [[nodiscard]] +/ QStringView left(qsizetype n) const/+ noexcept+/
     {
-        return QStringView(m_data + qBound(qsizetype(0), pos, m_size), qBound(qsizetype(0), pos + n, m_size) - qBound(qsizetype(0), pos, m_size));
+        if (size_t(n) >= size_t(size()))
+            n = size();
+        return QStringView(m_data, n);
     }
-    /+ Q_REQUIRED_RESULT +/ QStringView left(qsizetype n) const
+    /+ [[nodiscard]] +/ QStringView right(qsizetype n) const/+ noexcept+/
     {
-        return QStringView(m_data, (size_t(n) > size_t(m_size) ? m_size : n));
+        if (size_t(n) >= size_t(size()))
+            n = size();
+        return QStringView(m_data + m_size - n, n);
     }
-    /+ Q_REQUIRED_RESULT +/ QStringView right(qsizetype n) const
-    {
-        return QStringView(m_data + m_size - (size_t(n) > size_t(m_size) ? m_size : n), (size_t(n) > size_t(m_size) ? m_size : n));
-    }
-    /+ Q_REQUIRED_RESULT +/ QStringView chopped(qsizetype n) const
+
+    /+ [[nodiscard]] +/ QStringView first(qsizetype n) const/+ noexcept+/
+    { (mixin(Q_ASSERT(q{n >= 0}))); (mixin(Q_ASSERT(q{n <= QStringView.size()}))); return QStringView(m_data, n); }
+    /+ [[nodiscard]] +/ QStringView last(qsizetype n) const/+ noexcept+/
+    { (mixin(Q_ASSERT(q{n >= 0}))); (mixin(Q_ASSERT(q{n <= QStringView.size()}))); return QStringView(m_data + size() - n, n); }
+    /+ [[nodiscard]] +/ QStringView sliced(qsizetype pos) const/+ noexcept+/
+    { (mixin(Q_ASSERT(q{pos >= 0}))); (mixin(Q_ASSERT(q{pos <= QStringView.size()}))); return QStringView(m_data + pos, size() - pos); }
+    /+ [[nodiscard]] +/ QStringView sliced(qsizetype pos, qsizetype n) const/+ noexcept+/
+    { (mixin(Q_ASSERT(q{pos >= 0}))); (mixin(Q_ASSERT(q{n >= 0}))); (mixin(Q_ASSERT(q{size_t(pos) + size_t(n) <= size_t(QStringView.size())}))); return QStringView(m_data + pos, n); }
+    /+ [[nodiscard]] +/ QStringView chopped(qsizetype n) const/+ noexcept+/
     { return (){(){ (mixin(Q_ASSERT(q{n >= 0})));
 return /+ Q_ASSERT(n <= size()) +/ mixin(Q_ASSERT(q{n <= QStringView.size()}));
 }();
 return QStringView(m_data, m_size - n);
 }(); }
 
-    void truncate(qsizetype n)
+    void truncate(qsizetype n)/+ noexcept+/
     { (mixin(Q_ASSERT(q{n >= 0}))); (mixin(Q_ASSERT(q{n <= QStringView.size()}))); m_size = n; }
-    void chop(qsizetype n)
+    void chop(qsizetype n)/+ noexcept+/
     { (mixin(Q_ASSERT(q{n >= 0}))); (mixin(Q_ASSERT(q{n <= QStringView.size()}))); m_size -= n; }
 
-    /+ Q_REQUIRED_RESULT +/ QStringView trimmed() const/+ noexcept+/ {
+    /+ [[nodiscard]] +/ QStringView trimmed() const/+ noexcept+/ {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.trimmed(this);
     }
 
-    /+ Q_REQUIRED_RESULT +/ int compare(QStringView other, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ template <typename Needle, typename...Flags> +/
+    /+ [[nodiscard]] constexpr inline auto tokenize(Needle &&needle, Flags...flags) const
+        noexcept(noexcept(qTokenize(std::declval<const QStringView&>(), std::forward<Needle>(needle), flags...)))
+            -> decltype(qTokenize(*this, std::forward<Needle>(needle), flags...))
+    { return qTokenize(*this, std::forward<Needle>(needle), flags...); } +/
+
+    /+ [[nodiscard]] +/ int compare(QStringView other, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.compareStrings(this, other, cs);
@@ -296,219 +331,272 @@ return QStringView(m_data, m_size - n);
     //
     // QStringView members that require QLatin1String:
     //
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int compare(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) int compare(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.compareStrings(this, s, cs);
     }
-    /+ Q_REQUIRED_RESULT +/ int compare(QChar c) const/+ noexcept+/
+    /+ [[nodiscard]] +/ int compare(QChar c) const/+ noexcept+/
     { return size() >= 1 ? compare_single_char_helper(*utf16() - c.unicode()) : -1; }
-    /+ Q_REQUIRED_RESULT +/ int compare(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs) const/+ noexcept+/
+    /+ [[nodiscard]] +/ int compare(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.compareStrings(this, QStringView(&c, 1), cs);
     }
 
-    /+ Q_REQUIRED_RESULT +/ bool startsWith(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool startsWith(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.startsWith(this, s, cs);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool startsWith(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) bool startsWith(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.startsWith(this, s, cs);
     }
-    /+ Q_REQUIRED_RESULT +/ bool startsWith(QChar c) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool startsWith(QChar c) const/+ noexcept+/
     { return !empty() && front() == c; }
-    /+ Q_REQUIRED_RESULT +/ bool startsWith(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool startsWith(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.startsWith(this, QStringView(&c, 1), cs);
     }
 
-    /+ Q_REQUIRED_RESULT +/ bool endsWith(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool endsWith(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.endsWith(this, s, cs);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool endsWith(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) bool endsWith(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.endsWith(this, s, cs);
     }
-    /+ Q_REQUIRED_RESULT +/ bool endsWith(QChar c) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool endsWith(QChar c) const/+ noexcept+/
     { return !empty() && back() == c; }
-    /+ Q_REQUIRED_RESULT +/ bool endsWith(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool endsWith(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.endsWith(this, QStringView(&c, 1), cs);
     }
 
-    /+ Q_REQUIRED_RESULT +/ qsizetype indexOf(QChar c, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype indexOf(QChar c, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.findString(this, from, QStringView(&c, 1), cs);
     }
-    /+ Q_REQUIRED_RESULT +/ qsizetype indexOf(QStringView s, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype indexOf(QStringView s, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.findString(this, from, s, cs);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) qsizetype indexOf(QLatin1String s, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype indexOf(QLatin1String s, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.findString(this, from, s, cs);
     }
 
-    /+ Q_REQUIRED_RESULT +/ bool contains(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool contains(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     { return indexOf(QStringView(&c, 1), 0, cs) != qsizetype(-1); }
-    /+ Q_REQUIRED_RESULT +/ bool contains(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool contains(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     { return indexOf(s, 0, cs) != qsizetype(-1); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool contains(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) bool contains(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     { return indexOf(s, 0, cs) != qsizetype(-1); }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) qsizetype count(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
-    { return toString().count(c, cs); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) qsizetype count(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
-    { auto tmp = s.toString(); return toString().count(tmp, cs); }
-
-    /+ Q_REQUIRED_RESULT +/ qsizetype lastIndexOf(QChar c, qsizetype from = -1, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype count(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
+        import qt.core.stringalgorithms;
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.count(this, c, cs);
+    }
+    /+ [[nodiscard]] +/ qsizetype count(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    {
+        import qt.core.stringalgorithms;
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.count(this, s, cs);
+    }
+
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QChar c, qsizetype from = -1, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    {
+        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, QStringView(&c, 1), cs);
     }
-    /+ Q_REQUIRED_RESULT +/ qsizetype lastIndexOf(QStringView s, qsizetype from = -1, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    { return lastIndexOf(s, size(), cs); }
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QStringView s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
+        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, s, cs);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) qsizetype lastIndexOf(QLatin1String s, qsizetype from = -1, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype lastIndexOf(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
+        import qt.core.bytearrayalgorithms;
+        import qt.core.stringalgorithms;
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, size(), s, cs);
+    }
+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype lastIndexOf(QLatin1String s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    {
+        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, s, cs);
     }
 
-    /+ Q_REQUIRED_RESULT +/ bool isRightToLeft() const/+ noexcept+/
+/+ #if QT_CONFIG(regularexpression) +/
+    /+ [[nodiscard]] +/ qsizetype indexOf(ref const(QRegularExpression) re, qsizetype from = 0, QRegularExpressionMatch* rmatch = null) const
+    {
+        import qt.core.stringalgorithms;
+
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.indexOf(this, re, from, rmatch);
+    }
+/+ #ifdef Q_QDOC
+    [[nodiscard]] qsizetype lastIndexOf(const QRegularExpression &re, QRegularExpressionMatch *rmatch = nullptr) const;
+#else +/
+    // prevent an ambiguity when called like this: lastIndexOf(re, 0)
+    /+ template <typename T = QRegularExpressionMatch, std::enable_if_t<std::is_same_v<T, QRegularExpressionMatch>, bool> = false> +/
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(T,)(ref const(QRegularExpression) re, T* rmatch = null) const
+    {
+        import qt.core.bytearrayalgorithms;
+        import qt.core.stringalgorithms;
+
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, re, size(), rmatch);
+    }
+/+ #endif +/
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(ref const(QRegularExpression) re, qsizetype from, QRegularExpressionMatch* rmatch = null) const
+    {
+        import qt.core.bytearrayalgorithms;
+        import qt.core.stringalgorithms;
+
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, re, from, rmatch);
+    }
+    /+ [[nodiscard]] +/ bool contains(ref const(QRegularExpression) re, QRegularExpressionMatch* rmatch = null) const
+    {
+        import qt.core.stringalgorithms;
+
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.contains(this, re, rmatch);
+    }
+    /+ [[nodiscard]] +/ qsizetype count(ref const(QRegularExpression) re) const
+    {
+        import qt.core.stringalgorithms;
+
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.count(this, re);
+    }
+/+ #endif +/
+
+    /+ [[nodiscard]] +/ bool isRightToLeft() const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.isRightToLeft(this);
     }
-    /+ Q_REQUIRED_RESULT +/ bool isValidUtf16() const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool isValidUtf16() const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.isValidUtf16(this);
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) short toShort(bool* ok = null, int base = 10) const
-    { return toString().toShort(ok, base); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) ushort toUShort(bool* ok = null, int base = 10) const
-    { return toString().toUShort(ok, base); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int toInt(bool* ok = null, int base = 10) const
-    { return toString().toInt(ok, base); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) uint toUInt(bool* ok = null, int base = 10) const
-    { return toString().toUInt(ok, base); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) cpp_long toLong(bool* ok = null, int base = 10) const
-    { return toString().toLong(ok, base); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) cpp_ulong toULong(bool* ok = null, int base = 10) const
-    { return toString().toULong(ok, base); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) qlonglong toLongLong(bool* ok = null, int base = 10) const
-    { return toString().toLongLong(ok, base); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) qulonglong toULongLong(bool* ok = null, int base = 10) const
-    { return toString().toULongLong(ok, base); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) float toFloat(bool* ok = null) const
-    { return toString().toFloat(ok); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) double toDouble(bool* ok = null) const
-    { return toString().toDouble(ok); }
+    /+ [[nodiscard]] +/ pragma(inline, true) short toShort(bool* ok = null, int base = 10) const
+    { return QString.toIntegral_helper!(short)(this, ok, base); }
+    /+ [[nodiscard]] +/ pragma(inline, true) ushort toUShort(bool* ok = null, int base = 10) const
+    { return QString.toIntegral_helper!(ushort)(this, ok, base); }
+    /+ [[nodiscard]] +/ pragma(inline, true) int toInt(bool* ok = null, int base = 10) const
+    { return QString.toIntegral_helper!(int)(this, ok, base); }
+    /+ [[nodiscard]] +/ pragma(inline, true) uint toUInt(bool* ok = null, int base = 10) const
+    { return QString.toIntegral_helper!(uint)(this, ok, base); }
+    /+ [[nodiscard]] +/ pragma(inline, true) cpp_long toLong(bool* ok = null, int base = 10) const
+    { return QString.toIntegral_helper!(cpp_long)(this, ok, base); }
+    /+ [[nodiscard]] +/ pragma(inline, true) cpp_ulong toULong(bool* ok = null, int base = 10) const
+    { return QString.toIntegral_helper!(cpp_ulong)(this, ok, base); }
+    /+ [[nodiscard]] +/ pragma(inline, true) qlonglong toLongLong(bool* ok = null, int base = 10) const
+    /+pragma(inline, true) qint64 toLongLong(bool* ok, int base) const+/
+    { return QString.toIntegral_helper!(qint64)(this, ok, base); }
+    /+ [[nodiscard]] +/ pragma(inline, true) qulonglong toULongLong(bool* ok = null, int base = 10) const
+    /+pragma(inline, true) quint64 toULongLong(bool* ok, int base) const+/
+    { return QString.toIntegral_helper!(quint64)(this, ok, base); }
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ float toFloat(bool* ok = null) const;
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ double toDouble(bool* ok = null) const;
 
-/+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int toWCharArray(wchar_t* array) const
+/+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype toWCharArray(wchar_t* array) const
     {
         import core.stdc.string;
 
         if (wchar_t.sizeof == QChar.sizeof) {
             if (auto src = data())
                 memcpy(array, cast(const(void)*)(src), QChar.sizeof * size());
-            return cast(int)(size());     // ### q6sizetype
+            return size();
         } else {
-            return QString.toUcs4_helper(reinterpret_cast!(const(ushort)*)(data()), int(size()),
+            return QString.toUcs4_helper(reinterpret_cast!(const(ushort)*)(data()), size(),
                                           reinterpret_cast!(uint*)(array));
         }
     } // defined in qstring.h +/
 
-    // those methods need to be here, so they can be implemented inline
-    /+ Q_REQUIRED_RESULT +/ 
-/+        pragma(inline, true) QList!(QStringView) split(QStringView sep,
+
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/
+        QList!(QStringView) split(QStringView sep,
                                  /+ Qt:: +/qt.core.namespace.SplitBehavior behavior = /+ Qt:: +/qt.core.namespace.SplitBehaviorFlags.KeepEmptyParts,
-                                 /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
-    {
-        (mixin(Q_ASSERT(q{cast(int)(QStringView.m_size) == QStringView.m_size})));
-        QString s = QString.fromRawData(data(), cast(int)(m_size));
-        const split = s.splitRef(sep.toString(), behavior, cs);
-        QList!(QStringView) result;
-        foreach (const ref QStringRef r; split)
-            result.append(QStringView(m_data + r.position(), r.size()));
-        return result;
-    }+/
-    /+ Q_REQUIRED_RESULT +/ 
-/+        pragma(inline, true) QList!(QStringView) split(QChar sep, /+ Qt:: +/qt.core.namespace.SplitBehavior behavior = /+ Qt:: +/qt.core.namespace.SplitBehaviorFlags.KeepEmptyParts,
-                                 /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
-    {
-        (mixin(Q_ASSERT(q{int(QStringView.m_size) == QStringView.m_size})));
-        QString s = QString.fromRawData(data(), int(m_size));
-        const split = s.splitRef(sep, behavior, cs);
-        QList!(QStringView) result;
-        foreach (const ref QStringRef r; split)
-            result.append(QStringView(m_data + r.position(), r.size()));
-        return result;
-    }+/
+                                 /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/
+        QList!(QStringView) split(QChar sep, /+ Qt:: +/qt.core.namespace.SplitBehavior behavior = /+ Qt:: +/qt.core.namespace.SplitBehaviorFlags.KeepEmptyParts,
+                                 /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
 
 /+ #if QT_CONFIG(regularexpression) +/
-    // implementation here, so we have all required classes
-    /+ Q_REQUIRED_RESULT +/ 
-/+        pragma(inline, true) QList!(QStringView) split(ref const(QRegularExpression) sep, /+ Qt:: +/qt.core.namespace.SplitBehavior behavior = /+ Qt:: +/qt.core.namespace.SplitBehaviorFlags.KeepEmptyParts) const
-    {
-        (mixin(Q_ASSERT(q{int(QStringView.m_size) == QStringView.m_size})));
-        QString s = QString.fromRawData(data(), int(m_size));
-        const split = s.splitRef(sep, behavior);
-        QList!(QStringView) result;
-        result.reserve(split.size());
-        foreach(const ref QStringRef r; split)
-            result.append(r);
-        return result;
-    }+/
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/
+        QList!(QStringView) split(ref const(QRegularExpression) sep,
+                                 /+ Qt:: +/qt.core.namespace.SplitBehavior behavior = /+ Qt:: +/qt.core.namespace.SplitBehaviorFlags.KeepEmptyParts) const;
 /+ #endif +/
+
+    // QStringView <> QStringView
+    /+ friend bool operator==(QStringView lhs, QStringView rhs) noexcept { return lhs.size() == rhs.size() && QtPrivate::equalStrings(lhs, rhs); } +/
+    /+ friend bool operator!=(QStringView lhs, QStringView rhs) noexcept { return !(lhs == rhs); } +/
+    /+ friend bool operator< (QStringView lhs, QStringView rhs) noexcept { return QtPrivate::compareStrings(lhs, rhs) <  0; } +/
+    /+ friend bool operator<=(QStringView lhs, QStringView rhs) noexcept { return QtPrivate::compareStrings(lhs, rhs) <= 0; } +/
+    /+ friend bool operator> (QStringView lhs, QStringView rhs) noexcept { return QtPrivate::compareStrings(lhs, rhs) >  0; } +/
+    /+ friend bool operator>=(QStringView lhs, QStringView rhs) noexcept { return QtPrivate::compareStrings(lhs, rhs) >= 0; } +/
+
+    // QStringView <> QChar
+    /+ friend bool operator==(QStringView lhs, QChar rhs) noexcept { return lhs == QStringView(&rhs, 1); } +/
+    /+ friend bool operator!=(QStringView lhs, QChar rhs) noexcept { return lhs != QStringView(&rhs, 1); } +/
+    /+ friend bool operator< (QStringView lhs, QChar rhs) noexcept { return lhs <  QStringView(&rhs, 1); } +/
+    /+ friend bool operator<=(QStringView lhs, QChar rhs) noexcept { return lhs <= QStringView(&rhs, 1); } +/
+    /+ friend bool operator> (QStringView lhs, QChar rhs) noexcept { return lhs >  QStringView(&rhs, 1); } +/
+    /+ friend bool operator>=(QStringView lhs, QChar rhs) noexcept { return lhs >= QStringView(&rhs, 1); } +/
+
+    /+ friend bool operator==(QChar lhs, QStringView rhs) noexcept { return QStringView(&lhs, 1) == rhs; } +/
+    /+ friend bool operator!=(QChar lhs, QStringView rhs) noexcept { return QStringView(&lhs, 1) != rhs; } +/
+    /+ friend bool operator< (QChar lhs, QStringView rhs) noexcept { return QStringView(&lhs, 1) <  rhs; } +/
+    /+ friend bool operator<=(QChar lhs, QStringView rhs) noexcept { return QStringView(&lhs, 1) <= rhs; } +/
+    /+ friend bool operator> (QChar lhs, QStringView rhs) noexcept { return QStringView(&lhs, 1) >  rhs; } +/
+    /+ friend bool operator>=(QChar lhs, QStringView rhs) noexcept { return QStringView(&lhs, 1) >= rhs; } +/
 
     //
     // STL compatibility API:
     //
-    /+ Q_REQUIRED_RESULT +/ const_iterator begin()   const/+ noexcept+/ { return data(); }
-    /+ Q_REQUIRED_RESULT +/ const_iterator end()     const/+ noexcept+/ { return data() + size(); }
-    /+ Q_REQUIRED_RESULT +/ const_iterator cbegin()  const/+ noexcept+/ { return begin(); }
-    /+ Q_REQUIRED_RESULT +/ const_iterator cend()    const/+ noexcept+/ { return end(); }
-    /+ Q_REQUIRED_RESULT const_reverse_iterator rbegin()  const noexcept { return const_reverse_iterator(end()); } +/
-    /+ Q_REQUIRED_RESULT const_reverse_iterator rend()    const noexcept { return const_reverse_iterator(begin()); } +/
-    /+ Q_REQUIRED_RESULT const_reverse_iterator crbegin() const noexcept { return rbegin(); } +/
-    /+ Q_REQUIRED_RESULT const_reverse_iterator crend()   const noexcept { return rend(); } +/
+    /+ [[nodiscard]] +/ const_iterator begin()   const/+ noexcept+/ { return data(); }
+    /+ [[nodiscard]] +/ const_iterator end()     const/+ noexcept+/ { return data() + size(); }
+    /+ [[nodiscard]] +/ const_iterator cbegin()  const/+ noexcept+/ { return begin(); }
+    /+ [[nodiscard]] +/ const_iterator cend()    const/+ noexcept+/ { return end(); }
+    /+ [[nodiscard]] const_reverse_iterator rbegin()  const noexcept { return const_reverse_iterator(end()); } +/
+    /+ [[nodiscard]] const_reverse_iterator rend()    const noexcept { return const_reverse_iterator(begin()); } +/
+    /+ [[nodiscard]] const_reverse_iterator crbegin() const noexcept { return rbegin(); } +/
+    /+ [[nodiscard]] const_reverse_iterator crend()   const noexcept { return rend(); } +/
 
-    /+ Q_REQUIRED_RESULT +/ bool empty() const/+ noexcept+/ { return size() == 0; }
-    /+ Q_REQUIRED_RESULT +/ QChar front() const { return (){ (mixin(Q_ASSERT(q{!QStringView.empty()})));
+    /+ [[nodiscard]] +/ bool empty() const/+ noexcept+/ { return size() == 0; }
+    /+ [[nodiscard]] +/ QChar front() const { return (){ (mixin(Q_ASSERT(q{!QStringView.empty()})));
 return QChar(m_data[0]);
 }(); }
-    /+ Q_REQUIRED_RESULT +/ QChar back()  const { return (){ (mixin(Q_ASSERT(q{!QStringView.empty()})));
+    /+ [[nodiscard]] +/ QChar back()  const { return (){ (mixin(Q_ASSERT(q{!QStringView.empty()})));
 return QChar(m_data[m_size - 1]);
 }(); }
 
     //
     // Qt compatibility API:
     //
-    /+ Q_REQUIRED_RESULT +/ bool isNull() const/+ noexcept+/ { return !m_data; }
-    /+ Q_REQUIRED_RESULT +/ bool isEmpty() const/+ noexcept+/ { return empty(); }
-    /+ Q_REQUIRED_RESULT +/ int length() const /* not nothrow! */
-    { return (){ (mixin(Q_ASSERT(q{cast(int)(QStringView.size()) == QStringView.size()})));
-return cast(int)(size());
-}(); }
-    /+ Q_REQUIRED_RESULT +/ QChar first() const { return front(); }
-    /+ Q_REQUIRED_RESULT +/ QChar last()  const { return back(); }
+    /+ [[nodiscard]] +/ const_iterator constBegin() const/+ noexcept+/ { return begin(); }
+    /+ [[nodiscard]] +/ const_iterator constEnd() const/+ noexcept+/ { return end(); }
+    /+ [[nodiscard]] +/ bool isNull() const/+ noexcept+/ { return !m_data; }
+    /+ [[nodiscard]] +/ bool isEmpty() const/+ noexcept+/ { return empty(); }
+    /+ [[nodiscard]] +/ qsizetype length() const/+ noexcept+/
+    { return size(); }
+    /+ [[nodiscard]] +/ QChar first() const { return front(); }
+    /+ [[nodiscard]] +/ QChar last()  const { return back(); }
 private:
     qsizetype m_size = 0;
     const(storage_type)* m_data = null;
@@ -520,7 +608,9 @@ private:
 /+ Q_DECLARE_TYPEINFO(QStringView, Q_PRIMITIVE_TYPE); +/
 
 pragma(inline, true) QStringView qToStringViewIgnoringNull(QStringLike, /+ typename std::enable_if<
-    std::is_same<QStringLike, QString>::value || std::is_same<QStringLike, QStringRef>::value,
+    std::is_same<QStringLike, QString>::value,
     bool>::type +/ /+ = true +/)(ref const(QStringLike) s)/+ noexcept+/
 { return QStringView(s.data(), s.size()); }
+
+// QChar inline functions:
 

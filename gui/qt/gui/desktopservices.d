@@ -14,8 +14,6 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-static if(!defined!"QT_NO_DESKTOPSERVICES" && !defined!"QT_NO_STANDARDPATHS")
-    import qt.core.standardpaths;
 static if(!defined!"QT_NO_DESKTOPSERVICES")
 {
     import qt.core.object;
@@ -26,39 +24,14 @@ static if(!defined!"QT_NO_DESKTOPSERVICES")
 static if(!defined!"QT_NO_DESKTOPSERVICES")
 {
 
-/// Binding for C++ class [QDesktopServices](https://doc.qt.io/qt-5/qdesktopservices.html).
+
+/// Binding for C++ class [QDesktopServices](https://doc.qt.io/qt-6/qdesktopservices.html).
 extern(C++, class) struct /+ Q_GUI_EXPORT +/ QDesktopServices
 {
 public:
     static bool openUrl(ref const(QUrl) url);
     static void setUrlHandler(ref const(QString) scheme, QObject receiver, const(char)* method);
     static void unsetUrlHandler(ref const(QString) scheme);
-
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    //Must match QStandardPaths::StandardLocation
-    enum StandardLocation {
-        DesktopLocation,
-        DocumentsLocation,
-        FontsLocation,
-        ApplicationsLocation,
-        MusicLocation,
-        MoviesLocation,
-        PicturesLocation,
-        TempLocation,
-        HomeLocation,
-        DataLocation,
-        CacheLocation
-    };
-
-    QT_DEPRECATED static QString storageLocation(StandardLocation type) {
-        return storageLocationImpl(static_cast<QStandardPaths::StandardLocation>(type));
-    }
-    QT_DEPRECATED static QString displayName(StandardLocation type) {
-        return QStandardPaths::displayName(static_cast<QStandardPaths::StandardLocation>(type));
-    }
-#endif +/
-private:
-    static QString storageLocationImpl(mixin((!defined!"QT_NO_STANDARDPATHS") ? q{QStandardPaths.StandardLocation } : q{AliasSeq!()}) type);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

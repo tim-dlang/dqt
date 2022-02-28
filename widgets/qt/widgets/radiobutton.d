@@ -29,7 +29,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QRadioButtonPrivate;
 
-/// Binding for C++ class [QRadioButton](https://doc.qt.io/qt-5/qradiobutton.html).
+/// Binding for C++ class [QRadioButton](https://doc.qt.io/qt-6/qradiobutton.html).
 class /+ Q_WIDGETS_EXPORT +/ QRadioButton : QAbstractButton
 {
     mixin(Q_OBJECT);
@@ -47,7 +47,7 @@ protected:
     override bool hitButton(ref const(QPoint) ) const;
     override void paintEvent(QPaintEvent );
     override void mouseMoveEvent(QMouseEvent );
-    final void initStyleOption(QStyleOptionButton* button) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionButton* button) const;
 
 
 private:

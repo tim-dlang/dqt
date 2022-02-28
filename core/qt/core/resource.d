@@ -24,7 +24,7 @@ import qt.helpers;
 
 extern(C++, class) struct QResourcePrivate;
 
-/// Binding for C++ class [QResource](https://doc.qt.io/qt-5/qresource.html).
+/// Binding for C++ class [QResource](https://doc.qt.io/qt-6/qresource.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QResource
 {
 public:
@@ -35,12 +35,7 @@ public:
     }
 
     @disable this();
-    this(ref const(QString) file, ref const(QLocale) locale);
-    this(ref const(QString) file)
-    {
-        const(QLocale) locale = QLocale.create();
-        this(file, locale);
-    }
+    this(ref const(QString) file/* = globalInitVar!QString*/, ref const(QLocale) locale/* = globalInitVar!QLocale*/);
     ~this();
 
     void setFileName(ref const(QString) file);
@@ -58,17 +53,6 @@ public:
     qint64 uncompressedSize() const;
     QByteArray uncompressedData() const;
     QDateTime lastModified() const;
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use QDir::addSearchPath() instead") +/
-        static void addSearchPath(ref const(QString) path);
-    /+ QT_DEPRECATED_X("Use QDir::searchPaths() instead") +/
-        static QStringList searchPaths();
-/+ #endif
-#if QT_DEPRECATED_SINCE(5, 15) +/
-    /+ QT_DEPRECATED_VERSION_X_5_15("Use QResource::compressionAlgorithm() instead") +/
-        bool isCompressed() const;
-/+ #endif +/
 
     static bool registerResource(ref const(QString) rccFilename, ref const(QString) resourceRoot=globalInitVar!QString);
     static bool unregisterResource(ref const(QString) rccFilename, ref const(QString) resourceRoot=globalInitVar!QString);

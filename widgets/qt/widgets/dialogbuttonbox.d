@@ -29,7 +29,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QDialogButtonBoxPrivate;
 
-/// Binding for C++ class [QDialogButtonBox](https://doc.qt.io/qt-5/qdialogbuttonbox.html).
+/// Binding for C++ class [QDialogButtonBox](https://doc.qt.io/qt-6/qdialogbuttonbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QDialogButtonBox : QWidget
 {
     mixin(Q_OBJECT);
@@ -91,8 +91,7 @@ alias StandardButtons = QFlags!(StandardButton);    /+ Q_FLAG(StandardButtons) +
         MacLayout,
         KdeLayout,
         GnomeLayout,
-        // MacModelessLayout,
-        AndroidLayout = ButtonLayout.GnomeLayout + 2 // ### Qt 6: reorder
+        AndroidLayout
     }
 
     this(QWidget parent = null);
@@ -141,6 +140,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator |(QDialogButtonBox.StandardButtons.enum_type f1, QDialogButtonBox.StandardButtons.enum_type f2)/+noexcept+/{return QFlags!(QDialogButtonBox.StandardButtons.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator |(QDialogButtonBox.StandardButtons.enum_type f1, QFlags!(QDialogButtonBox.StandardButtons.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator &(QDialogButtonBox.StandardButtons.enum_type f1, QDialogButtonBox.StandardButtons.enum_type f2)/+noexcept+/{return QFlags!(QDialogButtonBox.StandardButtons.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator &(QDialogButtonBox.StandardButtons.enum_type f1, QFlags!(QDialogButtonBox.StandardButtons.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QDialogButtonBox.StandardButtons.enum_type f1, QDialogButtonBox.StandardButtons.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDialogButtonBox.StandardButtons.enum_type f1, QFlags!(QDialogButtonBox.StandardButtons.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QDialogButtonBox.StandardButtons.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDialogButtonBox.StandardButtons.enum_type f1, QDialogButtonBox.StandardButtons.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDialogButtonBox.StandardButtons.enum_type f1, QFlags!(QDialogButtonBox.StandardButtons.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QDialogButtonBox.StandardButtons.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QDialogButtonBox.StandardButtons.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QDialogButtonBox.StandardButtons.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QDialogButtonBox.StandardButtons.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QDialogButtonBox.StandardButtons.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QDialogButtonBox.StandardButtons.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QDialogButtonBox::StandardButtons) +/

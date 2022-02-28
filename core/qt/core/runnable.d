@@ -9,36 +9,28 @@
  * ensure the GNU Lesser General Public License version 3 requirements
  * will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
  */
-module qt.widgets.event;
+module qt.core.runnable;
 extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_ACTION){}else
-{
-    import qt.core.coreevent;
-    import qt.widgets.action;
-}
 
-version(QT_NO_ACTION){}else
-{
-/// Binding for C++ class [QActionEvent](https://doc.qt.io/qt-5/qactionevent.html).
-class /+ Q_GUI_EXPORT +/ QActionEvent : QEvent
+/// Binding for C++ class [QRunnable](https://doc.qt.io/qt-6/qrunnable.html).
+abstract class /+ Q_CORE_EXPORT +/ QRunnable
 {
 private:
-    QAction act; QAction bef;
-public:
-    this(int type, QAction action, QAction before = null);
-    ~this();
+    bool m_autoDelete = true;
 
-    pragma(inline, true) final QAction action() const { return cast(QAction)act; }
-    pragma(inline, true) final QAction before() const { return cast(QAction)bef; }
+    /+ Q_DISABLE_COPY(QRunnable) +/
+public:
+    /+ virtual +/ abstract void run();
+
+    /+ constexpr QRunnable() noexcept = default; +/
+    /+ virtual +/~this();
+    /+ static QRunnable *create(std::function<void()> functionToRun); +/
+
+    final bool autoDelete() const { return m_autoDelete; }
+    final void setAutoDelete(bool autoDelete) { m_autoDelete = autoDelete; }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-}
-version(QT_NO_ACTION)
-{
-class QActionEvent;
-}
-
 

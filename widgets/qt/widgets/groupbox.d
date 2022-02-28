@@ -26,7 +26,7 @@ import qt.widgets.widget;
 
 
 extern(C++, class) struct QGroupBoxPrivate;
-/// Binding for C++ class [QGroupBox](https://doc.qt.io/qt-5/qgroupbox.html).
+/// Binding for C++ class [QGroupBox](https://doc.qt.io/qt-6/qgroupbox.html).
 class /+ Q_WIDGETS_EXPORT +/ QGroupBox : QWidget
 {
     mixin(Q_OBJECT);
@@ -72,7 +72,7 @@ protected:
     override void mousePressEvent(QMouseEvent event);
     override void mouseMoveEvent(QMouseEvent event);
     override void mouseReleaseEvent(QMouseEvent event);
-    final void initStyleOption(QStyleOptionGroupBox* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionGroupBox* option) const;
 
 
 private:

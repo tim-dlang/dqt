@@ -27,7 +27,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QDialPrivate;
 
-/// Binding for C++ class [QDial](https://doc.qt.io/qt-5/qdial.html).
+/// Binding for C++ class [QDial](https://doc.qt.io/qt-6/qdial.html).
 class /+ Q_WIDGETS_EXPORT +/ QDial: QAbstractSlider
 {
     mixin(Q_OBJECT);
@@ -66,7 +66,7 @@ protected:
     override void mouseMoveEvent(QMouseEvent me);
 
     override void sliderChange(SliderChange change);
-    final void initStyleOption(QStyleOptionSlider* option) const;
+    /+ virtual +/ void initStyleOption(QStyleOptionSlider* option) const;
 
 
 private:

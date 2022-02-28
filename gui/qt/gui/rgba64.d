@@ -17,7 +17,7 @@ import qt.core.global;
 import qt.core.typeinfo;
 import qt.helpers;
 
-/// Binding for C++ class [QRgba64](https://doc.qt.io/qt-5/qrgba64.html).
+/// Binding for C++ class [QRgba64](https://doc.qt.io/qt-6/qrgba64.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QRgba64 {
 private:
     quint64 rgba;
@@ -171,7 +171,7 @@ public:
         return rgba;
     }+/
 
-    /+QRgba64 operator =(quint64 _rgba)
+    /+ref QRgba64 operator =(quint64 _rgba)/+ noexcept+/
     {
         rgba = _rgba;
         return this;

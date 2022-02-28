@@ -28,8 +28,8 @@ import qt.helpers;
 #endif +/
 
 
-/// Binding for C++ class [QDeadlineTimer](https://doc.qt.io/qt-5/qdeadlinetimer.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDeadlineTimer
+/// Binding for C++ class [QDeadlineTimer](https://doc.qt.io/qt-6/qdeadlinetimer.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDeadlineTimer
 {
 public:
     enum ForeverConstant { Forever }
@@ -169,11 +169,18 @@ private:
 
 public:
     // This is not a public function, it's here only for Qt's internal convenience...
-    QPair!(qint64, uint) _q_data() const { return qMakePair(t1, t2); }
+//    qt.core.pair.QPair!(qint64, uint) _q_data() const { return qMakePair(cast(T1 && )(t1), cast(T2 && )(t2)); }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_SHARED(QDeadlineTimer)
+/+ #if __has_include(<chrono>) && (defined(Q_OS_DARWIN) || defined(Q_OS_LINUX) || (defined(Q_CC_MSVC) && Q_CC_MSVC >= 1900))
+// We know for these OS/compilers that the std::chrono::steady_clock uses the same
+// reference time as QDeadlineTimer
+
+template <>
+template <>#endif
+
+Q_DECLARE_SHARED(QDeadlineTimer)
 
 
 Q_DECLARE_METATYPE(QDeadlineTimer) +/

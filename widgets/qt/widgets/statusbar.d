@@ -24,7 +24,7 @@ import qt.widgets.widget;
 
 extern(C++, class) struct QStatusBarPrivate;
 
-/// Binding for C++ class [QStatusBar](https://doc.qt.io/qt-5/qstatusbar.html).
+/// Binding for C++ class [QStatusBar](https://doc.qt.io/qt-6/qstatusbar.html).
 class /+ Q_WIDGETS_EXPORT +/ QStatusBar: QWidget
 {
     mixin(Q_OBJECT);

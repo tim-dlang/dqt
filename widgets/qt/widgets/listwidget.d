@@ -25,9 +25,7 @@ import qt.core.size;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.core.variant;
-import qt.core.vector;
 import qt.gui.brush;
-import qt.gui.color;
 import qt.gui.event;
 import qt.gui.font;
 import qt.gui.icon;
@@ -44,7 +42,7 @@ version(QT_NO_DATASTREAM){}else
 extern(C++, class) struct QListModel;
 extern(C++, class) struct QListWidgetItemPrivate;
 
-/// Binding for C++ class [QListWidgetItem](https://doc.qt.io/qt-5/qlistwidgetitem.html).
+/// Binding for C++ class [QListWidgetItem](https://doc.qt.io/qt-6/qlistwidgetitem.html).
 class /+ Q_WIDGETS_EXPORT +/ QListWidgetItem
 {
 private:
@@ -89,14 +87,11 @@ public:
     pragma(inline, true) final void setStatusTip(ref const(QString) astatusTip)
     { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole, astatusTip); }
 
-/+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
-    {
-        pragma(inline, true) final QString toolTip() const
-            { return data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole).toString(); }
-        pragma(inline, true) final void setToolTip(ref const(QString) atoolTip)
-        { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole, atoolTip); }
-    }
+/+ #if QT_CONFIG(tooltip) +/
+    pragma(inline, true) final QString toolTip() const
+        { return data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole).toString(); }
+    pragma(inline, true) final void setToolTip(ref const(QString) atoolTip)
+    { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole, atoolTip); }
 /+ #endif
 
 #if QT_CONFIG(whatsthis) +/
@@ -116,29 +111,10 @@ public:
     pragma(inline, true) final void setTextAlignment(int alignment)
         { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole, alignment); }
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X ("Use QListWidgetItem::background() instead") +/
-        pragma(inline, true) final QColor backgroundColor() const
-        { return qvariant_cast!(QColor)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
-/+ #endif +/
-    // no QT_DEPRECATED_SINCE because it is a virtual function
-    /+ QT_DEPRECATED_X ("Use QListWidgetItem::setBackground() instead") +/
-        /+ virtual +/ void setBackgroundColor(ref const(QColor) color)
-        { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, color); }
-
     pragma(inline, true) final QBrush background() const
         { return qvariant_cast!(QBrush)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
     pragma(inline, true) final void setBackground(ref const(QBrush) brush)
         { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, brush.style() != /+ Qt:: +/qt.core.namespace.BrushStyle.NoBrush ? QVariant.fromValue(brush) : QVariant()); }
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X ("Use QListWidgetItem::foreground() instead") +/
-        pragma(inline, true) final QColor textColor() const
-        { return qvariant_cast!(QColor)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole)); }
-    /+ QT_DEPRECATED_X ("Use QListWidgetItem::setForeground() instead") +/
-        pragma(inline, true) final void setTextColor(ref const(QColor) color)
-        { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole, color); }
-/+ #endif +/
 
     pragma(inline, true) final QBrush foreground() const
         { return qvariant_cast!(QBrush)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole)); }
@@ -181,14 +157,13 @@ public:
 private:
     final QListModel* listModel() const;
     int rtti;
-    QVector!(void*) dummy;
     QListWidget view;
     QListWidgetItemPrivate* d;
     /+ Qt:: +/qt.core.namespace.ItemFlags itemFlags;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ #ifndef QT_NO_TOOLTIP
+/+ #if QT_CONFIG(tooltip)
 #endif
 
 #if QT_CONFIG(whatsthis)
@@ -201,12 +176,13 @@ Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &in, QListWidgetItem &item)
 
 extern(C++, class) struct QListWidgetPrivate;
 
-/// Binding for C++ class [QListWidget](https://doc.qt.io/qt-5/qlistwidget.html).
+/// Binding for C++ class [QListWidget](https://doc.qt.io/qt-6/qlistwidget.html).
 class /+ Q_WIDGETS_EXPORT +/ QListWidget : QListView
 {
     mixin(Q_OBJECT);
     /+ Q_PROPERTY(int count READ count)
-    Q_PROPERTY(int currentRow READ currentRow WRITE setCurrentRow NOTIFY currentRowChanged USER true)
+    Q_PROPERTY(int currentRow READ currentRow WRITE setCurrentRow NOTIFY currentRowChanged
+               USER true)
     Q_PROPERTY(bool sortingEnabled READ isSortingEnabled WRITE setSortingEnabled) +/
 
     /+ friend class QListWidgetItem; +/
@@ -261,33 +237,20 @@ public:
     pragma(inline, true) final void removeItemWidget(QListWidgetItem aItem)
     { setItemWidget(aItem, null); }
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QListWidgetItem::isSelected() instead") +/
-        final bool isItemSelected(const(QListWidgetItem) item) const;
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QListWidgetItem::setSelected() instead") +/
-        final void setItemSelected(const(QListWidgetItem) item, bool select);
-    }));
-/+ #endif +/
     final QList!(QListWidgetItem) selectedItems() const;
     final QList!(QListWidgetItem) findItems(ref const(QString) text, /+ Qt:: +/qt.core.namespace.MatchFlags flags) const;
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QListWidgetItem::isHidden() instead") +/
-        final bool isItemHidden(const(QListWidgetItem) item) const;
+    final QList!(QListWidgetItem) items(const(QMimeData) data) const;
     }));
+
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    /+ QT_DEPRECATED_X ("Use QListWidgetItem::setHidden() instead") +/
-        final void setItemHidden(const(QListWidgetItem) item, bool hide);
+    final QModelIndex indexFromItem(const(QListWidgetItem) item) const;
     }));
-/+ #endif
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    final QListWidgetItem itemFromIndex(ref const(QModelIndex) index) const;
+
 protected:
-#endif
-#if QT_CONFIG(draganddrop) +/
+/+ #if QT_CONFIG(draganddrop) +/
     override void dropEvent(QDropEvent event);
 /+ #endif +/
 public /+ Q_SLOTS +/:
@@ -302,7 +265,6 @@ public /+ Q_SLOTS +/:
     @QSignal final void itemDoubleClicked(QListWidgetItem item);
     @QSignal final void itemActivated(QListWidgetItem item);
     @QSignal final void itemEntered(QListWidgetItem item);
-    // ### Qt 6: add changed roles
     @QSignal final void itemChanged(QListWidgetItem item);
 
     @QSignal final void currentItemChanged(QListWidgetItem current, QListWidgetItem previous);
@@ -314,34 +276,13 @@ public /+ Q_SLOTS +/:
 protected:
     override bool event(QEvent e);
     /+ virtual +/ QStringList mimeTypes() const;
-/+ #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-    virtual QMimeData *mimeData(const QList<QListWidgetItem *> &items) const;
-#else +/
-    /+ virtual +/ QMimeData mimeData(const(QList!(QListWidgetItem)) items) const;
-/+ #endif
-#if QT_CONFIG(draganddrop) +/
+    /+ virtual +/ QMimeData mimeData(ref const(QList!(QListWidgetItem)) items) const;
+/+ #if QT_CONFIG(draganddrop) +/
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ virtual +/ bool dropMimeData(int index, const(QMimeData) data, /+ Qt:: +/qt.core.namespace.DropAction action);
     }));
     /+ virtual +/ /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;
-/+ #endif
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-public:
-#else +/
-protected:
 /+ #endif +/
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QList!(QListWidgetItem) items(const(QMimeData) data) const;
-    }));
-
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QModelIndex indexFromItem(const(QListWidgetItem) item) const;
-    }));
-/+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
-    final QModelIndex indexFromItem(QListWidgetItem item) const; // ### Qt 6: remove
-/+ #endif +/
-    final QListWidgetItem itemFromIndex(ref const(QModelIndex) index) const;
 
 private:
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{

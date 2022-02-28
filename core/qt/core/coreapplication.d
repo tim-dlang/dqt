@@ -17,6 +17,7 @@ import qt.core.coreevent;
 import qt.core.eventloop;
 import qt.core.global;
 import qt.core.namespace;
+import qt.core.nativeinterface;
 import qt.core.object;
 import qt.core.string;
 import qt.core.stringlist;
@@ -26,6 +27,8 @@ version(QT_NO_TRANSLATION){}else
 
 /+ #ifndef QT_NO_QOBJECT
 #else
+#endif
+#ifndef QT_NO_DEBUGSTREAM
 #endif
 
 #ifndef QT_NO_QOBJECT +/
@@ -46,7 +49,7 @@ extern(C++, class) struct QAbstractNativeEventFilter;
 
 /+ #define qApp QCoreApplication::instance() +/
 
-/// Binding for C++ class [QCoreApplication](https://doc.qt.io/qt-5/qcoreapplication.html).
+/// Binding for C++ class [QCoreApplication](https://doc.qt.io/qt-6/qcoreapplication.html).
 class /+ Q_CORE_EXPORT +/ QCoreApplication
 /+ #ifndef QT_NO_QOBJECT +/
     : QObject
@@ -54,10 +57,14 @@ class /+ Q_CORE_EXPORT +/ QCoreApplication
 {
 /+ #ifndef QT_NO_QOBJECT +/
     mixin(Q_OBJECT);
-    /+ Q_PROPERTY(QString applicationName READ applicationName WRITE setApplicationName NOTIFY applicationNameChanged)
-    Q_PROPERTY(QString applicationVersion READ applicationVersion WRITE setApplicationVersion NOTIFY applicationVersionChanged)
-    Q_PROPERTY(QString organizationName READ organizationName WRITE setOrganizationName NOTIFY organizationNameChanged)
-    Q_PROPERTY(QString organizationDomain READ organizationDomain WRITE setOrganizationDomain NOTIFY organizationDomainChanged)
+    /+ Q_PROPERTY(QString applicationName READ applicationName WRITE setApplicationName
+               NOTIFY applicationNameChanged)
+    Q_PROPERTY(QString applicationVersion READ applicationVersion WRITE setApplicationVersion
+               NOTIFY applicationVersionChanged)
+    Q_PROPERTY(QString organizationName READ organizationName WRITE setOrganizationName
+               NOTIFY organizationNameChanged)
+    Q_PROPERTY(QString organizationDomain READ organizationDomain WRITE setOrganizationDomain
+               NOTIFY organizationDomainChanged)
     Q_PROPERTY(bool quitLockEnabled READ isQuitLockEnabled WRITE setQuitLockEnabled)
 #endif
 
@@ -97,15 +104,11 @@ public:
     static int exec();
     static void processEvents(QEventLoop.ProcessEventsFlags flags = QEventLoop.ProcessEventsFlag.AllEvents);
     static void processEvents(QEventLoop.ProcessEventsFlags flags, int maxtime);
-    static void exit(int retcode=0);
 
     static bool sendEvent(QObject receiver, QEvent event);
     static void postEvent(QObject receiver, QEvent event, int priority = /+ Qt:: +/qt.core.namespace.EventPriority.NormalEventPriority);
     static void sendPostedEvents(QObject receiver = null, int event_type = 0);
     static void removePostedEvents(QObject receiver, int eventType = 0);
-/+ #if QT_DEPRECATED_SINCE(5, 3) +/
-    /+ QT_DEPRECATED +/ static bool hasPendingEvents();
-/+ #endif +/
     static QAbstractEventDispatcher* eventDispatcher();
     static void setEventDispatcher(QAbstractEventDispatcher* eventDispatcher);
 
@@ -138,18 +141,10 @@ public:
                                  const(char)*  key,
                                  const(char)*  disambiguation = null,
                                  int n = -1);
-/+ #if QT_DEPRECATED_SINCE(5, 0)
-    enum Encoding { UnicodeUTF8, Latin1, DefaultCodec = UnicodeUTF8, CodecForTr = UnicodeUTF8 };
-    QT_DEPRECATED static inline QString translate(const char * context, const char * key,
-                             const char * disambiguation, Encoding, int n = -1)
-        { return translate(context, key, disambiguation, n); }
-#endif
 
-#ifndef QT_NO_QOBJECT
-#  if QT_DEPRECATED_SINCE(5, 9) +/
-    /+ QT_DEPRECATED +/ static void flush();
-/+ #  endif +/
+    mixin(QT_DECLARE_NATIVE_INTERFACE_ACCESSOR(q{ValueClass!(QCoreApplication)}));
 
+/+ #ifndef QT_NO_QOBJECT +/
     final void installNativeEventFilter(QAbstractNativeEventFilter* filterObj);
     final void removeNativeEventFilter(QAbstractNativeEventFilter* filterObj);
 
@@ -158,6 +153,7 @@ public:
 
 public /+ Q_SLOTS +/:
     @QSlot static void quit();
+    @QSlot static void exit(int retcode = 0);
 
 /+ Q_SIGNALS +/public:
     @QSignal final void aboutToQuit(QPrivateSignal);
@@ -183,9 +179,6 @@ protected:
 private:
 /+ #ifndef QT_NO_QOBJECT +/
     static bool sendSpontaneousEvent(QObject receiver, QEvent event);
-/+ #  if QT_DEPRECATED_SINCE(5,6) +/
-    /+ QT_DEPRECATED +/ final bool notifyInternal(QObject receiver, QEvent event); // ### Qt6 BIC: remove me
-/+ #  endif +/
     static bool notifyInternal2(QObject receiver, QEvent );
     static bool forwardEvent(QObject receiver, QEvent event, QEvent originatingEvent = null);
 /+ #endif
@@ -209,34 +202,26 @@ private:
 /+ #ifndef QT_NO_QOBJECT +/
     /+ friend class QEventDispatcherUNIXPrivate; +/
     /+ friend class QCocoaEventDispatcherPrivate; +/
-    /+ friend bool qt_sendSpontaneousEvent(QObject*, QEvent*); +/
+    /+ friend bool qt_sendSpontaneousEvent(QObject *, QEvent *); +/
 /+ #endif +/
     /+ friend Q_CORE_EXPORT QString qAppName(); +/
-    /+ friend class QClassFactory; +/
     /+ friend class QCommandLineParserPrivate; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ #ifdef QT_NO_DEPRECATED
-#  define QT_DECLARE_DEPRECATED_TR_FUNCTIONS(context)
-#else +/
-/+ #  define QT_DECLARE_DEPRECATED_TR_FUNCTIONS(context) \
-    QT_DEPRECATED static inline QString trUtf8(const char *sourceText, const char *disambiguation = nullptr, int n = -1) \
-        { return QCoreApplication::translate(#context, sourceText, disambiguation, n); } +/
-extern(D) alias QT_DECLARE_DEPRECATED_TR_FUNCTIONS = function string(string context)
-{
-    return
-            mixin(interpolateMixin(q{/+ QT_DEPRECATED +/ pragma(inline, true) static QString trUtf8(const(char)* sourceText, const(char)* disambiguation = null, int n = -1)
-                { return QCoreApplication.translate($(stringifyMacroParameter(context)), sourceText, disambiguation, n); }}));
-};
-/+ #endif
-
-#define Q_DECLARE_TR_FUNCTIONS(context) \
+/+ #define Q_DECLARE_TR_FUNCTIONS(context) \
 public: \
     static inline QString tr(const char *sourceText, const char *disambiguation = nullptr, int n = -1) \
         { return QCoreApplication::translate(#context, sourceText, disambiguation, n); } \
-    QT_DECLARE_DEPRECATED_TR_FUNCTIONS(context) \
 private: +/
+extern(D) alias Q_DECLARE_TR_FUNCTIONS = function string(string context)
+{
+    return
+    mixin(interpolateMixin(q{    public:
+            pragma(inline, true) static QString tr(const(char)* sourceText, const(char)* disambiguation = null, int n = -1)
+                { return QCoreApplication.translate($(stringifyMacroParameter(context)), sourceText, disambiguation, n); }
+        private:}));
+};
 
 alias QtStartUpFunction = ExternCPPFunc!(void function());
 alias QtCleanUpFunction = ExternCPPFunc!(void function());

@@ -17,6 +17,7 @@ import qt.core.abstractitemmodel;
 import qt.core.coreevent;
 import qt.core.flags;
 import qt.core.itemselectionmodel;
+import qt.core.list;
 import qt.core.namespace;
 import qt.core.object;
 import qt.core.point;
@@ -24,7 +25,6 @@ import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
 import qt.core.variant;
-import qt.core.vector;
 import qt.gui.event;
 import qt.gui.region;
 import qt.helpers;
@@ -41,7 +41,7 @@ extern(C++, class) struct tst_QTreeView;
 
 extern(C++, class) struct QAbstractItemViewPrivate;
 
-/// Binding for C++ class [QAbstractItemView](https://doc.qt.io/qt-5/qabstractitemview.html).
+/// Binding for C++ class [QAbstractItemView](https://doc.qt.io/qt-6/qabstractitemview.html).
 abstract class /+ Q_WIDGETS_EXPORT +/ QAbstractItemView : QAbstractScrollArea
 {
     mixin(Q_OBJECT);
@@ -58,11 +58,14 @@ abstract class /+ Q_WIDGETS_EXPORT +/ QAbstractItemView : QAbstractScrollArea
 #endif
     Q_PROPERTY(bool alternatingRowColors READ alternatingRowColors WRITE setAlternatingRowColors)
     Q_PROPERTY(SelectionMode selectionMode READ selectionMode WRITE setSelectionMode)
-    Q_PROPERTY(SelectionBehavior selectionBehavior READ selectionBehavior WRITE setSelectionBehavior)
+    Q_PROPERTY(SelectionBehavior selectionBehavior READ selectionBehavior
+               WRITE setSelectionBehavior)
     Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged)
     Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode)
-    Q_PROPERTY(ScrollMode verticalScrollMode READ verticalScrollMode WRITE setVerticalScrollMode RESET resetVerticalScrollMode)
-    Q_PROPERTY(ScrollMode horizontalScrollMode READ horizontalScrollMode WRITE setHorizontalScrollMode RESET resetHorizontalScrollMode) +/
+    Q_PROPERTY(ScrollMode verticalScrollMode READ verticalScrollMode WRITE setVerticalScrollMode
+               RESET resetVerticalScrollMode)
+    Q_PROPERTY(ScrollMode horizontalScrollMode READ horizontalScrollMode
+               WRITE setHorizontalScrollMode RESET resetHorizontalScrollMode) +/
 
 public:
     enum SelectionMode {
@@ -209,7 +212,12 @@ alias EditTriggers = QFlags!(EditTrigger);    /+ Q_FLAG(EditTriggers) +/
     final void setItemDelegateForColumn(int column, QAbstractItemDelegate delegate_);
     final QAbstractItemDelegate itemDelegateForColumn(int column) const;
 
-    final QAbstractItemDelegate itemDelegate(ref const(QModelIndex) index) const;
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use itemDelegateForIndex instead") +/
+        final QAbstractItemDelegate itemDelegate(ref const(QModelIndex) index) const
+    { return itemDelegateForIndex(index); }
+/+ #endif +/
+    /+ virtual +/ QAbstractItemDelegate itemDelegateForIndex(ref const(QModelIndex) index) const;
 
     /+ virtual +/ override QVariant inputMethodQuery(/+ Qt:: +/qt.core.namespace.InputMethodQuery query) const;
 
@@ -228,7 +236,8 @@ public /+ Q_SLOTS +/:
     @QSlot final void update(ref const(QModelIndex) index);
 
 protected /+ Q_SLOTS +/:
-    /+ virtual +/ @QSlot void dataChanged(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight, ref const(QVector!(int)) roles = globalInitVar!(QVector!(int)));
+    /+ virtual +/ @QSlot void dataChanged(ref const(QModelIndex) topLeft, ref const(QModelIndex) bottomRight,
+                                 ref const(QList!(int)) roles = globalInitVar!(QList!(int)));
     /+ virtual +/ @QSlot void rowsInserted(ref const(QModelIndex) parent, int start, int end);
     /+ virtual +/ @QSlot void rowsAboutToBeRemoved(ref const(QModelIndex) parent, int start, int end);
     /+ virtual +/ @QSlot void selectionChanged(ref const(QItemSelection) selected, ref const(QItemSelection) deselected);
@@ -260,13 +269,6 @@ protected:
     this(ref QAbstractItemViewPrivate , QWidget parent = null);
     }));
 
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED +/ final void setHorizontalStepsPerItem(int steps);
-    /+ QT_DEPRECATED +/ final int horizontalStepsPerItem() const;
-    /+ QT_DEPRECATED +/ final void setVerticalStepsPerItem(int steps);
-    /+ QT_DEPRECATED +/ final int verticalStepsPerItem() const;
-/+ #endif +/
-
     enum CursorAction { MoveUp, MoveDown, MoveLeft, MoveRight,
                         MoveHome, MoveEnd, MovePageUp, MovePageDown,
                         MoveNext, MovePrevious }
@@ -293,7 +295,7 @@ protected:
     /+ virtual +/ void startDrag(/+ Qt:: +/qt.core.namespace.DropActions supportedActions);
 /+ #endif +/
 
-    /+ virtual +/ QStyleOptionViewItem viewOptions() const;
+    /+ virtual +/ void initViewItemOption(QStyleOptionViewItem* option) const;
 
     enum State {
         NoState,
@@ -374,6 +376,18 @@ private:
 }
 /+pragma(inline, true) QFlags!(QAbstractItemView.EditTriggers.enum_type) operator |(QAbstractItemView.EditTriggers.enum_type f1, QAbstractItemView.EditTriggers.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemView.EditTriggers.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QAbstractItemView.EditTriggers.enum_type) operator |(QAbstractItemView.EditTriggers.enum_type f1, QFlags!(QAbstractItemView.EditTriggers.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemView.EditTriggers.enum_type) operator &(QAbstractItemView.EditTriggers.enum_type f1, QAbstractItemView.EditTriggers.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemView.EditTriggers.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemView.EditTriggers.enum_type) operator &(QAbstractItemView.EditTriggers.enum_type f1, QFlags!(QAbstractItemView.EditTriggers.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QAbstractItemView.EditTriggers.enum_type f1, QAbstractItemView.EditTriggers.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QAbstractItemView.EditTriggers.enum_type f1, QFlags!(QAbstractItemView.EditTriggers.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QAbstractItemView.EditTriggers.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QAbstractItemView.EditTriggers.enum_type f1, QAbstractItemView.EditTriggers.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QAbstractItemView.EditTriggers.enum_type f1, QFlags!(QAbstractItemView.EditTriggers.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QAbstractItemView.EditTriggers.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QAbstractItemView.EditTriggers.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QAbstractItemView.EditTriggers.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QAbstractItemView.EditTriggers.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QAbstractItemView.EditTriggers.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QAbstractItemView.EditTriggers.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemView::EditTriggers) +/

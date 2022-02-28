@@ -25,13 +25,12 @@ static if(!defined!"QT_NO_STANDARDPATHS")
 static if(!defined!"QT_NO_STANDARDPATHS")
 {
 
-/// Binding for C++ class [QStandardPaths](https://doc.qt.io/qt-5/qstandardpaths.html).
+/// Binding for C++ class [QStandardPaths](https://doc.qt.io/qt-6/qstandardpaths.html).
 abstract class /+ Q_CORE_EXPORT +/ QStandardPaths
 {
     mixin(Q_GADGET);
 
 public:
-    // Do not re-order, must match QDesktopServices
     enum StandardLocation {
         DesktopLocation,
         DocumentsLocation,
@@ -42,7 +41,7 @@ public:
         PicturesLocation,
         TempLocation,
         HomeLocation,
-        DataLocation,
+        AppLocalDataLocation,
         CacheLocation,
         GenericDataLocation,
         RuntimeLocation,
@@ -51,8 +50,7 @@ public:
         GenericCacheLocation,
         GenericConfigLocation,
         AppDataLocation,
-        AppConfigLocation,
-        AppLocalDataLocation = StandardLocation.DataLocation
+        AppConfigLocation
     }
     /+ Q_ENUM(StandardLocation) +/
 
@@ -74,9 +72,6 @@ alias LocateOptions = QFlags!(LocateOption);    /+ Q_FLAG(LocateOptions) +/
 
     static QString findExecutable(ref const(QString) executableName, ref const(QStringList) paths = globalInitVar!QStringList);
 
-/+ #if QT_DEPRECATED_SINCE(5, 2) +/
-    /+ QT_DEPRECATED +/ static void enableTestMode(bool testMode);
-/+ #endif +/
     static void setTestModeEnabled(bool testMode);
     static bool isTestModeEnabled();
 
@@ -88,7 +83,19 @@ private:
 }
 /+pragma(inline, true) QFlags!(QStandardPaths.LocateOptions.enum_type) operator |(QStandardPaths.LocateOptions.enum_type f1, QStandardPaths.LocateOptions.enum_type f2)/+noexcept+/{return QFlags!(QStandardPaths.LocateOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStandardPaths.LocateOptions.enum_type) operator |(QStandardPaths.LocateOptions.enum_type f1, QFlags!(QStandardPaths.LocateOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStandardPaths.LocateOptions.enum_type) operator &(QStandardPaths.LocateOptions.enum_type f1, QStandardPaths.LocateOptions.enum_type f2)/+noexcept+/{return QFlags!(QStandardPaths.LocateOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStandardPaths.LocateOptions.enum_type) operator &(QStandardPaths.LocateOptions.enum_type f1, QFlags!(QStandardPaths.LocateOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QStandardPaths.LocateOptions.enum_type f1, QStandardPaths.LocateOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStandardPaths.LocateOptions.enum_type f1, QFlags!(QStandardPaths.LocateOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStandardPaths.LocateOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStandardPaths.LocateOptions.enum_type f1, QStandardPaths.LocateOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStandardPaths.LocateOptions.enum_type f1, QFlags!(QStandardPaths.LocateOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStandardPaths.LocateOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QStandardPaths.LocateOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QStandardPaths.LocateOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStandardPaths.LocateOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QStandardPaths.LocateOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStandardPaths.LocateOptions.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStandardPaths::LocateOptions) +/
 }

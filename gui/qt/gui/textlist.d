@@ -21,7 +21,7 @@ import qt.helpers;
 
 extern(C++, class) struct QTextListPrivate;
 
-/// Binding for C++ class [QTextList](https://doc.qt.io/qt-5/qtextlist.html).
+/// Binding for C++ class [QTextList](https://doc.qt.io/qt-6/qtextlist.html).
 class /+ Q_GUI_EXPORT +/ QTextList : QTextBlockGroup
 {
     mixin(Q_OBJECT);
@@ -30,12 +30,6 @@ public:
     ~this();
 
     final int count() const;
-
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+ QT_DEPRECATED_X("Use count() instead") +/
-        pragma(inline, true) final bool isEmpty() const
-    { return count() == 0; }
-/+ #endif +/
 
     final QTextBlock item(int i) const;
 

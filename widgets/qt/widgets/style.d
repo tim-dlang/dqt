@@ -35,7 +35,7 @@ import qt.widgets.widget;
 extern(C++, class) struct QTab;
 extern(C++, class) struct QStylePrivate;
 
-/// Binding for C++ class [QStyle](https://doc.qt.io/qt-5/qstyle.html).
+/// Binding for C++ class [QStyle](https://doc.qt.io/qt-6/qstyle.html).
 abstract class /+ Q_WIDGETS_EXPORT +/ QStyle : QObject
 {
     mixin(Q_OBJECT);
@@ -51,6 +51,8 @@ public:
     this();
     }));
     /+ virtual +/~this();
+
+    final QString name() const;
 
     /+ virtual +/ void polish(QWidget widget);
     /+ virtual +/ void unpolish(QWidget widget);
@@ -128,9 +130,6 @@ alias State = QFlags!(StateFlag);
         PE_FrameLineEdit,
         PE_FrameMenu,
         PE_FrameStatusBarItem,
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/ // ### Qt 6: remove
-        PE_FrameStatusBar /+ Q_DECL_ENUMERATOR_DEPRECATED +/ = PrimitiveElement.PE_FrameStatusBarItem,
-/+ #endif +/
         PE_FrameTabWidget,
         PE_FrameWindow,
         PE_FrameButtonBevel,
@@ -151,9 +150,6 @@ alias State = QFlags!(StateFlag);
         PE_IndicatorBranch,
         PE_IndicatorButtonDropDown,
         PE_IndicatorItemViewItemCheck,
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/ // ### Qt 6: remove
-        PE_IndicatorViewItemCheck /+ Q_DECL_ENUMERATOR_DEPRECATED +/ = PrimitiveElement.PE_IndicatorItemViewItemCheck,
-/+ #endif +/
         PE_IndicatorCheckBox,
         PE_IndicatorDockWidgetResizeHandle,
         PE_IndicatorHeaderArrow,
@@ -299,9 +295,6 @@ alias State = QFlags!(StateFlag);
         SE_TabWidgetRightCorner,
 
         SE_ItemViewItemCheckIndicator,
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/ // ### Qt 6: remove
-        SE_ViewItemCheckIndicator /+ Q_DECL_ENUMERATOR_DEPRECATED +/ = SubElement.SE_ItemViewItemCheckIndicator,
-/+ #endif +/
         SE_TabBarTearIndicator,
         SE_TabBarTearIndicatorLeft = SubElement.SE_TabBarTearIndicator,
 
@@ -318,10 +311,7 @@ alias State = QFlags!(StateFlag);
         SE_CheckBoxLayoutItem,
         SE_ComboBoxLayoutItem,
         SE_DateTimeEditLayoutItem,
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/ // ### Qt 6: remove
-        SE_DialogButtonBoxLayoutItem /+ Q_DECL_ENUMERATOR_DEPRECATED +/,
-/+ #endif +/
-        SE_LabelLayoutItem = SubElement.SE_DateTimeEditLayoutItem + 2,
+        SE_LabelLayoutItem,
         SE_ProgressBarLayoutItem,
         SE_PushButtonLayoutItem,
         SE_RadioButtonLayoutItem,
@@ -502,10 +492,6 @@ alias SubControls = QFlags!(SubControl);
 
         PM_MdiSubWindowFrameWidth,
         PM_MdiSubWindowMinimizedWidth,
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/ // ### Qt 6: remove
-        PM_MDIFrameWidth /+ Q_DECL_ENUMERATOR_DEPRECATED +/ = PixelMetric.PM_MdiSubWindowFrameWidth,
-        PM_MDIMinimizedWidth /+ Q_DECL_ENUMERATOR_DEPRECATED +/ = PixelMetric.PM_MdiSubWindowMinimizedWidth,
-/+ #endif +/
 
         PM_HeaderMargin,
         PM_HeaderMarkSize,
@@ -523,13 +509,7 @@ alias SubControls = QFlags!(SubControl);
 
         PM_SpinBoxSliderHeight,
 
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/ // ### Qt 6: remove
-        PM_DefaultTopLevelMargin /+ Q_DECL_ENUMERATOR_DEPRECATED +/,
-        PM_DefaultChildMargin /+ Q_DECL_ENUMERATOR_DEPRECATED +/,
-        PM_DefaultLayoutSpacing /+ Q_DECL_ENUMERATOR_DEPRECATED +/,
-/+ #endif +/
-
-        PM_ToolBarIconSize = PixelMetric.PM_SpinBoxSliderHeight + 4,
+        PM_ToolBarIconSize,
         PM_ListViewIconSize,
         PM_IconViewIconSize,
         PM_SmallIconSize,
@@ -572,6 +552,8 @@ alias SubControls = QFlags!(SubControl);
 
         PM_TitleBarButtonIconSize,
         PM_TitleBarButtonSize,
+
+        PM_LineEditIconSize,
 
         // do not add any values below/greater than this
         PM_CustomBase = 0xf0000000
@@ -648,9 +630,6 @@ alias SubControls = QFlags!(SubControl);
         SH_ComboBox_Popup,
         SH_TitleBar_NoBorder,
         SH_Slider_StopMouseOverSlider,
-/+ #if QT_DEPRECATED_SINCE(5, 13) +/ // ### Qt 6: remove
-        SH_ScrollBar_StopMouseOverSlider /+ Q_DECL_ENUMERATOR_DEPRECATED +/ = StyleHint.SH_Slider_StopMouseOverSlider,
-/+ #endif +/
         SH_BlinkCursorWhenTextSelected,
         SH_RichText_FullWidthSelection,
         SH_Menu_Scrollable,
@@ -695,7 +674,6 @@ alias SubControls = QFlags!(SubControl);
         SH_ComboBox_PopupFrameStyle,
         SH_MessageBox_TextInteractionFlags,
         SH_DialogButtonBox_ButtonsHaveIcons,
-        SH_SpellCheckUnderlineStyle,
         SH_MessageBox_CenterButtons,
         SH_Menu_SelectionWrap,
         SH_ItemView_MovementWithoutUpdatingSelection,
@@ -743,6 +721,7 @@ alias SubControls = QFlags!(SubControl);
         SH_ComboBox_AllowWheelScrolling,
         SH_SpinBox_ButtonsInsideFrame,
         SH_SpinBox_StepModifier,
+        SH_TabBar_AllowWheelScrolling,
         // Add new style hint values here
 
         SH_CustomBase = 0xf0000000
@@ -869,28 +848,49 @@ alias SubControls = QFlags!(SubControl);
     }));
 
 private:
+    final void setName(ref const(QString) name);
+
+private:
     /+ Q_DISABLE_COPY(QStyle) +/
     /+ friend class QWidget; +/
     /+ friend class QWidgetPrivate; +/
     /+ friend class QApplication; +/
     /+ friend class QProxyStyle; +/
     /+ friend class QProxyStylePrivate; +/
+    /+ friend class QStyleFactory; +/
     final void setProxy(QStyle style);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/{return QFlags!(QStyle.State.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator &(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/{return QFlags!(QStyle.State.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator &(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QStyle.State.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QStyle.State.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyle.State.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QStyle.State.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyle.State.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyle::State) +/
 /+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/{return QFlags!(QStyle.SubControls.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator &(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/{return QFlags!(QStyle.SubControls.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator &(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QStyle.SubControls.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
-/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyle::SubControls)
-#if !defined(QT_NO_DEBUG_STREAM)
-// ### Qt 6: Remove in favor of template<class T> QDebug operator<<(QDebug, const QFlags<T> &).
-#  if QT_VERSION < QT_VERSION_CHECK(6,0,0)
-Q_WIDGETS_EXPORT QDebug operator<<(QDebug debug, QStyle::State state);
-#  endif
-#endif +/
-
+/+pragma(inline, true) void operator +(int f1, QStyle.SubControls.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QStyle.SubControls.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QStyle.SubControls.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QStyle.SubControls.enum_type f1, int f2)/+noexcept+/;+/
+/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyle::SubControls) +/

@@ -13,6 +13,7 @@ module qt.gui.colortransform;
 extern(C++):
 
 import qt.config;
+import qt.core.shareddata;
 import qt.core.typeinfo;
 import qt.gui.color;
 import qt.gui.rgb;
@@ -21,32 +22,22 @@ import qt.helpers;
 
 extern(C++, class) struct QColorSpacePrivate;
 extern(C++, class) struct QColorTransformPrivate;
-
-/// Binding for C++ class [QColorTransform](https://doc.qt.io/qt-5/qcolortransform.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct QColorTransform
+/+ QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QColorTransformPrivate, Q_GUI_EXPORT) +/
+/// Binding for C++ class [QColorTransform](https://doc.qt.io/qt-6/qcolortransform.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct QColorTransform
 {
 public:
-    @disable this();
-    /+this()/+ noexcept+/
-    {
-        this.d = null;
-    }+/
+    /+ QColorTransform() noexcept = default; +/
     /+ Q_GUI_EXPORT +/~this();
     @disable this(this);
     /+ Q_GUI_EXPORT +/this(ref const(QColorTransform) colorTransform)/+ noexcept+/;
-    /+ QColorTransform(QColorTransform &&colorTransform) noexcept
-            : d{qExchange(colorTransform.d, nullptr)}
-    { } +/
+    /+ QColorTransform(QColorTransform &&colorTransform) = default; +/
     /+ref QColorTransform operator =(ref const(QColorTransform) other)/+ noexcept+/
     {
         QColorTransform{other}.swap(this);
         return this;
     }+/
-    /+ QColorTransform &operator=(QColorTransform &&other) noexcept
-    {
-        QColorTransform{std::move(other)}.swap(*this);
-        return *this;
-    } +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QColorTransform) +/
 
     /+ void swap(QColorTransform &other) noexcept { qSwap(d, other.d); } +/
 
@@ -57,9 +48,10 @@ public:
 private:
     /+ friend class QColorSpace; +/
     /+ friend class QColorSpacePrivate; +/
+    /+ friend class QColorTransformPrivate; +/
     /+ friend class QImage; +/
 
-    const(QColorTransformPrivate)* d = null;
+    QExplicitlySharedDataPointer!(QColorTransformPrivate) d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

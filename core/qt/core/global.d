@@ -26,14 +26,9 @@ import qt.config;
 import qt.core.bytearray;
 import qt.core.config;
 import qt.core.string;
-import qt.core.typeinfo;
 import qt.helpers;
 
 /+ #define Q_STATIC_ASSERT(Condition) static_assert(Condition) +/
-extern(D) alias Q_STATIC_ASSERT = function string(string Condition)
-{
-    return mixin(interpolateMixin(q{static assert($(Condition));}));
-};
 /+ #define Q_STATIC_ASSERT_X(Condition, Message) static_assert(bool(Condition), Message) +/
 extern(D) alias Q_STATIC_ASSERT_X = function string(string Condition, string Message)
 {
@@ -76,15 +71,6 @@ template QT_VERSION_CHECK(params...) if(params.length == 3)
 #else
 #endif
 
-// The QT_SUPPORTS macro is deprecated. Don't use it in new code.
-// Instead, use QT_CONFIG(feature)
-// ### Qt6: remove macro
-#ifdef _MSC_VER
-#  define QT_SUPPORTS(FEATURE) (!defined QT_NO_##FEATURE)
-#else
-#  define QT_SUPPORTS(FEATURE) (!defined(QT_NO_##FEATURE))
-#endif
-
 /*
     The QT_CONFIG macro implements a safe compile time check for features of Qt.
     Features can be in three states:
@@ -95,19 +81,20 @@ template QT_VERSION_CHECK(params...) if(params.length == 3)
 #define QT_CONFIG(feature) (1/QT_FEATURE_##feature == 1)
 #define QT_REQUIRE_CONFIG(feature) Q_STATIC_ASSERT_X(QT_FEATURE_##feature == 1, "Required feature " #feature " for file " __FILE__ " not available.")
 
-#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-#  define QT_NO_UNSHARABLE_CONTAINERS
-#  define QT6_VIRTUAL virtual
-#  define QT6_NOT_VIRTUAL
-#else
-#  define QT6_VIRTUAL
-#  define QT6_NOT_VIRTUAL virtual
-#endif
-
 /* These two macros makes it possible to turn the builtin line expander into a
  * string literal. */
 #define QT_STRINGIFY2(x) #x
 #define QT_STRINGIFY(x) QT_STRINGIFY2(x)
+
+// This could go to the very beginning of this file, but we're using compiler
+// detection, so it's here.
+#if defined(__cplusplus) && (__cplusplus < 201703L)
+#  ifdef Q_CC_MSVC
+#    error "Qt requires a C++17 compiler, and a suitable value for __cplusplus. On MSVC, you must pass the /Zc:__cplusplus option to the compiler."
+#  else
+#    error "Qt requires a C++17 compiler"
+#  endif
+#endif // __cplusplus
 
 #if defined (__ELF__)
 #  define Q_OF_ELF
@@ -121,7 +108,9 @@ template QT_VERSION_CHECK(params...) if(params.length == 3)
 */
 #define Q_UNUSED(x) (void)x;
 
-#if defined(__cplusplus) && defined(Q_COMPILER_STATIC_ASSERT)
+#if defined(__cplusplus)
+// Don't use these in C++ mode, use static_assert directly.
+// These are here only to keep old code compiling.
 #  define Q_STATIC_ASSERT(Condition) static_assert(bool(Condition), #Condition)
 #  define Q_STATIC_ASSERT_X(Condition, Message) static_assert(bool(Condition), Message)
 #elif defined(Q_COMPILER_STATIC_ASSERT)
@@ -216,10 +205,6 @@ namespace QT_NAMESPACE {}
 
 #endif /* __cplusplus */
 
-// ### Qt6: remove me.
-#define QT_BEGIN_HEADER
-#define QT_END_HEADER
-
 #if defined(Q_OS_DARWIN) && !defined(QT_LARGEFILE_SUPPORT)
 #  define QT_LARGEFILE_SUPPORT 64
 #endif
@@ -238,6 +223,15 @@ alias qint16 = short;              /* 16 bit signed */
 alias quint16 = ushort;    /* 16 bit unsigned */
 alias qint32 = int;                /* 32 bit signed */
 alias quint32 = uint;      /* 32 bit unsigned */
+// Unlike LL / ULL in C++, for historical reasons, we force the
+// result to be of the requested type.
+/+ #ifdef __cplusplus
+#  define Q_INT64_C(c) static_cast<long long>(c ## LL)     /* signed 64 bit constant */
+#  define Q_UINT64_C(c) static_cast<unsigned long long>(c ## ULL) /* unsigned 64 bit constant */
+#else
+#  define Q_INT64_C(c) ((long long)(c ## LL))               /* signed 64 bit constant */
+#  define Q_UINT64_C(c) ((unsigned long long)(c ## ULL))    /* unsigned 64 bit constant */
+#endif +/
 alias qint64 = cpp_longlong;           /* 64 bit signed */
 alias quint64 = cpp_ulonglong; /* 64 bit unsigned */
 
@@ -251,6 +245,20 @@ typedef ptrdiff_t qptrdiff;
 typedef ptrdiff_t qsizetype;
 typedef ptrdiff_t qintptr;
 typedef size_t quintptr;
+
+#define PRIdQPTRDIFF "td"
+#define PRIiQPTRDIFF "ti"
+
+#define PRIdQSIZETYPE "td"
+#define PRIiQSIZETYPE "ti"
+
+#define PRIdQINTPTR "td"
+#define PRIiQINTPTR "ti"
+
+#define PRIuQUINTPTR "zu"
+#define PRIoQUINTPTR "zo"
+#define PRIxQUINTPTR "zx"
+#define PRIXQUINTPTR "zX"
 #endif
 
 /*
@@ -282,7 +290,7 @@ alias qreal = double;
 #  undef QT_DEPRECATED_VARIABLE
 #  define QT_DEPRECATED_VARIABLE Q_DECL_VARIABLE_DEPRECATED
 #  undef QT_DEPRECATED_CONSTRUCTOR
-#  define QT_DEPRECATED_CONSTRUCTOR explicit Q_DECL_CONSTRUCTOR_DEPRECATED
+#  define QT_DEPRECATED_CONSTRUCTOR Q_DECL_CONSTRUCTOR_DEPRECATED explicit
 #else
 #  undef QT_DEPRECATED
 #  define QT_DEPRECATED
@@ -365,17 +373,73 @@ alias qreal = double;
 # define QT_DEPRECATED_VERSION_5_15
 #endif
 
+#if QT_DEPRECATED_WARNINGS_SINCE >= QT_VERSION_CHECK(6, 0, 0)
+# define QT_DEPRECATED_VERSION_X_6_0(text) QT_DEPRECATED_X(text)
+# define QT_DEPRECATED_VERSION_6_0         QT_DEPRECATED
+#else
+# define QT_DEPRECATED_VERSION_X_6_0(text)
+# define QT_DEPRECATED_VERSION_6_0
+#endif
+
+#if QT_DEPRECATED_WARNINGS_SINCE >= QT_VERSION_CHECK(6, 1, 0)
+# define QT_DEPRECATED_VERSION_X_6_1(text) QT_DEPRECATED_X(text)
+# define QT_DEPRECATED_VERSION_6_1         QT_DEPRECATED
+#else
+# define QT_DEPRECATED_VERSION_X_6_1(text)
+# define QT_DEPRECATED_VERSION_6_1
+#endif
+
+#if QT_DEPRECATED_WARNINGS_SINCE >= QT_VERSION_CHECK(6, 2, 0)
+# define QT_DEPRECATED_VERSION_X_6_2(text) QT_DEPRECATED_X(text)
+# define QT_DEPRECATED_VERSION_6_2         QT_DEPRECATED
+#else
+# define QT_DEPRECATED_VERSION_X_6_2(text)
+# define QT_DEPRECATED_VERSION_6_2
+#endif
+
+#if QT_DEPRECATED_WARNINGS_SINCE >= QT_VERSION_CHECK(6, 3, 0)
+# define QT_DEPRECATED_VERSION_X_6_3(text) QT_DEPRECATED_X(text)
+# define QT_DEPRECATED_VERSION_6_3         QT_DEPRECATED
+#else
+# define QT_DEPRECATED_VERSION_X_6_3(text)
+# define QT_DEPRECATED_VERSION_6_3
+#endif
+
+#if QT_DEPRECATED_WARNINGS_SINCE >= QT_VERSION_CHECK(6, 4, 0)
+# define QT_DEPRECATED_VERSION_X_6_4(text) QT_DEPRECATED_X(text)
+# define QT_DEPRECATED_VERSION_6_4         QT_DEPRECATED
+#else
+# define QT_DEPRECATED_VERSION_X_6_4(text)
+# define QT_DEPRECATED_VERSION_6_4
+#endif
+
+#if QT_DEPRECATED_WARNINGS_SINCE >= QT_VERSION_CHECK(6, 5, 0)
+# define QT_DEPRECATED_VERSION_X_6_5(text) QT_DEPRECATED_X(text)
+# define QT_DEPRECATED_VERSION_6_5         QT_DEPRECATED
+#else
+# define QT_DEPRECATED_VERSION_X_6_5(text)
+# define QT_DEPRECATED_VERSION_6_5
+#endif
+
+#if QT_DEPRECATED_WARNINGS_SINCE >= QT_VERSION_CHECK(6, 6, 0)
+# define QT_DEPRECATED_VERSION_X_6_6(text) QT_DEPRECATED_X(text)
+# define QT_DEPRECATED_VERSION_6_6         QT_DEPRECATED
+#else
+# define QT_DEPRECATED_VERSION_X_6_6(text)
+# define QT_DEPRECATED_VERSION_6_6
+#endif
+
 #define QT_DEPRECATED_VERSION_X_5(minor, text)      QT_DEPRECATED_VERSION_X_5_##minor(text)
-#define QT_DEPRECATED_VERSION_X(major, minor, text) QT_DEPRECATED_VERSION_X_##major(minor, text)
+#define QT_DEPRECATED_VERSION_X(major, minor, text) QT_DEPRECATED_VERSION_X_##major##_##minor(text)
 
 #define QT_DEPRECATED_VERSION_5(minor)      QT_DEPRECATED_VERSION_5_##minor
-#define QT_DEPRECATED_VERSION(major, minor) QT_DEPRECATED_VERSION_##major(minor)
+#define QT_DEPRECATED_VERSION(major, minor) QT_DEPRECATED_VERSION_##major##_##minor
 
 #ifdef __cplusplus +/
 // A tag to help mark stuff deprecated (cf. QStringViewLiteral)
 extern(C++, "QtPrivate") {
 enum /+ class +/ Deprecated_t {init}
-/+ Q_DECL_UNUSED +/ extern(D) immutable Deprecated_t Deprecated = Deprecated_t();
+extern(D) immutable Deprecated_t Deprecated = Deprecated_t();
 }
 /+ #endif
 
@@ -422,13 +486,55 @@ enum /+ class +/ Deprecated_t {init}
     Class(const Class &) = delete;\
     Class &operator=(const Class &) = delete;
 
-#define Q_DISABLE_MOVE(Class) \
+#define Q_DISABLE_COPY_MOVE(Class) \
+    Q_DISABLE_COPY(Class) \
     Class(Class &&) = delete; \
     Class &operator=(Class &&) = delete;
 
-#define Q_DISABLE_COPY_MOVE(Class) \
-    Q_DISABLE_COPY(Class) \
-    Q_DISABLE_MOVE(Class)
+/*
+    Implementing a move assignment operator using an established
+    technique (move-and-swap, pure swap) is just boilerplate.
+    Here's a couple of *private* macros for convenience.
+
+    To know which one to use:
+
+    * if you don't have a move constructor (*) => use pure swap;
+    * if you have a move constructor, then
+      * if your class holds just memory (no file handles, no user-defined
+        datatypes, etc.) => use pure swap;
+      * use move and swap.
+
+    The preference should always go for the move-and-swap one, as it
+    will deterministically destroy the data previously held in *this,
+    and not "dump" it in the moved-from object (which may then be alive
+    for longer).
+
+    The requirement for either macro is the presence of a member swap(),
+    which any value class that defines its own special member functions
+    should have anyhow.
+
+    (*) Many value classes in Qt do not have move constructors; mostly,
+    the implicitly shared classes using QSharedDataPointer and friends.
+    The reason is mostly historical: those classes require either an
+    out-of-line move constructor, which we could not provide before we
+    made C++11 mandatory (and that we don't like anyhow), or
+    an out-of-line dtor for the Q(E)DSP<Private> member (cf. QPixmap).
+
+    If you can however add a move constructor to a class lacking it,
+    consider doing so, then reevaluate which macro to choose.
+*/
+#define QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(Class) \
+    Class &operator=(Class &&other) noexcept { \
+        Class moved(std::move(other)); \
+        swap(moved); \
+        return *this; \
+    }
+
+#define QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(Class) \
+    Class &operator=(Class &&other) noexcept { \
+        swap(other); \
+        return *this; \
+    }
 
 /*
    No, this is not an evil backdoor. QT_BUILD_INTERNAL just exports more symbols
@@ -487,63 +593,6 @@ extern(C)
 # define Q_DESTRUCTOR_FUNCTION(AFUNC) Q_DESTRUCTOR_FUNCTION0(AFUNC)
 #endif +/
 
-extern(C++, "QtPrivate") {
-    struct AlignOfHelper(T)
-    {
-        char c;
-        T type;
-
-        @disable this();
-        pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-        ref typeof(this) rawConstructor();
-        static typeof(this) create()
-        {
-            typeof(this) r = typeof(this).init;
-            r.rawConstructor();
-            return r;
-        }
-
-        ~this();
-    }
-
-    struct AlignOf_Default(T)
-    {
-        enum { Value = AlignOfHelper!(T).sizeof - T.sizeof }
-    }
-
-    struct AlignOf(T) {
-        AlignOf_Default!(T) base0;
-        alias base0 this;
- }
-    /+ template <class T> struct AlignOf<T &> : AlignOf<T> {};
-    template <class T> struct AlignOf<T &&> : AlignOf<T> {};
-    template <size_t N, class T> struct AlignOf<T[N]> : AlignOf<T> {};
-
-#if defined(Q_PROCESSOR_X86_32) && !defined(Q_OS_WIN)
-    template <class T> struct AlignOf_WorkaroundForI386Abi { enum { Value = sizeof(T) }; };
-
-    // x86 ABI weirdness
-    // Alignment of naked type is 8, but inside struct has alignment 4.
-    template <> struct AlignOf<double>  : AlignOf_WorkaroundForI386Abi<double> {};
-    template <> struct AlignOf<qint64>  : AlignOf_WorkaroundForI386Abi<qint64> {};
-    template <> struct AlignOf<quint64> : AlignOf_WorkaroundForI386Abi<quint64> {};
-#ifdef Q_CC_CLANG
-    // GCC and Clang seem to disagree wrt to alignment of arrays
-    template <size_t N> struct AlignOf<double[N]>   : AlignOf_Default<double> {};
-    template <size_t N> struct AlignOf<qint64[N]>   : AlignOf_Default<qint64> {};
-    template <size_t N> struct AlignOf<quint64[N]>  : AlignOf_Default<quint64> {};
-#endif
-#endif +/
-} // namespace QtPrivate
-
-/+ #define QT_EMULATED_ALIGNOF(T) \
-    (size_t(QT_PREPEND_NAMESPACE(QtPrivate)::AlignOf<T>::Value))
-
-#ifndef Q_ALIGNOF
-#define Q_ALIGNOF(T) QT_EMULATED_ALIGNOF(T)
-#endif+/
-
-
 /*
   quintptr and qptrdiff is guaranteed to be the same size as a pointer, i.e.
 
@@ -551,7 +600,7 @@ extern(C++, "QtPrivate") {
       && sizeof(void *) == sizeof(qptrdiff)
 
   size_t and qsizetype are not guaranteed to be the same size as a pointer, but
-  they usually are.
+  they usually are. We actually check for that in qglobal.cpp.
 */
 template QIntegerForSize(int size) if(size == 1) { alias Unsigned = ubyte; alias Signed = byte; }
 template QIntegerForSize(int size) if(size == 2) { alias Unsigned = ushort; alias Signed = short; }
@@ -569,8 +618,49 @@ alias qptrdiff = QIntegerForSizeof!(void*).Signed;
 alias qintptr = qptrdiff;
 alias qsizetype = QIntegerForSizeof!(/+ std:: +/size_t).Signed;
 
+// These custom definitions are necessary as we're not defining our
+// datatypes in terms of the language ones, but in terms of integer
+// types that have the sime size. For instance, on a 32-bit platform,
+// qptrdiff is int, while ptrdiff_t may be aliased to long; therefore
+// using %td to print a qptrdiff would be wrong (and raise -Wformat
+// warnings), although both int and long have same bit size on that
+// platform.
+//
+// We know that sizeof(size_t) == sizeof(void *) == sizeof(qptrdiff).
+/+ #if SIZE_MAX == 4294967295ULL
+#define PRIuQUINTPTR "u"
+#define PRIoQUINTPTR "o"
+#define PRIxQUINTPTR "x"
+#define PRIXQUINTPTR "X"
+
+#define PRIdQPTRDIFF "d"
+#define PRIiQPTRDIFF "i"
+
+#define PRIdQINTPTR "d"
+#define PRIiQINTPTR "i"
+
+#define PRIdQSIZETYPE "d"
+#define PRIiQSIZETYPE "i"
+#elif SIZE_MAX == 18446744073709551615ULL
+#define PRIuQUINTPTR "llu"
+#define PRIoQUINTPTR "llo"
+#define PRIxQUINTPTR "llx"
+#define PRIXQUINTPTR "llX"
+
+#define PRIdQPTRDIFF "lld"
+#define PRIiQPTRDIFF "lli"
+
+#define PRIdQINTPTR "lld"
+#define PRIiQINTPTR "lli"
+
+#define PRIdQSIZETYPE "lld"
+#define PRIiQSIZETYPE "lli"
+#else
+#error Unsupported platform (unknown value for SIZE_MAX)
+#endif
+
 /* moc compats (signals/slots) */
-/+ #ifndef QT_MOC_COMPAT
+#ifndef QT_MOC_COMPAT
 #  define QT_MOC_COMPAT
 #else
 #  undef QT_MOC_COMPAT
@@ -619,25 +709,16 @@ alias qsizetype = QIntegerForSizeof!(/+ std:: +/size_t).Signed;
 #  define Q_ALWAYS_INLINE inline
 #endif
 
-#if defined(Q_CC_GNU) && defined(Q_OS_WIN) && !defined(QT_NO_DATA_RELOCATION)
-// ### Qt6: you can remove me
-#  define QT_INIT_METAOBJECT __attribute__((init_priority(101)))
-#else
-#  define QT_INIT_METAOBJECT
-#endif
-
 //defines the type for the WNDPROC on windows
 //the alignment needs to be forced for sse2 to not crash with mingw
 #if defined(Q_OS_WIN)
-#  if defined(Q_CC_MINGW) && !defined(Q_OS_WIN64)
+#  if defined(Q_CC_MINGW) && defined(Q_PROCESSOR_X86_32)
 #    define QT_ENSURE_STACK_ALIGNED_FOR_SSE __attribute__ ((force_align_arg_pointer))
 #  else
 #    define QT_ENSURE_STACK_ALIGNED_FOR_SSE
 #  endif
 #  define QT_WIN_CALLBACK CALLBACK QT_ENSURE_STACK_ALIGNED_FOR_SSE
 #endif +/
-
-alias QNoImplicitBoolCast = int;
 
 /*
    Utility macros and inline functions
@@ -646,30 +727,94 @@ alias QNoImplicitBoolCast = int;
 pragma(inline, true) T qAbs(T)(ref const(T) t) { return t >= 0 ? t : -t; }
 pragma(inline, true) T qAbs(T)(const(T) t) { return t >= 0 ? t : -t; }
 
+// gcc < 10 doesn't have __has_builtin
+static if(defined!"Q_PROCESSOR_ARM_64" || defined!"_M_ARM64" || defined!"__ARM64__" || versionIsSet!("AArch64"))
+{
+// ARM64 has a single instruction that can do C++ rounding with conversion to integer.
+// Note current clang versions have non-constexpr __builtin_round, ### allow clang this path when they fix it.
 pragma(inline, true) int qRound(double d)
-{ return d >= 0.0 ? cast(int)(d + 0.5) : cast(int)(d - double(cast(int)(d-1)) + 0.5) + cast(int)(d-1); }
+{ return int(__builtin_round(d)); }
+pragma(inline, true) int qRound(float f)
+{ return int(__builtin_roundf(f)); }
+pragma(inline, true) qint64 qRound64(double d)
+{ return qint64(__builtin_round(d)); }
+pragma(inline, true) qint64 qRound64(float f)
+{ return qint64(__builtin_roundf(f)); }
+}
+static if(!defined!"Q_PROCESSOR_ARM_64" && !defined!"_M_ARM64" && !defined!"__ARM64__" && defined!"__SSE2__" && !versionIsSet!("AArch64"))
+{
+// SSE has binary operations directly on floating point making copysign fast
+pragma(inline, true) int qRound(double d)
+{ return cast(int)(d + __builtin_copysign(0.5, d)); }
+pragma(inline, true) int qRound(float f)
+{ return cast(int)(f + __builtin_copysignf(0.5f, f)); }
+pragma(inline, true) qint64 qRound64(double d)
+{ return cast(qint64)(d + __builtin_copysign(0.5, d)); }
+pragma(inline, true) qint64 qRound64(float f)
+{ return cast(qint64)(f + __builtin_copysignf(0.5f, f)); }
+}
+static if(!defined!"Q_PROCESSOR_ARM_64" && !defined!"_M_ARM64" && !defined!"__ARM64__" && !defined!"__SSE2__" && !versionIsSet!("AArch64"))
+{
+pragma(inline, true) int qRound(double d)
+{ return d >= 0.0 ? cast(int)(d + 0.5) : cast(int)(d - 0.5); }
 pragma(inline, true) int qRound(float d)
-{ return d >= 0.0f ? cast(int)(d + 0.5f) : cast(int)(d - float(cast(int)(d-1)) + 0.5f) + cast(int)(d-1); }
+{ return d >= 0.0f ? cast(int)(d + 0.5f) : cast(int)(d - 0.5f); }
 
 pragma(inline, true) qint64 qRound64(double d)
-{ return d >= 0.0 ? cast(qint64)(d + 0.5) : cast(qint64)(d - double(cast(qint64)(d-1)) + 0.5) + cast(qint64)(d-1); }
+{ return d >= 0.0 ? cast(qint64)(d + 0.5) : cast(qint64)(d - 0.5); }
 pragma(inline, true) qint64 qRound64(float d)
-{ return d >= 0.0f ? cast(qint64)(d + 0.5f) : cast(qint64)(d - float(cast(qint64)(d-1)) + 0.5f) + cast(qint64)(d-1); }
+{ return d >= 0.0f ? cast(qint64)(d + 0.5f) : cast(qint64)(d - 0.5f); }
+}
+
+extern(C++, "QTypeTraits") {
+
+extern(C++, "detail") {
+struct Promoted(T, U,
+         
+)
+{
+    alias type = /+ decltype(T() + U()) +/T;
+}
+}
+
+alias Promoted(T, U) = /+ detail:: +/Promoted!(T, U).type;
+
+}
 
 pragma(inline, true) ref const(T) qMin(T)(ref const(T) a, ref const(T) b) { return (a < b) ? a : b; }
 pragma(inline, true) const(T)  qMin(T)(const(T) a, const(T) b) { return (a < b) ? a : b; }
 pragma(inline, true) ref const(T) qMax(T)(ref const(T) a, ref const(T) b) { return (a < b) ? b : a; }
 pragma(inline, true) const(T)  qMax(T)(const(T) a, const(T) b) { return (a < b) ? b : a; }
 pragma(inline, true) ref const(T) qBound(T)(ref const(T) min, ref const(T) val, ref const(T) max)
-{ auto tmp = qMin(max, val); return qMax(min, tmp); }
-pragma(inline, true) const(T)  qBound(T)(const(T)  min, const(T)  val, const(T)  max)
-{ auto tmp = qMin(max, val); return qMax(min, tmp); }
+{ return qMax(min, qMin(max, val)); }
+pragma(inline, true) const(T) qBound(T)(const(T) min, const(T) val, const(T) max)
+{ return qMax(min, qMin(max, val)); }
+/+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qMin(T, U)(ref const(T) a, ref const(U) b)
+{
+    alias P = /+ QTypeTraits:: +/Promoted!(T, U);
+    P _a = a;
+    P _b = b;
+    return (_a < _b) ? _a : _b;
+}
+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qMax(T, U)(ref const(T) a, ref const(U) b)
+{
+    alias P = /+ QTypeTraits:: +/Promoted!(T, U);
+    P _a = a;
+    P _b = b;
+    return (_a < _b) ? _b : _a;
+}
+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(T) min, ref const(U) val, ref const(T) max)
+{ return qMax(min, qMin(max, val)); }
+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(T) min, ref const(T) val, ref const(U) max)
+{ return qMax(min, qMin(max, val)); }
+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(U) min, ref const(T) val, ref const(T) max)
+{ return qMax(min, qMin(max, val)); }+/
 
 /+ #ifndef Q_FORWARD_DECLARE_OBJC_CLASS
 #  ifdef __OBJC__
 #    define Q_FORWARD_DECLARE_OBJC_CLASS(classname) @class classname
 #  else
-#    define Q_FORWARD_DECLARE_OBJC_CLASS(classname) typedef struct objc_object classname
+#    define Q_FORWARD_DECLARE_OBJC_CLASS(classname) class classname
 #  endif
 #endif
 #ifndef Q_FORWARD_DECLARE_CF_TYPE
@@ -791,9 +936,10 @@ pragma(inline, true) void qt_noop() {}
 #  elif defined(QT_BOOTSTRAPPED)
 #    define QT_NO_EXCEPTIONS
 #  endif
-#endif
+#endif +/
 
-#ifdef QT_NO_EXCEPTIONS
+/+ Q_NORETURN +/ /+ Q_DECL_COLD_FUNCTION +/ /+ Q_CORE_EXPORT +/ void qTerminate()/+ noexcept+/;
+/+ #ifdef QT_NO_EXCEPTIONS
 #  define QT_TRY if (true)
 #  define QT_CATCH(A) else
 #  define QT_THROW(A) qt_noop()
@@ -805,7 +951,6 @@ pragma(inline, true) void qt_noop() {}
 #  define QT_THROW(A) throw A +/
 /+ #  define QT_RETHROW throw +/
 enum QT_RETHROW = q{throw};
-/+ Q_NORETURN +/ /+ Q_DECL_COLD_FUNCTION +/ /+ Q_CORE_EXPORT +/ void qTerminate()/+ noexcept+/;
 /+ #  ifdef Q_COMPILER_NOEXCEPT
 #    define QT_TERMINATE_ON_EXCEPTION(expr) do { expr; } while (false)
 #  else
@@ -880,7 +1025,7 @@ Q_DECL_COLD_FUNCTION +/
 #endif +/
 
 /+ Q_NORETURN +/ /+ Q_CORE_EXPORT +/ void qt_check_pointer(const(char)* , int)/+ noexcept+/;
-/+ Q_DECL_COLD_FUNCTION +/
+/+ Q_NORETURN +/ /+ Q_DECL_COLD_FUNCTION +/
 /+ Q_CORE_EXPORT +/ void qBadAlloc();
 
 /+ #ifdef QT_NO_EXCEPTIONS
@@ -905,37 +1050,35 @@ alias QFunctionPointer = ExternCPPFunc!(void function());
 #  define Q_UNIMPLEMENTED() qWarning("Unimplemented code.")
 #endif +/
 
-/+ Q_REQUIRED_RESULT +/ /+ Q_DECL_UNUSED +/ pragma(inline, true) bool qFuzzyCompare(double p1, double p2)
+/+ [[nodiscard]] +/ bool qFuzzyCompare(double p1, double p2)
 {
     return (qAbs(p1 - p2) * 1000000000000. <= qMin(qAbs(p1), qAbs(p2)));
 }
 
-/+ Q_REQUIRED_RESULT +/ /+ Q_DECL_UNUSED +/ pragma(inline, true) bool qFuzzyCompare(float p1, float p2)
+/+ [[nodiscard]] +/ bool qFuzzyCompare(float p1, float p2)
 {
     return (qAbs(p1 - p2) * 100000.0f <= qMin(qAbs(p1), qAbs(p2)));
 }
 
-/+ Q_REQUIRED_RESULT +/ /+ Q_DECL_UNUSED +/ pragma(inline, true) bool qFuzzyIsNull(double d)
+/+ [[nodiscard]] +/ bool qFuzzyIsNull(double d)
 {
     return qAbs(d) <= 0.000000000001;
 }
 
-/+ Q_REQUIRED_RESULT +/ /+ Q_DECL_UNUSED +/  pragma(inline, true) bool qFuzzyIsNull(float f)
+/+ [[nodiscard]] +/ bool qFuzzyIsNull(float f)
 {
     return qAbs(f) <= 0.00001f;
 }
 
 /+ QT_WARNING_PUSH
-QT_WARNING_DISABLE_CLANG("-Wfloat-equal")
-QT_WARNING_DISABLE_GCC("-Wfloat-equal")
-QT_WARNING_DISABLE_INTEL(1572) +/
+QT_WARNING_DISABLE_FLOAT_COMPARE +/
 
-/+ Q_REQUIRED_RESULT +/ /+ Q_DECL_UNUSED +/ pragma(inline, true) bool qIsNull(double d)/+ noexcept+/
+/+ [[nodiscard]] +/ bool qIsNull(double d)/+ noexcept+/
 {
     return d == 0.0;
 }
 
-/+ Q_REQUIRED_RESULT +/ /+ Q_DECL_UNUSED +/ pragma(inline, true) bool qIsNull(float f)/+ noexcept+/
+/+ [[nodiscard]] +/ bool qIsNull(float f)/+ noexcept+/
 {
     return f == 0.0f;
 }
@@ -976,22 +1119,17 @@ extern(C++, "SwapExceptionTester") { // insulate users from the "using std::swap
 }
 } // namespace QtPrivate
 
-pragma(inline, true) void qSwap(T)(ref T value1, ref T value2)
+// Documented in ../tools/qalgorithm.qdoc
+void qSwap(T)(ref T value1, ref T value2)
     /+ noexcept(noexcept(QtPrivate::SwapExceptionTester::checkSwap(value1))) +/
 {
     /+ using std::swap; +/
+    import std.algorithm;
     swap(value1, value2);
 }
 
-/+ QT_WARNING_POP
+/+ QT_WARNING_POP +/
 
-#if QT_DEPRECATED_SINCE(5, 0)
-Q_CORE_EXPORT QT_DEPRECATED void *qMalloc(size_t size) Q_ALLOC_SIZE(1);
-Q_CORE_EXPORT QT_DEPRECATED void qFree(void *ptr);
-Q_CORE_EXPORT QT_DEPRECATED void *qRealloc(void *ptr, size_t size) Q_ALLOC_SIZE(2);
-Q_CORE_EXPORT QT_DEPRECATED void *qMemCopy(void *dest, const void *src, size_t n);
-Q_CORE_EXPORT QT_DEPRECATED void *qMemSet(void *dest, int c, size_t n);
-#endif +/
 /+ Q_CORE_EXPORT +/ void* qMallocAligned(size_t size, size_t alignment) /+ Q_ALLOC_SIZE(1) +/;
 /+ Q_CORE_EXPORT +/ void* qReallocAligned(void* ptr, size_t size, size_t oldsize, size_t alignment) /+ Q_ALLOC_SIZE(2) +/;
 /+ Q_CORE_EXPORT +/ void qFreeAligned(void* ptr);
@@ -1026,29 +1164,7 @@ QT_WARNING_DISABLE_MSVC(4530) /* C++ exception handler used, but unwind semantic
 #    pragma warn -rch
 #    pragma warn -sig
 #  endif
-#endif
-
-// Work around MSVC warning about use of 3-arg algorithms
-// until we can depend on the C++14 4-arg ones.
-//
-// These algortithms do NOT check for equal length.
-// They need to be treated as if they called the 3-arg version (which they do)!
-#ifdef Q_CC_MSVC
-# define QT_3ARG_ALG(alg, f1, l1, f2, l2) \
-    std::alg(f1, l1, f2, l2)
-#else
-# define QT_3ARG_ALG(alg, f1, l1, f2, l2)     \
-    [&f1, &l1, &f2, &l2]() {                  \
-        Q_UNUSED(l2);                         \
-        return std::alg(f1, l1, f2);          \
-    }()
 #endif +/
-/+pragma(inline, true) bool qt_is_permutation(ForwardIterator1, ForwardIterator2)(ForwardIterator1 first1, ForwardIterator1 last1,
-                              ForwardIterator2 first2, ForwardIterator2 last2)
-{
-    return /+ QT_3ARG_ALG(is_permutation, first1, last1, first2, last2) +/[&first1,&last1,&first2,&last2](){return is_permutation(first1,last1,first2);}();
-}+/
-/+ #undef QT_3ARG_ALG +/
 
 // this adds const to non-const objects (like std::as_const)
 ref /+ std:: +/add_const!(T).type qAsConst(T)(ref T t)/+ noexcept+/ { return t; }
@@ -1058,19 +1174,32 @@ void qAsConst(const T &&) = delete;
 
 // like std::exchange
 template <typename T, typename U = T>
-T qExchange(T &t, U &&newValue)
+constexpr T qExchange(T &t, U &&newValue)
 {
     T old = std::move(t);
     t = std::forward<U>(newValue);
     return old;
-} +/
+}
+
+// like std::to_underlying
+template <typename Enum>
+constexpr std::underlying_type_t<Enum> qToUnderlying(Enum e) noexcept
+{
+    return static_cast<std::underlying_type_t<Enum>>(e);
+}
+
+#ifdef __cpp_conditional_explicit
+#define Q_IMPLICIT explicit(false)
+#else
+#define Q_IMPLICIT
+#endif +/
 
 /+version(QT_NO_FOREACH){}else
 {
 
-/+ namespace QtPrivate {
+extern(C++, "QtPrivate") {
 
-template <typename T>
+/+ template <typename T>
 class QForeachContainer {
     Q_DISABLE_COPY(QForeachContainer)
 public:
@@ -1097,40 +1226,40 @@ public:
     T c;
     typename T::const_iterator i, e;
     int control = 1;
-};
+}; +/
+
+// Containers that have a detach function are considered shared, and are OK in a foreach loop
+pragma(inline, true) void warnIfContainerIsNotShared(T, )(int) {}
+
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+// Other containers will copy themselves if used in foreach, this use is deprecated
+/+ QT_DEPRECATED_VERSION_X_6_0("Do not use foreach/Q_FOREACH with containers which are not implicitly shared. "
+    "Prefer using a range-based for loop with these containers: `for (const auto &it : container)`, "
+    "keeping in mind that range-based for doesn't copy the container as Q_FOREACH does") +/
+pragma(inline, true) void warnIfContainerIsNotShared(T)(...) {}
+/+ #endif
 
 template<typename T>
 QForeachContainer<typename std::decay<T>::type> qMakeForeachContainer(T &&t)
 {
+    warnIfContainerIsNotShared<typename std::decay<T>::type>(0);
     return QForeachContainer<typename std::decay<T>::type>(std::forward<T>(t));
-}
+} +/
 
 }
 
-#if __cplusplus >= 201703L
 // Use C++17 if statement with initializer. User's code ends up in a else so
 // scoping of different ifs is not broken
-#define Q_FOREACH(variable, container)                                   \
-for (auto _container_ = QtPrivate::qMakeForeachContainer(container);     \
-     _container_.i != _container_.e;  ++_container_.i)                   \
-    if (variable = *_container_.i; false) {} else
-#else
-// Explanation of the control word:
-//  - it's initialized to 1
-//  - that means both the inner and outer loops start
-//  - if there were no breaks, at the end of the inner loop, it's set to 0, which
-//    causes it to exit (the inner loop is run exactly once)
-//  - at the end of the outer loop, it's inverted, so it becomes 1 again, allowing
-//    the outer loop to continue executing
-//  - if there was a break inside the inner loop, it will exit with control still
-//    set to 1; in that case, the outer loop will invert it to 0 and will exit too
-#define Q_FOREACH(variable, container)                                \
-for (auto _container_ = QtPrivate::qMakeForeachContainer(container); \
-     _container_.control && _container_.i != _container_.e;         \
-     ++_container_.i, _container_.control ^= 1)                     \
-    for (variable = *_container_.i; _container_.control; _container_.control = 0)
-#endif +/
-}+/
+/+ #define Q_FOREACH_IMPL(variable, name, container)                                             \
+    for (auto name = QtPrivate::qMakeForeachContainer(container); name.i != name.e; ++name.i) \
+        if (variable = *name.i; false) {} else
+
+#define Q_FOREACH_JOIN(A, B) Q_FOREACH_JOIN_IMPL(A, B)
+#define Q_FOREACH_JOIN_IMPL(A, B) A ## B
+
+#define Q_FOREACH(variable, container) \
+    Q_FOREACH_IMPL(variable, Q_FOREACH_JOIN(_container_, __LINE__), container) +/
+} +/
 
 /+ #define Q_FOREVER for(;;)
 #ifndef QT_NO_KEYWORDS
@@ -1144,8 +1273,9 @@ for (auto _container_ = QtPrivate::qMakeForeachContainer(container); \
 #  endif
 #endif +/
 
-pragma(inline, true) T* qGetPtrHelper(T)(T* ptr) { return ptr; }
-//pragma(inline, true) auto qGetPtrHelper(Ptr)()/+ (Ptr &ptr) -> decltype(ptr.operator->()) +/ { return ptr.operator->(); }
+pragma(inline, true) T* qGetPtrHelper(T)(T* ptr)/+ noexcept+/ { return ptr; }
+pragma(inline, true) auto qGetPtrHelper(Ptr)()/+ (Ptr &ptr) noexcept -> decltype(ptr.get()) +/
+{ static assert(noexcept(ptr.get()), "Smart d pointers for Q_DECLARE_PRIVATE must have noexcept get()"); return ptr.get(); }
 
 // The body must be a statement:
 /+ #define Q_CAST_IGNORE_ALIGN(body) QT_WARNING_PUSH QT_WARNING_DISABLE_GCC("-Wcast-align") body QT_WARNING_POP +/
@@ -1154,22 +1284,22 @@ extern(D) alias Q_CAST_IGNORE_ALIGN = function string(string body_)
     return /+ QT_WARNING_PUSH QT_WARNING_DISABLE_GCC("-Wcast-align") +/ mixin(interpolateMixin(q{$(body_)})); /+ QT_WARNING_POP +/
 };
 /+ #define Q_DECLARE_PRIVATE(Class) \
-    inline Class##Private* d_func() \
+    inline Class##Private* d_func() noexcept \
     { Q_CAST_IGNORE_ALIGN(return reinterpret_cast<Class##Private *>(qGetPtrHelper(d_ptr));) } \
-    inline const Class##Private* d_func() const \
+    inline const Class##Private* d_func() const noexcept \
     { Q_CAST_IGNORE_ALIGN(return reinterpret_cast<const Class##Private *>(qGetPtrHelper(d_ptr));) } \
     friend class Class##Private;
 
 #define Q_DECLARE_PRIVATE_D(Dptr, Class) \
-    inline Class##Private* d_func() \
+    inline Class##Private* d_func() noexcept \
     { Q_CAST_IGNORE_ALIGN(return reinterpret_cast<Class##Private *>(qGetPtrHelper(Dptr));) } \
-    inline const Class##Private* d_func() const \
+    inline const Class##Private* d_func() const noexcept \
     { Q_CAST_IGNORE_ALIGN(return reinterpret_cast<const Class##Private *>(qGetPtrHelper(Dptr));) } \
     friend class Class##Private;
 
 #define Q_DECLARE_PUBLIC(Class)                                    \
-    inline Class* q_func() { return static_cast<Class *>(q_ptr); } \
-    inline const Class* q_func() const { return static_cast<const Class *>(q_ptr); } \
+    inline Class* q_func() noexcept { return static_cast<Class *>(q_ptr); } \
+    inline const Class* q_func() const noexcept { return static_cast<const Class *>(q_ptr); } \
     friend class Class;
 
 #define Q_D(Class) Class##Private * const d = d_func()
@@ -1198,22 +1328,8 @@ version(QT_NO_TRANSLATION){}else
 
 }
 
-/*
-   When RTTI is not available, define this macro to force any uses of
-   dynamic_cast to cause a compile failure.
-*/
-
-static if(defined!"QT_NO_DYNAMIC_CAST" && !defined!"dynamic_cast")
-{
-/+ #  define dynamic_cast QT_PREPEND_NAMESPACE(qt_dynamic_cast_check) +/
-
-  T qt_dynamic_cast_check(T, X)(X, T* /+ = 0 +/)
-  { return T.dynamic_cast_will_always_fail_because_rtti_is_disabled; }
-}
-
 
 /+ #ifdef Q_QDOC
-
 // Just for documentation generation
 template<typename T>
 auto qOverload(T functionPointer);
@@ -1221,18 +1337,16 @@ template<typename T>
 auto qConstOverload(T memberFunctionPointer);
 template<typename T>
 auto qNonConstOverload(T memberFunctionPointer);
-
-#elif defined(Q_COMPILER_VARIADIC_TEMPLATES)
-
+#else
 template <typename... Args>
 struct QNonConstOverload
 {
     template <typename R, typename T>
-    auto operator()(R (T::*ptr)(Args...)) const noexcept -> decltype(ptr)
+    constexpr auto operator()(R (T::*ptr)(Args...)) const noexcept -> decltype(ptr)
     { return ptr; }
 
     template <typename R, typename T>
-    static auto of(R (T::*ptr)(Args...)) noexcept -> decltype(ptr)
+    static constexpr auto of(R (T::*ptr)(Args...)) noexcept -> decltype(ptr)
     { return ptr; }
 };
 
@@ -1240,11 +1354,11 @@ template <typename... Args>
 struct QConstOverload
 {
     template <typename R, typename T>
-    auto operator()(R (T::*ptr)(Args...) const) const noexcept -> decltype(ptr)
+    constexpr auto operator()(R (T::*ptr)(Args...) const) const noexcept -> decltype(ptr)
     { return ptr; }
 
     template <typename R, typename T>
-    static auto of(R (T::*ptr)(Args...) const) noexcept -> decltype(ptr)
+    static constexpr auto of(R (T::*ptr)(Args...) const) noexcept -> decltype(ptr)
     { return ptr; }
 };
 
@@ -1257,20 +1371,17 @@ struct QOverload : QConstOverload<Args...>, QNonConstOverload<Args...>
     using QNonConstOverload<Args...>::operator();
 
     template <typename R>
-    auto operator()(R (*ptr)(Args...)) const noexcept -> decltype(ptr)
+    constexpr auto operator()(R (*ptr)(Args...)) const noexcept -> decltype(ptr)
     { return ptr; }
 
     template <typename R>
-    static auto of(R (*ptr)(Args...)) noexcept -> decltype(ptr)
+    static constexpr auto of(R (*ptr)(Args...)) noexcept -> decltype(ptr)
     { return ptr; }
 };
 
-#if defined(__cpp_variable_templates) && __cpp_variable_templates >= 201304 // C++14
-template <typename... Args> Q_DECL_UNUSED QOverload<Args...> qOverload = {};
-template <typename... Args> Q_DECL_UNUSED QConstOverload<Args...> qConstOverload = {};
-template <typename... Args> Q_DECL_UNUSED QNonConstOverload<Args...> qNonConstOverload = {};
-#endif
-
+template <typename... Args> constexpr inline QOverload<Args...> qOverload = {};
+template <typename... Args> constexpr inline QConstOverload<Args...> qConstOverload = {};
+template <typename... Args> constexpr inline QNonConstOverload<Args...> qNonConstOverload = {};
 #endif +/
 
 
@@ -1288,15 +1399,7 @@ template <typename... Args> Q_DECL_UNUSED QNonConstOverload<Args...> qNonConstOv
 pragma(inline, true) int qIntCast(double f) { return cast(int)(f); }
 pragma(inline, true) int qIntCast(float f) { return cast(int)(f); }
 
-/*
-  Reentrant versions of basic rand() functions for random number generation
-*/
-/+ #if QT_DEPRECATED_SINCE(5, 15) +/
-/+ Q_CORE_EXPORT +/ /+ QT_DEPRECATED_VERSION_X_5_15("use QRandomGenerator instead") +/ void qsrand(uint seed);
-/+ Q_CORE_EXPORT +/ /+ QT_DEPRECATED_VERSION_X_5_15("use QRandomGenerator instead") +/ int qrand();
-/+ #endif
-
-#define QT_MODULE(x)
+/+ #define QT_MODULE(x)
 
 #if !defined(QT_BOOTSTRAPPED) && defined(QT_REDUCE_RELOCATIONS) && defined(__ELF__) && \
     (!defined(__PIC__) || (defined(__PIE__) && defined(Q_CC_GNU) && Q_CC_GNU >= 500))
@@ -1304,11 +1407,23 @@ pragma(inline, true) int qIntCast(float f) { return cast(int)(f); }
          "Compile your code with -fPIC (and not with -fPIE)."
 #endif
 
-namespace QtPrivate {
-//like std::enable_if
-template <bool B, typename T = void> struct QEnableIf;
-template <typename T> struct QEnableIf<true, T> { typedef T Type; };
-} +/
+#define QT_VA_ARGS_CHOOSE(_1, _2, _3, _4, _5, _6, _7, _8, _9, N, ...) N
+#define QT_VA_ARGS_EXPAND(...) __VA_ARGS__ // Needed for MSVC
+#define QT_VA_ARGS_COUNT(...) QT_VA_ARGS_EXPAND(QT_VA_ARGS_CHOOSE(__VA_ARGS__, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
+#define QT_OVERLOADED_MACRO_EXPAND(MACRO, ARGC) MACRO##_##ARGC
+#define QT_OVERLOADED_MACRO_IMP(MACRO, ARGC) QT_OVERLOADED_MACRO_EXPAND(MACRO, ARGC)
+#define QT_OVERLOADED_MACRO(MACRO, ...) QT_VA_ARGS_EXPAND(QT_OVERLOADED_MACRO_IMP(MACRO, QT_VA_ARGS_COUNT(__VA_ARGS__))(__VA_ARGS__))
+
+// This macro can be used to calculate member offsets for types with a non standard layout.
+// It uses the fact that offsetof() is allowed to support those types since C++17 as an optional
+// feature. All our compilers do support this, but some issue a warning, so we wrap the offsetof()
+// call in a macro that disables the compiler warning.
+#define Q_OFFSETOF(Class, member) \
+    []() -> size_t { \
+        QT_WARNING_PUSH QT_WARNING_DISABLE_INVALID_OFFSETOF \
+        return offsetof(Class, member); \
+        QT_WARNING_POP \
+    }() +/
 
 
 // We need to keep QTypeInfo, QSysInfo, QFlags, qDebug & family in qglobal.h for compatibility with Qt 4.

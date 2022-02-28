@@ -20,8 +20,8 @@ import qt.core.typeinfo;
 import qt.gui.font;
 import qt.helpers;
 
-/// Binding for C++ class [QFontInfo](https://doc.qt.io/qt-5/qfontinfo.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontInfo
+/// Binding for C++ class [QFontInfo](https://doc.qt.io/qt-6/qfontinfo.html).
+@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QFontInfo
 {
 public:
     this(ref const(QFont) );
@@ -47,8 +47,9 @@ public:
     bool strikeOut() const;
     bool fixedPitch() const;
     QFont.StyleHint styleHint() const;
-/+ #if QT_DEPRECATED_SINCE(5, 5) +/
-    bool rawMode() const;
+
+/+ #if QT_DEPRECATED_SINCE(6, 0) +/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use weight() instead") +/ int legacyWeight() const;
 /+ #endif +/
 
     bool exactMatch() const;

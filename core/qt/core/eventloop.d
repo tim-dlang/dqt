@@ -21,7 +21,7 @@ import qt.helpers;
 
 extern(C++, class) struct QEventLoopPrivate;
 
-/// Binding for C++ class [QEventLoop](https://doc.qt.io/qt-5/qeventloop.html).
+/// Binding for C++ class [QEventLoop](https://doc.qt.io/qt-6/qeventloop.html).
 class /+ Q_CORE_EXPORT +/ QEventLoop : QObject
 {
     mixin(Q_OBJECT);
@@ -46,7 +46,6 @@ alias ProcessEventsFlags = QFlags!(ProcessEventsFlag);
     final void processEvents(ProcessEventsFlags flags, int maximumTime);
 
     final int exec(ProcessEventsFlags flags = ProcessEventsFlag.AllEvents);
-    final void exit(int returnCode = 0);
     final bool isRunning() const;
 
     final void wakeUp();
@@ -54,18 +53,30 @@ alias ProcessEventsFlags = QFlags!(ProcessEventsFlag);
     override bool event(QEvent event);
 
 public /+ Q_SLOTS +/:
+    @QSlot final void exit(int returnCode = 0);
     @QSlot final void quit();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator |(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/{return QFlags!(QEventLoop.ProcessEventsFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator |(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator &(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/{return QFlags!(QEventLoop.ProcessEventsFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator &(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) void operator +(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) void operator +(int f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)/+noexcept+/;+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QEventLoop::ProcessEventsFlags) +/
-
 extern(C++, class) struct QEventLoopLockerPrivate;
 
-/// Binding for C++ class [QEventLoopLocker](https://doc.qt.io/qt-5/qeventlooplocker.html).
+/// Binding for C++ class [QEventLoopLocker](https://doc.qt.io/qt-6/qeventlooplocker.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QEventLoopLocker
 {
 public:
