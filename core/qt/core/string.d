@@ -426,7 +426,7 @@ public:
     pragma(inline, true) const(QChar)* constData() const
     { return reinterpret_cast!(const(QChar)*)(d.data()); }
 
-    extern(D) const(wchar)[] toConstWString()
+    extern(D) const(wchar)[] toConstWString() const
     {
         return (cast(const(wchar)*)constData())[0..length];
     }
