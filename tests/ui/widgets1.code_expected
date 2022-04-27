@@ -119,6 +119,13 @@
 
         dateEdit = cpp_new!(dqtimported!q{qt.widgets.datetimeedit}.QDateEdit)(FormWidgets1);
         dateEdit.setObjectName("dateEdit");
+        auto date = dqtimported!q{qt.core.datetime}.QDate(9999, 12, 31);
+        dateEdit.setMaximumDate(date);
+        auto date1 = dqtimported!q{qt.core.datetime}.QDate(1752, 9, 14);
+        dateEdit.setMinimumDate(date1);
+        dateEdit.setTimeSpec(dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(dateEdit.timeSpec()), q{Qt::UTC}));
+        auto date2 = dqtimported!q{qt.core.datetime}.QDate(2000, 1, 1);
+        dateEdit.setDate(date2);
 
         gridLayout.addWidget(dateEdit, 11, 0, 1, 1);
 
@@ -157,7 +164,8 @@
 
         timeEdit = cpp_new!(dqtimported!q{qt.widgets.datetimeedit}.QTimeEdit)(FormWidgets1);
         timeEdit.setObjectName("timeEdit");
-        auto time = dqtimported!q{qt.core.datetime}.QTime(19, 59, 0);
+        timeEdit.setTimeSpec(dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(timeEdit.timeSpec()), q{Qt::UTC}));
+        auto time = dqtimported!q{qt.core.datetime}.QTime(18, 59, 0);
         timeEdit.setTime(time);
 
         gridLayout.addWidget(timeEdit, 11, 1, 1, 1);
@@ -213,16 +221,16 @@
         dateTimeEdit.setObjectName("dateTimeEdit");
         auto datetime = dqtimported!q{qt.core.datetime}.QDateTime(dqtimported!q{qt.core.datetime}.QDate(2001, 1, 2),dqtimported!q{qt.core.datetime}.QTime(12, 0, 0));
         dateTimeEdit.setDateTime(datetime);
-        auto date = dqtimported!q{qt.core.datetime}.QDate(2001, 1, 2);
-        dateTimeEdit.setDate(date);
+        auto date3 = dqtimported!q{qt.core.datetime}.QDate(2001, 1, 2);
+        dateTimeEdit.setDate(date3);
         auto datetime1 = dqtimported!q{qt.core.datetime}.QDateTime(dqtimported!q{qt.core.datetime}.QDate(9999, 12, 14),dqtimported!q{qt.core.datetime}.QTime(23, 59, 59));
         dateTimeEdit.setMaximumDateTime(datetime1);
         auto datetime2 = dqtimported!q{qt.core.datetime}.QDateTime(dqtimported!q{qt.core.datetime}.QDate(1752, 9, 29),dqtimported!q{qt.core.datetime}.QTime(0, 0, 0));
         dateTimeEdit.setMinimumDateTime(datetime2);
-        auto date1 = dqtimported!q{qt.core.datetime}.QDate(9999, 12, 14);
-        dateTimeEdit.setMaximumDate(date1);
-        auto date2 = dqtimported!q{qt.core.datetime}.QDate(1752, 9, 29);
-        dateTimeEdit.setMinimumDate(date2);
+        auto date4 = dqtimported!q{qt.core.datetime}.QDate(9999, 12, 14);
+        dateTimeEdit.setMaximumDate(date4);
+        auto date5 = dqtimported!q{qt.core.datetime}.QDate(1752, 9, 29);
+        dateTimeEdit.setMinimumDate(date5);
         dateTimeEdit.setCurrentSection(dqtimported!q{qt.core.flags}.enumFromStaticString!(typeof(dateTimeEdit.currentSection()), q{QDateTimeEdit::DaySection}));
         dateTimeEdit.setCalendarPopup(true);
         dateTimeEdit.setCurrentSectionIndex(0);

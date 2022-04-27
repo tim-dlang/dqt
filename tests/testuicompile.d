@@ -26,7 +26,8 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
 {
     const QMetaObject *meta = obj.metaObject();
     appender.put(indent);
-    appender.put(fromStringz(meta.className()));
+    auto className = fromStringz(meta.className());
+    appender.put(className);
     if(!obj.objectName().isEmpty())
     {
         appender.put(" ");
@@ -44,12 +45,15 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
         /*if(value.isEmpty())
             continue;*/
         auto propertyType = fromStringz(valueVar.typeName());
-        if(propertyType == "QFont")
         if(valueVar.typeId() == QMetaType.Type.QFont)
             value = QString("platform dependent");
         if(valueVar.typeId() == QMetaType.Type.QKeySequence)
             value = valueVar.value!QKeySequence().toString(QKeySequence.SequenceFormat.PortableText);
-        if(propertyName == "x" || propertyName == "y" || propertyName == "width" || propertyName == "height")
+        if(propertyName.among("x", "y", "width", "height"))
+            value = QString("platform dependent");
+        if(className == "QTimeEdit" && propertyName.among("date", "dateTime", "maximumDateTime", "minimumDateTime", "maximumDate", "minimumDate"))
+            value = QString("platform dependent");
+        if(className == "QDateEdit" && propertyName.among("time", "dateTime", "maximumDateTime", "minimumDateTime", "maximumDate", "minimumDate", "maximumTime", "minimumTime"))
             value = QString("platform dependent");
         appender.put(indent);
         appender.put("    ");
