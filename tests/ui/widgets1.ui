@@ -238,7 +238,32 @@
     </widget>
    </item>
    <item row="11" column="0">
-    <widget class="QDateEdit" name="dateEdit"/>
+    <widget class="QDateEdit" name="dateEdit">
+     <property name="maximumDate">
+      <date>
+       <year>9999</year>
+       <month>12</month>
+       <day>31</day>
+      </date>
+     </property>
+     <property name="minimumDate">
+      <date>
+       <year>1752</year>
+       <month>9</month>
+       <day>14</day>
+      </date>
+     </property>
+     <property name="timeSpec">
+      <enum>Qt::UTC</enum>
+     </property>
+     <property name="date">
+      <date>
+       <year>2000</year>
+       <month>1</month>
+       <day>1</day>
+      </date>
+     </property>
+    </widget>
    </item>
    <item row="5" column="0">
     <widget class="QComboBox" name="comboBox">
@@ -326,9 +351,12 @@
    </item>
    <item row="11" column="1">
     <widget class="QTimeEdit" name="timeEdit">
+     <property name="timeSpec">
+      <enum>Qt::UTC</enum>
+     </property>
      <property name="time">
       <time>
-       <hour>19</hour>
+       <hour>18</hour>
        <minute>59</minute>
        <second>0</second>
       </time>
