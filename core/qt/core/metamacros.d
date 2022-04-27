@@ -231,6 +231,37 @@ template MetaObjectImpl(T)
         assert(methodsStartIndex == currentOutputIndex);
         currentOutputIndex += 6 * allMethods.length;
 
+        string typeToMetaComplex(T2)()
+        {
+            import qt.core.list: QList;
+            import qt.core.vector: QVector;
+            if(is(const(T2) == const(QList!int)))
+                return "QList<int>";
+            else static if(is(const(T2) == const(QVector!int)))
+                return "QVector<int>";
+            else static if(is(T2 == int*))
+                return "int*";
+            else static if(is(T2 == U*, U) && is(U == struct))
+            {
+                return typeToMetaComplex!U() ~ "*";
+            }
+            else static if(is(T2 == class))
+            {
+                static if(__traits(getLinkage, T2) == "D")
+                    return T2.mangleof ~ "*";
+                else
+                    return __traits(identifier, T2) ~ "*";
+            }
+            else static if(is(T2 == struct) || is(T2 == union) || is(T2 == enum))
+            {
+                static if(__traits(getLinkage, T2) == "D")
+                    return T2.mangleof ~ "*";
+                else
+                    return __traits(identifier, T2) ~ "*";
+            }
+            else
+                static assert("TODO: Type not yet supported ", T2.stringof);
+        }
         string typeToMeta(T2)()
         {
             import qt.core.list: QList;
@@ -245,18 +276,10 @@ template MetaObjectImpl(T)
                 return "QMetaType.Type.Double";
             else static if(is(const(T2) == const(QString)))
                 return "QMetaType.Type.QString";
-            else static if(is(const(T2) == const(QList!int)))
-                return text("0x80000000 | ", addString("QList<int>"));
-            else static if(is(const(T2) == const(QVector!int)))
-                return text("0x80000000 | ", addString("QVector<int>"));
             else static if(is(const(T2) == const(QPoint)))
                 return "QMetaType.Type.QPoint";
-            else static if(is(T2 == int*))
-                return text("0x80000000 | ", addString("int*"));
-            else static if(is(T2 == class) && __traits(getLinkage, T2) == "C++")
-                return text("0x80000000 | ", addString(__traits(identifier, T2) ~ "*"));
             else
-                static assert("TODO: Type not yet supported ", T2.stringof);
+                return text("0x80000000 | ", addString(typeToMetaComplex!T2()));
         }
 
         void addMethods(M...)(string typename, uint type)
