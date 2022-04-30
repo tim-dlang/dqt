@@ -1155,6 +1155,21 @@ enum isWrapperCallable(alias F, Params...) = ()
         }
     }();
 
+template isAnyWrapperCallable(bool isStaticFunction, Overloads...)
+{
+    template impl(Params...)
+    {
+        static if(Overloads.length == 0)
+            enum impl = false;
+        else static if(__traits(isStaticFunction, Overloads[0]) != isStaticFunction)
+            enum impl = isAnyWrapperCallable!(isStaticFunction, Overloads[1..$]).impl!(Params);
+        else static if(isWrapperCallable!(Overloads[0], Params))
+            enum impl = true;
+        else
+            enum impl = isAnyWrapperCallable!(isStaticFunction, Overloads[1..$]).impl!(Params);
+    }
+}
+
 // Creates wrapper functions for every function in the current class / struct, which are callable with rvalues.
 enum CREATE_CONVENIENCE_WRAPPERS = q{
     static foreach(member; __traits(derivedMembers, typeof(this)))
@@ -1162,30 +1177,53 @@ enum CREATE_CONVENIENCE_WRAPPERS = q{
         static if((!(member.length >= 2 && member[0..2] == "__") || member == "__ctor")
                 && !(member.length >= 32 && member[0..32] == "dummyFunctionForChangingMangling")
                 && member != "rawConstructor")
-            static foreach(F; __traits(getOverloads, typeof(this), member))
+            static foreach(isStaticFunction; [false, true])
             {
-                static if(__traits(getVisibility, F) == "public" && anyParamConstStructRef!F)
+                static if((){
+                        bool needsWrapper;
+                        static foreach(F; __traits(getOverloads, typeof(this), member))
+                        {
+                            static if(__traits(getVisibility, F) == "public"
+                                && __traits(isStaticFunction, F) == isStaticFunction
+                                && anyParamConstStructRef!F)
+                            {
+                                needsWrapper = true;
+                            }
+                        }
+                        return needsWrapper;
+                    }())
                 {
                     mixin((){
+                        static import std.conv;
                         string code;
+                        string overloadHelper = "dqt_publicOverloads";
+                        if(isStaticFunction)
+                            overloadHelper ~= "Static";
+                        static foreach(i, F; __traits(getOverloads, typeof(this), member))
+                        {
+                            static if(__traits(isStaticFunction, F) == isStaticFunction && __traits(getVisibility, F) == "public")
+                            {
+                                code ~= "private alias " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ " =  __traits(getOverloads, typeof(this), member)[" ~ std.conv.text(i) ~ "];";
+                            }
+                        }
                         code ~= "public extern(D) pragma(inline, true) ";
                         if(member == "__ctor")
                             code ~= "this";
                         else
                         {
-                            static if(__traits(isStaticFunction, F))
+                            static if(isStaticFunction)
                                 code ~= "static ";
                             else static if(is(typeof(this) == class))
                                 code ~= "final ";
                             code ~= "auto " ~ member;
                         }
                         code ~= "(Params...)(auto ref Params params)";
-                        code ~= "if(isWrapperCallable!(F, Params))";
+                        code ~= "if(isAnyWrapperCallable!(isStaticFunction, __traits(getOverloads, typeof(this), member)).impl!(Params))";
                         code ~= "{";
                         if(member == "__ctor")
-                            code ~= "this(params);";
+                            code ~= "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ "(params);";
                         else
-                            code ~= "return " ~ member ~ "(params);";
+                            code ~= "return " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ "(params);";
                         code ~= "}";
                         return code;
                     }());
