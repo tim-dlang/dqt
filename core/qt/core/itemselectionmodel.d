@@ -30,6 +30,16 @@ import qt.helpers;
 
 public:
     /+ QItemSelectionRange() = default; +/
+    this(ref const(QItemSelectionRange) other) const
+    {
+        this.tl = other.tl;
+        this.br = other.br;
+    }
+    this(ref QItemSelectionRange other)
+    {
+        this.tl = other.tl;
+        this.br = other.br;
+    }
     this(ref const(QModelIndex) topL, ref const(QModelIndex) bottomR)
     {
         this.tl = topL;
