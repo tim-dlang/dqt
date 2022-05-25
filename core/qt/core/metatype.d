@@ -439,7 +439,7 @@ private:
 public:
 /+ #ifndef Q_CLANG_QDOC +/
     // The code that actually gets compiled.
-    mixin((){
+    extern(D) mixin((){
         import std.conv;
         string code = "enum Type {";
         // these are merged with QVariant
@@ -1842,7 +1842,7 @@ struct QMetaTypeIdQObject(T, /+ int +/ /+ =
 
 alias QMetaTypeId(T) = QMetaTypeIdQObject!(T);
 
-mixin((){
+extern(D) mixin((){
     import std.conv;
     string code = "template QMetaTypeId2(T)\n";
     code ~= "{\n";

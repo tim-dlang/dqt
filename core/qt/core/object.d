@@ -199,7 +199,7 @@ template parametersSame(Params...)
 /// Binding for C++ class [QObject](https://doc.qt.io/qt-5/qobject.html).
 class /+ Q_CORE_EXPORT +/ QObject
 {
-    mixin((){import std.array; return Q_OBJECT.replace("override", "");}());
+    extern(D) mixin((){import std.array; return Q_OBJECT.replace("override", "");}());
 
     /+ Q_PROPERTY(QString objectName READ objectName WRITE setObjectName NOTIFY objectNameChanged)
     Q_DECLARE_PRIVATE(QObject) +/
