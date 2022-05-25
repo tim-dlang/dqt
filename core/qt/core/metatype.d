@@ -2533,7 +2533,7 @@ constexpr const QtPrivate::QMetaTypeInterface *const qt_incomplete_metaTypeArray
 
 template qt_incomplete_metaTypeArray(Unique, T...)
 {
-    mixin((){
+    extern(D) mixin((){
         import std.conv;
         string code = text("extern(D) const __gshared QMetaTypeInterface*[", T.length, "] qt_incomplete_metaTypeArray = [");
         code ~= "T";
