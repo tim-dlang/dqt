@@ -1179,7 +1179,7 @@ enum CREATE_CONVENIENCE_WRAPPERS = q{
                 && member != "rawConstructor")
             static foreach(isStaticFunction; [false, true])
             {
-                static if((){
+                extern(D) static if((){
                         bool needsWrapper;
                         static foreach(F; __traits(getOverloads, typeof(this), member))
                         {

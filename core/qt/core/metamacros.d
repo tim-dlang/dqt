@@ -147,7 +147,7 @@ struct CPPMemberFunctionPointer(T)
 template memberFunctionExternDeclaration(alias F)
 {
     version(Windows)
-    mixin((){
+    extern(D) mixin((){
             string code;
             version(Windows)
                 static if(IsInQtPackage!(F))
