@@ -139,11 +139,11 @@ public:
     static QFont systemFont(SystemFont type);
 
 private:
-    static void createDatabase();
+    /+ static void createDatabase();
     static void parseFontName(ref const(QString) name, ref QString foundry, ref QString family);
     static QString resolveFontFamilyAlias(ref const(QString) family);
     static QFontEngine* findFont(ref const(QFontDef) request, int script /* QChar::Script */);
-    static void load(const(QFontPrivate)* d, int script /* QChar::Script */);
+    static void load(const(QFontPrivate)* d, int script /* QChar::Script */); +/
 
     /+ friend struct QFontDef; +/
     /+ friend class QFontPrivate; +/
