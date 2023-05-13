@@ -26,7 +26,7 @@ jobs:
 
         include:
           - platform: linux64
-            os: ubuntu-20.04
+            os: ubuntu-22.04
             model: 64
             qt_arch: gcc_64
             qtbase_url: 'https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt5_5152/qt.qt5.5152.gcc_64/'
@@ -34,21 +34,21 @@ jobs:
             qticu_file: '5.15.2-0-202011130601icu-linux-Rhel7.2-x64.7z'
 
           - platform: win64
-            os: windows-2019
+            os: windows-2022
             model: 64
             qt_arch: msvc2019_64
             qtbase_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5152/qt.qt5.5152.win64_msvc2019_64/'
             qtbase_file: '5.15.2-0-202011130602qtbase-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z'
 
           - platform: win32
-            os: windows-2019
+            os: windows-2022
             model: 32mscoff
             qt_arch: msvc2019
             qtbase_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5152/qt.qt5.5152.win32_msvc2019/'
             qtbase_file: '5.15.2-0-202011130602qtbase-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86.7z'
 
           - platform: osx64
-            os: macos-10.15
+            os: macos-12
             model: 64
             qt_arch: clang_64
             qtbase_url: 'https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/qt5_5152/qt.qt5.5152.clang_64/'
