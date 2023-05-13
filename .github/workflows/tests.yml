@@ -19,7 +19,7 @@ jobs:
 
       matrix:
         platform: [ linux64, win64, osx64 ]
-        dc: [ dmd-latest, dmd-2.099.0, ldc-latest, dmd-master ]
+        dc: [ dmd-latest, dmd-2.100.0, ldc-latest, dmd-master ]
 
         exclude:
           - { platform: win64, dc: ldc-latest }
