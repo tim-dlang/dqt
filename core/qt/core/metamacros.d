@@ -225,7 +225,8 @@ template MetaObjectImpl(T)
         enum signalIndex = staticIndexOf!(F, allSignals);
     }
 
-    enum CODE = (){
+    string generateCode()
+    {
         import std.conv;
 
         string concatenatedStrings;
@@ -440,9 +441,9 @@ template MetaObjectImpl(T)
                 } };
             }
         }));
-    }();
-    //pragma(msg, CODE);
-    mixin(CODE);
+    }
+    //pragma(msg, generateCode());
+    mixin(generateCode());
 }
 
 enum Q_OBJECT_D = q{
