@@ -174,8 +174,8 @@ extern(D) auto getMemberFunctionAddress(alias F)()
         static foreach (qtmodule; ["Core", "Gui", "Widgets"])
         {{
             enum prefix = "qt." ~ qtmodule[0].toLower ~ qtmodule[1 .. $];
-            enum dllName = "Qt5" ~ qtmodule;
-            enum dllNamed = "Qt5" ~ qtmodule ~ "d";
+            enum dllName = "Qt6" ~ qtmodule;
+            enum dllNamed = "Qt6" ~ qtmodule ~ "d";
 
             if (qt.helpers.packageName!F.length >= prefix.length && qt.helpers.packageName!F[0..prefix.length] == prefix)
             {
