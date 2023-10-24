@@ -200,6 +200,41 @@ template memberFunctionExternDeclaration(alias F)
         alias memberFunctionExternDeclaration = F;
 }
 
+extern(D) auto getMemberFunctionAddress(alias F)()
+{
+    version (Windows)
+    version (LDC)
+    {
+        import core.sys.windows.windef: HMODULE;
+        import core.sys.windows.winbase: GetModuleHandle, GetProcAddress;
+        import std.ascii: toLower;
+
+        HMODULE hmodule;
+
+        static foreach (qtmodule; ["Core", "Gui", "Widgets"])
+        {{
+            enum prefix = "qt." ~ qtmodule[0].toLower ~ qtmodule[1 .. $];
+            enum dllName = "Qt5" ~ qtmodule;
+            enum dllNamed = "Qt5" ~ qtmodule ~ "d";
+
+            if (qt.helpers.packageName!F.length >= prefix.length && qt.helpers.packageName!F[0..prefix.length] == prefix)
+            {
+                hmodule = GetModuleHandle(dllName);
+                if (hmodule is null)
+                    hmodule = GetModuleHandle(dllNamed);
+            }
+        }}
+
+        if (hmodule !is null)
+        {
+            auto signal = cast(typeof(&memberFunctionExternDeclaration!F)) GetProcAddress(hmodule, F.mangleof);
+            if (signal !is null)
+                return signal;
+        }
+    }
+    return &memberFunctionExternDeclaration!F;
+}
+
 enum NotIsConstructor(alias F) = __traits(identifier, F) != "__ctor";
 
 template MetaObjectImpl(T)
@@ -521,7 +556,7 @@ enum Q_OBJECT_D = q{
                 {{
                     alias _t = qt.core.metamacros.CPPMemberFunctionPointer!(typeof(this));
 
-                    auto fp = &memberFunctionExternDeclaration!(allSignals[i]);
+                    auto fp = getMemberFunctionAddress!(allSignals[i]);
                     qt.core.metamacros.CPPMemberFunctionPointer!(typeof(this)) memberFunction = qt.core.metamacros.CPPMemberFunctionPointer!(typeof(this))(fp);
 
                     if (*reinterpret_cast!(_t *)(_a[1]) == memberFunction) {
