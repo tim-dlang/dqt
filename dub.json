@@ -14,7 +14,8 @@
 			"sourcePaths": ["core"],
 			"importPaths": ["core"],
 			"libs": ["Qt5Core"],
-			"libs-posix": ["stdc++"]
+			"libs-linux": ["stdc++"],
+			"libs-osx": ["c++"]
 		},
 		{
 			"name": "gui",
