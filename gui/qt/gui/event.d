@@ -66,8 +66,7 @@ public:
     }));
     ~this();
     override QInputEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QInputEvent(this);
+        return cpp_new_copy!QInputEvent(cast() this);
     }
 
     final const(QInputDevice) device() const { return m_dev; }
@@ -110,8 +109,7 @@ public:
     ~this();
 
     override QPointerEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QPointerEvent(this);
+        return cpp_new_copy!QPointerEvent(cast() this);
     }
 
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
@@ -185,8 +183,7 @@ public:
     { QPointerEvent.setExclusiveGrabber(points().first(), exclusiveGrabber); }
 
     override QSinglePointEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QSinglePointEvent(this);
+        return cpp_new_copy!QSinglePointEvent(cast() this);
     }
 
 protected:
@@ -276,8 +273,7 @@ public:
     ~this();
 
     override QEnterEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QEnterEvent(this);
+        return cpp_new_copy!QEnterEvent(cast() this);
     }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0)
@@ -344,8 +340,7 @@ public:
     ~this();
 
     override QMouseEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QMouseEvent(this);
+        return cpp_new_copy!QMouseEvent(cast() this);
     }
 
 /+ #ifndef QT_NO_INTEGER_EVENT_COORDINATES +/
@@ -400,8 +395,7 @@ public:
     ~this();
 
     override QHoverEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QHoverEvent(this);
+        return cpp_new_copy!QHoverEvent(cast() this);
     }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0)
@@ -457,8 +451,7 @@ public:
     ~this();
 
     override QWheelEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QWheelEvent(this);
+        return cpp_new_copy!QWheelEvent(cast() this);
     }
 
     pragma(inline, true) final QPoint pixelDelta() const { return m_pixelDelta; }
@@ -503,8 +496,7 @@ public:
     ~this();
 
     override QTabletEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QTabletEvent(this);
+        return cpp_new_copy!QTabletEvent(cast() this);
     }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
@@ -573,8 +565,7 @@ public:
     ~this();
 
     override QNativeGestureEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QNativeGestureEvent(this);
+        return cpp_new_copy!QNativeGestureEvent(cast() this);
     }
 
     final /+ Qt:: +/qt.core.namespace.NativeGestureType gestureType() const { return m_gestureType; }
@@ -661,8 +652,7 @@ public:
     ~this();
 
     override QKeyEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QKeyEvent(this);
+        return cpp_new_copy!QKeyEvent(cast() this);
     }
 
     final int key() const { return m_key; }
@@ -734,8 +724,7 @@ public:
     ~this();
 
     override QFocusEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QFocusEvent(this);
+        return cpp_new_copy!QFocusEvent(cast() this);
     }
 
     pragma(inline, true) final bool gotFocus() const { return type() == Type.FocusIn; }
@@ -764,8 +753,7 @@ public:
     ~this();
 
     override QPaintEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QPaintEvent(this);
+        return cpp_new_copy!QPaintEvent(cast() this);
     }
 
     pragma(inline, true) final ref const(QRect) rect() const { return m_rect; }
@@ -792,8 +780,7 @@ public:
     ~this();
 
     override QMoveEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QMoveEvent(this);
+        return cpp_new_copy!QMoveEvent(cast() this);
     }
 
     pragma(inline, true) final ref const(QPoint) pos() const { return m_pos; }
@@ -818,8 +805,7 @@ public:
     ~this();
 
     override QExposeEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QExposeEvent(this);
+        return cpp_new_copy!QExposeEvent(cast() this);
     }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
@@ -851,8 +837,7 @@ public:
     ~this();
 
     override QPlatformSurfaceEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QPlatformSurfaceEvent(this);
+        return cpp_new_copy!QPlatformSurfaceEvent(cast() this);
     }
 
     pragma(inline, true) final SurfaceEventType surfaceEventType() const { return m_surfaceEventType; }
@@ -876,8 +861,7 @@ public:
     ~this();
 
     override QResizeEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QResizeEvent(this);
+        return cpp_new_copy!QResizeEvent(cast() this);
     }
 
     pragma(inline, true) final ref const(QSize) size() const { return m_size; }
@@ -952,8 +936,7 @@ public:
     ~this();
 
     override QContextMenuEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QContextMenuEvent(this);
+        return cpp_new_copy!QContextMenuEvent(cast() this);
     }
 
     pragma(inline, true) final int x() const { return m_pos.x(); }
@@ -1035,8 +1018,7 @@ public:
     ~this();
 
     override QInputMethodEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QInputMethodEvent(this);
+        return cpp_new_copy!QInputMethodEvent(cast() this);
     }
 
     final void setCommitString(ref const(QString) commitString, int replaceFrom = 0, int replaceLength = 0);
@@ -1084,8 +1066,7 @@ public:
     ~this();
 
     override QInputMethodQueryEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QInputMethodQueryEvent(this);
+        return cpp_new_copy!QInputMethodQueryEvent(cast() this);
     }
 
     final /+ Qt:: +/qt.core.namespace.InputMethodQueries queries() const { return m_queries; }
@@ -1131,8 +1112,7 @@ public:
     ~this();
 
     override QDropEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QDropEvent(this);
+        return cpp_new_copy!QDropEvent(cast() this);
     }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
@@ -1190,8 +1170,7 @@ public:
     ~this();
 
     override QDragMoveEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QDragMoveEvent(this);
+        return cpp_new_copy!QDragMoveEvent(cast() this);
     }
 
     pragma(inline, true) final QRect answerRect() const { return m_rect; }
@@ -1248,8 +1227,7 @@ public:
     ~this();
 
     override QHelpEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QHelpEvent(this);
+        return cpp_new_copy!QHelpEvent(cast() this);
     }
 
     pragma(inline, true) final int x() const { return m_pos.x(); }
@@ -1282,8 +1260,7 @@ public:
     ~this();
 
     override QStatusTipEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QStatusTipEvent(this);
+        return cpp_new_copy!QStatusTipEvent(cast() this);
     }
 
     pragma(inline, true) final QString tip() /*const*/ { return m_tip; }
@@ -1308,8 +1285,7 @@ public:
     ~this();
 
     override QWhatsThisClickedEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QWhatsThisClickedEvent(this);
+        return cpp_new_copy!QWhatsThisClickedEvent(cast() this);
     }
 
     pragma(inline, true) final QString href() /*const*/ { return m_href; }
@@ -1334,8 +1310,7 @@ public:
     ~this();
 
     override QActionEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QActionEvent(this);
+        return cpp_new_copy!QActionEvent(cast() this);
     }
 
     pragma(inline, true) final QAction action() /*const*/ { return m_action; }
@@ -1362,8 +1337,7 @@ public:
     ~this();
 
     override QFileOpenEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QFileOpenEvent(this);
+        return cpp_new_copy!QFileOpenEvent(cast() this);
     }
 
     pragma(inline, true) final QString file() /*const*/ { return m_file; }
@@ -1390,8 +1364,7 @@ public:
     ~this();
 
     override QToolBarChangeEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QToolBarChangeEvent(this);
+        return cpp_new_copy!QToolBarChangeEvent(cast() this);
     }
 
     pragma(inline, true) final bool toggle() const { return m_toggle; }
@@ -1416,8 +1389,7 @@ public:
     ~this();
 
     override QShortcutEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QShortcutEvent(this);
+        return cpp_new_copy!QShortcutEvent(cast() this);
     }
 
     pragma(inline, true) final ref const(QKeySequence) key() const { return m_sequence; }
@@ -1445,8 +1417,7 @@ public:
     ~this();
 
     override QWindowStateChangeEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QWindowStateChangeEvent(this);
+        return cpp_new_copy!QWindowStateChangeEvent(cast() this);
     }
 
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.WindowStates oldState() const { return m_oldStates; }
@@ -1493,8 +1464,7 @@ public:
     ~this();
 
     override QTouchEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QTouchEvent(this);
+        return cpp_new_copy!QTouchEvent(cast() this);
     }
 
     pragma(inline, true) final QObject target() /*const*/ { return m_target; }
@@ -1538,8 +1508,7 @@ public:
     ~this();
 
     override QScrollPrepareEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QScrollPrepareEvent(this);
+        return cpp_new_copy!QScrollPrepareEvent(cast() this);
     }
 
     final QPointF startPos() const { return m_startPos; }
@@ -1582,8 +1551,7 @@ public:
     ~this();
 
     override QScrollEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QScrollEvent(this);
+        return cpp_new_copy!QScrollEvent(cast() this);
     }
 
     final QPointF contentPos() const { return m_contentPos; }
@@ -1610,8 +1578,7 @@ public:
     ~this();
 
     override QScreenOrientationChangeEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QScreenOrientationChangeEvent(this);
+        return cpp_new_copy!QScreenOrientationChangeEvent(cast() this);
     }
 
     final QScreen screen() /*const*/ { return m_screen; }
@@ -1635,8 +1602,7 @@ public:
     /+ explicit +/this(/+ Qt:: +/qt.core.namespace.ApplicationState state);
 
     override QApplicationStateChangeEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QApplicationStateChangeEvent(this);
+        return cpp_new_copy!QApplicationStateChangeEvent(cast() this);
     }
 
     final /+ Qt:: +/qt.core.namespace.ApplicationState applicationState() const { return m_applicationState; }

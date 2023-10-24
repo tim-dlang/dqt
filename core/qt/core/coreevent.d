@@ -421,8 +421,7 @@ public:
     final int timerId() const { return id; }
 
     override QTimerEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QTimerEvent(this);
+        return cpp_new_copy!QTimerEvent(cast() this);
     }/+ ; +/
 
 protected:
@@ -449,8 +448,7 @@ public:
     final bool removed() const { return type() == Type.ChildRemoved; }
 
     override QChildEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QChildEvent(this);
+        return cpp_new_copy!QChildEvent(cast() this);
     }/+ ; +/
 
 protected:
@@ -474,8 +472,7 @@ public:
     pragma(inline, true) final QByteArray propertyName() const { return *cast(QByteArray*)&n; }
 
     override QDynamicPropertyChangeEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QDynamicPropertyChangeEvent(this);
+        return cpp_new_copy!QDynamicPropertyChangeEvent(cast() this);
     }/+ ; +/
 
 private:
@@ -497,8 +494,7 @@ public:
     final int loopLevel() const { return level; }
 
     override QDeferredDeleteEvent clone() const {
-        import core.stdcpp.new_;
-        return cpp_new!QDeferredDeleteEvent(this);
+        return cpp_new_copy!QDeferredDeleteEvent(cast() this);
     }/+ ; +/
 
 private:

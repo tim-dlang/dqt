@@ -1259,3 +1259,13 @@ package template IsInQtPackage(alias S)
 {
     enum IsInQtPackage = packageName!(S).length > 3 && packageName!(S)[0..3] == "qt.";
 }
+
+T cpp_new_copy(T, S)(S source) if (is(T == class))
+{
+    import core.stdcpp.new_: __cpp_new;
+    import core.lifetime : copyEmplace;
+
+    T mem = cast(T)__cpp_new(__traits(classInstanceSize, T));
+    copyEmplace(source, mem);
+    return mem;
+}
