@@ -475,7 +475,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
         alias StaticMetacallFunction = ExternCPPFunc!(void function(QObject , QMetaObject.Call, int, void** ));
         StaticMetacallFunction static_metacall;
         const(SuperData)* relatedMetaObjects;
-        const(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface)*/+ const +/ * metaTypes;
+        const(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface*)* metaTypes;
         void* extradata; //reserved for future use
     }Data d;
 
