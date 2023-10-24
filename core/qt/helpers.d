@@ -231,7 +231,7 @@ T const_cast(T, S)(S x)
 
 private template globalInitVarImpl(T)
 {
-    immutable __gshared T globalInitVar = immutable(T).init;
+    __gshared T globalInitVar = T.init;
     shared static this()
     {
         (*cast(T*)&globalInitVar).rawConstructor;
@@ -243,7 +243,7 @@ template globalInitVar(T)
     static if(__traits(hasMember, T, "rawConstructor"))
     {
         version(Windows)
-            alias globalInitVar = globalInitVarImpl!T.globalInitVar;
+            alias globalInitVar = const(globalInitVarImpl!T.globalInitVar);
         else
             static assert(0, "globalInitVar!"~T.stringof~" needs complex construction");
     }
