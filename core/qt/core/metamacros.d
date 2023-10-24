@@ -414,7 +414,7 @@ template MetaObjectImpl(T)
             version(Windows)
             {
                 pragma(mangle, T.staticMetaObject.mangleof)
-                extern(C++) static __gshared const(QMetaObject) staticMetaObject = { {
+                extern(C++) static __gshared QMetaObject staticMetaObject = { {
                     null,
                     &stringdata,
                     meta_data.ptr,
@@ -425,7 +425,7 @@ template MetaObjectImpl(T)
                 shared static this()
                 {
                     // Necessary for Windows, because staticMetaObject from a DLL can't be used directly.
-                    (cast(QMetaObject*)&staticMetaObject).d.superdata.direct = &BaseClassesTuple!(T)[0].staticMetaObject;
+                    staticMetaObject.d.superdata.direct = &BaseClassesTuple!(T)[0].staticMetaObject;
                 }
             }
             else
@@ -449,7 +449,10 @@ template MetaObjectImpl(T)
 enum Q_OBJECT_D = q{
     public:
         static import qt.core.objectdefs;
-        extern(C++) extern static __gshared const(qt.core.objectdefs.QMetaObject) staticMetaObject;
+        version(Windows)
+            extern(C++) extern static __gshared qt.core.objectdefs.QMetaObject staticMetaObject;
+        else
+            extern(C++) extern static __gshared const(qt.core.objectdefs.QMetaObject) staticMetaObject;
         extern(C++) override const(qt.core.objectdefs.QMetaObject)* metaObject() const
         {
             import qt.core.object;
