@@ -21,10 +21,6 @@ jobs:
         platform: [ linux64, win64, osx64 ]
         dc: [ dmd-latest, dmd-2.100.0, ldc-latest, dmd-master ]
 
-        exclude:
-          - { platform: win64, dc: ldc-latest }
-          - { platform: osx64, dc: ldc-latest }
-
         include:
           - platform: linux64
             os: ubuntu-22.04

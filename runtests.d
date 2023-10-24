@@ -258,7 +258,10 @@ int main(string[] args)
         dmdArgs ~= "-w";
         dmdArgs ~= "-m" ~ model;
         dmdArgs ~= test.name;
-        version(Windows){}else
+        version(Windows){}
+        else version(OSX)
+            dmdArgs ~= "-L-lc++";
+        else
             dmdArgs ~= "-L-lstdc++";
         foreach_reverse(m; test.qtModules)
         {
