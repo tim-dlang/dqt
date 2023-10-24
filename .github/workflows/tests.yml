@@ -22,7 +22,6 @@ jobs:
         exclude:
           - { platform: win32, dc: ldc-latest }
           - { platform: win64, dc: ldc-latest }
-          - { platform: osx64, dc: ldc-latest }
 
         include:
           - platform: linux64
