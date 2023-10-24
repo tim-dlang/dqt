@@ -296,6 +296,7 @@ int main(string[] args)
             else version(OSX)
             {
                 dmdArgs ~= "-L-F" ~ qtPath ~ "/lib";
+                dmdArgs ~= "-L-headerpad_max_install_names";
             }
             else
             {
