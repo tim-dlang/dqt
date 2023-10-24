@@ -634,7 +634,7 @@ public:
 
         static assert(Signal.Members.length == 1);
 
-        auto signal = &memberFunctionExternDeclaration!(Signal.Members[0]);
+        auto signal = getMemberFunctionAddress!(Signal.Members[0]);
 
         auto slotObj = cpp_new!(DQtStaticSlotObject!(Parameters!Dg))(dg);
 
@@ -737,9 +737,9 @@ public:
         static assert(overloadIndices[0] != size_t.max);
         static assert(overloadIndices[1] != size_t.max);
 
-        auto signal = &memberFunctionExternDeclaration!(Signal.Members[overloadIndices[0]]);
+        auto signal = getMemberFunctionAddress!(Signal.Members[overloadIndices[0]]);
 
-        auto slot = &memberFunctionExternDeclaration!(Slot.Members[overloadIndices[1]]);
+        auto slot = getMemberFunctionAddress!(Slot.Members[overloadIndices[1]]);
 
         alias UsedParams = Parameters!(Signal.Members[overloadIndices[0]])[0..Parameters!(Slot.Members[overloadIndices[1]]).length];
 
