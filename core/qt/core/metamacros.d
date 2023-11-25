@@ -22,38 +22,56 @@ import qt.helpers;
 import std.traits;
 import std.meta;
 
-static if(!defined!"Q_MOC_OUTPUT_REVISION")
-{
-/+ #define Q_MOC_OUTPUT_REVISION 68 +/
-}
-static if(false)
-{
-/+ # define QT_ANNOTATE_CLASS(type, ...)
+/+ #ifndef Q_MOC_OUTPUT_REVISION
+#define Q_MOC_OUTPUT_REVISION 68
+#endif
+
+// The following macros can be defined by tools that understand Qt
+// to have the information from the macro.
+#ifndef QT_ANNOTATE_CLASS
+# define QT_ANNOTATE_CLASS(type, ...)
+#endif
+#ifndef QT_ANNOTATE_CLASS2
 # define QT_ANNOTATE_CLASS2(type, a1, a2)
+#endif
+#ifndef QT_ANNOTATE_FUNCTION
 # define QT_ANNOTATE_FUNCTION(x)
+#endif
+#ifndef QT_ANNOTATE_ACCESS_SPECIFIER
 # define QT_ANNOTATE_ACCESS_SPECIFIER(x)
-#  define QT_NO_EMIT +/
-}
-/+ #     define slots Q_SLOTS
+#endif
+
+// The following macros are our "extensions" to C++
+// They are used, strictly speaking, only by the moc.
+
+#ifndef Q_MOC_RUN +/
+/+ #ifndef QT_NO_META_MACROS
+# if defined(QT_NO_KEYWORDS)
+#  define QT_NO_EMIT
+# else
+#   ifndef QT_NO_SIGNALS_SLOTS_KEYWORDS
+#     define slots Q_SLOTS
 #     define signals Q_SIGNALS
+#   endif
+# endif
 # define Q_SLOTS QT_ANNOTATE_ACCESS_SPECIFIER(qt_slot)
 # define Q_SIGNALS public QT_ANNOTATE_ACCESS_SPECIFIER(qt_signal)
 # define Q_PRIVATE_SLOT(d, signature) QT_ANNOTATE_CLASS2(qt_private_slot, d, signature)
 # define Q_EMIT
-# define emit +/
-static if(!defined!"Q_CLASSINFO")
-{
-/+ # define Q_CLASSINFO(name, value) +/
-}
-/+ #define Q_PLUGIN_METADATA(x) QT_ANNOTATE_CLASS(qt_plugin_metadata, x)
+#ifndef QT_NO_EMIT
+# define emit
+#endif
+#ifndef Q_CLASSINFO
+# define Q_CLASSINFO(name, value)
+#endif
+#define Q_PLUGIN_METADATA(x) QT_ANNOTATE_CLASS(qt_plugin_metadata, x)
 #define Q_INTERFACES(x) QT_ANNOTATE_CLASS(qt_interfaces, x)
 #define Q_PROPERTY(...) QT_ANNOTATE_CLASS(qt_property, __VA_ARGS__)
-#define Q_PRIVATE_PROPERTY(d, text) QT_ANNOTATE_CLASS2(qt_private_property, d, text) +/
-static if(!defined!"Q_REVISION")
-{
-/+ # define Q_REVISION(...) +/
-}
-/+ #define Q_OVERRIDE(text) QT_ANNOTATE_CLASS(qt_override, text)
+#define Q_PRIVATE_PROPERTY(d, text) QT_ANNOTATE_CLASS2(qt_private_property, d, text)
+#ifndef Q_REVISION
+# define Q_REVISION(...)
+#endif
+#define Q_OVERRIDE(text) QT_ANNOTATE_CLASS(qt_override, text)
 #define QDOC_PROPERTY(text) QT_ANNOTATE_CLASS(qt_qdoc_property, text)
 #define Q_ENUMS(x) QT_ANNOTATE_CLASS(qt_enums, x)
 #define Q_FLAGS(x) QT_ANNOTATE_CLASS(qt_enums, x)
@@ -71,9 +89,12 @@ static if(!defined!"Q_REVISION")
 #define Q_INVOKABLE  QT_ANNOTATE_FUNCTION(qt_invokable)
 #define Q_SIGNAL QT_ANNOTATE_FUNCTION(qt_signal)
 #define Q_SLOT QT_ANNOTATE_FUNCTION(qt_slot)
-#define Q_MOC_INCLUDE(...) QT_ANNOTATE_CLASS(qt_moc_include, __VA_ARGS__) +/
+#define Q_MOC_INCLUDE(...) QT_ANNOTATE_CLASS(qt_moc_include, __VA_ARGS__)
+#endif +/ // QT_NO_META_MACROS
+
 version(QT_NO_TRANSLATION){}else
 {
+// full set of tr functions
 /+ #  define QT_TR_FUNCTIONS \
     static inline QString tr(const char *s, const char *c = nullptr, int n = -1) \
         { return staticMetaObject.tr(s, c, n); } +/
@@ -83,28 +104,36 @@ enum QT_TR_FUNCTIONS =
 }
 version(QT_NO_TRANSLATION)
 {
+// inherit the ones from QObject
 /+ # define QT_TR_FUNCTIONS +/
 }
-static if(false)
-{
-/+ #define QT_TR_FUNCTIONS
-# define Q_DECL_HIDDEN_STATIC_METACALL +/
-}
-/+ # define Q_DECL_HIDDEN_STATIC_METACALL Q_DECL_HIDDEN +/
-static if(false)
-{
-/+ #  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_CLANG("-Winconsistent-missing-override") +/
-}
-/+ #  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_GCC("-Wsuggest-override") +/
-static if(false)
-{
-/+ #  define Q_OBJECT_NO_OVERRIDE_WARNING +/
-}
-/+ #  define Q_OBJECT_NO_ATTRIBUTES_WARNING    QT_WARNING_DISABLE_GCC("-Wattributes") +/
-static if(false)
-{
-/+ #  define Q_OBJECT_NO_ATTRIBUTES_WARNING +/
-}
+
+/+ #ifdef Q_CLANG_QDOC
+#define QT_TR_FUNCTIONS
+#endif
+
+#if defined(Q_CC_INTEL)
+// Cannot redefine the visibility of a method in an exported class
+# define Q_DECL_HIDDEN_STATIC_METACALL
+#else
+# define Q_DECL_HIDDEN_STATIC_METACALL Q_DECL_HIDDEN
+#endif
+
+#if defined(Q_CC_CLANG) && Q_CC_CLANG >= 306
+#  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_CLANG("-Winconsistent-missing-override")
+#elif defined(Q_CC_GNU) && !defined(Q_CC_INTEL) && Q_CC_GNU >= 501
+#  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_GCC("-Wsuggest-override")
+#else
+#  define Q_OBJECT_NO_OVERRIDE_WARNING
+#endif
+
+#if defined(Q_CC_GNU) && !defined(Q_CC_INTEL) && Q_CC_GNU >= 600
+#  define Q_OBJECT_NO_ATTRIBUTES_WARNING    QT_WARNING_DISABLE_GCC("-Wattributes")
+#else
+#  define Q_OBJECT_NO_ATTRIBUTES_WARNING
+#endif +/
+
+/* qmake ignore Q_OBJECT */
 /+ #define Q_OBJECT \
 public: \
     QT_WARNING_PUSH \
@@ -570,15 +599,21 @@ q{    public:
         /+ QT_WARNING_POP
         QT_ANNOTATE_CLASS(qt_qgadget, "") +/
         /*end*/
+
+/* qmake ignore Q_NAMESPACE_EXPORT */
 /+ #define Q_NAMESPACE_EXPORT(...) \
     extern __VA_ARGS__ const QMetaObject staticMetaObject; \
     QT_ANNOTATE_CLASS(qt_qnamespace, "") \
     /*end*/
+
+/* qmake ignore Q_NAMESPACE */
 #define Q_NAMESPACE Q_NAMESPACE_EXPORT() \
     /*end*/ +/
-static if(false)
-{
-/+ #define slots slots
+
+/+ #endif +/ // QT_NO_META_MACROS
+
+/+ #else // Q_MOC_RUN
+#define slots slots
 #define signals signals
 #define Q_SLOTS Q_SLOTS
 #define Q_SIGNALS Q_SIGNALS
@@ -596,12 +631,15 @@ static if(false)
 #define Q_FLAGS(x) Q_FLAGS(x)
 #define Q_ENUM(x) Q_ENUM(x)
 #define Q_FLAGS(x) Q_FLAGS(x)
+ /* qmake ignore Q_OBJECT */
 #define Q_OBJECT Q_OBJECT
+ /* qmake ignore Q_OBJECT */
 #define Q_OBJECT_FAKE Q_OBJECT_FAKE
+ /* qmake ignore Q_GADGET */
 #define Q_GADGET Q_GADGET
 #define Q_SCRIPTABLE Q_SCRIPTABLE
 #define Q_INVOKABLE Q_INVOKABLE
 #define Q_SIGNAL Q_SIGNAL
-#define Q_SLOT Q_SLOT +/
-}
+#define Q_SLOT Q_SLOT
+#endif +/ //Q_MOC_RUN
 

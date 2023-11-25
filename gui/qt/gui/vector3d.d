@@ -34,6 +34,9 @@ version(QT_NO_VECTOR3D)
 {
 extern(C++, class) struct QVector3D;
 }
+/+ #if 0
+#pragma qt_sync_stop_processing
+#endif +/
 version(QT_NO_VECTOR3D){}else
 {
 

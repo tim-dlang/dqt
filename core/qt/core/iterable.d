@@ -18,7 +18,7 @@ import qt.core.taggedpointer;
 import qt.helpers;
 
 extern(C++, "QtPrivate") {
-    class QConstPreservingPointer(Type, Storage)
+    extern(C++, class) struct QConstPreservingPointer(Type, Storage)
     {
     private:
         enum Tag : bool { Const, Mutable }
@@ -64,12 +64,12 @@ extern(C++, "QtPrivate") {
 
         /+ QConstPreservingPointer() = default; +/
 
-        final const(Type)* constPointer() const
+        const(Type)* constPointer() const
         {
             return reinterpret_cast!(const(Type)*)(m_pointer.data());
         }
 
-        final Type* mutablePointer() const
+        Type* mutablePointer() const
         {
             return m_pointer.tag() == Tag.Mutable ? reinterpret_cast!(Type*)(m_pointer.data()) : null;
         }
@@ -133,21 +133,21 @@ public:
 
 
 /// Binding for C++ class [QBaseIterator](https://doc.qt.io/qt-6/qbaseiterator.html).
-class QBaseIterator(Container)
+extern(C++, class) struct QBaseIterator(Container)
 {
 private:
-    ValueClass!(/+ QtPrivate:: +/QConstPreservingPointer!(ValueClass!(QIterable!(Container)))) m_iterable;
+    /+ QtPrivate:: +/QConstPreservingPointer!(QIterable!(Container)) m_iterable;
     void* m_iterator = null;
 
 protected:
     /+ QBaseIterator() = default; +/
-    this(const(QIterable!(Container)) iterable, void* iterator)
+    this(const(QIterable!(Container))* iterable, void* iterator)
     {
         this.m_iterable = iterable;
         this.m_iterator = iterator;
     }
 
-    this(QIterable!(Container) iterable, void* iterator)
+    this(QIterable!(Container)* iterable, void* iterator)
     {
         this.m_iterable = iterable;
         this.m_iterator = iterator;
@@ -159,12 +159,13 @@ protected:
         other.m_iterator = nullptr;
     } +/
 
-    /+this(ref const(ValueClass!(QBaseIterator)) other)
+    @disable this(this);
+    this(ref const(QBaseIterator) other)
     {
         this.m_iterable = other.m_iterable;
 
         initIterator(other.m_iterator);
-    }+/
+    }
 
     ~this() { clearIterator(); }
 
@@ -179,27 +180,27 @@ protected:
         return *this;
     } +/
 
-    /+final ref ValueClass!(QBaseIterator) operator =(ref const(ValueClass!(QBaseIterator)) other)
+    /+ref QBaseIterator operator =(ref const(QBaseIterator) other)
     {
-        if (this != &other) {
+        if (&this != &other) {
             clearIterator();
             m_iterable = other.m_iterable;
             initIterator(other.m_iterator);
         }
-        return *this;
+        return this;
     }+/
 
-    final QIterable!(Container) mutableIterable() const
+    QIterable!(Container)* mutableIterable() const
     {
         return m_iterable.mutablePointer();
     }
 
-    final const(QIterable!(Container)) constIterable() const
+    const(QIterable!(Container))* constIterable() const
     {
         return m_iterable.constPointer();
     }
 
-/+    final void initIterator(const(void)* copy)
+/+    void initIterator(const(void)* copy)
     {
         if (!copy)
             return;
@@ -212,7 +213,7 @@ protected:
         }
     }+/
 
-    final void clearIterator()
+    void clearIterator()
     {
         if (!m_iterator)
             return;
@@ -223,9 +224,9 @@ protected:
     }
 
 public:
-    final void* mutableIterator() { return m_iterator; }
-    final const(void)* constIterator() const { return m_iterator; }
-    final Container metaContainer() const { return constIterable().m_metaContainer; }
+    void* mutableIterator() { return m_iterator; }
+    const(void)* constIterator() const { return m_iterator; }
+    Container metaContainer() const { return constIterable().m_metaContainer; }
 }
 
 struct QIterator(Container)
@@ -235,7 +236,7 @@ struct QIterator(Container)
 public:
     alias difference_type = qsizetype;
 
-    /+ explicit +/this(QIterable!(Container) iterable, void* iterator)
+    /+ explicit +/this(QIterable!(Container)* iterable, void* iterator)
     {
         this.QBaseIterator!(Container) = typeof(this.QBaseIterator!(Container))(iterable, iterator);
 
@@ -260,7 +261,7 @@ public:
 
     /+QIterator operator ++(int)
     {
-        QIterable!(Container) iterable = this.mutableIterable();
+        QIterable!(Container)* iterable = this.mutableIterable();
         const(Container) metaContainer = this.metaContainer();
         auto result = QIterator(iterable, metaContainer.begin(iterable.mutableIterable()));
         metaContainer.copyIterator(result.mutableIterator(), this.constIterator());
@@ -276,7 +277,7 @@ public:
 
     /+QIterator operator --(int)
     {
-        QIterable!(Container) iterable = this.mutableIterable();
+        QIterable!(Container)* iterable = this.mutableIterable();
         const(Container) metaContainer = this.metaContainer();
         auto result = QIterator(iterable, metaContainer.begin(iterable.mutableIterable()));
         metaContainer.copyIterator(result.mutableIterator(), this.constIterator());
@@ -298,7 +299,7 @@ public:
 
     QIterator opBinary(string op)(qsizetype j) const if(op == "+")
     {
-        QIterable!(Container) iterable = this.mutableIterable();
+        QIterable!(Container)* iterable = this.mutableIterable();
         const(Container) metaContainer = this.metaContainer();
         auto result = QIterator(iterable, metaContainer.begin(iterable.mutableIterable()));
         metaContainer.copyIterator(result.mutableIterator(), this.constIterator());
@@ -308,7 +309,7 @@ public:
 
     QIterator opBinary(string op)(qsizetype j) const if(op == "-")
     {
-        QIterable!(Container) iterable = this.mutableIterable();
+        QIterable!(Container)* iterable = this.mutableIterable();
         const(Container) metaContainer = this.metaContainer();
         auto result = QIterator(iterable, metaContainer.begin(iterable.mutableIterable()));
         metaContainer.copyIterator(result.mutableIterator(), this.constIterator());
@@ -331,7 +332,7 @@ struct QConstIterator(Container)
 public:
     alias difference_type = qsizetype;
 
-    /+ explicit +/this(const(QIterable!(Container)) iterable, void* iterator)
+    /+ explicit +/this(const(QIterable!(Container))* iterable, void* iterator)
     {
         this.QBaseIterator!(Container) = typeof(this.QBaseIterator!(Container))(iterable, iterator);
     }
@@ -425,14 +426,14 @@ public:
 }
 
 /// Binding for C++ class [QIterable](https://doc.qt.io/qt-6/qiterable.html).
-class QIterable(Container)
+extern(C++, class) struct QIterable(Container)
 {
 private:
     /+ friend class QBaseIterator<Container>; +/
 
 protected:
     uint m_revision = 0;
-    ValueClass!(/+ QtPrivate:: +/QConstPreservingPointer!(void, quint16)) m_iterable;
+    /+ QtPrivate:: +/QConstPreservingPointer!(void, quint16) m_iterable;
     Container m_metaContainer;
 
 public:
@@ -469,50 +470,50 @@ public:
         this.m_metaContainer = metaContainer;
     }
 
-    final bool canInputIterate() const
+    bool canInputIterate() const
     {
         return m_metaContainer.hasInputIterator();
     }
 
-    final bool canForwardIterate() const
+    bool canForwardIterate() const
     {
         return m_metaContainer.hasForwardIterator();
     }
 
-    final bool canReverseIterate() const
+    bool canReverseIterate() const
     {
         return m_metaContainer.hasBidirectionalIterator();
     }
 
-    final bool canRandomAccessIterate() const
+    bool canRandomAccessIterate() const
     {
         return m_metaContainer.hasRandomAccessIterator();
     }
 
-    final const(void)* constIterable() const { return m_iterable.constPointer(); }
-    final void* mutableIterable() { return m_iterable.mutablePointer(); }
+    const(void)* constIterable() const { return m_iterable.constPointer(); }
+    void* mutableIterable() { return m_iterable.mutablePointer(); }
 
-    final QConstIterator!(Container) constBegin() const
+    QConstIterator!(Container) constBegin() const
     {
-        return QConstIterator(this, m_metaContainer.constBegin(constIterable()));
+        return QConstIterator(&this, m_metaContainer.constBegin(constIterable()));
     }
 
-    final QConstIterator!(Container) constEnd() const
+    QConstIterator!(Container) constEnd() const
     {
-        return QConstIterator(this, m_metaContainer.constEnd(constIterable()));
+        return QConstIterator(&this, m_metaContainer.constEnd(constIterable()));
     }
 
-    final QIterator!(Container) mutableBegin()
+    QIterator!(Container) mutableBegin()
     {
-        return QIterator(this, m_metaContainer.begin(mutableIterable()));
+        return QIterator(&this, m_metaContainer.begin(mutableIterable()));
     }
 
-    final QIterator!(Container) mutableEnd()
+    QIterator!(Container) mutableEnd()
     {
-        return QIterator(this, m_metaContainer.end(mutableIterable()));
+        return QIterator(&this, m_metaContainer.end(mutableIterable()));
     }
 
-    final qsizetype size() const
+    qsizetype size() const
     {
         const(void)* container = constIterable();
         if (m_metaContainer.hasSize())
@@ -528,7 +529,7 @@ public:
         return size;
     }
 
-    final Container metaContainer() const
+    Container metaContainer() const
     {
         return m_metaContainer;
     }/+ ; +/

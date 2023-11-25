@@ -52,8 +52,10 @@ extern(C++, "Qt") {
 }
 
 /// Binding for C++ class [QPropertyData](https://doc.qt.io/qt-6/qpropertydata.html).
-class QPropertyData(T) : QUntypedPropertyData
+extern(C++, class) struct QPropertyData(T)
 {
+    public QUntypedPropertyData base0;
+    alias base0 this;
 protected:
     /+ mutable +/ T val = T();
 private:
@@ -78,9 +80,9 @@ public:
     }
     /+ ~QPropertyData() = default; +/
 
-    final parameter_type valueBypassingBindings() const { return val; }
-    final void setValueBypassingBindings(parameter_type v) { val = v; }
-    final void setValueBypassingBindings(rvalue_ref v) { val = /+ std:: +/move(v); }*/
+    parameter_type valueBypassingBindings() const { return val; }
+    void setValueBypassingBindings(parameter_type v) { val = v; }
+    void setValueBypassingBindings(rvalue_ref v) { val = /+ std:: +/move(v); }*/
 }
 
 struct /+ Q_CORE_EXPORT +/ QPropertyBindingSourceLocation
@@ -290,15 +292,17 @@ private:
 }
 
 /// Binding for C++ class [QPropertyChangeHandler](https://doc.qt.io/qt-6/qpropertychangehandler.html).
-class /+ [[nodiscard]] +/ QPropertyChangeHandler(Functor) : QPropertyObserver
+extern(C++, class) struct /+ [[nodiscard]] +/ QPropertyChangeHandler(Functor)
 {
+    public QPropertyObserver base0;
+    alias base0 this;
 private:
     Functor m_handler;
 public:
 /*    this(Functor handler)
     {
-        super([](QPropertyObserver *self, QUntypedPropertyData *) {
-                      auto This = static_cast!(QPropertyChangeHandler!(Functor))(self);
+        this.base0 = QPropertyObserver([](QPropertyObserver *self, QUntypedPropertyData *) {
+                      auto This = static_cast!(QPropertyChangeHandler!(Functor)*)(self);
                       This.m_handler();
                   });
         this.m_handler = handler;
@@ -307,8 +311,8 @@ public:
     /+ template<typename Property, typename = typename Property::InheritsQUntypedPropertyData> +/
     /+ this(Property,)(ref const(Property) property, Functor handler)
     {
-        super([](QPropertyObserver *self, QUntypedPropertyData *) {
-                      auto This = static_cast!(QPropertyChangeHandler!(Functor))(self);
+        this.base0 = QPropertyObserver([](QPropertyObserver *self, QUntypedPropertyData *) {
+                      auto This = static_cast!(QPropertyChangeHandler!(Functor)*)(self);
                       This.m_handler();
                   });
         this.m_handler = handler;
@@ -494,14 +498,14 @@ public:
     }
 
     /+ template<typename Functor> +/
-    ValueClass!(QPropertyChangeHandler!(Functor)) onValueChanged(Functor)(Functor f)
+    QPropertyChangeHandler!(Functor) onValueChanged(Functor)(Functor f)
     {
         static assert(/+ std:: +/is_invocable_v!(Functor), "Functor callback must be callable without any parameters");
         return QPropertyChangeHandler!(Functor)(this, f);
     }
 
     /+ template<typename Functor> +/
-    ValueClass!(QPropertyChangeHandler!(Functor)) subscribe(Functor)(Functor f)
+    QPropertyChangeHandler!(Functor) subscribe(Functor)(Functor f)
     {
         static assert(/+ std:: +/is_invocable_v!(Functor), "Functor callback must be callable without any parameters");
         f();
@@ -560,7 +564,7 @@ struct QBindableInterface
     extern(D) static immutable quintptr MetaTypeAccessorFlag = 0x1;
 }
 
-class QBindableInterfaceForProperty(Property, )
+extern(C++, class) struct QBindableInterfaceForProperty(Property, )
 {
 private:
     alias T = UnknownType!q{Property.value_type};
@@ -697,15 +701,15 @@ public:
     }
 
     /+ template<typename Functor> +/
-    /+ ValueClass!(QPropertyChangeHandler!(Functor)) onValueChanged(Functor)(Functor f) const
+    /+ QPropertyChangeHandler!(Functor) onValueChanged(Functor)(Functor f) const
     {
-        auto handler = ValueClass!(QPropertyChangeHandler!(Functor))(f);
+        auto handler = QPropertyChangeHandler!(Functor)(f);
         observe(&handler);
         return handler;
     } +/
 
     /+ template<typename Functor> +/
-    /+ ValueClass!(QPropertyChangeHandler!(Functor)) subscribe(Functor)(Functor f) const
+    /+ QPropertyChangeHandler!(Functor) subscribe(Functor)(Functor f) const
     {
         f();
         return onValueChanged(f);
@@ -963,13 +967,13 @@ public:
     }
 
     /+ template<typename Functor> +/
-    ValueClass!(QPropertyChangeHandler!(Functor)) onValueChanged(Functor)(Functor f)
+    QPropertyChangeHandler!(Functor) onValueChanged(Functor)(Functor f)
     {
         return QBindable!(T)(aliasedProperty(), iface).onValueChanged(f);
     }
 
     /+ template<typename Functor> +/
-    ValueClass!(QPropertyChangeHandler!(Functor)) subscribe(Functor)(Functor f)
+    QPropertyChangeHandler!(Functor) subscribe(Functor)(Functor f)
     {
         return QBindable!(T)(aliasedProperty(), iface).subscribe(f);
     }
@@ -1171,14 +1175,14 @@ public:
     }
 
     /+ template<typename Functor> +/
-    ValueClass!(QPropertyChangeHandler!(Functor)) onValueChanged(Functor)(Functor f)
+    QPropertyChangeHandler!(Functor) onValueChanged(Functor)(Functor f)
     {
         static assert(/+ std:: +/is_invocable_v!(Functor), "Functor callback must be callable without any parameters");
         return QPropertyChangeHandler!(Functor)(this, f);
     }
 
     /+ template<typename Functor> +/
-    ValueClass!(QPropertyChangeHandler!(Functor)) subscribe(Functor)(Functor f)
+    QPropertyChangeHandler!(Functor) subscribe(Functor)(Functor f)
     {
         static assert(/+ std:: +/is_invocable_v!(Functor), "Functor callback must be callable without any parameters");
         f();
@@ -1265,17 +1269,19 @@ private:
     QT_WARNING_POP +/
 
 /// Binding for C++ class [QObjectComputedProperty](https://doc.qt.io/qt-6/qobjectcomputedproperty.html).
-/+class QObjectComputedProperty(Class, T, auto Offset, auto Getter) : QUntypedPropertyData
+/+extern(C++, class) struct QObjectComputedProperty(Class, T, auto Offset, auto Getter)
 {
+    public QUntypedPropertyData base0;
+    alias base0 this;
 private:
-    final Class* owner()
+    Class* owner()
     {
-        char* that = reinterpret_cast!(char*)(this);
+        char* that = reinterpret_cast!(char*)(&this);
         return reinterpret_cast!(Class*)(that - /+ QtPrivate:: +//+ detail:: +/qt.core.propertyprivate.getOffset(Offset));
     }
-    final const(Class)* owner() const
+    const(Class)* owner() const
     {
-        char* that = const_cast!(char*)(reinterpret_cast!(const(char)*)(this));
+        char* that = const_cast!(char*)(reinterpret_cast!(const(char)*)(&this));
         return reinterpret_cast!(Class*)(that - /+ QtPrivate:: +//+ detail:: +/qt.core.propertyprivate.getOffset(Offset));
     }
 
@@ -1285,11 +1291,11 @@ public:
 
     /+ QObjectComputedProperty() = default; +/
 
-    final parameter_type value() const
+    parameter_type value() const
     {
         import qt.core.object;
 
-        qGetBindingStorage(owner()).registerDependency(this);
+        qGetBindingStorage(owner()).registerDependency(&this);
         return (owner()->*Getter)();
     }
 
@@ -1302,27 +1308,27 @@ public:
             return;
     } +/
 
-    final parameter_type opUnary(string op)() const if(op == "*")
+    parameter_type opUnary(string op)() const if(op == "*")
     {
         return value();
     }
 
-    /+final auto opCast(T : parameter_type)() const
+    /+auto opCast(T : parameter_type)() const
     {
         return value();
     }+/
 
-    final bool hasBinding() const { return false; }
+    bool hasBinding() const { return false; }
 
     /+ template<typename Functor> +/
-    final ValueClass!(QPropertyChangeHandler!(Functor)) onValueChanged(Functor)(Functor f)
+    QPropertyChangeHandler!(Functor) onValueChanged(Functor)(Functor f)
     {
         static assert(/+ std:: +/is_invocable_v!(Functor), "Functor callback must be callable without any parameters");
-        return QPropertyChangeHandler!(Functor)(*this, f);
+        return QPropertyChangeHandler!(Functor)(this, f);
     }
 
     /+ template<typename Functor> +/
-    final ValueClass!(QPropertyChangeHandler!(Functor)) subscribe(Functor)(Functor f)
+    QPropertyChangeHandler!(Functor) subscribe(Functor)(Functor f)
     {
         static assert(/+ std:: +/is_invocable_v!(Functor), "Functor callback must be callable without any parameters");
         f();
@@ -1330,30 +1336,30 @@ public:
     }
 
     /+ template<typename Functor> +/
-    final QPropertyNotifier addNotifier(Functor)(Functor f)
+    QPropertyNotifier addNotifier(Functor)(Functor f)
     {
         static assert(/+ std:: +/is_invocable_v!(Functor), "Functor callback must be callable without any parameters");
-        return QPropertyNotifier(*this, f);
+        return QPropertyNotifier(this, f);
     }
 
-    final ref /+ QtPrivate:: +/qt.core.propertyprivate.QPropertyBindingData bindingData() const
+    ref /+ QtPrivate:: +/qt.core.propertyprivate.QPropertyBindingData bindingData() const
     {
         import qt.core.bindingstorage;
         import qt.core.object;
 
         auto* storage = const_cast!(QBindingStorage*)(qGetBindingStorage(owner()));
-        return *storage.bindingData(const_cast!(QObjectComputedProperty)(this), true);
+        return *storage.bindingData(const_cast!(QObjectComputedProperty*)(&this), true);
     }
 
-    final void notify() {
+    void notify() {
         import qt.core.bindingstorage;
         import qt.core.object;
 
         // computed property can't store a binding, so there's nothing to mark
         auto* storage = const_cast!(QBindingStorage*)(qGetBindingStorage(owner()));
-        auto bd = storage.bindingData(const_cast!(QObjectComputedProperty)(this), false);
+        auto bd = storage.bindingData(const_cast!(QObjectComputedProperty*)(&this), false);
         if (bd)
-            bd.notifyObservers(this, qGetBindingStorage(owner()));
+            bd.notifyObservers(&this, qGetBindingStorage(owner()));
     }
 }+/
 

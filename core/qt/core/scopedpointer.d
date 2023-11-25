@@ -215,16 +215,19 @@ private:
 /+this(ref const(QScopedPointer));+//+ref QScopedPointer operator =(ref const(QScopedPointer));+/}
 
 /// Binding for C++ class [QScopedArrayPointer](https://doc.qt.io/qt-6/qscopedarraypointer.html).
-class QScopedArrayPointer(T, Cleanup ) : QScopedPointer!(T, Cleanup)
+extern(C++, class) struct QScopedArrayPointer(T, Cleanup )
 {
+    public QScopedPointer!(T, Cleanup) base0;
+    alias base0 this;
 private:
     /+ template <typename Ptr> +/
     /+ using if_same_type = typename std::enable_if<std::is_same<typename std::remove_cv<T>::type, Ptr>::value, bool>::type; +/
 public:
-    pragma(inline, true) this()
+    @disable this();
+    /+pragma(inline, true) this()
     {
         this.QScopedPointer!(T, Cleanup) = null;
-    }
+    }+/
 
     /+ template <typename D, if_same_type<D> = true> +/
     /+ explicit +/this(D,)(D* p)
@@ -232,12 +235,12 @@ public:
         this.QScopedPointer!(T, Cleanup) = p;
     }
 
-    pragma(inline, true) final ref T opIndex(int i)
+    pragma(inline, true) ref T opIndex(int i)
     {
         return this.d[i];
     }
 
-    pragma(inline, true) final ref const(T) opIndex(int i) const
+    pragma(inline, true) ref const(T) opIndex(int i) const
     {
         return this.d[i];
     }
@@ -262,7 +265,8 @@ private:
     }
 
     /+ Q_DISABLE_COPY(QScopedArrayPointer) +/
-}
+@disable this(this);
+/+this(ref const(QScopedArrayPointer));+//+ref QScopedArrayPointer operator =(ref const(QScopedArrayPointer));+/}
 
 /+ #if QT_DEPRECATED_SINCE(6, 2)
 template <typename T, typename Cleanup>

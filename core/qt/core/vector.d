@@ -19,4 +19,10 @@ import qt.helpers;
 
 /// Binding for C++ class [QVector](https://doc.qt.io/qt-6/qvector.html).
 alias QVector(T) = QList!(T);
+/+ #if !defined(QT_NO_JAVA_STYLE_ITERATORS)
+template<typename T>
+using QMutableVectorIterator = QMutableListIterator<T>;
+template<typename T>
+using QVectorIterator = QListIterator<T>;
+#endif +/
 

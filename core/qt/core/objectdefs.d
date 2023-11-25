@@ -120,12 +120,14 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-class QArgument(T): QGenericArgument
+extern(C++, class) struct QArgument(T)
 {
+    public QGenericArgument base0;
+    alias base0 this;
 public:
     pragma(inline, true) this(const(char)* aName, ref const(T) aData)
     {
-        super(aName, static_cast!(const(void)*)(&aData));
+        this.base0 = QGenericArgument(aName, static_cast!(const(void)*)(&aData));
     }
 }
 /+ template <class T>
@@ -138,12 +140,14 @@ public:
 }; +/
 
 
-class QReturnArgument(T): QGenericReturnArgument
+extern(C++, class) struct QReturnArgument(T)
 {
+    public QGenericReturnArgument base0;
+    alias base0 this;
 public:
     pragma(inline, true) this(const(char)* aName, ref T aData)
     {
-        super(aName, static_cast!(void*)(&aData));
+        this.base0 = QGenericReturnArgument(aName, static_cast!(void*)(&aData));
     }
 }
 

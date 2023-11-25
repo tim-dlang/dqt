@@ -1712,7 +1712,7 @@ struct QSequentialIterableConvertFunctor
 
 struct QSequentialIterableMutableViewFunctor(From)
 {
-    /+ValueClass!(QIterable!(QMetaSequence)) operator ()(ref From f) const
+    /+QIterable!(QMetaSequence) operator ()(ref From f) const
     {
         return QIterable!(QMetaSequence)(QMetaSequence.fromContainer!(From)(), &f);
     }+/
@@ -1753,7 +1753,7 @@ struct QAssociativeIterableConvertFunctor
 
 struct QAssociativeIterableMutableViewFunctor(From)
 {
-    /+ValueClass!(QIterable!(QMetaAssociation)) operator ()(ref From f) const
+    /+QIterable!(QMetaAssociation) operator ()(ref From f) const
     {
         return QIterable!(QMetaAssociation)(QMetaAssociation.fromContainer!(From)(), &f);
     }+/
@@ -2299,7 +2299,7 @@ struct QDataStreamOperatorForType <T, false>
     static constexpr QMetaTypeInterface::DataStreamInFn dataStreamIn = nullptr;
 }; +/
 
-class QMetaTypeForType(S)
+extern(C++, class) struct QMetaTypeForType(S)
 {
 public:
     extern(D) static immutable name = typenameHelper!(S)();

@@ -736,7 +736,7 @@ public:
 }
 
 /// Binding for C++ class [QVariantPointer](https://doc.qt.io/qt-6/qvariantpointer.html).
-class QVariantPointer(Pointer)
+extern(C++, class) struct QVariantPointer(Pointer)
 {
 private:
     const(Pointer)* m_pointer = null;
@@ -746,8 +746,8 @@ public:
     {
         this.m_pointer = pointer;
     }
-    //final QVariantRef!(Pointer) opUnary(string op)() const if(op == "*") { return QVariantRef!(Pointer)(cast(QVariantRef && )(m_pointer)); }
-    /+final Pointer operator ->() const { return *m_pointer; }+/
+    //QVariantRef!(Pointer) opUnary(string op)() const if(op == "*") { return QVariantRef!(Pointer)(cast(QVariantRef && )(m_pointer)); }
+    /+Pointer operator ->() const { return *m_pointer; }+/
 }
 
 pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) v)

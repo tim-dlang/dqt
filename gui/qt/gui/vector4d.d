@@ -32,6 +32,9 @@ version(QT_NO_VECTOR4D)
 {
 extern(C++, class) struct QVector4D;
 }
+/+ #if 0
+#pragma qt_sync_stop_processing
+#endif +/
 version(QT_NO_VECTOR4D){}else
 {
 

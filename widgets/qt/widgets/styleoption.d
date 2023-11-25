@@ -1309,12 +1309,23 @@ public:
 
 /+
 /// Binding for C++ class [QStyleHintReturnMask](https://doc.qt.io/qt-6/qstylehintreturnmask.html).
-class /+ Q_WIDGETS_EXPORT +/ QStyleHintReturnMask : QStyleHintReturn {
+extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleHintReturnMask {
+    public QStyleHintReturn base0;
+    alias base0 this;
 public:
     enum StyleOptionType { Type = HintReturnType.SH_Mask }
     enum StyleOptionVersion { Version = 1 }
 
-    this();
+    @disable this();
+    pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
+    void rawConstructor();
+    static typeof(this) create()
+    {
+        typeof(this) r = typeof(this).init;
+        r.rawConstructor();
+        return r;
+    }
+
     ~this();
 
     QRegion region;
@@ -1322,12 +1333,23 @@ public:
 }
 
 /// Binding for C++ class [QStyleHintReturnVariant](https://doc.qt.io/qt-6/qstylehintreturnvariant.html).
-class /+ Q_WIDGETS_EXPORT +/ QStyleHintReturnVariant : QStyleHintReturn {
+extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QStyleHintReturnVariant {
+    public QStyleHintReturn base0;
+    alias base0 this;
 public:
     enum StyleOptionType { Type = HintReturnType.SH_Variant }
     enum StyleOptionVersion { Version = 1 }
 
-    this();
+    @disable this();
+    pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
+    void rawConstructor();
+    static typeof(this) create()
+    {
+        typeof(this) r = typeof(this).init;
+        r.rawConstructor();
+        return r;
+    }
+
     ~this();
 
     QVariant variant;
