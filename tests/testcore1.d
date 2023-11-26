@@ -66,14 +66,14 @@ public:
     }
 
 /+ signals +/public:
-    @QSignal final void signalVoid(){mixin(Q_SIGNAL_IMPL_D);}
-    @QSignal final void signalInt(int i){mixin(Q_SIGNAL_IMPL_D);}
-    @QSignal final void signalInt3(int x, int y, int z){mixin(Q_SIGNAL_IMPL_D);}
-    @QSignal final void signalDouble(double d){mixin(Q_SIGNAL_IMPL_D);}
-    @QSignal final void signalString(ref const(QString) s){mixin(Q_SIGNAL_IMPL_D);}
-    @QSignal final void signalListInt(ref const(QList!(int)) l){mixin(Q_SIGNAL_IMPL_D);}
-    @QSignal final void signalVectorInt(ref const(QVector!(int)) v){mixin(Q_SIGNAL_IMPL_D);}
-    @QSignal final void signalPointerInt(int* p){mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalVoid() {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalInt(int i) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalInt3(int x, int y, int z) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalDouble(double d) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalString(ref const(QString) s) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalListInt(ref const(QList!(int)) l) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalVectorInt(ref const(QVector!(int)) v) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalPointerInt(int* p) {mixin(Q_SIGNAL_IMPL_D);}
 
 public /+ slots +/:
     @QSlot final void onSignalVoid()
@@ -99,13 +99,13 @@ public /+ slots +/:
     @QSlot final void onSignalListInt(ref const(QList!(int)) l)
     {
         lastStr = QString("QList<int>");
-        for(int i=0; i<l.size(); i++)
+        for (int i=0; i<l.size(); i++)
             lastStr ~= " " ~ QString.number(l[i]);
     }
     @QSlot final void onSignalVectorInt(ref const(QVector!(int)) v)
     {
         lastStr = QString("QVector<int>");
-        for(int i=0; i<v.size(); i++)
+        for (int i=0; i<v.size(); i++)
             lastStr ~= " " ~ QString.number(v[i]);
     }
     @QSlot final void onSignalPointerInt(int* p)
@@ -353,11 +353,11 @@ void compareVariant(ref const(QVariant) v, const(char)* expected)
 
     char[(v). sizeof * 3 + 1] buffer;
     size_t pos = 0;
-    for(size_t i=0; i<(v). sizeof; i++)
+    for (size_t i=0; i<(v). sizeof; i++)
     {
         snprintf(&buffer[pos], 3, "%02X", (cast(ubyte*)&v)[i]);
         pos += 2;
-        if(i % 4 == 3 && i + 1 < (v). sizeof)
+        if (i % 4 == 3 && i + 1 < (v). sizeof)
         {
             buffer[pos] = ' ';
             pos++;
@@ -365,16 +365,16 @@ void compareVariant(ref const(QVariant) v, const(char)* expected)
     }
     buffer[pos] = 0;
     bool different = false;
-    for(size_t i=0; i<pos; i++)
+    for (size_t i=0; i<pos; i++)
     {
-        if(!expected[i])
+        if (!expected[i])
             break;
-        if(expected[i] == '?')
+        if (expected[i] == '?')
             continue;
-        if(buffer[i] != expected[i])
+        if (buffer[i] != expected[i])
             different = true;
     }
-    if(different)
+    if (different)
     {
         printf("expected: %s\n", expected);
         printf("got:      %s\n", buffer.ptr);
@@ -385,27 +385,27 @@ void compareVariant(ref const(QVariant) v, const(char)* expected)
 unittest
 {
     QVariant v;
-    static if((void*).sizeof == 8)
+    static if ((void*).sizeof == 8)
         compareVariant(v, "00000000 00000000 00000000 00000000 00000000 00000000 02000000 00000000");
     else
         compareVariant(v, "00000000 00000000 00000000 02000000");
     v = QVariant(5);
-    static if((void*).sizeof == 8)
+    static if ((void*).sizeof == 8)
         compareVariant(v, "05000000 00000000 00000000 00000000 00000000 00000000 ???????? ????????");
     else
         compareVariant(v, "05000000 00000000 00000000 ????????");
     v = QVariant(100.0f);
-    static if((void*).sizeof == 8)
+    static if ((void*).sizeof == 8)
         compareVariant(v, "0000C842 00000000 00000000 00000000 00000000 00000000 ???????? ????????");
     else
         compareVariant(v, "0000C842 00000000 00000000 ????????");
     v = QVariant(100.0);
-    static if((void*).sizeof == 8)
+    static if ((void*).sizeof == 8)
         compareVariant(v, "00000000 00005940 00000000 00000000 00000000 00000000 ???????? ????????");
     else
         compareVariant(v, "00000000 00005940 00000000 ????????");
     v = QVariant(cast(int)'A');
-    static if((void*).sizeof == 8)
+    static if ((void*).sizeof == 8)
         compareVariant(v, "41000000 00000000 00000000 00000000 00000000 00000000 ???????? ????????");
     else
         compareVariant(v, "41000000 00000000 00000000 ????????");
@@ -418,7 +418,7 @@ unittest
     size_t changeCount = 0;
     {
         scope QObject dummy = new QObject;
-        QObject.connect(QCoreApplication.instance().signal!"applicationNameChanged", dummy, (){
+        QObject.connect(QCoreApplication.instance().signal!"applicationNameChanged", dummy, () {
             changeCount++;
         });
         assert(changeCount == 0);
@@ -430,7 +430,7 @@ unittest
     assert(changeCount == 1);
 
     scope QObject dummy = new QObject;
-    QMetaObject.Connection connection = QObject.connect(QCoreApplication.instance().signal!"applicationNameChanged", dummy, (){
+    QMetaObject.Connection connection = QObject.connect(QCoreApplication.instance().signal!"applicationNameChanged", dummy, () {
         changeCount++;
     });
     assert(changeCount == 1);

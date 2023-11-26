@@ -43,7 +43,7 @@ import qt.helpers;
 struct HINSTANCE__;
 /+ Q_DECLARE_HANDLE(HINSTANCE) +/alias HINSTANCE = HINSTANCE__*;
 /+ #endif +/
-static if(!defined!"HMODULE")
+static if (!defined!"HMODULE")
 {
 alias HMODULE = HINSTANCE;
 }
@@ -90,7 +90,7 @@ struct HRGN__;
 struct HMONITOR__;
 /+ Q_DECLARE_HANDLE(HMONITOR) +/alias HMONITOR = HMONITOR__*;
 /+ #endif +/
-static if(!defined!"HGLRC")
+static if (!defined!"HGLRC")
 {
 struct HGLRC__;
 /+ Q_DECLARE_HANDLE(HGLRC) +/alias HGLRC = HGLRC__*;

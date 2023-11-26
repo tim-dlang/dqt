@@ -19,7 +19,7 @@ import qt.core.math;
 import qt.helpers;
 
 extern(C++, "QtPrivate") {
-    quint8 nextByteSize(quint8 bits) { return cast(quint8)((bits + 7) / 8); }
+    quint8 nextByteSize(quint8 bits) { return cast(quint8) ((bits + 7) / 8); }
 
     struct TagInfo(T)
     {
@@ -68,7 +68,7 @@ public:
             "QTaggedPointer<T, Tag>::setTag"},q{ "Tag is larger than allowed by number of available tag bits"})));
     }
 
-    ref Type opUnary(string op)() const/+ noexcept+/ if(op == "*")
+    ref Type opUnary(string op)() const/+ noexcept+/ if (op == "*")
     {
         (mixin(Q_ASSERT(q{data()})));
         return *data();

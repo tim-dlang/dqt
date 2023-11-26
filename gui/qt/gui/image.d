@@ -321,13 +321,13 @@ public:
 
     // Platform specific conversion functions
 /+ #if defined(Q_OS_DARWIN) || defined(Q_QDOC) +/
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ CGImageRef toCGImage() const Q_DECL_CF_RETURNS_RETAINED; +/
     }
 /+ #endif
 #if defined(Q_OS_WIN) || defined(Q_QDOC) +/
-    static if((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
     {
         HBITMAP toHBITMAP() const;
         HICON toHICON(ref const(QImage) mask /+ = {} +/) const;

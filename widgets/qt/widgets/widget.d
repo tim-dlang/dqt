@@ -309,10 +309,10 @@ alias RenderFlags = QFlags!(RenderFlag);
 /+ #if QT_DEPRECATED_SINCE(6, 1) +/
     /+ QT_DEPRECATED_VERSION_X_6_1("Use isWindow()") +/
         pragma(inline, true) final bool isTopLevel() const
-    { return (cast(bool)(windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
+    { return (cast(bool) (windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
 /+ #endif +/
     pragma(inline, true) final bool isWindow() const
-    { return (cast(bool)(windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
+    { return (cast(bool) (windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
 
     pragma(inline, true) final bool isModal() const
     { return data.window_modality != /+ Qt:: +/qt.core.namespace.WindowModality.NonModal; }
@@ -722,7 +722,7 @@ public:
     final void setAttribute(/+ Qt:: +/qt.core.namespace.WidgetAttribute, bool on = true);
     pragma(inline, true) final bool testAttribute(/+ Qt:: +/qt.core.namespace.WidgetAttribute attribute) const
     {
-        if (attribute < cast(int)(8*uint.sizeof))
+        if (attribute < cast(int) (8*uint.sizeof))
             return (data.widget_attributes & (1<<attribute)) != 0;
         return testAttribute_helper(attribute);
     }
@@ -878,7 +878,7 @@ private:
     }
     /+ friend class QWidgetEffectSourcePrivate; +/
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ friend bool qt_mac_is_metal(const QWidget *w); +/
     }

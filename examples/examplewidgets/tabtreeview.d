@@ -48,12 +48,15 @@ public:
 
     final RandomTreeItem* getItem(ref const(QModelIndex) index) const
     {
-        if (index.isValid()) {
+        if (index.isValid())
+        {
             RandomTreeItem* parentItem = static_cast!(RandomTreeItem*)(index.internalPointer());
-            if (parentItem) {
+            if (parentItem)
+            {
                 int row = index.row();
-                if(row >= 0 && row < parentItem.childs.length()) {
-                    if(!parentItem.childs[row])
+                if (row >= 0 && row < parentItem.childs.length())
+                {
+                    if (!parentItem.childs[row])
                         parentItem.childs[row] = createItem(parentItem, row);
                     return parentItem.childs[row];
                 }
@@ -68,8 +71,8 @@ public:
     extern(C++) override int rowCount(ref const(QModelIndex) parent = globalInitVar!QModelIndex) const
     {
         RandomTreeItem* item = getItem(parent);
-        if(item)
-            return cast(int)item.childs.length();
+        if (item)
+            return cast(int) item.childs.length();
         return 0;
     }
     extern(C++) override QVariant data(ref const(QModelIndex) index, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) const
@@ -81,7 +84,7 @@ public:
             return QVariant();
 
         RandomTreeItem* item = getItem(index);
-        if(index.column())
+        if (index.column())
             return QVariant(item.desc);
         else
             return QVariant(item.name);
@@ -102,7 +105,8 @@ public:
             return false;
 
         RandomTreeItem* item = getItem(index);
-        if (item && index.column() == 1) {
+        if (item && index.column() == 1)
+        {
             item.desc = value.toString();
             QVector!(int) roles = QVector!(int).create();
             roles.append(qt.core.namespace.ItemDataRole.DisplayRole);
@@ -129,16 +133,17 @@ public:
         if (!index.isValid())
             return QModelIndex();
         RandomTreeItem* parentItem = static_cast!(RandomTreeItem*)(index.internalPointer());
-        if(parentItem)
+        if (parentItem)
             return createIndex(parentItem.row, 0, parentItem.parent);
         return QModelIndex();
     }
     extern(C++) override QVariant headerData(int section, /+ Qt:: +/qt.core.namespace.Orientation orientation, int role) const
     {
-        if (orientation == /+ Qt:: +/qt.core.namespace.Orientation.Horizontal && role == /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) {
-            if(section == 0)
+        if (orientation == /+ Qt:: +/qt.core.namespace.Orientation.Horizontal && role == /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole)
+        {
+            if (section == 0)
                 return QVariant(QString("Name"));
-            else if(section == 1)
+            else if (section == 1)
                 return QVariant(QString("Description"));
         }
 

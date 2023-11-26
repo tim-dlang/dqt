@@ -133,7 +133,7 @@ alias MatchOptions = QFlags!(MatchOption);
     }
     /+ Q_DECLARE_FLAGS(WildcardConversionOptions, WildcardConversionOption) +/
 alias WildcardConversionOptions = QFlags!(WildcardConversionOption);
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         static QString escape(ref const(QString) str)
         {
@@ -255,7 +255,7 @@ public:
     QString captured(int nth = 0) const;
     QStringView capturedView(int nth = 0) const;
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString captured(ref const(QString) name) const
         { return captured(QStringView(name)); }
@@ -270,7 +270,7 @@ public:
     qsizetype capturedLength(int nth = 0) const;
     qsizetype capturedEnd(int nth = 0) const;
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         qsizetype capturedStart(ref const(QString) name) const
         { return capturedStart(QStringView(name)); }
@@ -376,13 +376,13 @@ public:
         ++this;
     }+/
 
-    ref const(QRegularExpressionMatch) opUnary(string op)() const if(op == "*")
+    ref const(QRegularExpressionMatch) opUnary(string op)() const if (op == "*")
     {
         (mixin(Q_ASSERT_X(q{!m_atEnd},q{ Q_FUNC_INFO},q{ "operator* called on an iterator already at the end"})));
         return m_currentMatch;
     }
 
-    ref QRegularExpressionMatchIteratorRangeBasedForIterator opUnary(string op)() if(op == "++")
+    ref QRegularExpressionMatchIteratorRangeBasedForIterator opUnary(string op)() if (op == "++")
     {
         (mixin(Q_ASSERT_X(q{!m_atEnd},q{ Q_FUNC_INFO},q{ "operator++ called on an iterator already at the end"})));
         if (m_matchIterator.hasNext()) {

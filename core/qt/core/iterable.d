@@ -113,15 +113,15 @@ public:
 
     /+bool operator ==(ref const(QTaggedIterator) o) const { return Iterator.operator==(o); }+/
     /+bool operator !=(ref const(QTaggedIterator) o) const { return Iterator.operator!=(o); }+/
-    ref QTaggedIterator opUnary(string op)() if(op == "++") { Iterator.operator++(); return this; }
+    ref QTaggedIterator opUnary(string op)() if (op == "++") { Iterator.operator++(); return this; }
     /+QTaggedIterator operator ++(int x) { return QTaggedIterator(Iterator.operator++(x)); }+//+ ; +/
-    ref QTaggedIterator opUnary(string op)() if(op == "--") { Iterator.operator--(); return this; }
+    ref QTaggedIterator opUnary(string op)() if (op == "--") { Iterator.operator--(); return this; }
     /+QTaggedIterator operator --(int x) { return QTaggedIterator(Iterator.operator--(x)); }+//+ ; +/
-    ref QTaggedIterator opOpAssign(string op)(qsizetype j) if(op == "+") { Iterator.operator+=(j); return this; }
-    ref QTaggedIterator opOpAssign(string op)(qsizetype j) if(op == "-")  { Iterator.operator-=(j); return this; }
-    QTaggedIterator opBinary(string op)(qsizetype j) const if(op == "+") { return QTaggedIterator(Iterator.operator+(j)); }
-    QTaggedIterator opBinary(string op)(qsizetype j) const if(op == "-") { return QTaggedIterator(Iterator.operator-(j)); }
-    qsizetype opBinary(string op)(ref const(QTaggedIterator) j) const if(op == "-") { return Iterator.operator-(j); }
+    ref QTaggedIterator opOpAssign(string op)(qsizetype j) if (op == "+") { Iterator.operator+=(j); return this; }
+    ref QTaggedIterator opOpAssign(string op)(qsizetype j) if (op == "-")  { Iterator.operator-=(j); return this; }
+    QTaggedIterator opBinary(string op)(qsizetype j) const if (op == "+") { return QTaggedIterator(Iterator.operator+(j)); }
+    QTaggedIterator opBinary(string op)(qsizetype j) const if (op == "-") { return QTaggedIterator(Iterator.operator-(j)); }
+    qsizetype opBinary(string op)(ref const(QTaggedIterator) j) const if (op == "-") { return Iterator.operator-(j); }
 
     /+bool operator <(ref const(QTaggedIterator) j) { return operator-(j) < 0; }+/
     /+bool operator >=(ref const(QTaggedIterator) j) { return !operator<(j); }+/
@@ -253,7 +253,7 @@ public:
         return !this.metaContainer().compareIterator(this.constIterator(), o.constIterator());
     }+/
 
-    ref QIterator opUnary(string op)() if(op == "++")
+    ref QIterator opUnary(string op)() if (op == "++")
     {
         this.metaContainer().advanceIterator(this.mutableIterator(), 1);
         return this;
@@ -269,7 +269,7 @@ public:
         return result;
     }+/
 
-    ref QIterator opUnary(string op)() if(op == "--")
+    ref QIterator opUnary(string op)() if (op == "--")
     {
         this.metaContainer().advanceIterator(this.mutableIterator(), -1);
         return this;
@@ -285,19 +285,19 @@ public:
         return result;
     }+/
 
-    ref QIterator opOpAssign(string op)(qsizetype j) if(op == "+")
+    ref QIterator opOpAssign(string op)(qsizetype j) if (op == "+")
     {
         this.metaContainer().advanceIterator(this.mutableIterator(), j);
         return this;
     }
 
-    ref QIterator opOpAssign(string op)(qsizetype j) if(op == "-")
+    ref QIterator opOpAssign(string op)(qsizetype j) if (op == "-")
     {
         this.metaContainer().advanceIterator(this.mutableIterator(), -j);
         return this;
     }
 
-    QIterator opBinary(string op)(qsizetype j) const if(op == "+")
+    QIterator opBinary(string op)(qsizetype j) const if (op == "+")
     {
         QIterable!(Container)* iterable = this.mutableIterable();
         const(Container) metaContainer = this.metaContainer();
@@ -307,7 +307,7 @@ public:
         return result;
     }
 
-    QIterator opBinary(string op)(qsizetype j) const if(op == "-")
+    QIterator opBinary(string op)(qsizetype j) const if (op == "-")
     {
         QIterable!(Container)* iterable = this.mutableIterable();
         const(Container) metaContainer = this.metaContainer();
@@ -317,7 +317,7 @@ public:
         return result;
     }
 
-    qsizetype opBinary(string op)(ref const(QIterator) j) const if(op == "-")
+    qsizetype opBinary(string op)(ref const(QIterator) j) const if (op == "-")
     {
         return this.metaContainer().diffIterator(this.constIterator(), j.constIterator());
     }
@@ -349,7 +349,7 @@ public:
                     this.constIterator(), o.constIterator());
     }+/
 
-    ref QConstIterator opUnary(string op)() if(op == "++")
+    ref QConstIterator opUnary(string op)() if (op == "++")
     {
         this.metaContainer().advanceConstIterator(this.mutableIterator(), 1);
         return this;
@@ -365,7 +365,7 @@ public:
         return result;
     }+/
 
-    ref QConstIterator opUnary(string op)() if(op == "--")
+    ref QConstIterator opUnary(string op)() if (op == "--")
     {
         this.metaContainer().advanceConstIterator(this.mutableIterator(), -1);
         return this;
@@ -381,19 +381,19 @@ public:
         return result;
     }+/
 
-    ref QConstIterator opOpAssign(string op)(qsizetype j) if(op == "+")
+    ref QConstIterator opOpAssign(string op)(qsizetype j) if (op == "+")
     {
         this.metaContainer().advanceConstIterator(this.mutableIterator(), j);
         return this;
     }
 
-    ref QConstIterator opOpAssign(string op)(qsizetype j) if(op == "-")
+    ref QConstIterator opOpAssign(string op)(qsizetype j) if (op == "-")
     {
         this.metaContainer().advanceConstIterator(this.mutableIterator(), -j);
         return this;
     }
 
-    QConstIterator opBinary(string op)(qsizetype j) const if(op == "+")
+    QConstIterator opBinary(string op)(qsizetype j) const if (op == "+")
     {
         const(Container) metaContainer = this.metaContainer();
         auto result = QConstIterator(
@@ -404,7 +404,7 @@ public:
         return result;
     }
 
-    QConstIterator opBinary(string op)(qsizetype j) const if(op == "-")
+    QConstIterator opBinary(string op)(qsizetype j) const if (op == "-")
     {
         const(Container) metaContainer = this.metaContainer();
         auto result = QConstIterator(this.constIterable(), metaContainer.constBegin(
@@ -414,7 +414,7 @@ public:
         return result;
     }
 
-    qsizetype opBinary(string op)(ref const(QConstIterator) j) const if(op == "-")
+    qsizetype opBinary(string op)(ref const(QConstIterator) j) const if (op == "-")
     {
         return this.metaContainer().diffIterator(this.constIterator(), j.constIterator());
     }

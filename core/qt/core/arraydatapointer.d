@@ -94,7 +94,7 @@ public:
 
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QArrayDataPointer) +/
 
-    /*ref DataOps opUnary(string op)()/+ noexcept+/ if(op == "*")
+    /*ref DataOps opUnary(string op)()/+ noexcept+/ if (op == "*")
     {
         return *static_cast!(DataOps*)(&this);
     }*/
@@ -104,7 +104,7 @@ public:
         return static_cast!(DataOps*)(&this);
     }+/
 
-    /*ref const(DataOps) opUnary(string op)() const/+ noexcept+/ if(op == "*")
+    /*ref const(DataOps) opUnary(string op)() const/+ noexcept+/ if (op == "*")
     {
         return *static_cast!(const(DataOps)*)(&this);
     }*/
@@ -327,7 +327,7 @@ public:
     qsizetype constAllocatedCapacity() const/+ noexcept+/ { return d ? d.constAllocatedCapacity() : 0; }
     void ref_()/+ noexcept+/ { if (d) d.ref_(); }
     bool deref()/+ noexcept+/ { return !d || d.deref(); }
-    bool isMutable() const/+ noexcept+/ { return cast(bool)(d); }
+    bool isMutable() const/+ noexcept+/ { return cast(bool) (d); }
     bool isShared() const/+ noexcept+/ { return !d || d.isShared(); }
     bool isSharedWith(ref const(QArrayDataPointer) other) const/+ noexcept+/ { return d && d == other.d; }
     bool needsDetach() const/+ noexcept+/ { return !d || d.needsDetach(); }

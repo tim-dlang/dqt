@@ -119,7 +119,7 @@ public:
     }
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    this(Char)(const(Char)* str, qsizetype len) if(is(const(Char) == const(wchar)) || is(const(Char) == const(char)) || is(const(Char) == const(QChar)))
+    this(Char)(const(Char)* str, qsizetype len) if (is(const(Char) == const(wchar)) || is(const(Char) == const(char)) || is(const(Char) == const(QChar)))
     {
         this.m_data = typeof(this.m_data)(str);
         (mixin(Q_ASSERT(q{len >= 0})));

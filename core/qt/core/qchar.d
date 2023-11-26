@@ -60,7 +60,7 @@ private:
     char ch;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-static if(false)
+static if (false)
 {
 /+ #define QCHAR_MAYBE_IMPLICIT Q_IMPLICIT +/
 }
@@ -104,7 +104,7 @@ public:
     }
     /+ QCHAR_MAYBE_IMPLICIT +/this(uchar c, uchar r)/+ noexcept+/
     {
-        this.ucs = cast(wchar)((r << 8) | c);
+        this.ucs = cast(wchar) ((r << 8) | c);
     }
     this(short rc)/+ noexcept+/
     {
@@ -113,7 +113,7 @@ public:
     /+ QCHAR_MAYBE_IMPLICIT +/this(uint rc)/+ noexcept+/
     {
         this.ucs = ((){ (mixin(Q_ASSERT(q{rc <= 0xffff})));
-        return cast(wchar)(rc);
+        return cast(wchar) (rc);
         }());
     }
     /+ QCHAR_MAYBE_IMPLICIT +/this(int rc)/+ noexcept+/
@@ -122,7 +122,7 @@ public:
     }
     this(SpecialCharacter s)/+ noexcept+/
     {
-        this.ucs = cast(wchar)(s);
+        this.ucs = cast(wchar) (s);
     }
     this(QLatin1Char ch)/+ noexcept+/
     {
@@ -133,11 +133,11 @@ public:
         this.ucs = ch;
     }
 /+ #if defined(Q_OS_WIN) || defined(Q_CLANG_QDOC) +/
-    /+ static if((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    /+ static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
     {
         this(wchar_t ch)/+ noexcept+/
         {
-            this.ucs = cast(wchar)(ch);
+            this.ucs = cast(wchar) (ch);
         }
     } +/
 /+ #endif
@@ -167,7 +167,7 @@ public:
         }/+ ; +/
         return requiresSurrogates(c) ? R([QChar.highSurrogate(c),
                                           QChar.lowSurrogate(c)]) :
-                                       R([cast(wchar)(c), '\0']) ;
+                                       R([cast(wchar) (c), '\0']) ;
     }
 
     // Unicode information
@@ -497,23 +497,23 @@ public:
     pragma(inline, true) JoiningType joiningType() const/+ noexcept+/ { return QChar.joiningType(ucs); }
     pragma(inline, true) ubyte  combiningClass() const/+ noexcept+/ { return QChar.combiningClass(ucs); }
 
-    pragma(inline, true) QChar mirroredChar() const/+ noexcept+/ { return QChar(cast(uchar)(QChar.mirroredChar(ucs))); }
+    pragma(inline, true) QChar mirroredChar() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.mirroredChar(ucs))); }
     pragma(inline, true) bool hasMirrored() const/+ noexcept+/ { return QChar.hasMirrored(ucs); }
 
     QString decomposition() const;
     pragma(inline, true) Decomposition decompositionTag() const/+ noexcept+/ { return QChar.decompositionTag(ucs); }
 
     pragma(inline, true) int digitValue() const/+ noexcept+/ { return QChar.digitValue(ucs); }
-    pragma(inline, true) QChar toLower() const/+ noexcept+/ { return QChar(cast(uchar)(QChar.toLower(ucs))); }
-    pragma(inline, true) QChar toUpper() const/+ noexcept+/ { return QChar(cast(uchar)(QChar.toUpper(ucs))); }
-    pragma(inline, true) QChar toTitleCase() const/+ noexcept+/ { return QChar(cast(uchar)(QChar.toTitleCase(ucs))); }
-    pragma(inline, true) QChar toCaseFolded() const/+ noexcept+/ { return QChar(cast(uchar)(QChar.toCaseFolded(ucs))); }
+    pragma(inline, true) QChar toLower() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.toLower(ucs))); }
+    pragma(inline, true) QChar toUpper() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.toUpper(ucs))); }
+    pragma(inline, true) QChar toTitleCase() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.toTitleCase(ucs))); }
+    pragma(inline, true) QChar toCaseFolded() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.toCaseFolded(ucs))); }
 
     pragma(inline, true) Script script() const/+ noexcept+/ { return QChar.script(ucs); }
 
     pragma(inline, true) UnicodeVersion unicodeVersion() const/+ noexcept+/ { return QChar.unicodeVersion(ucs); }+/
 
-    pragma(inline, true) char toLatin1() const/+ noexcept+/ { return ucs > 0xff ? '\0' : cast(char)(ucs); }
+    pragma(inline, true) char toLatin1() const/+ noexcept+/ { return ucs > 0xff ? '\0' : cast(char) (ucs); }
     pragma(inline, true) wchar unicode() const/+ noexcept+/ { return ucs; }
     pragma(inline, true) ref wchar unicode() return /+ noexcept+/ { return ucs; }
 
@@ -541,8 +541,8 @@ public:
 
     pragma(inline, true) uchar cell() const/+ noexcept+/ { return cast(uchar)(ucs & 0xff); }
     pragma(inline, true) uchar row() const/+ noexcept+/ { return cast(uchar)((ucs>>8)&0xff); }
-    pragma(inline, true) void setCell(uchar acell)/+ noexcept+/ { ucs = cast(wchar)((ucs & 0xff00) + acell); }
-    pragma(inline, true) void setRow(uchar arow)/+ noexcept+/ { ucs = cast(wchar)((wchar(arow)<<8) + (ucs&0xff)); }
+    pragma(inline, true) void setCell(uchar acell)/+ noexcept+/ { ucs = cast(wchar) ((ucs & 0xff00) + acell); }
+    pragma(inline, true) void setRow(uchar arow)/+ noexcept+/ { ucs = cast(wchar) ((wchar(arow)<<8) + (ucs&0xff)); }
 
     pragma(inline, true) static bool isNonCharacter(dchar ucs4)/+ noexcept+/
     {
@@ -568,7 +568,7 @@ public:
     {
         // 0x010000 through 0x10ffff, provided params are actual high, low surrogates.
         // 0x010000 + ((high - 0xd800) << 10) + (low - 0xdc00), optimized:
-        return cast(dchar)((dchar(high)<<10) + low - 0x35fdc00);
+        return cast(dchar) ((dchar(high)<<10) + low - 0x35fdc00);
     }
     pragma(inline, true) static dchar surrogateToUcs4(QChar high, QChar low)/+ noexcept+/
     {
@@ -576,11 +576,11 @@ public:
     }
     pragma(inline, true) static wchar highSurrogate(dchar ucs4)/+ noexcept+/
     {
-        return cast(wchar)((ucs4>>10) + 0xd7c0);
+        return cast(wchar) ((ucs4>>10) + 0xd7c0);
     }
     pragma(inline, true) static wchar lowSurrogate(dchar ucs4)/+ noexcept+/
     {
-        return cast(wchar)(ucs4%0x400 + 0xdc00);
+        return cast(wchar) (ucs4%0x400 + 0xdc00);
     }
 
     static Category /+ QT_FASTCALL +/ category(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;

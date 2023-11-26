@@ -144,9 +144,9 @@ public:
 
         /+pragma(inline, true) bool operator ==(ref const(iterator) o) const { return f == o.f && cf == o.cf && cb == o.cb; }+/
         /+pragma(inline, true) bool operator !=(ref const(iterator) o) const { return f != o.f || cf != o.cf || cb != o.cb; }+/
-        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if(op == "++");
+        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if (op == "++");
         /+pragma(inline, true) iterator operator ++(int) { iterator tmp = this; operator++(); return tmp; }+/
-        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if(op == "--");
+        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if (op == "--");
         /+pragma(inline, true) iterator operator --(int) { iterator tmp = this; operator--(); return tmp; }+/
     }
 
@@ -266,9 +266,9 @@ public:
 
         /+pragma(inline, true) bool operator ==(ref const(iterator) o) const { return p == o.p && n == o.n; }+/
         /+pragma(inline, true) bool operator !=(ref const(iterator) o) const { return p != o.p || n != o.n; }+/
-        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if(op == "++");
+        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if (op == "++");
         /+pragma(inline, true) iterator operator ++(int) { iterator tmp = this; operator++(); return tmp; }+/
-        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if(op == "--");
+        /+ Q_GUI_EXPORT +/ ref iterator opUnary(string op)() if (op == "--");
         /+pragma(inline, true) iterator operator --(int) { iterator tmp = this; operator--(); return tmp; }+/
     }
 

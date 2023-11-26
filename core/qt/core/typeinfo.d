@@ -48,47 +48,47 @@ template qIsRelocatable(T)
 
 template QTypeInfo(T)
 {
-    static if(is(T == R*, R) || is(T == class))
+    static if (is(T == R*, R) || is(T == class))
     {
         enum isRelocatable = true;
         enum isComplex = false;
     }
-    else static if(is(T == int) || is(T == uint) || is(T == double))
+    else static if (is(T == int) || is(T == uint) || is(T == double))
     {
         enum isRelocatable = true;
         enum isComplex = false;
     }
-    else static if(is(T == void))
+    else static if (is(T == void))
     {
         enum isRelocatable = false;
         enum isComplex = false;
     }
-    else static if(is(T == enum))
+    else static if (is(T == enum))
     {
         enum isRelocatable = true;
         enum isComplex = false;
     }
-    else static if(fullyQualifiedName!T.startsWith("qt.core.pair.pair!"))
+    else static if (fullyQualifiedName!T.startsWith("qt.core.pair.pair!"))
     {
         enum isRelocatable = QTypeInfo!(T.first_type).isRelocatable && QTypeInfo!(T.second_type).isRelocatable;
         enum isComplex = QTypeInfo!(T.first_type).isComplex || QTypeInfo!(T.second_type).isComplex;
     }
-    else static if(fullyQualifiedName!T.startsWith("qt.core.list.QList!") || fullyQualifiedName!T.startsWith("qt.core.vector.QVector!"))
+    else static if (fullyQualifiedName!T.startsWith("qt.core.list.QList!") || fullyQualifiedName!T.startsWith("qt.core.vector.QVector!"))
     {
         enum isRelocatable = true;
         enum isComplex = true;
     }
-    else static if(fullyQualifiedName!T.startsWith("qt.core.flags.QFlags!"))
+    else static if (fullyQualifiedName!T.startsWith("qt.core.flags.QFlags!"))
     {
         enum isRelocatable = true;
         enum isComplex = false;
     }
-    else static if(qIsTrivial!T)
+    else static if (qIsTrivial!T)
     {
         enum isRelocatable = qIsRelocatable!T;
         enum isComplex = !qIsTrivial!T;
     }
-    else static if(getUDAs!(T, QTypeInfoFlags).length)
+    else static if (getUDAs!(T, QTypeInfoFlags).length)
     {
         enum combinedFlags = (){
             QTypeInfoFlags r;

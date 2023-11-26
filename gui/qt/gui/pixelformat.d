@@ -71,7 +71,7 @@ private:
     static assert(uint(FieldWidth.TotalFieldWidthByWidths) == 8 * quint64.sizeof);
 
     pragma(inline, true) uchar get(Field offset, FieldWidth width) const/+ noexcept+/
-    { return cast(uchar)((data >> uint(offset)) & ((1uL << uint(width)) - 1uL)); }
+    { return cast(uchar) ((data >> uint(offset)) & ((1uL << uint(width)) - 1uL)); }
     pragma(inline, true) static quint64 set(Field offset, FieldWidth width, uchar value)
     { return (quint64(value) & ((1uL << uint(width)) - 1uL)) << uint(offset); }
 
@@ -154,24 +154,24 @@ public:
                                                ByteOrder b_order = ByteOrder.CurrentSystemEndian,
                                                uchar s_enum = 0)/+ noexcept+/
     {
-        this.data = set(Field.ModelField, FieldWidth.ModelFieldWidth, cast(uchar)(mdl)) |
+        this.data = set(Field.ModelField, FieldWidth.ModelFieldWidth, cast(uchar) (mdl)) |
                    set(Field.FirstField, FieldWidth.FirstFieldWidth, firstSize) |
                    set(Field.SecondField, FieldWidth.SecondFieldWidth, secondSize) |
                    set(Field.ThirdField, FieldWidth.ThirdFieldWidth, thirdSize) |
                    set(Field.FourthField, FieldWidth.FourthFieldWidth, fourthSize) |
                    set(Field.FifthField, FieldWidth.FifthFieldWidth, fifthSize) |
                    set(Field.AlphaField, FieldWidth.AlphaFieldWidth, alfa) |
-                   set(Field.AlphaUsageField, FieldWidth.AlphaUsageFieldWidth, cast(uchar)(usage)) |
-                   set(Field.AlphaPositionField, FieldWidth.AlphaPositionFieldWidth, cast(uchar)(position)) |
-                   set(Field.PremulField, FieldWidth.PremulFieldWidth, cast(uchar)(premult)) |
-                   set(Field.TypeInterpretationField, FieldWidth.TypeInterpretationFieldWidth, cast(uchar)(typeInterp)) |
-                   set(Field.ByteOrderField, FieldWidth.ByteOrderFieldWidth, cast(uchar)(resolveByteOrder(b_order))) |
+                   set(Field.AlphaUsageField, FieldWidth.AlphaUsageFieldWidth, cast(uchar) (usage)) |
+                   set(Field.AlphaPositionField, FieldWidth.AlphaPositionFieldWidth, cast(uchar) (position)) |
+                   set(Field.PremulField, FieldWidth.PremulFieldWidth, cast(uchar) (premult)) |
+                   set(Field.TypeInterpretationField, FieldWidth.TypeInterpretationFieldWidth, cast(uchar) (typeInterp)) |
+                   set(Field.ByteOrderField, FieldWidth.ByteOrderFieldWidth, cast(uchar) (resolveByteOrder(b_order))) |
                    set(Field.SubEnumField, FieldWidth.SubEnumFieldWidth, s_enum) |
                    set(Field.UnusedField, FieldWidth.UnusedFieldWidth, 0);
     }+/
 
-    pragma(inline, true) ColorModel colorModel() const/+  noexcept+/ { return cast(ColorModel)(get(Field.ModelField, FieldWidth.ModelFieldWidth)); }
-    pragma(inline, true) uchar channelCount() const/+ noexcept+/ { return cast(uchar)((get(Field.FirstField, FieldWidth.FirstFieldWidth) > 0) +
+    pragma(inline, true) ColorModel colorModel() const/+  noexcept+/ { return cast(ColorModel) (get(Field.ModelField, FieldWidth.ModelFieldWidth)); }
+    pragma(inline, true) uchar channelCount() const/+ noexcept+/ { return cast(uchar) ((get(Field.FirstField, FieldWidth.FirstFieldWidth) > 0) +
                                                                                  (get(Field.SecondField, FieldWidth.SecondFieldWidth) > 0) +
                                                                                  (get(Field.ThirdField, FieldWidth.ThirdFieldWidth) > 0) +
                                                                                  (get(Field.FourthField, FieldWidth.FourthFieldWidth) > 0) +
@@ -194,20 +194,20 @@ public:
 
     pragma(inline, true) uchar alphaSize() const/+ noexcept+/ { return get(Field.AlphaField, FieldWidth.AlphaFieldWidth); }
 
-    pragma(inline, true) uchar bitsPerPixel() const/+ noexcept+/ { return cast(uchar)(get(Field.FirstField, FieldWidth.FirstFieldWidth) +
+    pragma(inline, true) uchar bitsPerPixel() const/+ noexcept+/ { return cast(uchar) (get(Field.FirstField, FieldWidth.FirstFieldWidth) +
                                                                                  get(Field.SecondField, FieldWidth.SecondFieldWidth) +
                                                                                  get(Field.ThirdField, FieldWidth.ThirdFieldWidth) +
                                                                                  get(Field.FourthField, FieldWidth.FourthFieldWidth) +
                                                                                  get(Field.FifthField, FieldWidth.FifthFieldWidth) +
                                                                                  get(Field.AlphaField, FieldWidth.AlphaFieldWidth)); }
 
-    pragma(inline, true) AlphaUsage alphaUsage() const/+ noexcept+/ { return cast(AlphaUsage)(get(Field.AlphaUsageField, FieldWidth.AlphaUsageFieldWidth)); }
-    pragma(inline, true) AlphaPosition alphaPosition() const/+ noexcept+/ { return cast(AlphaPosition)(get(Field.AlphaPositionField, FieldWidth.AlphaPositionFieldWidth)); }
-    pragma(inline, true) AlphaPremultiplied premultiplied() const/+ noexcept+/ { return cast(AlphaPremultiplied)(get(Field.PremulField, FieldWidth.PremulFieldWidth)); }
-    pragma(inline, true) TypeInterpretation typeInterpretation() const/+ noexcept+/ { return cast(TypeInterpretation)(get(Field.TypeInterpretationField, FieldWidth.TypeInterpretationFieldWidth)); }
-    pragma(inline, true) ByteOrder byteOrder() const/+ noexcept+/ { return cast(ByteOrder)(get(Field.ByteOrderField, FieldWidth.ByteOrderFieldWidth)); }
+    pragma(inline, true) AlphaUsage alphaUsage() const/+ noexcept+/ { return cast(AlphaUsage) (get(Field.AlphaUsageField, FieldWidth.AlphaUsageFieldWidth)); }
+    pragma(inline, true) AlphaPosition alphaPosition() const/+ noexcept+/ { return cast(AlphaPosition) (get(Field.AlphaPositionField, FieldWidth.AlphaPositionFieldWidth)); }
+    pragma(inline, true) AlphaPremultiplied premultiplied() const/+ noexcept+/ { return cast(AlphaPremultiplied) (get(Field.PremulField, FieldWidth.PremulFieldWidth)); }
+    pragma(inline, true) TypeInterpretation typeInterpretation() const/+ noexcept+/ { return cast(TypeInterpretation) (get(Field.TypeInterpretationField, FieldWidth.TypeInterpretationFieldWidth)); }
+    pragma(inline, true) ByteOrder byteOrder() const/+ noexcept+/ { return cast(ByteOrder) (get(Field.ByteOrderField, FieldWidth.ByteOrderFieldWidth)); }
 
-    pragma(inline, true) YUVLayout yuvLayout() const/+ noexcept+/ { return cast(YUVLayout)(get(Field.SubEnumField, FieldWidth.SubEnumFieldWidth)); }
+    pragma(inline, true) YUVLayout yuvLayout() const/+ noexcept+/ { return cast(YUVLayout) (get(Field.SubEnumField, FieldWidth.SubEnumFieldWidth)); }
     pragma(inline, true) uchar subEnum() const/+ noexcept+/ { return get(Field.SubEnumField, FieldWidth.SubEnumFieldWidth); }
 
 private:

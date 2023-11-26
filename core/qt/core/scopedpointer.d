@@ -18,7 +18,7 @@ import qt.helpers;
 
 struct QScopedPointerDeleter(T)
 {
-    static if(is(T == class))
+    static if (is(T == class))
     {
         alias P = T;
         enum IsIncompleteType = !__traits(compiles, __traits(classInstanceSize, T));
@@ -28,14 +28,14 @@ struct QScopedPointerDeleter(T)
         alias P = T*;
         enum IsIncompleteType = !__traits(compiles, T.sizeof);
     }
-    static if(IsIncompleteType)
+    static if (IsIncompleteType)
         static void cleanup(P pointer);
     else
         pragma(inline, true) static void cleanup(P pointer)
         {
             import core.stdcpp.new_;
 
-            static if(IsIncompleteType)
+            static if (IsIncompleteType)
                 assert(false);
             else
                 cpp_delete(pointer);
@@ -68,7 +68,7 @@ struct QScopedPointerPodDeleter
 };
 
 #ifndef QT_NO_QOBJECT +/
-struct QScopedPointerObjectDeleteLater(T) if(is(T : QObject))
+struct QScopedPointerObjectDeleteLater(T) if (is(T : QObject))
 {
     pragma(inline, true) static void cleanup(T pointer) { if (pointer) pointer.deleteLater(); }
     /+void operator ()(T* pointer) const { cleanup(pointer); }+/
@@ -81,7 +81,7 @@ alias QScopedPointerDeleteLater = QScopedPointerObjectDeleteLater!(QObject);
 extern(C++, class) struct QScopedPointer(T, Cleanup = QScopedPointerDeleter!T)
 {
 private:
-    static if(is(T == class))
+    static if (is(T == class))
     {
         alias P = T;
     }
@@ -103,7 +103,7 @@ public:
         Cleanup.cleanup(oldD);*/
     }
 
-    pragma(inline, true) ref T opUnary(string op)() const if(op == "*")
+    pragma(inline, true) ref T opUnary(string op)() const if (op == "*")
     {
         import qt.core.global;
 
@@ -147,7 +147,7 @@ public:
     {
         if (d == other)
             return;
-        T* oldD = qExchange(d, cast(U && )(other));
+        T* oldD = qExchange(d, cast(U && ) (other));
         Cleanup.cleanup(oldD);
     }+/
 
@@ -155,7 +155,7 @@ public:
     /+ QT_DEPRECATED_VERSION_X_6_1("Use std::unique_ptr instead, and call release().") +/
 /+        T* take()/+ noexcept+/
     {
-        T* oldD = qExchange(d, cast(U && )(null));
+        T* oldD = qExchange(d, cast(U && ) (null));
         return oldD;
     }+/
 /+ #endif

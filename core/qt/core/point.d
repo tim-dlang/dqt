@@ -75,13 +75,13 @@ public:
         return yp;
     }
 
-    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if(op == "+")
+    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if (op == "+")
     {
         xp += p.xp;
         yp += p.yp;
         return this;
     }
-    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if(op == "-")
+    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if (op == "-")
     {
         xp -= p.xp;
         yp -= p.yp;
@@ -144,16 +144,16 @@ public:
     /+ friend constexpr inline QPoint operator/(const QPoint &p, qreal c)
     { return QPoint(qRound(p.xp / c), qRound(p.yp / c)); } +/
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ [[nodiscard]] Q_CORE_EXPORT CGPoint toCGPoint() const noexcept; +/
     }
 
 
-    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if(op == "+")
+    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if (op == "+")
     { return QPoint(xp+p2.xp, yp+p2.yp); }
 
-    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if(op == "-")
+    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if (op == "-")
     { return QPoint(xp-p2.xp, yp-p2.yp); }
 
 
@@ -257,13 +257,13 @@ public:
         return yp;
     }
 
-    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if(op == "+")
+    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if (op == "+")
     {
         xp += p.xp;
         yp += p.yp;
         return this;
     }
-    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if(op == "-")
+    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if (op == "-")
     {
         xp -= p.xp;
         yp -= p.yp;
@@ -324,16 +324,16 @@ public:
         return QPoint(qRound(xp), qRound(yp));
     }
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ [[nodiscard]] Q_CORE_EXPORT static QPointF fromCGPoint(CGPoint point) noexcept; +/
         /+ [[nodiscard]] Q_CORE_EXPORT CGPoint toCGPoint() const noexcept; +/
     }
 
-    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const if(op == "+")
+    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const if (op == "+")
     { return QPointF(xp+p2.xp, yp+p2.yp); }
 
-    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const if(op == "-")
+    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const if (op == "-")
     { return QPointF(xp-p2.xp, yp-p2.yp); }
 
 private:

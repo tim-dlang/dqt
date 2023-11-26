@@ -64,8 +64,8 @@ public:
     alias pointer = T*;
 
     void detach()() { if (d && d.ref_.loadRelaxed() != 1) detach_helper(); }
-    ref T opUnary(string op)() if(op == "*") { detach(); return *d; }
-    ref const(T) opUnary(string op)() const if(op == "*") { return *d; }
+    ref T opUnary(string op)() if (op == "*") { detach(); return *d; }
+    ref const(T) opUnary(string op)() const if (op == "*") { return *d; }
     /+T* operator ->() { detach(); return d; }+/
     /+const(T)* operator ->() const/+ noexcept+/ { return d; }+/
     /+auto opCast(T : T)() { detach(); return d; }+/
@@ -75,7 +75,7 @@ public:
     const(T)* data() const/+ noexcept+/ { return d; }
     const(T)* get() const/+ noexcept+/ { return d; }
     const(T)* constData() const/+ noexcept+/ { return d; }
-//    T* take()/+ noexcept+/ { return qExchange(d, cast(U && )(null)); }
+//    T* take()/+ noexcept+/ { return qExchange(d, cast(U && ) (null)); }
 
     /+this()/+ noexcept+/
     {
@@ -83,7 +83,7 @@ public:
     }+/
     ~this() {
         import core.stdcpp.new_;
-        static if(__traits(compiles, (*d).sizeof))
+        static if (__traits(compiles, (*d).sizeof))
         {
             import core.stdcpp.new_;
             if (d && !d.ref_.deref()) cpp_delete(d);
@@ -104,7 +104,7 @@ public:
     @disable this(this);
     this(ref const(QSharedDataPointer) o)/+ noexcept+/
     {
-        static if(__traits(compiles, d.ref_))
+        static if (__traits(compiles, d.ref_))
         {
             if (d) d.ref_.ref_();
         }
@@ -119,7 +119,7 @@ public:
         if (ptr != d) {
             if (ptr)
                 ptr.ref_.ref_();
-            T* old = qExchange(d, cast(U && )(ptr));
+            T* old = qExchange(d, cast(U && ) (ptr));
             if (old && !old.ref_.deref())
                 cpp_delete(old);
         }
@@ -195,7 +195,7 @@ public:
     alias Type = T;
     alias pointer = T*;
 
-    ref T opUnary(string op)() const if(op == "*") { return *d; }
+    ref T opUnary(string op)() const if (op == "*") { return *d; }
     /+T* operator ->()/+ noexcept+/ { return d; }+/
     /+T* operator ->() const/+ noexcept+/ { return d; }+/
     /+/+ explicit +/ auto opCast(T : T)() { return d; }+/
@@ -203,7 +203,7 @@ public:
     T* data() /*const*/ /+ noexcept+/ { return d; }
     T* get() /*const*/ /+ noexcept+/ { return d; }
     const(T)* constData() const/+ noexcept+/ { return d; }
-//    T* take()/+ noexcept+/ { return qExchange(d, cast(U && )(null)); }
+//    T* take()/+ noexcept+/ { return qExchange(d, cast(U && ) (null)); }
 
     void detach()() { if (d && d.ref_.loadRelaxed() != 1) detach_helper(); }
 
@@ -212,7 +212,7 @@ public:
         this.d = null;
     }+/
     ~this() {
-        static if(__traits(compiles, (*d).sizeof))
+        static if (__traits(compiles, (*d).sizeof))
         {
             import core.stdcpp.new_;
             if (d && !d.ref_.deref()) cpp_delete(d);
@@ -233,7 +233,7 @@ public:
     @disable this(this);
     /+this(ref const(QExplicitlySharedDataPointer) o)/+ noexcept+/
     {
-        static if(__traits(compiles, (*d).sizeof))
+        static if (__traits(compiles, (*d).sizeof))
         {
             this.d = cast(T*)o.d;
             if (d) d.ref_.ref_();
@@ -247,7 +247,7 @@ public:
     this(X)(ref const(QExplicitlySharedDataPointer!(X)) o)/+ noexcept+//+ #ifdef QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST +/
 /+ #endif +/
 {
-    static if(defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
+    static if (defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
     {
         this.d = static_cast!(T*)(o.data());
 
@@ -268,7 +268,7 @@ public:
         if (ptr != d) {
             if (ptr)
                 ptr.ref_.ref_();
-            T* old = qExchange(d, cast(U && )(ptr));
+            T* old = qExchange(d, cast(U && ) (ptr));
             if (old && !old.ref_.deref())
                 cpp_delete(old);
         }

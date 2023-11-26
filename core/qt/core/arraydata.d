@@ -125,7 +125,7 @@ struct QTypedArrayData(T)
         static assert(QTypedArrayData.sizeof == QArrayData.sizeof);
         QArrayData* d;
         void* result = QArrayData.allocate(&d, T.sizeof, AlignmentDummy.alignof, capacity, option);
-        static if((configValue!"__has_builtin___builtin_assume_aligned" && defined!"__has_builtin___builtin_assume_aligned"))
+        static if ((configValue!"__has_builtin___builtin_assume_aligned" && defined!"__has_builtin___builtin_assume_aligned"))
         {
             result = __builtin_assume_aligned(result, /+ Q_ALIGNOF +/AlignmentDummy.alignof);
         }

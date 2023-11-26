@@ -2191,12 +2191,12 @@ public:
 
     /+ Qt:: +/KeyboardModifiers keyboardModifiers() const/+ noexcept+/
     {
-        return /+ Qt:: +/KeyboardModifiers(cast(QFlag)(combination & /+ Qt:: +/KeyboardModifier.KeyboardModifierMask));
+        return /+ Qt:: +/KeyboardModifiers(cast(QFlag) (combination & /+ Qt:: +/KeyboardModifier.KeyboardModifierMask));
     }
 
     /+ Qt:: +/Key key() const/+ noexcept+/
     {
-        return cast(/+ Qt:: +/Key)(combination & ~int(/+ Qt:: +/KeyboardModifier.KeyboardModifierMask));
+        return cast(/+ Qt:: +/Key) (combination & ~int(/+ Qt:: +/KeyboardModifier.KeyboardModifierMask));
     }
 
     static QKeyCombination fromCombined(int combined)

@@ -39,7 +39,7 @@ public:
             return QVariant();
 
         int[2] key = [index.column(), index.row()];
-        if(key in content)
+        if (key in content)
             return QVariant(content[key]);
 
         return QVariant(QString(""));
@@ -78,24 +78,26 @@ public:
     }
     extern(C++) override QVariant headerData(int section, /+ Qt:: +/qt.core.namespace.Orientation orientation, int role) const
     {
-        if (orientation == /+ Qt:: +/qt.core.namespace.Orientation.Horizontal && role == /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) {
+        if (orientation == /+ Qt:: +/qt.core.namespace.Orientation.Horizontal && role == /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole)
+        {
             char[3] text;
-            if(section < 26)
+            if (section < 26)
             {
-                text[0] = cast(char)('A' + section);
+                text[0] = cast(char) ('A' + section);
                 text[1] = 0;
                 return QVariant(QString.fromUtf8(text.ptr));
             }
-            if(section - 26 < 26 * 26)
+            if (section - 26 < 26 * 26)
             {
-                text[0] = cast(char)('A' + (section - 26) / 26);
-                text[1] = cast(char)('A' + (section - 26) % 26);
+                text[0] = cast(char) ('A' + (section - 26) / 26);
+                text[1] = cast(char) ('A' + (section - 26) % 26);
                 text[2] = 0;
                 return QVariant(QString.fromUtf8(text.ptr));
             }
         }
 
-        if (orientation == /+ Qt:: +/qt.core.namespace.Orientation.Vertical && role == /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) {
+        if (orientation == /+ Qt:: +/qt.core.namespace.Orientation.Vertical && role == /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole)
+        {
             return QVariant(QString.number(section + 1));
         }
 

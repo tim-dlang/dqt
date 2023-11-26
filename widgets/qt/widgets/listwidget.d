@@ -135,7 +135,7 @@ public:
     /+ virtual +/ void setData(int role, ref const(QVariant) value);
     final void setData(T)(int role, T value)
     {
-        static if(is(const(T) == const(QVariant)))
+        static if (is(const(T) == const(QVariant)))
             QVariant v = value;
         else
             QVariant v = QVariant.fromValue(value);

@@ -42,7 +42,7 @@ private /+ slots +/:
         import qt.widgets.listwidget;
 
         QListWidgetItem item = ui.listWidget.currentItem();
-        if(item)
+        if (item)
             cpp_delete(item);
     }
 

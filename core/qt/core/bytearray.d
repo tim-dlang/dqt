@@ -141,7 +141,7 @@ alias Base64Options = QFlags!(Base64Option);
     }
     pragma(inline, true) const(char)* data() const
     {
-        static if((configValue!"QT5_NULL_STRINGS" == 1 || !defined!"QT5_NULL_STRINGS"))
+        static if ((configValue!"QT5_NULL_STRINGS" == 1 || !defined!"QT5_NULL_STRINGS"))
         {
             return d.data() ? d.data() : &_empty;
         }
@@ -338,13 +338,13 @@ alias Base64Options = QFlags!(Base64Option);
     ref QByteArray replace(QByteArrayView before, QByteArrayView after);
     ref QByteArray replace(char before, char after);
 
-    extern(D) ref QByteArray opOpAssign(string op)(char c) if(op == "~")
+    extern(D) ref QByteArray opOpAssign(string op)(char c) if (op == "~")
     { return append(c); }
-    extern(D) ref QByteArray opOpAssign(string op)(const(char)* s) if(op == "~")
+    extern(D) ref QByteArray opOpAssign(string op)(const(char)* s) if (op == "~")
     { return append(s); }
-    extern(D) ref QByteArray opOpAssign(string op)(ref const(QByteArray) a) if(op == "~")
+    extern(D) ref QByteArray opOpAssign(string op)(ref const(QByteArray) a) if (op == "~")
     { return append(a); }
-    extern(D) ref QByteArray opOpAssign(string op)(QByteArrayView a) if(op == "~")
+    extern(D) ref QByteArray opOpAssign(string op)(QByteArrayView a) if (op == "~")
     { return append(a); }
 
     QList!(QByteArray) split(char sep) const;
@@ -477,8 +477,8 @@ alias Base64Options = QFlags!(Base64Option);
         /+/+ explicit +/ auto opCast(T : bool)() const/+ noexcept+/ { return decodingStatus == QByteArray.Base64DecodingStatus.Ok; }+/
 
     /+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(Q_QDOC) +/
-        ref QByteArray opUnary(string op)()/+ & noexcept+/ if(op == "*") { return decoded; }
-        ref const(QByteArray) opUnary(string op)() const/+ & noexcept+/ if(op == "*") { return decoded; }
+        ref QByteArray opUnary(string op)()/+ & noexcept+/ if (op == "*") { return decoded; }
+        ref const(QByteArray) opUnary(string op)() const/+ & noexcept+/ if (op == "*") { return decoded; }
         /+ QByteArray &&operator*() && noexcept { return std::move(decoded); } +/
     /+ #else
         QByteArray &operator*() noexcept { return decoded; }
@@ -509,7 +509,7 @@ alias Base64Options = QFlags!(Base64Option);
     /+ [[nodiscard]] +/ static QByteArray fromHex(ref const(QByteArray) hexEncoded);
     /+ [[nodiscard]] +/ static QByteArray fromPercentEncoding(ref const(QByteArray) pctEncoded, char percent = '%');
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QByteArray fromCFData(CFDataRef data); +/
         /+ static QByteArray fromRawCFData(CFDataRef data); +/

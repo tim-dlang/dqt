@@ -115,20 +115,20 @@ public:
     void setRects(const(QRect)* rect, int num);
     int rectCount() const/+ noexcept+/;
 
-    QRegion opBinary(string op)(ref const(QRegion) r) const if(op == "|");
-    QRegion opBinary(string op)(ref const(QRegion) r) const if(op == "+");
-    QRegion opBinary(string op)(ref const(QRect) r) const if(op == "+");
-    QRegion opBinary(string op)(ref const(QRegion) r) const if(op == "&");
-    QRegion opBinary(string op)(ref const(QRect) r) const if(op == "&");
-    QRegion opBinary(string op)(ref const(QRegion) r) const if(op == "-");
+    QRegion opBinary(string op)(ref const(QRegion) r) const if (op == "|");
+    QRegion opBinary(string op)(ref const(QRegion) r) const if (op == "+");
+    QRegion opBinary(string op)(ref const(QRect) r) const if (op == "+");
+    QRegion opBinary(string op)(ref const(QRegion) r) const if (op == "&");
+    QRegion opBinary(string op)(ref const(QRect) r) const if (op == "&");
+    QRegion opBinary(string op)(ref const(QRegion) r) const if (op == "-");
     /+QRegion operator ^(ref const(QRegion) r) const;+/
 
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "|");
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "+");
-    ref QRegion opOpAssign(string op)(ref const(QRect) r) if(op == "+");
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "&");
-    ref QRegion opOpAssign(string op)(ref const(QRect) r) if(op == "&");
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "-");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "|");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "+");
+    ref QRegion opOpAssign(string op)(ref const(QRect) r) if (op == "+");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "&");
+    ref QRegion opOpAssign(string op)(ref const(QRect) r) if (op == "&");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "-");
     /+ref QRegion operator ^=(ref const(QRegion) r);+/
 
     /+bool operator ==(ref const(QRegion) r) const;+/
@@ -137,7 +137,7 @@ public:
 
     // Platform specific conversion functions
 /+ #if defined(Q_OS_WIN) || defined(Q_QDOC) +/
-    static if((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
     {
         HRGN toHRGN() const;
         static QRegion fromHRGN(HRGN hrgn);

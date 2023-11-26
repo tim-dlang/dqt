@@ -329,8 +329,8 @@ class QRegularExpression;
     {
         import qt.core.bytearrayview;
 
-        int metaType = QMetaType.fromName(cast(QByteArrayView)(name)).id();
-        return metaType <= int(Type.UserType) ? cast(QVariant.Type)(metaType) : Type.UserType;
+        int metaType = QMetaType.fromName(cast(QByteArrayView) (name)).id();
+        return metaType <= int(Type.UserType) ? cast(QVariant.Type) (metaType) : Type.UserType;
     }
     /+ QT_WARNING_POP
 #endif +/
@@ -456,7 +456,7 @@ public:
             import qt.core.flags;
 
             (mixin(Q_ASSERT(q{type})));
-            return QMetaType.TypeFlags(cast(QFlag)(type.flags)) & QMetaType.TypeFlag.RelocatableType &&
+            return QMetaType.TypeFlags(cast(QFlag) (type.flags)) & QMetaType.TypeFlag.RelocatableType &&
                    size_t(type.size) <= MaxInternalSize && size_t(type.alignment) <= double.alignof;
         }
 
@@ -730,7 +730,7 @@ private:
 public:
     /+ explicit +/this(QVariant variant);
 
-    QVariant opUnary(string op)() const if(op == "*");
+    QVariant opUnary(string op)() const if (op == "*");
     /+const(QVariant)* operator ->() const;+/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
@@ -746,27 +746,27 @@ public:
     {
         this.m_pointer = pointer;
     }
-    //QVariantRef!(Pointer) opUnary(string op)() const if(op == "*") { return QVariantRef!(Pointer)(cast(QVariantRef && )(m_pointer)); }
+    //QVariantRef!(Pointer) opUnary(string op)() const if (op == "*") { return QVariantRef!(Pointer)(cast(QVariantRef && ) (m_pointer)); }
     /+Pointer operator ->() const { return *m_pointer; }+/
 }
 
 pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) v)
 {
     // TODO: special cases of qvariant_cast
-    static if(is(T == class))
+    static if (is(T == class))
         static assert(false);
     else
     {
         const(int) vid = qMetaTypeId!(T)();
         if (vid == v.userType())
             return *reinterpret_cast!(T*)(v.constData());
-        static if(__traits(hasMember, T, "rawConstructor"))
+        static if (__traits(hasMember, T, "rawConstructor"))
             mixin("T t = T.init; t.rawConstructor();");
         else
             mixin("T t;");
         if (v.convert(vid, &t))
             return t;
-        static if(__traits(hasMember, T, "rawConstructor"))
+        static if (__traits(hasMember, T, "rawConstructor"))
             mixin("T r = T.init; r.rawConstructor(); return r;");
         else
             mixin("return T();");

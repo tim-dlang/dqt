@@ -69,7 +69,7 @@ public:
     }
 /+    static QRgba64 fromArgb32(uint rgb)
     {
-        return fromRgba(cast(quint8)(rgb >> 16), cast(quint8)(rgb >> 8), cast(quint8)(rgb), cast(quint8)(rgb >> 24));
+        return fromRgba(cast(quint8) (rgb >> 16), cast(quint8) (rgb >> 8), cast(quint8) (rgb), cast(quint8) (rgb >> 24));
     }
 +/
     bool isOpaque() const
@@ -81,10 +81,10 @@ public:
         return (rgba & alphaMask()) == 0;
     }
 
-    quint16 red()   const { return cast(quint16)(rgba >> Shifts.RedShift);   }
-    quint16 green() const { return cast(quint16)(rgba >> Shifts.GreenShift); }
-    quint16 blue()  const { return cast(quint16)(rgba >> Shifts.BlueShift);  }
-    quint16 alpha() const { return cast(quint16)(rgba >> Shifts.AlphaShift); }
+    quint16 red()   const { return cast(quint16) (rgba >> Shifts.RedShift);   }
+    quint16 green() const { return cast(quint16) (rgba >> Shifts.GreenShift); }
+    quint16 blue()  const { return cast(quint16) (rgba >> Shifts.BlueShift);  }
+    quint16 alpha() const { return cast(quint16) (rgba >> Shifts.AlphaShift); }
     void setRed(quint16 _red)     { rgba = (rgba & ~(0xffffuL << Shifts.RedShift))   | (quint64(_red) << Shifts.RedShift); }
     void setGreen(quint16 _green) { rgba = (rgba & ~(0xffffuL << Shifts.GreenShift)) | (quint64(_green) << Shifts.GreenShift); }
     void setBlue(quint16 _blue)   { rgba = (rgba & ~(0xffffuL << Shifts.BlueShift))  | (quint64(_blue) << Shifts.BlueShift); }
@@ -104,9 +104,9 @@ public:
         br = (br - ((br >> 8) & 0xffff0000ffffuL)) >> 8;
         ag = (ag - ((ag >> 8) & 0xffff0000ffffuL));
 /+ #if Q_BYTE_ORDER == Q_BIG_ENDIAN +/
-        static if(versionIsSet!("BigEndian"))
+        static if (versionIsSet!("BigEndian"))
         {
-            return cast(uint)(((br << 24) & 0xff000000)
+            return cast(uint) (((br << 24) & 0xff000000)
                  | ((ag >> 24) & 0xff0000)
                  | ((br >> 24) & 0xff00)
                  | ((ag >> 8)  & 0xff));
@@ -114,7 +114,7 @@ public:
         else
         {
     /+ #else +/
-            return cast(uint)(((ag >> 16) & 0xff000000)
+            return cast(uint) (((ag >> 16) & 0xff000000)
                  | ((br << 16) & 0xff0000)
                  | (ag         & 0xff00)
                  | ((br >> 32) & 0xff));
@@ -126,7 +126,7 @@ public:
     }
     ushort toRgb16() const
     {
-        return cast(ushort)((red() & 0xf800) | ((green() >> 10) << 5) | (blue() >> 11));
+        return cast(ushort) ((red() & 0xf800) | ((green() >> 10) << 5) | (blue() >> 11));
     }
 
     QRgba64 premultiplied() const
@@ -140,7 +140,7 @@ public:
         quint64 ag = ((rgba >> 16) & 0xffff0000ffffuL) * a;
         br = (br + ((br >> 16) & 0xffff0000ffffuL) + 0x800000008000uL);
         ag = (ag + ((ag >> 16) & 0xffff0000ffffuL) + 0x800000008000uL);
-        static if(versionIsSet!("BigEndian"))
+        static if (versionIsSet!("BigEndian"))
         {
             ag = ag & 0xffff0000ffff0000uL;
             br = (br >> 16) & 0xffff00000000uL;
@@ -156,7 +156,7 @@ public:
 
 /+    QRgba64 unpremultiplied() const
     {
-        static if(configValue!"Q_PROCESSOR_WORDSIZE" < 8)
+        static if (configValue!"Q_PROCESSOR_WORDSIZE" < 8)
         {
             return unpremultiplied_32bit();
         }
@@ -180,17 +180,17 @@ public:
 private:
     /+ Q_ALWAYS_INLINE +/ pragma(inline, true) static quint64 alphaMask() { return 0xffffuL << Shifts.AlphaShift; }
 
-    /+ Q_ALWAYS_INLINE +/ pragma(inline, true) static quint8 div_257_floor(uint x) { return cast(quint8)((x - (x >> 8)) >> 8); }
+    /+ Q_ALWAYS_INLINE +/ pragma(inline, true) static quint8 div_257_floor(uint x) { return cast(quint8) ((x - (x >> 8)) >> 8); }
     /+ Q_ALWAYS_INLINE +/ pragma(inline, true) static quint8 div_257(quint16 x) { return div_257_floor(x + 128U); }
     /+ Q_ALWAYS_INLINE +/ pragma(inline, true) QRgba64 unpremultiplied_32bit() const
     {
         if (isOpaque() || isTransparent())
             return this;
         const(quint32) a = alpha();
-        const(quint16) r = cast(quint16)((red()   * 0xffff + a/2) / a);
-        const(quint16) g = cast(quint16)((green() * 0xffff + a/2) / a);
-        const(quint16) b = cast(quint16)((blue()  * 0xffff + a/2) / a);
-        return fromRgba64(r, g, b, cast(quint16)(a));
+        const(quint16) r = cast(quint16) ((red()   * 0xffff + a/2) / a);
+        const(quint16) g = cast(quint16) ((green() * 0xffff + a/2) / a);
+        const(quint16) b = cast(quint16) ((blue()  * 0xffff + a/2) / a);
+        return fromRgba64(r, g, b, cast(quint16) (a));
     }
     /+ Q_ALWAYS_INLINE +/ pragma(inline, true) QRgba64 unpremultiplied_64bit() const
     {
@@ -198,10 +198,10 @@ private:
             return this;
         const(quint64) a = alpha();
         const(quint64) fa = (0xffff00008000uL + a/2) / a;
-        const(quint16) r = cast(quint16)((red()   * fa + 0x80000000) >> 32);
-        const(quint16) g = cast(quint16)((green() * fa + 0x80000000) >> 32);
-        const(quint16) b = cast(quint16)((blue()  * fa + 0x80000000) >> 32);
-        return fromRgba64(r, g, b, cast(quint16)(a));
+        const(quint16) r = cast(quint16) ((red()   * fa + 0x80000000) >> 32);
+        const(quint16) g = cast(quint16) ((green() * fa + 0x80000000) >> 32);
+        const(quint16) b = cast(quint16) ((blue()  * fa + 0x80000000) >> 32);
+        return fromRgba64(r, g, b, cast(quint16) (a));
     }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }

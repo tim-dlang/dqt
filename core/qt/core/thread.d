@@ -93,14 +93,14 @@ public:
     final bool wait(QDeadlineTimer deadline = QDeadlineTimer(QDeadlineTimer.ForeverConstant.Forever));
 /+    final bool wait(cpp_ulong  time)
     {
-        static if(versionIsSet!("CPPCONV_OS_LINUX") && !defined!"__WEBOS__" && (defined!"ANDROID" || defined!"__ANDROID__"))
+        static if (versionIsSet!("CPPCONV_OS_LINUX") && !defined!"__WEBOS__" && (defined!"ANDROID" || defined!"__ANDROID__"))
             import qt.core.global;
-        static if(!versionIsSet!("CPPCONV_OS_LINUX") || defined!"__WEBOS__" || (!defined!"ANDROID" && !defined!"__ANDROID__"))
+        static if (!versionIsSet!("CPPCONV_OS_LINUX") || defined!"__WEBOS__" || (!defined!"ANDROID" && !defined!"__ANDROID__"))
             import libc.time;
 
         if (time == (/+ std:: +/numeric_limits!(cpp_ulong).max)())
             return wait(QDeadlineTimer(QDeadlineTimer.ForeverConstant.Forever));
-        return wait(QDeadlineTimer(cast(Identity!(mixin((true)?q{duration!(Rep, Period)}:q{qint64})))(time)));
+        return wait(QDeadlineTimer(cast(Identity!(mixin((true)?q{duration!(Rep, Period)}:q{qint64}))) (time)));
     }+/
 
     static void sleep(cpp_ulong );

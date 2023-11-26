@@ -197,7 +197,7 @@ public:
 #else +/
 
     /+ template <typename Pointer, if_compatible_pointer<Pointer> = true> +/
-    this(Pointer,)(ref const(Pointer) str)/+ noexcept+/ if(is(Pointer: const(wchar)*))
+    this(Pointer,)(ref const(Pointer) str)/+ noexcept+/ if (is(Pointer: const(wchar)*))
     {
         this(str, str ? lengthHelperPointer(str) : 0);
     }
@@ -227,7 +227,7 @@ public:
     { return (){ (mixin(Q_ASSERT(q{QStringView.size() == QStringView.length()})));
     return QString(data(), length());
     }(); } // defined in qstring.h
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         // defined in qcore_foundation.mm
         /+ [[nodiscard]] Q_CORE_EXPORT CFStringRef toCFString() const Q_DECL_CF_RETURNS_RETAINED; +/
@@ -520,7 +520,7 @@ return QStringView(m_data, m_size - n);
 
         if (wchar_t.sizeof == QChar.sizeof) {
             if (auto src = data())
-                memcpy(array, cast(const(void)*)(src), QChar.sizeof * size());
+                memcpy(array, cast(const(void)*) (src), QChar.sizeof * size());
             return size();
         } else {
             return QString.toUcs4_helper(reinterpret_cast!(const(ushort)*)(data()), size(),

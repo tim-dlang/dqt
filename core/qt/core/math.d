@@ -53,7 +53,7 @@ int qCeil(T)(T v)
         import libc.mathcalls;
 
     /+ using std::ceil; +/
-    return cast(int)(ceil(v));
+    return cast(int) (ceil(v));
 }
 
 int qFloor(T)(T v)
@@ -65,7 +65,7 @@ int qFloor(T)(T v)
         import libc.mathcalls;
 
     /+ using std::floor; +/
-    return cast(int)(floor(v));
+    return cast(int) (floor(v));
 }
 
 auto qFabs(T)(T v)
@@ -292,7 +292,7 @@ auto qPow(T1, T2)(T1 x, T2 y)
 #define M_LN10 (2.30258509299404568402)
 #endif +/
 
-static if(versionIsSet!("Windows") && !defined!"M_PI" && !defined!"_BSD_SOURCE" && !defined!"_GNU_SOURCE" && !defined!"_POSIX_C_SOURCE" && !defined!"_POSIX_SOURCE" && !defined!"_USE_MATH_DEFINES" && !defined!"_XOPEN_SOURCE" && !versionIsSet!("Cygwin") && defined!"__STRICT_ANSI__")
+static if (versionIsSet!("Windows") && !defined!"M_PI" && !defined!"_BSD_SOURCE" && !defined!"_GNU_SOURCE" && !defined!"_POSIX_C_SOURCE" && !defined!"_POSIX_SOURCE" && !defined!"_USE_MATH_DEFINES" && !defined!"_XOPEN_SOURCE" && !versionIsSet!("Cygwin") && defined!"__STRICT_ANSI__")
 {
 /+ #define M_PI (3.14159265358979323846) +/
 enum M_PI = (3.14159265358979323846);
@@ -328,7 +328,7 @@ enum M_PI = (3.14159265358979323846);
 
 /+pragma(inline, true) qreal qFastSin(qreal x)
 {
-    int si = cast(int)(x * (0.5 * QT_SINE_TABLE_SIZE / mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
+    int si = cast(int) (x * (0.5 * QT_SINE_TABLE_SIZE / mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
             M_PI
         } : ((!versionIsSet!("Windows") || versionIsSet!("Cygwin"))) ? q{
         M_PI
@@ -354,7 +354,7 @@ enum M_PI = (3.14159265358979323846);
 
 /+pragma(inline, true) qreal qFastCos(qreal x)
 {
-    int ci = cast(int)(x * (0.5 * QT_SINE_TABLE_SIZE / mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
+    int ci = cast(int) (x * (0.5 * QT_SINE_TABLE_SIZE / mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
             M_PI
         } : ((!versionIsSet!("Windows") || versionIsSet!("Cygwin"))) ? q{
         M_PI
@@ -380,7 +380,7 @@ enum M_PI = (3.14159265358979323846);
 
 /+pragma(inline, true) float qDegreesToRadians(float degrees)
 {
-    static if(!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
+    static if (!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
         import libc.math;
 
     return degrees * float( mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
@@ -396,7 +396,7 @@ enum M_PI = (3.14159265358979323846);
 
 pragma(inline, true) double qDegreesToRadians(double degrees)
 {
-    static if(!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
+    static if (!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
         import libc.math;
 
     return degrees * ( mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
@@ -412,7 +412,7 @@ pragma(inline, true) double qDegreesToRadians(double degrees)
 
 pragma(inline, true) real  qDegreesToRadians(real  degrees)
 {
-    static if(!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
+    static if (!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
         import libc.math;
 
     return degrees * ( mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
@@ -433,7 +433,7 @@ pragma(inline, true) double qDegreesToRadians(T, /+ std::enable_if_t<std::is_int
 
 pragma(inline, true) float qRadiansToDegrees(float radians)
 {
-    static if(!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
+    static if (!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
         import libc.math;
 
     return radians * float(180 / mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
@@ -449,7 +449,7 @@ pragma(inline, true) float qRadiansToDegrees(float radians)
 
 pragma(inline, true) double qRadiansToDegrees(double radians)
 {
-    static if(!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
+    static if (!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
         import libc.math;
 
     return radians * (180 / mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
@@ -465,7 +465,7 @@ pragma(inline, true) double qRadiansToDegrees(double radians)
 
 pragma(inline, true) real  qRadiansToDegrees(real  radians)
 {
-    static if(!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
+    static if (!versionIsSet!("Windows") || defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || versionIsSet!("Cygwin") || !defined!"__STRICT_ANSI__")
         import libc.math;
 
     return radians * (180 / mixin(((versionIsSet!("Windows") && !versionIsSet!("Cygwin") && (defined!"_BSD_SOURCE" || defined!"_GNU_SOURCE" || defined!"_POSIX_C_SOURCE" || defined!"_POSIX_SOURCE" || defined!"_USE_MATH_DEFINES" || defined!"_XOPEN_SOURCE" || !defined!"__STRICT_ANSI__"))) ? q{
@@ -521,7 +521,7 @@ pragma(inline, true) quint64 qConstexprNextPowerOfTwo(qint64 v)
 /+pragma(inline, true) quint32 qNextPowerOfTwo(quint32 v)
 {
 /+ #if defined(__cpp_lib_int_pow2) && __cpp_lib_int_pow2 >= 202002L +/
-    static if((configValue!"__cpp_lib_int_pow2" >= 202002 && defined!"__cpp_lib_int_pow2"))
+    static if ((configValue!"__cpp_lib_int_pow2" >= 202002 && defined!"__cpp_lib_int_pow2"))
     {
         return /+ std:: +/bit_ceil(v + 1);
     }
@@ -540,7 +540,7 @@ pragma(inline, true) quint64 qConstexprNextPowerOfTwo(qint64 v)
 /+pragma(inline, true) quint64 qNextPowerOfTwo(quint64 v)
 {
 /+ #if defined(__cpp_lib_int_pow2) && __cpp_lib_int_pow2 >= 202002L +/
-    static if((configValue!"__cpp_lib_int_pow2" >= 202002 && defined!"__cpp_lib_int_pow2"))
+    static if ((configValue!"__cpp_lib_int_pow2" >= 202002 && defined!"__cpp_lib_int_pow2"))
     {
         return /+ std:: +/bit_ceil(v + 1);
     }

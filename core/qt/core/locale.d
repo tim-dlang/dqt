@@ -938,7 +938,7 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
 /+ #endif
 
 #if QT_STRINGVIEW_LEVEL < 2 +/
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         short toShort(ref const(QString) s, bool* ok = null) const
         { return toShort(qToStringViewIgnoringNull(s), ok); }
@@ -986,7 +986,7 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     QString toString(float f, char format = 'g', int precision = 6) const
     { return toString(double(f), format, precision); }
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         // (Can't inline first two: passing by value doesn't work when only forward-declared.)
         QString toString(QDate date, ref const(QString) format) const;

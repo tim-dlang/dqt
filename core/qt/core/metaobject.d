@@ -285,7 +285,7 @@ public:
     QT_WARNING_DISABLE_DEPRECATED +/
     /+ QT_DEPRECATED_VERSION_6_0 +/
         QVariant.Type type() const
-    { int t = userType(); return t >= QMetaType.Type.User ? QVariant.Type.UserType : cast(QVariant.Type)(t); }
+    { int t = userType(); return t >= QMetaType.Type.User ? QVariant.Type.UserType : cast(QVariant.Type) (t); }
     /+ QT_WARNING_POP
 #endif +/
     int userType() const { return typeId(); }

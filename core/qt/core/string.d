@@ -488,7 +488,7 @@ public:
     }
     pragma(inline, true) const(QChar)* data() const
     {
-        static if((configValue!"QT5_NULL_STRINGS" == 1 || !defined!"QT5_NULL_STRINGS"))
+        static if ((configValue!"QT5_NULL_STRINGS" == 1 || !defined!"QT5_NULL_STRINGS"))
         {
             return reinterpret_cast!(const(QChar)*)(d.data() ? d.data() : &_empty);
         }
@@ -553,7 +553,7 @@ public:
                     QChar fillChar = QLatin1Char(' ')) const;
     /+ [[nodiscard]] +/ QString arg(QChar a, int fieldWidth = 0,
                     QChar fillChar = QLatin1Char(' ')) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         /+ [[nodiscard]] +/ QString arg(ref const(QString) a, int fieldWidth = 0,
                         QChar fillChar = QLatin1Char(' ')) const;
@@ -597,7 +597,7 @@ public:
 
     /+ [[nodiscard]] +/ qsizetype indexOf(QChar c, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
     /+ [[nodiscard]] +/ qsizetype indexOf(QLatin1String s, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         /+ [[nodiscard]] +/ qsizetype indexOf(ref const(QString) s, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
     }
@@ -610,7 +610,7 @@ public:
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
     { return lastIndexOf(s, size(), cs); }
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(QLatin1String s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         /+ [[nodiscard]] +/ qsizetype lastIndexOf(ref const(QString) s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
         { return lastIndexOf(s, size(), cs); }
@@ -628,7 +628,7 @@ public:
 
     /+ [[nodiscard]] +/ pragma(inline, true) bool contains(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
     { return indexOf(c, 0, cs) != -1; }
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         /+ [[nodiscard]] +/ pragma(inline, true) bool contains(ref const(QString) s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
         { return indexOf(s, 0, cs) != -1; }
@@ -689,7 +689,7 @@ alias SectionFlags = QFlags!(SectionFlag);
     { (mixin(Q_ASSERT(q{n >= 0}))); (mixin(Q_ASSERT(q{n <= QString.size()}))); return first(size() - n); }
 
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         bool startsWith(ref const(QString) s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
     }
@@ -701,7 +701,7 @@ alias SectionFlags = QFlags!(SectionFlag);
     bool startsWith(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
     bool startsWith(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         bool endsWith(ref const(QString) s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
     }
@@ -751,7 +751,7 @@ alias SectionFlags = QFlags!(SectionFlag);
 
     ref QString insert(qsizetype i, QChar c);
     ref QString insert(qsizetype i, const(QChar)* uc, qsizetype len);
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         pragma(inline, true) ref QString insert(qsizetype i, ref const(QString) s) { return insert(i, s.constData(), s.length()); }
     }
@@ -760,7 +760,7 @@ alias SectionFlags = QFlags!(SectionFlag);
 
     ref QString append(QChar c);
     ref QString append(const(QChar)* uc, qsizetype len);
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         ref QString append(ref const(QString) s);
     }
@@ -769,22 +769,22 @@ alias SectionFlags = QFlags!(SectionFlag);
 
     pragma(inline, true) ref QString prepend(QChar c) { return insert(0, c); }
     pragma(inline, true) ref QString prepend(const(QChar)* uc, qsizetype len) { return insert(0, uc, len); }
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         pragma(inline, true) ref QString prepend(ref const(QString) s) { return insert(0, s); }
     }
     pragma(inline, true) ref QString prepend(QStringView v) { return prepend(v.data(), v.length()); }
     pragma(inline, true) ref QString prepend(QLatin1String s) { return insert(0, s); }
 
-    extern(D) pragma(inline, true) ref QString opOpAssign(string op)(QChar c) if(op == "~") { return append(c); }
+    extern(D) pragma(inline, true) ref QString opOpAssign(string op)(QChar c) if (op == "~") { return append(c); }
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         /+pragma(inline, true) ref QString operator +=(ref const(QString) s) { return append(s); }+/
     }
-    extern(D) pragma(inline, true) ref QString opOpAssign(string op)(QStringView v) if(op == "~") { return append(v); }
-    extern(D) pragma(inline, true) ref QString opOpAssign(string op)(const QString s) if(op == "~") { return append(s); }
-    extern(D) pragma(inline, true) ref QString opOpAssign(string op)(QLatin1String s) if(op == "~") { return append(s); }
+    extern(D) pragma(inline, true) ref QString opOpAssign(string op)(QStringView v) if (op == "~") { return append(v); }
+    extern(D) pragma(inline, true) ref QString opOpAssign(string op)(const QString s) if (op == "~") { return append(s); }
+    extern(D) pragma(inline, true) ref QString opOpAssign(string op)(QLatin1String s) if (op == "~") { return append(s); }
 
     ref QString remove(qsizetype i, qsizetype len);
     ref QString remove(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive);
@@ -945,7 +945,7 @@ public:
     pragma(inline, true) ref QString setUtf16(const(ushort)* autf16, qsizetype asize)
     { return setUnicode(reinterpret_cast!(const(QChar)*)(autf16), asize); } // ### Qt 7 char16_t
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         int compare(ref const(QString) s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/;
     }
@@ -1245,7 +1245,7 @@ public:
     /+ static inline QString fromStdU32String(const std::u32string &s); +/
     /+ inline std::u32string toStdU32String() const; +/
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QString fromCFString(CFStringRef string); +/
         /+ CFStringRef toCFString() const Q_DECL_CF_RETURNS_RETAINED; +/
@@ -1264,19 +1264,19 @@ public:
     this(qsizetype size, /+ Qt:: +/qt.core.namespace.Initialization);
     /+ explicit QString(DataPointer &&dd) : d(std::move(dd)) {} +/
 
-    extern(D) QString opBinary(string op)(const ref QString s2) const if(op == "~")
+    extern(D) QString opBinary(string op)(const ref QString s2) const if (op == "~")
     {
         QString t = *cast(QString*)&this; t ~= s2; return t;
     }
-    extern(D) QString opBinary(string op)(const QString s2) const if(op == "~")
+    extern(D) QString opBinary(string op)(const QString s2) const if (op == "~")
     {
         QString t = *cast(QString*)&this; t ~= s2; return t;
     }
-    extern(D) QString opBinary(string op)(const char *s2) const if(op == "~")
+    extern(D) QString opBinary(string op)(const char *s2) const if (op == "~")
     {
         QString t = *cast(QString*)&this; auto tmp = QString.fromUtf8(s2, -1); t ~= tmp; return t;
     }
-    extern(D) QString opBinaryRight(string op)(const char *s1) const if(op == "~")
+    extern(D) QString opBinaryRight(string op)(const char *s1) const if (op == "~")
     {
         QString t = QString.fromUtf8(s1, -1); t ~= this; return t;
     }
@@ -1294,8 +1294,8 @@ public:
 
 private:
 /+ #if defined(QT_NO_CAST_FROM_ASCII) +/
-    extern(D) ref QString opOpAssign(string op)(const(char)* s) if(op == "~");
-    extern(D) ref QString opOpAssign(string op)(ref const(QByteArray) s) if(op == "~");
+    extern(D) ref QString opOpAssign(string op)(const(char)* s) if (op == "~");
+    extern(D) ref QString opOpAssign(string op)(ref const(QByteArray) s) if (op == "~");
     //this(const(char)* ch);
     //this(ref const(QByteArray) a);
     /+ref QString operator =(const(char)*  ch);+/
@@ -1354,7 +1354,7 @@ private:
         static T toIntegral_helper(T)(QStringView string, bool* ok, int base)
     {
         import std.traits;
-        static if(isUnsigned!T)
+        static if (isUnsigned!T)
         {
             alias Int64 = qulonglong;
             alias Int32 = uint;

@@ -19,18 +19,18 @@ public:
     }
 
 /+ signals +/public:
-    @QSignal final void progressChanged(int value){mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void progressChanged(int value) {mixin(Q_SIGNAL_IMPL_D);}
 
-    @QSignal final void message(ref const(QString) msg){mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void message(ref const(QString) msg) {mixin(Q_SIGNAL_IMPL_D);}
 
 protected:
     override extern(C++) void run()
     {
         QString tmp = "Started";
         /+ emit +/ message(tmp);
-        for(int i = 1; i <= 100; i++)
+        for (int i = 1; i <= 100; i++)
         {
-            if(isInterruptionRequested())
+            if (isInterruptionRequested())
             {
                 QString tmp2 = "Canceled";
                 /+ emit +/ message(tmp2);
@@ -66,7 +66,7 @@ public:
     {
         import core.stdcpp.new_;
 
-        if(thread)
+        if (thread)
         {
             thread.requestInterruption();
             thread.wait();

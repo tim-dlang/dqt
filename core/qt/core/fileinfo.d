@@ -26,7 +26,7 @@ import qt.helpers;
 
 extern(C++, class) struct QDirIteratorPrivate;
 extern(C++, class) struct QFileInfoPrivate;
-static if(false)
+static if (false)
 {
 /+ #define QFILEINFO_MAYBE_EXPLICIT Q_IMPLICIT +/
 }

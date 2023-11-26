@@ -111,7 +111,7 @@ namespace QNativeInterface::Private { +/
         static int revision()
         {
             static if (haveTypeInfo)
-                return cast(int)(NativeInterface__1.TypeInfo.revision);
+                return cast(int) (NativeInterface__1.TypeInfo.revision);
             else
                 return 0;
         }
@@ -119,7 +119,7 @@ namespace QNativeInterface::Private { +/
         static const(char)* name()
         {
             static if (haveTypeInfo)
-                return cast(const(char)*)(&NativeInterface__1.TypeInfo.name);
+                return cast(const(char)*) (&NativeInterface__1.TypeInfo.name);
             else
                 return null;
         }

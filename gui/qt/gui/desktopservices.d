@@ -14,14 +14,14 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-static if(!defined!"QT_NO_DESKTOPSERVICES")
+static if (!defined!"QT_NO_DESKTOPSERVICES")
 {
     import qt.core.object;
     import qt.core.string;
     import qt.core.url;
 }
 
-static if(!defined!"QT_NO_DESKTOPSERVICES")
+static if (!defined!"QT_NO_DESKTOPSERVICES")
 {
 
 

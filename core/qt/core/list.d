@@ -129,7 +129,7 @@ public:
         {
             this.i = n;
         }
-        pragma(inline, true) ref T opUnary(string op)() const if(op == "*") { return *cast(T*)i; }
+        pragma(inline, true) ref T opUnary(string op)() const if (op == "*") { return *cast(T*) i; }
         /+pragma(inline, true) T* operator ->() const { return i; }+/
         //pragma(inline, true) ref T opIndex(qsizetype j) const { return *(i + j); }
         /+pragma(inline, true) bool operator ==(iterator o) const { return i == o.i; }+/
@@ -140,11 +140,11 @@ public:
         /+pragma(inline, true) bool operator >=(iterator other) const { return i >= other.i; }+/
         /+pragma(inline, true) bool operator ==(pointer p) const { return i == p; }+/
         /+pragma(inline, true) bool operator !=(pointer p) const { return i != p; }+/
-        pragma(inline, true) ref iterator opUnary(string op)() if(op == "++") { ++i; return this; }
-        /+pragma(inline, true) iterator operator ++(int) { T* n = i; ++i; return cast(iterator)(n); }+/
-        pragma(inline, true) ref iterator opUnary(string op)() if(op == "--") { i--; return this; }
-        /+pragma(inline, true) iterator operator --(int) { T* n = i; i--; return cast(iterator)(n); }+/
-        pragma(inline, true) qsizetype opBinary(string op)(iterator j) const if(op == "-") { return i - j.i; }
+        pragma(inline, true) ref iterator opUnary(string op)() if (op == "++") { ++i; return this; }
+        /+pragma(inline, true) iterator operator ++(int) { T* n = i; ++i; return cast(iterator) (n); }+/
+        pragma(inline, true) ref iterator opUnary(string op)() if (op == "--") { i--; return this; }
+        /+pragma(inline, true) iterator operator --(int) { T* n = i; i--; return cast(iterator) (n); }+/
+        pragma(inline, true) qsizetype opBinary(string op)(iterator j) const if (op == "-") { return i - j.i; }
         /+pragma(inline, true) auto opCast(T : T)() const { return i; }+/
 
         /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, iterator>
@@ -184,7 +184,7 @@ public:
         {
             this.i = o;
         }*/
-        pragma(inline, true) ref const(T) opUnary(string op)() const if(op == "*") { return *i; }
+        pragma(inline, true) ref const(T) opUnary(string op)() const if (op == "*") { return *i; }
         /+pragma(inline, true) const(T)* operator ->() const { return i; }+/
         pragma(inline, true) ref const(T) opIndex(qsizetype j) const { return *(i + j); }
         /+pragma(inline, true) bool operator ==(const_iterator o) const { return i == o.i; }+/
@@ -197,11 +197,11 @@ public:
         /+pragma(inline, true) bool operator !=(iterator o) const { return i != const_iterator(o).i; }+/
         /+pragma(inline, true) bool operator ==(pointer p) const { return i == p; }+/
         /+pragma(inline, true) bool operator !=(pointer p) const { return i != p; }+/
-        pragma(inline, true) ref const_iterator opUnary(string op)() if(op == "++") { ++i; return this; }
-        /+pragma(inline, true) const_iterator operator ++(int) { const(T)* n = i; ++i; return cast(const_iterator)(n); }+/
-        pragma(inline, true) ref const_iterator opUnary(string op)() if(op == "--") { i--; return this; }
-        /+pragma(inline, true) const_iterator operator --(int) { const(T)* n = i; i--; return cast(const_iterator)(n); }+/
-        pragma(inline, true) qsizetype opBinary(string op)(const_iterator j) const if(op == "-") { return i - j.i; }
+        pragma(inline, true) ref const_iterator opUnary(string op)() if (op == "++") { ++i; return this; }
+        /+pragma(inline, true) const_iterator operator ++(int) { const(T)* n = i; ++i; return cast(const_iterator) (n); }+/
+        pragma(inline, true) ref const_iterator opUnary(string op)() if (op == "--") { i--; return this; }
+        /+pragma(inline, true) const_iterator operator --(int) { const(T)* n = i; i--; return cast(const_iterator) (n); }+/
+        pragma(inline, true) qsizetype opBinary(string op)(const_iterator j) const if (op == "-") { return i - j.i; }
         /+pragma(inline, true) auto opCast(T : const(T))() const { return i; }+/
         int opCmp(const const_iterator other) const
         {
@@ -219,10 +219,10 @@ public:
         &operator-=(Int j) { i-=j; return *this; } +/
         /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
         operator+(Int j) const { return const_iterator(i+j); } +/
-        pragma(inline, true) const_iterator opBinary(string op, Int)(Int j) const if(op == "+" && isIntegral!Int) { return const_iterator(i+j); }
+        pragma(inline, true) const_iterator opBinary(string op, Int)(Int j) const if (op == "+" && isIntegral!Int) { return const_iterator(i+j); }
         /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
         operator-(Int j) const { return const_iterator(i-j); } +/
-        pragma(inline, true) const_iterator opBinary(string op, Int)(Int j) const if(op == "-" && isIntegral!Int) { return const_iterator(i-j); }
+        pragma(inline, true) const_iterator opBinary(string op, Int)(Int j) const if (op == "-" && isIntegral!Int) { return const_iterator(i-j); }
         /+ template <typename Int> +/ /+ friend std::enable_if_t<std::is_integral_v<Int>, const_iterator>
         operator+(Int j, const_iterator k) { return k + j; } +/
     }
@@ -321,9 +321,9 @@ public:
     /+/+ QTypeTraits:: +/qt.core.typeinfo.compare_eq_result_container!(QList, U) operator ==(U)(ref const(QList) other) const
     {
         if (size() != other.size())
-            return cast(qt.core.typeinfo.compare_eq_result_container!(QList, U))(false);
+            return cast(qt.core.typeinfo.compare_eq_result_container!(QList, U)) (false);
         if (begin() == other.begin())
-            return cast(qt.core.typeinfo.compare_eq_result_container!(QList, U))(true);
+            return cast(qt.core.typeinfo.compare_eq_result_container!(QList, U)) (true);
 
         // do element-by-element comparison
         return d.compare(begin(), other.begin(), size());
@@ -341,7 +341,7 @@ public:
                                 std::declval<QList<U>>().begin(), std::declval<QList<U>>().end(),
                                 other.begin(), other.end()))) +/
     {
-        return cast(qt.core.typeinfo.compare_lt_result_container!(QList, U))(/+ std:: +/lexicographical_compare(begin(), end(),
+        return cast(qt.core.typeinfo.compare_lt_result_container!(QList, U)) (/+ std:: +/lexicographical_compare(begin(), end(),
                                             other.begin(), other.end()));
     }+/
 
@@ -349,7 +349,7 @@ public:
     /+/+ QTypeTraits:: +/qt.core.typeinfo.compare_lt_result_container!(QList, U) operator >(U)(ref const(QList) other) const
             /+ noexcept(noexcept(other < std::declval<QList<U>>())) +/
     {
-        return cast(qt.core.typeinfo.compare_lt_result_container!(QList, U))(other < this);
+        return cast(qt.core.typeinfo.compare_lt_result_container!(QList, U)) (other < this);
     }+/
 
     /+ template <typename U = T> +/
@@ -407,11 +407,11 @@ public:
             }
         }
 
-        static if(#configValue!"merged")
+        static if (#configValue!"merged")
         {
         auto detached = DataPointer(Data.allocate(qMax(asize, size())));
         }
-    static if(#configValue!"merged")
+    static if (#configValue!"merged")
     {
     DataPointer detached__1();
     }
@@ -426,11 +426,11 @@ public:
             return;
         if (d.needsDetach() || size() < capacity()) {
             // must allocate memory
-            static if(#configValue!"merged")
+            static if (#configValue!"merged")
             {
             auto detached = DataPointer(Data.allocate(size()));
             }
-    static if(#configValue!"merged")
+    static if (#configValue!"merged")
     {
     DataPointer detached__1();
     }
@@ -752,7 +752,7 @@ public:
 
         return d.begin() + i;
     }+/
-//    pragma(inline, true) iterator erase(const_iterator pos) { return erase(pos, cast(const_iterator)(pos+1)); }
+//    pragma(inline, true) iterator erase(const_iterator pos) { return erase(pos, cast(const_iterator) (pos+1)); }
 
     // more Qt
     pragma(inline, true) ref T first()() { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *begin(); }
@@ -780,16 +780,16 @@ public:
         }
 
         // Allocate memory
-        static if(#configValue!"merged")
+        static if (#configValue!"merged")
         {
         auto copied = DataPointer(Data.allocate(l));
         }
-    static if(#configValue!"merged")
+    static if (#configValue!"merged")
     {
     DataPointer copied__1();
     }
         copied__1.copyAppend(constBegin() + p, constBegin() + p + l);
-        return cast(QList!(T))(copied__1);
+        return cast(QList!(T)) (copied__1);
     }+/
 
 /+    QList!(T) first(qsizetype n) const
@@ -848,13 +848,13 @@ public:
 //    void shrink_to_fit() { squeeze(); }
 
     // comfort
-    extern(D) ref QList!(T) opOpAssign(string op)(ref const(QList!(T)) l) if(op == "~") { append(l); return this; }
+    extern(D) ref QList!(T) opOpAssign(string op)(ref const(QList!(T)) l) if (op == "~") { append(l); return this; }
     /+ QList<T> &operator+=(QList<T> &&l) { append(std::move(l)); return *this; } +/
-    extern(D) pragma(inline, true) QList!(T) opBinary(string op)(ref const(QList!(T)) l) const if(op == "~")
+    extern(D) pragma(inline, true) QList!(T) opBinary(string op)(ref const(QList!(T)) l) const if (op == "~")
     { QList n = this; n ~= l; return n; }
     /+ inline QList<T> operator+(QList<T> &&l) const
     { QList n = *this; n += std::move(l); return n; } +/
-    extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(parameter_type t) if(op == "~")
+    extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(parameter_type t) if (op == "~")
     { append(t); return this; }
     /+pragma(inline, true) ref QList!(T) operator << (parameter_type t)
     { append(t); return this; }+/
@@ -862,7 +862,7 @@ public:
     { this += l; return this; }+/
     /+ inline QList<T> &operator<<(QList<T> &&l)
     { *this += std::move(l); return *this; } +/
-    /+extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(rvalue_ref t) if(op == "~")
+    /+extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(rvalue_ref t) if (op == "~")
     { append(/+ std:: +/move(t)); return this; }+/
     /+pragma(inline, true) ref QList!(T) operator <<(rvalue_ref t)
     { append(/+ std:: +/move(t)); return this; }+/

@@ -126,7 +126,7 @@ public:
 
 /+    QVariant* dataForRole(int role) const
     {
-        static if(defined!"__cpp_lib_constexpr_algorithms")
+        static if (defined!"__cpp_lib_constexpr_algorithms")
         {
             auto result = /+ std:: +/find_if(begin(), end(), [role](const QModelRoleData &roleData) {
                 return roleData.role() == role;
@@ -142,7 +142,7 @@ public:
             }
         }
 
-        return (){ (mixin(Q_ASSERT(q{cast(QModelRoleData*)(result) != QModelRoleDataSpan.end()})));
+        return (){ (mixin(Q_ASSERT(q{cast(QModelRoleData*) (result) != QModelRoleDataSpan.end()})));
 return &result.data();
 }();
     }+/

@@ -22,7 +22,7 @@ import qt.core.size;
 import qt.core.variant;
 import qt.gui.image;
 import qt.helpers;
-static if(!defined!"QT_NO_IMAGEFORMATPLUGIN")
+static if (!defined!"QT_NO_IMAGEFORMATPLUGIN")
     import qt.core.object;
 
 
@@ -108,7 +108,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-static if(!defined!"QT_NO_IMAGEFORMATPLUGIN")
+static if (!defined!"QT_NO_IMAGEFORMATPLUGIN")
 {
 
 /+ #define QImageIOHandlerFactoryInterface_iid "org.qt-project.Qt.QImageIOHandlerFactoryInterface" +/

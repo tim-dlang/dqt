@@ -166,22 +166,22 @@ public:
     T fetchAndXorOrdered(T valueToAdd)/+ noexcept+/
     { return Ops.fetchAndXorOrdered(_q_value, valueToAdd); }
 +/
-    T opUnary(string op)()/+ noexcept+/ if(op == "++")
+    T opUnary(string op)()/+ noexcept+/ if (op == "++")
     { return fetchAndAddOrdered(1) + 1; }
     /+T operator ++(int)/+ noexcept+/
     { return fetchAndAddOrdered(1); }+/
-    T opUnary(string op)()/+ noexcept+/ if(op == "--")
+    T opUnary(string op)()/+ noexcept+/ if (op == "--")
     { return fetchAndSubOrdered(1) - 1; }
     /+T operator --(int)/+ noexcept+/
     { return fetchAndSubOrdered(1); }+/
 
-    T opOpAssign(string op)(T v)/+ noexcept+/ if(op == "+")
+    T opOpAssign(string op)(T v)/+ noexcept+/ if (op == "+")
     { return fetchAndAddOrdered(v) + v; }
-    T opOpAssign(string op)(T v)/+ noexcept+/ if(op == "-")
+    T opOpAssign(string op)(T v)/+ noexcept+/ if (op == "-")
     { return fetchAndSubOrdered(v) - v; }
-    T opOpAssign(string op)(T v)/+ noexcept+/ if(op == "&")
+    T opOpAssign(string op)(T v)/+ noexcept+/ if (op == "&")
     { return fetchAndAndOrdered(v) & v; }
-    T opOpAssign(string op)(T v)/+ noexcept+/ if(op == "|")
+    T opOpAssign(string op)(T v)/+ noexcept+/ if (op == "|")
     { return fetchAndOrOrdered(v) | v; }
     /+T operator ^=(T v)/+ noexcept+/
     { return fetchAndXorOrdered(v) ^ v; }+/

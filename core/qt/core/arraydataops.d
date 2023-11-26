@@ -179,7 +179,7 @@ public:
                 return;
             }
         }
-        static if(Args.length == 1 && is(const(Args[0]) == const(T)))
+        static if (Args.length == 1 && is(const(Args[0]) == const(T)))
             auto tmp = args[0];
         else
             auto tmp = T(args /+ /+ std:: +/forward!(Args)(args)...+/);
@@ -318,7 +318,7 @@ public:
 
         T* data = this_.begin();
         while (b < e) {
-            static if(is(T == struct) && __traits(hasCopyConstructor, T)) {
+            static if (is(T == struct) && __traits(hasCopyConstructor, T)) {
                 // Workaround for https://issues.dlang.org/show_bug.cgi?id=22766
                 import core.stdc.string;
                 memset((data + this_.size), 0, T.sizeof);
@@ -858,7 +858,7 @@ public:
                 return;
             }
         }
-        static if(Args.length == 1 && is(const(Args[0]) == const(T)))
+        static if (Args.length == 1 && is(const(Args[0]) == const(T)))
             auto tmp = args[0];
         else
             auto tmp = T(args /+ /+ std:: +/forward!(Args)(args)...+/);
@@ -914,9 +914,9 @@ public:
 
 template QArrayOpsSelector(T)
 {
-    static if(!QTypeInfo!T.isComplex && QTypeInfo!T.isRelocatable)
+    static if (!QTypeInfo!T.isComplex && QTypeInfo!T.isRelocatable)
         alias Type = QPodArrayOps!(T);
-    else static if(QTypeInfo!T.isComplex && QTypeInfo!T.isRelocatable)
+    else static if (QTypeInfo!T.isComplex && QTypeInfo!T.isRelocatable)
         alias Type = QMovableArrayOps!(T);
     else
         alias Type = QGenericArrayOps!(T);
@@ -957,7 +957,7 @@ public:
     alias destroyAll = Base.destroyAll;
     alias assign = Base.assign;
     alias compare = Base.compare;
-    static if(__traits(hasMember, Base, "reallocate"))
+    static if (__traits(hasMember, Base, "reallocate"))
         alias reallocate = Base.reallocate;
     alias copyAppend = Base.copyAppend;
     alias moveAppend = Base.moveAppend;

@@ -78,7 +78,7 @@ public:
 
 #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QString) format, QCalendar cal/* = QCalendar()*/) const
         { return toString(qToStringViewIgnoringNull(format), cal); }
@@ -105,7 +105,7 @@ public:
     { auto tmp = string.toString(); return fromString(tmp, format, cal); }
     static QDate fromString(ref const(QString) string, QStringView format, QCalendar cal/* = QCalendar()*/);
 /+ # if QT_STRINGVIEW_LEVEL < 2 +/
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         static QDate fromString(ref const(QString) string, /+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate)
         { return fromString(qToStringViewIgnoringNull(string), format); }
@@ -173,7 +173,7 @@ public:
     int msec() const;
 /+ #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat f = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QString) format) const
         { return toString(qToStringViewIgnoringNull(format)); }
@@ -197,7 +197,7 @@ public:
     { auto tmp = string.toString(); return fromString(tmp, format); }
     static QTime fromString(ref const(QString) string, QStringView format);
 /+ # if QT_STRINGVIEW_LEVEL < 2 +/
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         static QTime fromString(ref const(QString) string, /+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate)
         { return fromString(qToStringViewIgnoringNull(string), format); }
@@ -365,7 +365,7 @@ public:
 
 /+ #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QString) format, QCalendar cal/* = QCalendar()*/) const
         { return toString(qToStringViewIgnoringNull(format), cal); }
@@ -400,7 +400,7 @@ public:
     static QDateTime fromString(ref const(QString) string, QStringView format,
                                     QCalendar cal/* = QCalendar()*/);
 /+ # if QT_STRINGVIEW_LEVEL < 2 +/
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         static QDateTime fromString(ref const(QString) string, /+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate)
         { return fromString(qToStringViewIgnoringNull(string), format); }
@@ -424,7 +424,7 @@ public:
     static qint64 currentMSecsSinceEpoch()/+ noexcept+/;
     static qint64 currentSecsSinceEpoch()/+ noexcept+/;
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QDateTime fromCFDate(CFDateRef date); +/
         /+ CFDateRef toCFDate() const Q_DECL_CF_RETURNS_RETAINED; +/

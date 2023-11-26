@@ -86,13 +86,13 @@ public:
     pragma(inline, true) ref int rheight()/+ noexcept+/ return
     { return ht; }
 
-    pragma(inline, true) ref QSize opOpAssign(string op)(ref const(QSize) s)/+ noexcept+/ if(op == "+")
+    pragma(inline, true) ref QSize opOpAssign(string op)(ref const(QSize) s)/+ noexcept+/ if (op == "+")
     {
         wd += s.wd;
         ht += s.ht;
         return this;
     }
-    pragma(inline, true) ref QSize opOpAssign(string op)(ref const(QSize) s)/+ noexcept+/ if(op == "-")
+    pragma(inline, true) ref QSize opOpAssign(string op)(ref const(QSize) s)/+ noexcept+/ if (op == "-")
     {
         wd -= s.wd;
         ht -= s.ht;
@@ -128,7 +128,7 @@ public:
     { Q_ASSERT(!qFuzzyIsNull(c)); return QSize(qRound(s.wd / c), qRound(s.ht / c)); } +/
     /+ friend inline constexpr size_t qHash(const QSize &, size_t) noexcept; +/
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ [[nodiscard]] CGSize toCGSize() const noexcept; +/
     }
@@ -241,13 +241,13 @@ public:
     pragma(inline, true) ref qreal rheight()/+ noexcept+/ return
     { return ht; }
 
-    pragma(inline, true) ref QSizeF opOpAssign(string op)(ref const(QSizeF) s)/+ noexcept+/ if(op == "+")
+    pragma(inline, true) ref QSizeF opOpAssign(string op)(ref const(QSizeF) s)/+ noexcept+/ if (op == "+")
     {
         wd += s.wd;
         ht += s.ht;
         return this;
     }
-    pragma(inline, true) ref QSizeF opOpAssign(string op)(ref const(QSizeF) s)/+ noexcept+/ if(op == "-")
+    pragma(inline, true) ref QSizeF opOpAssign(string op)(ref const(QSizeF) s)/+ noexcept+/ if (op == "-")
     {
         wd -= s.wd;
         ht -= s.ht;
@@ -293,7 +293,7 @@ public:
         return QSize(qRound(wd), qRound(ht));
     }
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ [[nodiscard]] static QSizeF fromCGSize(CGSize size) noexcept; +/
         /+ [[nodiscard]] CGSize toCGSize() const noexcept; +/

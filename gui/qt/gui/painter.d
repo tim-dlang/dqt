@@ -694,7 +694,7 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     void setRenderHint(RenderHint hint, bool on = true);
     void setRenderHints(RenderHints hints, bool on = true);
     RenderHints renderHints() const;
-    pragma(inline, true) bool testRenderHint(RenderHint hint) const { return cast(bool)(renderHints() & hint); }
+    pragma(inline, true) bool testRenderHint(RenderHint hint) const { return cast(bool) (renderHints() & hint); }
 
     QPaintEngine paintEngine() const;
 

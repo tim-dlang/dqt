@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-static if(!defined!"QT_NO_SYNTAXHIGHLIGHTER")
+static if (!defined!"QT_NO_SYNTAXHIGHLIGHTER")
 {
     import qt.core.object;
     import qt.core.string;
@@ -25,7 +25,7 @@ static if(!defined!"QT_NO_SYNTAXHIGHLIGHTER")
     import qt.gui.textobject;
 }
 
-static if(!defined!"QT_NO_SYNTAXHIGHLIGHTER")
+static if (!defined!"QT_NO_SYNTAXHIGHLIGHTER")
 {
 
 

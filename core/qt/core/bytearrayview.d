@@ -135,7 +135,7 @@ private:
 
     /+static qsizetype lengthHelperCharArray(const(char)* data, size_t size)/+ noexcept+/
     {
-        const it = /+ std:: +/char_traits!(char).find(cast(const(char_traits.char_type)*)(data), size, '\0');
+        const it = /+ std:: +/char_traits!(char).find(cast(const(char_traits.char_type)*) (data), size, '\0');
         const end = it ? it : /+ std:: +/next(data, size);
         return qsizetype(/+ std:: +/distance(data, end));
     }+/
@@ -180,7 +180,7 @@ public:
     constexpr QByteArrayView(const Byte *data) noexcept;
 #else +/
     /+ template <typename Pointer, if_compatible_pointer<Pointer> = true> +/
-    this(Pointer)(ref const(Pointer) data)/+ noexcept+/ if(is(Pointer: const(char)*))
+    this(Pointer)(ref const(Pointer) data)/+ noexcept+/ if (is(Pointer: const(char)*))
     {
         import core.stdc.string: strlen;
         this(
@@ -192,7 +192,7 @@ public:
     QByteArrayView(const QByteArray &data) noexcept;
 #else +/
     /+ template <typename ByteArray, if_compatible_qbytearray_like<ByteArray> = true> +/
-    this(ByteArray)(ref const(ByteArray) ba)/+ noexcept+/ if(is(ByteArray == QByteArray))
+    this(ByteArray)(ref const(ByteArray) ba)/+ noexcept+/ if (is(ByteArray == QByteArray))
     {
         this(ba.isNull() ? null : ba.data(), qsizetype(ba.size()));
     }

@@ -443,7 +443,7 @@ alias TypeFlags = QFlags!(TypeFlag);
 
     bool isValid() const;
     bool isRegistered() const;
-    static if(defined!"QT_QMETATYPE_BC_COMPAT")
+    static if (defined!"QT_QMETATYPE_BC_COMPAT")
     {
         int id() const;
     }
@@ -471,7 +471,7 @@ alias TypeFlags = QFlags!(TypeFlag);
     }
     TypeFlags flags() const
     {
-        return d_ptr ? TypeFlags(cast(QFlag)(d_ptr.flags)) : TypeFlags();
+        return d_ptr ? TypeFlags(cast(QFlag) (d_ptr.flags)) : TypeFlags();
     }
     const(QMetaObject)* metaObject() const
     {
@@ -652,7 +652,7 @@ public:
             *t = function_(*f);
             return true;
         };
-        return registerMutableViewImpl!(From, To)(/+ std:: +/move(cast(_Tp && )(view)), fromType, toType);
+        return registerMutableViewImpl!(From, To)(/+ std:: +/move(cast(_Tp && ) (view)), fromType, toType);
     } +/
 
 private:
@@ -978,7 +978,7 @@ extern(C++, "QtPrivate")
 #endif +/
     template MetaObjectForType(T)
     {
-        static if(is(const(T): const(QObject)))
+        static if (is(const(T): const(QObject)))
         {
             static const(QMetaObject)* value() { return &T.staticMetaObject; }
             static const(QMetaObject)* metaObjectFunction(const(QMetaTypeInterface)*) { return &T.staticMetaObject; }
@@ -1165,7 +1165,7 @@ extern(D) mixin((){
     import std.conv;
     string code = "template QMetaTypeId2(T)\n";
     code ~= "{\n";
-    code ~= "    static if(std.traits.isBuiltinType!T)\n";
+    code ~= "    static if (std.traits.isBuiltinType!T)\n";
     code ~= "    {\n";
     bool needsElse = false;
     foreach(i, t; allBuiltinTypes)
@@ -1178,7 +1178,7 @@ extern(D) mixin((){
             code ~= "        ";
             if(needsElse)
                 code ~= "else ";
-            code ~= text("static if(is(T == ", realType2, "))\n");
+            code ~= text("static if (is(T == ", realType2, "))\n");
             code ~= "        {\n";
             code ~= text("            enum { Defined = 1, IsBuiltIn = true, MetaType = ", t.typeNameID, " };\n");
             code ~= text("            pragma(inline, true) static int qt_metatype_id() { return ", t.typeNameID, "; }\n");
@@ -1195,7 +1195,7 @@ extern(D) mixin((){
     code ~= "    else\n";
     code ~= "    {\n";
     needsElse = false;
-    code ~= "        static if(IsInQtPackage!T)\n";
+    code ~= "        static if (IsInQtPackage!T)\n";
     code ~= "        {\n";
     foreach(i, t; allBuiltinTypes)
     {
@@ -1208,7 +1208,7 @@ extern(D) mixin((){
             if(needsElse)
                 code ~= "else ";
             // TODO: Match templates like QList!(QString)
-            code ~= text("static if(__traits(identifier, T) == \"", realType2, "\")\n");
+            code ~= text("static if (__traits(identifier, T) == \"", realType2, "\")\n");
             code ~= "            {\n";
             code ~= text("                enum { Defined = 1, IsBuiltIn = true, MetaType = ", t.typeNameID, " };\n");
             code ~= text("                pragma(inline, true) static int qt_metatype_id() { return ", t.typeNameID, "; }\n");
@@ -1263,7 +1263,7 @@ extern(C++, "QtPrivate") {
 
     private template RemovePointer(T)
     {
-        static if(is(T == X*, X))
+        static if (is(T == X*, X))
             alias RemovePointer = typeof(*T.init);
         else
             alias RemovePointer = T;
@@ -1354,7 +1354,7 @@ int qRegisterMetaType(T)(const(char)* typeName)
 
 pragma(inline, true) int qMetaTypeId(T)()
 {
-    static if (cast(bool)(QMetaTypeId2!(T).IsBuiltIn)) {
+    static if (cast(bool) (QMetaTypeId2!(T).IsBuiltIn)) {
         return QMetaTypeId2!(T).MetaType;
     } else {
         return QMetaType.fromType!(T)().id();
@@ -2238,7 +2238,7 @@ extern(D) auto typenameHelper(T)()
 
 struct BuiltinMetaType(T)
 {
-    static if(QMetaTypeId2!(T).IsBuiltIn)
+    static if (QMetaTypeId2!(T).IsBuiltIn)
         enum int value = QMetaTypeId2!(T).MetaType;
     else
         enum int value = 0;
@@ -2310,7 +2310,7 @@ public:
 
         static if (__traits(compiles, {S s;}) || __traits(hasMember, S, "rawConstructor")) {
             return (const QMetaTypeInterface *, void *addr) {
-                static if(__traits(hasMember, S, "rawConstructor")) {
+                static if (__traits(hasMember, S, "rawConstructor")) {
                     (cast(S*)addr).rawConstructor();
                 } else {
                     emplace!S(cast(S*)addr);
@@ -2327,7 +2327,7 @@ public:
 
         static if (__traits(compiles, (ref S other){S s = other;})) {
             return (const QMetaTypeInterface *, void *addr, const void *other) {
-                static if(is(S == struct) && __traits(hasCopyConstructor, S)) {
+                static if (is(S == struct) && __traits(hasCopyConstructor, S)) {
                     // Workaround for https://issues.dlang.org/show_bug.cgi?id=22766
                     import core.stdc.string;
                     memset(addr, 0, S.sizeof);
@@ -2375,7 +2375,7 @@ public:
 
     static const(char)* getName()
     {
-        static if (cast(bool)(QMetaTypeId2!(S).IsBuiltIn)) {
+        static if (cast(bool) (QMetaTypeId2!(S).IsBuiltIn)) {
             return QMetaTypeId2!(S).nameAsArray.ptr;
         } else {
             return name.ptr;

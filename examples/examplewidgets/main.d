@@ -11,7 +11,7 @@ public:
     extern(C++) override bool eventFilter(QObject object, QEvent event)
     {
         import std.stdio, std.string;
-        writeln("event ", cast(void*)object, " ", object.metaObject().className().fromStringz, " ", object.objectName().toConstWString, " ", event.type());
+        writeln("event ", cast(void*) object, " ", object.metaObject().className().fromStringz, " ", object.objectName().toConstWString, " ", event.type());
 
         return false;
     }

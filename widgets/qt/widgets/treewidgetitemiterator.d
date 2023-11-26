@@ -63,14 +63,14 @@ alias IteratorFlags = QFlags!(IteratorFlag);
 
     /+ref QTreeWidgetItemIterator operator =(ref const(QTreeWidgetItemIterator) it);+/
 
-    ref QTreeWidgetItemIterator opUnary(string op)() if(op == "++");
+    ref QTreeWidgetItemIterator opUnary(string op)() if (op == "++");
     /+pragma(inline, true) const(QTreeWidgetItemIterator) operator ++(int)
     {
         QTreeWidgetItemIterator it = this;
         ++(this);
         return it;
     }+/
-    pragma(inline, true) ref QTreeWidgetItemIterator opOpAssign(string op)(int n) if(op == "+")
+    pragma(inline, true) ref QTreeWidgetItemIterator opOpAssign(string op)(int n) if (op == "+")
     {
         if (n < 0)
             return (this) -= (-n);
@@ -79,14 +79,14 @@ alias IteratorFlags = QFlags!(IteratorFlag);
         return this;
     }
 
-    ref QTreeWidgetItemIterator opUnary(string op)() if(op == "--");
+    ref QTreeWidgetItemIterator opUnary(string op)() if (op == "--");
     /+pragma(inline, true) const(QTreeWidgetItemIterator) operator --(int)
     {
         QTreeWidgetItemIterator it = this;
         --(this);
         return it;
     }+/
-    pragma(inline, true) ref QTreeWidgetItemIterator opOpAssign(string op)(int n) if(op == "-")
+    pragma(inline, true) ref QTreeWidgetItemIterator opOpAssign(string op)(int n) if (op == "-")
     {
         if (n < 0)
             return (this) += (-n);
@@ -95,7 +95,7 @@ alias IteratorFlags = QFlags!(IteratorFlag);
         return this;
     }
 
-    pragma(inline, true) QTreeWidgetItem opUnary(string op)() const if(op == "*")
+    pragma(inline, true) QTreeWidgetItem opUnary(string op)() const if (op == "*")
     {
         return current;
     }

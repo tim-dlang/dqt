@@ -52,7 +52,7 @@ public:
         this.itm = 0;
         this.eng = null;
     }+/
-    pragma(inline, true) bool isValid() const { return cast(bool)(eng); }
+    pragma(inline, true) bool isValid() const { return cast(bool) (eng); }
 
     QRectF rect() const;
     qreal width() const;
@@ -211,7 +211,7 @@ public:
         this.index = 0;
         this.eng = null;
     }+/
-    pragma(inline, true) bool isValid() const { return cast(bool)(eng); }
+    pragma(inline, true) bool isValid() const { return cast(bool) (eng); }
 
     QRectF rect() const;
     qreal x() const;

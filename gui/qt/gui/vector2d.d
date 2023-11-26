@@ -143,7 +143,7 @@ public:
     {
         if (direction.isNull())
             return (this - point).length();
-        QVector2D p = cast(QVector2D)(point + dotProduct(this - point, direction) * direction);
+        QVector2D p = cast(QVector2D) (point + dotProduct(this - point, direction) * direction);
         return (this - p).length();
     } +/
 

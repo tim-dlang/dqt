@@ -455,7 +455,7 @@ public:
     }
 }
 
-extern(D) struct DQtMemberSlotObject(T, alias F, Params...) if(is(T: QObject))
+extern(D) struct DQtMemberSlotObject(T, alias F, Params...) if (is(T: QObject))
 {
     QSlotObjectBase base;
 

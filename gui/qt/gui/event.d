@@ -457,7 +457,7 @@ public:
     pragma(inline, true) final QPoint pixelDelta() const { return m_pixelDelta; }
     pragma(inline, true) final QPoint angleDelta() const { return m_angleDelta; }
 
-    pragma(inline, true) final /+ Qt:: +/qt.core.namespace.ScrollPhase phase() const { return cast(/+ Qt:: +/qt.core.namespace.ScrollPhase)(m_phase); }
+    pragma(inline, true) final /+ Qt:: +/qt.core.namespace.ScrollPhase phase() const { return cast(/+ Qt:: +/qt.core.namespace.ScrollPhase) (m_phase); }
     pragma(inline, true) final bool inverted() const { return (m_invertedScrolling) != 0; }
     pragma(inline, true) final bool isInverted() const { return (m_invertedScrolling) != 0; }
     pragma(inline, true) final bool hasPixelDelta() const { return !m_pixelDelta.isNull(); }
@@ -662,7 +662,7 @@ public:
     //final /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers() const;
     final QKeyCombination keyCombination() const
     {
-        return QKeyCombination(modifiers(), cast(/+ Qt:: +/qt.core.namespace.Key)(m_key));
+        return QKeyCombination(modifiers(), cast(/+ Qt:: +/qt.core.namespace.Key) (m_key));
     }
     pragma(inline, true) final QString text() /*const*/ { return m_text; }
     pragma(inline, true) final bool isAutoRepeat() const { return (m_autoRepeat) != 0; }
@@ -947,7 +947,7 @@ public:
     pragma(inline, true) final ref const(QPoint) pos() const { return m_pos; }
     pragma(inline, true) final ref const(QPoint) globalPos() const { return m_globalPos; }
 
-    pragma(inline, true) final Reason reason() const { return cast(Reason)(m_reason); }
+    pragma(inline, true) final Reason reason() const { return cast(Reason) (m_reason); }
 
 protected:
     QPoint m_pos;
@@ -993,7 +993,7 @@ public:
             this.type = typ;
             this.start = s;
             this.length = l;
-            this.value = /+ std:: +/move(cast(_Tp && )(val));
+            this.value = /+ std:: +/move(cast(_Tp && ) (val));
         }
         this(AttributeType typ, int s, int l)
         {

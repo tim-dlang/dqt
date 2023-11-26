@@ -31,7 +31,7 @@ import qt.helpers;
 #endif
 #endif +/
 
-static if(!defined!"QT_PROPERTY_COLLECT_BINDING_LOCATION")
+static if (!defined!"QT_PROPERTY_COLLECT_BINDING_LOCATION")
 {
 /+ #if defined(__cpp_lib_experimental_source_location) +/
 /+ #define QT_SOURCE_LOCATION_NAMESPACE std::experimental
@@ -419,7 +419,7 @@ public:
         }
     }+/
 
-    parameter_type opUnary(string op)() const if(op == "*")
+    parameter_type opUnary(string op)() const if (op == "*")
     {
         return value();
     }
@@ -930,12 +930,12 @@ public:
 
     /+QPropertyBinding!(T) setBinding(ref const(QPropertyBinding!(T)) newBinding)
     {
-        return QBindable!(T)(aliasedProperty(), iface).setBinding(cast(Functor && )(newBinding));
+        return QBindable!(T)(aliasedProperty(), iface).setBinding(cast(Functor && ) (newBinding));
     }+/
 
     bool setBinding(ref const(QUntypedPropertyBinding) newBinding)
     {
-        return cast(bool)(QBindable!(T)(aliasedProperty(), iface).setBinding(newBinding));
+        return cast(bool) (QBindable!(T)(aliasedProperty(), iface).setBinding(newBinding));
     }
 
 /+ #ifndef Q_CLANG_QDOC +/
@@ -1068,7 +1068,7 @@ public:
         }
     }+/
 
-    parameter_type opUnary(string op)() const if(op == "*")
+    parameter_type opUnary(string op)() const if (op == "*")
     {
         return value();
     }
@@ -1082,33 +1082,33 @@ public:
     {
         import qt.core.object;
 
-        auto* bd = cast(auto*)(qGetBindingStorage(owner()).bindingData(&this));
+        auto* bd = cast(auto*) (qGetBindingStorage(owner()).bindingData(&this));
         if (bd)
             bd.removeBinding();
         if (this.val == t)
             return;
         this.val = t;
-        notify(cast(const(qt.core.propertyprivate.QPropertyBindingData)*)(bd));
+        notify(cast(const(qt.core.propertyprivate.QPropertyBindingData)*) (bd));
     }
 
     void notify() {
         import qt.core.object;
 
-        auto* bd = cast(auto*)(qGetBindingStorage(owner()).bindingData(&this));
-        notify(cast(const(qt.core.propertyprivate.QPropertyBindingData)*)(bd));
+        auto* bd = cast(auto*) (qGetBindingStorage(owner()).bindingData(&this));
+        notify(cast(const(qt.core.propertyprivate.QPropertyBindingData)*) (bd));
     }
 
     void setValue(rvalue_ref t)
     {
         import qt.core.object;
 
-        auto* bd = cast(auto*)(qGetBindingStorage(owner()).bindingData(&this));
+        auto* bd = cast(auto*) (qGetBindingStorage(owner()).bindingData(&this));
         if (bd)
             bd.removeBinding();
         if (this.val == t)
             return;
         this.val = /+ std:: +/move(t);
-        notify(cast(const(qt.core.propertyprivate.QPropertyBindingData)*)(bd));
+        notify(cast(const(qt.core.propertyprivate.QPropertyBindingData)*) (bd));
     }
 
     /+ref QObjectBindableProperty operator =(rvalue_ref newValue)
@@ -1157,7 +1157,7 @@ public:
     {
         import qt.core.object;
 
-        auto* bd = cast(auto*)(qGetBindingStorage(owner()).bindingData(&this));
+        auto* bd = cast(auto*) (qGetBindingStorage(owner()).bindingData(&this));
         return bd && bd.binding() !is null;
     }
 
@@ -1165,13 +1165,13 @@ public:
     {
         import qt.core.object;
 
-        auto* bd = cast(auto*)(qGetBindingStorage(owner()).bindingData(&this));
+        auto* bd = cast(auto*) (qGetBindingStorage(owner()).bindingData(&this));
         return static_cast!(QPropertyBinding!(T) && /+ && +/)(QUntypedPropertyBinding(bd ? bd.binding() : null));
     }
 
     QPropertyBinding!(T) takeBinding()
     {
-        return setBinding(cast(Functor && )(QPropertyBinding!(T)()));
+        return setBinding(cast(Functor && ) (QPropertyBinding!(T)()));
     }
 
     /+ template<typename Functor> +/
@@ -1308,7 +1308,7 @@ public:
             return;
     } +/
 
-    parameter_type opUnary(string op)() const if(op == "*")
+    parameter_type opUnary(string op)() const if (op == "*")
     {
         return value();
     }

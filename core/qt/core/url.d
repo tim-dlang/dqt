@@ -62,15 +62,15 @@ public:
         this.i = f.operatortypenameQFlags<E2E2>::Int  ();
     }+/
 
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(int mask) if(op == "&") { i &= mask; return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(uint mask) if(op == "&") { i &= mask; return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QFlags!(E1) mask) if(op == "&") { i &= mask.toInt(); return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QFlags!(E2) mask) if(op == "&") { i &= mask.toInt(); return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QUrlTwoFlags f) if(op == "|") { i |= f.i; return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E1 f) if(op == "|") { i |= f; return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E2 f) if(op == "|") { i |= f; return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QFlags!(E1) mask) if(op == "|") { i |= mask.toInt(); return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QFlags!(E2) mask) if(op == "|") { i |= mask.toInt(); return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(int mask) if (op == "&") { i &= mask; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(uint mask) if (op == "&") { i &= mask; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QFlags!(E1) mask) if (op == "&") { i &= mask.toInt(); return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QFlags!(E2) mask) if (op == "&") { i &= mask.toInt(); return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QUrlTwoFlags f) if (op == "|") { i |= f.i; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E1 f) if (op == "|") { i |= f; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E2 f) if (op == "|") { i |= f; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QFlags!(E1) mask) if (op == "|") { i |= mask.toInt(); return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QFlags!(E2) mask) if (op == "|") { i |= mask.toInt(); return this; }
     /+pragma(inline, true) ref QUrlTwoFlags operator ^=(QUrlTwoFlags f) { i ^= f.i; return this; }+/
     /+pragma(inline, true) ref QUrlTwoFlags operator ^=(E1 f) { i ^= f; return this; }+/
     /+pragma(inline, true) ref QUrlTwoFlags operator ^=(E2 f) { i ^= f; return this; }+/
@@ -82,11 +82,11 @@ public:
     /+pragma(inline, true) auto opCast(T : int)() const { return i; }+/
     /+pragma(inline, true) bool operator !() const { return !i; }+/
 
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(QUrlTwoFlags f) const if(op == "|")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(QUrlTwoFlags f) const if (op == "|")
     { return QUrlTwoFlags(QFlag(i | f.i)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E1 f) const if(op == "|")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E1 f) const if (op == "|")
     { return QUrlTwoFlags(QFlag(i | f)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if(op == "|")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if (op == "|")
     { return QUrlTwoFlags(QFlag(i | f)); }
     /+pragma(inline, true) QUrlTwoFlags operator ^(QUrlTwoFlags f) const
     { return QUrlTwoFlags(QFlag(i ^ f.i)); }+/
@@ -94,13 +94,13 @@ public:
     { return QUrlTwoFlags(QFlag(i ^ f)); }+/
     /+pragma(inline, true) QUrlTwoFlags operator ^(E2 f) const
     { return QUrlTwoFlags(QFlag(i ^ f)); }+/
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(int mask) const if(op == "&")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(int mask) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & mask)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(uint mask) const if(op == "&")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(uint mask) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & mask)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E1 f) const if(op == "&")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E1 f) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & f)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if(op == "&")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & f)); }
     /+pragma(inline, true) QUrlTwoFlags operator ~() const
     { return QUrlTwoFlags(QFlag(~i)); }+/
@@ -269,7 +269,7 @@ alias UserInputResolutionOptions = QFlags!(UserInputResolutionOption);
     static QByteArray toPercentEncoding(ref const(QString) ,
                                             ref const(QByteArray) exclude = globalInitVar!QByteArray,
                                             ref const(QByteArray) include = globalInitVar!QByteArray);
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QUrl fromCFURL(CFURLRef url); +/
         /+ CFURLRef toCFURL() const Q_DECL_CF_RETURNS_RETAINED; +/

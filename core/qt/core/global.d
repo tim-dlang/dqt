@@ -59,7 +59,7 @@ enum QT_VERSION =      QT_VERSION_CHECK!(QT_VERSION_MAJOR, QT_VERSION_MINOR, QT_
    can be used like #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
 */
 /+ #define QT_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch)) +/
-template QT_VERSION_CHECK(params...) if(params.length == 3)
+template QT_VERSION_CHECK(params...) if (params.length == 3)
 {
     enum major = params[0];
     enum minor = params[1];
@@ -728,7 +728,7 @@ pragma(inline, true) T qAbs(T)(ref const(T) t) { return t >= 0 ? t : -t; }
 pragma(inline, true) T qAbs(T)(const(T) t) { return t >= 0 ? t : -t; }
 
 // gcc < 10 doesn't have __has_builtin
-static if(defined!"Q_PROCESSOR_ARM_64" || defined!"_M_ARM64" || defined!"__ARM64__" || versionIsSet!("AArch64"))
+static if (defined!"Q_PROCESSOR_ARM_64" || defined!"_M_ARM64" || defined!"__ARM64__" || versionIsSet!("AArch64"))
 {
 // ARM64 has a single instruction that can do C++ rounding with conversion to integer.
 // Note current clang versions have non-constexpr __builtin_round, ### allow clang this path when they fix it.
@@ -741,29 +741,29 @@ pragma(inline, true) qint64 qRound64(double d)
 pragma(inline, true) qint64 qRound64(float f)
 { return qint64(__builtin_roundf(f)); }
 }
-static if(!defined!"Q_PROCESSOR_ARM_64" && !defined!"_M_ARM64" && !defined!"__ARM64__" && defined!"__SSE2__" && !versionIsSet!("AArch64"))
+static if (!defined!"Q_PROCESSOR_ARM_64" && !defined!"_M_ARM64" && !defined!"__ARM64__" && defined!"__SSE2__" && !versionIsSet!("AArch64"))
 {
 // SSE has binary operations directly on floating point making copysign fast
 pragma(inline, true) int qRound(double d)
-{ return cast(int)(d + __builtin_copysign(0.5, d)); }
+{ return cast(int) (d + __builtin_copysign(0.5, d)); }
 pragma(inline, true) int qRound(float f)
-{ return cast(int)(f + __builtin_copysignf(0.5f, f)); }
+{ return cast(int) (f + __builtin_copysignf(0.5f, f)); }
 pragma(inline, true) qint64 qRound64(double d)
-{ return cast(qint64)(d + __builtin_copysign(0.5, d)); }
+{ return cast(qint64) (d + __builtin_copysign(0.5, d)); }
 pragma(inline, true) qint64 qRound64(float f)
-{ return cast(qint64)(f + __builtin_copysignf(0.5f, f)); }
+{ return cast(qint64) (f + __builtin_copysignf(0.5f, f)); }
 }
-static if(!defined!"Q_PROCESSOR_ARM_64" && !defined!"_M_ARM64" && !defined!"__ARM64__" && !defined!"__SSE2__" && !versionIsSet!("AArch64"))
+static if (!defined!"Q_PROCESSOR_ARM_64" && !defined!"_M_ARM64" && !defined!"__ARM64__" && !defined!"__SSE2__" && !versionIsSet!("AArch64"))
 {
 pragma(inline, true) int qRound(double d)
-{ return d >= 0.0 ? cast(int)(d + 0.5) : cast(int)(d - 0.5); }
+{ return d >= 0.0 ? cast(int) (d + 0.5) : cast(int) (d - 0.5); }
 pragma(inline, true) int qRound(float d)
-{ return d >= 0.0f ? cast(int)(d + 0.5f) : cast(int)(d - 0.5f); }
+{ return d >= 0.0f ? cast(int) (d + 0.5f) : cast(int) (d - 0.5f); }
 
 pragma(inline, true) qint64 qRound64(double d)
-{ return d >= 0.0 ? cast(qint64)(d + 0.5) : cast(qint64)(d - 0.5); }
+{ return d >= 0.0 ? cast(qint64) (d + 0.5) : cast(qint64) (d - 0.5); }
 pragma(inline, true) qint64 qRound64(float d)
-{ return d >= 0.0f ? cast(qint64)(d + 0.5f) : cast(qint64)(d - 0.5f); }
+{ return d >= 0.0f ? cast(qint64) (d + 0.5f) : cast(qint64) (d - 0.5f); }
 }
 
 extern(C++, "QTypeTraits") {
@@ -1396,8 +1396,8 @@ template <typename... Args> constexpr inline QNonConstOverload<Args...> qNonCons
 /+ Q_CORE_EXPORT +/ bool qEnvironmentVariableIsSet(const(char)* varName)/+ noexcept+/;
 /+ Q_CORE_EXPORT +/ int  qEnvironmentVariableIntValue(const(char)* varName, bool* ok=null)/+ noexcept+/;
 
-pragma(inline, true) int qIntCast(double f) { return cast(int)(f); }
-pragma(inline, true) int qIntCast(float f) { return cast(int)(f); }
+pragma(inline, true) int qIntCast(double f) { return cast(int) (f); }
+pragma(inline, true) int qIntCast(float f) { return cast(int) (f); }
 
 /+ #define QT_MODULE(x)
 

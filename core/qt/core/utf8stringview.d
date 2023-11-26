@@ -88,7 +88,7 @@ struct wrap_char { alias type = char; }
 } // namespace QtPrivate
 
 /+ #ifdef Q_CLANG_QDOC +/
-static if(false)
+static if (false)
 {
 /+ #define QBasicUtf8StringView QUtf8StringView +/
 }

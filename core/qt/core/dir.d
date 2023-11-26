@@ -199,7 +199,7 @@ alias SortFlags = QFlags!(SortFlag);
 
     pragma(inline, true) static QChar listSeparator()/+ noexcept+/
     {
-        static if((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+        static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
         {
             return QChar(QLatin1Char(';'));
         }
@@ -211,7 +211,7 @@ alias SortFlags = QFlags!(SortFlag);
 
     static QChar separator()
     {
-        static if((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+        static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
         {
             return QChar(QLatin1Char('\\'));
         }

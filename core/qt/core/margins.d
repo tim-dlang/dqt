@@ -61,17 +61,17 @@ public:
     pragma(inline, true) void setBottom(int abottom)/+ noexcept+/
     { m_bottom = abottom; }
 
-    pragma(inline, true) ref QMargins opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if(op == "+")
+    pragma(inline, true) ref QMargins opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if (op == "+")
     {
         return (){return this = this + margins;
     }();
     }
-    pragma(inline, true) ref QMargins opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if(op == "-")
+    pragma(inline, true) ref QMargins opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if (op == "-")
     {
         return (){return this = this - margins;
     }();
     }
-    pragma(inline, true) ref QMargins opOpAssign(string op)(int margin)/+ noexcept+/ if(op == "+")
+    pragma(inline, true) ref QMargins opOpAssign(string op)(int margin)/+ noexcept+/ if (op == "+")
     {
         m_left += margin;
         m_top += margin;
@@ -79,7 +79,7 @@ public:
         m_bottom += margin;
         return this;
     }
-    pragma(inline, true) ref QMargins opOpAssign(string op)(int margin)/+ noexcept+/ if(op == "-")
+    pragma(inline, true) ref QMargins opOpAssign(string op)(int margin)/+ noexcept+/ if (op == "-")
     {
         m_left -= margin;
         m_top -= margin;
@@ -298,17 +298,17 @@ public:
     pragma(inline, true) void setBottom(qreal abottom)/+ noexcept+/
     { m_bottom = abottom; }
 
-    pragma(inline, true) ref QMarginsF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if(op == "+")
+    pragma(inline, true) ref QMarginsF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if (op == "+")
     {
         return (){return this = this + margins;
     }();
     }
-    pragma(inline, true) ref QMarginsF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if(op == "-")
+    pragma(inline, true) ref QMarginsF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if (op == "-")
     {
         return (){return this = this - margins;
     }();
     }
-    pragma(inline, true) ref QMarginsF opOpAssign(string op)(qreal addend)/+ noexcept+/ if(op == "+")
+    pragma(inline, true) ref QMarginsF opOpAssign(string op)(qreal addend)/+ noexcept+/ if (op == "+")
     {
         m_left += addend;
         m_top += addend;
@@ -316,7 +316,7 @@ public:
         m_bottom += addend;
         return this;
     }
-    pragma(inline, true) ref QMarginsF opOpAssign(string op)(qreal subtrahend)/+ noexcept+/ if(op == "-")
+    pragma(inline, true) ref QMarginsF opOpAssign(string op)(qreal subtrahend)/+ noexcept+/ if (op == "-")
     {
         m_left -= subtrahend;
         m_top -= subtrahend;
