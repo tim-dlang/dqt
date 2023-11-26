@@ -215,7 +215,7 @@ private:
 
     /+ friend class QVector2D; +/
     /+ friend class QVector4D; +/
-    static if(!defined!"QT_NO_MATRIX4X4")
+    static if (!defined!"QT_NO_MATRIX4X4")
     {
         /+ friend QVector3D operator*(const QVector3D& vector, const QMatrix4x4& matrix); +/
         /+ friend QVector3D operator*(const QMatrix4x4& matrix, const QVector3D& vector); +/

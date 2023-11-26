@@ -620,7 +620,7 @@ alias TypeFlags = QFlags!(TypeFlag);
     {
         if (/+ Q_UNLIKELY +/(isExtended(ExtensionFlag.FlagsEx)))
             return flagsExtended();
-        return QMetaType.TypeFlags(cast(QFlag)(m_typeFlags));
+        return QMetaType.TypeFlags(cast(QFlag) (m_typeFlags));
     }
     pragma(inline, true) const(QMetaObject)* metaObject() const
     {
@@ -832,7 +832,7 @@ private:
 // ### Qt6: FIXME: Remove the special Q_CC_MSVC handling, it was introduced to maintain BC.
 #if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC)
 #ifndef Q_CLANG_QDOC +/
-    static if(!defined!"Q_NO_TEMPLATE_FRIENDS" && !versionIsSet!("Windows"))
+    static if (!defined!"Q_NO_TEMPLATE_FRIENDS" && !versionIsSet!("Windows"))
     {
         /+ template<typename, bool> +/ /+ friend struct QtPrivate::ValueTypeIsMetaType; +/
         /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunction; +/
@@ -1846,7 +1846,7 @@ extern(D) mixin((){
     import std.conv;
     string code = "template QMetaTypeId2(T)\n";
     code ~= "{\n";
-    code ~= "    static if(std.traits.isBuiltinType!T)\n";
+    code ~= "    static if (std.traits.isBuiltinType!T)\n";
     code ~= "    {\n";
     bool needsElse = false;
     foreach(i, t; allBuiltinTypes)
@@ -1859,7 +1859,7 @@ extern(D) mixin((){
             code ~= "        ";
             if(needsElse)
                 code ~= "else ";
-            code ~= text("static if(is(T == ", realType2, "))\n");
+            code ~= text("static if (is(T == ", realType2, "))\n");
             code ~= "        {\n";
             code ~= text("            enum { Defined = 1, IsBuiltIn = true, MetaType = ", t.typeNameID, " };\n");
             code ~= text("            pragma(inline, true) static int qt_metatype_id() { return ", t.typeNameID, "; }\n");
@@ -1875,7 +1875,7 @@ extern(D) mixin((){
     code ~= "    else\n";
     code ~= "    {\n";
     needsElse = false;
-    code ~= "        static if(IsInQtPackage!T)\n";
+    code ~= "        static if (IsInQtPackage!T)\n";
     code ~= "        {\n";
     foreach(i, t; allBuiltinTypes)
     {
@@ -1888,7 +1888,7 @@ extern(D) mixin((){
             if(needsElse)
                 code ~= "else ";
             // TODO: Match templates like QList!(QString)
-            code ~= text("static if(__traits(identifier, T) == \"", realType2, "\")\n");
+            code ~= text("static if (__traits(identifier, T) == \"", realType2, "\")\n");
             code ~= "            {\n";
             code ~= text("                enum { Defined = 1, IsBuiltIn = true, MetaType = ", t.typeNameID, " };\n");
             code ~= text("                pragma(inline, true) static int qt_metatype_id() { return ", t.typeNameID, "; }\n");

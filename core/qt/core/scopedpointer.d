@@ -18,7 +18,7 @@ import qt.helpers;
 
 struct QScopedPointerDeleter(T)
 {
-    static if(is(T == class))
+    static if (is(T == class))
     {
         alias P = T;
         enum IsIncompleteType = !__traits(compiles, __traits(classInstanceSize, T));
@@ -28,14 +28,14 @@ struct QScopedPointerDeleter(T)
         alias P = T*;
         enum IsIncompleteType = !__traits(compiles, T.sizeof);
     }
-    static if(IsIncompleteType)
+    static if (IsIncompleteType)
         static void cleanup(P pointer);
     else
         pragma(inline, true) static void cleanup(P pointer)
         {
             import core.stdcpp.new_;
 
-            static if(IsIncompleteType)
+            static if (IsIncompleteType)
                 assert(false);
             else
                 cpp_delete(pointer);
@@ -63,7 +63,7 @@ struct QScopedPointerPodDeleter
 };
 
 #ifndef QT_NO_QOBJECT +/
-struct QScopedPointerObjectDeleteLater(T) if(is(T : QObject))
+struct QScopedPointerObjectDeleteLater(T) if (is(T : QObject))
 {
     pragma(inline, true) static void cleanup(T pointer) { if (pointer) pointer.deleteLater(); }
 }
@@ -75,7 +75,7 @@ alias QScopedPointerDeleteLater = QScopedPointerObjectDeleteLater!(QObject);
 extern(C++, class) struct QScopedPointer(T, Cleanup = QScopedPointerDeleter!T)
 {
 private:
-    static if(is(T == class))
+    static if (is(T == class))
     {
         alias P = T;
     }
@@ -98,7 +98,7 @@ public:
         Cleanup.cleanup(oldD);*/
     }
 
-    pragma(inline, true) ref T opUnary(string op)() const if(op == "*")
+    pragma(inline, true) ref T opUnary(string op)() const if (op == "*")
     {
         import qt.core.global;
 

@@ -313,7 +313,7 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
     void setProperty(int propertyId, ref const(QVariant) value);
     void setProperty(T)(int propertyId, T value)
     {
-        static if(is(T==enum))
+        static if (is(T==enum))
             QVariant v = QVariant(cast(int)value);
         else
             QVariant v = QVariant.fromValue(value);
@@ -365,7 +365,7 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
     pragma(inline, true) void setLayoutDirection(/+ Qt:: +/qt.core.namespace.LayoutDirection direction)
         { setProperty(QTextFormat.Property.LayoutDirection, direction); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.LayoutDirection layoutDirection() const
-        { return cast(/+ Qt:: +/qt.core.namespace.LayoutDirection)(intProperty(QTextFormat.Property.LayoutDirection)); }
+        { return cast(/+ Qt:: +/qt.core.namespace.LayoutDirection) (intProperty(QTextFormat.Property.LayoutDirection)); }
 
 /*    pragma(inline, true) void setBackground(ref const(QBrush) brush)
     { setProperty(Property.BackgroundBrush, brush); }*/
@@ -629,7 +629,7 @@ public:
     bool isValid() const { return isBlockFormat(); }
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
-    { auto tmp = cast(int)(aalignment); setProperty(Property.BlockAlignment, tmp); }
+    { auto tmp = cast(int) (aalignment); setProperty(Property.BlockAlignment, tmp); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const
     { int a = intProperty(Property.BlockAlignment); if (a == 0) a = /+ Qt:: +/qt.core.namespace.AlignmentFlag.AlignLeft; return qt.core.namespace.Alignment(QFlag(a)); }
 
@@ -700,9 +700,9 @@ public:
     { return boolProperty(Property.BlockNonBreakableLines); }
 
     pragma(inline, true) void setPageBreakPolicy(PageBreakFlags flags)
-    { auto tmp = cast(int)(flags); setProperty(Property.PageBreakPolicy, tmp); }
+    { auto tmp = cast(int) (flags); setProperty(Property.PageBreakPolicy, tmp); }
     pragma(inline, true) PageBreakFlags pageBreakPolicy() const
-    { return PageBreakFlags(cast(QFlag)(intProperty(Property.PageBreakPolicy))); }
+    { return PageBreakFlags(cast(QFlag) (intProperty(Property.PageBreakPolicy))); }
 
     void setTabPositions(ref const(QList!(QTextOption.Tab)) tabs);
     QList!(QTextOption.Tab) tabPositions() const;
@@ -710,7 +710,7 @@ public:
     pragma(inline, true) void setMarker(MarkerType marker)
     { auto tmp = int(marker); setProperty(Property.BlockMarker, tmp); }
     pragma(inline, true) MarkerType marker() const
-    { return cast(MarkerType)(intProperty(Property.BlockMarker)); }
+    { return cast(MarkerType) (intProperty(Property.BlockMarker)); }
 
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
@@ -911,9 +911,9 @@ public:
     { return lengthProperty(Property.FrameHeight); }
 
     pragma(inline, true) void setPageBreakPolicy(PageBreakFlags flags)
-    { auto tmp = cast(int)(flags); setProperty(Property.PageBreakPolicy, tmp); }
+    { auto tmp = cast(int) (flags); setProperty(Property.PageBreakPolicy, tmp); }
     pragma(inline, true) PageBreakFlags pageBreakPolicy() const
-    { return PageBreakFlags(cast(QFlag)(intProperty(Property.PageBreakPolicy))); }
+    { return PageBreakFlags(cast(QFlag) (intProperty(Property.PageBreakPolicy))); }
 
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
@@ -971,7 +971,7 @@ public:
     { setProperty(Property.TableCellPadding, apadding); }
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
-    { auto tmp = cast(int)(aalignment); setProperty(Property.BlockAlignment, tmp); }
+    { auto tmp = cast(int) (aalignment); setProperty(Property.BlockAlignment, tmp); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const
     { return qt.core.namespace.Alignment(QFlag(intProperty(Property.BlockAlignment))); }
 

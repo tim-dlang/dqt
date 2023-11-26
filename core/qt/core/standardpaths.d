@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-static if(!defined!"QT_NO_STANDARDPATHS")
+static if (!defined!"QT_NO_STANDARDPATHS")
 {
     import qt.core.flags;
     import qt.core.metamacros;
@@ -22,7 +22,7 @@ static if(!defined!"QT_NO_STANDARDPATHS")
     import qt.core.stringlist;
 }
 
-static if(!defined!"QT_NO_STANDARDPATHS")
+static if (!defined!"QT_NO_STANDARDPATHS")
 {
 
 /// Binding for C++ class [QStandardPaths](https://doc.qt.io/qt-5/qstandardpaths.html).

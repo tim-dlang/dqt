@@ -258,12 +258,12 @@ Q_CORE_EXPORT QString decodeMSG(const MSG &);
 Q_CORE_EXPORT QDebug operator<<(QDebug, const MSG &);
 #endif
 #endif +/
-static if(!versionIsSet!("Windows") || versionIsSet!("Cygwin"))
+static if (!versionIsSet!("Windows") || versionIsSet!("Cygwin"))
 {
 struct tagMSG;
 }
 
-static if(!versionIsSet!("Windows") || versionIsSet!("Cygwin"))
+static if (!versionIsSet!("Windows") || versionIsSet!("Cygwin"))
 {
 alias MSG = tagMSG;
 }

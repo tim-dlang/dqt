@@ -80,7 +80,7 @@ public:
     } // implicit
     this(uchar c, uchar r)/+ noexcept+/
     {
-        this.ucs = cast(ushort)((r << 8) | c);
+        this.ucs = cast(ushort) ((r << 8) | c);
     }
     this(short rc)/+ noexcept+/
     {
@@ -88,15 +88,15 @@ public:
     } // implicit
     this(uint rc)/+ noexcept+/
     {
-        this.ucs = cast(ushort)(rc & 0xffff);
+        this.ucs = cast(ushort) (rc & 0xffff);
     }
     this(int rc)/+ noexcept+/
     {
-        this.ucs = cast(ushort)(rc & 0xffff);
+        this.ucs = cast(ushort) (rc & 0xffff);
     }
     this(SpecialCharacter s)/+ noexcept+/
     {
-        this.ucs = cast(ushort)(s);
+        this.ucs = cast(ushort) (s);
     } // implicit
     this(QLatin1Char ch)/+ noexcept+/
     {
@@ -109,7 +109,7 @@ public:
     } // implicit
 /+ #endif
 #if defined(Q_OS_WIN) +/
-    static if((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
     {
         mixin(Q_STATIC_ASSERT(q{wchar_t.sizeof == ushort.sizeof}));
     }
@@ -498,7 +498,7 @@ public:
 /+ #if QT_DEPRECATED_SINCE(5, 0)
     QT_DEPRECATED inline char toAscii() const noexcept { return toLatin1(); }
 #endif +/
-    pragma(inline, true) char toLatin1() const/+ noexcept+/ { return ucs > 0xff ? '\0' : cast(char)(ucs); }
+    pragma(inline, true) char toLatin1() const/+ noexcept+/ { return ucs > 0xff ? '\0' : cast(char) (ucs); }
     pragma(inline, true) ushort unicode() const/+ noexcept+/ { return ucs; }
     pragma(inline, true) ref ushort unicode()/+ noexcept+/ return { return ucs; }
 
@@ -528,10 +528,10 @@ public:
     pragma(inline, true) bool isLowSurrogate() const/+ noexcept+/ { return QChar.isLowSurrogate(ucs); }
     pragma(inline, true) bool isSurrogate() const/+ noexcept+/ { return QChar.isSurrogate(ucs); }
 
-    pragma(inline, true) uchar cell() const/+ noexcept+/ { return cast(uchar)(ucs & 0xff); }
-    pragma(inline, true) uchar row() const/+ noexcept+/ { return cast(uchar)((ucs>>8)&0xff); }
-    pragma(inline, true) void setCell(uchar acell)/+ noexcept+/ { ucs = cast(ushort)((ucs & 0xff00) + acell); }
-    pragma(inline, true) void setRow(uchar arow)/+ noexcept+/ { ucs = cast(ushort)((ushort(arow)<<8) + (ucs&0xff)); }+/
+    pragma(inline, true) uchar cell() const/+ noexcept+/ { return cast(uchar) (ucs & 0xff); }
+    pragma(inline, true) uchar row() const/+ noexcept+/ { return cast(uchar) ((ucs>>8)&0xff); }
+    pragma(inline, true) void setCell(uchar acell)/+ noexcept+/ { ucs = cast(ushort) ((ucs & 0xff00) + acell); }
+    pragma(inline, true) void setRow(uchar arow)/+ noexcept+/ { ucs = cast(ushort) ((ushort(arow)<<8) + (ucs&0xff)); }+/
 
     pragma(inline, true) static bool isNonCharacter(uint ucs4)/+ noexcept+/
     {
@@ -563,11 +563,11 @@ public:
     }
     pragma(inline, true) static ushort highSurrogate(uint ucs4)/+ noexcept+/
     {
-        return cast(ushort)((ucs4>>10) + 0xd7c0);
+        return cast(ushort) ((ucs4>>10) + 0xd7c0);
     }
     pragma(inline, true) static ushort lowSurrogate(uint ucs4)/+ noexcept+/
     {
-        return cast(ushort)(ucs4%0x400 + 0xdc00);
+        return cast(ushort) (ucs4%0x400 + 0xdc00);
     }
 
 /+    static Category /+ QT_FASTCALL +/ category(uint ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;

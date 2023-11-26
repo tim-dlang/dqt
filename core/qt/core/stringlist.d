@@ -125,7 +125,7 @@ public:
     /+ QStringList &operator=(QList<QString> &&other) noexcept
     { QList<QString>::operator=(std::move(other)); return *this; } +/
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         pragma(inline, true) bool contains(ref const(QString) str, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
         {
@@ -147,7 +147,7 @@ public:
         return /+ QtPrivate:: +/QStringList_contains(&this, str, cs);
     }
 
-    extern(D) pragma(inline, true) QStringList opBinary(string op)(ref const(QStringList) other) const if(op == "~")
+    extern(D) pragma(inline, true) QStringList opBinary(string op)(ref const(QStringList) other) const if (op == "~")
     { QStringList n = this; n ~= other; return n; }
     /+pragma(inline, true) ref QStringList operator <<(ref const(QString) str)
     { append(str); return this; }+/
@@ -287,7 +287,7 @@ version(QT_NO_REGEXP){}else
 
 
 /+ #endif +/ // QSTRINGLIST_H
-static if(!defined!"QT_NO_DESKTOPSERVICES")
+static if (!defined!"QT_NO_DESKTOPSERVICES")
 {
 
 }

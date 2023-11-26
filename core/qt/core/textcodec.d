@@ -53,7 +53,7 @@ public:
     static QTextCodec codecForUtfText(ref const(QByteArray) ba, QTextCodec defaultCodec);
 
     final bool canEncode(QChar) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         final bool canEncode(ref const(QString)) const;
     }
@@ -61,7 +61,7 @@ public:
 
     final QString toUnicode(ref const(QByteArray)) const;
     final QString toUnicode(const(char)* chars) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         final QByteArray fromUnicode(ref const(QString) uc) const;
     }
@@ -138,7 +138,7 @@ private:
     /+ explicit +/this(const(QTextCodec) codec, QTextCodec.ConversionFlags flags);
     }));
     ~this();
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QByteArray fromUnicode(ref const(QString) str);
     }

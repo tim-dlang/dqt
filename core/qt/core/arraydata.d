@@ -263,7 +263,7 @@ struct QTypedArrayData(T)
 
             result.offset = reinterpret_cast!(const(char)*)(data)
                 - reinterpret_cast!(const(char)*)(result);
-            result.size = cast(int)(n);
+            result.size = cast(int) (n);
         }
         return result;
     }

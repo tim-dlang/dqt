@@ -57,10 +57,10 @@ protected:
         QAction pdfAction = menu.addAction(QString("Create PDF"));
         QAction selected = menu.exec(event.globalPos());
 
-        if(selected == pdfAction)
+        if (selected == pdfAction)
         {
             QString filename = QFileDialog.getSaveFileName(this, globalInitVar!QString, globalInitVar!QString, QString("*.pdf"));
-            if(!filename.isEmpty())
+            if (!filename.isEmpty())
             {
                 scope writer = new QPdfWriter(filename);
                 writer.setPageSize(QPdfWriter.PageSize.A4);

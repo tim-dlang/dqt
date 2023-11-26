@@ -100,7 +100,7 @@ alias LayoutFlags = QFlags!(LayoutFlag);
     pragma(inline, true) QVector!(QPointF) advancesForGlyphIndexes(ref const(QVector!(quint32)) glyphIndexes, LayoutFlags layoutFlags) const
     {
         auto advances = QVector!(QPointF)(glyphIndexes.size());
-        if (advancesForGlyphIndexes(cast(const(quint32)*)(glyphIndexes.constData()), advances.data(), glyphIndexes.size(), layoutFlags))
+        if (advancesForGlyphIndexes(cast(const(quint32)*) (glyphIndexes.constData()), advances.data(), glyphIndexes.size(), layoutFlags))
             return advances;
         return QVector!(QPointF).create();
     }

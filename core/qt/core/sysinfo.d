@@ -212,7 +212,7 @@ public:
 QT_WARNING_DISABLE_DEPRECATED
 #if defined(Q_OS_WIN) || defined(Q_OS_CYGWIN)
     QT_SYSINFO_DEPRECATED_X("Use QOperatingSystemVersion::current()") +/ 
-    static if(versionIsSet!("Windows"))
+    static if (versionIsSet!("Windows"))
     {
         extern export static __gshared const(WinVersion) WindowsVersion;
         /+ QT_SYSINFO_DEPRECATED_X("Use QOperatingSystemVersion::current()") +/ static WinVersion windowsVersion();
@@ -226,7 +226,7 @@ QT_WARNING_DISABLE_DEPRECATED
 /+ #endif
 #if defined(Q_OS_MAC)
     QT_SYSINFO_DEPRECATED_X("Use QOperatingSystemVersion::current()") +/ 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         extern static __gshared const(MacVersion) MacintoshVersion;
         /+ QT_SYSINFO_DEPRECATED_X("Use QOperatingSystemVersion::current()") +/ static MacVersion macVersion();

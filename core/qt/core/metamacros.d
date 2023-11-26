@@ -190,7 +190,7 @@ template memberFunctionExternDeclaration(alias F)
     extern(D) mixin((){
             string code;
             version(Windows)
-                static if(IsInQtPackage!(F))
+                static if (IsInQtPackage!(F))
                     code ~= "export ";
             code ~= "extern(" ~ functionLinkage!F ~ ")";
             code ~= q{pragma(mangle, F.mangleof) ReturnType!F memberFunctionExternDeclaration(__traits(parent, F), Parameters!F);};
@@ -309,26 +309,26 @@ template MetaObjectImpl(T)
         {
             import qt.core.list: QList;
             import qt.core.vector: QVector;
-            if(is(const(T2) == const(QList!int)))
+            if (is(const(T2) == const(QList!int)))
                 return "QList<int>";
-            else static if(is(const(T2) == const(QVector!int)))
+            else static if (is(const(T2) == const(QVector!int)))
                 return "QVector<int>";
-            else static if(is(T2 == int*))
+            else static if (is(T2 == int*))
                 return "int*";
-            else static if(is(T2 == U*, U) && is(U == struct))
+            else static if (is(T2 == U*, U) && is(U == struct))
             {
                 return typeToMetaComplex!U() ~ "*";
             }
-            else static if(is(T2 == class))
+            else static if (is(T2 == class))
             {
-                static if(__traits(getLinkage, T2) == "D")
+                static if (__traits(getLinkage, T2) == "D")
                     return T2.mangleof ~ "*";
                 else
                     return __traits(identifier, T2) ~ "*";
             }
-            else static if(is(T2 == struct) || is(T2 == union) || is(T2 == enum))
+            else static if (is(T2 == struct) || is(T2 == union) || is(T2 == enum))
             {
-                static if(__traits(getLinkage, T2) == "D")
+                static if (__traits(getLinkage, T2) == "D")
                     return T2.mangleof ~ "*";
                 else
                     return __traits(identifier, T2) ~ "*";
@@ -340,17 +340,17 @@ template MetaObjectImpl(T)
         {
             import qt.core.list: QList;
             import qt.core.vector: QVector;
-            static if(is(T2 == int))
+            static if (is(T2 == int))
                 return "QMetaType.Type.Int";
-            else static if(is(T2 == uint))
+            else static if (is(T2 == uint))
                 return "QMetaType.Type.UInt";
-            else static if(is(T2 == bool))
+            else static if (is(T2 == bool))
                 return "QMetaType.Type.Bool";
-            else static if(is(T2 == double))
+            else static if (is(T2 == double))
                 return "QMetaType.Type.Double";
-            else static if(is(const(T2) == const(QString)))
+            else static if (is(const(T2) == const(QString)))
                 return "QMetaType.Type.QString";
-            else static if(is(const(T2) == const(QPoint)))
+            else static if (is(const(T2) == const(QPoint)))
                 return "QMetaType.Type.QPoint";
             else
                 return text("0x80000000 | ", addString(typeToMetaComplex!T2()));

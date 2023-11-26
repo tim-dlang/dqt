@@ -125,7 +125,7 @@ public:
 /+ #endif +/
     void setRects(const(QRect)* rect, int num);
     int rectCount() const/+ noexcept+/;
-    static if(defined!"Q_COMPILER_MANGLES_RETURN_TYPE")
+    static if (defined!"Q_COMPILER_MANGLES_RETURN_TYPE")
     {
         // ### Qt 6: remove these, they're kept for MSVC compat
         /+const(QRegion) operator |(ref const(QRegion) r) const;+/
@@ -146,12 +146,12 @@ public:
         /+QRegion operator -(ref const(QRegion) r) const;+/
         /+QRegion operator ^(ref const(QRegion) r) const;+/
     }
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "|");
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "+");
-    ref QRegion opOpAssign(string op)(ref const(QRect) r) if(op == "+");
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "&");
-    ref QRegion opOpAssign(string op)(ref const(QRect) r) if(op == "&");
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "-");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "|");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "+");
+    ref QRegion opOpAssign(string op)(ref const(QRect) r) if (op == "+");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "&");
+    ref QRegion opOpAssign(string op)(ref const(QRect) r) if (op == "&");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "-");
     /+ref QRegion operator ^=(ref const(QRegion) r);+/
 
     /+bool operator ==(ref const(QRegion) r) const;+/

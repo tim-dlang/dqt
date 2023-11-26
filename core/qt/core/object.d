@@ -181,7 +181,7 @@ public:
     }
 }
 
-extern(D) struct DQtMember(T, Members_...) if(is(T: QObject))
+extern(D) struct DQtMember(T, Members_...) if (is(T: QObject))
 {
     alias Type = T;
     alias Members = Members_;
@@ -557,7 +557,7 @@ public:
         extern(D) auto signal(this T)()
         {
             import std.meta;
-            static if(Params.length)
+            static if (Params.length)
                 return DQtMember!(T, Filter!(parametersSame!Params, __traits(getOverloads, T, name)))(cast(T)this);
             else
                 return DQtMember!(T, __traits(getOverloads, T, name))(cast(T)this);
@@ -581,7 +581,7 @@ public:
         extern(D) auto slot(this T)()
         {
             import std.meta;
-            static if(Params.length)
+            static if (Params.length)
                 return DQtMember!(T, Filter!(parametersSame!Params, __traits(getOverloads, T, name)))(cast(T)this);
             else
                 return DQtMember!(T, __traits(getOverloads, T, name))(cast(T)this);
@@ -607,7 +607,7 @@ public:
         Returns:
             Connection.
     +/
-    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, QObject context, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if(is(Signal: DQtMember!P, P...) && !is(Dg: DQtMember!P2, P2...))
+    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, QObject context, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if (is(Signal: DQtMember!P, P...) && !is(Dg: DQtMember!P2, P2...))
     {
         import core.stdcpp.new_;
 
@@ -650,7 +650,7 @@ public:
                            type, types, mo);
     }
     /// ditto
-    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if(is(Signal: DQtMember!P, P...) && !is(Dg: DQtMember!P2, P2...))
+    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if (is(Signal: DQtMember!P, P...) && !is(Dg: DQtMember!P2, P2...))
     {
         return connect(sender, sender.obj, dg, type);
     }
@@ -666,7 +666,7 @@ public:
         Returns:
             Connection.
     +/
-    static extern(D) QMetaObject.Connection connect(Signal, Slot)(Signal sender, Slot receiver, ConnectionType type = ConnectionType.AutoConnection) if(is(Signal: DQtMember!P, P...) && is(Slot: DQtMember!P2, P2...))
+    static extern(D) QMetaObject.Connection connect(Signal, Slot)(Signal sender, Slot receiver, ConnectionType type = ConnectionType.AutoConnection) if (is(Signal: DQtMember!P, P...) && is(Slot: DQtMember!P2, P2...))
     {
        import core.stdcpp.new_;
 
@@ -698,12 +698,12 @@ public:
             static foreach(j, slot; Slot.Members)
             {
                 //pragma(msg, i, " ", j, " ", __traits(identifier, signal), " ", __traits(identifier, slot));
-                static if(Parameters!(signal).length >= Parameters!(slot).length) // TODO: allow default arguments
+                static if (Parameters!(signal).length >= Parameters!(slot).length) // TODO: allow default arguments
                 {{
                     bool possible = true;
                     static foreach(k; 0..Parameters!(slot).length)
                     {
-                        static if(!__traits(compiles, {Parameters!(slot)[k] p = Parameters!(signal)[k].init;}))
+                        static if (!__traits(compiles, {Parameters!(slot)[k] p = Parameters!(signal)[k].init;}))
                         {
                             //pragma(msg, " param ", k, " not compatible ", Parameters!(signal)[k], " ", Parameters!(slot)[k]);
                             possible = false;
@@ -725,7 +725,7 @@ public:
             return [size_t.max, size_t.max];
         }();
 
-        static if(overloadIndices[0] == size_t.max || overloadIndices[1] == size_t.max)
+        static if (overloadIndices[0] == size_t.max || overloadIndices[1] == size_t.max)
         {
             pragma(msg, "Signals:");
             static foreach(signal; Signal.Members)
@@ -900,7 +900,7 @@ inline QT_DEPRECATED QList<T> qFindChildren(const QObject *o, const QRegExp &re)
 
 #endif +/ //QT_DEPRECATED
 
-T qobject_cast(T)(QObject object) if(is(T : QObject))
+T qobject_cast(T)(QObject object) if (is(T : QObject))
 {
     static assert(is(__traits(parent, T.staticMetaObject) == T));
     return static_cast!T(T.staticMetaObject.cast_(object));

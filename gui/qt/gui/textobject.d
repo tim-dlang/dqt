@@ -151,9 +151,9 @@ public:
 
         /+pragma(inline, true) bool operator ==(ref const(iterator) o) const { return f == o.f && cf == o.cf && cb == o.cb; }+/
         /+pragma(inline, true) bool operator !=(ref const(iterator) o) const { return f != o.f || cf != o.cf || cb != o.cb; }+/
-        ref iterator opUnary(string op)() if(op == "++");
+        ref iterator opUnary(string op)() if (op == "++");
         /+pragma(inline, true) iterator operator ++(int) { iterator tmp = this; operator++(); return tmp; }+/
-        ref iterator opUnary(string op)() if(op == "--");
+        ref iterator opUnary(string op)() if (op == "--");
         /+pragma(inline, true) iterator operator --(int) { iterator tmp = this; operator--(); return tmp; }+/
     }
 
@@ -291,9 +291,9 @@ public:
 
         /+pragma(inline, true) bool operator ==(ref const(iterator) o) const { return p == o.p && n == o.n; }+/
         /+pragma(inline, true) bool operator !=(ref const(iterator) o) const { return p != o.p || n != o.n; }+/
-        ref iterator opUnary(string op)() if(op == "++");
+        ref iterator opUnary(string op)() if (op == "++");
         /+pragma(inline, true) iterator operator ++(int) { iterator tmp = this; operator++(); return tmp; }+/
-        ref iterator opUnary(string op)() if(op == "--");
+        ref iterator opUnary(string op)() if (op == "--");
         /+pragma(inline, true) iterator operator --(int) { iterator tmp = this; operator--(); return tmp; }+/
     }
 

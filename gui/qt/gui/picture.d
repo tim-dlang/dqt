@@ -127,7 +127,7 @@ public:
 /+ Q_DECLARE_SHARED(QPicture) +/
 
 
-static if(!defined!"QT_NO_PICTUREIO")
+static if (!defined!"QT_NO_PICTUREIO")
 {
 alias picture_io_handler = ExternCPPFunc!(void function(QPictureIO* )); // picture IO handler
 

@@ -47,7 +47,7 @@ public:
     final int remainingTime() const;
 
     final void setTimerType(/+ Qt:: +/qt.core.namespace.TimerType atype) { this.type = atype; }
-    final /+ Qt:: +/qt.core.namespace.TimerType timerType() const { return cast(/+ Qt:: +/qt.core.namespace.TimerType)(type); }
+    final /+ Qt:: +/qt.core.namespace.TimerType timerType() const { return cast(/+ Qt:: +/qt.core.namespace.TimerType) (type); }
 
     pragma(inline, true) final void setSingleShot(bool asingleShot) { single = asingleShot; }
     pragma(inline, true) final bool isSingleShot() const { return (single) != 0; }

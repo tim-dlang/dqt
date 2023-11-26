@@ -999,7 +999,7 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     QString nativeLanguageName() const;
     QString nativeCountryName() const;
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         short toShort(ref const(QString) s, bool* ok = null) const;
         ushort toUShort(ref const(QString) s, bool* ok = null) const;
@@ -1053,7 +1053,7 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     pragma(inline, true) QString toString(float i, char f = 'g', int prec = 6) const
         { return toString(double(i), f, prec); }
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QDate) date, ref const(QString) formatStr) const;
         QString toString(ref const(QTime) time, ref const(QString) formatStr) const;

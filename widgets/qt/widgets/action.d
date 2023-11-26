@@ -144,7 +144,7 @@ public:
     final void setData(ref const(QVariant) var);
     final void setData(T)(T value)
     {
-        static if(is(const(T) == const(QVariant)))
+        static if (is(const(T) == const(QVariant)))
             QVariant v = value;
         else
             QVariant v = QVariant.fromValue(value);
@@ -206,7 +206,7 @@ private:
     /+ friend class QMenuPrivate; +/
     /+ friend class QMenuBar; +/
     /+ friend class QToolButton; +/
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ friend void qt_mac_clear_status_text(QAction *action); +/
     }

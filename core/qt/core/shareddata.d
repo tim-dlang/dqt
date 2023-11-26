@@ -55,8 +55,8 @@ public:
     alias pointer = T*;
 
     pragma(inline, true) void detach()() { if (d && d.ref_.loadRelaxed() != 1) detach_helper(); }
-    pragma(inline, true) ref T opUnary(string op)() if(op == "*") { detach(); return *d; }
-    pragma(inline, true) ref const(T) opUnary(string op)() const if(op == "*") { return *d; }
+    pragma(inline, true) ref T opUnary(string op)() if (op == "*") { detach(); return *d; }
+    pragma(inline, true) ref const(T) opUnary(string op)() const if (op == "*") { return *d; }
     /+pragma(inline, true) T* operator ->() { detach(); return d; }+/
     /+pragma(inline, true) const(T)* operator ->() const { return d; }+/
     /+pragma(inline, true) auto opCast(T : T)() { detach(); return d; }+/
@@ -71,7 +71,7 @@ public:
     /+pragma(inline, true) this() { d = null; }+/
     pragma(inline, true) ~this() {
         import core.stdcpp.new_;
-        static if(__traits(compiles, (*d).sizeof))
+        static if (__traits(compiles, (*d).sizeof))
         {
             import core.stdcpp.new_;
             if (d && !d.ref_.deref()) cpp_delete(d);
@@ -87,7 +87,7 @@ public:
     }+/
     pragma(inline, true) this(this)
     {
-        static if(__traits(compiles, d.ref_))
+        static if (__traits(compiles, d.ref_))
         {
             if (d) d.ref_.ref_();
         }
@@ -175,7 +175,7 @@ public:
     alias Type = T;
     alias pointer = T*;
 
-    pragma(inline, true) ref T opUnary(string op)() const if(op == "*") { return *d; }
+    pragma(inline, true) ref T opUnary(string op)() const if (op == "*") { return *d; }
     /+pragma(inline, true) T* operator ->() { return d; }+/
     /+pragma(inline, true) T* operator ->() const { return d; }+/
     pragma(inline, true) T* data() const { return cast(T*)d; }
@@ -203,7 +203,7 @@ public:
 
     /+pragma(inline, true) this() { d = null; }+/
     pragma(inline, true) ~this() {
-        static if(__traits(compiles, (*d).sizeof))
+        static if (__traits(compiles, (*d).sizeof))
         {
             import core.stdcpp.new_;
             if (d && !d.ref_.deref()) cpp_delete(d);
@@ -220,7 +220,7 @@ public:
     @disable this(this);
     pragma(inline, true) this(ref const(QExplicitlySharedDataPointer!(T)) o)
     {
-        static if(__traits(compiles, (*d).sizeof))
+        static if (__traits(compiles, (*d).sizeof))
         {
             this.d = cast(T*)o.d;
             if (d) d.ref_.ref_();
@@ -234,7 +234,7 @@ public:
     pragma(inline, true) this(X)(ref const(QExplicitlySharedDataPointer!(X)) o)/+ #ifdef QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST +/
 /+ #endif +/
     {
-        static if(defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
+        static if (defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
         {
             this.d = static_cast!(T*)(o.data());
 

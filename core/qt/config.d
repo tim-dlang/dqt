@@ -20,7 +20,7 @@ template defined(string name)
 
 template configValue(string name)
 {
-    static if(defined!name)
+    static if (defined!name)
         mixin("enum configValue = " ~ name ~ ";");
     else
         enum configValue = 0;
@@ -28,12 +28,12 @@ template configValue(string name)
 
 template versionIsSet(string name)
 {
-    mixin((){
+    mixin(() {
         string r;
         r ~= "version(" ~ name ~ ")\n";
         r ~= "enum versionIsSet = true;\n";
         r ~= "else\n";
         r ~= "enum versionIsSet = false;\n";
         return r;
-        }());
+    }());
 }

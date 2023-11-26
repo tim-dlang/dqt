@@ -75,7 +75,7 @@ private /+ slots +/:
         import qt.gui.textlist;
 
         QTextCursor cursor = ui.textEdit.textCursor();
-        if(ui.pushButtonList.isChecked())
+        if (ui.pushButtonList.isChecked())
         {
             QTextListFormat listFmt;
             listFmt.setStyle(QTextListFormat.Style.ListDecimal);
@@ -85,7 +85,7 @@ private /+ slots +/:
         else
         {
             QTextList list = cursor.currentList();
-            if(list)
+            if (list)
             {
                 list.remove(cursor.block());
             }
@@ -99,7 +99,7 @@ private /+ slots +/:
 protected:
     override extern(C++) void changeEvent(QEvent event)
     {
-        if(event.type() == QEvent.Type.LanguageChange)
+        if (event.type() == QEvent.Type.LanguageChange)
             ui.retranslateUi(this);
         QWidget.changeEvent(event);
     }

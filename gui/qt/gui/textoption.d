@@ -81,11 +81,11 @@ public:
     /+ref QTextOption operator =(ref const(QTextOption) o);+/
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
-    { align_ = cast(uint)(aalignment.toInt); }
-    pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const { return /+ Qt:: +/qt.core.namespace.Alignment(cast(QFlag)(align_)); }
+    { align_ = cast(uint) (aalignment.toInt); }
+    pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const { return /+ Qt:: +/qt.core.namespace.Alignment(cast(QFlag) (align_)); }
 
     pragma(inline, true) void setTextDirection(/+ Qt:: +/qt.core.namespace.LayoutDirection aDirection) { this.direction = aDirection; }
-    pragma(inline, true) /+ Qt:: +/qt.core.namespace.LayoutDirection textDirection() const { return cast(/+ Qt:: +/qt.core.namespace.LayoutDirection)(direction); }
+    pragma(inline, true) /+ Qt:: +/qt.core.namespace.LayoutDirection textDirection() const { return cast(/+ Qt:: +/qt.core.namespace.LayoutDirection) (direction); }
 
     enum WrapMode {
         NoWrap,
@@ -107,8 +107,8 @@ public:
     }
     /+ Q_DECLARE_FLAGS(Flags, Flag) +/
 alias Flags = QFlags!(Flag);    pragma(inline, true) void setFlags(Flags aflags)
-{ f = cast(uint)(aflags); }
-//    pragma(inline, true) Flags flags() const { return Flags(cast(QFlag)(f)); }
+{ f = cast(uint) (aflags); }
+//    pragma(inline, true) Flags flags() const { return Flags(cast(QFlag) (f)); }
 
 /+ #if QT_DEPRECATED_SINCE(5, 10) +/
     /+ QT_DEPRECATED +/ pragma(inline, true) void setTabStop(qreal atabStop)

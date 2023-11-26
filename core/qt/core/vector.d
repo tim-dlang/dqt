@@ -67,12 +67,12 @@ public:
     {
         (mixin(Q_ASSERT_X(q{asize >= 0},q{ "QVector::QVector"},q{ "Size must be greater than or equal to 0."})));
         if (/+ Q_LIKELY +/(asize > 0)) {
-            d = cast(Data*)(Data.allocate(asize));
+            d = cast(Data*) (Data.allocate(asize));
             //mixin(Q_CHECK_PTR(q{QVector.d}));
             d.size = asize;
             defaultConstruct(d.begin(), d.end());
         } else {
-            d = cast(Data*)(Data.sharedNull());
+            d = cast(Data*) (Data.sharedNull());
         }
     }
     this(int asize, ref const(T) t)
@@ -81,14 +81,14 @@ public:
 
         (mixin(Q_ASSERT_X(q{asize >= 0},q{ "QVector::QVector"},q{ "Size must be greater than or equal to 0."})));
         if (asize > 0) {
-            d = cast(Data*)(Data.allocate(asize));
+            d = cast(Data*) (Data.allocate(asize));
             mixin(Q_CHECK_PTR(q{QVector.d}));
             d.size = asize;
             T* i = d.end();
             while (i != d.begin())
                 copyEmplace!T(*--i, t);
         } else {
-            d = cast(Data*)(Data.sharedNull());
+            d = cast(Data*) (Data.sharedNull());
         }
     }
     /+@disable this(this);
@@ -98,11 +98,11 @@ public:
             d = cast(Data*)v.d;
         } else {
             if (v.d.capacityReserved) {
-                d = cast(Data*)(Data.allocate(v.d.alloc));
+                d = cast(Data*) (Data.allocate(v.d.alloc));
                 mixin(Q_CHECK_PTR(q{QVector.d}));
                 d.capacityReserved = true;
             } else {
-                d = cast(Data*)(Data.allocate(v.d.size));
+                d = cast(Data*) (Data.allocate(v.d.size));
                 mixin(Q_CHECK_PTR(q{QVector.d}));
             }
             if (d.alloc) {
@@ -226,10 +226,10 @@ public:
     {
         if (!isDetached()) {
     /+ #if !defined(QT_NO_UNSHARABLE_CONTAINERS) +/
-            static if(!versionIsSet!("QT_NO_UNSHARABLE_CONTAINERS"))
+            static if (!versionIsSet!("QT_NO_UNSHARABLE_CONTAINERS"))
             {
                     if (!d.alloc)
-                    d = cast(Data*)(Data.unsharableEmpty());
+                    d = cast(Data*) (Data.unsharableEmpty());
                 else
         /+ #endif +/
                     realloc(int(d.alloc));
@@ -253,7 +253,7 @@ public:
 
             if (d == Data.unsharableEmpty()) {
                 if (sharable)
-                    d = cast(Data*)(Data.sharedNull());
+                    d = cast(Data*) (Data.sharedNull());
             } else {
                 d.ref_.setSharable(sharable);
             }
@@ -383,7 +383,7 @@ public:
             T* e = cast(T*)(d.end());
             while (++n != e)
                 if (*n == t)
-                    return cast(int)(n - d.begin());
+                    return cast(int) (n - d.begin());
         }
         return -1;
     }
@@ -402,7 +402,7 @@ public:
             T* n = cast(T*)(d.begin() + from + 1);
             while (n != b) {
                 if (*--n == t)
-                    return cast(int)(n - b);
+                    return cast(int) (n - b);
             }
         }
         return -1;
@@ -433,7 +433,7 @@ public:
         const(int) firstFoundIdx = /+ std:: +/distance(this.cbegin(), cit);
         const(iterator) e = end(); const(iterator) it = /+ std:: +/remove(begin() + firstFoundIdx, e, tCopy);
         const(int) result = /+ std:: +/distance(it, e);
-        erase(cast(iterator)(it), cast(iterator)(e));
+        erase(cast(iterator) (it), cast(iterator) (e));
         return result;
     }+/
     bool removeOne(ref const(T) t)
@@ -683,21 +683,21 @@ public:
     void shrink_to_fit() { squeeze(); }
 
     // comfort
-    extern(D) ref QVector!(T) opOpAssign(string op)(ref const(QVector!(T)) l) if(op == "~");
-    extern(D) pragma(inline, true) QVector!(T) opBinary(string op)(ref const(QVector!(T)) l) const if(op == "~")
+    extern(D) ref QVector!(T) opOpAssign(string op)(ref const(QVector!(T)) l) if (op == "~");
+    extern(D) pragma(inline, true) QVector!(T) opBinary(string op)(ref const(QVector!(T)) l) const if (op == "~")
     { QVector n = this; n ~= l; return n; }
-    extern(D) pragma(inline, true) ref QVector!(T) opOpAssign(string op)(ref const(T) t) if(op == "~")
+    extern(D) pragma(inline, true) ref QVector!(T) opOpAssign(string op)(ref const(T) t) if (op == "~")
     { append(t); return this; }
     /+pragma(inline, true) ref QVector!(T) operator << (ref const(T) t)
     { append(t); return this; }+/
     /+pragma(inline, true) ref QVector!(T) operator <<(ref const(QVector!(T)) l)
     { this += l; return this; }+/
-    extern(D) void opOpAssign(string op, T2)(ref const T2 t) if(op == "~" && !is(const(T2) == const(T)))
+    extern(D) void opOpAssign(string op, T2)(ref const T2 t) if (op == "~" && !is(const(T2) == const(T)))
     {
         auto tmp = T(t);
         append(tmp);
     }
-    extern(D) void opOpAssign(string op)(const T t) if(op == "~")
+    extern(D) void opOpAssign(string op)(const T t) if (op == "~")
     {
         append(t);
     }
@@ -743,7 +743,7 @@ private:
                     }
                     import core.stdc.string;
                     // allocate memory
-                    x = cast(Data*)(Data.allocate(aalloc, options));
+                    x = cast(Data*) (Data.allocate(aalloc, options));
                     //mixin(Q_CHECK_PTR(q{x}));
                     // aalloc is bigger then 0 so it is not [un]sharedEmpty
                     version(QT_NO_UNSHARABLE_CONTAINERS){}else
@@ -810,7 +810,7 @@ private:
                 x.size = asize;
             }
         } else {
-            x = cast(Data*)(Data.sharedNull());
+            x = cast(Data*) (Data.sharedNull());
         }
         if (d != x) {
             if (!d.ref_.deref()) {
@@ -851,7 +851,7 @@ private:
                 Data.deallocate(x);
             }
             // allocate memory
-            x = cast(Data*)(Data.allocate(aalloc, options));
+            x = cast(Data*) (Data.allocate(aalloc, options));
             //mixin(Q_CHECK_PTR(q{x}));
             // aalloc is bigger then 0 so it is not [un]sharedEmpty
             version(QT_NO_UNSHARABLE_CONTAINERS){}else
@@ -921,7 +921,7 @@ private:
 
         while (from != to)
         {
-            static if(__traits(hasMember, T, "rawConstructor"))
+            static if (__traits(hasMember, T, "rawConstructor"))
                 (*from++).rawConstructor();
             else
                 emplace!T(from++);

@@ -155,11 +155,11 @@ public:
           data4{guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
                 guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]} {}
 #else +/
-    static if((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
     {
         this(ref const(GUID) guid)/+ noexcept+/
         {
-            data1 = cast(uint)(guid.Data1);
+            data1 = cast(uint) (guid.Data1);
             data2 = guid.Data2;
             data3 = guid.Data3;
             for(int i = 0; i < 8; i++)
@@ -211,7 +211,7 @@ public:
     Variant variant() const/+ noexcept+/;
     //Version version_() const/+ noexcept+/;
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QUuid fromCFUUID(CFUUIDRef uuid); +/
         /+ CFUUIDRef toCFUUID() const Q_DECL_CF_RETURNS_RETAINED; +/

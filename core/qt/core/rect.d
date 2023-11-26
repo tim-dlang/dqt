@@ -114,7 +114,7 @@ public:
     pragma(inline, true) QPoint bottomLeft() const/+ noexcept+/
     { return QPoint(x1, y2); }
     pragma(inline, true) QPoint center() const/+ noexcept+/
-    { return QPoint(cast(int)((qint64(x1)+x2)/2), cast(int)((qint64(y1)+y2)/2)); } // cast avoids overflow on addition
+    { return QPoint(cast(int) ((qint64(x1)+x2)/2), cast(int) ((qint64(y1)+y2)/2)); } // cast avoids overflow on addition
 
 
     pragma(inline, true) void moveLeft(int pos)/+ noexcept+/
@@ -253,14 +253,14 @@ public:
         y2 = (s.height() + y1 - 1);
     }
 
-    QRect opBinary(string op)(ref const(QRect) r) const/+ noexcept+/ if(op == "|");
-    QRect opBinary(string op)(ref const(QRect) r) const/+ noexcept+/ if(op == "&");
-    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QRect) r)/+ noexcept+/ if(op == "|")
+    QRect opBinary(string op)(ref const(QRect) r) const/+ noexcept+/ if (op == "|");
+    QRect opBinary(string op)(ref const(QRect) r) const/+ noexcept+/ if (op == "&");
+    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QRect) r)/+ noexcept+/ if (op == "|")
     {
         this = this | r;
         return this;
     }
-    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QRect) r)/+ noexcept+/ if(op == "&")
+    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QRect) r)/+ noexcept+/ if (op == "&")
     {
         this = this & r;
         return this;
@@ -296,12 +296,12 @@ public:
         auto tmp = QPoint(x1 + margins.left(), y1 + margins.top()); auto tmp__1 = QPoint(x2 - margins.right(), y2 - margins.bottom()); return QRect(tmp,
                      tmp__1);
     }
-    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if(op == "+")
+    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if (op == "+")
     {
         this = marginsAdded(margins);
         return this;
     }
-    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if(op == "-")
+    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if (op == "-")
     {
         this = marginsRemoved(margins);
         return this;
@@ -315,7 +315,7 @@ public:
     /+ friend inline bool operator==(const QRect &, const QRect &) noexcept; +/
     /+ friend inline bool operator!=(const QRect &, const QRect &) noexcept; +/
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ Q_REQUIRED_RESULT CGRect toCGRect() const noexcept; +/
     }
@@ -562,14 +562,14 @@ public:
         h = s.height();
     }
 
-    QRectF opBinary(string op)(ref const(QRectF) r) const/+ noexcept+/ if(op == "|");
-    QRectF opBinary(string op)(ref const(QRectF) r) const/+ noexcept+/ if(op == "&");
-    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QRectF) r)/+ noexcept+/ if(op == "|")
+    QRectF opBinary(string op)(ref const(QRectF) r) const/+ noexcept+/ if (op == "|");
+    QRectF opBinary(string op)(ref const(QRectF) r) const/+ noexcept+/ if (op == "&");
+    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QRectF) r)/+ noexcept+/ if (op == "|")
     {
         this = this | r;
         return this;
     }
-    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QRectF) r)/+ noexcept+/ if(op == "&")
+    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QRectF) r)/+ noexcept+/ if (op == "&")
     {
         this = this & r;
         return this;
@@ -601,12 +601,12 @@ public:
         auto tmp = QPointF(xp + margins.left(), yp + margins.top()); auto tmp__1 = QSizeF(w - margins.left() - margins.right(), h - margins.top() - margins.bottom()); return QRectF(tmp,
                       tmp__1);
     }
-    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if(op == "+")
+    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if (op == "+")
     {
         this = marginsAdded(margins);
         return this;
     }
-    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if(op == "-")
+    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if (op == "-")
     {
         this = marginsRemoved(margins);
         return this;
@@ -626,7 +626,7 @@ public:
     }
     /+ Q_REQUIRED_RESULT +/ QRect toAlignedRect() const/+ noexcept+/;
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ Q_REQUIRED_RESULT static QRectF fromCGRect(CGRect rect) noexcept; +/
         /+ Q_REQUIRED_RESULT CGRect toCGRect() const noexcept; +/

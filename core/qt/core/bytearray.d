@@ -43,7 +43,7 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSData);
 pragma(inline, true) uint qstrlen(const(char)* str)
 {
     import core.stdc.string;
-    return str ? cast(uint)(strlen(str)) : 0;
+    return str ? cast(uint) (strlen(str)) : 0;
 }
 
 pragma(inline, true) uint qstrnlen(const(char)* str, uint maxlen)
@@ -230,19 +230,19 @@ alias Base64Options = QFlags!(Base64Option);
         /+pragma(inline, true) auto opCast(T : const(void))() const;+/
     }
     pragma(inline, true) char* data()
-    { detach(); return cast(char*)(d.data()); }
+    { detach(); return cast(char*) (d.data()); }
     pragma(inline, true) const(char)* data() const
-    { return cast(const(char)*)(d.data()); }
+    { return cast(const(char)*) (d.data()); }
     pragma(inline, true) const(char)* constData() const
-    { return cast(const(char)*)(d.data()); }
+    { return cast(const(char)*) (d.data()); }
 
     extern(D) const(ubyte)[] toConstUByteArray()
     {
-        return (cast(const(ubyte)*)constData())[0..length];
+        return (cast(const(ubyte)*) constData())[0..length];
     }
     extern(D) const(char)[] toConstCharArray()
     {
-        return (cast(const(char)*)constData())[0..length];
+        return (cast(const(char)*) constData())[0..length];
     }
 
     pragma(inline, true) void detach()
@@ -384,11 +384,11 @@ alias Base64Options = QFlags!(Base64Option);
     { return replace(before.constData(), before.size(), c, qstrlen(c)); }
     ref QByteArray replace(const(char)* before, ref const(QByteArray) after);
     ref QByteArray replace(char before, char after);
-    extern(D) pragma(inline, true) ref QByteArray opOpAssign(string op)(char c) if(op == "~")
+    extern(D) pragma(inline, true) ref QByteArray opOpAssign(string op)(char c) if (op == "~")
     { return append(c); }
-    extern(D) pragma(inline, true) ref QByteArray opOpAssign(string op)(const(char)* s) if(op == "~")
+    extern(D) pragma(inline, true) ref QByteArray opOpAssign(string op)(const(char)* s) if (op == "~")
     { return append(s); }
-    extern(D) pragma(inline, true) ref QByteArray opOpAssign(string op)(ref const(QByteArray) a) if(op == "~")
+    extern(D) pragma(inline, true) ref QByteArray opOpAssign(string op)(ref const(QByteArray) a) if (op == "~")
     { return append(a); }
 
     QList!(QByteArray) split(char sep) const;
@@ -482,8 +482,8 @@ alias Base64Options = QFlags!(Base64Option);
         /+/+ explicit +/ auto opCast(T : bool)() const/+ noexcept+/ { return decodingStatus == QByteArray.Base64DecodingStatus.Ok; }+/
 
     /+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(Q_QDOC) +/
-        ref QByteArray opUnary(string op)()/+ & noexcept+/ if(op == "*") { return decoded; }
-        ref const(QByteArray) opUnary(string op)() const/+ & noexcept+/ if(op == "*") { return decoded; }
+        ref QByteArray opUnary(string op)()/+ & noexcept+/ if (op == "*") { return decoded; }
+        ref const(QByteArray) opUnary(string op)() const/+ & noexcept+/ if (op == "*") { return decoded; }
         /+ QByteArray &&operator*() && noexcept { return std::move(decoded); } +/
     /+ #else
         QByteArray &operator*() noexcept { return decoded; }
@@ -499,7 +499,7 @@ alias Base64Options = QFlags!(Base64Option);
     /+ Q_REQUIRED_RESULT +/ static QByteArray fromHex(ref const(QByteArray) hexEncoded);
     /+ Q_REQUIRED_RESULT +/ static QByteArray fromPercentEncoding(ref const(QByteArray) pctEncoded, char percent = '%');
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QByteArray fromCFData(CFDataRef data); +/
         /+ static QByteArray fromRawCFData(CFDataRef data); +/
@@ -518,21 +518,21 @@ alias Base64Options = QFlags!(Base64Option);
     /+ typedef std::reverse_iterator<iterator> reverse_iterator; +/
     /+ typedef std::reverse_iterator<const_iterator> const_reverse_iterator; +/
     pragma(inline, true) iterator begin()
-    { detach(); return cast(iterator)(d.data()); }
+    { detach(); return cast(iterator) (d.data()); }
     pragma(inline, true) const_iterator begin() const
-    { return cast(const_iterator)(d.data()); }
+    { return cast(const_iterator) (d.data()); }
     pragma(inline, true) const_iterator cbegin() const
-    { return cast(const_iterator)(d.data()); }
+    { return cast(const_iterator) (d.data()); }
     pragma(inline, true) const_iterator constBegin() const
-    { return cast(const_iterator)(d.data()); }
+    { return cast(const_iterator) (d.data()); }
     pragma(inline, true) iterator end()
-    { detach(); return cast(iterator)(d.data() + d.size); }
+    { detach(); return cast(iterator) (d.data() + d.size); }
     pragma(inline, true) const_iterator end() const
-    { return cast(const_iterator)(d.data() + d.size); }
+    { return cast(const_iterator) (d.data() + d.size); }
     pragma(inline, true) const_iterator cend() const
-    { return cast(const_iterator)(d.data() + d.size); }
+    { return cast(const_iterator) (d.data() + d.size); }
     pragma(inline, true) const_iterator constEnd() const
-    { return cast(const_iterator)(d.data() + d.size); }
+    { return cast(const_iterator) (d.data() + d.size); }
     /+ reverse_iterator rbegin() { return reverse_iterator(end()); } +/
     /+ reverse_iterator rend() { return reverse_iterator(begin()); } +/
     /+ const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); } +/
@@ -655,7 +655,7 @@ public:
         {
             warn(WarningType.OutOfRange, EmittingClass.QByteRef);
         }
-        return cast(char)(0);
+        return cast(char) (0);
     }+/
     /+pragma(inline, true) ref QByteRef operator =(char c)
     {
@@ -679,7 +679,7 @@ public:
     }+/
     /+pragma(inline, true) ref QByteRef operator =(ref const(QByteRef) c)
     {
-        return operator=(cast(char)(c));
+        return operator=(cast(char) (c));
     }+/
     /+pragma(inline, true) bool operator ==(char c) const
     { return a.d.data()[i] == c; }+/

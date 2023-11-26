@@ -99,7 +99,7 @@ public:
 /+ #endif
 
 #if QT_STRINGVIEW_LEVEL < 2 +/
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QString) format) const;
         QString toString(ref const(QString) format, QCalendar cal) const;
@@ -193,7 +193,7 @@ public:
     int msec() const;
 /+ #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat f = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QString) format) const;
     }
@@ -367,7 +367,7 @@ public:
 
 /+ #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QString) format) const;
         QString toString(ref const(QString) format, QCalendar cal) const;
@@ -437,7 +437,7 @@ public:
     static qint64 currentMSecsSinceEpoch()/+ noexcept+/;
     static qint64 currentSecsSinceEpoch()/+ noexcept+/;
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QDateTime fromCFDate(CFDateRef date); +/
         /+ CFDateRef toCFDate() const Q_DECL_CF_RETURNS_RETAINED; +/

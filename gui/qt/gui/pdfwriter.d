@@ -17,7 +17,7 @@ import qt.core.point;
 import qt.gui.painter;
 import qt.gui.paintdevice;
 import qt.helpers;
-static if(!defined!"QT_NO_PDF")
+static if (!defined!"QT_NO_PDF")
 {
     import qt.core.bytearray;
     import qt.core.iodevice;
@@ -28,7 +28,7 @@ static if(!defined!"QT_NO_PDF")
     import qt.gui.paintengine;
 }
 
-static if(!defined!"QT_NO_PDF")
+static if (!defined!"QT_NO_PDF")
 {
 
 

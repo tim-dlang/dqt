@@ -532,7 +532,7 @@ protected:
 #endif
 // ### Qt6: FIXME: Remove the special Q_CC_MSVC handling, it was introduced to maintain BC for QTBUG-41810 .
 #if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC) +/
-    /*static if(!defined!"Q_NO_TEMPLATE_FRIENDS")
+    /*static if (!defined!"Q_NO_TEMPLATE_FRIENDS")
     {
         /+ template<typename T> +/
         /+ friend inline T qvariant_cast(const QVariant &); +/
@@ -675,17 +675,17 @@ public:
 
         /+ref const_iterator operator =(ref const(const_iterator) other);+/
 
-        const(QVariant) opUnary(string op)() const if(op == "*");
+        const(QVariant) opUnary(string op)() const if (op == "*");
         /+bool operator ==(ref const(const_iterator) o) const;+/
         /+bool operator !=(ref const(const_iterator) o) const;+/
-        ref const_iterator opUnary(string op)() if(op == "++");
+        ref const_iterator opUnary(string op)() if (op == "++");
         /+const_iterator operator ++(int);+/
-        ref const_iterator opUnary(string op)() if(op == "--");
+        ref const_iterator opUnary(string op)() if (op == "--");
         /+const_iterator operator --(int);+/
-        ref const_iterator opOpAssign(string op)(int j) if(op == "+");
-        ref const_iterator opOpAssign(string op)(int j) if(op == "-");
-        const_iterator opBinary(string op)(int j) const if(op == "+");
-        const_iterator opBinary(string op)(int j) const if(op == "-");
+        ref const_iterator opOpAssign(string op)(int j) if (op == "+");
+        ref const_iterator opOpAssign(string op)(int j) if (op == "-");
+        const_iterator opBinary(string op)(int j) const if (op == "+");
+        const_iterator opBinary(string op)(int j) const if (op == "-");
         /+ friend inline const_iterator operator+(int j, const_iterator k) { return k + j; } +/
     }
 
@@ -738,17 +738,17 @@ public:
 
         const(QVariant) value() const;
 
-        const(QVariant) opUnary(string op)() const if(op == "*");
+        const(QVariant) opUnary(string op)() const if (op == "*");
         /+bool operator ==(ref const(const_iterator) o) const;+/
         /+bool operator !=(ref const(const_iterator) o) const;+/
-        ref const_iterator opUnary(string op)() if(op == "++");
+        ref const_iterator opUnary(string op)() if (op == "++");
         /+const_iterator operator ++(int);+/
-        ref const_iterator opUnary(string op)() if(op == "--");
+        ref const_iterator opUnary(string op)() if (op == "--");
         /+const_iterator operator --(int);+/
-        ref const_iterator opOpAssign(string op)(int j) if(op == "+");
-        ref const_iterator opOpAssign(string op)(int j) if(op == "-");
-        const_iterator opBinary(string op)(int j) const if(op == "+");
-        const_iterator opBinary(string op)(int j) const if(op == "-");
+        ref const_iterator opOpAssign(string op)(int j) if (op == "+");
+        ref const_iterator opOpAssign(string op)(int j) if (op == "-");
+        const_iterator opBinary(string op)(int j) const if (op == "+");
+        const_iterator opBinary(string op)(int j) const if (op == "-");
         /+ friend inline const_iterator operator+(int j, const_iterator k) { return k + j; } +/
     }
 
@@ -917,20 +917,20 @@ version(QT_MOC){}else
 pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) v)
 {
     // TODO: special cases of qvariant_cast
-    static if(is(T == class))
+    static if (is(T == class))
         static assert(false);
     else
     {
         const(int) vid = qMetaTypeId!(T)();
         if (vid == v.userType())
             return *reinterpret_cast!(T*)(v.constData());
-        static if(__traits(hasMember, T, "rawConstructor"))
+        static if (__traits(hasMember, T, "rawConstructor"))
             mixin("T t = T.init; t.rawConstructor();");
         else
             mixin("T t;");
         if (v.convert(vid, &t))
             return t;
-        static if(__traits(hasMember, T, "rawConstructor"))
+        static if (__traits(hasMember, T, "rawConstructor"))
             mixin("T r = T.init; r.rawConstructor(); return r;");
         else
             mixin("return T();");

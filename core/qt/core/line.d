@@ -100,7 +100,7 @@ public:
 
     /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QPoint center() const
     {
-        return QPoint(cast(int)((qint64(pt1.x()) + pt2.x()) / 2), cast(int)((qint64(pt1.y()) + pt2.y()) / 2));
+        return QPoint(cast(int) ((qint64(pt1.x()) + pt2.x()) / 2), cast(int) ((qint64(pt1.y()) + pt2.y()) / 2));
     }
 
     pragma(inline, true) void setP1(ref const(QPoint) aP1)

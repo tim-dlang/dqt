@@ -235,14 +235,14 @@ public:
     /+bool operator ==(ref const(QPainterPath) other) const;+/
     /+bool operator !=(ref const(QPainterPath) other) const;+/
 
-    QPainterPath opBinary(string op)(ref const(QPainterPath) other) const if(op == "&");
-    QPainterPath opBinary(string op)(ref const(QPainterPath) other) const if(op == "|");
-    QPainterPath opBinary(string op)(ref const(QPainterPath) other) const if(op == "+");
-    QPainterPath opBinary(string op)(ref const(QPainterPath) other) const if(op == "-");
-    ref QPainterPath opOpAssign(string op)(ref const(QPainterPath) other) if(op == "&");
-    ref QPainterPath opOpAssign(string op)(ref const(QPainterPath) other) if(op == "|");
-    ref QPainterPath opOpAssign(string op)(ref const(QPainterPath) other) if(op == "+");
-    ref QPainterPath opOpAssign(string op)(ref const(QPainterPath) other) if(op == "-");
+    QPainterPath opBinary(string op)(ref const(QPainterPath) other) const if (op == "&");
+    QPainterPath opBinary(string op)(ref const(QPainterPath) other) const if (op == "|");
+    QPainterPath opBinary(string op)(ref const(QPainterPath) other) const if (op == "+");
+    QPainterPath opBinary(string op)(ref const(QPainterPath) other) const if (op == "-");
+    ref QPainterPath opOpAssign(string op)(ref const(QPainterPath) other) if (op == "&");
+    ref QPainterPath opOpAssign(string op)(ref const(QPainterPath) other) if (op == "|");
+    ref QPainterPath opOpAssign(string op)(ref const(QPainterPath) other) if (op == "+");
+    ref QPainterPath opOpAssign(string op)(ref const(QPainterPath) other) if (op == "-");
 
 private:
     QScopedPointer!(QPainterPathPrivate, QPainterPathPrivateDeleter) d_ptr;

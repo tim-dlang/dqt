@@ -28,32 +28,32 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
     appender.put(indent);
     auto className = fromStringz(meta.className());
     appender.put(className);
-    if(!obj.objectName().isEmpty())
+    if (!obj.objectName().isEmpty())
     {
         appender.put(" ");
         appender.put(fromStringz(obj.objectName().toUtf8().data()));
     }
     appender.put("\n");
     int propertyCount = meta.propertyCount();
-    for(int i = 0; i < propertyCount; i++)
+    for (int i = 0; i < propertyCount; i++)
     {
         auto propertyName = fromStringz(meta.property(i).name());
-        if(propertyName == "objectName")
+        if (propertyName == "objectName")
             continue;
         QVariant valueVar = obj.property(propertyName.ptr);
         QString value = valueVar.toString();
-        /*if(value.isEmpty())
+        /*if (value.isEmpty())
             continue;*/
         auto propertyType = fromStringz(valueVar.typeName());
-        if(valueVar.type() == cast(QVariant.Type)QMetaType.Type.QFont)
+        if (valueVar.type() == cast(QVariant.Type)QMetaType.Type.QFont)
             value = QString("platform dependent");
-        if(valueVar.type() == cast(QVariant.Type)QMetaType.Type.QKeySequence)
+        if (valueVar.type() == cast(QVariant.Type)QMetaType.Type.QKeySequence)
             value = valueVar.value!QKeySequence().toString(QKeySequence.SequenceFormat.PortableText);
-        if(propertyName.among("x", "y", "width", "height"))
+        if (propertyName.among("x", "y", "width", "height"))
             value = QString("platform dependent");
-        if(className == "QTimeEdit" && propertyName.among("date", "dateTime", "maximumDateTime", "minimumDateTime", "maximumDate", "minimumDate"))
+        if (className == "QTimeEdit" && propertyName.among("date", "dateTime", "maximumDateTime", "minimumDateTime", "maximumDate", "minimumDate"))
             value = QString("platform dependent");
-        if(className == "QDateEdit" && propertyName.among("time", "dateTime", "maximumDateTime", "minimumDateTime", "maximumDate", "minimumDate", "maximumTime", "minimumTime"))
+        if (className == "QDateEdit" && propertyName.among("time", "dateTime", "maximumDateTime", "minimumDateTime", "maximumDate", "minimumDate", "maximumTime", "minimumTime"))
             value = QString("platform dependent");
         appender.put(indent);
         appender.put("    ");
@@ -64,32 +64,32 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
         appender.put(fromStringz(value.toUtf8().data()));
         appender.put(")\n");
     }
-    if(fromStringz(meta.className()) == "QComboBox")
+    if (fromStringz(meta.className()) == "QComboBox")
         return;
-    if(fromStringz(meta.className()) == "QKeySequenceEdit")
+    if (fromStringz(meta.className()) == "QKeySequenceEdit")
         return;
     QLayout layout = qobject_cast!QLayout(obj);
-    if(layout)
+    if (layout)
     {
         int left, top, right, bottom;
         layout.getContentsMargins(&left, &top, &right, &bottom);
         appender.put(text(indent, "  contentsMargins = (", left, ", ", top, ", ", right, ", ", bottom, ")\n"));
         int itemCount = layout.count();
-        for(int i = 0; i < itemCount; i++)
+        for (int i = 0; i < itemCount; i++)
         {
             QLayoutItem item = layout.itemAt(i);
             appender.put(text(indent, "  item[", i, "] = "));
-            if(item.widget())
+            if (item.widget())
                 appender.put(text("widget ", fromStringz(item.widget().metaObject().className()), " ", fromStringz(item.widget().objectName().toUtf8().data())));
-            else if(item.spacerItem())
+            else if (item.spacerItem())
                 appender.put("spacer");
-            else if(item.layout())
+            else if (item.layout())
                 appender.put(text("layout ", fromStringz(item.layout().metaObject().className()), " ", fromStringz(item.layout().objectName().toUtf8().data())));
             appender.put("\n");
         }
     }
     const QObjectList children = obj.children();
-    foreach(QObject c; children)
+    foreach (QObject c; children)
     {
         dumpObject(appender, c, indent ~ "    ");
     }
@@ -110,9 +110,9 @@ unittest
 
     bool anyFailure;
     size_t countFiles;
-    static foreach(filename; filesUi)
+    static foreach (filename; filesUi)
     {
-        static if(filename.endsWith(".ui"))
+        static if (filename.endsWith(".ui"))
         {{
             UIStruct!("ui/" ~ filename) ui;
             alias Root = Parameters!(ui.setupUi)[0];
@@ -124,7 +124,7 @@ unittest
             std.file.write(resultPath, appender.data);
             string expectedPath = buildPath(dqtRoot, "tests", "ui", filename[0..$-3] ~ ".properties_expected");
             auto expected = readText(expectedPath);
-            if(appender.data.replace("\r", "") != expected.replace("\r", ""))
+            if (appender.data.replace("\r", "") != expected.replace("\r", ""))
             {
                 stderr.writeln("Wrong properties for ", filename);
                 stderr.writeln(appender.data);
