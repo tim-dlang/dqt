@@ -1344,7 +1344,7 @@ private:
     package static qlonglong toIntegral_helper(QStringView string, bool* ok, int base);
     package static qulonglong toIntegral_helper(QStringView string, bool* ok, uint base);
     }
-    void replace_helper(size_t* indices, qsizetype nIndices, qsizetype blen, const(QChar)* after, qsizetype alen);
+    /+ void replace_helper(size_t *indices, qsizetype nIndices, qsizetype blen, const QChar *after, qsizetype alen); +/
     /+ friend class QStringView; +/
     /+ friend class QByteArray; +/
     /+ friend class QCollator; +/

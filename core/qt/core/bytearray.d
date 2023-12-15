@@ -595,7 +595,7 @@ private:
     void reallocData(qsizetype alloc, QArrayData.AllocationOption option);
     void reallocGrowData(qsizetype n);
     void expand(qsizetype i);
-    QByteArray nulTerminated() const;
+    /+ QByteArray nulTerminated() const; +/
 
     static QByteArray toLower_helper(ref const(QByteArray) a);
     static QByteArray toLower_helper(ref QByteArray a);
