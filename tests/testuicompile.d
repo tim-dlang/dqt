@@ -55,6 +55,8 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
             value = QString("platform dependent");
         if (className == "QDateEdit" && propertyName.among("time", "dateTime", "maximumDateTime", "minimumDateTime", "maximumDate", "minimumDate", "maximumTime", "minimumTime"))
             value = QString("platform dependent");
+        if (propertyType.startsWith("QFlags"))
+            value = QString.number(valueVar.toInt());
         appender.put(indent);
         appender.put("    ");
         appender.put(propertyName);
