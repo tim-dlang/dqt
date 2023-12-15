@@ -40,6 +40,8 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
         auto propertyName = fromStringz(meta.property(i).name());
         if (propertyName == "objectName")
             continue;
+        if (className == "QKeySequenceEdit" && propertyName.among("clearButtonEnabled", "maximumSequenceLength", "finishingKeyCombinations"))
+            continue;
         QVariant valueVar = obj.property(propertyName.ptr);
         QString value = valueVar.toString();
         /*if (value.isEmpty())
