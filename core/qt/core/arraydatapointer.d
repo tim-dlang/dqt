@@ -397,7 +397,7 @@ public:
     qsizetype size = 0;
 }
 
-/+pragma(inline, true) void qSwap(T)(/+ QArrayDataPointer<T> &p1, QArrayDataPointer<T> &p2 +/)/+ noexcept+/
+/+pragma(inline, true) void qSwap(T)(ref QArrayDataPointer!(T) p1, ref QArrayDataPointer!(T) p2)/+ noexcept+/
 {
     p1.swap(p2);
 }+/

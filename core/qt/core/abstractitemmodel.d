@@ -92,7 +92,7 @@ private:
     qsizetype m_len = 0;
 
     /+ template <typename T> +/
-    alias if_compatible_container(T) = /+ std:: +/enable_if_t!(/+ QtPrivate:: +/IsContainerCompatibleWithModelRoleDataSpan!(T).value, bool);
+    /+ using if_compatible_container = std::enable_if_t<QtPrivate::IsContainerCompatibleWithModelRoleDataSpan<T>::value, bool>; +/
 
 public:
     @disable this();

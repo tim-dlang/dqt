@@ -825,7 +825,7 @@ public:
         (mixin(Q_ASSERT_X(q{i >= 0 && i < QList.size() && j >= 0 && j < QList.size()},q{
                     "QList<T>::swap"},q{ "index out of range"})));
         detach();
-        qt.core.global.qSwap(d.begin()[i], d.begin()[j]);
+        qt.core.arraydatapointer.qSwap(d.begin()[i], d.begin()[j]);
     }
 
     // STL compatibility

@@ -292,6 +292,8 @@ To convertImplicit(From, To)(ref const(From) from)
 }
 
     /+ template<typename T, bool>
+    struct SequentialValueTypeIsMetaType;
+    template<typename T, bool>
     struct AssociativeValueTypeIsMetaType;
     template<typename T, bool>
     struct IsMetaTypePair;
@@ -1047,20 +1049,21 @@ extern(C++, "QtPrivate")
         }
     }
 
-    struct SequentialValueTypeIsMetaType(T, /+ bool +/ /+ = QMetaTypeId2<typename T::value_type>::Defined +/)
+    /+ template<typename T, bool = QMetaTypeId2<typename T::value_type>::Defined>
+    struct SequentialValueTypeIsMetaType
     {
-        /+ static bool registerConverter()
+        static bool registerConverter()
         {
             return false;
-        } +/
+        }
 
         static bool registerMutableView()
         {
             return false;
         }
-    }
+    };
 
-    /+ template<typename T>
+    template<typename T>
     struct SequentialContainerTransformationHelper<T, true> : SequentialValueTypeIsMetaType<T>
     {
     }; +/
@@ -2382,7 +2385,6 @@ public:
         }
     }
 }
-
 
 struct QMetaTypeInterfaceWrapper(T)
 {

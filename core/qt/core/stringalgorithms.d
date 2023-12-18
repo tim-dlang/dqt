@@ -60,7 +60,7 @@ extern(C++, "QtPrivate") {
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QLatin1String lhs, QBasicUtf8StringView!(false) rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QBasicUtf8StringView!(false) lhs, QStringView   rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QBasicUtf8StringView!(false) lhs, QLatin1String rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(/+ QBasicUtf8StringView<false> lhs, QBasicUtf8StringView<false> rhs +/ /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QBasicUtf8StringView!(false) lhs, QBasicUtf8StringView!(false) rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
 
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QStringView   lhs, QStringView   rhs)/+ noexcept+/;
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QStringView   lhs, QLatin1String rhs)/+ noexcept+/;
@@ -70,7 +70,7 @@ extern(C++, "QtPrivate") {
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QLatin1String lhs, QBasicUtf8StringView!(false) rhs)/+ noexcept+/;
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QBasicUtf8StringView!(false) lhs, QStringView   rhs)/+ noexcept+/;
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QBasicUtf8StringView!(false) lhs, QLatin1String rhs)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(/+ QBasicUtf8StringView<false> lhs, QBasicUtf8StringView<false> rhs +/)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QBasicUtf8StringView!(false) lhs, QBasicUtf8StringView!(false) rhs)/+ noexcept+/;
 
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QStringView   haystack, QStringView   needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QStringView   haystack, QLatin1String needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;

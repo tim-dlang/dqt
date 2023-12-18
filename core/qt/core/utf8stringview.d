@@ -130,7 +130,7 @@ private:
     /+ using if_compatible_qstring_like = std::enable_if_t<std::is_same_v<T, QByteArray>, bool>; +/
 
     /+ template <typename T> +/
-    alias if_compatible_container(T) = /+ std:: +/enable_if_t!(/+ QtPrivate:: +/IsContainerCompatibleWithQUtf8StringView!(T).value, bool);
+    /+ using if_compatible_container = std::enable_if_t<QtPrivate::IsContainerCompatibleWithQUtf8StringView<T>::value, bool>; +/
 
     /+ template <typename Container> +/
     static qsizetype lengthHelperContainer(Container)(ref const(Container) c)/+ noexcept+/
@@ -320,7 +320,8 @@ private:
     {
         import qt.core.stringalgorithms;
 
-        return /+ QtPrivate:: +/qt.core.stringalgorithms.compareStrings(QBasicUtf8StringView!(false)(lhs.data(),lhs.size()),QBasicUtf8StringView!(false)(rhs.data(),rhs.size()));
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.compareStrings(QBasicUtf8StringView!(false)(lhs.data(), lhs.size()),
+                                         QBasicUtf8StringView!(false)(rhs.data(), rhs.size()));
     }+/
 
     /+ [[nodiscard]] friend inline bool operator==(QBasicUtf8StringView lhs, QBasicUtf8StringView rhs) noexcept

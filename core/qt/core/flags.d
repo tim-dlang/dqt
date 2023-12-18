@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.typeinfo;
 import qt.helpers;
+import std.traits;
 version(D_LP64){}else
     import core.stdc.config;
 
@@ -101,11 +102,10 @@ public:
     // the definition below is too complex for qdoc
     typedef int Int;
 #else +/
-    /+ typename std::conditional<
-                std::is_unsigned<typename std::underlying_type<Enum>::type>::value,
-                unsigned int,
-                signed int
-            >::type +/alias Int = int;
+    static if (isUnsigned!(OriginalType!Enum))
+        alias Int = uint;
+    else
+        alias Int = int;
 /+ #endif +/
     alias enum_type = Enum;
     // compiler-generated copy/move ctor/assignment operators are fine!

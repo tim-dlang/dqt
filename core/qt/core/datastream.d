@@ -22,7 +22,6 @@ version(QT_NO_DATASTREAM){}else
     import qt.core.iodevicebase;
     import qt.core.scopedpointer;
     import qt.core.sysinfo;
-    import qt.core.typeinfo;
 }
 
 
@@ -355,21 +354,25 @@ QDataStream &writeAssociativeContainer(QDataStream &s, const Container &c)
 
 } // QtPrivate namespace
 
-/+ alias QDataStreamIfHasOStreamOperators(T) =
-    /+ std:: +/enable_if_t!(bool, ref QDataStream);
-alias QDataStreamIfHasOStreamOperatorsContainer(Container, T) =
-    /+ std:: +/enable_if_t!(bool, ref QDataStream);
+/+ template<typename ...T>
+using QDataStreamIfHasOStreamOperators =
+    std::enable_if_t<std::conjunction_v<QTypeTraits::has_ostream_operator<QDataStream, T>...>, QDataStream &>;
+template<typename Container, typename ...T>
+using QDataStreamIfHasOStreamOperatorsContainer =
+    std::enable_if_t<std::conjunction_v<QTypeTraits::has_ostream_operator_container<QDataStream, Container, T>...>, QDataStream &>;
 
-alias QDataStreamIfHasIStreamOperators(T) =
-    /+ std:: +/enable_if_t!(bool, ref QDataStream);
-alias QDataStreamIfHasIStreamOperatorsContainer(Container, T) =
-    /+ std:: +/enable_if_t!(bool, ref QDataStream); +/
+template<typename ...T>
+using QDataStreamIfHasIStreamOperators =
+    std::enable_if_t<std::conjunction_v<QTypeTraits::has_istream_operator<QDataStream, T>...>, QDataStream &>;
+template<typename Container, typename ...T>
+using QDataStreamIfHasIStreamOperatorsContainer =
+    std::enable_if_t<std::conjunction_v<QTypeTraits::has_istream_operator_container<QDataStream, Container, T>...>, QDataStream &>;
 
 /*****************************************************************************
   QDataStream inline functions
  *****************************************************************************/
 
-/+ template <typename Enum>
+template <typename Enum>
 inline QDataStream &operator<<(QDataStream &s, QFlags<Enum> e)
 { return s << typename QFlags<Enum>::Int(e); }
 

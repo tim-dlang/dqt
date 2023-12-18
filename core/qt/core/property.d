@@ -20,7 +20,6 @@ import qt.core.propertyprivate;
 import qt.core.shareddata;
 import qt.core.string;
 import qt.core.taggedpointer;
-import qt.core.typeinfo;
 import qt.helpers;
 
 /+ #if __has_include(<source_location>) && __cplusplus >= 202002L && !defined(Q_CLANG_QDOC)
@@ -66,8 +65,8 @@ public:
 /*    alias value_type = T;
     alias parameter_type = /+ std:: +/conditional_t!(UseReferences, ref const(T), T);
     /+ using rvalue_ref = typename std::conditional_t<UseReferences, T &&, DisableRValueRefs>; +/
-    alias arrow_operator_result = /+ std:: +/conditional_t!(bool, ref const(T),
-                                            /+ std:: +/conditional_t!(bool, ref const(T), void));
+    /+ using arrow_operator_result = std::conditional_t<std::is_pointer_v<T>, const T &,
+                                        std::conditional_t<QTypeTraits::is_dereferenceable_v<T>, const T &, void>>; +/
 
     /+ QPropertyData() = default; +/
     this(parameter_type t)
@@ -363,6 +362,8 @@ private:
     /+ QtPrivate:: +/qt.core.propertyprivate.QPropertyBindingData d;
     bool is_equal(ref const(T) v)
     {
+        import qt.core.typeinfo;
+
         static if (/+ QTypeTraits:: +/qt.core.typeinfo.has_operator_equal_v!(T)) {
             if (v == this.val)
                 return true;
@@ -374,7 +375,7 @@ public:
     alias value_type = QPropertyData!(T).value_type;
     alias parameter_type = QPropertyData!(T).parameter_type;
     /+ using rvalue_ref = typename QPropertyData<T>::rvalue_ref; +/
-    alias arrow_operator_result = QPropertyData!(T).arrow_operator_result;
+    /+ using arrow_operator_result = typename QPropertyData<T>::arrow_operator_result; +/
 
     /+ QProperty() = default; +/
     /+ explicit +/this(parameter_type initialValue)
@@ -409,6 +410,8 @@ public:
 
     /+arrow_operator_result operator ->() const
     {
+        import qt.core.typeinfo;
+
         static if (/+ QTypeTraits:: +/qt.core.typeinfo.is_dereferenceable_v!(T)) {
             return value();
         } else static if (/+ std:: +/is_pointer_v!(T)) {
@@ -1024,7 +1027,7 @@ public:
     alias value_type = QPropertyData!(T).value_type;
     alias parameter_type = QPropertyData!(T).parameter_type;
     /+ using rvalue_ref = typename QPropertyData<T>::rvalue_ref; +/
-    alias arrow_operator_result = QPropertyData!(T).arrow_operator_result;
+    /+ using arrow_operator_result = typename QPropertyData<T>::arrow_operator_result; +/
 
     /+ QObjectBindableProperty() = default; +/
     /+ explicit +/this(ref const(T) initialValue)
@@ -1058,6 +1061,8 @@ public:
 
     /+arrow_operator_result operator ->() const
     {
+        import qt.core.typeinfo;
+
         static if (/+ QTypeTraits:: +/qt.core.typeinfo.is_dereferenceable_v!(T)) {
             return value();
         } else static if (/+ std:: +/is_pointer_v!(T)) {

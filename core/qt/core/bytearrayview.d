@@ -113,13 +113,13 @@ private:
                                       bool>; +/
 
     /+ template <typename T> +/
-    alias if_compatible_qbytearray_like(T) =
-                /+ std:: +/enable_if_t!(bool, bool);
+    /+ using if_compatible_qbytearray_like =
+            typename std::enable_if_t<std::is_same_v<T, QByteArray>, bool>; +/
 
     /+ template <typename T> +/
-    alias if_compatible_container(T) =
-                /+ std:: +/enable_if_t!(/+ QtPrivate:: +/IsContainerCompatibleWithQByteArrayView!(T).value,
-                                          bool);
+    /+ using if_compatible_container =
+            typename std::enable_if_t<QtPrivate::IsContainerCompatibleWithQByteArrayView<T>::value,
+                                      bool>; +/
 
     /+ template <typename Char> +/
     /+ static constexpr qsizetype lengthHelperPointer(const Char *data) noexcept

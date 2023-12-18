@@ -50,7 +50,10 @@ private:
 
 
     /+ template <typename T> +/
-    alias if_compatible_container(T) = /+ std:: +/enable_if_t!(bool, bool);
+    /+ using if_compatible_container = std::enable_if_t<std::disjunction_v<
+        QtPrivate::IsContainerCompatibleWithQStringView<T>,
+        QtPrivate::IsContainerCompatibleWithQUtf8StringView<T>
+    >, bool>; +/
 
     // confirm we don't make an accidental copy constructor:
 //    static assert(/+ QtPrivate:: +/qt.core.stringview.IsContainerCompatibleWithQStringView!(QAnyStringView).value == false);

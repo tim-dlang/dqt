@@ -121,7 +121,7 @@ private:
     /+ using if_compatible_qstring_like = typename std::enable_if<std::is_same<T, QString>::value, bool>::type; +/
 
     /+ template <typename T> +/
-    alias if_compatible_container(T) = UnknownType!q{/+ std:: +/enable_if!(/+ QtPrivate:: +/IsContainerCompatibleWithQStringView!(T).value, bool).type};
+    /+ using if_compatible_container = typename std::enable_if<QtPrivate::IsContainerCompatibleWithQStringView<T>::value, bool>::type; +/
 
     /+ template <typename Char> +/
     /+ static qsizetype lengthHelperPointer(const Char *str) noexcept
