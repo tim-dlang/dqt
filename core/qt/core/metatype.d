@@ -2015,8 +2015,8 @@ int qRegisterNormalizedMetaType(const QT_PREPEND_NAMESPACE(QByteArray) &normaliz
 int qRegisterMetaType(T)(const(char)* typeName
 /+ #ifndef Q_CLANG_QDOC +/
     , T*  dummy = null
-    /+ , typename QtPrivate::MetaTypeDefinedHelper<T, QMetaTypeId2<T>::Defined && !QMetaTypeId2<T>::IsBuiltIn>::DefinedType defined = QtPrivate::MetaTypeDefinedHelper<T, QMetaTypeId2<T>::Defined && !QMetaTypeId2<T>::IsBuiltIn>::Defined
-#endif +/
+    , /+ QtPrivate:: +/MetaTypeDefinedHelper!(T, QMetaTypeId2!(T).Defined && !QMetaTypeId2!(T).IsBuiltIn).DefinedType defined = /+ QtPrivate:: +/MetaTypeDefinedHelper!(T, QMetaTypeId2!(T).Defined && !QMetaTypeId2!(T).IsBuiltIn).DefinedType.Defined
+/+ #endif +/
 )
 {
 /+ #ifdef QT_NO_QOBJECT
@@ -2024,7 +2024,7 @@ int qRegisterMetaType(T)(const(char)* typeName
 #else +/
     /+ QT_PREPEND_NAMESPACE(QByteArray) +/QByteArray normalizedTypeName = QMetaObject.normalizedType(typeName);
 /+ #endif +/
-    return qRegisterNormalizedMetaType!(T)(normalizedTypeName, dummy, defined__1);
+    return qRegisterNormalizedMetaType!(T)(normalizedTypeName, dummy, defined);
 }
 
 /+ #ifndef QT_NO_DATASTREAM
