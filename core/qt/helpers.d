@@ -242,7 +242,7 @@ template globalInitVar(T)
 {
     static if (__traits(hasMember, T, "rawConstructor"))
     {
-        version(Windows)
+        version (Windows)
             alias globalInitVar = const(globalInitVarImpl!T.globalInitVar);
         else
             static assert(0, "globalInitVar!"~T.stringof~" needs complex construction");
@@ -264,7 +264,7 @@ private struct FunctionManglingCpp
     string suffix;
 }
 
-version(Windows)
+version (Windows)
 {
     private string parseTypeManglingWin(ref string mangling, bool is64bit)
     {
@@ -557,7 +557,7 @@ else
 
 alias defaultConstructorMangling = function string(string name)
 {
-    version(Windows)
+    version (Windows)
         static if (size_t.sizeof == 8)
             return "??0" ~ name ~ "@@QEAA@XZ";
         else
@@ -578,7 +578,7 @@ private string replaceStart(string str, string from, string to)
 // On Win32 it also converts it from 64 bit.
 alias mangleWindows = function string(string mangling, string code)
 {
-    version(Windows)
+    version (Windows)
     {
         import std.algorithm;
         static if (size_t.sizeof == 4)
@@ -626,7 +626,7 @@ alias mangleWindows = function string(string mangling, string code)
 // Changes the mangling only on platforms with Itanium C++ ABI.
 alias mangleItanium = function string(string mangling, string code)
 {
-    version(Windows)
+    version (Windows)
         return code;
     else
     {
@@ -636,7 +636,7 @@ alias mangleItanium = function string(string mangling, string code)
 
 alias mangleOpLess = function string(string name)
 {
-    version(Windows)
+    version (Windows)
         static if (size_t.sizeof == 8)
             return "??M" ~ name ~ "@@UEBA_NAEBV0@@Z";
         else
@@ -650,7 +650,7 @@ package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, st
 {
     import std.algorithm, std.exception, std.conv;
 
-    version(Windows)
+    version (Windows)
     {
         auto parsed = parseFunctionManglingWin(mangling, (void*).sizeof == 8);
         if (name == "~this")
@@ -732,7 +732,7 @@ package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, st
 // Workaround for https://issues.dlang.org/show_bug.cgi?id=22550
 package FunctionManglingCpp mangleClassesTailConst(FunctionManglingCpp parsed)
 {
-    version(Windows)
+    version (Windows)
     {
         string makeTailConst(string mangling)
         {
@@ -757,7 +757,7 @@ package FunctionManglingCpp mangleClassesTailConst(FunctionManglingCpp parsed)
 
 package FunctionManglingCpp mangleChangeAccess(FunctionManglingCpp parsed, string access)
 {
-    version(Windows)
+    version (Windows)
     {
         // private / protected / public / none
         uint accessLevel = (parsed.flags[0] - 'A') / 8;
@@ -781,7 +781,7 @@ package FunctionManglingCpp mangleChangeAccess(FunctionManglingCpp parsed, strin
 
 package FunctionManglingCpp mangleChangeFunctionType(FunctionManglingCpp parsed, string functionTypeStr)
 {
-    version(Windows)
+    version (Windows)
     {
         // private / protected / public / none
         uint accessLevel = (parsed.flags[0] - 'A') / 8;
@@ -805,7 +805,7 @@ package FunctionManglingCpp mangleChangeFunctionType(FunctionManglingCpp parsed,
 // Workaround for https://issues.dlang.org/show_bug.cgi?id=22636
 package FunctionManglingCpp mangleConstructorBaseObject(FunctionManglingCpp parsed)
 {
-    version(Windows)
+    version (Windows)
     {}
     else
     {
@@ -993,7 +993,7 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs, str
     {
         code ~= "pragma(msg, " ~ dummyFunctionName ~ ".mangleof);\n";
 
-        version(Windows)
+        version (Windows)
             code ~= "pragma(msg, parseFunctionManglingWin(" ~ dummyFunctionName ~ ".mangleof, (void*).sizeof == 8));\n";
         else
             code ~= "pragma(msg, parseFunctionManglingItanium(" ~ dummyFunctionName ~ ".mangleof, (void*).sizeof == 8));\n";
@@ -1050,7 +1050,7 @@ package string changeCppManglingNoop(bool debugHere = false)(string changeFuncs,
 {
     return declaration;
 }
-version(Windows)
+version (Windows)
 {
     alias changeWindowsMangling = changeCppMangling;
     alias changeItaniumMangling = changeCppManglingNoop;
@@ -1062,7 +1062,7 @@ else
 }
 
 // Workaround for https://issues.dlang.org/show_bug.cgi?id=19660, which can be removed later.
-version(Windows)
+version (Windows)
     enum exportOnWindows = " export ";
 else
     enum exportOnWindows = "";

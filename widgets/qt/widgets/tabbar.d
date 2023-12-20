@@ -103,7 +103,7 @@ public:
     final void setElideMode(/+ Qt:: +/qt.core.namespace.TextElideMode mode);
 
 /+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
+    version (QT_NO_TOOLTIP) {} else
     {
         final void setTabToolTip(int index, ref const(QString) tip);
         final QString tabToolTip(int index) const;
@@ -160,7 +160,7 @@ public:
     final bool changeCurrentOnDrag() const;
     final void setChangeCurrentOnDrag(bool change);
 
-    version(QT_NO_ACCESSIBILITY){}else
+    version (QT_NO_ACCESSIBILITY) {} else
     {
         final QString accessibleTabName(int index) const;
         final void setAccessibleTabName(int index, ref const(QString) name);
@@ -199,7 +199,7 @@ protected:
     override void timerEvent(QTimerEvent event);
     final void initStyleOption(QStyleOptionTab* option, int tabIndex) const;
 
-    version(QT_NO_ACCESSIBILITY){}else
+    version (QT_NO_ACCESSIBILITY) {} else
     {
         /+ friend class QAccessibleTabBar; +/
     }

@@ -24,7 +24,7 @@ import qt.helpers;
 import qt.widgets.lineedit;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
-version(QT_NO_VALIDATOR){}else
+version (QT_NO_VALIDATOR) {} else
     import qt.gui.validator;
 
 /+ QT_REQUIRE_CONFIG(spinbox); +/

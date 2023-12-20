@@ -36,16 +36,16 @@ import qt.core.typeinfo;
 import qt.core.url;
 import qt.core.uuid;
 import qt.helpers;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.datastream;
-version(QT_NO_GEOM_VARIANT){}else
+version (QT_NO_GEOM_VARIANT) {} else
 {
     import qt.core.line;
     import qt.core.point;
     import qt.core.rect;
     import qt.core.size;
 }
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
     import qt.core.regexp;
 
 /+ #ifndef QT_BOOTSTRAPPED
@@ -188,7 +188,7 @@ extern(C++, "QtPrivate") {
     @disable this(this);
     this(ref const(QVariant) other);
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         this(ref QDataStream s);
     }
@@ -216,7 +216,7 @@ extern(C++, "QtPrivate") {
     this(ref const(QList!(QVariant)) list);
 //    this(ref const(QMap!(QString,QVariant)) map);
 //    this(ref const(QHash!(QString,QVariant)) hash);
-    version(QT_NO_GEOM_VARIANT){}else
+    version (QT_NO_GEOM_VARIANT) {} else
     {
         this(ref const(QSize) size);
         this(ref const(QSizeF) size);
@@ -229,7 +229,7 @@ extern(C++, "QtPrivate") {
     }
     this(ref const(QLocale) locale);
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         this(ref const(QRegExp) regExp);
     }
@@ -297,7 +297,7 @@ extern(C++, "QtPrivate") {
 //    QMap!(QString, QVariant) toMap() const;
 //    QHash!(QString, QVariant) toHash() const;
 
-    version(QT_NO_GEOM_VARIANT){}else
+    version (QT_NO_GEOM_VARIANT) {} else
     {
         QPoint toPoint() const;
         QPointF toPointF() const;
@@ -310,7 +310,7 @@ extern(C++, "QtPrivate") {
     }
     QLocale toLocale() const;
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         QRegExp toRegExp() const;
     }
@@ -335,7 +335,7 @@ extern(C++, "QtPrivate") {
 /+ #endif
 
 #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         void load(ref QDataStream ds);
         void save(ref QDataStream ds) const;
@@ -487,7 +487,7 @@ extern(C++, "QtPrivate") {
     alias f_construct = ExternCPPFunc!(void function(Private* , const(void)* ));
     alias f_clear = ExternCPPFunc!(void function(Private* ));
     alias f_null = ExternCPPFunc!(bool function(const(Private)* ));
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         alias f_load = ExternCPPFunc!(void function(Private* , ref QDataStream ));
         alias f_save = ExternCPPFunc!(void function(const(Private)* , ref QDataStream ));
@@ -770,7 +770,7 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }+/
 
-version(QT_MOC){}else
+version (QT_MOC) {} else
 {
 /+extern(C++, "QtPrivate") {
     /+ template<typename T>

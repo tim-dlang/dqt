@@ -23,7 +23,7 @@ import qt.gui.pixmap;
 import qt.helpers;
 import qt.widgets.frame;
 import qt.widgets.widget;
-version(QT_NO_PICTURE){}else
+version (QT_NO_PICTURE) {} else
     import qt.gui.picture;
 
 /+ QT_REQUIRE_CONFIG(label); +/
@@ -67,7 +67,7 @@ public:
 
 #ifndef QT_NO_PICTURE
 #  if QT_DEPRECATED_SINCE(5,15) +/
-    version(QT_NO_PICTURE){}else
+    version (QT_NO_PICTURE) {} else
     {
         /+ QT_DEPRECATED_VERSION_X(5, 15, "Use the other overload which returns QPicture by-value") +/
             final const(QPicture)* picture() const; // ### Qt 7: Remove function
@@ -101,7 +101,7 @@ public:
     final void setScaledContents(bool);
     override QSize sizeHint() const;
     override QSize minimumSizeHint() const;
-    version(QT_NO_SHORTCUT){}else
+    version (QT_NO_SHORTCUT) {} else
     {
         final void setBuddy(QWidget );
         final QWidget buddy() const;
@@ -123,7 +123,7 @@ public /+ Q_SLOTS +/:
     @QSlot final void setText(ref const(QString) );
     @QSlot final void setPixmap(ref const(QPixmap) );
 /+ #ifndef QT_NO_PICTURE +/
-    version(QT_NO_PICTURE){}else
+    version (QT_NO_PICTURE) {} else
     {
         @QSlot final void setPicture(ref const(QPicture) );
     }
@@ -147,7 +147,7 @@ protected:
     override void mousePressEvent(QMouseEvent ev);
     override void mouseMoveEvent(QMouseEvent ev);
     override void mouseReleaseEvent(QMouseEvent ev);
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         override void contextMenuEvent(QContextMenuEvent ev);
     }

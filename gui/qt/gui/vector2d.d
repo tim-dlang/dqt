@@ -14,13 +14,13 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_VECTOR2D){}else
-version(QT_NO_VECTOR3D){}else
+version (QT_NO_VECTOR2D) {} else
+version (QT_NO_VECTOR3D) {} else
     import qt.gui.vector3d;
-version(QT_NO_VECTOR2D){}else
-version(QT_NO_VECTOR4D){}else
+version (QT_NO_VECTOR2D) {} else
+version (QT_NO_VECTOR4D) {} else
     import qt.gui.vector4d;
-version(QT_NO_VECTOR2D){}else
+version (QT_NO_VECTOR2D) {} else
 {
     import qt.core.namespace;
     import qt.core.point;
@@ -28,12 +28,12 @@ version(QT_NO_VECTOR2D){}else
     import qt.core.variant;
 }
 
-version(QT_NO_VECTOR2D)
+version (QT_NO_VECTOR2D)
 {
 extern(C++, class) struct QVector2D;
 }
 
-version(QT_NO_VECTOR2D){}else
+version (QT_NO_VECTOR2D) {} else
 {
 
 /// Binding for C++ class [QVector2D](https://doc.qt.io/qt-5/qvector2d.html).
@@ -59,13 +59,13 @@ public:
         this.v = [float(point.x()), float(point.y())];
     }
 /+ #ifndef QT_NO_VECTOR3D +/
-    version(QT_NO_VECTOR3D){}else
+    version (QT_NO_VECTOR3D) {} else
     {
         /+ explicit +/this(ref const(QVector3D) vector);
     }
 /+ #endif
 #ifndef QT_NO_VECTOR4D +/
-    version(QT_NO_VECTOR4D){}else
+    version (QT_NO_VECTOR4D) {} else
     {
         /+ explicit +/this(ref const(QVector4D) vector);
     }
@@ -161,13 +161,13 @@ public:
     /+ friend inline bool qFuzzyCompare(const QVector2D& v1, const QVector2D& v2); +/
 
 /+ #ifndef QT_NO_VECTOR3D +/
-    version(QT_NO_VECTOR3D){}else
+    version (QT_NO_VECTOR3D) {} else
     {
         QVector3D toVector3D() const;
     }
 /+ #endif
 #ifndef QT_NO_VECTOR4D +/
-    version(QT_NO_VECTOR4D){}else
+    version (QT_NO_VECTOR4D) {} else
     {
         QVector4D toVector4D() const;
     }

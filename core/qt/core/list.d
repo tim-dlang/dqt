@@ -127,14 +127,14 @@ private:
         }
     }
 
-    version(Windows)
+    version (Windows)
         union { QListData.Data * d; QListData p; }
     else
         union { QListData.Data * d = &QListData.shared_null; QListData p; }
 
 
 public:
-    version(Windows)
+    version (Windows)
     {
         @disable this();
         pragma(inline, true) void rawConstructor()/+ noexcept+/
@@ -223,7 +223,7 @@ public:
     }
 
     pragma(inline, true) bool isDetached() const { return !d.ref_.isShared(); }
-    version(QT_NO_UNSHARABLE_CONTAINERS){}else
+    version (QT_NO_UNSHARABLE_CONTAINERS) {} else
     {
         pragma(inline, true) void setSharable(bool sharable)
         {

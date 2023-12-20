@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
 {
     import qt.core.global;
     import qt.core.locale;
@@ -22,12 +22,12 @@ version(QT_NO_TRANSLATION){}else
     import qt.core.string;
 }
 
-version(QT_NO_TRANSLATION)
+version (QT_NO_TRANSLATION)
 {
 class QTranslator;
 }
 
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
 {
 
 extern(C++, class) struct QTranslatorPrivate;

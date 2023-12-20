@@ -15,7 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.typeinfo;
 import qt.helpers;
-version(QT_NO_SHORTCUT){}else
+version (QT_NO_SHORTCUT) {} else
 {
     import qt.core.list;
     import qt.core.metamacros;
@@ -23,7 +23,7 @@ version(QT_NO_SHORTCUT){}else
     import qt.core.variant;
 }
 
-version(QT_NO_SHORTCUT){}else
+version (QT_NO_SHORTCUT) {} else
 {
 
 
@@ -215,7 +215,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QKeySequence &);
 #endif +/
 
 }
-version(QT_NO_SHORTCUT)
+version (QT_NO_SHORTCUT)
 {
 
 /// Binding for C++ class [QKeySequence](https://doc.qt.io/qt-5/qkeysequence.html).

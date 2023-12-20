@@ -26,7 +26,7 @@ import qt.core.thread;
 import qt.helpers;
 import std.traits;
 import std.meta;
-version(QT_NO_PROPERTIES){}else
+version (QT_NO_PROPERTIES) {} else
 {
     import qt.core.bytearray;
     import qt.core.variant;
@@ -175,7 +175,7 @@ public:
     QDynamicMetaObjectData* metaObject;
     final QMetaObject* dynamicMetaObject() const;
 
-    version(QT_DEBUG)
+    version (QT_DEBUG)
     {
         enum { CheckForParentChildLoopsWarnDepth = 4096 }
     }
@@ -269,7 +269,7 @@ public:
     /+ virtual +/ bool eventFilter(QObject watched, QEvent event);
 
 /+ #if defined(QT_NO_TRANSLATION) || defined(Q_CLANG_QDOC) +/
-    version(QT_NO_TRANSLATION)
+    version (QT_NO_TRANSLATION)
     {
         static QString tr(const(char)* sourceText, const(char)*  /+ = nullptr +/, int /+ = -1 +/)
             { return QString.fromUtf8(sourceText); }
@@ -326,7 +326,7 @@ public:
 
 /+ #ifndef QT_NO_REGEXP
 #if QT_DEPRECATED_SINCE(5, 13) +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         /+ template<typename T> +/
         /+ QT_DEPRECATED_X("Use findChildren(const QRegularExpression &, ...) instead.")
@@ -765,7 +765,7 @@ public:
     final void dumpObjectInfo() const;
 
 /+ #ifndef QT_NO_PROPERTIES +/
-    version(QT_NO_PROPERTIES){}else
+    version (QT_NO_PROPERTIES) {} else
     {
         final bool setProperty(const(char)* name, ref const(QVariant) value);
         final bool setProperty(T)(const(char)* name, auto ref T value)
@@ -779,7 +779,7 @@ public:
 /+ #endif // QT_NO_PROPERTIES
 
 #ifndef QT_NO_USERDATA +/
-    version(QT_NO_USERDATA){}else
+    version (QT_NO_USERDATA) {} else
     {
         /+ QT_DEPRECATED_VERSION_5_14 +/
             static uint registerUserData();
@@ -868,7 +868,7 @@ private:
 pragma(inline, true) const(QMetaObject)* qt_getQtMetaObject()/+ noexcept+/
 { return &QObject.staticQtMetaObject; }
 
-version(QT_NO_USERDATA){}else
+version (QT_NO_USERDATA) {} else
 {
 class /+ Q_CORE_EXPORT +/ QObjectUserData {
 private:

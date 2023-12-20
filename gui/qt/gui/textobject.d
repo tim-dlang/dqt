@@ -25,7 +25,7 @@ import qt.gui.textformat;
 import qt.gui.textlayout;
 import qt.gui.textlist;
 import qt.helpers;
-version(QT_NO_RAWFONT){}else
+version (QT_NO_RAWFONT) {} else
     import qt.gui.glyphrun;
 
 extern(C++, class) struct QTextObjectPrivate;
@@ -361,7 +361,7 @@ public:
     int charFormatIndex() const;
     QString text() const;
 
-    version(QT_NO_RAWFONT){}else
+    version (QT_NO_RAWFONT) {} else
     {
         QList!(QGlyphRun) glyphRuns(int from = -1, int length = -1) const;
     }

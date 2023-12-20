@@ -12,13 +12,13 @@
 module qt.core.global;
 extern(C++):
 
-version(OSX)
+version (OSX)
     version = Apple;
-version(iOS)
+version (iOS)
     version = Apple;
-version(TVOS)
+version (TVOS)
     version = Apple;
-version(WatchOS)
+version (WatchOS)
     version = Apple;
 
 import core.stdc.config;
@@ -685,7 +685,7 @@ pragma(inline, true) const(T)  qBound(T)(const(T)  min, const(T)  val, const(T) 
 #define Q_FORWARD_DECLARE_MUTABLE_CG_TYPE(type) typedef struct type *type ## Ref;
 #endif +/
 
-version(Apple)
+version (Apple)
 {
 /+ #  define QT_DARWIN_PLATFORM_SDK_EQUAL_OR_ABOVE(macos, ios, tvos, watchos) \
     ((defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && macos != __MAC_NA && __MAC_OS_X_VERSION_MAX_ALLOWED >= macos) || \
@@ -750,10 +750,10 @@ private:
 }
 
 }
-version(OSX){}else
-version(iOS){}else
-version(TVOS){}else
-version(WatchOS){}else
+version (OSX) {} else
+version (iOS) {} else
+version (TVOS) {} else
+version (WatchOS) {} else
 {
 
 /+ #define QT_DARWIN_PLATFORM_SDK_EQUAL_OR_ABOVE(macos, ios, tvos, watchos) (0)
@@ -1065,7 +1065,7 @@ T qExchange(T &t, U &&newValue)
     return old;
 } +/
 
-/+version(QT_NO_FOREACH){}else
+/+version (QT_NO_FOREACH) {} else
 {
 
 /+ namespace QtPrivate {
@@ -1182,7 +1182,7 @@ extern(D) alias Q_CAST_IGNORE_ALIGN = function string(string body_)
 #define QT_TRANSLATE_NOOP3(scope, x, comment) {x, comment}
 #define QT_TRANSLATE_NOOP3_UTF8(scope, x, comment) {x, comment} +/
 
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
 {
 
 /+ #define QT_TR_N_NOOP(x) x

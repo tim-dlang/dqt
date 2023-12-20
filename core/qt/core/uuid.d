@@ -20,12 +20,12 @@ import qt.core.string;
 import qt.core.stringview;
 import qt.core.typeinfo;
 import qt.helpers;
-version(Cygwin){}else
-version(Windows)
+version (Cygwin) {} else
+version (Windows)
     import core.stdc.config;
 
-version(Cygwin){}else
-version(Windows)
+version (Cygwin) {} else
+version (Windows)
 {
 /+ #ifndef GUID_DEFINED +/
 /+ #define GUID_DEFINED +/

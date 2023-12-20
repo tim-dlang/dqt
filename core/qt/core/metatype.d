@@ -525,7 +525,7 @@ alias TypeFlags = QFlags!(TypeFlag);
 
     alias SaveOperator = ExternCPPFunc!(void function(ref QDataStream , const(void)* ));
     alias LoadOperator = ExternCPPFunc!(void function(ref QDataStream , void* ));
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         static void registerStreamOperators(const(char)* typeName, SaveOperator saveOp,
                                                 LoadOperator loadOp);
@@ -584,7 +584,7 @@ alias TypeFlags = QFlags!(TypeFlag);
     static void* construct(int type, void* where, const(void)* copy);
     static void destruct(int type, void* where);
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         static bool save(ref QDataStream stream, int type, const(void)* data);
         static bool load(ref QDataStream stream, int type, void* data);
@@ -899,7 +899,7 @@ struct QMetaTypeFunctionHelper(T, bool Accepted=true) {
             return emplace!T(where, *static_cast!(const(T)*)(t));
         return emplace!T(where);
     }
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         static void Save(ref QDataStream stream, const(void)* t)
         {

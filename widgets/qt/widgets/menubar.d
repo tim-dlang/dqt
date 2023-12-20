@@ -109,7 +109,7 @@ public:
     final void setCornerWidget(QWidget w, /+ Qt:: +/qt.core.namespace.Corner corner = /+ Qt:: +/qt.core.namespace.Corner.TopRightCorner);
     final QWidget cornerWidget(/+ Qt:: +/qt.core.namespace.Corner corner = /+ Qt:: +/qt.core.namespace.Corner.TopRightCorner) const;
 
-    version(OSX)
+    version (OSX)
     {
         /+ NSMenu* toNSMenu(); +/
     }

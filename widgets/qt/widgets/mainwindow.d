@@ -29,7 +29,7 @@ import qt.widgets.statusbar;
 import qt.widgets.tabwidget;
 import qt.widgets.toolbar;
 import qt.widgets.widget;
-version(QT_NO_CONTEXTMENU){}else
+version (QT_NO_CONTEXTMENU) {} else
     import qt.gui.event;
 
 /+ #if QT_CONFIG(tabwidget)
@@ -192,7 +192,7 @@ public /+ Q_SLOTS +/:
 /+ #endif +/
 
 protected:
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         override void contextMenuEvent(QContextMenuEvent event);
     }

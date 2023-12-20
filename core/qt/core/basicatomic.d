@@ -15,7 +15,7 @@ extern(C++):
 import core.atomic;
 import qt.config;
 import qt.helpers;
-version(D_LP64)
+version (D_LP64)
     import core.stdc.config;
 
 /+ #ifndef QBASICATOMIC_H +/

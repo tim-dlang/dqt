@@ -194,7 +194,7 @@ public:
     final QPlatformMenu* platformMenu();
     final void setPlatformMenu(QPlatformMenu* platformMenu);
 
-    version(OSX)
+    version (OSX)
     {
         /+ NSMenu* toNSMenu(); +/
         final void setAsDockMenu();
@@ -263,7 +263,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-version(OSX)
+version (OSX)
 {
 // ### Qt 4 compatibility; remove in Qt 6
 /+ QT_DEPRECATED +/ pragma(inline, true) void qt_mac_set_dock_menu(QMenu menu) { menu.setAsDockMenu(); }

@@ -151,7 +151,7 @@ alias Base64Options = QFlags!(Base64Option);
         IllegalPadding,
     }
 
-    version(Windows)
+    version (Windows)
     {
         @disable this();
         pragma(inline, true) void rawConstructor()/+ noexcept+/
@@ -224,7 +224,7 @@ alias Base64Options = QFlags!(Base64Option);
         }
     }
 
-    version(QT_NO_CAST_FROM_BYTEARRAY){}else
+    version (QT_NO_CAST_FROM_BYTEARRAY) {} else
     {
         /+pragma(inline, true) auto opCast(T : const(char))() const;+/
         /+pragma(inline, true) auto opCast(T : const(void))() const;+/
@@ -576,7 +576,7 @@ alias Base64Options = QFlags!(Base64Option);
 
 private:
     /+auto opCast(T : QNoImplicitBoolCast)() const;+/
-    version(Windows)
+    version (Windows)
         Data* d;
     else
     {
@@ -651,7 +651,7 @@ public:
         using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_LIKELY +/(i < a.d.size))
             return a.d.data()[i];
-        version(QT_DEBUG)
+        version (QT_DEBUG)
         {
             warn(WarningType.OutOfRange, EmittingClass.QByteRef);
         }
@@ -661,13 +661,13 @@ public:
     {
         using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_UNLIKELY +/(i >= a.d.size)) {
-            version(QT_DEBUG)
+            version (QT_DEBUG)
             {
                 warn(WarningType.OutOfRange, EmittingClass.QByteRef);
             }
             a.expand(i);
         } else {
-            version(QT_DEBUG)
+            version (QT_DEBUG)
             {
                 if (/+ Q_UNLIKELY +/(!a.isDetached()))
                     warn(WarningType.DelayedDetach, EmittingClass.QByteRef);
@@ -734,7 +734,7 @@ public:
 { return qstrcmp(a1, a2) >= 0; }+/
 /+pragma(inline, true) bool operator >=(const(char)* a1, ref const(QByteArray) a2)/+ noexcept+/
 { return qstrcmp(a1, a2) >= 0; }+/
-version(QT_USE_QSTRINGBUILDER){}else
+version (QT_USE_QSTRINGBUILDER) {} else
 {
 /+pragma(inline, true) const(QByteArray) operator +(ref const(QByteArray) a1, ref const(QByteArray) a2)
 { return QByteArray(a1) ~= a2; }+/
@@ -759,7 +759,7 @@ Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QByteArray &);
 #endif +/
 
-version(QT_NO_COMPRESS){}else
+version (QT_NO_COMPRESS) {} else
 {
 /+ Q_CORE_EXPORT +/ QByteArray qCompress(const(uchar)* data, int nbytes, int compressionLevel = -1);
 /+ Q_CORE_EXPORT +/ QByteArray qUncompress(const(uchar)* data, int nbytes);

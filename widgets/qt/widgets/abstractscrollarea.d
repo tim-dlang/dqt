@@ -97,7 +97,7 @@ protected:
     override void wheelEvent(QWheelEvent );
 /+ #endif
 #ifndef QT_NO_CONTEXTMENU +/
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         override void contextMenuEvent(QContextMenuEvent );
     }

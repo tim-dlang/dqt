@@ -29,7 +29,7 @@ extern(C++, class) struct QVector(T)
 {
 private:
     alias Data = QTypedArrayData!(T);
-    version(Windows)
+    version (Windows)
         Data* d;
     else
     {
@@ -41,7 +41,7 @@ private:
     }
 
 public:
-    version(Windows)
+    version (Windows)
     {
         @disable this();
         pragma(inline, true) void rawConstructor()/+ noexcept+/
@@ -242,7 +242,7 @@ public:
         (mixin(Q_ASSERT(q{QVector.isDetached()})));
     }
     pragma(inline, true) bool isDetached() const { return !d.ref_.isShared(); }
-    version(QT_NO_UNSHARABLE_CONTAINERS){}else
+    version (QT_NO_UNSHARABLE_CONTAINERS) {} else
     {
         pragma(inline, true) void setSharable(bool sharable)
         {
@@ -746,7 +746,7 @@ private:
                     x = cast(Data*) (Data.allocate(aalloc, options));
                     //mixin(Q_CHECK_PTR(q{x}));
                     // aalloc is bigger then 0 so it is not [un]sharedEmpty
-                    version(QT_NO_UNSHARABLE_CONTAINERS){}else
+                    version (QT_NO_UNSHARABLE_CONTAINERS) {} else
                     {
                         (mixin(Q_ASSERT(q{x.ref_.isSharable() || options.testFlag(QArrayData.AllocationOption.Unsharable)})));
                     }
@@ -827,7 +827,7 @@ private:
 
         (mixin(Q_ASSERT(q{QVector.d.data()})));
         (mixin(Q_ASSERT(q{uint(QVector.d.size) <= QVector.d.alloc})));
-        version(QT_NO_UNSHARABLE_CONTAINERS){}else
+        version (QT_NO_UNSHARABLE_CONTAINERS) {} else
         {
             (mixin(Q_ASSERT(q{QVector.d != Data.unsharableEmpty()})));
         }
@@ -854,7 +854,7 @@ private:
             x = cast(Data*) (Data.allocate(aalloc, options));
             //mixin(Q_CHECK_PTR(q{x}));
             // aalloc is bigger then 0 so it is not [un]sharedEmpty
-            version(QT_NO_UNSHARABLE_CONTAINERS){}else
+            version (QT_NO_UNSHARABLE_CONTAINERS) {} else
             {
                 (mixin(Q_ASSERT(q{x.ref_.isSharable() || options.testFlag(QArrayData.AllocationOption.Unsharable)})));
             }
@@ -902,7 +902,7 @@ private:
 
         (mixin(Q_ASSERT(q{QVector.d.data()})));
         (mixin(Q_ASSERT(q{uint(QVector.d.size) <= QVector.d.alloc})));
-        version(QT_NO_UNSHARABLE_CONTAINERS){}else
+        version (QT_NO_UNSHARABLE_CONTAINERS) {} else
         {
             (mixin(Q_ASSERT(q{QVector.d != Data.unsharableEmpty()})));
         }

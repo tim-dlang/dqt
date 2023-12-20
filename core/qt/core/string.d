@@ -29,7 +29,7 @@ import qt.core.stringview;
 import qt.core.typeinfo;
 import qt.core.vector;
 import qt.helpers;
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
     import qt.core.regexp;
 
 /+ #if defined(QT_NO_CAST_FROM_ASCII) && defined(QT_RESTRICTED_CAST_FROM_ASCII)
@@ -316,7 +316,7 @@ bool isLatin1(QLatin1String)/+ noexcept+/
 public:
     alias Data = QStringData;
 
-    version(Windows)
+    version (Windows)
     {
         @disable this();
         pragma(inline, true) void rawConstructor()/+ noexcept+/
@@ -604,7 +604,7 @@ public:
     int count(ref const(QStringRef) s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
 
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         int indexOf(ref const(QRegExp) , int from = 0) const;
         int lastIndexOf(ref const(QRegExp) , int from = -1) const;
@@ -640,7 +640,7 @@ alias SectionFlags = QFlags!(SectionFlag);
     { auto tmp = QString(asep); return section(tmp, astart, aend, aflags); }
     QString section(ref const(QString) in_sep, int start, int end = -1, SectionFlags flags = SectionFlag.SectionDefault) const;
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         QString section(ref const(QRegExp) reg, int start, int end = -1, SectionFlags flags = SectionFlag.SectionDefault) const;
     }
@@ -784,7 +784,7 @@ alias SectionFlags = QFlags!(SectionFlag);
     ref QString replace(QChar c, ref const(QString) after, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive);
     ref QString replace(QChar c, QLatin1String after, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive);
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         ref QString replace(ref const(QRegExp) rx, ref const(QString) after);
         /+pragma(inline, true) ref QString remove(ref const(QRegExp) rx)
@@ -817,7 +817,7 @@ alias SectionFlags = QFlags!(SectionFlag);
         QVector!(QStringRef) splitRef(QChar sep, SplitBehavior behavior,
                                                        /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         /+ Q_REQUIRED_RESULT +/ /+ QT_DEPRECATED_VERSION_X_5_15("Use Qt::SplitBehavior variant instead") +/
             QStringList split(ref const(QRegExp) sep, SplitBehavior behavior) const;
@@ -848,7 +848,7 @@ public:
         QVector!(QStringRef) splitRef(QChar sep, /+ Qt:: +/qt.core.namespace.SplitBehavior behavior = /+ Qt:: +/qt.core.namespace.SplitBehaviorFlags.KeepEmptyParts,
                                      /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         /+ Q_REQUIRED_RESULT +/
             QStringList split(ref const(QRegExp) sep,
@@ -859,7 +859,7 @@ public:
     }
 /+ #endif
 #ifndef QT_NO_REGULAREXPRESSION +/
-    version(QT_NO_REGULAREXPRESSION){}else
+    version (QT_NO_REGULAREXPRESSION) {} else
     {
         /+ Q_REQUIRED_RESULT +/
             QStringList split(ref const(QRegularExpression) sep,
@@ -1054,7 +1054,7 @@ public:
 
     // ASCII compatibility
 /+ #if defined(QT_RESTRICTED_CAST_FROM_ASCII) +/
-    version(QT_RESTRICTED_CAST_FROM_ASCII)
+    version (QT_RESTRICTED_CAST_FROM_ASCII)
     {
         /+ template <int N> +/
         pragma(inline, true) this(int N)(ref const(char)[N] ch)
@@ -1280,7 +1280,7 @@ private:
     /+ref QString operator =(ref const(QByteArray) a);+/
 /+ #endif +/
 
-    version(Windows)
+    version (Windows)
         Data* d;
     else
     {
@@ -1403,7 +1403,7 @@ public:
         //using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_LIKELY +/(i < s.d.size))
             return QChar(s.d.data()[i]);
-        version(QT_DEBUG)
+        version (QT_DEBUG)
         {
 //            warn(WarningType.OutOfRange, EmittingClass.QCharRef);
         }
@@ -1413,13 +1413,13 @@ public:
     {
         using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_UNLIKELY +/(i >= s.d.size)) {
-            version(QT_DEBUG)
+            version (QT_DEBUG)
             {
                 warn(WarningType.OutOfRange, EmittingClass.QCharRef);
             }
             s.resize(i + 1, QLatin1Char(' '));
         } else {
-            version(QT_DEBUG)
+            version (QT_DEBUG)
             {
                 if (/+ Q_UNLIKELY +/(!s.isDetached()))
                     warn(WarningType.DelayedDetach, EmittingClass.QCharRef);
@@ -1656,8 +1656,8 @@ inline int QByteArray::lastIndexOf(const QString &s, int from) const
 { return lastIndexOf(s.toUtf8(), from); }
 #endif +/ // !defined(QT_NO_CAST_TO_ASCII) && QT_DEPRECATED_SINCE(5, 15)
 
-version(QT_USE_FAST_OPERATOR_PLUS){}else
-version(QT_USE_QSTRINGBUILDER){}else
+version (QT_USE_FAST_OPERATOR_PLUS) {} else
+version (QT_USE_QSTRINGBUILDER) {} else
 {
 /+pragma(inline, true) const(QString) operator +(ref const(QString) s1, ref const(QString) s2)
 { auto t = QString(s1); t ~= s2; return t; }+/
@@ -2234,8 +2234,8 @@ inline QT_ASCII_CAST_WARN bool operator>=(const char *s1, const QStringRef &s2)
 #if QT_STRINGVIEW_LEVEL < 2
 #endif +/
 
-version(QT_USE_FAST_OPERATOR_PLUS){}else
-version(QT_USE_QSTRINGBUILDER){}else
+version (QT_USE_FAST_OPERATOR_PLUS) {} else
+version (QT_USE_QSTRINGBUILDER) {} else
 {
 /+pragma(inline, true) QString operator +(ref const(QString) s1, ref const(QStringRef) s2)
 { QString t; t.reserve(s1.size() + s2.size()); t ~= s1; t ~= s2; return t; }+/

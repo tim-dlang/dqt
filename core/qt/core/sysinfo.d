@@ -70,7 +70,7 @@ public:
     }
 
 /+ #if defined(QT_BUILD_QMAKE) +/
-    version(QT_BUILD_QMAKE)
+    version (QT_BUILD_QMAKE)
     {
         enum Endian {
             BigEndian,
@@ -86,9 +86,9 @@ public:
             BigEndian,
             LittleEndian
         }
-        version(BigEndian)
+        version (BigEndian)
             enum ByteOrder = Endian.BigEndian;
-        else version(LittleEndian)
+        else version (LittleEndian)
             enum ByteOrder = Endian.LittleEndian;
         else
             static assert(0, "Undefined byte order");

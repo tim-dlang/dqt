@@ -305,7 +305,7 @@ private:
 
     /+ friend class QColormap; +/
 /+ #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QColor &); +/
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &); +/

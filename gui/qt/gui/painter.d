@@ -41,9 +41,9 @@ import qt.gui.statictext;
 import qt.gui.textoption;
 import qt.gui.transform;
 import qt.helpers;
-version(QT_NO_PICTURE){}else
+version (QT_NO_PICTURE) {} else
     import qt.gui.picture;
-version(QT_NO_RAWFONT){}else
+version (QT_NO_RAWFONT) {} else
     import qt.gui.glyphrun;
 
 /+ #ifndef QT_INCLUDE_COMPAT
@@ -520,7 +520,7 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     {
         auto tmp = QRectF(rect); auto tmp__1 = QPointF(offset); drawTiledPixmap(tmp, pm, tmp__1);
     }
-    version(QT_NO_PICTURE){}else
+    version (QT_NO_PICTURE) {} else
     {
         void drawPicture(ref const(QPointF) p, ref const(QPicture) picture);
         pragma(inline, true) void drawPicture(int x, int y, ref const(QPicture) p)
@@ -619,7 +619,7 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
     void setLayoutDirection(/+ Qt:: +/qt.core.namespace.LayoutDirection direction);
     /+ Qt:: +/qt.core.namespace.LayoutDirection layoutDirection() const;
 
-    version(QT_NO_RAWFONT){}else
+    version (QT_NO_RAWFONT) {} else
     {
         void drawGlyphRun(ref const(QPointF) position, ref const(QGlyphRun) glyphRun);
     }

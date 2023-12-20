@@ -159,7 +159,7 @@ private:
 
     /+ friend class QDateTime; +/
     /+ friend class QDateTimePrivate; +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDate &); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDate &); +/
@@ -235,7 +235,7 @@ private:
 
     /+ friend class QDateTime; +/
     /+ friend class QDateTimePrivate; +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &); +/
@@ -253,7 +253,7 @@ private:
     // ### Qt 6: revisit the optimization
     struct ShortData {
         size_t bitfieldData;
-/+        version(LittleEndian)
+/+        version (LittleEndian)
         {
             /+ quintptr status : 8; +/
             final quintptr status() const
@@ -278,7 +278,7 @@ private:
             return value;
         }
 
-        version(BigEndian)
+        version (BigEndian)
         {
             /+ quintptr status : 8; +/
             final quintptr status() const
@@ -455,7 +455,7 @@ private:
     Data d;
 
 /+ #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &); +/

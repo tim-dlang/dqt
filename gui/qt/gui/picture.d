@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_PICTURE){}else
+version (QT_NO_PICTURE) {} else
 {
     import qt.core.bytearray;
     import qt.core.datastream;
@@ -30,7 +30,7 @@ version(QT_NO_PICTURE){}else
     import qt.gui.painter;
 }
 
-version(QT_NO_PICTURE){}else
+version (QT_NO_PICTURE) {} else
 {
 
 extern(C++, class) struct QPicturePrivate;
@@ -208,7 +208,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPicture &);
 #endif +/
 
 }
-version(QT_NO_PICTURE)
+version (QT_NO_PICTURE)
 {
 extern(C++, class) struct QPicture;
 }

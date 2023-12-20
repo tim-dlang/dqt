@@ -149,7 +149,7 @@ alias ControlTypes = QFlags!(ControlType);    /+ Q_FLAG(ControlTypes) +/
     }+/
 
 private:
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_WIDGETS_EXPORT QDataStream &operator<<(QDataStream &, const QSizePolicy &); +/
         /+ friend Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &); +/

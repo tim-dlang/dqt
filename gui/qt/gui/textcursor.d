@@ -165,7 +165,7 @@ public:
 
     void insertFragment(ref const(QTextDocumentFragment) fragment);
 
-    version(QT_NO_TEXTHTMLPARSER){}else
+    version (QT_NO_TEXTHTMLPARSER) {} else
     {
         void insertHtml(ref const(QString) html);
     }

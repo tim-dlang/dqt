@@ -21,7 +21,7 @@ import qt.core.objectdefs_impl;
 import qt.helpers;
 import std.traits;
 import std.meta;
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
     import qt.core.string;
 
 /+ #if defined(__OBJC__) && !defined(__cplusplus)
@@ -190,7 +190,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     }));
     //const(QObject) cast_(const(QObject) obj) const;
 
-    version(QT_NO_TRANSLATION){}else
+    version (QT_NO_TRANSLATION) {} else
     {
         QString tr(const(char)* s, const(char)* c, int n = -1) const;
     }
@@ -440,7 +440,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
 
         /+const(QMetaObject)* operator ->() const { return operator const QMetaObject *(); }+/
 
-        version(QT_NO_DATA_RELOCATION)
+        version (QT_NO_DATA_RELOCATION)
         {
             alias Getter = ExternCPPFunc!(const(QMetaObject)* function());
             Getter indirect = null;

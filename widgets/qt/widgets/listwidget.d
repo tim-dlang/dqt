@@ -35,7 +35,7 @@ import qt.helpers;
 import qt.widgets.abstractitemview;
 import qt.widgets.listview;
 import qt.widgets.widget;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.datastream;
 
 /+ QT_REQUIRE_CONFIG(listwidget); +/
@@ -90,7 +90,7 @@ public:
     { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole, astatusTip); }
 
 /+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
+    version (QT_NO_TOOLTIP) {} else
     {
         pragma(inline, true) final QString toolTip() const
             { return data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole).toString(); }
@@ -169,7 +169,7 @@ public:
     pragma(mangle, mangleOpLess("QListWidgetItem"))
     bool opLess(const QListWidgetItem other) const;
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ virtual +/ void read(ref QDataStream in_);
         /+ virtual +/ void write(ref QDataStream out_) const;

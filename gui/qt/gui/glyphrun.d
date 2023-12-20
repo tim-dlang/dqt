@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_RAWFONT){}else
+version (QT_NO_RAWFONT) {} else
 {
     import qt.core.flags;
     import qt.core.global;
@@ -26,7 +26,7 @@ version(QT_NO_RAWFONT){}else
     import qt.gui.rawfont;
 }
 
-version(QT_NO_RAWFONT){}else
+version (QT_NO_RAWFONT) {} else
 {
 
 
@@ -119,7 +119,7 @@ private:
 
 
 }
-version(QT_NO_RAWFONT)
+version (QT_NO_RAWFONT)
 {
 extern(C++, class) struct QGlyphRun;
 }

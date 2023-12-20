@@ -143,7 +143,7 @@ public:
     this(uchar* data, int width, int height, int bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = null, void* cleanupInfo = null);
     this(const(uchar)* data, int width, int height, int bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = null, void* cleanupInfo = null);
 
-    version(QT_NO_IMAGEFORMAT_XPM){}else
+    version (QT_NO_IMAGEFORMAT_XPM) {} else
     {
         /+ explicit +/this(const(char**) xpm);
     }
@@ -274,7 +274,7 @@ public:
         QImage alphaChannel() const;
 /+ #endif +/
     QImage createAlphaMask(/+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const;
-    version(QT_NO_IMAGE_HEURISTIC_MASK){}else
+    version (QT_NO_IMAGE_HEURISTIC_MASK) {} else
     {
         QImage createHeuristicMask(bool clipTight = true) const;
     }

@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_ACTION){}else
+version (QT_NO_ACTION) {} else
 {
     import qt.core.coreevent;
     import qt.core.list;
@@ -30,12 +30,12 @@ version(QT_NO_ACTION){}else
     import qt.widgets.widget;
 }
 
-version(QT_NO_ACTION)
+version (QT_NO_ACTION)
 {
 class QAction;
 }
 
-version(QT_NO_ACTION){}else
+version (QT_NO_ACTION) {} else
 {
 
 extern(C++, class) struct QActionPrivate;
