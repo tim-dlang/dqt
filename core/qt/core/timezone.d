@@ -162,7 +162,7 @@ public:
 
 private:
     this(ref QTimeZonePrivate dd);
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &ds, const QTimeZone &tz); +/
     }

@@ -36,8 +36,8 @@ import qt.gui.pixelformat;
 import qt.gui.rgb;
 import qt.gui.transform;
 import qt.helpers;
-version(Cygwin){}else
-version(Windows)
+version (Cygwin) {} else
+version (Windows)
     import qt.gui.windowdefs_win;
 
 /+ #if defined(Q_OS_DARWIN) || defined(Q_QDOC)
@@ -128,7 +128,7 @@ public:
     this(uchar* data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = null, void* cleanupInfo = null);
     this(const(uchar)* data, int width, int height, qsizetype bytesPerLine, Format format, QImageCleanupFunction cleanupFunction = null, void* cleanupInfo = null);
 
-    version(QT_NO_IMAGEFORMAT_XPM){}else
+    version (QT_NO_IMAGEFORMAT_XPM) {} else
     {
         /+ explicit +/this(const(char**) xpm);
     }
@@ -245,7 +245,7 @@ public:
     bool hasAlphaChannel() const;
     void setAlphaChannel(ref const(QImage) alphaChannel);
     /+ [[nodiscard]] +/ QImage createAlphaMask(/+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor) const;
-    version(QT_NO_IMAGE_HEURISTIC_MASK){}else
+    version (QT_NO_IMAGE_HEURISTIC_MASK) {} else
     {
         /+ [[nodiscard]] +/ QImage createHeuristicMask(bool clipTight = true) const;
     }

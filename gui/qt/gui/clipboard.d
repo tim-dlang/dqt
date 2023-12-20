@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_CLIPBOARD){}else
+version (QT_NO_CLIPBOARD) {} else
 {
     import qt.core.mimedata;
     import qt.core.object;
@@ -23,7 +23,7 @@ version(QT_NO_CLIPBOARD){}else
     import qt.gui.pixmap;
 }
 
-version(QT_NO_CLIPBOARD){}else
+version (QT_NO_CLIPBOARD) {} else
 {
 
 

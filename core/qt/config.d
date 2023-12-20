@@ -30,7 +30,7 @@ template versionIsSet(string name)
 {
     mixin(() {
         string r;
-        r ~= "version(" ~ name ~ ")\n";
+        r ~= "version (" ~ name ~ ")\n";
         r ~= "enum versionIsSet = true;\n";
         r ~= "else\n";
         r ~= "enum versionIsSet = false;\n";

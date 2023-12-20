@@ -24,7 +24,7 @@ import qt.gui.textdocument;
 import qt.helpers;
 import qt.widgets.frame;
 import qt.widgets.widget;
-version(QT_NO_PICTURE){}else
+version (QT_NO_PICTURE) {} else
     import qt.gui.picture;
 
 /+ QT_REQUIRE_CONFIG(label); +/
@@ -65,7 +65,7 @@ public:
 
 /+ #ifndef QT_NO_PICTURE
 #if QT_DEPRECATED_SINCE(6,6) +/
-    version(QT_NO_PICTURE){}else
+    version (QT_NO_PICTURE) {} else
     {
         final QPicture picture(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const { return picture(); }
     /+ #endif +/
@@ -98,7 +98,7 @@ public:
     final void setScaledContents(bool);
     override QSize sizeHint() const;
     override QSize minimumSizeHint() const;
-    version(QT_NO_SHORTCUT){}else
+    version (QT_NO_SHORTCUT) {} else
     {
         final void setBuddy(QWidget );
         final QWidget buddy() const;
@@ -120,7 +120,7 @@ public /+ Q_SLOTS +/:
     @QSlot final void setText(ref const(QString) );
     @QSlot final void setPixmap(ref const(QPixmap) );
 /+ #ifndef QT_NO_PICTURE +/
-    version(QT_NO_PICTURE){}else
+    version (QT_NO_PICTURE) {} else
     {
         @QSlot final void setPicture(ref const(QPicture) );
     }
@@ -144,7 +144,7 @@ protected:
     override void mousePressEvent(QMouseEvent ev);
     override void mouseMoveEvent(QMouseEvent ev);
     override void mouseReleaseEvent(QMouseEvent ev);
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         override void contextMenuEvent(QContextMenuEvent ev);
     }

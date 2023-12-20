@@ -20,7 +20,7 @@ import qt.helpers;
 // Class forward definitions
 
 extern(C++, class) struct QWindow;
-version(QT_NO_CLIPBOARD)
+version (QT_NO_CLIPBOARD)
 {
 extern(C++, class) struct QClipboard;
 }

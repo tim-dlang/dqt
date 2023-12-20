@@ -823,7 +823,7 @@ public:
     /+ [[nodiscard]] +/
         QStringList split(QChar sep, /+ Qt:: +/qt.core.namespace.SplitBehavior behavior = /+ Qt:: +/qt.core.namespace.SplitBehaviorFlags.KeepEmptyParts,
                           /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
-    version(QT_NO_REGULAREXPRESSION){}else
+    version (QT_NO_REGULAREXPRESSION) {} else
     {
         /+ [[nodiscard]] +/
             QStringList split(ref const(QRegularExpression) sep,
@@ -1097,7 +1097,7 @@ public:
 
     // ASCII compatibility
 /+ #if defined(QT_RESTRICTED_CAST_FROM_ASCII) +/
-    version(QT_RESTRICTED_CAST_FROM_ASCII)
+    version (QT_RESTRICTED_CAST_FROM_ASCII)
     {
         /+ template <qsizetype N> +/
         pragma(inline, true) this(qsizetype N)(ref const(char)[N] ch)
@@ -1332,7 +1332,7 @@ private:
     static QByteArray toUtf8_helper(ref const(QString) );
     static QByteArray toLocal8Bit_helper(const(QChar)* data, qsizetype size);
     static qsizetype toUcs4_helper(const(ushort)* uc, qsizetype length, uint* out_); // ### Qt 7 char16_t
-    version(Windows)
+    version (Windows)
     {
     pragma(mangle, "?toIntegral_helper@QString@@CA_JVQStringView@@PEA_NH@Z")
     package static qlonglong toIntegral_helper(QStringView string, bool* ok, int base);
@@ -1475,8 +1475,8 @@ inline bool QByteArray::operator>=(const QString &s) const
 { return QString::compare_helper(s.constData(), s.size(), constData(), size()) <= 0; }
 #endif +/ // !defined(QT_NO_CAST_FROM_ASCII) && !defined(QT_RESTRICTED_CAST_FROM_ASCII)
 
-version(QT_USE_FAST_OPERATOR_PLUS){}else
-version(QT_USE_QSTRINGBUILDER){}else
+version (QT_USE_FAST_OPERATOR_PLUS) {} else
+version (QT_USE_QSTRINGBUILDER) {} else
 {
 /+pragma(inline, true) const(QString) operator +(ref const(QString) s1, ref const(QString) s2)
 { auto t = QString(s1); t ~= s2; return t; }+/

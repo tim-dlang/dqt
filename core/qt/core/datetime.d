@@ -139,7 +139,7 @@ private:
     /+ friend constexpr bool operator<=(QDate lhs, QDate rhs) { return lhs.jd <= rhs.jd; } +/
     /+ friend constexpr bool operator> (QDate lhs, QDate rhs) { return lhs.jd >  rhs.jd; } +/
     /+ friend constexpr bool operator>=(QDate lhs, QDate rhs) { return lhs.jd >= rhs.jd; } +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, QDate); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDate &); +/
@@ -222,7 +222,7 @@ private:
 
     /+ friend class QDateTime; +/
     /+ friend class QDateTimePrivate; +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, QTime); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &); +/
@@ -240,7 +240,7 @@ private:
     struct ShortData {
         size_t bitfieldData;
 /+ #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN +/
-/+        version(LittleEndian)
+/+        version (LittleEndian)
         {
             /+ quintptr status : 8; +/
             final quintptr status() const
@@ -272,7 +272,7 @@ private:
 /+ #endif
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN +/
-        version(BigEndian)
+        version (BigEndian)
         {
             /+ quintptr status : 8; +/
             final quintptr status() const
@@ -451,7 +451,7 @@ private:
     /+ friend bool operator>=(const QDateTime &lhs, const QDateTime &rhs) { return !(lhs < rhs); } +/
 
 /+ #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &); +/

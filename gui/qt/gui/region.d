@@ -22,10 +22,10 @@ import qt.core.variant;
 import qt.gui.bitmap;
 import qt.gui.polygon;
 import qt.helpers;
-version(Cygwin){}else
-version(Windows)
+version (Cygwin) {} else
+version (Windows)
     import qt.gui.windowdefs_win;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
 {
     import qt.core.bytearray;
     import qt.core.datastream;
@@ -46,7 +46,7 @@ struct QRegionPrivate;
 public:
     enum RegionType { Rectangle, Ellipse }
 
-    version(Windows)
+    version (Windows)
     {
         @disable this();
         pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
@@ -145,7 +145,7 @@ public:
 /+ #endif
 
 #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QRegion &); +/
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QRegion &); +/
@@ -159,7 +159,7 @@ private:
                                          const QRect &rect); +/
     /+ friend struct QRegionPrivate; +/
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         void exec(ref const(QByteArray) ba, int ver = 0, QDataStream.ByteOrder byteOrder = QDataStream.ByteOrder.BigEndian);
     }
@@ -168,7 +168,7 @@ private:
         /+ QtPrivate:: +/qt.core.refcount.RefCount ref_;
         QRegionPrivate* qt_rgn;
     }
-    version(Windows)
+    version (Windows)
         QRegionData* d;
     else
     {

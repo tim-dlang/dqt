@@ -1895,7 +1895,7 @@ alias TouchPointStates = QFlags!(TouchPointState);
 /+pragma(inline, true) void operator -(int f1, TouchPointStates.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(TouchPointStates.enum_type f1, int f2)/+noexcept+/;+/
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(TouchPointStates) +/
-version(QT_NO_GESTURES){}else
+version (QT_NO_GESTURES) {} else
 {
     enum GestureState
     {

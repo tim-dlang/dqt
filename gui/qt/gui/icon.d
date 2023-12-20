@@ -114,7 +114,7 @@ public:
 
 private:
     QIconPrivate* d;
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QIcon &); +/
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QIcon &); +/

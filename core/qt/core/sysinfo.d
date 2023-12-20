@@ -37,9 +37,9 @@ public:
         BigEndian,
         LittleEndian
     }
-    version(BigEndian)
+    version (BigEndian)
         enum ByteOrder = Endian.BigEndian;
-    else version(LittleEndian)
+    else version (LittleEndian)
         enum ByteOrder = Endian.LittleEndian;
     else
         static assert(0, "Undefined byte order");

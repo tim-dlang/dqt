@@ -17,7 +17,7 @@ import qt.core.point;
 import qt.core.typeinfo;
 import qt.gui.screen;
 import qt.helpers;
-version(QT_NO_CURSOR){}else
+version (QT_NO_CURSOR) {} else
 {
     import qt.core.namespace;
     import qt.core.variant;
@@ -29,7 +29,7 @@ version(QT_NO_CURSOR){}else
 /*
   ### The fake cursor has to go first with old qdoc.
 */
-version(QT_NO_CURSOR)
+version (QT_NO_CURSOR)
 {
 
 /// Binding for C++ class [QCursor](https://doc.qt.io/qt-6/qcursor.html).
@@ -59,7 +59,7 @@ private:
 
 }
 
-version(QT_NO_CURSOR){}else
+version (QT_NO_CURSOR) {} else
 {
 
 extern(C++, class) struct QCursorData;

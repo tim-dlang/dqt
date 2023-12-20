@@ -207,7 +207,7 @@ public:
     final QPlatformMenu* platformMenu();
     final void setPlatformMenu(QPlatformMenu* platformMenu);
 
-    version(OSX)
+    version (OSX)
     {
         /+ NSMenu* toNSMenu(); +/
         final void setAsDockMenu();

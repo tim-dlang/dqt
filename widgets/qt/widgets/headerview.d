@@ -28,7 +28,7 @@ import qt.helpers;
 import qt.widgets.abstractitemview;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.bytearray;
 
 /+ QT_REQUIRE_CONFIG(itemviews); +/
@@ -160,7 +160,7 @@ public:
     final bool sectionsMoved() const;
     final bool sectionsHidden() const;
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         final QByteArray saveState() const;
         final bool restoreState(ref const(QByteArray) state);

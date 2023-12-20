@@ -12,9 +12,9 @@
 module qt.core.math;
 extern(C++):
 
-version(Windows) {} else
+version (Windows) {} else
     version = NotWindowsOrCygwin;
-version(Cygwin)
+version (Cygwin)
     version = NotWindowsOrCygwin;
 
 import qt.config;
@@ -46,10 +46,10 @@ enum QT_SINE_TABLE_SIZE = 256;
 
 int qCeil(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::ceil; +/
@@ -58,10 +58,10 @@ int qCeil(T)(T v)
 
 int qFloor(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::floor; +/
@@ -70,10 +70,10 @@ int qFloor(T)(T v)
 
 auto qFabs(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::fabs; +/
@@ -82,10 +82,10 @@ auto qFabs(T)(T v)
 
 auto qSin(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::sin; +/
@@ -94,10 +94,10 @@ auto qSin(T)(T v)
 
 auto qCos(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::cos; +/
@@ -106,10 +106,10 @@ auto qCos(T)(T v)
 
 auto qTan(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::tan; +/
@@ -118,10 +118,10 @@ auto qTan(T)(T v)
 
 auto qAcos(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::acos; +/
@@ -130,10 +130,10 @@ auto qAcos(T)(T v)
 
 auto qAsin(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::asin; +/
@@ -142,10 +142,10 @@ auto qAsin(T)(T v)
 
 auto qAtan(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::atan; +/
@@ -154,10 +154,10 @@ auto qAtan(T)(T v)
 
 auto qAtan2(T1, T2)(T1 y, T2 x)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::atan2; +/
@@ -166,10 +166,10 @@ auto qAtan2(T1, T2)(T1 y, T2 x)
 
 auto qSqrt(T)(T v)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::sqrt; +/
@@ -260,10 +260,10 @@ auto qExp(T)(T v)
 
 auto qPow(T1, T2)(T1 x, T2 y)
 {
-    version(Cygwin){}else
-    version(Windows)
+    version (Cygwin) {} else
+    version (Windows)
         import libc.math;
-    version(NotWindowsOrCygwin)
+    version (NotWindowsOrCygwin)
         import libc.mathcalls;
 
     /+ using std::pow; +/

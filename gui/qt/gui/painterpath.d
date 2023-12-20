@@ -234,7 +234,7 @@ private:
     /+ friend class QVectorPath; +/
     /+ friend Q_GUI_EXPORT const QVectorPath &qtVectorPathForPath(const QPainterPath &); +/
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QPainterPath &); +/
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPainterPath &); +/

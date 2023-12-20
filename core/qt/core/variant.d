@@ -35,9 +35,9 @@ import qt.core.typeinfo;
 import qt.core.url;
 import qt.core.uuid;
 import qt.helpers;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.datastream;
-version(QT_NO_GEOM_VARIANT){}else
+version (QT_NO_GEOM_VARIANT) {} else
 {
     import qt.core.line;
     import qt.core.point;
@@ -177,7 +177,7 @@ class QRegularExpression;
     this(ref const(QList!(QVariant)) list);
 //    this(ref const(QMap!(QString, QVariant)) map);
 //    this(ref const(QHash!(QString, QVariant)) hash);
-    version(QT_NO_GEOM_VARIANT){}else
+    version (QT_NO_GEOM_VARIANT) {} else
     {
         this(ref const(QSize) size);
         this(ref const(QSizeF) size);
@@ -269,7 +269,7 @@ class QRegularExpression;
 //    QMap!(QString, QVariant) toMap() const;
 //    QHash!(QString, QVariant) toHash() const;
 
-    version(QT_NO_GEOM_VARIANT){}else
+    version (QT_NO_GEOM_VARIANT) {} else
     {
         QPoint toPoint() const;
         QPointF toPointF() const;
@@ -301,7 +301,7 @@ class QRegularExpression;
 /+ #endif
 
 #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         void load(ref QDataStream ds);
         void save(ref QDataStream ds) const;
@@ -641,7 +641,7 @@ QT_WARNING_POP
 
 Q_DECLARE_SHARED(QVariant) +/
 
-version(QT_MOC){}else
+version (QT_MOC) {} else
 {
 
 /+pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) v)

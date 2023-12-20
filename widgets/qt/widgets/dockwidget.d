@@ -21,7 +21,7 @@ import qt.gui.event;
 import qt.helpers;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
-version(QT_NO_ACTION){}else
+version (QT_NO_ACTION) {} else
     import qt.gui.action;
 
 /+ QT_REQUIRE_CONFIG(dockwidget); +/
@@ -79,7 +79,7 @@ alias DockWidgetFeatures = QFlags!(DockWidgetFeature);    /+ Q_FLAG(DockWidgetFe
     pragma(inline, true) final bool isAreaAllowed(/+ Qt:: +/qt.core.namespace.DockWidgetArea area) const
     { return (allowedAreas() & area) == qt.core.namespace.DockWidgetAreas(area); }
 
-    version(QT_NO_ACTION){}else
+    version (QT_NO_ACTION) {} else
     {
         final QAction toggleViewAction() const;
     }

@@ -26,7 +26,7 @@ import qt.gui.textformat;
 import qt.gui.textobject;
 import qt.gui.textoption;
 import qt.helpers;
-version(QT_NO_RAWFONT){}else
+version (QT_NO_RAWFONT) {} else
 {
     import qt.gui.glyphrun;
     import qt.gui.rawfont;
@@ -104,7 +104,7 @@ public:
     void setFont(ref const(QFont) f);
     QFont font() const;
 
-    version(QT_NO_RAWFONT){}else
+    version (QT_NO_RAWFONT) {} else
     {
         void setRawFont(ref const(QRawFont) rawFont);
     }
@@ -174,7 +174,7 @@ public:
     qreal minimumWidth() const;
     qreal maximumWidth() const;
 
-    version(QT_NO_RAWFONT){}else
+    version (QT_NO_RAWFONT) {} else
     {
         QList!(QGlyphRun) glyphRuns(int from = -1, int length = -1) const;
     }
@@ -257,7 +257,7 @@ public:
 
     void draw(QPainter* painter, ref const(QPointF) position) const;
 
-    version(QT_NO_RAWFONT){}else
+    version (QT_NO_RAWFONT) {} else
     {
         QList!(QGlyphRun) glyphRuns(int from = -1, int length = -1) const;
     }

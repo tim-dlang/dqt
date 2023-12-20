@@ -495,7 +495,7 @@ alias TypeFlags = QFlags!(TypeFlag);
     bool isOrdered() const;
 
 /+ #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         bool save(ref QDataStream stream, const(void)* data) const;
         bool load(ref QDataStream stream, void* data) const;

@@ -28,7 +28,7 @@ import qt.core.thread;
 import qt.helpers;
 import std.traits;
 import std.meta;
-version(QT_NO_PROPERTIES){}else
+version (QT_NO_PROPERTIES) {} else
 {
     import qt.core.bytearray;
     import qt.core.variant;
@@ -170,7 +170,7 @@ public:
     QBindingStorage bindingStorage;
     final QMetaObject* dynamicMetaObject() const;
 
-    version(QT_DEBUG)
+    version (QT_DEBUG)
     {
         enum { CheckForParentChildLoopsWarnDepth = 4096 }
     }
@@ -264,7 +264,7 @@ public:
     /+ virtual +/ bool event(QEvent event);
     /+ virtual +/ bool eventFilter(QObject watched, QEvent event);
 
-    version(QT_NO_TRANSLATION)
+    version (QT_NO_TRANSLATION)
     {
         static QString tr(const(char)* sourceText, const(char)*  /+ = nullptr +/, int /+ = -1 +/)
             { return QString.fromUtf8(sourceText); }
@@ -726,7 +726,7 @@ public:
     final void dumpObjectTree() const;
     final void dumpObjectInfo() const;
 
-    version(QT_NO_PROPERTIES){}else
+    version (QT_NO_PROPERTIES) {} else
     {
         final bool setProperty(const(char)* name, ref const(QVariant) value);
         final bool setProperty(T)(const(char)* name, auto ref T value)
@@ -815,7 +815,7 @@ private:
 pragma(inline, true) const(QMetaObject)* qt_getQtMetaObject()/+ noexcept+/
 { return &QObject.staticQtMetaObject; }
 
-version(QT_NO_USERDATA){}else
+version (QT_NO_USERDATA) {} else
 {
     typedef typename std::remove_cv<typename std::remove_pointer<T>::type>::type ObjType;
     static_assert(QtPrivate::HasQ_OBJECT_Macro<ObjType>::Value,

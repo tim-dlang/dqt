@@ -305,7 +305,7 @@ private:
     /+ friend class QFontEngine; +/
 
 /+ #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QFont &); +/
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QFont &); +/

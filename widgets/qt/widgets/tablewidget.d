@@ -34,7 +34,7 @@ import qt.widgets.abstractitemview;
 import qt.widgets.tableview;
 import qt.widgets.widget;
 import qt.widgets.widgetitemdata;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.datastream;
 
 /+ QT_REQUIRE_CONFIG(tablewidget); +/
@@ -169,7 +169,7 @@ public:
     pragma(mangle, mangleOpLess("QTableWidgetItem"))
     bool opLess(const QTableWidgetItem other) const;
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ virtual +/ void read(ref QDataStream in_);
         /+ virtual +/ void write(ref QDataStream out_) const;

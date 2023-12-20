@@ -49,7 +49,7 @@ protected:
     override void mouseMoveEvent(QMouseEvent );
     override void hideEvent(QHideEvent);
     override void sliderChange(SliderChange change);
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         override void contextMenuEvent(QContextMenuEvent );
     }

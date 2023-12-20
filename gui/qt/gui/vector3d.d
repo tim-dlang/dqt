@@ -14,13 +14,13 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_VECTOR2D){}else
-version(QT_NO_VECTOR3D){}else
+version (QT_NO_VECTOR2D) {} else
+version (QT_NO_VECTOR3D) {} else
     import qt.gui.vector2d;
-version(QT_NO_VECTOR3D){}else
-version(QT_NO_VECTOR4D){}else
+version (QT_NO_VECTOR3D) {} else
+version (QT_NO_VECTOR4D) {} else
     import qt.gui.vector4d;
-version(QT_NO_VECTOR3D){}else
+version (QT_NO_VECTOR3D) {} else
 {
     import qt.core.metatype;
     import qt.core.namespace;
@@ -30,14 +30,14 @@ version(QT_NO_VECTOR3D){}else
     import qt.core.variant;
 }
 
-version(QT_NO_VECTOR3D)
+version (QT_NO_VECTOR3D)
 {
 extern(C++, class) struct QVector3D;
 }
 /+ #if 0
 #pragma qt_sync_stop_processing
 #endif +/
-version(QT_NO_VECTOR3D){}else
+version (QT_NO_VECTOR3D) {} else
 {
 
 /// Binding for C++ class [QVector3D](https://doc.qt.io/qt-6/qvector3d.html).
@@ -63,7 +63,7 @@ public:
         this.v = [float(point.x()), float(point.y()), 0.0f];
     }
 /+ #ifndef QT_NO_VECTOR2D +/
-    version(QT_NO_VECTOR2D){}else
+    version (QT_NO_VECTOR2D) {} else
     {
         /+ /+ explicit +/pragma(inline, true) this(QVector2D vector)/+ noexcept+/
         {
@@ -76,7 +76,7 @@ public:
     }
 /+ #endif
 #ifndef QT_NO_VECTOR4D +/
-    version(QT_NO_VECTOR4D){}else
+    version (QT_NO_VECTOR4D) {} else
     {
         /+ /+ explicit +/pragma(inline, true) this(QVector4D vector)/+ noexcept+/
         {
@@ -301,7 +301,7 @@ QT_WARNING_DISABLE_FLOAT_COMPARE +/
     /+ friend Q_GUI_EXPORT bool qFuzzyCompare(QVector3D v1, QVector3D v2) noexcept; +/
 
 /+ #ifndef QT_NO_VECTOR2D +/
-    version(QT_NO_VECTOR2D){}else
+    version (QT_NO_VECTOR2D) {} else
     {
         pragma(inline, true) QVector2D toVector2D() const/+ noexcept+/
         {
@@ -310,7 +310,7 @@ QT_WARNING_DISABLE_FLOAT_COMPARE +/
     }
 /+ #endif
 #ifndef QT_NO_VECTOR4D +/
-    version(QT_NO_VECTOR4D){}else
+    version (QT_NO_VECTOR4D) {} else
     {
         pragma(inline, true) QVector4D toVector4D() const/+ noexcept+/
         {

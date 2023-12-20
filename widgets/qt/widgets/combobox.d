@@ -29,7 +29,7 @@ import qt.widgets.completer;
 import qt.widgets.lineedit;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
-version(QT_NO_VALIDATOR){}else
+version (QT_NO_VALIDATOR) {} else
     import qt.gui.validator;
 
 /+ QT_REQUIRE_CONFIG(combobox); +/
@@ -118,7 +118,7 @@ public:
     final void setLineEdit(QLineEdit edit);
     final QLineEdit lineEdit() const;
 /+ #ifndef QT_NO_VALIDATOR +/
-    version(QT_NO_VALIDATOR){}else
+    version (QT_NO_VALIDATOR) {} else
     {
         mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
         final void setValidator(const(QValidator) v);
@@ -220,7 +220,7 @@ protected:
     override void wheelEvent(QWheelEvent e);
 /+ #endif
 #ifndef QT_NO_CONTEXTMENU +/
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         override void contextMenuEvent(QContextMenuEvent e);
     }

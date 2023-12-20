@@ -16,7 +16,7 @@ import qt.config;
 import qt.core.typeinfo;
 import qt.helpers;
 import std.traits;
-version(D_LP64){}else
+version (D_LP64) {} else
     import core.stdc.config;
 
 /+ #ifndef QFLAGS_H +/
@@ -42,7 +42,7 @@ public:
     // unsigned enums: even if the enum is unsigned, the enum tags are
     // always signed
 #  if !defined(__LP64__) && !defined(Q_CLANG_QDOC) +/
-    version(D_LP64){}else
+    version (D_LP64) {} else
     {
         pragma(inline, true) this(cpp_long value)/+ noexcept+/
         {

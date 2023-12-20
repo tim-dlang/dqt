@@ -22,7 +22,7 @@ import qt.core.objectdefs_impl;
 import qt.helpers;
 import std.traits;
 import std.meta;
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
     import qt.core.string;
 
 /+ #if defined(__OBJC__) && !defined(__cplusplus)
@@ -201,7 +201,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     }));
     }));
 
-    version(QT_NO_TRANSLATION){}else
+    version (QT_NO_TRANSLATION) {} else
     {
         QString tr(const(char)* s, const(char)* c, int n = -1) const;
     }

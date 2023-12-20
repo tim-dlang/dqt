@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
 {
     import qt.core.bytearray;
     import qt.core.global;
@@ -31,7 +31,7 @@ version(QT_NO_DATASTREAM){}else
 
 
 
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
 {
 extern(C++, class) struct QDataStreamPrivate;
 /+ namespace QtPrivate {
@@ -548,7 +548,7 @@ inline QDataStream &operator<<(QDataStream &s, QKeyCombination combination)
 }
 
 
-version(QT_NO_DATASTREAM)
+version (QT_NO_DATASTREAM)
 {
 extern(C++, class) struct QDataStream;
 }

@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_RAWFONT){}else
+version (QT_NO_RAWFONT) {} else
 {
     import qt.core.bytearray;
     import qt.core.flags;
@@ -33,7 +33,7 @@ version(QT_NO_RAWFONT){}else
     import qt.gui.transform;
 }
 
-version(QT_NO_RAWFONT){}else
+version (QT_NO_RAWFONT) {} else
 {
 
 

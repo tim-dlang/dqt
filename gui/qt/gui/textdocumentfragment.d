@@ -47,13 +47,13 @@ public:
     bool isEmpty() const;
 
     QString toPlainText() const;
-    version(QT_NO_TEXTHTMLPARSER){}else
+    version (QT_NO_TEXTHTMLPARSER) {} else
     {
         QString toHtml() const;
     }
 
     static QTextDocumentFragment fromPlainText(ref const(QString) plainText);
-    version(QT_NO_TEXTHTMLPARSER){}else
+    version (QT_NO_TEXTHTMLPARSER) {} else
     {
         mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
         static QTextDocumentFragment fromHtml(ref const(QString) html, const(QTextDocument) resourceProvider = null);

@@ -22,7 +22,7 @@ import qt.core.object;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.helpers;
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
     import qt.core.translator;
 
 /+ #ifndef QT_NO_QOBJECT
@@ -32,8 +32,8 @@ version(QT_NO_TRANSLATION){}else
 #endif
 
 #ifndef QT_NO_QOBJECT +/
-version(Cygwin){}else
-version(Windows)
+version (Cygwin) {} else
+version (Windows)
 {
 struct tagMSG;
 alias MSG = tagMSG;
@@ -130,7 +130,7 @@ public:
 /+ #endif // QT_CONFIG(library)
 
 #ifndef QT_NO_TRANSLATION +/
-    version(QT_NO_TRANSLATION){}else
+    version (QT_NO_TRANSLATION) {} else
     {
         static bool installTranslator(QTranslator  messageFile);
         static bool removeTranslator(QTranslator  messageFile);

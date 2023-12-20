@@ -23,7 +23,7 @@ import qt.helpers;
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QBitArray
 {
 private:
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QBitArray &); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QBitArray &); +/

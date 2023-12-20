@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_VALIDATOR){}else
+version (QT_NO_VALIDATOR) {} else
 {
     import qt.core.locale;
     import qt.core.object;
@@ -26,7 +26,7 @@ version(QT_NO_VALIDATOR){}else
 #endif +/
 
 
-version(QT_NO_VALIDATOR){}else
+version (QT_NO_VALIDATOR) {} else
 {
 
 extern(C++, class) struct QValidatorPrivate;
@@ -189,7 +189,7 @@ private:
 
 }
 
-version(QT_NO_VALIDATOR)
+version (QT_NO_VALIDATOR)
 {
 extern(C++, class) struct QValidator;
 }

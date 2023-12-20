@@ -31,7 +31,7 @@ import qt.gui.brush;
 import qt.gui.font;
 import qt.gui.icon;
 import qt.helpers;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.datastream;
 
 /+ #ifndef QT_NO_DATASTREAM
@@ -84,7 +84,7 @@ public:
     { setData(atoolTip, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole); }
 
 /+ #ifndef QT_NO_STATUSTIP +/
-    version(QT_NO_STATUSTIP){}else
+    version (QT_NO_STATUSTIP) {} else
     {
         pragma(inline, true) final QString statusTip() const {
             return qvariant_cast!(QString)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole));
@@ -246,7 +246,7 @@ public:
     enum ItemType { Type = 0, UserType = 1000 }
     /+ virtual +/ int type() const;
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ virtual +/ void read(ref QDataStream in_);
         /+ virtual +/ void write(ref QDataStream out_) const;

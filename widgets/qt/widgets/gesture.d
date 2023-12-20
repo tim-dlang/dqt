@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_GESTURES){}else
+version (QT_NO_GESTURES) {} else
 {
     import qt.core.coreevent;
     import qt.core.flags;
@@ -27,7 +27,7 @@ version(QT_NO_GESTURES){}else
     import qt.widgets.widget;
 }
 
-version(QT_NO_GESTURES){}else
+version (QT_NO_GESTURES) {} else
 {
 
 /+ Q_DECLARE_METATYPE(Qt::GestureState)

@@ -36,7 +36,7 @@ import qt.widgets.treeview;
 import qt.widgets.treewidgetitemiterator;
 import qt.widgets.widget;
 import qt.widgets.widgetitemdata;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.datastream;
 
 /+ QT_REQUIRE_CONFIG(treewidget); +/
@@ -169,7 +169,7 @@ public:
     pragma(mangle, mangleOpLess("QTreeWidgetItem"))
     bool opLess(const(QTreeWidgetItem) other) const;
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ virtual +/ void read(ref QDataStream in_);
         /+ virtual +/ void write(ref QDataStream out_) const;

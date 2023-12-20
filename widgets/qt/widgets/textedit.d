@@ -35,7 +35,7 @@ import qt.gui.textoption;
 import qt.helpers;
 import qt.widgets.abstractscrollarea;
 import qt.widgets.widget;
-version(QT_NO_CONTEXTMENU){}else
+version (QT_NO_CONTEXTMENU) {} else
     import qt.widgets.menu;
 
 /+ QT_REQUIRE_CONFIG(textedit); +/
@@ -156,7 +156,7 @@ alias AutoFormatting = QFlags!(AutoFormattingFlag);    /+ Q_FLAG(AutoFormatting)
 
     final QString toPlainText() const;
 /+ #ifndef QT_NO_TEXTHTMLPARSER +/
-    version(QT_NO_TEXTHTMLPARSER){}else
+    version (QT_NO_TEXTHTMLPARSER) {} else
     {
         final QString toHtml() const;
     }
@@ -168,7 +168,7 @@ alias AutoFormatting = QFlags!(AutoFormattingFlag);    /+ Q_FLAG(AutoFormatting)
     final void ensureCursorVisible();
 
     /+ virtual +/ @QInvokable QVariant loadResource(int type, ref const(QUrl) name);
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         final QMenu createStandardContextMenu();
         final QMenu createStandardContextMenu(ref const(QPoint) position);
@@ -222,7 +222,7 @@ public /+ Q_SLOTS +/:
 
     @QSlot final void setPlainText(ref const(QString) text);
 /+ #ifndef QT_NO_TEXTHTMLPARSER +/
-    version(QT_NO_TEXTHTMLPARSER){}else
+    version (QT_NO_TEXTHTMLPARSER) {} else
     {
         @QSlot final void setHtml(ref const(QString) text);
     }
@@ -232,7 +232,7 @@ public /+ Q_SLOTS +/:
 /+ #endif +/
     @QSlot final void setText(ref const(QString) text);
 
-    version(QT_NO_CLIPBOARD){}else
+    version (QT_NO_CLIPBOARD) {} else
     {
         @QSlot final void cut();
         /+ void copy(); +/
@@ -246,7 +246,7 @@ public /+ Q_SLOTS +/:
     @QSlot final void selectAll();
 
     @QSlot final void insertPlainText(ref const(QString) text);
-    version(QT_NO_TEXTHTMLPARSER){}else
+    version (QT_NO_TEXTHTMLPARSER) {} else
     {
         @QSlot final void insertHtml(ref const(QString) text);
     }
@@ -280,7 +280,7 @@ protected:
     /+ virtual +/ override void mouseDoubleClickEvent(QMouseEvent e);
     /+ virtual +/ override bool focusNextPrevChild(bool next);
 /+ #ifndef QT_NO_CONTEXTMENU +/
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         /+ virtual +/ override void contextMenuEvent(QContextMenuEvent e);
     }

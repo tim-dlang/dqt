@@ -36,7 +36,7 @@ import qt.gui.region;
 import qt.gui.screen;
 import qt.gui.vector2d;
 import qt.helpers;
-version(QT_NO_INPUTMETHOD){}else
+version (QT_NO_INPUTMETHOD) {} else
     import qt.core.variant;
 
 /+ #if QT_CONFIG(shortcut)
@@ -44,7 +44,7 @@ version(QT_NO_INPUTMETHOD){}else
 
 
 #if QT_CONFIG(gestures) +/
-version(QT_NO_GESTURES)
+version (QT_NO_GESTURES)
 {
 extern(C++, class) struct QGesture;
 }
@@ -278,7 +278,7 @@ public:
 
 /+ #if QT_DEPRECATED_SINCE(6, 0)
 #ifndef QT_NO_INTEGER_EVENT_COORDINATES +/
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         /+ QT_DEPRECATED_VERSION_X_6_0("Use position()") +/
             pragma(inline, true) final QPoint pos() const { return position().toPoint(); }
@@ -344,14 +344,14 @@ public:
     }
 
 /+ #ifndef QT_NO_INTEGER_EVENT_COORDINATES +/
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         pragma(inline, true) final QPoint pos() const { return position().toPoint(); }
     }
 /+ #endif
 #if QT_DEPRECATED_SINCE(6, 0)
 #ifndef QT_NO_INTEGER_EVENT_COORDINATES +/
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         /+ QT_DEPRECATED_VERSION_X_6_0("Use globalPosition()") +/
             pragma(inline, true) final QPoint globalPos() const { return globalPosition().toPoint(); }
@@ -400,7 +400,7 @@ public:
 
 /+ #if QT_DEPRECATED_SINCE(6, 0)
 #ifndef QT_NO_INTEGER_EVENT_COORDINATES +/
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         /+ QT_DEPRECATED_VERSION_X_6_0("Use position()") +/
             pragma(inline, true) final QPoint pos() const { return position().toPoint(); }
@@ -581,7 +581,7 @@ public:
 
 /+ #if QT_DEPRECATED_SINCE(6, 0)
 #ifndef QT_NO_INTEGER_EVENT_COORDINATES +/
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         /+ QT_DEPRECATED_VERSION_X_6_0("Use position().toPoint()") +/
             pragma(inline, true) final const(QPoint) pos() const { return position().toPoint(); }
@@ -916,7 +916,7 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-version(QT_NO_CONTEXTMENU){}else
+version (QT_NO_CONTEXTMENU) {} else
 {
 /// Binding for C++ class [QContextMenuEvent](https://doc.qt.io/qt-6/qcontextmenuevent.html).
 class /+ Q_GUI_EXPORT +/ QContextMenuEvent : QInputEvent
@@ -967,7 +967,7 @@ protected:
 }
 }
 
-version(QT_NO_INPUTMETHOD){}else
+version (QT_NO_INPUTMETHOD) {} else
 {
 /// Binding for C++ class [QInputMethodEvent](https://doc.qt.io/qt-6/qinputmethodevent.html).
 class /+ Q_GUI_EXPORT +/ QInputMethodEvent : QEvent
@@ -1244,7 +1244,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-version(QT_NO_STATUSTIP){}else
+version (QT_NO_STATUSTIP) {} else
 {
 /// Binding for C++ class [QStatusTipEvent](https://doc.qt.io/qt-6/qstatustipevent.html).
 class /+ Q_GUI_EXPORT +/ QStatusTipEvent : QEvent
@@ -1349,7 +1349,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-version(QT_NO_TOOLBAR){}else
+version (QT_NO_TOOLBAR) {} else
 {
 class /+ Q_GUI_EXPORT +/ QToolBarChangeEvent : QEvent
 {
@@ -1611,17 +1611,17 @@ private:
     /+ Qt:: +/qt.core.namespace.ApplicationState m_applicationState;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-version(QT_NO_INPUTMETHOD)
+version (QT_NO_INPUTMETHOD)
 {
 extern(C++, class) struct QInputMethodQueryEvent;
 }
 
-version(QT_NO_CONTEXTMENU)
+version (QT_NO_CONTEXTMENU)
 {
 class QContextMenuEvent;
 }
 
-version(QT_NO_INPUTMETHOD)
+version (QT_NO_INPUTMETHOD)
 {
 class QInputMethodEvent;
 }

@@ -92,7 +92,7 @@ import std.meta;
 #define Q_MOC_INCLUDE(...) QT_ANNOTATE_CLASS(qt_moc_include, __VA_ARGS__)
 #endif +/ // QT_NO_META_MACROS
 
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
 {
 // full set of tr functions
 /+ #  define QT_TR_FUNCTIONS \
@@ -102,7 +102,7 @@ enum QT_TR_FUNCTIONS =
         q{pragma(inline, true) static dqtimported!"qt.core.string".QString tr(const(char)* s, const(char)* c = null, int n = -1)
             { return staticMetaObject.tr(s, c, n); }};
 }
-version(QT_NO_TRANSLATION)
+version (QT_NO_TRANSLATION)
 {
 // inherit the ones from QObject
 /+ # define QT_TR_FUNCTIONS +/
@@ -175,10 +175,10 @@ struct CPPMemberFunctionPointer(T)
 
 template memberFunctionExternDeclaration(alias F)
 {
-    version(Windows)
+    version (Windows)
     extern(D) mixin((){
             string code;
-            version(Windows)
+            version (Windows)
                 static if (IsInQtPackage!(F))
                     code ~= "export ";
             code ~= "extern(" ~ functionLinkage!F ~ ")";
@@ -431,7 +431,7 @@ template MetaObjectImpl(T)
                    0        // eod
             ];
 
-            version(Windows)
+            version (Windows)
             {
                 pragma(mangle, T.staticMetaObject.mangleof)
                 extern(C++) static __gshared QMetaObject staticMetaObject = { {
@@ -471,7 +471,7 @@ template MetaObjectImpl(T)
 enum Q_OBJECT_D = q{
     public:
         static import qt.core.objectdefs;
-        version(Windows)
+        version (Windows)
             extern(C++) extern static __gshared qt.core.objectdefs.QMetaObject staticMetaObject;
         else
             extern(C++) extern static __gshared const(qt.core.objectdefs.QMetaObject) staticMetaObject;
