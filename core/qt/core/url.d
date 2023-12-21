@@ -186,12 +186,12 @@ public:
     /+ inline void swap(QUrl &other) noexcept { qSwap(d, other.d); } +/
 
     void setUrl(ref const(QString) url, ParsingMode mode = ParsingMode.TolerantMode);
-//    QString url(FormattingOptions options = FormattingOptions(cast(QUrlTwoFlags.Zero) (ComponentFormattingOption.PrettyDecoded))) const;
-//    QString toString(FormattingOptions options = FormattingOptions(cast(QUrlTwoFlags.Zero) (ComponentFormattingOption.PrettyDecoded))) const;
-//    QString toDisplayString(FormattingOptions options = FormattingOptions(cast(QUrlTwoFlags.Zero) (ComponentFormattingOption.PrettyDecoded))) const;
+    QString url(FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded)) const;
+    QString toString(FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded)) const;
+    QString toDisplayString(FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded)) const;
     /+ Q_REQUIRED_RESULT +/ QUrl adjusted(FormattingOptions options) const;
 
-//    QByteArray toEncoded(FormattingOptions options = ComponentFormattingOption.FullyEncoded) const;
+    QByteArray toEncoded(FormattingOptions options = ComponentFormattingOption.FullyEncoded) const;
     static QUrl fromEncoded(ref const(QByteArray) url, ParsingMode mode = ParsingMode.TolerantMode);
 
     enum UserInputResolutionOption {
@@ -355,8 +355,8 @@ public:
     static QString fromAce(ref const(QByteArray) );
     static QByteArray toAce(ref const(QString) );
     static QStringList idnWhitelist();
-    static QStringList toStringList(ref const(QList!(QUrl)) uris, FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded));
-    static QList!(QUrl) fromStringList(ref const(QStringList) uris, ParsingMode mode = ParsingMode.TolerantMode);
+    //static QStringList toStringList(ref const(QList!(QUrl)) uris, FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded));
+    //static QList!(QUrl) fromStringList(ref const(QStringList) uris, ParsingMode mode = ParsingMode.TolerantMode);
 
     static void setIdnWhitelist(ref const(QStringList) );
     /+ friend Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed) noexcept; +/
@@ -370,6 +370,10 @@ public:
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
+
+// Test for https://issues.dlang.org/show_bug.cgi?id=24292
+static assert(!__traits(isPOD, QUrl));
+
 /+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/

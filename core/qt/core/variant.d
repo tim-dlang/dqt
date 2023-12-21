@@ -583,6 +583,9 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
+// Test for https://issues.dlang.org/show_bug.cgi?id=24292
+static assert(!__traits(isPOD, QVariant));
+
 /+ #if QT_DEPRECATED_SINCE(5, 14) +/
 /+ QT_DEPRECATED_X("Use QVariant::fromValue() instead.") +/
 pragma(inline, true) QVariant qVariantFromValue(T)(ref const(T) t)
