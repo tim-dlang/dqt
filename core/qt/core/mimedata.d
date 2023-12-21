@@ -33,8 +33,8 @@ public:
     this();
     ~this();
 
-    final QList!(QUrl) urls() const;
-    final void setUrls(ref const(QList!(QUrl)) urls);
+    //final QList!(QUrl) urls() const;
+    //final void setUrls(ref const(QList!(QUrl)) urls);
     final bool hasUrls() const;
 
     final QString text() const;

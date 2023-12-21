@@ -174,7 +174,7 @@ class QRegularExpression;
     this(QDate date);
     this(QTime time);
     this(ref const(QDateTime) datetime);
-    this(ref const(QList!(QVariant)) list);
+//    this(ref const(QList!(QVariant)) list);
 //    this(ref const(QMap!(QString, QVariant)) map);
 //    this(ref const(QHash!(QString, QVariant)) hash);
     version (QT_NO_GEOM_VARIANT) {} else
@@ -265,7 +265,7 @@ class QRegularExpression;
     QDate toDate() const;
     QTime toTime() const;
     QDateTime toDateTime() const;
-    QList!(QVariant) toList() const;
+//    QList!(QVariant) toList() const;
 //    QMap!(QString, QVariant) toMap() const;
 //    QHash!(QString, QVariant) toHash() const;
 
@@ -603,6 +603,9 @@ public:
     pragma(inline, true) ref const(DataPtr) data_ptr() const return { return d; }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
+
+// Test for https://issues.dlang.org/show_bug.cgi?id=24292
+static assert(!__traits(isPOD, QVariant));
 
 /+ template<>
 #if __has_include(<variant>) && __cplusplus >= 201703L

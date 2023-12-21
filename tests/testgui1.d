@@ -85,3 +85,17 @@ unittest
     }
     assert(data.ref_.loadRelaxed() == 1); // Only our extra reference remains.
 }
+
+unittest
+{
+    import core.stdcpp.new_;
+    import qt.core.string;
+    import qt.core.url;
+    import qt.gui.textdocument;
+
+    QTextDocument document = cpp_new!QTextDocument;
+    QUrl url = QUrl(QString("https://dlang.org/"));
+    assert(url.toString().toConstWString == "https://dlang.org/"w);
+    document.setBaseUrl(url);
+    assert(document.baseUrl().toString().toConstWString == "https://dlang.org/"w);
+}

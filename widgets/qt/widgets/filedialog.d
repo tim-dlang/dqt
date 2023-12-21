@@ -90,7 +90,7 @@ alias Options = QFlags!(Option);    /+ Q_FLAG(Options) +/
     final QStringList selectedFiles() const;
 
     final void selectUrl(ref const(QUrl) url);
-    final QList!(QUrl) selectedUrls() const;
+    //final QList!(QUrl) selectedUrls() const;
 
     final void setNameFilter(ref const(QString) filter);
     final void setNameFilters(ref const(QStringList) filters);
@@ -117,8 +117,8 @@ alias Options = QFlags!(Option);    /+ Q_FLAG(Options) +/
     final void setAcceptMode(AcceptMode mode);
     final AcceptMode acceptMode() const;
 
-    final void setSidebarUrls(ref const(QList!(QUrl)) urls);
-    final QList!(QUrl) sidebarUrls() const;
+    //final void setSidebarUrls(ref const(QList!(QUrl)) urls);
+    //final QList!(QUrl) sidebarUrls() const;
 
     final QByteArray saveState() const;
     final bool restoreState(ref const(QByteArray) state);
@@ -162,7 +162,7 @@ alias Options = QFlags!(Option);    /+ Q_FLAG(Options) +/
     @QSignal final void directoryEntered(ref const(QString) directory);
 
     @QSignal final void urlSelected(ref const(QUrl) url);
-    @QSignal final void urlsSelected(ref const(QList!(QUrl)) urls);
+    //@QSignal final void urlsSelected(ref const(QList!(QUrl)) urls);
     @QSignal final void currentUrlChanged(ref const(QUrl) url);
     @QSignal final void directoryUrlEntered(ref const(QUrl) directory);
 
@@ -218,13 +218,13 @@ public:
                                             QString* selectedFilter = null,
                                             Options options = Options());
 
-    static QList!(QUrl) getOpenFileUrls(QWidget parent = null,
+    /*static QList!(QUrl) getOpenFileUrls(QWidget parent = null,
                                            ref const(QString) caption = globalInitVar!QString,
                                            ref const(QUrl) dir = globalInitVar!QUrl,
                                            ref const(QString) filter = globalInitVar!QString,
                                            QString* selectedFilter = null,
                                            Options options = Options(),
-                                           ref const(QStringList) supportedSchemes = globalInitVar!QStringList);
+                                           ref const(QStringList) supportedSchemes = globalInitVar!QStringList);*/
 
     /+ static void getOpenFileContent(const QString &nameFilter,
                                    const std::function<void(const QString &, const QByteArray &)> &fileContentsReady); +/
