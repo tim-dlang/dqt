@@ -63,7 +63,10 @@ public:
     {
         return atomicLoad!(MemoryOrder.raw)(_q_value); 
     }
-//    void storeRelaxed(T newValue)/+ noexcept+/ { Ops.storeRelaxed(_q_value, newValue); }
+    void storeRelaxed(T newValue)/+ noexcept+/
+    {
+        atomicStore!(MemoryOrder.raw)(_q_value, newValue);
+    }
 
     T loadAcquire() const/+ noexcept+/{ return atomicLoad!(MemoryOrder.acq)(_q_value);  }
     void storeRelease(T newValue)/+ noexcept+/ { atomicStore!(MemoryOrder.rel)(_q_value, newValue); }

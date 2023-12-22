@@ -29,6 +29,13 @@ jobs:
             qtbase_url: 'https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_623/qt.qt6.623.gcc_64/'
             qtbase_file: '6.2.3-0-202201260729qtbase-Linux-RHEL_8_4-GCC-Linux-RHEL_8_4-X86_64.7z'
             qticu_file: '6.2.3-0-202201260729icu-linux-Rhel7.2-x64.7z'
+            qtdeclarative_file: '6.2.3-0-202201260729qtdeclarative-Linux-RHEL_8_4-GCC-Linux-RHEL_8_4-X86_64.7z'
+            qtpositioning_url: 'https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_623/qt.qt6.623.addons.qtpositioning.gcc_64/'
+            qtpositioning_file: '6.2.3-0-202201260729qtpositioning-Linux-RHEL_8_4-GCC-Linux-RHEL_8_4-X86_64.7z'
+            qtwebchannel_url: 'https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_623/qt.qt6.623.addons.qtwebchannel.gcc_64/'
+            qtwebchannel_file: '6.2.3-0-202201260729qtwebchannel-Linux-RHEL_8_4-GCC-Linux-RHEL_8_4-X86_64.7z'
+            qtwebengine_url: 'https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt6_623/qt.qt6.623.addons.qtwebengine.gcc_64/'
+            qtwebengine_file: '6.2.3-0-202201260729qtwebengine-Linux-RHEL_8_4-GCC-Linux-RHEL_8_4-X86_64.7z'
 
           - platform: win64
             os: windows-2022
@@ -36,6 +43,13 @@ jobs:
             qt_arch: msvc2019_64
             qtbase_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_623/qt.qt6.623.win64_msvc2019_64/'
             qtbase_file: '6.2.3-0-202201260729qtbase-Windows-Windows_10_21H2-MSVC2019-Windows-Windows_10_21H2-X86_64.7z'
+            qtdeclarative_file: '6.2.3-0-202201260729qtdeclarative-Windows-Windows_10_21H2-MSVC2019-Windows-Windows_10_21H2-X86_64.7z'
+            qtpositioning_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_623/qt.qt6.623.addons.qtpositioning.win64_msvc2019_64/'
+            qtpositioning_file: '6.2.3-0-202201260729qtpositioning-Windows-Windows_10_21H2-MSVC2019-Windows-Windows_10_21H2-X86_64.7z'
+            qtwebchannel_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_623/qt.qt6.623.addons.qtwebchannel.win64_msvc2019_64/'
+            qtwebchannel_file: '6.2.3-0-202201260729qtwebchannel-Windows-Windows_10_21H2-MSVC2019-Windows-Windows_10_21H2-X86_64.7z'
+            qtwebengine_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt6_623/qt.qt6.623.addons.qtwebengine.win64_msvc2019_64/'
+            qtwebengine_file: '6.2.3-0-202201260729qtwebengine-Windows-Windows_10_21H2-MSVC2019-Windows-Windows_10_21H2-X86_64.7z'
 
           - platform: osx64
             os: macos-12
@@ -43,6 +57,13 @@ jobs:
             qt_arch: macos
             qtbase_url: 'https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/qt6_623/qt.qt6.623.clang_64/'
             qtbase_file: '6.2.3-0-202201260730qtbase-MacOS-MacOS_12-Clang-MacOS-MacOS_12-X86_64-ARM64.7z'
+            qtdeclarative_file: '6.2.3-0-202201260730qtdeclarative-MacOS-MacOS_12-Clang-MacOS-MacOS_12-X86_64-ARM64.7z'
+            qtpositioning_url: 'https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/qt6_623/qt.qt6.623.addons.qtpositioning.clang_64/'
+            qtpositioning_file: '6.2.3-0-202201260730qtpositioning-MacOS-MacOS_12-Clang-MacOS-MacOS_12-X86_64-ARM64.7z'
+            qtwebchannel_url: 'https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/qt6_623/qt.qt6.623.addons.qtwebchannel.clang_64/'
+            qtwebchannel_file: '6.2.3-0-202201260730qtwebchannel-MacOS-MacOS_12-Clang-MacOS-MacOS_12-X86_64-ARM64.7z'
+            qtwebengine_url: 'https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/qt6_623/qt.qt6.623.addons.qtwebengine.clang_64/'
+            qtwebengine_file: '6.2.3-0-202201260730qtwebengine-MacOS-MacOS_12-Clang-MacOS-MacOS_12-X86_64-ARM64.7z'
 
     runs-on: ${{ matrix.os }}
 
@@ -75,6 +96,34 @@ jobs:
           wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qticu_file }}"
           7z x "${{ matrix.qticu_file }}"
 
+      - name: Install QtDeclarative
+        run: |
+          wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qtdeclarative_file }}"
+          7z x "${{ matrix.qtdeclarative_file }}" 6.2.3/${{ matrix.qt_arch }}/lib/ 6.2.3/${{ matrix.qt_arch }}/bin/
+
+      - name: Install QtPositioning
+        run: |
+          wget --no-verbose "${{ matrix.qtpositioning_url }}${{ matrix.qtpositioning_file }}"
+          7z x "${{ matrix.qtpositioning_file }}" 6.2.3/${{ matrix.qt_arch }}/lib/ 6.2.3/${{ matrix.qt_arch }}/bin/
+
+      - name: Install QtWebChannel
+        run: |
+          wget --no-verbose "${{ matrix.qtwebchannel_url }}${{ matrix.qtwebchannel_file }}"
+          7z x "${{ matrix.qtwebchannel_file }}" 6.2.3/${{ matrix.qt_arch }}/lib/ 6.2.3/${{ matrix.qt_arch }}/bin/
+
+      - name: Install QtWebEngine
+        run: |
+          wget --no-verbose "${{ matrix.qtwebengine_url }}${{ matrix.qtwebengine_file }}"
+          7z x "${{ matrix.qtwebengine_file }}" 6.2.3/${{ matrix.qt_arch }}/lib/ 6.2.3/${{ matrix.qt_arch }}/bin/
+
       - name: 'Build & Test'
         run: |
           ${{ env.DC }} -run runtests.d --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=6.2.3/${{ matrix.qt_arch }}
+
+#      - name: Upload test results
+#        uses: actions/upload-artifact@v4
+#        if: always()
+#        with:
+#          name: test_results-${{ matrix.platform }}-${{ matrix.dc }}
+#          path: test_results
+#          retention-days: 1
