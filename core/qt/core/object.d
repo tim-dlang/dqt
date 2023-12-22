@@ -660,14 +660,14 @@ public:
         enum size_t[2] overloadIndices = delegate size_t[2](){
             size_t[2] r = [size_t.max, size_t.max];
             size_t numPossible;
-            static foreach(i, signal; Signal.Members)
-            static foreach(j, slot; Slot.Members)
+            static foreach (i, signal; Signal.Members)
+            static foreach (j, slot; Slot.Members)
             {
                 //pragma(msg, i, " ", j, " ", __traits(identifier, signal), " ", __traits(identifier, slot));
                 static if (Parameters!(signal).length >= Parameters!(slot).length) // TODO: allow default arguments
                 {{
                     bool possible = true;
-                    static foreach(k; 0..Parameters!(slot).length)
+                    static foreach (k; 0 .. Parameters!(slot).length)
                     {
                         static if (!__traits(compiles, {Parameters!(slot)[k] p = Parameters!(signal)[k].init;}))
                         {
@@ -694,10 +694,10 @@ public:
         static if (overloadIndices[0] == size_t.max || overloadIndices[1] == size_t.max)
         {
             pragma(msg, "Signals:");
-            static foreach(signal; Signal.Members)
+            static foreach (signal; Signal.Members)
                 pragma(msg, __traits(identifier, signal), " ", Parameters!(signal));
             pragma(msg, "Slots:");
-            static foreach(slot; Slot.Members)
+            static foreach (slot; Slot.Members)
                 pragma(msg, __traits(identifier, slot), " ", Parameters!(slot));
         }
         static assert(overloadIndices[0] != size_t.max);

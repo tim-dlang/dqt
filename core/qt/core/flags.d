@@ -236,7 +236,7 @@ template flagsFromStaticString(T, string str)
 {
     enum flagsFromStaticString = (){
         T r;
-        static foreach(element; dqtimported!q{std.array}.split(str, "|"))
+        static foreach (element; dqtimported!q{std.array}.split(str, "|"))
         {
             r |= __traits(getMember, T.enum_type, dqtimported!q{std.array}.split(element, "::")[$-1]);
         }

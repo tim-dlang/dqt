@@ -307,12 +307,12 @@ public:
         T* res = this.ptr + offset;
         // /+ QtPrivate:: +/qt.core.containertools_impl.q_relocate_overlap_n(this.ptr, this.size, res);
         if (offset > 0) {
-            foreach_reverse (i; 0..this.size) {
+            foreach_reverse (i; 0 .. this.size) {
                 this.ptr[i + offset] = this.ptr[i];
             }
         }
         else {
-            foreach (i; 0..this.size) {
+            foreach (i; 0 .. this.size) {
                 this.ptr[i + offset] = this.ptr[i];
             }
         }

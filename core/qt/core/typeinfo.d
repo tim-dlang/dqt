@@ -23,7 +23,7 @@ enum QTypeInfoFlags {
     Q_DUMMY_TYPE = 0x4,
     Q_RELOCATABLE_TYPE = 0x8
 };
-/*static foreach(name; __traits(allMembers, QTypeInfoFlags))
+/*static foreach (name; __traits(allMembers, QTypeInfoFlags))
 {
     mixin("enum " + name + " = QTypeInfoFlags." + name + ";");
 }*/
@@ -92,7 +92,7 @@ template QTypeInfo(T)
     {
         enum combinedFlags = (){
             QTypeInfoFlags r;
-            foreach(flag; getUDAs!(T, QTypeInfoFlags))
+            foreach (flag; getUDAs!(T, QTypeInfoFlags))
             {
                 r |= flag;
             }

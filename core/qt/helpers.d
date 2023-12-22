@@ -1131,14 +1131,14 @@ enum isWrapperCallable(alias F, Params...) = ()
         {
             bool r = true;
             // The parameter types have to be checked with if to work around https://issues.dlang.org/show_bug.cgi?id=13140
-            static foreach (i; 0..Params.length)
+            static foreach (i; 0 .. Params.length)
             {
                 if (!is(Params[i] : FunctionParameters!F[i]))
                     r = false;
             }
             // Workaround for https://issues.dlang.org/show_bug.cgi?id=12672
             bool anyParamNeedsTemp;
-            static foreach (i; 0..Params.length)
+            static foreach (i; 0 .. Params.length)
             {
                 static if (isParamConstStructRef!(F, i))
                 {

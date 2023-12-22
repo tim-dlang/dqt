@@ -16,7 +16,7 @@ string[] dependencyClosure(string[] modules, string[][string] dependencies)
     bool[string] done;
     void add(string[] modules)
     {
-        foreach(m; modules)
+        foreach (m; modules)
         {
             if(m in done)
                 continue;
@@ -31,7 +31,7 @@ string[] dependencyClosure(string[] modules, string[][string] dependencies)
     return r;
 }
 
-version(Windows)
+version (Windows)
 {
     enum os = "win";
     enum libExt = ".lib";
@@ -59,7 +59,7 @@ int main(string[] args)
     string qtPath;
     bool verbose;
 
-    for(size_t i = 1; i < args.length; i++)
+    for (size_t i = 1; i < args.length; i++)
     {
         if(args[i].startsWith("-m"))
         {
@@ -84,7 +84,7 @@ int main(string[] args)
         }
     }
 
-    version(Windows)
+    version (Windows)
     {
         if(qtPath.length == 0)
         {
@@ -95,7 +95,7 @@ int main(string[] args)
         }
     }
 
-    version(Windows)
+    version (Windows)
     {
         import core.sys.windows.winbase: SetErrorMode, SEM_NOGPFAULTERRORBOX;
         uint dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
@@ -112,7 +112,7 @@ int main(string[] args)
     {
         tests ~= Test(e.name, [], ["-main", "-unittest", "-Itests", "-I" ~ buildPath("test_results", os ~ model, "tests"), "-Jtests"]);
         File f = File(e.name, "r");
-        foreach(line; f.byLine)
+        foreach (line; f.byLine)
         {
             if(!line.startsWith("//"))
                 break;
@@ -133,7 +133,7 @@ int main(string[] args)
     tests ~= Test(buildPath("examples", "helloworld", "main.d"), ["widgets"], ["-Iexamples"], true);
     tests ~= Test(buildPath("examples", "examplewidgets", "main.d"), ["widgets"], ["-Iexamples", "-J" ~ buildPath("examples", "examplewidgets")], true);
 
-    foreach(ref test; tests)
+    foreach (ref test; tests)
         test.qtModules = dependencyClosure(test.qtModules, moduleDependencies);
     tests.sort!((a, b) => a.qtModules.length < b.qtModules.length);
 
@@ -142,7 +142,7 @@ int main(string[] args)
         mkdirRecurse(buildPath("test_results", os ~ model, "tests", "imports"));
         File moduleListFile = File(buildPath("test_results", os ~ model, "tests", "imports", "qtmodules.d"), "w");
         moduleListFile.writeln("module imports.qtmodules;");
-        foreach(m; ["core", "gui", "widgets"])
+        foreach (m; ["core", "gui", "widgets"])
         {
             moduleListFile.writeln("immutable string[] modules", capitalize(m), " = [");
             string[] modules;
@@ -156,7 +156,7 @@ int main(string[] args)
                 modules ~= m2;
             }
             modules.sort();
-            foreach(m2; modules)
+            foreach (m2; modules)
                 moduleListFile.writeln("    \"", m2, "\",");
             moduleListFile.writeln("];");
         }
@@ -166,7 +166,7 @@ int main(string[] args)
     {
         File fileListFile = File(buildPath("test_results", os ~ model, "tests", "imports", "testfiles.d"), "w");
         fileListFile.writeln("module imports.testfiles;");
-        foreach(m; ["ui"])
+        foreach (m; ["ui"])
         {
             fileListFile.writeln("immutable string[] files", capitalize(m), " = [");
             string[] files;
@@ -175,7 +175,7 @@ int main(string[] args)
                 files ~= baseName(e.name);
             }
             files.sort();
-            foreach(m2; files)
+            foreach (m2; files)
                 fileListFile.writeln("    \"", m2, "\",");
             fileListFile.writeln("];");
         }
@@ -183,7 +183,7 @@ int main(string[] args)
 
     // Precompile static libraries for the bindings.
     bool[string] moduleCompiled;
-    foreach(m; ["core", "gui", "widgets"])
+    foreach (m; ["core", "gui", "widgets"])
     {
         auto sw = StopWatch(AutoStart.yes);
 
@@ -228,7 +228,7 @@ int main(string[] args)
     }
 
     // Compile and run the tests
-    foreach(ref test; tests)
+    foreach (ref test; tests)
     {
         auto sw = StopWatch(AutoStart.yes);
 
@@ -258,8 +258,8 @@ int main(string[] args)
         dmdArgs ~= "-w";
         dmdArgs ~= "-m" ~ model;
         dmdArgs ~= test.name;
-        version(Windows){}
-        else version(OSX)
+        version (Windows) {}
+        else version (OSX)
             dmdArgs ~= "-L-lc++";
         else
             dmdArgs ~= "-L-lstdc++";
@@ -273,9 +273,9 @@ int main(string[] args)
         }
         foreach_reverse(m; test.qtModules)
         {
-            version(Windows)
+            version (Windows)
                 dmdArgs ~= "Qt6" ~ capitalize(m) ~ "d.lib";
-            else version(OSX)
+            else version (OSX)
             {
                 dmdArgs ~= "-L-framework";
                 dmdArgs ~= "-LQt" ~ capitalize(m);
@@ -288,12 +288,12 @@ int main(string[] args)
         dmdArgs ~= test.extraArgs;
         if(qtPath.length)
         {
-            version(Windows)
+            version (Windows)
             {
                 dmdArgs ~= "-L/LIBPATH:" ~ qtPath ~ "\\lib";
                 env["PATH"] = absolutePath(qtPath) ~ "\\bin";
             }
-            else version(OSX)
+            else version (OSX)
             {
                 dmdArgs ~= "-L-F" ~ qtPath ~ "/lib";
                 dmdArgs ~= "-L-headerpad_max_install_names";
@@ -321,7 +321,7 @@ int main(string[] args)
             continue;
         }
 
-        version(OSX)
+        version (OSX)
         {
             if(qtPath.length)
             {

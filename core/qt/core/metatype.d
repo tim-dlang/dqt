@@ -324,7 +324,7 @@ public:
         string code = "enum Type {";
         // these are merged with QVariant
         /+ QT_FOR_EACH_STATIC_TYPE(QT_DEFINE_METATYPE_ID) +/
-        foreach(t; allBuiltinTypes)
+        foreach (t; allBuiltinTypes)
             code ~= text(t.typeName, " = ", t.typeNameID, ", ");
         code ~= q{
             FirstCoreType = Type.Bool,
@@ -1171,7 +1171,7 @@ extern(D) mixin((){
     code ~= "    static if (std.traits.isBuiltinType!T)\n";
     code ~= "    {\n";
     bool needsElse = false;
-    foreach(i, t; allBuiltinTypes)
+    foreach (i, t; allBuiltinTypes)
     {
         string realType2 = t.realType;
         if(t.dType.length)
@@ -1200,7 +1200,7 @@ extern(D) mixin((){
     needsElse = false;
     code ~= "        static if (IsInQtPackage!T)\n";
     code ~= "        {\n";
-    foreach(i, t; allBuiltinTypes)
+    foreach (i, t; allBuiltinTypes)
     {
         string realType2 = t.realType;
         if(t.dType.length)
