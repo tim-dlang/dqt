@@ -498,7 +498,7 @@ extern(D) struct DQtMemberSlotObject(T, alias F, Params...) if (is(T: QObject))
                 import std.conv;
                 string r;
                 r = "dg(";
-                foreach(i; 0..Params.length)
+                foreach (i; 0 .. Params.length)
                 {
                     r ~= text("*cast(Params[", i, "]*)a[", i + 1, "], ");
                 }

@@ -360,7 +360,7 @@ template MetaObjectImpl(T)
         {
             if(M.length)
                 metaDataCode ~= "    // " ~ typename ~ ": name, argc, parameters, tag, flags\n";
-            static foreach(i; 0..M.length)
+            static foreach (i; 0 .. M.length)
             {{
                 size_t nameId = addString(__traits(identifier, M[i]));
                 size_t parameterCount = Parameters!(M[i]).length;
@@ -379,12 +379,12 @@ template MetaObjectImpl(T)
         {
             if(M.length)
                 metaDataCode ~= "    // " ~ typename ~ ": parameters\n";
-            static foreach(i; 0..M.length)
+            static foreach (i; 0 .. M.length)
             {
                 metaDataCode ~= "                    QMetaType.Type.Void, "; // TODO: correct return type
-                foreach(P; Parameters!(M[i]))
+                foreach (P; Parameters!(M[i]))
                     metaDataCode ~= typeToMeta!(P) ~ ", ";
-                foreach(j, P; Parameters!(M[i]))
+                foreach (j, P; Parameters!(M[i]))
                     metaDataCode ~= text(addString(ParameterIdentifierTuple!(M[i])[j]), ", ");
                 metaDataCode ~= "// " ~ __traits(identifier, M[i]) ~ "\n";
             }
@@ -396,7 +396,7 @@ template MetaObjectImpl(T)
         addString("");
 
         string concatenatedStringsCode = "\"";
-        foreach(char c; concatenatedStrings)
+        foreach (char c; concatenatedStrings)
         {
             if(c == '\0')
                 concatenatedStringsCode ~= "\\0";
@@ -534,10 +534,10 @@ enum Q_OBJECT_D = q{
                 switch (_id) {
                     mixin((){
                             string methodCallCases;
-                            static foreach(i; 0..allMethods.length)
+                            static foreach (i; 0 .. allMethods.length)
                             {{
                                 methodCallCases ~= text("\n                    case ", i, ": _t.", __traits(identifier, allMethods[i]), "(");
-                                static foreach(j, P; Parameters!(allMethods[i]))
+                                static foreach (j, P; Parameters!(allMethods[i]))
                                 {
                                     methodCallCases ~= text("*cast(Parameters!(allMethods[", i, "])[", j, "]*)(_a[", j + 1, "]), ");
                                 }
@@ -552,7 +552,7 @@ enum Q_OBJECT_D = q{
             } else if (_c == qt.core.objectdefs.QMetaObject.Call.IndexOfMethod) {
                 alias allSignals = qt.core.metamacros.MetaObjectImpl!(typeof(this)).allSignals;
                 int *result = reinterpret_cast!(int *)(_a[0]);
-                static foreach(i; 0..allSignals.length)
+                static foreach (i; 0 .. allSignals.length)
                 {{
                     alias _t = qt.core.metamacros.CPPMemberFunctionPointer!(typeof(this));
 
@@ -578,7 +578,7 @@ enum Q_SIGNAL_IMPL_D = q{
     static import qt.core.objectdefs;
     void*[std.traits.Parameters!(__traits(parent, Dummy)).length + 1] _a = mixin((){
         string r = "[null";
-        static foreach(i; 0..std.traits.Parameters!(__traits(parent, Dummy)).length)
+        static foreach (i; 0 .. std.traits.Parameters!(__traits(parent, Dummy)).length)
             r ~= " , cast(void*)&" ~ std.traits.ParameterIdentifierTuple!(__traits(parent, Dummy))[i];
         r ~= "]";
         return r;

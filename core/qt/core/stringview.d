@@ -472,7 +472,7 @@ return QStringView(m_data, m_size - n);
         const split = s.splitRef(sep, behavior);
         QList!(QStringView) result;
         result.reserve(split.size());
-        foreach(const ref QStringRef r; split)
+        foreach (const ref QStringRef r; split)
             result.append(r);
         return result;
     }+/
