@@ -36,7 +36,9 @@ extern(D) void qDeleteAll(ForwardIterator)(ForwardIterator begin, ForwardIterato
     import core.stdcpp.new_;
 
     while (begin != end) {
-        cpp_delete(*begin);
+        if (*begin !is null) { // Check for null as a workaround for https://issues.dlang.org/show_bug.cgi?id=24298
+            cpp_delete(*begin);
+        }
         ++begin;
     }
 }
