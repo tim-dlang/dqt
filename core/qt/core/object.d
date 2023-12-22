@@ -607,7 +607,7 @@ public:
         Returns:
             Connection.
     +/
-    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, QObject context, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if (is(Signal: DQtMember!P, P...) && !is(Dg: DQtMember!P2, P2...))
+    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, QObject context, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if (is(Signal: DQtMember!P, P...) && is(Dg == delegate))
     {
         import core.stdcpp.new_;
 
@@ -635,8 +635,9 @@ public:
         static assert(Signal.Members.length == 1);
 
         auto signal = getMemberFunctionAddress!(Signal.Members[0]);
+        alias UsedParams = Parameters!(Signal.Members[0])[0..Parameters!(Dg).length];
 
-        auto slotObj = cpp_new!(DQtStaticSlotObject!(Parameters!Dg))(dg);
+        auto slotObj = cpp_new!(DQtStaticSlotObject!(Dg, UsedParams))(dg);
 
         //pragma(msg, __traits(parent, Signal.Type.staticMetaObject));
 
@@ -650,7 +651,7 @@ public:
                            type, types, mo);
     }
     /// ditto
-    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if (is(Signal: DQtMember!P, P...) && !is(Dg: DQtMember!P2, P2...))
+    static extern(D) QMetaObject.Connection connect(Signal, Dg)(Signal sender, Dg dg, ConnectionType type = ConnectionType.AutoConnection) if (is(Signal: DQtMember!P, P...) && is(Dg == delegate))
     {
         return connect(sender, sender.obj, dg, type);
     }

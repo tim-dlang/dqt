@@ -33,6 +33,30 @@
 			"dependencies": {"dqt:gui":"*"}
 		},
 		{
+			"name": "network",
+			"targetType": "library",
+			"sourcePaths": ["network"],
+			"importPaths": ["network"],
+			"libs": ["Qt5Network"],
+			"dependencies": {"dqt:core":"*"}
+		},
+		{
+			"name": "webenginecore",
+			"targetType": "library",
+			"sourcePaths": ["webenginecore"],
+			"importPaths": ["webenginecore"],
+			"libs": ["Qt5WebEngineCore"],
+			"dependencies": {"dqt:gui":"*", "dqt:network":"*"}
+		},
+		{
+			"name": "webenginewidgets",
+			"targetType": "library",
+			"sourcePaths": ["webenginewidgets"],
+			"importPaths": ["webenginewidgets"],
+			"libs": ["Qt5WebEngineWidgets"],
+			"dependencies": {"dqt:widgets":"*", "dqt:webenginecore":"*"}
+		},
+		{
 			"name": "helloworld",
 			"targetType": "executable",
 			"sourcePaths": ["examples/helloworld"],
@@ -47,6 +71,14 @@
 			"importPaths": ["examples/examplewidgets"],
 			"stringImportPaths": ["examples/examplewidgets"],
 			"dependencies": {"dqt:widgets":"*"}
+		},
+		{
+			"name": "examplebrowser",
+			"targetType": "executable",
+			"sourcePaths": ["examples/examplebrowser"],
+			"importPaths": ["examples/examplebrowser"],
+			"stringImportPaths": ["examples/examplebrowser"],
+			"dependencies": {"dqt:webenginewidgets":"*"}
 		}
 	]
 }

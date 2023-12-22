@@ -38,6 +38,7 @@ version (QT_NO_PRINTER) {} else
     import qt.gui.pagedpaintdevice;
 
 extern(C++, class) struct QTextDocumentPrivate;
+extern(C++, class) struct QTextFormatCollection;
 
 extern(C++, "Qt")
 {

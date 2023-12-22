@@ -33,7 +33,6 @@ import qt.gui.textoption;
 import qt.helpers;
 
 
-extern(C++, class) struct QTextFormatCollection;
 extern(C++, class) struct QTextFormatPrivate;
 
 /+ #ifndef QT_NO_DATASTREAM

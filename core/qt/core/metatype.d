@@ -832,23 +832,17 @@ private:
 // ### Qt6: FIXME: Remove the special Q_CC_MSVC handling, it was introduced to maintain BC.
 #if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC)
 #ifndef Q_CLANG_QDOC +/
-    static if (!defined!"Q_NO_TEMPLATE_FRIENDS" && !versionIsSet!("Windows"))
-    {
-        /+ template<typename, bool> +/ /+ friend struct QtPrivate::ValueTypeIsMetaType; +/
-        /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunction; +/
-        /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunctionOk; +/
-        /+ template<typename, typename, typename> +/ /+ friend struct QtPrivate::ConverterFunctor; +/
-        /+ template<typename, bool> +/ /+ friend struct QtPrivate::AssociativeValueTypeIsMetaType; +/
-        /+ template<typename, bool> +/ /+ friend struct QtPrivate::IsMetaTypePair; +/
-        /+ template<typename, typename> +/ /+ friend struct QtPrivate::MetaTypeSmartPointerHelper; +/
-    }
-    else
-    {
-    /+ #endif
-    #else +/
-    public:
-    }
-/+ #endif +/
+    /+ template<typename, bool> +/ /+ friend struct QtPrivate::ValueTypeIsMetaType; +/
+    /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunction; +/
+    /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunctionOk; +/
+    /+ template<typename, typename, typename> +/ /+ friend struct QtPrivate::ConverterFunctor; +/
+    /+ template<typename, bool> +/ /+ friend struct QtPrivate::AssociativeValueTypeIsMetaType; +/
+    /+ template<typename, bool> +/ /+ friend struct QtPrivate::IsMetaTypePair; +/
+    /+ template<typename, typename> +/ /+ friend struct QtPrivate::MetaTypeSmartPointerHelper; +/
+/+ #endif
+#else
+public:
+#endif +/
 /*    static bool registerConverterFunction(const(/+ QtPrivate:: +/AbstractConverterFunction)* f, int from, int to);
     static void unregisterConverterFunction(int from, int to);*/
 private:

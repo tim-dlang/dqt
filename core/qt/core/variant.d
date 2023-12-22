@@ -532,22 +532,16 @@ protected:
 #endif
 // ### Qt6: FIXME: Remove the special Q_CC_MSVC handling, it was introduced to maintain BC for QTBUG-41810 .
 #if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC) +/
-    /*static if (!defined!"Q_NO_TEMPLATE_FRIENDS")
-    {
-        /+ template<typename T> +/
-        /+ friend inline T qvariant_cast(const QVariant &); +/
-        /+ template<typename T> +/ /+ friend struct QtPrivate::QVariantValueHelper; +/
-    protected:
-    }
-    else
-    {
-    /+ #else +/
-    public:
-    }*/
-    public:
-/+ #endif +/
+    /+ template<typename T> +/
+    /+ friend inline T qvariant_cast(const QVariant &); +/
+    /+ template<typename T> +/ /+ friend struct QtPrivate::QVariantValueHelper; +/
+protected:
+/+ #else
+public:
+#endif +/
     Private d;
     /+ void create(int type, const void *copy); +/
+public:
     bool cmp(ref const(QVariant) other) const;
     int compare(ref const(QVariant) other) const;
     bool convert(const(int) t, void* ptr) const; // ### Qt6: drop const

@@ -114,7 +114,7 @@ private struct UICodeWriter()
         if (name == "QDoubleSpinBox")
             return "qt.widgets.spinbox";
         if (name == "QWebEngineView")
-            return "qt.webenginewidgets.webengineview";
+            return "qt.webengine.view";
 
         if (name.startsWith("Q"))
             return "qt.widgets." ~ std.uni.toLower(name[1..$]);

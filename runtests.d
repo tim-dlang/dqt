@@ -21,7 +21,7 @@ string[] dependencyClosure(string[] modules, string[][string] dependencies)
             if(m in done)
                 continue;
             done[m] = true;
-            auto d = m in dependencies;
+            auto d = toLower(m) in dependencies;
             if(d)
                 add(*d);
             r ~= m;
@@ -105,6 +105,18 @@ int main(string[] args)
     string[][string] moduleDependencies;
     moduleDependencies["widgets"] = ["gui"];
     moduleDependencies["gui"] = ["core"];
+    moduleDependencies["network"] = ["core"];
+    moduleDependencies["webenginecore"] = ["gui", "network"];
+    moduleDependencies["webenginewidgets"] = ["webenginecore", "widgets"];
+
+    immutable allQtModules = ["Core", "Gui", "Widgets", "Network", "WebEngineCore", "WebEngineWidgets"];
+    string getCapitalizedModuleName(string m)
+    {
+        foreach (m2; allQtModules)
+            if (toLower(m2) == toLower(m))
+                return m2;
+        return m;
+    }
 
     // Collect tests
     Test[] tests;
@@ -132,6 +144,7 @@ int main(string[] args)
     }
     tests ~= Test(buildPath("examples", "helloworld", "main.d"), ["widgets"], ["-Iexamples"], true);
     tests ~= Test(buildPath("examples", "examplewidgets", "main.d"), ["widgets"], ["-Iexamples", "-J" ~ buildPath("examples", "examplewidgets")], true);
+    tests ~= Test(buildPath("examples", "examplebrowser", "main.d"), ["webenginewidgets"], ["-Iexamples", "-J" ~ buildPath("examples", "examplebrowser")], true);
 
     foreach (ref test; tests)
         test.qtModules = dependencyClosure(test.qtModules, moduleDependencies);
@@ -142,15 +155,20 @@ int main(string[] args)
         mkdirRecurse(buildPath("test_results", os ~ model, "tests", "imports"));
         File moduleListFile = File(buildPath("test_results", os ~ model, "tests", "imports", "qtmodules.d"), "w");
         moduleListFile.writeln("module imports.qtmodules;");
-        foreach (m; ["core", "gui", "widgets"])
+        foreach (m; allQtModules)
         {
-            moduleListFile.writeln("immutable string[] modules", capitalize(m), " = [");
+            moduleListFile.writeln("immutable string[] modules", m, " = [");
             string[] modules;
-            foreach (DirEntry e; dirEntries(buildPath(m, "qt", m), "*.d", SpanMode.depth))
+            string path;
+            if (m.startsWith("WebEngine"))
+                path = buildPath(toLower(m), "qt", "webengine");
+            else
+                path = buildPath(toLower(m), "qt", toLower(m));
+            foreach (DirEntry e; dirEntries(path, "*.d", SpanMode.depth))
             {
                 string m2 = e.name[0..$-2].replace("/", ".").replace("\\", ".");
-                assert(m2.startsWith(m ~ "."));
-                m2 = m2[m.length+1..$];
+                assert(m2.startsWith(toLower(m) ~ "."));
+                m2 = m2[toLower(m).length+1..$];
                 if(m2.startsWith("qt.widgets.internal.dxml."))
                     continue;
                 modules ~= m2;
@@ -166,11 +184,11 @@ int main(string[] args)
     {
         File fileListFile = File(buildPath("test_results", os ~ model, "tests", "imports", "testfiles.d"), "w");
         fileListFile.writeln("module imports.testfiles;");
-        foreach (m; ["ui"])
+        foreach (m; ["Ui"])
         {
-            fileListFile.writeln("immutable string[] files", capitalize(m), " = [");
+            fileListFile.writeln("immutable string[] files", m, " = [");
             string[] files;
-            foreach (DirEntry e; dirEntries(buildPath("tests", m), "*", SpanMode.shallow))
+            foreach (DirEntry e; dirEntries(buildPath("tests", toLower(m)), "*", SpanMode.shallow))
             {
                 files ~= baseName(e.name);
             }
@@ -183,26 +201,31 @@ int main(string[] args)
 
     // Precompile static libraries for the bindings.
     bool[string] moduleCompiled;
-    foreach (m; ["core", "gui", "widgets"])
+    foreach (m; allQtModules)
     {
         auto sw = StopWatch(AutoStart.yes);
 
         string[] dmdArgs = [compiler, "-lib", "-g", "-w", "-m" ~ model];
-        foreach (DirEntry e; dirEntries(buildPath(m, "qt", m), "*.d", SpanMode.depth))
+        string path;
+        if (m.startsWith("WebEngine"))
+            path = buildPath(toLower(m), "qt", "webengine");
+        else
+            path = buildPath(toLower(m), "qt", toLower(m));
+        foreach (DirEntry e; dirEntries(path, "*.d", SpanMode.depth))
         {
             dmdArgs ~= e.name;
         }
-        if(m == "core")
+        if(m == "Core")
             dmdArgs ~= buildPath("core", "qt", "helpers.d");
         foreach_reverse(m2; dependencyClosure([m], moduleDependencies))
         {
-            dmdArgs ~= "-I" ~ m2;
+            dmdArgs ~= "-I" ~ toLower(m2);
         }
         dmdArgs ~= "-od" ~ buildPath("test_results", os ~ model);
         if(compiler.endsWith("ldc2"))
-            dmdArgs ~= "-of" ~ buildPath("test_results", os ~ model, "libdqt" ~ m ~ libExt);
+            dmdArgs ~= "-of" ~ buildPath("test_results", os ~ model, "libdqt" ~ toLower(m) ~ libExt);
         else
-            dmdArgs ~= "-of" ~ "libdqt" ~ m ~ libExt;
+            dmdArgs ~= "-of" ~ "libdqt" ~ toLower(m) ~ libExt;
 
         auto dmdRes = execute(dmdArgs);
         if(dmdRes.status || verbose)
@@ -220,7 +243,7 @@ int main(string[] args)
         }
         else
         {
-            moduleCompiled[m] = true;
+            moduleCompiled[toLower(m)] = true;
             sw.stop();
             stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
             stderr.writeln("Compiled ", m);
@@ -274,14 +297,14 @@ int main(string[] args)
         foreach_reverse(m; test.qtModules)
         {
             version (Windows)
-                dmdArgs ~= "Qt5" ~ capitalize(m) ~ ".lib";
+                dmdArgs ~= "Qt5" ~ getCapitalizedModuleName(m) ~ ".lib";
             else version (OSX)
             {
                 dmdArgs ~= "-L-framework";
-                dmdArgs ~= "-LQt" ~ capitalize(m);
+                dmdArgs ~= "-LQt" ~ getCapitalizedModuleName(m);
             }
             else
-                dmdArgs ~= "-L-lQt5" ~ capitalize(m);
+                dmdArgs ~= "-L-lQt5" ~ getCapitalizedModuleName(m);
         }
         dmdArgs ~= "-od" ~ resultDir;
         dmdArgs ~= "-of" ~ executable;
