@@ -20,9 +20,10 @@ class TabPainter : QWidget
 public:
     /+ explicit +/this(QWidget parent = null)
     {
+        import core.stdcpp.new_;
         super(parent);
 
-        timer = new QTimer(this);
+        timer = cpp_new!QTimer(this);
         connect(timer.signal!"timeout", this.slot!"update");
         timer.setInterval(100);
         timer.start();

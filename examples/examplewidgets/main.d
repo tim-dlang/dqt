@@ -39,7 +39,7 @@ int main()
     auto eventLogger = new EventLogger();
     scope a = new QApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
     //a.installEventFilter(eventLogger);
-    auto w = new MainWindow;
+    scope w = new MainWindow;
     w.show();
     return a.exec();
 }
