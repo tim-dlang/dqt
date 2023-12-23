@@ -95,6 +95,7 @@ int main(string[] args)
     string compiler = "dmd";
     string qtPath;
     bool verbose;
+    bool github;
 
     for (size_t i = 1; i < args.length; i++)
     {
@@ -113,6 +114,10 @@ int main(string[] args)
         else if (args[i] == "-v")
         {
             verbose = true;
+        }
+        else if (args[i] == "--github")
+        {
+            github = true;
         }
         else
         {
@@ -422,6 +427,20 @@ int main(string[] args)
                     anyFailure = true;
                     continue;
                 }
+            }
+        }
+
+        version (OSX) {}
+        else
+        {
+            // This test currently does not work with GitHub Actions
+            if (github && test.name.replace("\\", "/") == "tests/testwebenginewidgets1.d")
+            {
+                sw.stop();
+                stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000,
+                        sw.peek.total!"msecs" % 1000);
+                stderr.writeln("Skipping ", test.name);
+                continue;
             }
         }
 
