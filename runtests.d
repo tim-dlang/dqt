@@ -1,6 +1,15 @@
-import std.stdio, std.conv, std.string, std.path, std.process, std.file, std.algorithm, std.range;
-static import std.system;
+import core.thread;
+import std.algorithm;
+import std.conv;
 import std.datetime.stopwatch;
+import std.file;
+import std.path;
+import std.process;
+import std.range;
+import std.stdio;
+import std.string;
+static import std.system;
+import std.typecons;
 
 struct Test
 {
@@ -43,6 +52,32 @@ else
     enum os = text(std.system.os);
     enum libExt = ".a";
     enum exeExt = "";
+}
+
+auto executeTimeout(string[] args, Duration timeout, const string[string] env = null, string workDir = null)
+{
+    auto pipes = pipeProcess(args, Redirect.stdin | Redirect.stdout | Redirect.stderrToStdout, env, Config.none, workDir);
+    pipes.stdin.close();
+
+    auto sw = StopWatch(AutoStart.yes);
+    while (true)
+    {
+        auto status = pipes.pid.tryWait();
+        if (status.terminated || sw.peek > timeout)
+        {
+            if (!status.terminated)
+            {
+                kill(pipes.pid);
+            }
+            Appender!string app;
+            foreach (ubyte[] chunk; pipes.stdout.byChunk(4096))
+                app.put(chunk);
+            if (!status.terminated)
+                status.status = -1;
+            return Tuple!(bool, "terminated", int, "status", string, "output")(status.terminated, status.status, app.data);
+        }
+        Thread.sleep(1.seconds);
+    }
 }
 
 int main(string[] args)
@@ -394,7 +429,7 @@ int main(string[] args)
         if (!test.buildOnly)
         {
             string[] testArgs = [absolutePath(executable)];
-            auto testRes = execute(testArgs, env, Config.none, size_t.max, resultDir);
+            auto testRes = executeTimeout(testArgs, 2.minutes, env, resultDir);
             if (testRes.status || verbose)
             {
                 stderr.writeln(escapeShellCommand(testArgs));
@@ -406,7 +441,7 @@ int main(string[] args)
                 sw.stop();
                 stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000,
                         sw.peek.total!"msecs" % 1000);
-                stderr.writeln("Failure executing ", test.name);
+                stderr.writeln("Failure executing ", test.name, testRes.terminated ? text(" (status=", testRes.status, ")") : " (timeout)");
                 anyFailure = true;
                 continue;
             }
