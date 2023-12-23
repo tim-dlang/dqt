@@ -431,20 +431,6 @@ int main(string[] args)
             }
         }
 
-        version (OSX) {}
-        else
-        {
-            // This test currently does not work with GitHub Actions
-            if (github && test.name.replace("\\", "/") == "tests/testwebenginewidgets1.d")
-            {
-                sw.stop();
-                stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000,
-                        sw.peek.total!"msecs" % 1000);
-                stderr.writeln("Skipping ", test.name);
-                continue;
-            }
-        }
-
         string testOutput;
         if (!test.buildOnly)
         {
