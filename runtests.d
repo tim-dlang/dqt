@@ -247,9 +247,9 @@ int main(string[] args)
         if (dmdRes.status || verbose)
         {
             stderr.writeln(escapeShellCommand(dmdArgs));
-            if (dmdRes.output.length)
-                stderr.writeln(dmdRes.output.strip());
         }
+        if (dmdRes.output.length)
+            stderr.writeln(dmdRes.output.strip());
         if (dmdRes.status)
         {
             sw.stop();
@@ -350,9 +350,9 @@ int main(string[] args)
         if (dmdRes.status || verbose)
         {
             stderr.writeln(escapeShellCommand(dmdArgs));
-            if (dmdRes.output.length)
-                stderr.writeln(dmdRes.output.strip());
         }
+        if (dmdRes.output.length)
+            stderr.writeln(dmdRes.output.strip());
         if (dmdRes.status)
         {
             sw.stop();
