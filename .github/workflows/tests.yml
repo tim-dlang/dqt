@@ -114,11 +114,12 @@ jobs:
       - name: Install QtWebEngine
         run: |
           wget --no-verbose "${{ matrix.qtwebengine_url }}${{ matrix.qtwebengine_file }}"
-          7z x "${{ matrix.qtwebengine_file }}" 6.2.3/${{ matrix.qt_arch }}/lib/ 6.2.3/${{ matrix.qt_arch }}/bin/
+          7z x "${{ matrix.qtwebengine_file }}" 6.2.3/${{ matrix.qt_arch }}/lib/ 6.2.3/${{ matrix.qt_arch }}/bin/ 6.2.3/${{ matrix.qt_arch }}/libexec/ 6.2.3/${{ matrix.qt_arch }}/resources/
 
       - name: 'Build & Test'
+        timeout-minutes: 5
         run: |
-          ${{ env.DC }} -run runtests.d --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=6.2.3/${{ matrix.qt_arch }}
+          ${{ env.DC }} -run runtests.d --github --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=6.2.3/${{ matrix.qt_arch }}
 
 #      - name: Upload test results
 #        uses: actions/upload-artifact@v4

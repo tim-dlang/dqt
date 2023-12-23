@@ -196,30 +196,33 @@ extern(D) auto getMemberFunctionAddress(alias F)()
     {
         import core.sys.windows.windef: HMODULE;
         import core.sys.windows.winbase: GetModuleHandle, GetProcAddress;
+        import std.algorithm: startsWith;
         import std.ascii: toLower;
 
-        HMODULE hmodule;
-
-        static foreach (qtmodule; ["Core", "Gui", "Widgets"])
+        static foreach (qtmodule; ["Core", "Gui", "Widgets", "Network", "WebEngineCore", "WebEngineWidgets"])
         {{
-            enum prefix = "qt." ~ qtmodule[0].toLower ~ qtmodule[1 .. $];
+            static if (qtmodule.startsWith("WebEngine"))
+                enum prefix = "qt.webengine";
+            else
+                enum prefix = "qt." ~ qtmodule[0].toLower ~ qtmodule[1 .. $];
             enum dllName = "Qt6" ~ qtmodule;
             enum dllNamed = "Qt6" ~ qtmodule ~ "d";
 
-            if (qt.helpers.packageName!F.length >= prefix.length && qt.helpers.packageName!F[0..prefix.length] == prefix)
+            HMODULE hmodule;
+            if (qt.helpers.packageName!F.startsWith(prefix))
             {
                 hmodule = GetModuleHandle(dllName);
                 if (hmodule is null)
                     hmodule = GetModuleHandle(dllNamed);
             }
+            if (hmodule !is null)
+            {
+                auto signal = cast(typeof(&memberFunctionExternDeclaration!F)) GetProcAddress(hmodule, F.mangleof);
+                if (signal !is null)
+                    return signal;
+            }
         }}
 
-        if (hmodule !is null)
-        {
-            auto signal = cast(typeof(&memberFunctionExternDeclaration!F)) GetProcAddress(hmodule, F.mangleof);
-            if (signal !is null)
-                return signal;
-        }
     }
     return &memberFunctionExternDeclaration!F;
 }
