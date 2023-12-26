@@ -77,7 +77,7 @@ public:
 
     final qreal zoomFactor() const;
     final void setZoomFactor(qreal factor);
-//    final void findText(ref const(QString) subString, QWebEnginePage.FindFlags options = QWebEnginePage.FindFlags(), ref const(QWebEngineCallback!(bool)) resultCallback = globalInitVar!(QWebEngineCallback!(bool)));
+    final void findText(ref const(QString) subString, QWebEnginePage.FindFlags options = QWebEnginePage.FindFlags(), ref const(QWebEngineCallback!(bool)) resultCallback = globalInitVar!(QWebEngineCallback!(bool)));
 
     override QSize sizeHint() const;
     final QWebEngineSettings* settings() const;

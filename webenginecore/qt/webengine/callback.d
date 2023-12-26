@@ -23,20 +23,47 @@ extern(C++, class) struct CallbackDirectory;
 
 extern(C++, "QtWebEnginePrivate") {
 
-abstract class QWebEngineCallbackPrivateBase(T) : QSharedData {
+abstract class QWebEngineCallbackPrivateBase(T) {
 public:
+    QSharedData sharedData;
     this() {}
     /+ virtual +/~this() {}
-    /+/+ virtual +/ abstract void operator ()(T);+/
+    abstract void opCall(T);
 }
 
-class QWebEngineCallbackPrivate(T, F) : QWebEngineCallbackPrivateBase!(T) {
+abstract class QWebEngineCallbackPrivateBaseRef(T) {
+public:
+    QSharedData sharedData;
+    this() {}
+    /+ virtual +/~this() {}
+    abstract void opCall(ref T);
+}
+
+extern(D) class QWebEngineCallbackPrivate(T, F) : QWebEngineCallbackPrivateBase!(T) {
 public:
     this(F callable)
     {
         this.m_callable = callable;
     }
-    /+override void operator ()(T value) { m_callable(value); }+/
+    /* Need to use a custom mangling, because the template parameters
+     * may not have a C++ mangling. */
+    pragma(mangle, QWebEngineCallbackPrivate.mangleof ~ "__opCall")
+    override extern(C++) void opCall(T value) { m_callable(value); }
+
+private:
+    F m_callable;
+}
+
+extern(D) class QWebEngineCallbackPrivateRef(T, F) : QWebEngineCallbackPrivateBaseRef!(T) {
+public:
+    this(F callable)
+    {
+        this.m_callable = callable;
+    }
+    /* Need to use a custom mangling, because the template parameters
+     * may not have a C++ mangling. */
+    pragma(mangle, QWebEngineCallbackPrivate.mangleof ~ "__opCall")
+    override extern(C++) void opCall(ref T value) { m_callable(value); }
 
 private:
     F m_callable;
@@ -47,19 +74,39 @@ private:
 extern(C++, class) struct QWebEngineCallback(T) {
 public:
     /+ template<typename F> +/
-    this(F)(F f)
+    extern(D) this(F)(F f)
     {
         import core.stdcpp.new_;
-        this.d = UnresolvedMergeConflict!(q{cpp_new!/+ QtWebEnginePrivate:: +/QWebEngineCallbackPrivate!(T, F)(f)},q{cpp_new!QWebEngineCallbackPrivate<T,F>(f)});
+        auto tmp = cpp_new!(/+ QtWebEnginePrivate:: +/QWebEngineCallbackPrivate!(T, F))(f);
+        this.d = typeof(d).init;
+        this.d = tmp;
     }
-    @disable this();
     /+this() {}+/
     /+ void swap(QWebEngineCallback &other) Q_DECL_NOTHROW { qSwap(d, other.d); } +/
     /+auto opCast(T : bool)() const { return cast(bool) (d); }+/
 
 private:
     /+ friend class QtWebEngineCore::CallbackDirectory; +/
-    QExplicitlySharedDataPointer!(ValueClass!(/+ QtWebEnginePrivate:: +/QWebEngineCallbackPrivateBase!(T))) d;
+    QExplicitlySharedDataPointer!(/+ QtWebEnginePrivate:: +/QWebEngineCallbackPrivateBase!(T)) d;
+}
+
+extern(C++, class) struct QWebEngineCallbackRef(T) {
+public:
+    /+ template<typename F> +/
+    extern(D) this(F)(F f)
+    {
+        import core.stdcpp.new_;
+        auto tmp = cpp_new!(/+ QtWebEnginePrivate:: +/QWebEngineCallbackPrivateRef!(T, F))(f);
+        this.d = typeof(d).init;
+        this.d = tmp;
+    }
+    /+this() {}+/
+    /+ void swap(QWebEngineCallback &other) Q_DECL_NOTHROW { qSwap(d, other.d); } +/
+    /+auto opCast(T : bool)() const { return cast(bool) (d); }+/
+
+private:
+    /+ friend class QtWebEngineCore::CallbackDirectory; +/
+    QExplicitlySharedDataPointer!(/+ QtWebEnginePrivate:: +/QWebEngineCallbackPrivateBaseRef!(T)) d;
 }
 
 /+ Q_DECLARE_SHARED(QWebEngineCallback<int>)

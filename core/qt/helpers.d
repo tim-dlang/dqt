@@ -194,7 +194,7 @@ string stringifyMacroParameter(string s)
     return r;
 }
 
-template ExternCFunc(F)// if (is(F == function))
+template ExternCFunc(F) if (isSomeFunction!F)
 {
     static if (variadicFunctionStyle!F == Variadic.c)
         alias ExternCFunc = extern(C) ReturnType!F function(ParameterTypeTuple!F, ...);
@@ -202,7 +202,7 @@ template ExternCFunc(F)// if (is(F == function))
         alias ExternCFunc = extern(C) ReturnType!F function(ParameterTypeTuple!F);
 }
 
-template ExternCPPFunc(F)// if (is(F == function))
+template ExternCPPFunc(F) if (isSomeFunction!F)
 {
     static if (variadicFunctionStyle!F == Variadic.c)
         alias ExternCPPFunc = extern(C++) ReturnType!F function(ParameterTypeTuple!F, ...);
@@ -334,6 +334,13 @@ version (Windows)
                     if (i < mangling.length && mangling[i] == 'E')
                         i++;
                 }
+                continue;
+            }
+            else if (mangling.length >= i + 3 && mangling[i .. i + 2] == "$$"
+                    && mangling[i + 2].among('Q', 'R', 'C'))
+            {
+                // modifiers
+                i += 3;
                 continue;
             }
             else if (mangling[i].among('T', 'U', 'V'))
@@ -859,6 +866,26 @@ package FunctionManglingCpp mangleConstructorBaseObject(FunctionManglingCpp pars
 
         enforce(parsed.nameParts[$ - 1] == "C1");
         parsed.nameParts[$ - 1] = "C2";
+    }
+    return parsed;
+}
+
+package FunctionManglingCpp mangleQWebEngineCallbackRef(FunctionManglingCpp parsed)
+{
+    version (Windows)
+    {
+        foreach (ref p; parsed.parameters)
+        {
+            p = p.replace("?$QWebEngineCallbackRef@$$CBV",
+                    (size_t.sizeof == 8)
+                        ? "?$QWebEngineCallback@AEBV"
+                        : "?$QWebEngineCallback@ABV");
+        }
+    }
+    else
+    {
+        parsed.suffix = parsed.suffix.replace("21QWebEngineCallbackRefIK",
+                                              "18QWebEngineCallbackIRK");
     }
     return parsed;
 }

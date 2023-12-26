@@ -13,8 +13,8 @@ unittest
     import qt.webengine.view;
     import qt.widgets.application;
 
-    int argc = 0;
-    char*[1] argv = ["test".dup.ptr];
+    int argc = 1;
+    char*[1] argv = ["test\0".dup.ptr];
     scope a = new QApplication(argc, argv.ptr);
 
     scope view = new QWebEngineView();
@@ -26,4 +26,17 @@ unittest
     view.show();
     eventLoop.exec();
     assert(view.title() == "TestTitle");
+
+    QObject.connect(view.signal!"titleChanged", eventLoop.slot!"quit");
+    view.page().runJavaScript(QString("document.title = \"New Title from JS\""));
+    eventLoop.exec();
+    assert(view.title() == "New Title from JS");
+
+    int valueFromJS = 0;
+    view.page().runJavaScript(QString("1+2"), (ref const QVariant v) {
+        valueFromJS = v.toInt();
+        eventLoop.quit();
+    });
+    eventLoop.exec();
+    assert(valueFromJS == 3);
 }

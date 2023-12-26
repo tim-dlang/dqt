@@ -243,7 +243,7 @@ alias FindFlags = QFlags!(FindFlag);
 
     override bool event(QEvent);
 
-//    final void findText(ref const(QString) subString, FindFlags options = FindFlags(), ref const(QWebEngineCallback!(bool)) resultCallback = globalInitVar!(QWebEngineCallback!(bool)));
+    final void findText(ref const(QString) subString, FindFlags options = FindFlags(), ref const(QWebEngineCallback!(bool)) resultCallback = globalInitVar!(QWebEngineCallback!(bool)));
 
 /+ #if QT_CONFIG(menu) +/
     final QMenu createStandardContextMenu();
@@ -257,8 +257,12 @@ alias FindFlags = QFlags!(FindFlag);
     final void setHtml(ref const(QString) html, ref const(QUrl) baseUrl = globalInitVar!QUrl);
     final void setContent(ref const(QByteArray) data, ref const(QString) mimeType = globalInitVar!QString, ref const(QUrl) baseUrl = globalInitVar!QUrl);
 
-//    final void toHtml(ref const(QWebEngineCallback!(ref const(QString))) resultCallback) const;
-//    final void toPlainText(ref const(QWebEngineCallback!(ref const(QString))) resultCallback) const;
+    mixin(changeCppMangling(q{mangleQWebEngineCallbackRef}, q{
+    final void toHtml(ref const(QWebEngineCallbackRef!(const(QString))) resultCallback) const;
+    }));
+    mixin(changeCppMangling(q{mangleQWebEngineCallbackRef}, q{
+    final void toPlainText(ref const(QWebEngineCallbackRef!(const(QString))) resultCallback) const;
+    }));
 
     final QString title() const;
     final void setUrl(ref const(QUrl) url);
@@ -275,8 +279,22 @@ alias FindFlags = QFlags!(FindFlag);
 
     final void runJavaScript(ref const(QString) scriptSource);
     final void runJavaScript(ref const(QString) scriptSource, quint32 worldId);
-//    final void runJavaScript(ref const(QString) scriptSource, ref const(QWebEngineCallback!(ref const(QVariant))) resultCallback);
-//    final void runJavaScript(ref const(QString) scriptSource, quint32 worldId, ref const(QWebEngineCallback!(ref const(QVariant))) resultCallback);
+    mixin(changeCppMangling(q{mangleQWebEngineCallbackRef}, q{
+    final void runJavaScript(ref const(QString) scriptSource, ref const(QWebEngineCallbackRef!(const(QVariant))) resultCallback);
+    }));
+    extern(D) final void runJavaScript(ref const(QString) scriptSource, void delegate(ref const(QVariant)) resultCallback)
+    {
+        auto callback = QWebEngineCallbackRef!(const(QVariant))(resultCallback);
+        runJavaScript(scriptSource, callback);
+    }
+    mixin(changeCppMangling(q{mangleQWebEngineCallbackRef}, q{
+    final void runJavaScript(ref const(QString) scriptSource, quint32 worldId, ref const(QWebEngineCallbackRef!(const(QVariant))) resultCallback);
+    }));
+    extern(D) final void runJavaScript(ref const(QString) scriptSource, quint32 worldId, void delegate(ref const(QVariant)) resultCallback)
+    {
+        auto callback = QWebEngineCallbackRef!(const(QVariant))(resultCallback);
+        runJavaScript(scriptSource, worldId, callback);
+    }
     final ref QWebEngineScriptCollection scripts();
     final QWebEngineSettings* settings() const;
 
@@ -295,8 +313,10 @@ alias FindFlags = QFlags!(FindFlag);
     final qint64 renderProcessPid() const;
 
     final void printToPdf(ref const(QString) filePath, ref const(QPageLayout) layout /+ = QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF()) +/);
-//    final void printToPdf(ref const(QWebEngineCallback!(ref const(QByteArray))) resultCallback, ref const(QPageLayout) layout /+ = QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF()) +/);
-//    final void print(QPrinter* printer, ref const(QWebEngineCallback!(bool)) resultCallback);
+    mixin(changeCppMangling(q{mangleQWebEngineCallbackRef}, q{
+    final void printToPdf(ref const(QWebEngineCallbackRef!(const(QByteArray))) resultCallback, ref const(QPageLayout) layout /+ = QPageLayout(QPageSize(QPageSize::A4), QPageLayout::Portrait, QMarginsF()) +/);
+    }));
+    final void print(QPrinter* printer, ref const(QWebEngineCallback!(bool)) resultCallback);
 
     final void setInspectedPage(QWebEnginePage page);
     final QWebEnginePage inspectedPage() const;

@@ -38,7 +38,6 @@ public:
 /+ #ifdef QT_BASIC_ATOMIC_HAS_CONSTRUCTORS
     constexpr QAtomicInteger(T value = 0) noexcept : QBasicAtomicInteger<T>(value) {}
 #else +/
-    @disable this();
     pragma(inline, true) this(T value/+ = 0+/)/+ noexcept+/
     {
         this._q_value = value;
@@ -145,7 +144,6 @@ public:
 /+ #ifdef QT_BASIC_ATOMIC_HAS_CONSTRUCTORS
     constexpr
 #endif +/
-    @disable this();
     this(int value/+ = 0+/)/+ noexcept+/
     {
         this.base0 = typeof(this.base0)(value);

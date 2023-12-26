@@ -31,16 +31,15 @@ QSharedData
 public:
     /+ mutable +/ QAtomicInt ref_/* = 0*/;
 
-    @disable this();
     /+pragma(inline, true) this()/+ noexcept+/
     {
         this.ref_ = 0;
     }+/
     @disable this(this);
-    pragma(inline, true) this(ref const(QSharedData) )/+ noexcept+/
+    /*pragma(inline, true) this(ref const(QSharedData) )/+ noexcept+/
     {
         this.ref_ = 0;
-    }
+    }*/
 
     // using the assignment operator would lead to corruption in the ref-counting
     /+ref QSharedData operator =(ref const(QSharedData) ) /+ = delete +/;+/
@@ -169,7 +168,7 @@ private:
 }+/
 
 /// Binding for C++ class [QExplicitlySharedDataPointer](https://doc.qt.io/qt-5/qexplicitlyshareddatapointer.html).
-extern(C++, class) struct QExplicitlySharedDataPointer(T)
+extern(C++, class) struct QExplicitlySharedDataPointer(T) if (!is(T == class))
 {
 public:
     alias Type = T;
@@ -310,6 +309,39 @@ private:
     }
 
     T* d;
+}
+
+extern(C++, class) struct QExplicitlySharedDataPointer(T) if (is(T == class))
+{
+public:
+    pragma(inline, true) ~this() {
+        import core.stdcpp.new_;
+        if (d && !d.sharedData.ref_.deref()) cpp_delete(d);
+    }
+
+    @disable this(this);
+    pragma(inline, true) this(ref const(QExplicitlySharedDataPointer!(T)) o)
+    {
+        this.d = *cast(T*)&o.d;
+        if (d) d.sharedData.ref_.ref_();
+    }
+
+    pragma(inline, true) ref QExplicitlySharedDataPointer opAssign(T o) {
+        import core.stdcpp.new_;
+
+        if (o !is d) {
+            if (o)
+                o.sharedData.ref_.ref_();
+            T old = d;
+            d = o;
+            if (old && !old.sharedData.ref_.deref())
+                cpp_delete(old);
+        }
+        return this;
+    }
+
+private:
+    T d;
 }
 
 /+pragma(inline, true) bool operator ==(T)(/+ std:: +/nullptr_t p1, ref const(QExplicitlySharedDataPointer!(T)) p2)
