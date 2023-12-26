@@ -981,7 +981,7 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
     }
 
     /*foreach (i, part; parts)
-        code ~= "pragma(msg, q{" ~ text(i, ": ") ~ declaration[part.start..part.end] ~ "});";*/
+        code ~= "pragma(msg, q{" ~ text(i, ": ") ~ declaration[part.start .. part.end] ~ "});";*/
 
     size_t attributesEnd;
     string usedAttributes;
@@ -1232,8 +1232,8 @@ template isAnyWrapperCallable(bool isStaticFunction, Overloads...)
 enum CREATE_CONVENIENCE_WRAPPERS = q{
     static foreach (member; __traits(derivedMembers, typeof(this)))
     {
-        static if ((!(member.length >= 2 && member[0..2] == "__") || member == "__ctor")
-                && !(member.length >= 32 && member[0..32] == "dummyFunctionForChangingMangling")
+        static if ((!(member.length >= 2 && member[0 .. 2] == "__") || member == "__ctor")
+                && !(member.length >= 32 && member[0 .. 32] == "dummyFunctionForChangingMangling")
                 && member != "rawConstructor")
             static foreach (isStaticFunction; [false, true])
             {
