@@ -26,6 +26,7 @@ import qt.core.size;
 import qt.core.string;
 import qt.core.stringlist;
 import qt.core.url;
+import qt.core.variant;
 import qt.gui.color;
 import qt.gui.icon;
 import qt.gui.pagelayout;
@@ -33,6 +34,7 @@ import qt.gui.pageranges;
 import qt.gui.pagesize;
 import qt.helpers;
 import qt.network.authenticator;
+import qt.std_function;
 import qt.webengine.certificateerror;
 import qt.webengine.clientcertificateselection;
 import qt.webengine.downloadrequest;
@@ -49,6 +51,7 @@ import qt.webengine.registerprotocolhandlerrequest;
 import qt.webengine.scriptcollection;
 import qt.webengine.settings;
 import qt.webengine.urlrequestinterceptor;
+import std.traits;
 version (QT_NO_ACTION) {} else
     import qt.gui.action;
 
@@ -267,8 +270,27 @@ alias FindFlags = QFlags!(FindFlag);
     final QPointF scrollPosition() const;
     final QSizeF contentsSize() const;
 
-    /+ void runJavaScript(const QString &scriptSource, const std::function<void(const QVariant &)> &resultCallback); +/
-    /+ void runJavaScript(const QString &scriptSource, quint32 worldId = 0, const std::function<void(const QVariant &)> &resultCallback = {}); +/
+    mixin(changeCppMangling(q{mangleStdFunction}, q{
+    final void runJavaScript(ref const(QString) scriptSource, ref const(std_function!(FunctionTypeOf!(void function(ref const(QVariant))))) resultCallback);
+    }));
+    extern(D) final void runJavaScript(ref const(QString) scriptSource, void delegate(ref const(QVariant)) resultCallback)
+    {
+        auto callback = std_function!(FunctionTypeOf!(ExternCPPFunc!(void function(ref const(QVariant)))))(resultCallback);
+        runJavaScript(scriptSource, callback);
+    }
+    mixin(changeCppMangling(q{mangleStdFunction}, q{
+    final void runJavaScript(ref const(QString) scriptSource, quint32 worldId, ref const(std_function!(FunctionTypeOf!(void function(ref const(QVariant))))) resultCallback/* = {}*/);
+    }));
+    extern(D) final void runJavaScript(ref const(QString) scriptSource, quint32 worldId, void delegate(ref const(QVariant)) resultCallback)
+    {
+        auto callback = std_function!(FunctionTypeOf!(ExternCPPFunc!(void function(ref const(QVariant)))))(resultCallback);
+        runJavaScript(scriptSource, worldId, callback);
+    }
+    extern(D) final void runJavaScript(ref const(QString) scriptSource, quint32 worldId = 0)
+    {
+        auto callback = std_function!(FunctionTypeOf!(ExternCPPFunc!(void function(ref const(QVariant))))).init;
+        runJavaScript(scriptSource, worldId, callback);
+    }
     final ref QWebEngineScriptCollection scripts();
     final QWebEngineSettings* settings() const;
 

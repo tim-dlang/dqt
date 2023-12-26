@@ -272,7 +272,10 @@ int main(string[] args)
             dmdArgs ~= e.name;
         }
         if (m == "Core")
+        {
             dmdArgs ~= buildPath("core", "qt", "helpers.d");
+            dmdArgs ~= buildPath("core", "qt", "std_function.d");
+        }
         foreach_reverse (m2; dependencyClosure([m], moduleDependencies))
         {
             dmdArgs ~= "-I" ~ toLower(m2);
