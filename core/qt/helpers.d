@@ -26,7 +26,7 @@ private string nextCodePart(string code)
     {
         char stringDelim = c;
         i++;
-        while(i < code.length && code[i] != stringDelim)
+        while (i < code.length && code[i] != stringDelim)
         {
             if (code[i] == '\\')
                 i++;
@@ -37,16 +37,16 @@ private string nextCodePart(string code)
     {
         i++;
         i++;
-        while(i < code.length && code[i] != '\n')
+        while (i < code.length && code[i] != '\n')
             i++;
     }
     else if (c == '/' && i + 1 < code.length && code[i + 1] == '*')
     {
         i++;
         i++;
-        while(i < code.length)
+        while (i < code.length)
         {
-            if (i + 1 < code.length && code[i] == '*' && code[i+1] == '/')
+            if (i + 1 < code.length && code[i] == '*' && code[i + 1] == '/')
             {
                 i++;
                 break;
@@ -59,16 +59,16 @@ private string nextCodePart(string code)
         i++;
         i++;
         size_t nesting = 1;
-        while(i < code.length && nesting)
+        while (i < code.length && nesting)
         {
-            if (i + 1 < code.length && code[i] == '+' && code[i+1] == '/')
+            if (i + 1 < code.length && code[i] == '+' && code[i + 1] == '/')
             {
                 nesting--;
                 i++;
                 if (nesting == 0)
                     break;
             }
-            else if (i + 1 < code.length && code[i] == '/' && code[i+1] == '+')
+            else if (i + 1 < code.length && code[i] == '/' && code[i + 1] == '+')
             {
                 nesting++;
                 i++;
@@ -78,39 +78,39 @@ private string nextCodePart(string code)
     }
     else if (isAlphaNum(c) || c == '_')
     {
-        while(i + 1 < code.length && (isAlphaNum(code[i + 1]) || code[i + 1] == '_'))
+        while (i + 1 < code.length && (isAlphaNum(code[i + 1]) || code[i + 1] == '_'))
             i++;
     }
     else if (isWhite(c))
     {
-        while(i + 1 < code.length && isWhite(code[i + 1]))
+        while (i + 1 < code.length && isWhite(code[i + 1]))
             i++;
     }
     i++;
-    return code[0..i];
+    return code[0 .. i];
 }
 
 string interpolateMixin(string code)
 {
     string r = "\"";
-    for (size_t i=0; i<code.length;)
+    for (size_t i = 0; i < code.length;)
     {
-        string part = nextCodePart(code[i..$]);
-        if (i < code.length + 1 && code[i] == '$' && code[i+1] == '(')
+        string part = nextCodePart(code[i .. $]);
+        if (i < code.length + 1 && code[i] == '$' && code[i + 1] == '(')
         {
             r ~= "\" ~ ";
             i += 2;
             size_t numParens = 1;
-            while(i < code.length)
+            while (i < code.length)
             {
-                if (i + 1 < code.length && code[i] == 'q' && code[i+1] == '{')
+                if (i + 1 < code.length && code[i] == 'q' && code[i + 1] == '{')
                 {
                     i += 2;
                     size_t start = i;
                     size_t numBraces = 1;
-                    while(i < code.length)
+                    while (i < code.length)
                     {
-                        string part2 = nextCodePart(code[i..$]);
+                        string part2 = nextCodePart(code[i .. $]);
                         if (code[i] == '{')
                             numBraces++;
                         else if (code[i] == '}')
@@ -118,7 +118,7 @@ string interpolateMixin(string code)
                             numBraces--;
                             if (numBraces == 0)
                             {
-                                r ~= interpolateMixin(code[start..i]);
+                                r ~= interpolateMixin(code[start .. i]);
                                 i++;
                                 break;
                             }
@@ -138,7 +138,7 @@ string interpolateMixin(string code)
                 }
                 else if (code[i] == '(')
                     numParens++;
-                string part2 = nextCodePart(code[i..$]);
+                string part2 = nextCodePart(code[i .. $]);
                 r ~= part2;
                 i += part2.length;
             }
@@ -167,11 +167,11 @@ string stringifyMacroParameter(string s)
 {
     string r = "\"";
     bool hasWS;
-    for (size_t i=0; i<s.length;)
+    for (size_t i = 0; i < s.length;)
     {
-        string part = nextCodePart(s[i..$]);
+        string part = nextCodePart(s[i .. $]);
         if (part[0] == ' ' || part[0] == '\t' || part[0] == '\r' || part[0] == '\n'
-            || (part.length >= 2 && part[0] == '/' && (part[1] == '/' || part[1] == '*')))
+                || (part.length >= 2 && part[0] == '/' && (part[1] == '/' || part[1] == '*')))
             hasWS = true;
         else
         {
@@ -216,17 +216,17 @@ T static_cast(T, S)(S x)
     {
         static assert(functionLinkage!T == functionLinkage!S);
     }
-    return cast(T)x;
+    return cast(T) x;
 }
 
 T reinterpret_cast(T, S)(S x)
 {
-    return cast(T)x;
+    return cast(T) x;
 }
 
 T const_cast(T, S)(S x)
 {
-    return cast(T)x;
+    return cast(T) x;
 }
 
 private template globalInitVarImpl(T)
@@ -245,12 +245,12 @@ template globalInitVar(T)
         version (Windows)
             alias globalInitVar = const(globalInitVarImpl!T.globalInitVar);
         else
-            static assert(0, "globalInitVar!"~T.stringof~" needs complex construction");
+            static assert(0, "globalInitVar!" ~ T.stringof ~ " needs complex construction");
     }
-    else static if (__traits(compiles, {T x;}))
-        immutable __gshared T globalInitVar/* = immutable(T).init*/;
+    else static if (__traits(compiles, { T x; }))
+        immutable __gshared T globalInitVar /* = immutable(T).init*/ ;
     else
-        static assert(false, typeof({T x;}));
+        static assert(false, typeof({ T x; }));
 }
 
 private struct FunctionManglingCpp
@@ -269,15 +269,20 @@ version (Windows)
     private string parseTypeManglingWin(ref string mangling, bool is64bit)
     {
         import std.exception, std.ascii, std.algorithm;
+
         bool inPointer;
         size_t i = 0;
-        while(true)
+        while (true)
         {
-            enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+            enforce(i < mangling.length, text("Unexpected mangling ", __FILE__,
+                    ":", __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
             if (mangling[i] == '_')
             {
-                enforce(i + 1 < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
-                if ((mangling[i + 1] >= 'D' && mangling[i + 1] <= 'N') || mangling[i + 1] == 'Q' || mangling[i + 1] == 'S' || mangling[i + 1] == 'U' || mangling[i + 1] == 'W')
+                enforce(i + 1 < mangling.length, text("Unexpected mangling ",
+                        __FILE__, ":", __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
+                if ((mangling[i + 1] >= 'D' && mangling[i + 1] <= 'N')
+                        || mangling[i + 1] == 'Q' || mangling[i + 1] == 'S'
+                        || mangling[i + 1] == 'U' || mangling[i + 1] == 'W')
                 {
                     // basic types
                     i += 2;
@@ -294,18 +299,21 @@ version (Windows)
             {
                 // function type
                 i++;
-                enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
-                enforce(mangling[i] == 'A', text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                enforce(i < mangling.length, text("Unexpected mangling ", __FILE__,
+                        ":", __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
+                enforce(mangling[i] == 'A', text("Unexpected mangling ", __FILE__,
+                        ":", __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
                 // return type and arguments
-                while(true)
+                while (true)
                 {
-                    enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                    enforce(i < mangling.length, text("Unexpected mangling ", __FILE__,
+                            ":", __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
                     if (mangling[i] == 'Z')
                     {
                         i++;
                         break;
                     }
-                    string mangling2 = mangling[i..$];
+                    string mangling2 = mangling[i .. $];
                     string arg = parseTypeManglingWin(mangling2, is64bit);
                     i += arg.length;
                 }
@@ -338,11 +346,13 @@ version (Windows)
                 {
                     // back reference
                     i++;
-                    enforce(i < mangling.length && mangling[i] == '@', text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                    enforce(i < mangling.length && mangling[i] == '@', text("Unexpected mangling ",
+                            __FILE__, ":", __LINE__, ": ", mangling[0 .. i],
+                            " | ", mangling[i .. $]));
                     i++;
                     break;
                 }
-                while(true)
+                while (true)
                 {
                     if (i + 1 < mangling.length && mangling[i] == '?' && mangling[i + 1] == '$')
                     {
@@ -350,10 +360,13 @@ version (Windows)
                         i += 2;
 
                         // template name
-                        while(true)
+                        while (true)
                         {
-                            enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
-                            enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                            enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":",
+                                    __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
+                            enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]),
+                                    text("Unexpected mangling ", __FILE__, ":", __LINE__,
+                                        ": ", mangling[0 .. i], " | ", mangling[i .. $]));
                             if (mangling[i] == '@')
                             {
                                 i++;
@@ -363,14 +376,15 @@ version (Windows)
                         }
 
                         // template arguments
-                        while(true)
+                        while (true)
                         {
-                            enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                            enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":",
+                                    __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
                             if (mangling[i] == '@')
                             {
                                 break;
                             }
-                            string mangling2 = mangling[i..$];
+                            string mangling2 = mangling[i .. $];
                             string arg = parseTypeManglingWin(mangling2, is64bit);
                             i += arg.length;
                         }
@@ -379,14 +393,17 @@ version (Windows)
                     {
                         break;
                     }
-                    else if (i + 1 < mangling.length && mangling[i] >= '0' && mangling[i] <= '9' && mangling[i + 1] == '@')
+                    else if (i + 1 < mangling.length && mangling[i] >= '0'
+                            && mangling[i] <= '9' && mangling[i + 1] == '@')
                     {
                         i += 2;
                         break;
                     }
                     else
                     {
-                        enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                        enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]),
+                                text("Unexpected mangling ", __FILE__, ":", __LINE__,
+                                    ": ", mangling[0 .. i], " | ", mangling[i .. $]));
                         if (i + 1 < mangling.length && mangling[i] == '@' && mangling[i + 1] == '@')
                         {
                             i += 2;
@@ -401,21 +418,29 @@ version (Windows)
             {
                 // enum type
                 i++;
-                enforce(i < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
-                enforce(mangling[i] >= '0' && mangling[i] <= '7', text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                enforce(i < mangling.length, text("Unexpected mangling ", __FILE__,
+                        ":", __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
+                enforce(mangling[i] >= '0' && mangling[i] <= '7', text("Unexpected mangling ",
+                        __FILE__, ":", __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
                 i++;
                 if (mangling[i] >= '0' && mangling[i] < '9')
                 {
                     // back reference
                     i++;
-                    enforce(i < mangling.length && mangling[i] == '@', text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                    enforce(i < mangling.length && mangling[i] == '@', text("Unexpected mangling ",
+                            __FILE__, ":", __LINE__, ": ", mangling[0 .. i],
+                            " | ", mangling[i .. $]));
                     i++;
                     break;
                 }
-                while(true)
+                while (true)
                 {
-                    enforce(i + 1 < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
-                    enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+                    enforce(i + 1 < mangling.length, text("Unexpected mangling ",
+                            __FILE__, ":", __LINE__, ": ", mangling[0 .. i],
+                            " | ", mangling[i .. $]));
+                    enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]),
+                            text("Unexpected mangling ", __FILE__, ":", __LINE__,
+                                ": ", mangling[0 .. i], " | ", mangling[i .. $]));
                     if (mangling[i] >= '0' && mangling[i] <= '9' && mangling[i + 1] == '@')
                     {
                         i += 2;
@@ -430,22 +455,26 @@ version (Windows)
                 }
                 break;
             }
-            enforce(false, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+            enforce(false, text("Unexpected mangling ", __FILE__, ":",
+                    __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
         }
         assert(i < mangling.length);
-        string r = mangling[0..i];
-        mangling = mangling[i..$];
+        string r = mangling[0 .. i];
+        mangling = mangling[i .. $];
         return r;
     }
     /*private*/ FunctionManglingCpp parseFunctionManglingWin(string mangling, bool is64bit)
     {
         import std.exception, std.ascii, std.algorithm;
+
         FunctionManglingCpp r;
-        enforce(mangling.length && mangling[0] == '?', text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+        enforce(mangling.length && mangling[0] == '?',
+                text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
         size_t i = 1;
-        while(true)
+        while (true)
         {
-            enforce(i + 1 < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+            enforce(i + 1 < mangling.length, text("Unexpected mangling ",
+                    __FILE__, ":", __LINE__, ": ", mangling[0 .. i], " | ", mangling[i .. $]));
             if (mangling[i] == '?' && mangling[i + 1].among('0', '1'))
             {
                 i += 2;
@@ -456,13 +485,16 @@ version (Windows)
                 i += 2;
                 break;
             }
-            enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling[0..i], " | ", mangling[i..$]));
+            enforce(mangling[i] == '@' || mangling[i] == '_' || isAlphaNum(mangling[i]),
+                    text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ",
+                        mangling[0 .. i], " | ", mangling[i .. $]));
             i++;
         }
-        r.nameParts = [mangling[0..i]];
-        mangling = mangling[i..$];
+        r.nameParts = [mangling[0 .. i]];
+        mangling = mangling[i .. $];
 
-        enforce(mangling.length >= 2, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+        enforce(mangling.length >= 2, text("Unexpected mangling ", __FILE__,
+                ":", __LINE__, ": ", mangling));
         if (mangling[0] >= 'A' && mangling[0] <= 'Z')
         {
             // function
@@ -473,27 +505,32 @@ version (Windows)
             i = 1;
             if (is64bit && mangling[i] == 'E')
             {
-                enforce(i + 1 < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
-                enforce(mangling[i] == 'E', text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+                enforce(i + 1 < mangling.length, text("Unexpected mangling ",
+                        __FILE__, ":", __LINE__, ": ", mangling));
+                enforce(mangling[i] == 'E', text("Unexpected mangling ",
+                        __FILE__, ":", __LINE__, ": ", mangling));
                 i++;
             }
             if (functionType != 1)
             {
-                enforce(i + 1 < mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
-                enforce(mangling[i].among('A', 'B'), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+                enforce(i + 1 < mangling.length, text("Unexpected mangling ",
+                        __FILE__, ":", __LINE__, ": ", mangling));
+                enforce(mangling[i].among('A', 'B'), text("Unexpected mangling ",
+                        __FILE__, ":", __LINE__, ": ", mangling));
                 i++;
             }
-            enforce(mangling[i].among('A', 'E'), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+            enforce(mangling[i].among('A', 'E'), text("Unexpected mangling ",
+                    __FILE__, ":", __LINE__, ": ", mangling));
             i++;
-            r.flags = mangling[0..i];
-            mangling = mangling[i..$];
+            r.flags = mangling[0 .. i];
+            mangling = mangling[i .. $];
             if (mangling.startsWith("?A") || mangling.startsWith("?B"))
             {
-                r.flags2 = mangling[0..2];
-                mangling = mangling[2..$];
+                r.flags2 = mangling[0 .. 2];
+                mangling = mangling[2 .. $];
             }
 
-            if (r.nameParts[$-1].startsWith("??1")) // destructor
+            if (r.nameParts[$ - 1].startsWith("??1")) // destructor
             {
                 enforce(mangling == "@XZ");
                 r.suffix = mangling;
@@ -501,25 +538,28 @@ version (Windows)
             else
             {
                 r.returnType = parseTypeManglingWin(mangling, is64bit);
-                while(true)
+                while (true)
                 {
-                    enforce(mangling.length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+                    enforce(mangling.length, text("Unexpected mangling ",
+                            __FILE__, ":", __LINE__, ": ", mangling));
                     if (mangling[0].among('Z', 'X', '@'))
                         break;
                     r.parameters ~= parseTypeManglingWin(mangling, is64bit);
                 }
                 foreach (char c; mangling)
-                    enforce(c.among('Z', 'X', '@'), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+                    enforce(c.among('Z', 'X', '@'), text("Unexpected mangling ",
+                            __FILE__, ":", __LINE__, ": ", mangling));
                 r.suffix = mangling;
             }
         }
         else if (mangling[0] >= '0' && mangling[0] <= '4')
         {
             // variable
-            r.flags = mangling[0..1];
-            mangling = mangling[1..$];
+            r.flags = mangling[0 .. 1];
+            mangling = mangling[1 .. $];
             r.returnType = parseTypeManglingWin(mangling, is64bit);
-            enforce(mangling.among("A", "B", "EA", "EB"), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+            enforce(mangling.among("A", "B", "EA", "EB"),
+                    text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
             r.suffix = mangling;
         }
         else
@@ -533,27 +573,32 @@ else
     /*private*/ FunctionManglingCpp parseFunctionManglingItanium(string mangling, bool is64bit)
     {
         import std.exception, std.ascii, std.algorithm, std.conv;
-        FunctionManglingCpp r;
-        enforce(mangling.startsWith("_ZN"), text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
-        r.prefix = mangling[0..3];
-        mangling = mangling[3..$];
 
-        while(mangling.length)
+        FunctionManglingCpp r;
+        enforce(mangling.startsWith("_ZN"), text("Unexpected mangling ",
+                __FILE__, ":", __LINE__, ": ", mangling));
+        r.prefix = mangling[0 .. 3];
+        mangling = mangling[3 .. $];
+
+        while (mangling.length)
         {
             if (mangling[0] >= '0' && mangling[0] <= '9')
             {
                 size_t lengthBytes = 1;
-                while(lengthBytes < mangling.length && mangling[lengthBytes] >= '0' && mangling[lengthBytes] <= '9')
+                while (lengthBytes < mangling.length
+                        && mangling[lengthBytes] >= '0' && mangling[lengthBytes] <= '9')
                     lengthBytes++;
-                size_t length = to!size_t(mangling[0..lengthBytes]);
-                enforce(mangling.length >= lengthBytes + length, text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
-                r.nameParts ~= mangling[0..lengthBytes + length];
-                mangling = mangling[lengthBytes + length..$];
+                size_t length = to!size_t(mangling[0 .. lengthBytes]);
+                enforce(mangling.length >= lengthBytes + length,
+                        text("Unexpected mangling ", __FILE__, ":", __LINE__, ": ", mangling));
+                r.nameParts ~= mangling[0 .. lengthBytes + length];
+                mangling = mangling[lengthBytes + length .. $];
             }
-            else if (mangling.length >= 2 && mangling[0].among('C', 'D') && mangling[1].among('0', '1'))
+            else if (mangling.length >= 2 && mangling[0].among('C', 'D')
+                    && mangling[1].among('0', '1'))
             {
-                r.nameParts ~= mangling[0..2];
-                mangling = mangling[2..$];
+                r.nameParts ~= mangling[0 .. 2];
+                mangling = mangling[2 .. $];
             }
             else
                 break;
@@ -579,8 +624,9 @@ alias defaultConstructorMangling = function string(string name)
 private string replaceStart(string str, string from, string to)
 {
     import std.algorithm;
+
     if (str.startsWith(from))
-        str = to ~ str[from.length..$];
+        str = to ~ str[from.length .. $];
     return str;
 }
 
@@ -591,6 +637,7 @@ alias mangleWindows = function string(string mangling, string code)
     version (Windows)
     {
         import std.algorithm;
+
         static if (size_t.sizeof == 4)
         {
             auto parsed = parseFunctionManglingWin(mangling, true);
@@ -598,9 +645,9 @@ alias mangleWindows = function string(string mangling, string code)
             {
                 if (parsed.flags[0] >= 'A' && parsed.flags[0] <= 'Z' && parsed.flags[1] == 'E')
                 {
-                    parsed.flags = parsed.flags[0..1] ~ parsed.flags[2..$];
-                    if (parsed.flags[$-1] == 'A')
-                        parsed.flags = parsed.flags[0..$-1] ~ 'E';
+                    parsed.flags = parsed.flags[0 .. 1] ~ parsed.flags[2 .. $];
+                    if (parsed.flags[$ - 1] == 'A')
+                        parsed.flags = parsed.flags[0 .. $ - 1] ~ 'E';
                 }
                 parsed.returnType = parsed.returnType.replaceStart("PE", "P");
                 parsed.returnType = parsed.returnType.replaceStart("QE", "Q");
@@ -655,8 +702,8 @@ alias mangleOpLess = function string(string name)
         return text("_ZNK", name.length, name, "ltERKS_");
 };
 
-
-package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, string attributes2, string name, string dummyFunctionName, size_t numParameters, string mangling)
+package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, string attributes2,
+        string name, string dummyFunctionName, size_t numParameters, string mangling)
 {
     import std.algorithm, std.exception, std.conv;
 
@@ -670,21 +717,22 @@ package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, st
         assert(parsed.parameters.length == numParameters);
         if (name == "this")
         {
-            parsed.nameParts[$-1] = parsed.nameParts[$-1].replaceStart("?this@", "??0");
+            parsed.nameParts[$ - 1] = parsed.nameParts[$ - 1].replaceStart("?this@", "??0");
             assert(parsed.returnType == "X");
             parsed.returnType = "@";
             foreach (ref param; parsed.parameters)
             {
-                if (param.length >= 2 && param[$-1] == '@' && param[$-2] >= '1' && param[$-2] <= '9')
+                if (param.length >= 2 && param[$ - 1] == '@'
+                        && param[$ - 2] >= '1' && param[$ - 2] <= '9')
                 {
                     // References have to be decremented, because the dummy function has a return type, but not the real constructor.
-                    param = param[0..$-2] ~ cast(char)(param[$-2] - 1) ~ param[$-1];
+                    param = param[0 .. $ - 2] ~ cast(char)(param[$ - 2] - 1) ~ param[$ - 1];
                 }
             }
         }
         if (name == "~this")
         {
-            parsed.nameParts[$-1] = parsed.nameParts[$-1].replaceStart("?this@", "??1");
+            parsed.nameParts[$ - 1] = parsed.nameParts[$ - 1].replaceStart("?this@", "??1");
             assert(parsed.returnType == "X");
             parsed.returnType = "@";
         }
@@ -722,13 +770,13 @@ package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, st
     else
     {
         FunctionManglingCpp parsed = parseFunctionManglingItanium(mangling, (void*).sizeof == 8);
-        enforce(parsed.nameParts[$-1].endsWith(dummyFunctionName));
+        enforce(parsed.nameParts[$ - 1].endsWith(dummyFunctionName));
         if (name == "this")
-            parsed.nameParts[$-1] = "C1";
+            parsed.nameParts[$ - 1] = "C1";
         else if (name == "~this")
-            parsed.nameParts[$-1] = "D1";
+            parsed.nameParts[$ - 1] = "D1";
         else
-            parsed.nameParts[$-1] = text(name.length, name);
+            parsed.nameParts[$ - 1] = text(name.length, name);
 
         if (!attributes.canFind("static"))
         {
@@ -756,6 +804,7 @@ package FunctionManglingCpp mangleClassesTailConst(FunctionManglingCpp parsed)
             }
             return mangling;
         }
+
         parsed.returnType = makeTailConst(parsed.returnType);
         foreach (ref param; parsed.parameters)
         {
@@ -783,13 +832,13 @@ package FunctionManglingCpp mangleChangeAccess(FunctionManglingCpp parsed, strin
         else
             assert(false);
 
-        parsed.flags = cast(char)('A' + accessLevel * 8 + functionType * 2) ~ parsed.flags[1..$];
+        parsed.flags = cast(char)('A' + accessLevel * 8 + functionType * 2) ~ parsed.flags[1 .. $];
     }
     return parsed;
 }
 
-
-package FunctionManglingCpp mangleChangeFunctionType(FunctionManglingCpp parsed, string functionTypeStr)
+package FunctionManglingCpp mangleChangeFunctionType(FunctionManglingCpp parsed,
+        string functionTypeStr)
 {
     version (Windows)
     {
@@ -807,7 +856,7 @@ package FunctionManglingCpp mangleChangeFunctionType(FunctionManglingCpp parsed,
         else
             assert(false);
 
-        parsed.flags = cast(char)('A' + accessLevel * 8 + functionType * 2) ~ parsed.flags[1..$];
+        parsed.flags = cast(char)('A' + accessLevel * 8 + functionType * 2) ~ parsed.flags[1 .. $];
     }
     return parsed;
 }
@@ -820,8 +869,9 @@ package FunctionManglingCpp mangleConstructorBaseObject(FunctionManglingCpp pars
     else
     {
         import std.exception;
-        enforce(parsed.nameParts[$-1] == "C1");
-        parsed.nameParts[$-1] = "C2";
+
+        enforce(parsed.nameParts[$ - 1] == "C1");
+        parsed.nameParts[$ - 1] = "C2";
     }
     return parsed;
 }
@@ -848,7 +898,8 @@ string recreateCppMangling(FunctionManglingCpp parsed)
     It only uses a very simple parser and will only work for some declarations.
     The mangling could be wrong for some functions.
 */
-package string changeCppMangling(bool debugHere = false)(string changeFuncs, string declaration, size_t line = __LINE__)
+package string changeCppMangling(bool debugHere = false)(string changeFuncs,
+        string declaration, size_t line = __LINE__)
 {
     import std.ascii, std.algorithm;
 
@@ -858,15 +909,17 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs, str
     {
         size_t start, end;
     }
+
     StartEnd[] parts;
     size_t parenCount;
     bool afterCombiner;
     bool afterSemicolon;
     for (size_t i = 0; i < declaration.length;)
     {
-        string part = nextCodePart(declaration[i..$]);
+        string part = nextCodePart(declaration[i .. $]);
         bool mergeToLastPart;
-        if (isWhite(part[0]) || part.startsWith("//") || part.startsWith("/*") || part.startsWith("/+"))
+        if (isWhite(part[0]) || part.startsWith("//") || part.startsWith("/*")
+                || part.startsWith("/+"))
         {
             i += part.length;
             continue;
@@ -919,7 +972,7 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs, str
         }
 
         if (mergeToLastPart)
-            parts[$-1].end = i + part.length;
+            parts[$ - 1].end = i + part.length;
         else
             parts ~= StartEnd(i, i + part.length);
 
@@ -933,12 +986,11 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs, str
     size_t attributesEnd;
     string usedAttributes;
     string attributesNoComments;
-    while(parts.length)
+    while (parts.length)
     {
-        string part = declaration[parts[0].start..parts[0].end];
-        if (part.among("static", "override", "final", "extern", "export", "__gshared",
-            "private", "protected", "public", "package")
-            || part[0] == '@')
+        string part = declaration[parts[0].start .. parts[0].end];
+        if (part.among("static", "override", "final", "extern", "export",
+                "__gshared", "private", "protected", "public", "package") || part[0] == '@')
         {
             attributesEnd = parts[0].end;
             attributesNoComments ~= part ~ " ";
@@ -951,33 +1003,34 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs, str
         }
         else
             break;
-        parts = parts[1..$];
+        parts = parts[1 .. $];
     }
-    string attributes = declaration[0..attributesEnd];
+    string attributes = declaration[0 .. attributesEnd];
     assert(parts.length >= 3, text(parts.length));
     string returnType;
-    if (declaration[parts[0].start..parts[0].end] != "this" && declaration[parts[0].start..parts[0].end] != "~this")
+    if (declaration[parts[0].start .. parts[0].end] != "this"
+            && declaration[parts[0].start .. parts[0].end] != "~this")
     {
-        returnType = declaration[attributesEnd..parts[0].end];
-        parts = parts[1..$];
+        returnType = declaration[attributesEnd .. parts[0].end];
+        parts = parts[1 .. $];
     }
     assert(parts.length >= 3, text(parts.length));
-    string name = declaration[parts[0].start..parts[0].end];
-    parts = parts[1..$];
+    string name = declaration[parts[0].start .. parts[0].end];
+    parts = parts[1 .. $];
     assert(isAlphaNum(name[0]) || name[0] == '_' || name == "~this");
-    string params = declaration[parts[0].start..parts[0].end];
-    parts = parts[1..$];
+    string params = declaration[parts[0].start .. parts[0].end];
+    parts = parts[1 .. $];
     assert(params.startsWith("("));
     string attributesUsedAfter;
-    while(parts.length >= 2)
+    while (parts.length >= 2)
     {
-        string part = declaration[parts[0].start..parts[0].end];
+        string part = declaration[parts[0].start .. parts[0].end];
         assert(part.among("const", "immutable", "shared"));
         attributesUsedAfter ~= part ~ " ";
-        parts = parts[1..$];
+        parts = parts[1 .. $];
     }
     assert(parts.length == 1);
-    assert(declaration[parts[0].start..parts[0].end].startsWith(";"));
+    assert(declaration[parts[0].start .. parts[0].end].startsWith(";"));
 
     /*code ~= "pragma(msg, q{" ~ attributes ~ "});";
     code ~= "pragma(msg, q{" ~ returnType ~ "});";
@@ -1056,10 +1109,13 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs, str
     code ~= declaration;
     return code;
 }
-package string changeCppManglingNoop(bool debugHere = false)(string changeFuncs, string declaration, size_t line = __LINE__)
+
+package string changeCppManglingNoop(bool debugHere = false)(string changeFuncs,
+        string declaration, size_t line = __LINE__)
 {
     return declaration;
 }
+
 version (Windows)
 {
     alias changeWindowsMangling = changeCppMangling;
@@ -1094,7 +1150,9 @@ package template FunctionParameters(alias F)
 
 template isParamConstStructRef(alias F, size_t i)
 {
-    enum isParamConstStructRef = is(FunctionParameters!F[i] == struct) && is(FunctionParameters!F[i] == const) && [__traits(getParameterStorageClasses, F, i)] == ["ref"];
+    enum isParamConstStructRef = is(FunctionParameters!F[i] == struct)
+        && is(FunctionParameters!F[i] == const)
+        && [__traits(getParameterStorageClasses, F, i)] == ["ref"];
 }
 
 template anyParamConstStructRef(alias F, size_t i = 0)
@@ -1116,44 +1174,44 @@ template dummyFunctionWithSameArgs(alias F)
 template callableWithNParameters(alias F, size_t n)
 {
     enum callableWithNParameters = __traits(compiles, () {
-        FunctionParameters!F[0..n] params = void;
-        dummyFunctionWithSameArgs!F(params);
+            FunctionParameters!F[0 .. n] params = void;
+            dummyFunctionWithSameArgs!F(params);
         });
 }
 
-enum isWrapperCallable(alias F, Params...) = ()
+enum isWrapperCallable(alias F, Params...) = () {
+    static if (Params.length > FunctionParameters!F.length)
+        return false;
+    else static if (!callableWithNParameters!(F, Params.length))
+        return false;
+    else
     {
-        static if (Params.length > FunctionParameters!F.length)
-            return false;
-        else static if (!callableWithNParameters!(F, Params.length))
-            return false;
-        else
+        bool r = true;
+        // The parameter types have to be checked with if to work around https://issues.dlang.org/show_bug.cgi?id=13140
+        static foreach (i; 0 .. Params.length)
         {
-            bool r = true;
-            // The parameter types have to be checked with if to work around https://issues.dlang.org/show_bug.cgi?id=13140
-            static foreach (i; 0 .. Params.length)
-            {
-                if (!is(Params[i] : FunctionParameters!F[i]))
-                    r = false;
-            }
-            // Workaround for https://issues.dlang.org/show_bug.cgi?id=12672
-            bool anyParamNeedsTemp;
-            static foreach (i; 0 .. Params.length)
-            {
-                static if (isParamConstStructRef!(F, i))
-                {
-                    static if (!__traits(isRef, Params[i]))
-                        anyParamNeedsTemp = true;
-                }
-                // Ref parameters, which are not const structs should not use a temporary.
-                else if ([__traits(getParameterStorageClasses, F, i)] == ["ref"] && !__traits(isRef, Params[i]))
-                    r = false;
-            }
-            if (!anyParamNeedsTemp)
+            if (!is(Params[i] : FunctionParameters!F[i]))
                 r = false;
-            return r;
         }
-    }();
+        // Workaround for https://issues.dlang.org/show_bug.cgi?id=12672
+        bool anyParamNeedsTemp;
+        static foreach (i; 0 .. Params.length)
+        {
+            static if (isParamConstStructRef!(F, i))
+            {
+                static if (!__traits(isRef, Params[i]))
+                    anyParamNeedsTemp = true;
+            }
+            // Ref parameters, which are not const structs should not use a temporary.
+            else if ([__traits(getParameterStorageClasses, F, i)] == ["ref"]
+                    && !__traits(isRef, Params[i]))
+                r = false;
+        }
+        if (!anyParamNeedsTemp)
+            r = false;
+        return r;
+    }
+}();
 
 template isAnyWrapperCallable(bool isStaticFunction, Overloads...)
 {
@@ -1162,11 +1220,11 @@ template isAnyWrapperCallable(bool isStaticFunction, Overloads...)
         static if (Overloads.length == 0)
             enum impl = false;
         else static if (__traits(isStaticFunction, Overloads[0]) != isStaticFunction)
-            enum impl = isAnyWrapperCallable!(isStaticFunction, Overloads[1..$]).impl!(Params);
+            enum impl = isAnyWrapperCallable!(isStaticFunction, Overloads[1 .. $]).impl!(Params);
         else static if (isWrapperCallable!(Overloads[0], Params))
             enum impl = true;
         else
-            enum impl = isAnyWrapperCallable!(isStaticFunction, Overloads[1..$]).impl!(Params);
+            enum impl = isAnyWrapperCallable!(isStaticFunction, Overloads[1 .. $]).impl!(Params);
     }
 }
 
@@ -1203,7 +1261,7 @@ enum CREATE_CONVENIENCE_WRAPPERS = q{
                         {
                             static if (__traits(isStaticFunction, F) == isStaticFunction && __traits(getVisibility, F) == "public")
                             {
-                                code ~= "private alias " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ " =  __traits(getOverloads, typeof(this), member)[" ~ std.conv.text(i) ~ "];";
+                                code ~= "private alias " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ " = __traits(getOverloads, typeof(this), member)[" ~ std.conv.text(i) ~ "];";
                             }
                         }
                         code ~= "public extern(D) pragma(inline, true) ";
@@ -1257,15 +1315,15 @@ package template packageName(alias T)
 
 package template IsInQtPackage(alias S)
 {
-    enum IsInQtPackage = packageName!(S).length > 3 && packageName!(S)[0..3] == "qt.";
+    enum IsInQtPackage = packageName!(S).length > 3 && packageName!(S)[0 .. 3] == "qt.";
 }
 
 T cpp_new_copy(T, S)(S source) if (is(T == class))
 {
-    import core.stdcpp.new_: __cpp_new;
+    import core.stdcpp.new_ : __cpp_new;
     import core.lifetime : copyEmplace;
 
-    T mem = cast(T)__cpp_new(__traits(classInstanceSize, T));
+    T mem = cast(T) __cpp_new(__traits(classInstanceSize, T));
     copyEmplace(source, mem);
     return mem;
 }
