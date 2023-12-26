@@ -189,7 +189,7 @@ private:
 }
 
 /// Binding for C++ class [QExplicitlySharedDataPointer](https://doc.qt.io/qt-6/qexplicitlyshareddatapointer.html).
-extern(C++, class) struct QExplicitlySharedDataPointer(T)
+extern(C++, class) struct QExplicitlySharedDataPointer(T) if (!is(T == class))
 {
 public:
     alias Type = T;
