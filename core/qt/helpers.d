@@ -1069,6 +1069,11 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
         code ~= ".recreateCppMangling";
         code ~= ");\n";
     }
+    code ~= "static assert(" ~ codeSplitMangling;
+    code ~= "." ~ changeFuncs;
+    code ~= ".recreateCppMangling";
+    code ~= " != " ~ dummyFunctionName ~ ".mangleof, \"Redundant use of changeCppMangling\");\n";
+
     code ~= "pragma(mangle, " ~ codeSplitMangling;
     code ~= "." ~ changeFuncs;
     code ~= ".recreateCppMangling";
