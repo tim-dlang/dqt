@@ -1052,6 +1052,15 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
     code ~= params;
     //code ~= " " ~ attributesUsedAfter;
     code ~= ";\n";
+    string codeSplitMangling;
+    codeSplitMangling ~= "splitCppMangling(is(typeof(this) == class), ";
+    codeSplitMangling ~= "q{" ~ attributesNoComments ~ "}, ";
+    codeSplitMangling ~= "q{" ~ attributesUsedAfter ~ "}, ";
+    codeSplitMangling ~= "q{" ~ name ~ "}, ";
+    codeSplitMangling ~= "q{" ~ dummyFunctionName ~ "}, ";
+    codeSplitMangling ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
+    codeSplitMangling ~= dummyFunctionName ~ ".mangleof";
+    codeSplitMangling ~= ")";
     if (debugHere)
     {
         code ~= "pragma(msg, " ~ dummyFunctionName ~ ".mangleof);\n";
@@ -1061,47 +1070,24 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
         else
             code ~= "pragma(msg, parseFunctionManglingItanium(" ~ dummyFunctionName ~ ".mangleof, (void*).sizeof == 8));\n";
 
-        code ~= "pragma(msg, splitCppMangling(is(typeof(this) == class), ";
-        code ~= "q{" ~ attributesNoComments ~ "}, ";
-        code ~= "q{" ~ attributesUsedAfter ~ "}, ";
-        code ~= "q{" ~ name ~ "}, ";
-        code ~= "q{" ~ dummyFunctionName ~ "}, ";
-        code ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
-        code ~= dummyFunctionName ~ ".mangleof";
-        code ~= ")";
+        code ~= "pragma(msg, " ~ codeSplitMangling;
         code ~= ");\n";
 
-        code ~= "pragma(msg, splitCppMangling(is(typeof(this) == class), ";
-        code ~= "q{" ~ attributesNoComments ~ "}, ";
-        code ~= "q{" ~ attributesUsedAfter ~ "}, ";
-        code ~= "q{" ~ name ~ "}, ";
-        code ~= "q{" ~ dummyFunctionName ~ "}, ";
-        code ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
-        code ~= dummyFunctionName ~ ".mangleof";
-        code ~= ")";
+        code ~= "pragma(msg, " ~ codeSplitMangling;
         code ~= "." ~ changeFuncs;
         code ~= ");\n";
 
-        code ~= "pragma(msg, splitCppMangling(is(typeof(this) == class), ";
-        code ~= "q{" ~ attributesNoComments ~ "}, ";
-        code ~= "q{" ~ attributesUsedAfter ~ "}, ";
-        code ~= "q{" ~ name ~ "}, ";
-        code ~= "q{" ~ dummyFunctionName ~ "}, ";
-        code ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
-        code ~= dummyFunctionName ~ ".mangleof";
-        code ~= ")";
+        code ~= "pragma(msg, " ~ codeSplitMangling;
         code ~= "." ~ changeFuncs;
         code ~= ".recreateCppMangling";
         code ~= ");\n";
     }
-    code ~= "pragma(mangle, splitCppMangling(is(typeof(this) == class), ";
-    code ~= "q{" ~ attributesNoComments ~ "}, ";
-    code ~= "q{" ~ attributesUsedAfter ~ "}, ";
-    code ~= "q{" ~ name ~ "}, ";
-    code ~= "q{" ~ dummyFunctionName ~ "}, ";
-    code ~= "qt.helpers.FunctionParameters!" ~ dummyFunctionName ~ ".length, ";
-    code ~= dummyFunctionName ~ ".mangleof";
-    code ~= ")";
+    code ~= "static assert(" ~ codeSplitMangling;
+    code ~= "." ~ changeFuncs;
+    code ~= ".recreateCppMangling";
+    code ~= " != " ~ dummyFunctionName ~ ".mangleof, \"Redundant use of changeCppMangling\");\n";
+
+    code ~= "pragma(mangle, " ~ codeSplitMangling;
     code ~= "." ~ changeFuncs;
     code ~= ".recreateCppMangling";
     code ~= ")\n";
