@@ -18,20 +18,24 @@ jobs:
       fail-fast: false
 
       matrix:
-        platform: [ linux64, win64, osx64 ]
+        platform: [ linux64, win64, osx64, debian32 ]
         dc: [ dmd-latest, dmd-2.100.0, ldc-latest, dmd-master ]
-        qt_version: [ 6.2.3 ]
+
+        exclude:
+          - { platform: debian32, dc: ldc-latest }
 
         include:
           - platform: linux64
             os: ubuntu-22.04
             model: 64
+            qt_version: 6.2.3
             qt_arch: gcc_64
             qt_platform: linux_x64/desktop
 
           - platform: win64
             os: windows-2022
             model: 64
+            qt_version: 6.2.3
             qt_arch: msvc2019_64
             qt_arch_url: win64_msvc2019_64
             qt_platform: windows_x86/desktop
@@ -39,19 +43,43 @@ jobs:
           - platform: osx64
             os: macos-12
             model: 64
+            qt_version: 6.2.3
             qt_arch: macos
             qt_arch_url: clang_64
             qt_platform: mac_x64/desktop
 
+          - platform: debian32
+            os: ubuntu-22.04
+            container: debian:11
+            model: 32
+
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Install Debian packages
+        if: ${{ matrix.platform == 'debian32' }}
+        run: |
+          dpkg --add-architecture i386
+          echo "deb http://deb.debian.org/debian bullseye-backports main contrib non-free" >> /etc/apt/sources.list
+          echo "deb-src http://deb.debian.org/debian bullseye-backports main contrib non-free" >> /etc/apt/sources.list
+          apt-get -qq update
+          apt-get -qq install -y gpg xz-utils 7zip
+          apt-get -qq install -y libc6-dev:i386 libstdc++6:i386 g++:i386 qt6-base-dev:i386 qt6-webengine-dev:i386
 
       - name: Install D compiler
         uses: dlang-community/setup-dlang@v1
         with:
           compiler: ${{ matrix.dc }}
+
+      - name: Change env vars to 32-bit
+        if: ${{ matrix.platform == 'debian32' }}
+        run: |
+          echo "LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | sed "s|dmd2/linux/lib64|dmd2/linux/lib32|g")" >> "$GITHUB_ENV"
+          echo "$(echo "$PATH" | grep -o "[^:]*dmd2/linux/bin[^:]*" | sed "s|dmd2/linux/bin64|dmd2/linux/bin32|g")" >> "$GITHUB_PATH"
+          echo "QTWEBENGINE_DISABLE_SANDBOX=1" >> "$GITHUB_ENV"
 
       - name: Checkout dxml
         uses: actions/checkout@v3
@@ -67,19 +95,20 @@ jobs:
           echo "C:\msys64\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install libEGL
-        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.os == 'ubuntu-22.04' && matrix.platform != 'debian32' }}
         run: |
           sudo apt-get install -y libegl1
 
       - name: Cache Qt
         id: cache-qt
+        if: ${{ matrix.platform != 'debian32' }}
         uses: actions/cache@v3
         with:
           path: qt-lib
           key: ${{ runner.os }}-qt-${{ matrix.qt_version }}-${{ matrix.qt_arch }}-${{ matrix.qt_arch_url }}-${{ matrix.qt_platform }}-${{ hashFiles('ci/downloadqt.d') }}
 
       - name: Install Qt
-        if: ${{ steps.cache-qt.outputs.cache-hit != 'true' }}
+        if: ${{ steps.cache-qt.outputs.cache-hit != 'true' && matrix.platform != 'debian32' }}
         run: |
           ${{ env.DC }} -Idxml/source -i -run ci/downloadqt.d -v"${{ matrix.qt_version }}" -a${{ matrix.qt_arch }} -u${{ matrix.qt_arch_url }} -p${{ matrix.qt_platform }}
 
