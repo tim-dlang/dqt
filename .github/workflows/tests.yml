@@ -18,6 +18,7 @@ jobs:
       matrix:
         platform: [ linux64, win64, win32, osx64 ]
         dc: [ dmd-latest, dmd-2.100.0, ldc-latest, dmd-master ]
+        qt_version: [ 5.15.2 ]
 
         exclude:
           - { platform: win32, dc: ldc-latest }
@@ -27,50 +28,27 @@ jobs:
             os: ubuntu-22.04
             model: 64
             qt_arch: gcc_64
-            qtbase_url: 'https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt5_5152/qt.qt5.5152.gcc_64/'
-            qtbase_file: '5.15.2-0-202011130601qtbase-Linux-RHEL_7_6-GCC-Linux-RHEL_7_6-X86_64.7z'
-            qticu_file: '5.15.2-0-202011130601icu-linux-Rhel7.2-x64.7z'
-            qtdeclarative_file: '5.15.2-0-202011130601qtdeclarative-Linux-RHEL_7_6-GCC-Linux-RHEL_7_6-X86_64.7z'
-            qtlocation_file: '5.15.2-0-202011130601qtlocation-Linux-RHEL_7_6-GCC-Linux-RHEL_7_6-X86_64.7z'
-            qtwebchannel_file: '5.15.2-0-202011130601qtwebchannel-Linux-RHEL_7_6-GCC-Linux-RHEL_7_6-X86_64.7z'
-            qtwebengine_url: 'https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt5_5152/qt.qt5.5152.qtwebengine.gcc_64/'
-            qtwebengine_file: '5.15.2-0-202011130601qtwebengine-Linux-RHEL_7_6-GCC-Linux-RHEL_7_6-X86_64.7z'
+            qt_platform: linux_x64/desktop
 
           - platform: win64
             os: windows-2022
             model: 64
             qt_arch: msvc2019_64
-            qtbase_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5152/qt.qt5.5152.win64_msvc2019_64/'
-            qtbase_file: '5.15.2-0-202011130602qtbase-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z'
-            qtdeclarative_file: '5.15.2-0-202011130602qtdeclarative-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z'
-            qtlocation_file: '5.15.2-0-202011130602qtlocation-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z'
-            qtwebchannel_file: '5.15.2-0-202011130602qtwebchannel-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z'
-            qtwebengine_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5152/qt.qt5.5152.qtwebengine.win64_msvc2019_64/'
-            qtwebengine_file: '5.15.2-0-202011130602qtwebengine-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z'
+            qt_arch_url: win64_msvc2019_64
+            qt_platform: windows_x86/desktop
 
           - platform: win32
             os: windows-2022
             model: 32mscoff
             qt_arch: msvc2019
-            qtbase_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5152/qt.qt5.5152.win32_msvc2019/'
-            qtbase_file: '5.15.2-0-202011130602qtbase-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86.7z'
-            qtdeclarative_file: '5.15.2-0-202011130602qtdeclarative-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86.7z'
-            qtlocation_file: '5.15.2-0-202011130602qtlocation-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86.7z'
-            qtwebchannel_file: '5.15.2-0-202011130602qtwebchannel-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86.7z'
-            qtwebengine_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5152/qt.qt5.5152.qtwebengine.win32_msvc2019/'
-            qtwebengine_file: '5.15.2-0-202011130602qtwebengine-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86.7z'
+            qt_arch_url: win32_msvc2019
+            qt_platform: windows_x86/desktop
 
           - platform: osx64
             os: macos-12
             model: 64
             qt_arch: clang_64
-            qtbase_url: 'https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/qt5_5152/qt.qt5.5152.clang_64/'
-            qtbase_file: '5.15.2-0-202011130601qtbase-MacOS-MacOS_10_13-Clang-MacOS-MacOS_10_13-X86_64.7z'
-            qtdeclarative_file: '5.15.2-0-202011130601qtdeclarative-MacOS-MacOS_10_13-Clang-MacOS-MacOS_10_13-X86_64.7z'
-            qtlocation_file: '5.15.2-0-202011130601qtlocation-MacOS-MacOS_10_13-Clang-MacOS-MacOS_10_13-X86_64.7z'
-            qtwebchannel_file: '5.15.2-0-202011130601qtwebchannel-MacOS-MacOS_10_13-Clang-MacOS-MacOS_10_13-X86_64.7z'
-            qtwebengine_url: 'https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/qt5_5152/qt.qt5.5152.qtwebengine.clang_64/'
-            qtwebengine_file: '5.15.2-0-202011130601qtwebengine-MacOS-MacOS_10_13-Clang-MacOS-MacOS_10_13-X86_64.7z'
+            qt_platform: mac_x64/desktop
 
     runs-on: ${{ matrix.os }}
 
@@ -95,41 +73,22 @@ jobs:
         run: |
           echo "C:\msys64\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v3
+        with:
+          path: qt-lib
+          key: ${{ runner.os }}-qt-${{ matrix.qt_version }}-${{ matrix.qt_arch }}-${{ matrix.qt_arch_url }}-${{ matrix.qt_platform }}-${{ hashFiles('ci/downloadqt.d') }}
+
       - name: Install Qt
+        if: ${{ steps.cache-qt.outputs.cache-hit != 'true' }}
         run: |
-          wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qtbase_file }}"
-          7z x "${{ matrix.qtbase_file }}" 5.15.2/${{ matrix.qt_arch }}/lib/ 5.15.2/${{ matrix.qt_arch }}/bin/ 5.15.2/${{ matrix.qt_arch }}/plugins/platforms
-
-      - name: Install ICU for Qt
-        if: ${{ matrix.qticu_file != '' }}
-        run: |
-          wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qticu_file }}"
-          7z x "${{ matrix.qticu_file }}"
-
-      - name: Install QtDeclarative
-        run: |
-          wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qtdeclarative_file }}"
-          7z x "${{ matrix.qtdeclarative_file }}" 5.15.2/${{ matrix.qt_arch }}/lib/ 5.15.2/${{ matrix.qt_arch }}/bin/
-
-      - name: Install QtLocation
-        run: |
-          wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qtlocation_file }}"
-          7z x "${{ matrix.qtlocation_file }}" 5.15.2/${{ matrix.qt_arch }}/lib/ 5.15.2/${{ matrix.qt_arch }}/bin/
-
-      - name: Install QtWebChannel
-        run: |
-          wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qtwebchannel_file }}"
-          7z x "${{ matrix.qtwebchannel_file }}" 5.15.2/${{ matrix.qt_arch }}/lib/ 5.15.2/${{ matrix.qt_arch }}/bin/
-
-      - name: Install QtWebEngine
-        run: |
-          wget --no-verbose "${{ matrix.qtwebengine_url }}${{ matrix.qtwebengine_file }}"
-          7z x "${{ matrix.qtwebengine_file }}" 5.15.2/${{ matrix.qt_arch }}/lib/ 5.15.2/${{ matrix.qt_arch }}/bin/ 5.15.2/${{ matrix.qt_arch }}/libexec/ 5.15.2/${{ matrix.qt_arch }}/resources/
+          ${{ env.DC }} -Idxml/source -i -run ci/downloadqt.d -v"${{ matrix.qt_version }}" -a${{ matrix.qt_arch }} -u${{ matrix.qt_arch_url }} -p${{ matrix.qt_platform }}
 
       - name: 'Build & Test'
         timeout-minutes: 5
         run: |
-          ${{ env.DC }} -run runtests.d --github --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=5.15.2/${{ matrix.qt_arch }} --dxml-path=dxml/source
+          ${{ env.DC }} -run runtests.d --github --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=qt-lib/${{ matrix.qt_version }}/${{ matrix.qt_arch }} --dxml-path=dxml/source
 
 #      - name: Upload test results
 #        uses: actions/upload-artifact@v4
