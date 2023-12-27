@@ -30,7 +30,7 @@ import qt.gui.brush;
 import qt.gui.font;
 import qt.gui.icon;
 import qt.helpers;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.datastream;
 
 /+ #ifndef QT_NO_DATASTREAM
@@ -56,7 +56,7 @@ public:
     /+ virtual +/ void setData(ref const(QVariant) value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole + 1);
     /+ virtual +/ void setData(T)(T value, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole + 1)
     {
-        static if(is(const(T) == const(QVariant)))
+        static if (is(const(T) == const(QVariant)))
             QVariant v = value;
         else
             QVariant v = QVariant.fromValue(value);
@@ -77,7 +77,7 @@ public:
     { setData(aicon, /+ Qt:: +/qt.core.namespace.ItemDataRole.DecorationRole); }
 
 /+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
+    version (QT_NO_TOOLTIP) {} else
     {
         pragma(inline, true) final QString toolTip() const {
             return qvariant_cast!(QString)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole));
@@ -88,7 +88,7 @@ public:
 /+ #endif
 
 #ifndef QT_NO_STATUSTIP +/
-    version(QT_NO_STATUSTIP){}else
+    version (QT_NO_STATUSTIP) {} else
     {
         pragma(inline, true) final QString statusTip() const {
             return qvariant_cast!(QString)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole));
@@ -122,7 +122,7 @@ public:
         return /+ Qt:: +/qt.core.namespace.Alignment(qvariant_cast!(int)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole)));
     }
     pragma(inline, true) final void setTextAlignment(/+ Qt:: +/qt.core.namespace.Alignment atextAlignment)
-    { auto tmp = const(QVariant)(cast(int)(atextAlignment)); setData(tmp, /+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole); }+/
+    { auto tmp = const(QVariant)(cast(int) (atextAlignment)); setData(tmp, /+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole); }+/
 
     pragma(inline, true) final QBrush background() const {
         return qvariant_cast!(QBrush)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole));
@@ -239,7 +239,7 @@ public:
     pragma(inline, true) final void appendColumn(ref const(QList!(QStandardItem)) aitems)
     { insertColumn(columnCount(), aitems); }
 /+    pragma(inline, true) final void insertRow(int arow, QStandardItem aitem)
-    { insertRow(arow, cast(QStandardItem)(QList!(QStandardItem)() << aitem)); }
+    { insertRow(arow, cast(QStandardItem) (QList!(QStandardItem)() << aitem)); }
     pragma(inline, true) final void appendRow(QStandardItem aitem)
     { insertRow(rowCount(), aitem); }
 +/
@@ -255,7 +255,7 @@ public:
     enum ItemType { Type = 0, UserType = 1000 }
     /+ virtual +/ int type() const;
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ virtual +/ void read(ref QDataStream in_);
         /+ virtual +/ void write(ref QDataStream out_) const;
@@ -363,13 +363,13 @@ public:
     final void appendRow(ref const(QList!(QStandardItem)) items);
     final void appendColumn(ref const(QList!(QStandardItem)) items);
 /+    pragma(inline, true) final void appendRow(QStandardItem aitem)
-    { appendRow(cast(QStandardItem)(QList!(QStandardItem)() << aitem)); }
+    { appendRow(cast(QStandardItem) (QList!(QStandardItem)() << aitem)); }
 +/
 
     final void insertRow(int row, ref const(QList!(QStandardItem)) items);
     final void insertColumn(int column, ref const(QList!(QStandardItem)) items);
 /+    pragma(inline, true) final void insertRow(int arow, QStandardItem aitem)
-    { insertRow(arow, cast(QStandardItem)(QList!(QStandardItem)() << aitem)); }
+    { insertRow(arow, cast(QStandardItem) (QList!(QStandardItem)() << aitem)); }
 +/
 
 /+    pragma(inline, true) final bool insertRow(int arow, ref const(QModelIndex) aparent = globalInitVar!QModelIndex)

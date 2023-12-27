@@ -18,7 +18,7 @@ import qt.helpers;
 /+ #define QT_FEATURE_shared 1
 #define QT_FEATURE_cross_compile -1
 #define QT_FEATURE_framework -1
-#define QT_FEATURE_rpath -1
+#define QT_FEATURE_rpath 1
 #define QT_COMPILER_SUPPORTS_SSE2 1
 #define QT_COMPILER_SUPPORTS_AES 1
 #define QT_FEATURE_appstore_compliant -1
@@ -42,8 +42,8 @@ import qt.helpers;
 #define QT_FEATURE_build_all -1
 #define QT_FEATURE_c__11 1
 #define QT_FEATURE_c__14 1
-#define QT_FEATURE_c__17 1
-#define QT_FEATURE_c__1z 1
+#define QT_FEATURE_c__17 -1
+#define QT_FEATURE_c__1z -1
 #define QT_FEATURE_c__2a -1
 #define QT_FEATURE_c99 1
 #define QT_FEATURE_c11 1
@@ -55,10 +55,9 @@ import qt.helpers;
 #define QT_FEATURE_force_asserts -1
 #define QT_LARGEFILE_SUPPORT 64
 #define QT_COMPILER_SUPPORTS_RDRND 1
-#define QT_COMPILER_SUPPORTS_RDSEED 1
 #define QT_VISIBILITY_AVAILABLE true
 #define QT_REDUCE_RELOCATIONS true
-#define QT_FEATURE_separate_debug_info -1
+#define QT_FEATURE_separate_debug_info 1
 #define QT_COMPILER_SUPPORTS_SHA 1
 #define QT_FEATURE_signaling_nan 1
 #define QT_FEATURE_static -1

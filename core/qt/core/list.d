@@ -120,21 +120,21 @@ private:
     struct Node { void* v;
         ref T t()
         {
-            static if(QTypeInfo!T.isLarge || QTypeInfo!T.isStatic)
+            static if (QTypeInfo!T.isLarge || QTypeInfo!T.isStatic)
                 return *reinterpret_cast!(T*)(v);
             else
                 return *reinterpret_cast!(T*)(&this);
         }
     }
 
-    version(Windows)
+    version (Windows)
         union { QListData.Data * d; QListData p; }
     else
         union { QListData.Data * d = &QListData.shared_null; QListData p; }
 
 
 public:
-    version(Windows)
+    version (Windows)
     {
         @disable this();
         pragma(inline, true) void rawConstructor()/+ noexcept+/
@@ -223,7 +223,7 @@ public:
     }
 
     pragma(inline, true) bool isDetached() const { return !d.ref_.isShared(); }
-    version(QT_NO_UNSHARABLE_CONTAINERS){}else
+    version (QT_NO_UNSHARABLE_CONTAINERS) {} else
     {
         pragma(inline, true) void setSharable(bool sharable)
         {
@@ -413,7 +413,7 @@ public:
                 *n++ = *i;
         }
 
-        int removedCount = cast(int)(e - n);
+        int removedCount = cast(int) (e - n);
         d.end -= removedCount;
         return removedCount;
     }+/
@@ -509,7 +509,7 @@ public:
         /+pragma(inline, true) ref iterator operator =(ref const(iterator) o)/+ noexcept+/
         { i = o.i; return this; }+/
 /+ #endif +/
-        pragma(inline, true) ref T opUnary(string op)() const if(op == "*") { return (cast(Node*)i).t(); }
+        pragma(inline, true) ref T opUnary(string op)() const if (op == "*") { return (cast(Node*) i).t(); }
         /+pragma(inline, true) T* operator ->() const { return &i.t(); }+/
         pragma(inline, true) ref T opIndex(difference_type j) const { return (cast(Node*)i).t(); }
         /+pragma(inline, true) bool operator ==(ref const(iterator) o) const/+ noexcept+/ { return i == o.i; }+/
@@ -532,16 +532,16 @@ public:
         /+pragma(inline, true) bool operator >=(ref const(const_iterator) other) const/+ noexcept+/
             { return i >= other.i; }+/
 /+ #endif +/
-        pragma(inline, true) ref iterator opUnary(string op)() if(op == "++") { ++i; return this; }
-        /+pragma(inline, true) iterator operator ++(int) { Node* n = i; ++i; return cast(iterator)(n); }+/
-        pragma(inline, true) ref iterator opUnary(string op)() if(op == "--") { i--; return this; }
-        /+pragma(inline, true) iterator operator --(int) { Node* n = i; i--; return cast(iterator)(n); }+/
-        pragma(inline, true) ref iterator opOpAssign(string op)(difference_type j) if(op == "+") { i+=j; return this; }
-        pragma(inline, true) ref iterator opOpAssign(string op)(difference_type j) if(op == "-") { i-=j; return this; }
-        pragma(inline, true) iterator opBinary(string op)(difference_type j) const if(op == "+") { return iterator(cast(Node*)(i+j)); }
-        pragma(inline, true) iterator opBinary(string op)(difference_type j) const if(op == "-") { return iterator(cast(Node*)(i-j)); }
+        pragma(inline, true) ref iterator opUnary(string op)() if (op == "++") { ++i; return this; }
+        /+pragma(inline, true) iterator operator ++(int) { Node* n = i; ++i; return cast(iterator) (n); }+/
+        pragma(inline, true) ref iterator opUnary(string op)() if (op == "--") { i--; return this; }
+        /+pragma(inline, true) iterator operator --(int) { Node* n = i; i--; return cast(iterator) (n); }+/
+        pragma(inline, true) ref iterator opOpAssign(string op)(difference_type j) if (op == "+") { i+=j; return this; }
+        pragma(inline, true) ref iterator opOpAssign(string op)(difference_type j) if (op == "-") { i-=j; return this; }
+        pragma(inline, true) iterator opBinary(string op)(difference_type j) const if (op == "+") { return iterator(cast(Node*) (i+j)); }
+        pragma(inline, true) iterator opBinary(string op)(difference_type j) const if (op == "-") { return iterator(cast(Node*) (i-j)); }
         /+ friend inline iterator operator+(difference_type j, iterator k) { return k + j; } +/
-        pragma(inline, true) int opBinary(string op)(iterator j) const if(op == "-") { return cast(int)(i - j.i); }
+        pragma(inline, true) int opBinary(string op)(iterator j) const if (op == "-") { return cast(int) (i - j.i); }
     }
     /+ friend class iterator; +/
 
@@ -587,7 +587,7 @@ public:
             this.i = cast(Node*)o.i;
         }
 /+ #endif +/
-        pragma(inline, true) ref const(T) opUnary(string op)() const if(op == "*") { return i.t(); }
+        pragma(inline, true) ref const(T) opUnary(string op)() const if (op == "*") { return i.t(); }
         /+pragma(inline, true) const(T)* operator ->() const { return &i.t(); }+/
         pragma(inline, true) ref const(T) opIndex(difference_type j) const { return (cast(Node*)i)[j].t(); }
         /+pragma(inline, true) bool operator ==(ref const(const_iterator) o) const/+ noexcept+/ { return i == o.i; }+/
@@ -596,16 +596,16 @@ public:
         /+pragma(inline, true) bool operator <=(ref const(const_iterator) other) const/+ noexcept+/ { return i <= other.i; }+/
         /+pragma(inline, true) bool operator >(ref const(const_iterator) other) const/+ noexcept+/ { return i > other.i; }+/
         /+pragma(inline, true) bool operator >=(ref const(const_iterator) other) const/+ noexcept+/ { return i >= other.i; }+/
-        pragma(inline, true) ref const_iterator opUnary(string op)() if(op == "++") { ++i; return this; }
-        /+pragma(inline, true) const_iterator operator ++(int) { Node* n = i; ++i; return cast(const_iterator)(n); }+/
-        pragma(inline, true) ref const_iterator opUnary(string op)() if(op == "--") { i--; return this; }
-        /+pragma(inline, true) const_iterator operator --(int) { Node* n = i; i--; return cast(const_iterator)(n); }+/
-        pragma(inline, true) ref const_iterator opOpAssign(string op)(difference_type j) if(op == "+") { i+=j; return this; }
-        pragma(inline, true) ref const_iterator opOpAssign(string op)(difference_type j) if(op == "-") { i-=j; return this; }
-        pragma(inline, true) const_iterator opBinary(string op)(difference_type j) const if(op == "+") { return const_iterator(i+j); }
-        pragma(inline, true) const_iterator opBinary(string op)(difference_type j) const if(op == "-") { return const_iterator(i-j); }
+        pragma(inline, true) ref const_iterator opUnary(string op)() if (op == "++") { ++i; return this; }
+        /+pragma(inline, true) const_iterator operator ++(int) { Node* n = i; ++i; return cast(const_iterator) (n); }+/
+        pragma(inline, true) ref const_iterator opUnary(string op)() if (op == "--") { i--; return this; }
+        /+pragma(inline, true) const_iterator operator --(int) { Node* n = i; i--; return cast(const_iterator) (n); }+/
+        pragma(inline, true) ref const_iterator opOpAssign(string op)(difference_type j) if (op == "+") { i+=j; return this; }
+        pragma(inline, true) ref const_iterator opOpAssign(string op)(difference_type j) if (op == "-") { i-=j; return this; }
+        pragma(inline, true) const_iterator opBinary(string op)(difference_type j) const if (op == "+") { return const_iterator(i+j); }
+        pragma(inline, true) const_iterator opBinary(string op)(difference_type j) const if (op == "-") { return const_iterator(i-j); }
         /+ friend inline const_iterator operator+(difference_type j, const_iterator k) { return k + j; } +/
-        pragma(inline, true) int opBinary(string op)(const_iterator j) const if(op == "-") { return cast(int)(i - j.i); }
+        pragma(inline, true) int opBinary(string op)(const_iterator j) const if (op == "-") { return cast(int) (i - j.i); }
     }
     /+ friend class const_iterator; +/
 
@@ -654,7 +654,7 @@ public:
     {
         (mixin(Q_ASSERT_X(q{QList.isValidIterator(before)},q{ "QList::insert"},q{ "The specified iterator argument 'before' is invalid"})));
 
-        int iBefore = cast(int)(before.i - reinterpret_cast!(Node*)(p.begin()));
+        int iBefore = cast(int) (before.i - reinterpret_cast!(Node*)(p.begin()));
         Node* n = null;
         if (d.ref_.isShared())
             n = detach_helper_grow(iBefore, 1);
@@ -666,13 +666,13 @@ public:
             }
             node_construct(n, t);
         }
-        return cast(iterator)(n);
+        return cast(iterator) (n);
     }
     pragma(inline, true) iterator erase(iterator it)
     {
         (mixin(Q_ASSERT_X(q{QList!T.isValidIterator(it)},q{ "QList::erase"},q{ "The specified iterator argument 'it' is invalid"})));
         if (d.ref_.isShared()) {
-            int offset = cast(int)(it.i - reinterpret_cast!(Node*)(p.begin()));
+            int offset = cast(int) (it.i - reinterpret_cast!(Node*)(p.begin()));
             it = begin(); // implies detach()
             it += offset;
         }
@@ -686,8 +686,8 @@ public:
 
         if (d.ref_.isShared()) {
             // ### A block is erased and a detach is needed. We should shrink and only copy relevant items.
-            int offsetfirst = cast(int)(afirst.i - reinterpret_cast!(Node*)(p.begin()));
-            int offsetlast = cast(int)(alast.i - reinterpret_cast!(Node*)(p.begin()));
+            int offsetfirst = cast(int) (afirst.i - reinterpret_cast!(Node*)(p.begin()));
+            int offsetlast = cast(int) (alast.i - reinterpret_cast!(Node*)(p.begin()));
             afirst = begin(); // implies detach()
             alast = afirst;
             afirst += offsetfirst;
@@ -696,7 +696,7 @@ public:
 
         for (Node* n = afirst.i; n < alast.i; ++n)
             node_destruct(n);
-        int idx = cast(int)(afirst - begin());
+        int idx = cast(int) (afirst - begin());
         p.remove(idx, alast - afirst);
         return begin() + idx;
     }
@@ -780,7 +780,7 @@ public:
     alias difference_type = qptrdiff;
 
     // comfort
-    extern(D) ref QList!(T) opOpAssign(string op)(ref const(QList!(T)) l) if(op == "~")
+    extern(D) ref QList!(T) opOpAssign(string op)(ref const(QList!(T)) l) if (op == "~")
     {
         if (!l.isEmpty()) {
             if (d == &QListData.shared_null) {
@@ -801,21 +801,21 @@ public:
         }
         return this;
     }
-    extern(D) pragma(inline, true) QList!(T) opBinary(string op)(ref const(QList!(T)) l) const if(op == "~")
+    extern(D) pragma(inline, true) QList!(T) opBinary(string op)(ref const(QList!(T)) l) const if (op == "~")
     { QList n = this; n ~= l; return n; }
-    extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(ref const(T) t) if(op == "~")
+    extern(D) pragma(inline, true) ref QList!(T) opOpAssign(string op)(ref const(T) t) if (op == "~")
     { append(t); return this; }
     /+pragma(inline, true) ref QList!(T) operator << (ref const(T) t)
     { append(t); return this; }+/
     /+pragma(inline, true) ref QList!(T) operator <<(ref const(QList!(T)) l)
     { this += l; return this; }+/
 
-    extern(D) void opOpAssign(string op, T2)(ref const T2 t) if(op == "~" && !is(const(T2) == const(T)))
+    extern(D) void opOpAssign(string op, T2)(ref const T2 t) if (op == "~" && !is(const(T2) == const(T)))
     {
         auto tmp = T(t);
         append(tmp);
     }
-    extern(D) void opOpAssign(string op)(const T t) if(op == "~")
+    extern(D) void opOpAssign(string op)(const T t) if (op == "~")
     {
         append(t);
     }
@@ -910,7 +910,7 @@ private:
         }
         else static if (QTypeInfo!(T).isComplex)
         {
-            static if(__traits(hasMember, T, "rawConstructor"))
+            static if (__traits(hasMember, T, "rawConstructor"))
                 (*cast(T*)n).rawConstructor();
             else
                 emplace!T(cast(T*)n);
@@ -1071,7 +1071,7 @@ int indexOf(T, U)(ref const(QList!(T)) list, ref const(U) u, int from)
         QList!T.Node* e = reinterpret_cast!(QList!T.Node*)(list.p.end());
         while (++n != e)
             if (n.t() == u)
-                return cast(int)(n - reinterpret_cast!(QList!T.Node*)(list.p.begin()));
+                return cast(int) (n - reinterpret_cast!(QList!T.Node*)(list.p.begin()));
     }
     return -1;
 }
@@ -1092,7 +1092,7 @@ int lastIndexOf(T, U)(ref const(QList!(T)) list, ref const(U) u, int from)
         QList!T.Node* n = reinterpret_cast!(QList!T.Node*)(list.p.at(from + 1));
         while (n-- != b) {
             if (n.t() == u)
-                return cast(int)(n - b);
+                return cast(int) (n - b);
         }
     }
     return -1;

@@ -149,7 +149,7 @@ public:
     static QList!(QByteArray) windowsIdToIanaIds(ref const(QByteArray) windowsId,
                                                      QLocale.Country country);
 
-    static if((!versionIsSet!("QT_NO_SYSTEMLOCALE") && (versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS"))))
+    static if ((!versionIsSet!("QT_NO_SYSTEMLOCALE") && (versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS"))))
     {
         /+ static QTimeZone fromCFTimeZone(CFTimeZoneRef timeZone); +/
         /+ CFTimeZoneRef toCFTimeZone() const Q_DECL_CF_RETURNS_RETAINED; +/
@@ -159,7 +159,7 @@ public:
 
 private:
     this(ref QTimeZonePrivate dd);
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &ds, const QTimeZone &tz); +/
     }

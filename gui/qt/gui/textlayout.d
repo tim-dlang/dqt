@@ -27,7 +27,7 @@ import qt.gui.textformat;
 import qt.gui.textobject;
 import qt.gui.textoption;
 import qt.helpers;
-version(QT_NO_RAWFONT){}else
+version (QT_NO_RAWFONT) {} else
 {
     import qt.gui.glyphrun;
     import qt.gui.rawfont;
@@ -52,7 +52,7 @@ public:
         this.itm = 0;
         this.eng = null;
     }+/
-    pragma(inline, true) bool isValid() const { return cast(bool)(eng); }
+    pragma(inline, true) bool isValid() const { return cast(bool) (eng); }
 
     QRectF rect() const;
     qreal width() const;
@@ -115,7 +115,7 @@ public:
     void setFont(ref const(QFont) f);
     QFont font() const;
 
-    version(QT_NO_RAWFONT){}else
+    version (QT_NO_RAWFONT) {} else
     {
         void setRawFont(ref const(QRawFont) rawFont);
     }
@@ -189,7 +189,7 @@ public:
     qreal minimumWidth() const;
     qreal maximumWidth() const;
 
-    version(QT_NO_RAWFONT){}else
+    version (QT_NO_RAWFONT) {} else
     {
         QList!(QGlyphRun) glyphRuns(int from = -1, int length = -1) const;
     }
@@ -226,7 +226,7 @@ public:
         this.index = 0;
         this.eng = null;
     }+/
-    pragma(inline, true) bool isValid() const { return cast(bool)(eng); }
+    pragma(inline, true) bool isValid() const { return cast(bool) (eng); }
 
     QRectF rect() const;
     qreal x() const;
@@ -272,7 +272,7 @@ public:
 
     void draw(QPainter* p, ref const(QPointF) point, const(QTextLayout.FormatRange)* selection = null) const;
 
-    version(QT_NO_RAWFONT){}else
+    version (QT_NO_RAWFONT) {} else
     {
         QList!(QGlyphRun) glyphRuns(int from = -1, int length = -1) const;
     }

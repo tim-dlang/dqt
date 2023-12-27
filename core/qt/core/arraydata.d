@@ -263,7 +263,7 @@ struct QTypedArrayData(T)
 
             result.offset = reinterpret_cast!(const(char)*)(data)
                 - reinterpret_cast!(const(char)*)(result);
-            result.size = cast(int)(n);
+            result.size = cast(int) (n);
         }
         return result;
     }
@@ -280,7 +280,7 @@ struct QTypedArrayData(T)
         return allocate(/* capacity */ 0);
     }
 
-    version(QT_NO_UNSHARABLE_CONTAINERS){}else
+    version (QT_NO_UNSHARABLE_CONTAINERS) {} else
     {
         static QTypedArrayData* unsharableEmpty()
         {

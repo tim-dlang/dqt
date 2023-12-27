@@ -37,9 +37,9 @@ import qt.gui.touchdevice;
 import qt.gui.vector2d;
 import qt.gui.windowdefs;
 import qt.helpers;
-version(QT_NO_INPUTMETHOD){}else
+version (QT_NO_INPUTMETHOD) {} else
     import qt.core.variant;
-version(QT_NO_SHORTCUT){}else
+version (QT_NO_SHORTCUT) {} else
     import qt.gui.keysequence;
 
 /+ #ifndef QT_NO_GESTURES
@@ -69,7 +69,7 @@ public:
     this(ref const(QPointF) localPos, ref const(QPointF) windowPos, ref const(QPointF) screenPos);
     ~this();
 
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         pragma(inline, true) final QPoint pos() const { return l.toPoint(); }
         pragma(inline, true) final QPoint globalPos() const { return s.toPoint(); }
@@ -104,7 +104,7 @@ public:
                     /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers, /+ Qt:: +/qt.core.namespace.MouseEventSource source);
     ~this();
 
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         pragma(inline, true) final QPoint pos() const { return l.toPoint(); }
         pragma(inline, true) final QPoint globalPos() const { return s.toPoint(); }
@@ -147,7 +147,7 @@ public:
     this(Type type, ref const(QPointF) pos, ref const(QPointF) oldPos, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers = /+ Qt:: +/qt.core.namespace.KeyboardModifier.NoModifier);
     ~this();
 
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         pragma(inline, true) final QPoint pos() const { return p.toPoint(); }
         pragma(inline, true) final QPoint oldPos() const { return op.toPoint(); }
@@ -207,20 +207,20 @@ public:
     // Actually deprecated since 5.0, in docs
     /+ QT_DEPRECATED_VERSION_X_5_15("Use angleDelta()") +/
         pragma(inline, true) final /+ Qt:: +/qt.core.namespace.Orientation orientation() const { return qt4O; }
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         /+ QT_DEPRECATED_VERSION_X_5_15("Use position()") +/
             pragma(inline, true) final QPoint pos() const { return p.toPoint(); }
         /+ QT_DEPRECATED_VERSION_X_5_15("Use globalPosition()") +/
             pragma(inline, true) final QPoint globalPos()   const { return g.toPoint(); }
         /+ QT_DEPRECATED_VERSION_X_5_15("Use position()") +/
-            pragma(inline, true) final int x() const { return cast(int)(p.x()); }
+            pragma(inline, true) final int x() const { return cast(int) (p.x()); }
         /+ QT_DEPRECATED_VERSION_X_5_15("Use position()") +/
-            pragma(inline, true) final int y() const { return cast(int)(p.y()); }
+            pragma(inline, true) final int y() const { return cast(int) (p.y()); }
         /+ QT_DEPRECATED_VERSION_X_5_15("Use globalPosition()") +/
-            pragma(inline, true) final int globalX() const { return cast(int)(g.x()); }
+            pragma(inline, true) final int globalX() const { return cast(int) (g.x()); }
         /+ QT_DEPRECATED_VERSION_X_5_15("Use globalPosition()") +/
-            pragma(inline, true) final int globalY() const { return cast(int)(g.y()); }
+            pragma(inline, true) final int globalY() const { return cast(int) (g.y()); }
     }
     /+ QT_DEPRECATED_VERSION_X_5_15("Use position()") +/
         pragma(inline, true) final ref const(QPointF) posF() const { return p; }
@@ -233,10 +233,10 @@ public:
 
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.MouseButtons buttons() const { return mouseState; }
 
-    pragma(inline, true) final /+ Qt:: +/qt.core.namespace.ScrollPhase phase() const { return cast(/+ Qt:: +/qt.core.namespace.ScrollPhase)(ph); }
+    pragma(inline, true) final /+ Qt:: +/qt.core.namespace.ScrollPhase phase() const { return cast(/+ Qt:: +/qt.core.namespace.ScrollPhase) (ph); }
     pragma(inline, true) final bool inverted() const { return invertedScrolling; }
 
-    final /+ Qt:: +/qt.core.namespace.MouseEventSource source() const { return cast(/+ Qt:: +/qt.core.namespace.MouseEventSource)(src); }
+    final /+ Qt:: +/qt.core.namespace.MouseEventSource source() const { return cast(/+ Qt:: +/qt.core.namespace.MouseEventSource) (src); }
 
 protected:
     QPointF p;
@@ -348,10 +348,10 @@ public:
     /+ QT_DEPRECATED_VERSION_X_5_15("use globalPosF().y()") +/
         pragma(inline, true) final qreal hiResGlobalY() const { return mGPos.y(); }
     /+ QT_DEPRECATED_VERSION_X_5_15("Use deviceType()") +/
-        pragma(inline, true) final TabletDevice device() const { return cast(TabletDevice)(mDev); }
+        pragma(inline, true) final TabletDevice device() const { return cast(TabletDevice) (mDev); }
 /+ #endif +/
-    pragma(inline, true) final TabletDevice deviceType() const { return cast(TabletDevice)(mDev); }
-    pragma(inline, true) final PointerType pointerType() const { return cast(PointerType)(mPointerType); }
+    pragma(inline, true) final TabletDevice deviceType() const { return cast(TabletDevice) (mDev); }
+    pragma(inline, true) final PointerType pointerType() const { return cast(PointerType) (mPointerType); }
     pragma(inline, true) final qint64 uniqueId() const { return mUnique; }
     pragma(inline, true) final qreal pressure() const { return mPress; }
     pragma(inline, true) final int z() const { return mZ; }
@@ -375,7 +375,7 @@ protected:
 }
 /+ #endif +/ // QT_CONFIG(tabletevent)
 
-version(QT_NO_GESTURES){}else
+version (QT_NO_GESTURES) {} else
 {
 /// Binding for C++ class [QNativeGestureEvent](https://doc.qt.io/qt-5/qnativegestureevent.html).
 class /+ Q_GUI_EXPORT +/ QNativeGestureEvent : QInputEvent
@@ -391,7 +391,7 @@ public:
     final /+ Qt:: +/qt.core.namespace.NativeGestureType gestureType() const { return mGestureType; }
     final qreal value() const { return mRealValue; }
 
-    version(QT_NO_INTEGER_EVENT_COORDINATES){}else
+    version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
         pragma(inline, true) final const(QPoint) pos() const { return mLocalPos.toPoint(); }
         pragma(inline, true) final const(QPoint) globalPos() const { return mScreenPos.toPoint(); }
@@ -427,7 +427,7 @@ public:
     ~this();
 
     final int key() const { return k; }
-    version(QT_NO_SHORTCUT){}else
+    version (QT_NO_SHORTCUT) {} else
     {
         final bool matches(QKeySequence.StandardKey key) const;
     }
@@ -618,7 +618,7 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-version(QT_NO_CONTEXTMENU){}else
+version (QT_NO_CONTEXTMENU) {} else
 {
 /// Binding for C++ class [QContextMenuEvent](https://doc.qt.io/qt-5/qcontextmenuevent.html).
 class /+ Q_GUI_EXPORT +/ QContextMenuEvent : QInputEvent
@@ -640,7 +640,7 @@ public:
     pragma(inline, true) final ref const(QPoint) pos() const { return p; }
     pragma(inline, true) final ref const(QPoint) globalPos() const { return gp; }
 
-    pragma(inline, true) final Reason reason() const { return cast(Reason)(reas); }
+    pragma(inline, true) final Reason reason() const { return cast(Reason) (reas); }
 
 protected:
     QPoint p;
@@ -660,7 +660,7 @@ protected:
 }
 }
 
-version(QT_NO_INPUTMETHOD){}else
+version (QT_NO_INPUTMETHOD) {} else
 {
 /// Binding for C++ class [QInputMethodEvent](https://doc.qt.io/qt-5/qinputmethodevent.html).
 class /+ Q_GUI_EXPORT +/ QInputMethodEvent : QEvent
@@ -680,7 +680,7 @@ public:
             this.type = typ;
             this.start = s;
             this.length = l;
-            this.value = /+ std:: +/move(cast(_Tp && )(val));
+            this.value = /+ std:: +/move(cast(_Tp && ) (val));
         }
         this(AttributeType typ, int s, int l)
         {
@@ -854,7 +854,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-version(QT_NO_STATUSTIP){}else
+version (QT_NO_STATUSTIP) {} else
 {
 /// Binding for C++ class [QStatusTipEvent](https://doc.qt.io/qt-5/qstatustipevent.html).
 class /+ Q_GUI_EXPORT +/ QStatusTipEvent : QEvent
@@ -902,7 +902,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-version(QT_NO_TOOLBAR){}else
+version (QT_NO_TOOLBAR) {} else
 {
 class /+ Q_GUI_EXPORT +/ QToolBarChangeEvent : QEvent
 {
@@ -927,7 +927,7 @@ private:
 }
 }
 
-version(QT_NO_SHORTCUT){}else
+version (QT_NO_SHORTCUT) {} else
 {
 /// Binding for C++ class [QShortcutEvent](https://doc.qt.io/qt-5/qshortcutevent.html).
 class /+ Q_GUI_EXPORT +/ QShortcutEvent : QEvent
@@ -967,7 +967,7 @@ private:
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QEvent *);
 #endif +/
 
-version(QT_NO_SHORTCUT){}else
+version (QT_NO_SHORTCUT) {} else
 {
 /+pragma(inline, true) bool operator ==(QKeyEvent e, QKeySequence.StandardKey key){return (e ? e.matches(key) : false);}+/
 /+pragma(inline, true) bool operator ==(QKeySequence.StandardKey key, QKeyEvent e){return (e ? e.matches(key) : false);}+/
@@ -1172,7 +1172,7 @@ protected:
     /+ friend class QGuiApplicationPrivate; +/
     /+ friend class QApplication; +/
     /+ friend class QApplicationPrivate; +/
-    version(QT_NO_GRAPHICSVIEW){}else
+    version (QT_NO_GRAPHICSVIEW) {} else
     {
         /+ friend class QGraphicsScenePrivate; +/ // direct access to _touchPoints
     }
@@ -1264,17 +1264,17 @@ private:
     /+ Qt:: +/qt.core.namespace.ApplicationState m_applicationState;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-version(QT_NO_INPUTMETHOD)
+version (QT_NO_INPUTMETHOD)
 {
 extern(C++, class) struct QInputMethodQueryEvent;
 }
 
-version(QT_NO_CONTEXTMENU)
+version (QT_NO_CONTEXTMENU)
 {
 class QContextMenuEvent;
 }
 
-version(QT_NO_INPUTMETHOD)
+version (QT_NO_INPUTMETHOD)
 {
 class QInputMethodEvent;
 }

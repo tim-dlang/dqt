@@ -14,13 +14,13 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_VECTOR2D){}else
-version(QT_NO_VECTOR4D){}else
+version (QT_NO_VECTOR2D) {} else
+version (QT_NO_VECTOR4D) {} else
     import qt.gui.vector2d;
-version(QT_NO_VECTOR3D){}else
-version(QT_NO_VECTOR4D){}else
+version (QT_NO_VECTOR3D) {} else
+version (QT_NO_VECTOR4D) {} else
     import qt.gui.vector3d;
-version(QT_NO_VECTOR4D){}else
+version (QT_NO_VECTOR4D) {} else
 {
     import qt.core.namespace;
     import qt.core.point;
@@ -28,12 +28,12 @@ version(QT_NO_VECTOR4D){}else
     import qt.core.variant;
 }
 
-version(QT_NO_VECTOR4D)
+version (QT_NO_VECTOR4D)
 {
 extern(C++, class) struct QVector4D;
 }
 
-version(QT_NO_VECTOR4D){}else
+version (QT_NO_VECTOR4D) {} else
 {
 
 /// Binding for C++ class [QVector4D](https://doc.qt.io/qt-5/qvector4d.html).
@@ -59,14 +59,14 @@ public:
         this.v = [float(point.x()), float(point.y()), 0.0f, 0.0f];
     }
 /+ #ifndef QT_NO_VECTOR2D +/
-    version(QT_NO_VECTOR2D){}else
+    version (QT_NO_VECTOR2D) {} else
     {
         this(ref const(QVector2D) vector);
         this(ref const(QVector2D) vector, float zpos, float wpos);
     }
 /+ #endif
 #ifndef QT_NO_VECTOR3D +/
-    version(QT_NO_VECTOR3D){}else
+    version (QT_NO_VECTOR3D) {} else
     {
         this(ref const(QVector3D) vector);
         this(ref const(QVector3D) vector, float wpos);
@@ -176,14 +176,14 @@ public:
     /+ friend inline bool qFuzzyCompare(const QVector4D& v1, const QVector4D& v2); +/
 
 /+ #ifndef QT_NO_VECTOR2D +/
-    version(QT_NO_VECTOR2D){}else
+    version (QT_NO_VECTOR2D) {} else
     {
         QVector2D toVector2D() const;
         QVector2D toVector2DAffine() const;
     }
 /+ #endif
 #ifndef QT_NO_VECTOR3D +/
-    version(QT_NO_VECTOR3D){}else
+    version (QT_NO_VECTOR3D) {} else
     {
         QVector3D toVector3D() const;
         QVector3D toVector3DAffine() const;
@@ -210,7 +210,7 @@ private:
 
     /+ friend class QVector2D; +/
     /+ friend class QVector3D; +/
-    static if(!defined!"QT_NO_MATRIX4X4")
+    static if (!defined!"QT_NO_MATRIX4X4")
     {
         /+ friend QVector4D operator*(const QVector4D& vector, const QMatrix4x4& matrix); +/
         /+ friend QVector4D operator*(const QMatrix4x4& matrix, const QVector4D& vector); +/

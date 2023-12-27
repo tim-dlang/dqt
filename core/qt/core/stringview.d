@@ -150,7 +150,7 @@ public:
     }
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    this(Char)(const Char *str, qsizetype len) if(is(Char == QChar) || is(Char == ushort) || is(Char == wchar))
+    this(Char)(const Char *str, qsizetype len) if (is(Char == QChar) || is(Char == ushort) || is(Char == wchar))
     {
         assert(len >= 0);
         assert(str || !len);
@@ -159,7 +159,7 @@ public:
     }
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    this(Char,)(const(Char)* f, const(Char)* l) if(is(Char == QChar) || is(Char == ushort) || is(Char == wchar))
+    this(Char,)(const(Char)* f, const(Char)* l) if (is(Char == QChar) || is(Char == ushort) || is(Char == wchar))
     {
         this(f, l - f);
     }
@@ -427,8 +427,8 @@ return QStringView(m_data, m_size - n);
 
         if (wchar_t.sizeof == QChar.sizeof) {
             if (auto src = data())
-                memcpy(array, cast(const(void)*)(src), QChar.sizeof * size());
-            return cast(int)(size());     // ### q6sizetype
+                memcpy(array, cast(const(void)*) (src), QChar.sizeof * size());
+            return cast(int) (size());     // ### q6sizetype
         } else {
             return QString.toUcs4_helper(reinterpret_cast!(const(ushort)*)(data()), int(size()),
                                           reinterpret_cast!(uint*)(array));
@@ -472,7 +472,7 @@ return QStringView(m_data, m_size - n);
         const split = s.splitRef(sep, behavior);
         QList!(QStringView) result;
         result.reserve(split.size());
-        foreach(const ref QStringRef r; split)
+        foreach (const ref QStringRef r; split)
             result.append(r);
         return result;
     }+/

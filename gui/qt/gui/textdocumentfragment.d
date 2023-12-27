@@ -17,7 +17,7 @@ import qt.core.string;
 import qt.gui.textcursor;
 import qt.gui.textdocument;
 import qt.helpers;
-version(QT_NO_TEXTHTMLPARSER){}else
+version (QT_NO_TEXTHTMLPARSER) {} else
     import qt.core.bytearray;
 
 /+ class QTextStream; +/
@@ -49,13 +49,13 @@ public:
     bool isEmpty() const;
 
     QString toPlainText() const;
-    version(QT_NO_TEXTHTMLPARSER){}else
+    version (QT_NO_TEXTHTMLPARSER) {} else
     {
         QString toHtml(ref const(QByteArray) encoding = globalInitVar!QByteArray) const;
     }
 
     static QTextDocumentFragment fromPlainText(ref const(QString) plainText);
-    version(QT_NO_TEXTHTMLPARSER){}else
+    version (QT_NO_TEXTHTMLPARSER) {} else
     {
         static QTextDocumentFragment fromHtml(ref const(QString) html);
         mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{

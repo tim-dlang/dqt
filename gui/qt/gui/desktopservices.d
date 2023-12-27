@@ -14,16 +14,16 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-static if(!defined!"QT_NO_DESKTOPSERVICES" && !defined!"QT_NO_STANDARDPATHS")
+static if (!defined!"QT_NO_DESKTOPSERVICES" && !defined!"QT_NO_STANDARDPATHS")
     import qt.core.standardpaths;
-static if(!defined!"QT_NO_DESKTOPSERVICES")
+static if (!defined!"QT_NO_DESKTOPSERVICES")
 {
     import qt.core.object;
     import qt.core.string;
     import qt.core.url;
 }
 
-static if(!defined!"QT_NO_DESKTOPSERVICES")
+static if (!defined!"QT_NO_DESKTOPSERVICES")
 {
 
 /// Binding for C++ class [QDesktopServices](https://doc.qt.io/qt-5/qdesktopservices.html).

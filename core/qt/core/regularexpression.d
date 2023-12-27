@@ -131,7 +131,7 @@ alias MatchOptions = QFlags!(MatchOption);
 
     void optimize() const;
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         static QString escape(ref const(QString) str);
         static QString wildcardToRegularExpression(ref const(QString) str);
@@ -218,7 +218,7 @@ public:
     QStringRef capturedRef(int nth = 0) const;
     QStringView capturedView(int nth = 0) const;
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString captured(ref const(QString) name) const;
         QStringRef capturedRef(ref const(QString) name) const;
@@ -234,7 +234,7 @@ public:
     int capturedLength(int nth = 0) const;
     int capturedEnd(int nth = 0) const;
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         int capturedStart(ref const(QString) name) const;
         int capturedLength(ref const(QString) name) const;

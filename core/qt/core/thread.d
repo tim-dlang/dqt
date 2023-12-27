@@ -92,7 +92,7 @@ public:
 #else
 #  if QT_CONFIG(cxx11_future)
 #    ifdef QTHREAD_HAS_VARIADIC_CREATE +/
-    static if(defined!"QTHREAD_HAS_VARIADIC_CREATE")
+    static if (defined!"QTHREAD_HAS_VARIADIC_CREATE")
     {
         /+ template <typename Function, typename... Args> +/
         /+ static QThread *create(Function &&f, Args &&... args); +/
@@ -179,7 +179,7 @@ QThread *QThread::create(Function &&f)
     return createThreadImpl(std::async(std::launch::deferred, std::move(threadFunction)));
 }
 #else +/
-static if(!defined!"QTHREAD_HAS_VARIADIC_CREATE")
+static if (!defined!"QTHREAD_HAS_VARIADIC_CREATE")
 {
 // C++11: same as C++14, but with a workaround for not having generalized lambda captures
 extern(C++, "QtPrivate") {

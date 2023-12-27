@@ -37,7 +37,7 @@ import qt.widgets.treeview;
 import qt.widgets.treewidgetitemiterator;
 import qt.widgets.widget;
 import qt.widgets.widgetitemdata;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.datastream;
 
 /+ QT_REQUIRE_CONFIG(treewidget); +/
@@ -111,7 +111,7 @@ public:
     { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.StatusTipRole, astatusTip); }
 
 /+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
+    version (QT_NO_TOOLTIP) {} else
     {
         pragma(inline, true) final QString toolTip(int column) const
             { return data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ToolTipRole).toString(); }
@@ -181,7 +181,7 @@ public:
     /+ virtual +/ void setData(int column, int role, ref const(QVariant) value);
     final void setData(T)(int column, int role, T value)
     {
-        static if(is(const(T) == const(QVariant)))
+        static if (is(const(T) == const(QVariant)))
             QVariant v = value;
         else
             QVariant v = QVariant.fromValue(value);
@@ -191,7 +191,7 @@ public:
     pragma(mangle, mangleOpLess("QTreeWidgetItem"))
     bool opLess(const(QTreeWidgetItem) other) const;
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ virtual +/ void read(ref QDataStream in_);
         /+ virtual +/ void write(ref QDataStream out_) const;

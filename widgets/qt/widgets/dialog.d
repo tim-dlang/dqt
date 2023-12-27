@@ -85,7 +85,7 @@ protected:
     override void closeEvent(QCloseEvent );
     override void showEvent(QShowEvent );
     override void resizeEvent(QResizeEvent );
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         override void contextMenuEvent(QContextMenuEvent );
     }

@@ -48,44 +48,44 @@ private /+ slots +/:
         int currentRow = ui.tableWidget.rowAt(pos.y());
         int currentColumn = ui.tableWidget.columnAt(pos.x());
         QMenu menu = cpp_new!QMenu;
-        if(currentRow >= 0)
+        if (currentRow >= 0)
         {
             QAction action = menu.addAction("Current row = " ~ QString.number(currentRow));
             action.setEnabled(false);
 
             action = menu.addAction(QString("Remove row"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.removeRow(currentRow);
             });
 
             action = menu.addAction(QString("Add row before"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertRow(currentRow);
             });
 
             action = menu.addAction(QString("Add row after"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertRow(currentRow + 1);
             });
 
             action = menu.addAction(QString("Change row header"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QTableWidgetItem item = ui.tableWidget.verticalHeaderItem(currentRow);
                 bool ok;
                 QString text = QString.create;
-                if(item)
+                if (item)
                     text = item.text();
                 text = QInputDialog.getText(this, QString.create(), QString("Row header"), QLineEdit.EchoMode.Normal, text, &ok);
-                if(ok)
+                if (ok)
                 {
-                    if(text.isEmpty())
+                    if (text.isEmpty())
                     {
-                        if(item)
+                        if (item)
                             cpp_delete(item);
                     }
                     else
                     {
-                        if(!item)
+                        if (!item)
                         {
                             item = cpp_new!QTableWidgetItem;
                             ui.tableWidget.setVerticalHeaderItem(currentRow, item);
@@ -101,49 +101,49 @@ private /+ slots +/:
             action.setEnabled(false);
 
             action = menu.addAction(QString("Add row"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertRow(ui.tableWidget.rowCount());
             });
         }
 
-        if(currentColumn >= 0)
+        if (currentColumn >= 0)
         {
             QAction action = menu.addAction("Current column = " ~ QString.number(currentColumn));
             action.setEnabled(false);
 
             action = menu.addAction(QString("Remove column"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.removeColumn(currentColumn);
             });
 
             action = menu.addAction(QString("Add column before"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertColumn(currentColumn);
             });
 
             action = menu.addAction(QString("Add column after"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertColumn(currentColumn + 1);
             });
 
             action = menu.addAction(QString("Change column header"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QTableWidgetItem item = ui.tableWidget.horizontalHeaderItem(currentColumn);
                 bool ok;
                 QString text = QString.create;
-                if(item)
+                if (item)
                     text = item.text();
                 text = QInputDialog.getText(this, QString.create(), QString("Column header"), QLineEdit.EchoMode.Normal, text, &ok);
-                if(ok)
+                if (ok)
                 {
-                    if(text.isEmpty())
+                    if (text.isEmpty())
                     {
-                        if(item)
+                        if (item)
                             cpp_delete(item);
                     }
                     else
                     {
-                        if(!item)
+                        if (!item)
                         {
                             item = cpp_new!QTableWidgetItem;
                             ui.tableWidget.setHorizontalHeaderItem(currentColumn, item);
@@ -159,15 +159,15 @@ private /+ slots +/:
             action.setEnabled(false);
 
             action = menu.addAction(QString("Add column"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertColumn(ui.tableWidget.columnCount());
             });
         }
 
-        if(currentColumn >= 0 && currentRow >= 0)
+        if (currentColumn >= 0 && currentRow >= 0)
         {
             QTableWidgetItem item = ui.tableWidget.item(currentRow, currentColumn);
-            if(!item)
+            if (!item)
             {
                 item = cpp_new!QTableWidgetItem();
                 ui.tableWidget.setItem(currentRow, currentColumn, item);
@@ -177,19 +177,19 @@ private /+ slots +/:
             action.setEnabled(false);
 
             action = menu.addAction(QString("Change font"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QFont font = item.font();
                 bool ok;
                 font = QFontDialog.getFont(&ok, font, this);
-                if(ok)
+                if (ok)
                     item.setFont(font);
             });
 
             action = menu.addAction(QString("Change background color"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QBrush brush = item.background();
                 QColor color = QColorDialog.getColor(brush.color(), this);
-                if(color.isValid())
+                if (color.isValid())
                 {
                     brush = QBrush(color);
                     item.setBackground(brush);

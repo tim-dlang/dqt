@@ -91,7 +91,7 @@ import std.meta;
 #define Q_SLOT QT_ANNOTATE_FUNCTION(qt_slot)
 #endif +/ // QT_NO_META_MACROS
 
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
 {
 // full set of tr functions
 /+ #  define QT_TR_FUNCTIONS \
@@ -105,7 +105,7 @@ enum QT_TR_FUNCTIONS =
         /+ QT_DEPRECATED +/ pragma(inline, true) static dqtimported!"qt.core.string".QString trUtf8(const(char)* s, const(char)* c = null, int n = -1)
             { return staticMetaObject.tr(s, c, n); }};
 }
-version(QT_NO_TRANSLATION)
+version (QT_NO_TRANSLATION)
 {
 // inherit the ones from QObject
 /+ # define QT_TR_FUNCTIONS +/
@@ -186,11 +186,11 @@ struct CPPMemberFunctionPointer(T)
 
 template memberFunctionExternDeclaration(alias F)
 {
-    version(Windows)
+    version (Windows)
     extern(D) mixin((){
             string code;
-            version(Windows)
-                static if(IsInQtPackage!(F))
+            version (Windows)
+                static if (IsInQtPackage!(F))
                     code ~= "export ";
             code ~= "extern(" ~ functionLinkage!F ~ ")";
             code ~= q{pragma(mangle, F.mangleof) ReturnType!F memberFunctionExternDeclaration(__traits(parent, F), Parameters!F);};
@@ -207,30 +207,33 @@ extern(D) auto getMemberFunctionAddress(alias F)()
     {
         import core.sys.windows.windef: HMODULE;
         import core.sys.windows.winbase: GetModuleHandle, GetProcAddress;
+        import std.algorithm: startsWith;
         import std.ascii: toLower;
 
-        HMODULE hmodule;
-
-        static foreach (qtmodule; ["Core", "Gui", "Widgets"])
+        static foreach (qtmodule; ["Core", "Gui", "Widgets", "Network", "WebEngineCore", "WebEngineWidgets"])
         {{
-            enum prefix = "qt." ~ qtmodule[0].toLower ~ qtmodule[1 .. $];
+            static if (qtmodule.startsWith("WebEngine"))
+                enum prefix = "qt.webengine";
+            else
+                enum prefix = "qt." ~ qtmodule[0].toLower ~ qtmodule[1 .. $];
             enum dllName = "Qt5" ~ qtmodule;
             enum dllNamed = "Qt5" ~ qtmodule ~ "d";
 
-            if (qt.helpers.packageName!F.length >= prefix.length && qt.helpers.packageName!F[0..prefix.length] == prefix)
+            HMODULE hmodule;
+            if (qt.helpers.packageName!F.startsWith(prefix))
             {
                 hmodule = GetModuleHandle(dllName);
                 if (hmodule is null)
                     hmodule = GetModuleHandle(dllNamed);
             }
+            if (hmodule !is null)
+            {
+                auto signal = cast(typeof(&memberFunctionExternDeclaration!F)) GetProcAddress(hmodule, F.mangleof);
+                if (signal !is null)
+                    return signal;
+            }
         }}
 
-        if (hmodule !is null)
-        {
-            auto signal = cast(typeof(&memberFunctionExternDeclaration!F)) GetProcAddress(hmodule, F.mangleof);
-            if (signal !is null)
-                return signal;
-        }
     }
     return &memberFunctionExternDeclaration!F;
 }
@@ -309,26 +312,26 @@ template MetaObjectImpl(T)
         {
             import qt.core.list: QList;
             import qt.core.vector: QVector;
-            if(is(const(T2) == const(QList!int)))
+            if (is(const(T2) == const(QList!int)))
                 return "QList<int>";
-            else static if(is(const(T2) == const(QVector!int)))
+            else static if (is(const(T2) == const(QVector!int)))
                 return "QVector<int>";
-            else static if(is(T2 == int*))
+            else static if (is(T2 == int*))
                 return "int*";
-            else static if(is(T2 == U*, U) && is(U == struct))
+            else static if (is(T2 == U*, U) && is(U == struct))
             {
                 return typeToMetaComplex!U() ~ "*";
             }
-            else static if(is(T2 == class))
+            else static if (is(T2 == class))
             {
-                static if(__traits(getLinkage, T2) == "D")
+                static if (__traits(getLinkage, T2) == "D")
                     return T2.mangleof ~ "*";
                 else
                     return __traits(identifier, T2) ~ "*";
             }
-            else static if(is(T2 == struct) || is(T2 == union) || is(T2 == enum))
+            else static if (is(T2 == struct) || is(T2 == union) || is(T2 == enum))
             {
-                static if(__traits(getLinkage, T2) == "D")
+                static if (__traits(getLinkage, T2) == "D")
                     return T2.mangleof ~ "*";
                 else
                     return __traits(identifier, T2) ~ "*";
@@ -340,17 +343,17 @@ template MetaObjectImpl(T)
         {
             import qt.core.list: QList;
             import qt.core.vector: QVector;
-            static if(is(T2 == int))
+            static if (is(T2 == int))
                 return "QMetaType.Type.Int";
-            else static if(is(T2 == uint))
+            else static if (is(T2 == uint))
                 return "QMetaType.Type.UInt";
-            else static if(is(T2 == bool))
+            else static if (is(T2 == bool))
                 return "QMetaType.Type.Bool";
-            else static if(is(T2 == double))
+            else static if (is(T2 == double))
                 return "QMetaType.Type.Double";
-            else static if(is(const(T2) == const(QString)))
+            else static if (is(const(T2) == const(QString)))
                 return "QMetaType.Type.QString";
-            else static if(is(const(T2) == const(QPoint)))
+            else static if (is(const(T2) == const(QPoint)))
                 return "QMetaType.Type.QPoint";
             else
                 return text("0x80000000 | ", addString(typeToMetaComplex!T2()));
@@ -360,7 +363,7 @@ template MetaObjectImpl(T)
         {
             if(M.length)
                 metaDataCode ~= "    // " ~ typename ~ ": name, argc, parameters, tag, flags\n";
-            static foreach(i; 0..M.length)
+            static foreach (i; 0 .. M.length)
             {{
                 size_t nameId = addString(__traits(identifier, M[i]));
                 size_t parameterCount = Parameters!(M[i]).length;
@@ -379,12 +382,12 @@ template MetaObjectImpl(T)
         {
             if(M.length)
                 metaDataCode ~= "    // " ~ typename ~ ": parameters\n";
-            static foreach(i; 0..M.length)
+            static foreach (i; 0 .. M.length)
             {
                 metaDataCode ~= "                    QMetaType.Type.Void, "; // TODO: correct return type
-                foreach(P; Parameters!(M[i]))
+                foreach (P; Parameters!(M[i]))
                     metaDataCode ~= typeToMeta!(P) ~ ", ";
-                foreach(j, P; Parameters!(M[i]))
+                foreach (j, P; Parameters!(M[i]))
                     metaDataCode ~= text(addString(ParameterIdentifierTuple!(M[i])[j]), ", ");
                 metaDataCode ~= "// " ~ __traits(identifier, M[i]) ~ "\n";
             }
@@ -396,7 +399,7 @@ template MetaObjectImpl(T)
         addString("");
 
         string concatenatedStringsCode = "\"";
-        foreach(char c; concatenatedStrings)
+        foreach (char c; concatenatedStrings)
         {
             if(c == '\0')
                 concatenatedStringsCode ~= "\\0";
@@ -446,7 +449,7 @@ template MetaObjectImpl(T)
                    0        // eod
             ];
 
-            version(Windows)
+            version (Windows)
             {
                 pragma(mangle, T.staticMetaObject.mangleof)
                 extern(C++) static __gshared QMetaObject staticMetaObject = { {
@@ -484,7 +487,7 @@ template MetaObjectImpl(T)
 enum Q_OBJECT_D = q{
     public:
         static import qt.core.objectdefs;
-        version(Windows)
+        version (Windows)
             extern(C++) extern static __gshared qt.core.objectdefs.QMetaObject staticMetaObject;
         else
             extern(C++) extern static __gshared const(qt.core.objectdefs.QMetaObject) staticMetaObject;
@@ -534,10 +537,10 @@ enum Q_OBJECT_D = q{
                 switch (_id) {
                     mixin((){
                             string methodCallCases;
-                            static foreach(i; 0..allMethods.length)
+                            static foreach (i; 0 .. allMethods.length)
                             {{
                                 methodCallCases ~= text("\n                    case ", i, ": _t.", __traits(identifier, allMethods[i]), "(");
-                                static foreach(j, P; Parameters!(allMethods[i]))
+                                static foreach (j, P; Parameters!(allMethods[i]))
                                 {
                                     methodCallCases ~= text("*cast(Parameters!(allMethods[", i, "])[", j, "]*)(_a[", j + 1, "]), ");
                                 }
@@ -552,7 +555,7 @@ enum Q_OBJECT_D = q{
             } else if (_c == qt.core.objectdefs.QMetaObject.Call.IndexOfMethod) {
                 alias allSignals = qt.core.metamacros.MetaObjectImpl!(typeof(this)).allSignals;
                 int *result = reinterpret_cast!(int *)(_a[0]);
-                static foreach(i; 0..allSignals.length)
+                static foreach (i; 0 .. allSignals.length)
                 {{
                     alias _t = qt.core.metamacros.CPPMemberFunctionPointer!(typeof(this));
 
@@ -578,7 +581,7 @@ enum Q_SIGNAL_IMPL_D = q{
     static import qt.core.objectdefs;
     void*[std.traits.Parameters!(__traits(parent, Dummy)).length + 1] _a = mixin((){
         string r = "[null";
-        static foreach(i; 0..std.traits.Parameters!(__traits(parent, Dummy)).length)
+        static foreach (i; 0 .. std.traits.Parameters!(__traits(parent, Dummy)).length)
             r ~= " , cast(void*)&" ~ std.traits.ParameterIdentifierTuple!(__traits(parent, Dummy))[i];
         r ~= "]";
         return r;

@@ -12,13 +12,13 @@
 module qt.core.global;
 extern(C++):
 
-version(OSX)
+version (OSX)
     version = Apple;
-version(iOS)
+version (iOS)
     version = Apple;
-version(TVOS)
+version (TVOS)
     version = Apple;
-version(WatchOS)
+version (WatchOS)
     version = Apple;
 
 import core.stdc.config;
@@ -64,7 +64,7 @@ enum QT_VERSION =      QT_VERSION_CHECK!(QT_VERSION_MAJOR, QT_VERSION_MINOR, QT_
    can be used like #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
 */
 /+ #define QT_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch)) +/
-template QT_VERSION_CHECK(params...) if(params.length == 3)
+template QT_VERSION_CHECK(params...) if (params.length == 3)
 {
     enum major = params[0];
     enum minor = params[1];
@@ -647,14 +647,14 @@ pragma(inline, true) T qAbs(T)(ref const(T) t) { return t >= 0 ? t : -t; }
 pragma(inline, true) T qAbs(T)(const(T) t) { return t >= 0 ? t : -t; }
 
 pragma(inline, true) int qRound(double d)
-{ return d >= 0.0 ? cast(int)(d + 0.5) : cast(int)(d - double(cast(int)(d-1)) + 0.5) + cast(int)(d-1); }
+{ return d >= 0.0 ? cast(int) (d + 0.5) : cast(int) (d - double(cast(int) (d-1)) + 0.5) + cast(int) (d-1); }
 pragma(inline, true) int qRound(float d)
-{ return d >= 0.0f ? cast(int)(d + 0.5f) : cast(int)(d - float(cast(int)(d-1)) + 0.5f) + cast(int)(d-1); }
+{ return d >= 0.0f ? cast(int) (d + 0.5f) : cast(int) (d - float(cast(int) (d-1)) + 0.5f) + cast(int) (d-1); }
 
 pragma(inline, true) qint64 qRound64(double d)
-{ return d >= 0.0 ? cast(qint64)(d + 0.5) : cast(qint64)(d - double(cast(qint64)(d-1)) + 0.5) + cast(qint64)(d-1); }
+{ return d >= 0.0 ? cast(qint64) (d + 0.5) : cast(qint64) (d - double(cast(qint64) (d-1)) + 0.5) + cast(qint64) (d-1); }
 pragma(inline, true) qint64 qRound64(float d)
-{ return d >= 0.0f ? cast(qint64)(d + 0.5f) : cast(qint64)(d - float(cast(qint64)(d-1)) + 0.5f) + cast(qint64)(d-1); }
+{ return d >= 0.0f ? cast(qint64) (d + 0.5f) : cast(qint64) (d - float(cast(qint64) (d-1)) + 0.5f) + cast(qint64) (d-1); }
 
 pragma(inline, true) ref const(T) qMin(T)(ref const(T) a, ref const(T) b) { return (a < b) ? a : b; }
 pragma(inline, true) const(T)  qMin(T)(const(T) a, const(T) b) { return (a < b) ? a : b; }
@@ -685,7 +685,7 @@ pragma(inline, true) const(T)  qBound(T)(const(T)  min, const(T)  val, const(T) 
 #define Q_FORWARD_DECLARE_MUTABLE_CG_TYPE(type) typedef struct type *type ## Ref;
 #endif +/
 
-version(Apple)
+version (Apple)
 {
 /+ #  define QT_DARWIN_PLATFORM_SDK_EQUAL_OR_ABOVE(macos, ios, tvos, watchos) \
     ((defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && macos != __MAC_NA && __MAC_OS_X_VERSION_MAX_ALLOWED >= macos) || \
@@ -750,10 +750,10 @@ private:
 }
 
 }
-version(OSX){}else
-version(iOS){}else
-version(TVOS){}else
-version(WatchOS){}else
+version (OSX) {} else
+version (iOS) {} else
+version (TVOS) {} else
+version (WatchOS) {} else
 {
 
 /+ #define QT_DARWIN_PLATFORM_SDK_EQUAL_OR_ABOVE(macos, ios, tvos, watchos) (0)
@@ -1065,7 +1065,7 @@ T qExchange(T &t, U &&newValue)
     return old;
 } +/
 
-/+version(QT_NO_FOREACH){}else
+/+version (QT_NO_FOREACH) {} else
 {
 
 /+ namespace QtPrivate {
@@ -1182,7 +1182,7 @@ extern(D) alias Q_CAST_IGNORE_ALIGN = function string(string body_)
 #define QT_TRANSLATE_NOOP3(scope, x, comment) {x, comment}
 #define QT_TRANSLATE_NOOP3_UTF8(scope, x, comment) {x, comment} +/
 
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
 {
 
 /+ #define QT_TR_N_NOOP(x) x
@@ -1203,7 +1203,7 @@ version(QT_NO_TRANSLATION){}else
    dynamic_cast to cause a compile failure.
 */
 
-static if(defined!"QT_NO_DYNAMIC_CAST" && !defined!"dynamic_cast")
+static if (defined!"QT_NO_DYNAMIC_CAST" && !defined!"dynamic_cast")
 {
 /+ #  define dynamic_cast QT_PREPEND_NAMESPACE(qt_dynamic_cast_check) +/
 
@@ -1285,8 +1285,8 @@ template <typename... Args> Q_DECL_UNUSED QNonConstOverload<Args...> qNonConstOv
 /+ Q_CORE_EXPORT +/ bool qEnvironmentVariableIsSet(const(char)* varName)/+ noexcept+/;
 /+ Q_CORE_EXPORT +/ int  qEnvironmentVariableIntValue(const(char)* varName, bool* ok=null)/+ noexcept+/;
 
-pragma(inline, true) int qIntCast(double f) { return cast(int)(f); }
-pragma(inline, true) int qIntCast(float f) { return cast(int)(f); }
+pragma(inline, true) int qIntCast(double f) { return cast(int) (f); }
+pragma(inline, true) int qIntCast(float f) { return cast(int) (f); }
 
 /*
   Reentrant versions of basic rand() functions for random number generation

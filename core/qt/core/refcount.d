@@ -25,7 +25,7 @@ extern(C++, class) struct RefCount
 public:
     extern(D) pragma(inline, true) bool ref_(string filename = __FILE__, size_t line = __LINE__)/+ noexcept+/ {
         int count = atomic.loadRelaxed();
-        version(QT_NO_UNSHARABLE_CONTAINERS){}else
+        version (QT_NO_UNSHARABLE_CONTAINERS) {} else
         {
             if (count == 0) // !isSharable
                 return false;
@@ -38,7 +38,7 @@ public:
 
     extern(D) pragma(inline, true) bool deref(string filename = __FILE__, size_t line = __LINE__)/+ noexcept+/ {
         int count = atomic.loadRelaxed();
-        version(QT_NO_UNSHARABLE_CONTAINERS){}else
+        version (QT_NO_UNSHARABLE_CONTAINERS) {} else
         {
             if (count == 0) // !isSharable
                 return false;
@@ -49,7 +49,7 @@ public:
         return atomic.deref();
     }
 
-    version(QT_NO_UNSHARABLE_CONTAINERS){}else
+    version (QT_NO_UNSHARABLE_CONTAINERS) {} else
     {
         bool setSharable(bool sharable)/+ noexcept+/
         {

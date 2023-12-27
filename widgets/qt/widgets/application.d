@@ -162,7 +162,7 @@ public:
 
 /+ #ifdef QT_KEYPAD_NAVIGATION
 # if QT_DEPRECATED_SINCE(5, 13) +/
-    version(QT_KEYPAD_NAVIGATION)
+    version (QT_KEYPAD_NAVIGATION)
     {
         /+ QT_DEPRECATED_X ("Use QApplication::setNavigationMode() instead") +/
             static void setKeypadNavigationEnabled(bool);
@@ -180,7 +180,7 @@ public:
 public:
     final QString styleSheet() const;
 public /+ Q_SLOTS +/:
-    version(QT_NO_STYLE_STYLESHEET){}else
+    version (QT_NO_STYLE_STYLESHEET) {} else
     {
         @QSlot final void setStyleSheet(ref const(QString) sheet);
     }
@@ -206,7 +206,7 @@ private:
     /+ friend class QWidgetWindow; +/
     /+ friend class QTranslator; +/
     /+ friend class QWidgetAnimator; +/
-    version(QT_NO_SHORTCUT){}else
+    version (QT_NO_SHORTCUT) {} else
     {
         /+ friend class QShortcut; +/
         /+ friend class QLineEdit; +/
@@ -214,7 +214,7 @@ private:
     }
     /+ friend class QAction; +/
 
-    version(QT_NO_GESTURES){}else
+    version (QT_NO_GESTURES) {} else
     {
         /+ friend class QGestureManager; +/
     }

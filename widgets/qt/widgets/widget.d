@@ -46,14 +46,14 @@ import qt.helpers;
 import qt.widgets.layout;
 import qt.widgets.sizepolicy;
 import qt.widgets.style;
-version(QT_NO_ACTION){}else
+version (QT_NO_ACTION) {} else
 {
     import qt.widgets.action;
     import qt.widgets.event;
 }
-version(QT_NO_CURSOR){}else
+version (QT_NO_CURSOR) {} else
     import qt.gui.cursor;
-version(QT_NO_SHORTCUT){}else
+version (QT_NO_SHORTCUT) {} else
     import qt.gui.keysequence;
 
 alias QWidgetList = QList!(QWidget);
@@ -304,9 +304,9 @@ alias RenderFlags = QFlags!(RenderFlag);
     // Widget types and states
 
     pragma(inline, true) final bool isTopLevel() const
-    { return (cast(bool)(windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
+    { return (cast(bool) (windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
     pragma(inline, true) final bool isWindow() const
-    { return (cast(bool)(windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
+    { return (cast(bool) (windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
 
     pragma(inline, true) final bool isModal() const
     { return data.window_modality != /+ Qt:: +/qt.core.namespace.WindowModality.NonModal; }
@@ -426,7 +426,7 @@ public:
     pragma(inline, true) final QFontInfo fontInfo() const
     { auto tmp = data.fnt; return QFontInfo(tmp); }
 
-    version(QT_NO_CURSOR){}else
+    version (QT_NO_CURSOR) {} else
     {
         final QCursor cursor() const;
         final void setCursor(ref const(QCursor) );
@@ -466,7 +466,7 @@ public:
 /+ #endif // QT_CONFIG(graphicseffect)
 
 #ifndef QT_NO_GESTURES +/
-    version(QT_NO_GESTURES){}else
+    version (QT_NO_GESTURES) {} else
     {
         final void grabGesture(/+ Qt:: +/qt.core.namespace.GestureType type, /+ Qt:: +/qt.core.namespace.GestureFlags flags = /+ Qt:: +/qt.core.namespace.GestureFlags());
         final void ungrabGesture(/+ Qt:: +/qt.core.namespace.GestureType type);
@@ -475,12 +475,12 @@ public:
 
 public /+ Q_SLOTS +/:
     @QSlot final void setWindowTitle(ref const(QString) );
-    version(QT_NO_STYLE_STYLESHEET){}else
+    version (QT_NO_STYLE_STYLESHEET) {} else
     {
         @QSlot final void setStyleSheet(ref const(QString) styleSheet);
     }
 public:
-    version(QT_NO_STYLE_STYLESHEET){}else
+    version (QT_NO_STYLE_STYLESHEET) {} else
     {
         final QString styleSheet() const;
     }
@@ -499,7 +499,7 @@ public:
 
     final bool isWindowModified() const;
 /+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
+    version (QT_NO_TOOLTIP) {} else
     {
         final void setToolTip(ref const(QString) );
         final QString toolTip() const;
@@ -516,7 +516,7 @@ public:
     final QString whatsThis() const;
 /+ #endif
 #ifndef QT_NO_ACCESSIBILITY +/
-    version(QT_NO_ACCESSIBILITY){}else
+    version (QT_NO_ACCESSIBILITY) {} else
     {
         final QString accessibleName() const;
         final void setAccessibleName(ref const(QString) name);
@@ -556,14 +556,14 @@ public:
 
     // Grab functions
     final void grabMouse();
-    version(QT_NO_CURSOR){}else
+    version (QT_NO_CURSOR) {} else
     {
         final void grabMouse(ref const(QCursor) );
     }
     final void releaseMouse();
     final void grabKeyboard();
     final void releaseKeyboard();
-    version(QT_NO_SHORTCUT){}else
+    version (QT_NO_SHORTCUT) {} else
     {
         final int grabShortcut(ref const(QKeySequence) key, /+ Qt:: +/qt.core.namespace.ShortcutContext context = /+ Qt:: +/qt.core.namespace.ShortcutContext.WindowShortcut);
         final void releaseShortcut(int id);
@@ -687,7 +687,7 @@ public:
     final bool acceptDrops() const;
     final void setAcceptDrops(bool on);
 
-    version(QT_NO_ACTION){}else
+    version (QT_NO_ACTION) {} else
     {
         //actions
         final void addAction(QAction action);
@@ -723,7 +723,7 @@ public:
     final void setAttribute(/+ Qt:: +/qt.core.namespace.WidgetAttribute, bool on = true);
     pragma(inline, true) final bool testAttribute(/+ Qt:: +/qt.core.namespace.WidgetAttribute attribute) const
     {
-        if (attribute < cast(int)(8*uint.sizeof))
+        if (attribute < cast(int) (8*uint.sizeof))
             return (data.widget_attributes & (1<<attribute)) != 0;
         return testAttribute_helper(attribute);
     }
@@ -736,7 +736,7 @@ public:
     final bool isAncestorOf(const(QWidget) child) const;
     }));
 
-    version(QT_KEYPAD_NAVIGATION)
+    version (QT_KEYPAD_NAVIGATION)
     {
         final bool hasEditFocus() const;
         final void setEditFocus(bool on);
@@ -781,7 +781,7 @@ protected:
     /+ virtual +/ void resizeEvent(QResizeEvent event);
     /+ virtual +/ void closeEvent(QCloseEvent event);
 /+ #ifndef QT_NO_CONTEXTMENU +/
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         /+ virtual +/ void contextMenuEvent(QContextMenuEvent event);
     }
@@ -790,7 +790,7 @@ protected:
     /+ virtual +/ void tabletEvent(QTabletEvent event);
 /+ #endif
 #ifndef QT_NO_ACTION +/
-    version(QT_NO_ACTION){}else
+    version (QT_NO_ACTION) {} else
     {
         /+ virtual +/ void actionEvent(QActionEvent event);
     }
@@ -880,14 +880,14 @@ private:
     /+ friend class QAccessibleWidget; +/
     /+ friend class QAccessibleTable; +/
     /+ friend class QAccessibleTabButton; +/
-    version(QT_NO_GESTURES){}else
+    version (QT_NO_GESTURES) {} else
     {
         /+ friend class QGestureManager; +/
         /+ friend class QWinNativePanGestureRecognizer; +/
     }
     /+ friend class QWidgetEffectSourcePrivate; +/
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ friend bool qt_mac_is_metal(const QWidget *w); +/
     }

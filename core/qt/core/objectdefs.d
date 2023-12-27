@@ -21,7 +21,7 @@ import qt.core.objectdefs_impl;
 import qt.helpers;
 import std.traits;
 import std.meta;
-version(QT_NO_TRANSLATION){}else
+version (QT_NO_TRANSLATION) {} else
     import qt.core.string;
 
 /+ #if defined(__OBJC__) && !defined(__cplusplus)
@@ -112,12 +112,14 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-class QArgument(T): QGenericArgument
+extern(C++, class) struct QArgument(T)
 {
+    public QGenericArgument base0;
+    alias base0 this;
 public:
     pragma(inline, true) this(const(char)* aName, ref const(T) aData)
     {
-        super(aName, static_cast!(const(void)*)(&aData));
+        this.base0 = QGenericArgument(aName, static_cast!(const(void)*)(&aData));
     }
 }
 /+ template <class T>
@@ -130,12 +132,14 @@ public:
 }; +/
 
 
-class QReturnArgument(T): QGenericReturnArgument
+extern(C++, class) struct QReturnArgument(T)
 {
+    public QGenericReturnArgument base0;
+    alias base0 this;
 public:
     pragma(inline, true) this(const(char)* aName, ref T aData)
     {
-        super(aName, static_cast!(void*)(&aData));
+        this.base0 = QGenericReturnArgument(aName, static_cast!(void*)(&aData));
     }
 }
 
@@ -176,7 +180,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
 
     const(char)* className() const;
 /+    pragma(inline, true) const(QMetaObject)* superClass() const
-    { return cast(const(QMetaObject)*)(d.superdata); }+/
+    { return cast(const(QMetaObject)*) (d.superdata); }+/
 
     bool inherits(const(QMetaObject)* metaObject) const/+ noexcept+/;
     mixin(mangleWindows("?cast@QMetaObject@@QEBAPEAVQObject@@PEAV2@@Z", q{
@@ -186,7 +190,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     }));
     //const(QObject) cast_(const(QObject) obj) const;
 
-    version(QT_NO_TRANSLATION){}else
+    version (QT_NO_TRANSLATION) {} else
     {
         QString tr(const(char)* s, const(char)* c, int n = -1) const;
     }
@@ -436,7 +440,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
 
         /+const(QMetaObject)* operator ->() const { return operator const QMetaObject *(); }+/
 
-        version(QT_NO_DATA_RELOCATION)
+        version (QT_NO_DATA_RELOCATION)
         {
             alias Getter = ExternCPPFunc!(const(QMetaObject)* function());
             Getter indirect = null;
@@ -446,14 +450,14 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
                 this.indirect = g;
             }
             /+auto opCast(T : const(QMetaObject))() const
-            { return indirect ? indirect() : cast(const(QMetaObject))(direct); }+/
+            { return indirect ? indirect() : cast(const(QMetaObject)) (direct); }+/
             /+ template <const QMetaObject &MO> +/ /+ static constexpr SuperData link()
             { return SuperData(QMetaObject::staticMetaObject<MO>); } +/
         }
         else
         {
             /+auto opCast(T : const(QMetaObject))() const
-            { return cast(const(QMetaObject))(direct); }+/
+            { return cast(const(QMetaObject)) (direct); }+/
             static SuperData link(alias MO)()
             { return SuperData(QMetaObject.staticMetaObject!(MO)()); }
         }

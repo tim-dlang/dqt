@@ -60,9 +60,9 @@ public:
     pragma(inline, true) ref int ry() return
     { return yp; }
 
-    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if(op == "+")
+    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if (op == "+")
     { xp+=p.xp; yp+=p.yp; return this; }
-    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if(op == "-")
+    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if (op == "-")
     { xp-=p.xp; yp-=p.yp; return this; }
 
     /+pragma(inline, true) ref QPoint operator *=(float factor)
@@ -86,7 +86,7 @@ public:
     /+ friend inline bool operator!=(const QPoint &, const QPoint &); +/
     /+ friend inline const QPoint operator+(const QPoint &, const QPoint &); +/
 
-    /+ Q_DECL_CONSTEXPR +/ pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint)  p2) const if(op == "+")
+    /+ Q_DECL_CONSTEXPR +/ pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint)  p2) const if (op == "+")
     { return QPoint(this.xp+p2.xp, this.yp+p2.yp); }
 
     /+ friend inline const QPoint operator-(const QPoint &, const QPoint &); +/
@@ -100,14 +100,14 @@ public:
     /+ friend inline const QPoint operator-(const QPoint &); +/
     /+ friend inline const QPoint operator/(const QPoint &, qreal); +/
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ Q_REQUIRED_RESULT CGPoint toCGPoint() const noexcept; +/
     }
 
 
 
-    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if(op == "-")
+    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if (op == "-")
     { return QPoint(xp-p2.xp, yp-p2.yp); }
 
 
@@ -234,13 +234,13 @@ public:
         return yp;
     }
 
-    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if(op == "+")
+    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if (op == "+")
     {
         xp+=p.xp;
         yp+=p.yp;
         return this;
     }
-    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if(op == "-")
+    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if (op == "-")
     {
         xp-=p.xp; yp-=p.yp; return this;
     }
@@ -262,7 +262,7 @@ public:
     /+ friend inline bool operator!=(const QPointF &, const QPointF &); +/
     /+ friend inline const QPointF operator+(const QPointF &, const QPointF &); +/
 
-    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF)  p2) const if(op == "+")
+    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF)  p2) const if (op == "+")
     {
         return QPointF(this.xp+p2.xp, this.yp+p2.yp);
     }
@@ -279,7 +279,7 @@ public:
         return QPoint(qRound(xp), qRound(yp));
     }
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ Q_REQUIRED_RESULT static QPointF fromCGPoint(CGPoint point) noexcept; +/
         /+ Q_REQUIRED_RESULT CGPoint toCGPoint() const noexcept; +/

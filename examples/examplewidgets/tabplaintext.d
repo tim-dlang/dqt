@@ -36,11 +36,11 @@ public:
 private /+ slots +/:
     @QSlot final void on_plainTextEdit_textChanged()
     {
-        if(ui.comboBoxType.currentIndex() == 0)
+        if (ui.comboBoxType.currentIndex() == 0)
             ui.textBrowser.setMarkdown(ui.plainTextEdit.toPlainText());
-        if(ui.comboBoxType.currentIndex() == 1)
+        if (ui.comboBoxType.currentIndex() == 1)
             ui.textBrowser.setHtml(ui.plainTextEdit.toPlainText());
-        if(ui.comboBoxType.currentIndex() == 2)
+        if (ui.comboBoxType.currentIndex() == 2)
             ui.textBrowser.setPlainText(ui.plainTextEdit.toPlainText());
     }
 
@@ -52,7 +52,7 @@ private /+ slots +/:
 protected:
     override extern(C++) void changeEvent(QEvent event)
     {
-        if(event.type() == QEvent.Type.LanguageChange)
+        if (event.type() == QEvent.Type.LanguageChange)
             ui.retranslateUi(this);
         QWidget.changeEvent(event);
     }

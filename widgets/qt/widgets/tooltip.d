@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_TOOLTIP){}else
+version (QT_NO_TOOLTIP) {} else
 {
     import qt.core.point;
     import qt.core.rect;
@@ -24,7 +24,7 @@ version(QT_NO_TOOLTIP){}else
     import qt.widgets.widget;
 }
 
-version(QT_NO_TOOLTIP){}else
+version (QT_NO_TOOLTIP) {} else
 {
 
 /// Binding for C++ class [QToolTip](https://doc.qt.io/qt-5/qtooltip.html).

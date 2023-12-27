@@ -16,68 +16,111 @@ jobs:
       fail-fast: false
 
       matrix:
-        platform: [ linux64, win64, win32, osx64 ]
+        platform: [ linux64, win64, win32, osx64, debian32 ]
         dc: [ dmd-latest, dmd-2.100.0, ldc-latest, dmd-master ]
 
         exclude:
           - { platform: win32, dc: ldc-latest }
+          - { platform: debian32, dc: ldc-latest }
 
         include:
           - platform: linux64
             os: ubuntu-22.04
             model: 64
+            qt_version: 5.15.2
             qt_arch: gcc_64
-            qtbase_url: 'https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt5_5152/qt.qt5.5152.gcc_64/'
-            qtbase_file: '5.15.2-0-202011130601qtbase-Linux-RHEL_7_6-GCC-Linux-RHEL_7_6-X86_64.7z'
-            qticu_file: '5.15.2-0-202011130601icu-linux-Rhel7.2-x64.7z'
+            qt_platform: linux_x64/desktop
 
           - platform: win64
             os: windows-2022
             model: 64
+            qt_version: 5.15.2
             qt_arch: msvc2019_64
-            qtbase_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5152/qt.qt5.5152.win64_msvc2019_64/'
-            qtbase_file: '5.15.2-0-202011130602qtbase-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86_64.7z'
+            qt_arch_url: win64_msvc2019_64
+            qt_platform: windows_x86/desktop
 
           - platform: win32
             os: windows-2022
             model: 32mscoff
+            qt_version: 5.15.2
             qt_arch: msvc2019
-            qtbase_url: 'https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/qt5_5152/qt.qt5.5152.win32_msvc2019/'
-            qtbase_file: '5.15.2-0-202011130602qtbase-Windows-Windows_10-MSVC2019-Windows-Windows_10-X86.7z'
+            qt_arch_url: win32_msvc2019
+            qt_platform: windows_x86/desktop
 
           - platform: osx64
             os: macos-12
             model: 64
+            qt_version: 5.15.2
             qt_arch: clang_64
-            qtbase_url: 'https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/qt5_5152/qt.qt5.5152.clang_64/'
-            qtbase_file: '5.15.2-0-202011130601qtbase-MacOS-MacOS_10_13-Clang-MacOS-MacOS_10_13-X86_64.7z'
+            qt_platform: mac_x64/desktop
+
+          - platform: debian32
+            os: ubuntu-22.04
+            container: debian:11
+            model: 32
 
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Install Debian packages
+        if: ${{ matrix.platform == 'debian32' }}
+        run: |
+          dpkg --add-architecture i386
+          echo "deb http://deb.debian.org/debian bullseye-backports main contrib non-free" >> /etc/apt/sources.list
+          echo "deb-src http://deb.debian.org/debian bullseye-backports main contrib non-free" >> /etc/apt/sources.list
+          apt-get -qq update
+          apt-get -qq install -y gpg xz-utils 7zip
+          apt-get -qq install -y libc6-dev:i386 libstdc++6:i386 g++:i386 qtbase5-dev:i386 qtwebengine5-dev:i386
 
       - name: Install D compiler
         uses: dlang-community/setup-dlang@v1
         with:
           compiler: ${{ matrix.dc }}
 
+      - name: Change env vars to 32-bit
+        if: ${{ matrix.platform == 'debian32' }}
+        run: |
+          echo "LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | sed "s|dmd2/linux/lib64|dmd2/linux/lib32|g")" >> "$GITHUB_ENV"
+          echo "$(echo "$PATH" | grep -o "[^:]*dmd2/linux/bin[^:]*" | sed "s|dmd2/linux/bin64|dmd2/linux/bin32|g")" >> "$GITHUB_PATH"
+
+      - name: Checkout dxml
+        uses: actions/checkout@v3
+        with:
+          path: dxml
+          repository: jmdavis/dxml
+          ref: v0.4.4
+          persist-credentials: false
+
       - name: Update PATH
         if: ${{ matrix.os == 'windows-2022' }}
         run: |
           echo "C:\msys64\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-      - name: Install Qt
-        run: |
-          wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qtbase_file }}"
-          7z x "${{ matrix.qtbase_file }}" 5.15.2/${{ matrix.qt_arch }}/lib/ 5.15.2/${{ matrix.qt_arch }}/bin/ 5.15.2/${{ matrix.qt_arch }}/plugins/platforms
+      - name: Cache Qt
+        id: cache-qt
+        if: ${{ matrix.platform != 'debian32' }}
+        uses: actions/cache@v3
+        with:
+          path: qt-lib
+          key: ${{ runner.os }}-qt-${{ matrix.qt_version }}-${{ matrix.qt_arch }}-${{ matrix.qt_arch_url }}-${{ matrix.qt_platform }}-${{ hashFiles('ci/downloadqt.d') }}
 
-      - name: Install ICU for Qt
-        if: ${{ matrix.qticu_file != '' }}
+      - name: Install Qt
+        if: ${{ steps.cache-qt.outputs.cache-hit != 'true' && matrix.platform != 'debian32' }}
         run: |
-          wget --no-verbose "${{ matrix.qtbase_url }}${{ matrix.qticu_file }}"
-          7z x "${{ matrix.qticu_file }}"
+          ${{ env.DC }} -Idxml/source -i -run ci/downloadqt.d -v"${{ matrix.qt_version }}" -a${{ matrix.qt_arch }} -u${{ matrix.qt_arch_url }} -p${{ matrix.qt_platform }}
 
       - name: 'Build & Test'
+        timeout-minutes: 5
         run: |
-          ${{ env.DC }} -run runtests.d --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=5.15.2/${{ matrix.qt_arch }}
+          ${{ env.DC }} -run runtests.d --github --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=qt-lib/${{ matrix.qt_version }}/${{ matrix.qt_arch }} --dxml-path=dxml/source
+
+#      - name: Upload test results
+#        uses: actions/upload-artifact@v4
+#        if: always()
+#        with:
+#          name: test_results-${{ matrix.platform }}-${{ matrix.dc }}
+#          path: test_results
+#          retention-days: 1

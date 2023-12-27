@@ -20,9 +20,10 @@ class TabPainter : QWidget
 public:
     /+ explicit +/this(QWidget parent = null)
     {
+        import core.stdcpp.new_;
         super(parent);
 
-        timer = new QTimer(this);
+        timer = cpp_new!QTimer(this);
         connect(timer.signal!"timeout", this.slot!"update");
         timer.setInterval(100);
         timer.start();
@@ -57,10 +58,10 @@ protected:
         QAction pdfAction = menu.addAction(QString("Create PDF"));
         QAction selected = menu.exec(event.globalPos());
 
-        if(selected == pdfAction)
+        if (selected == pdfAction)
         {
             QString filename = QFileDialog.getSaveFileName(this, globalInitVar!QString, globalInitVar!QString, QString("*.pdf"));
-            if(!filename.isEmpty())
+            if (!filename.isEmpty())
             {
                 scope writer = new QPdfWriter(filename);
                 writer.setPageSize(QPdfWriter.PageSize.A4);

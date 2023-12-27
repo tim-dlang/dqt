@@ -44,18 +44,18 @@ private /+ slots +/:
 
         QTreeWidgetItem item = ui.treeWidget.itemAt(pos);
         QMenu menu = cpp_new!QMenu;
-        if(item)
+        if (item)
         {
             QAction action = menu.addAction("Selected: " ~ item.text(0));
             action.setEnabled(false);
 
             action = menu.addAction(QString("Remove"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 cpp_delete(item);
             });
 
             action = menu.addAction(QString("Add child"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QTreeWidgetItem child = cpp_new!QTreeWidgetItem();
                 child.setText(0, QString("New child"));
                 child.setFlags(child.flags() | /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsEditable);
@@ -65,11 +65,11 @@ private /+ slots +/:
             });
 
             action = menu.addAction(QString("Add sibling before"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QTreeWidgetItem sibling = cpp_new!QTreeWidgetItem();
                 sibling.setText(0, QString("New sibling"));
                 sibling.setFlags(sibling.flags() | /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsEditable);
-                if(item.parent())
+                if (item.parent())
                     item.parent().insertChild(item.parent().indexOfChild(item), sibling);
                 else
                     ui.treeWidget.insertTopLevelItem(ui.treeWidget.indexOfTopLevelItem(item), sibling);
@@ -78,11 +78,11 @@ private /+ slots +/:
             });
 
             action = menu.addAction(QString("Add sibling after"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QTreeWidgetItem sibling = cpp_new!QTreeWidgetItem();
                 sibling.setText(0, QString("New sibling"));
                 sibling.setFlags(sibling.flags() | /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsEditable);
-                if(item.parent())
+                if (item.parent())
                     item.parent().insertChild(item.parent().indexOfChild(item) + 1, sibling);
                 else
                     ui.treeWidget.insertTopLevelItem(ui.treeWidget.indexOfTopLevelItem(item) + 1, sibling);
@@ -91,11 +91,11 @@ private /+ slots +/:
             });
 
             action = menu.addAction(QString("Change font"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QFont font = item.font(0);
                 bool ok;
                 font = QFontDialog.getFont(&ok, font, this);
-                if(ok)
+                if (ok)
                 {
                     item.setFont(0, font);
                     item.setFont(1, font);
@@ -103,10 +103,10 @@ private /+ slots +/:
             });
 
             action = menu.addAction(QString("Change background color"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QBrush brush = item.background(0);
                 QColor color = QColorDialog.getColor(brush.color(), this);
-                if(color.isValid())
+                if (color.isValid())
                 {
                     brush.setColor(color);
                     brush = QBrush(color);
@@ -121,7 +121,7 @@ private /+ slots +/:
             action.setEnabled(false);
 
             action = menu.addAction(QString("Add top level item"));
-            connect(action.signal!"triggered", menu, (){
+            connect(action.signal!"triggered", menu, () {
                 QTreeWidgetItem item2 = cpp_new!QTreeWidgetItem();
                 item2.setText(0, QString("New item"));
                 item2.setFlags(item2.flags() | /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsEditable);

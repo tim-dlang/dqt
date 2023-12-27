@@ -31,16 +31,15 @@ QSharedData
 public:
     /+ mutable +/ QAtomicInt ref_/* = 0*/;
 
-    @disable this();
     /+pragma(inline, true) this()/+ noexcept+/
     {
         this.ref_ = 0;
     }+/
     @disable this(this);
-    pragma(inline, true) this(ref const(QSharedData) )/+ noexcept+/
+    /*pragma(inline, true) this(ref const(QSharedData) )/+ noexcept+/
     {
         this.ref_ = 0;
-    }
+    }*/
 
     // using the assignment operator would lead to corruption in the ref-counting
     /+ref QSharedData operator =(ref const(QSharedData) ) /+ = delete +/;+/
@@ -55,8 +54,8 @@ public:
     alias pointer = T*;
 
     pragma(inline, true) void detach()() { if (d && d.ref_.loadRelaxed() != 1) detach_helper(); }
-    pragma(inline, true) ref T opUnary(string op)() if(op == "*") { detach(); return *d; }
-    pragma(inline, true) ref const(T) opUnary(string op)() const if(op == "*") { return *d; }
+    pragma(inline, true) ref T opUnary(string op)() if (op == "*") { detach(); return *d; }
+    pragma(inline, true) ref const(T) opUnary(string op)() const if (op == "*") { return *d; }
     /+pragma(inline, true) T* operator ->() { detach(); return d; }+/
     /+pragma(inline, true) const(T)* operator ->() const { return d; }+/
     /+pragma(inline, true) auto opCast(T : T)() { detach(); return d; }+/
@@ -71,7 +70,7 @@ public:
     /+pragma(inline, true) this() { d = null; }+/
     pragma(inline, true) ~this() {
         import core.stdcpp.new_;
-        static if(__traits(compiles, (*d).sizeof))
+        static if (__traits(compiles, (*d).sizeof))
         {
             import core.stdcpp.new_;
             if (d && !d.ref_.deref()) cpp_delete(d);
@@ -87,7 +86,7 @@ public:
     }+/
     pragma(inline, true) this(this)
     {
-        static if(__traits(compiles, d.ref_))
+        static if (__traits(compiles, d.ref_))
         {
             if (d) d.ref_.ref_();
         }
@@ -169,13 +168,13 @@ private:
 }+/
 
 /// Binding for C++ class [QExplicitlySharedDataPointer](https://doc.qt.io/qt-5/qexplicitlyshareddatapointer.html).
-extern(C++, class) struct QExplicitlySharedDataPointer(T)
+extern(C++, class) struct QExplicitlySharedDataPointer(T) if (!is(T == class))
 {
 public:
     alias Type = T;
     alias pointer = T*;
 
-    pragma(inline, true) ref T opUnary(string op)() const if(op == "*") { return *d; }
+    pragma(inline, true) ref T opUnary(string op)() const if (op == "*") { return *d; }
     /+pragma(inline, true) T* operator ->() { return d; }+/
     /+pragma(inline, true) T* operator ->() const { return d; }+/
     pragma(inline, true) T* data() const { return cast(T*)d; }
@@ -203,7 +202,7 @@ public:
 
     /+pragma(inline, true) this() { d = null; }+/
     pragma(inline, true) ~this() {
-        static if(__traits(compiles, (*d).sizeof))
+        static if (__traits(compiles, (*d).sizeof))
         {
             import core.stdcpp.new_;
             if (d && !d.ref_.deref()) cpp_delete(d);
@@ -220,7 +219,7 @@ public:
     @disable this(this);
     pragma(inline, true) this(ref const(QExplicitlySharedDataPointer!(T)) o)
     {
-        static if(__traits(compiles, (*d).sizeof))
+        static if (__traits(compiles, (*d).sizeof))
         {
             this.d = cast(T*)o.d;
             if (d) d.ref_.ref_();
@@ -234,7 +233,7 @@ public:
     pragma(inline, true) this(X)(ref const(QExplicitlySharedDataPointer!(X)) o)/+ #ifdef QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST +/
 /+ #endif +/
     {
-        static if(defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
+        static if (defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
         {
             this.d = static_cast!(T*)(o.data());
 
@@ -310,6 +309,39 @@ private:
     }
 
     T* d;
+}
+
+extern(C++, class) struct QExplicitlySharedDataPointer(T) if (is(T == class))
+{
+public:
+    pragma(inline, true) ~this() {
+        import core.stdcpp.new_;
+        if (d && !d.sharedData.ref_.deref()) cpp_delete(d);
+    }
+
+    @disable this(this);
+    pragma(inline, true) this(ref const(QExplicitlySharedDataPointer!(T)) o)
+    {
+        this.d = *cast(T*)&o.d;
+        if (d) d.sharedData.ref_.ref_();
+    }
+
+    pragma(inline, true) ref QExplicitlySharedDataPointer opAssign(T o) {
+        import core.stdcpp.new_;
+
+        if (o !is d) {
+            if (o)
+                o.sharedData.ref_.ref_();
+            T old = d;
+            d = o;
+            if (old && !old.sharedData.ref_.deref())
+                cpp_delete(old);
+        }
+        return this;
+    }
+
+private:
+    T d;
 }
 
 /+pragma(inline, true) bool operator ==(T)(/+ std:: +/nullptr_t p1, ref const(QExplicitlySharedDataPointer!(T)) p2)

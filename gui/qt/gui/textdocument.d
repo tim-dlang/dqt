@@ -34,10 +34,11 @@ import qt.gui.textformat;
 import qt.gui.textobject;
 import qt.gui.textoption;
 import qt.helpers;
-version(QT_NO_PRINTER){}else
+version (QT_NO_PRINTER) {} else
     import qt.gui.pagedpaintdevice;
 
 extern(C++, class) struct QTextDocumentPrivate;
+extern(C++, class) struct QTextFormatCollection;
 
 extern(C++, "Qt")
 {
@@ -113,7 +114,7 @@ public:
     final QString metaInformation(MetaInformation info) const;
 
 /+ #ifndef QT_NO_TEXTHTMLPARSER +/
-    version(QT_NO_TEXTHTMLPARSER){}else
+    version (QT_NO_TEXTHTMLPARSER) {} else
     {
         final QString toHtml(ref const(QByteArray) encoding = globalInitVar!QByteArray) const;
         final void setHtml(ref const(QString) html);
@@ -156,7 +157,7 @@ alias FindFlags = QFlags!(FindFlag);
     /+ QTextCursor find(const QString &subString, const QTextCursor &cursor, FindFlags options = FindFlags()) const; +/
 
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         /+ QTextCursor find(const QRegExp &expr, int from = 0, FindFlags options = FindFlags()) const; +/
         /+ QTextCursor find(const QRegExp &expr, const QTextCursor &cursor, FindFlags options = FindFlags()) const; +/
@@ -193,7 +194,7 @@ alias FindFlags = QFlags!(FindFlag);
 
     final bool isModified() const;
 
-    version(QT_NO_PRINTER){}else
+    version (QT_NO_PRINTER) {} else
     {
         final void print(QPagedPaintDevice printer) const;
     }
@@ -239,7 +240,7 @@ alias FindFlags = QFlags!(FindFlag);
     final int lineCount() const;
     final int characterCount() const;
 
-    version(QT_NO_CSSPARSER){}else
+    version (QT_NO_CSSPARSER) {} else
     {
         final void setDefaultStyleSheet(ref const(QString) sheet);
         final QString defaultStyleSheet() const;

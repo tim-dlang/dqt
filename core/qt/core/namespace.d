@@ -1707,7 +1707,7 @@ alias TouchPointStates = QFlags!(TouchPointState);
 /+pragma(inline, true) QFlags!(TouchPointStates.enum_type) operator |(TouchPointStates.enum_type f1, QFlags!(TouchPointStates.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QIncompatibleFlag operator |(TouchPointStates.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(TouchPointStates) +/
-version(QT_NO_GESTURES){}else
+version (QT_NO_GESTURES) {} else
 {
     enum GestureState
     {

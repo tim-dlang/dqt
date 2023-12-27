@@ -23,7 +23,7 @@ import qt.core.vector;
 import qt.gui.bitmap;
 import qt.gui.polygon;
 import qt.helpers;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
 {
     import qt.core.bytearray;
     import qt.core.datastream;
@@ -43,7 +43,7 @@ struct QRegionPrivate;
 public:
     enum RegionType { Rectangle, Ellipse }
 
-    version(Windows)
+    version (Windows)
     {
         @disable this();
         pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
@@ -125,7 +125,7 @@ public:
 /+ #endif +/
     void setRects(const(QRect)* rect, int num);
     int rectCount() const/+ noexcept+/;
-    static if(defined!"Q_COMPILER_MANGLES_RETURN_TYPE")
+    static if (defined!"Q_COMPILER_MANGLES_RETURN_TYPE")
     {
         // ### Qt 6: remove these, they're kept for MSVC compat
         /+const(QRegion) operator |(ref const(QRegion) r) const;+/
@@ -146,19 +146,19 @@ public:
         /+QRegion operator -(ref const(QRegion) r) const;+/
         /+QRegion operator ^(ref const(QRegion) r) const;+/
     }
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "|");
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "+");
-    ref QRegion opOpAssign(string op)(ref const(QRect) r) if(op == "+");
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "&");
-    ref QRegion opOpAssign(string op)(ref const(QRect) r) if(op == "&");
-    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if(op == "-");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "|");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "+");
+    ref QRegion opOpAssign(string op)(ref const(QRect) r) if (op == "+");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "&");
+    ref QRegion opOpAssign(string op)(ref const(QRect) r) if (op == "&");
+    ref QRegion opOpAssign(string op)(ref const(QRegion) r) if (op == "-");
     /+ref QRegion operator ^=(ref const(QRegion) r);+/
 
     /+bool operator ==(ref const(QRegion) r) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QRegion) r) const { return !(operator==(r)); }+/
     /+auto opCast(T : QVariant)() const;+/
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QRegion &); +/
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QRegion &); +/
@@ -171,7 +171,7 @@ private:
                                          const QRect &rect); +/
     /+ friend struct QRegionPrivate; +/
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         void exec(ref const(QByteArray) ba, int ver = 0, QDataStream.ByteOrder byteOrder = QDataStream.ByteOrder.BigEndian);
     }
@@ -180,7 +180,7 @@ private:
         /+ QtPrivate:: +/qt.core.refcount.RefCount ref_;
         QRegionPrivate* qt_rgn;
     }
-    version(Windows)
+    version (Windows)
         QRegionData* d;
     else
     {

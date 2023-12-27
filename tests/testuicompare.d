@@ -15,9 +15,9 @@ unittest
 
     bool anyFailure;
     size_t countFiles;
-    foreach(filename; filesUi)
+    foreach (filename; filesUi)
     {
-        if(!filename.endsWith(".ui"))
+        if (!filename.endsWith(".ui"))
             continue;
         auto xml = readText(buildPath(dqtRoot, "tests", "ui", filename));
         string code = generateUICode(xml);
@@ -25,7 +25,7 @@ unittest
         std.file.write(resultPath, code);
         string expectedPath = buildPath(dqtRoot, "tests", "ui", filename[0..$-3] ~ ".code_expected");
         auto expected = readText(expectedPath);
-        if(code.replace("\r", "") != expected.replace("\r", ""))
+        if (code.replace("\r", "") != expected.replace("\r", ""))
         {
             stderr.writeln("Wrong code for ", filename);
             stderr.writeln(code);

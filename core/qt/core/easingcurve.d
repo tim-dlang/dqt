@@ -97,7 +97,7 @@ private:
     friend Q_CORE_EXPORT QDebug operator<<(QDebug debug, const QEasingCurve &item);
 #endif
 #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QEasingCurve&); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QEasingCurve &); +/

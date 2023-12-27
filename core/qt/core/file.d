@@ -51,7 +51,7 @@ public:
 
 /+ #if defined(Q_OS_DARWIN) +/
     // Mac always expects filenames in UTF-8... and decomposed...
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         pragma(inline, true) static QByteArray encodeName(ref const(QString) fileName)
         {

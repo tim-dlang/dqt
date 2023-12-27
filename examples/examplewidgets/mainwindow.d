@@ -58,7 +58,7 @@ public:
          * example.
          */
         QActionGroup actionGroupLanguage = cpp_new!QActionGroup(this);
-        foreach(lang; languages)
+        foreach (lang; languages)
         {
             QString name = QString(lang[0]);
             QAction action = actionGroupLanguage.addAction(name);
@@ -118,7 +118,7 @@ private /+ slots +/:
 protected:
     override extern(C++) void changeEvent(QEvent event)
     {
-        if(event.type() == QEvent.Type.LanguageChange)
+        if (event.type() == QEvent.Type.LanguageChange)
             ui.retranslateUi(this);
         QMainWindow.changeEvent(event);
     }

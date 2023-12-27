@@ -36,16 +36,16 @@ import qt.core.typeinfo;
 import qt.core.url;
 import qt.core.uuid;
 import qt.helpers;
-version(QT_NO_DATASTREAM){}else
+version (QT_NO_DATASTREAM) {} else
     import qt.core.datastream;
-version(QT_NO_GEOM_VARIANT){}else
+version (QT_NO_GEOM_VARIANT) {} else
 {
     import qt.core.line;
     import qt.core.point;
     import qt.core.rect;
     import qt.core.size;
 }
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
     import qt.core.regexp;
 
 /+ #ifndef QT_BOOTSTRAPPED
@@ -188,7 +188,7 @@ extern(C++, "QtPrivate") {
     @disable this(this);
     this(ref const(QVariant) other);
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         this(ref QDataStream s);
     }
@@ -216,7 +216,7 @@ extern(C++, "QtPrivate") {
     this(ref const(QList!(QVariant)) list);
 //    this(ref const(QMap!(QString,QVariant)) map);
 //    this(ref const(QHash!(QString,QVariant)) hash);
-    version(QT_NO_GEOM_VARIANT){}else
+    version (QT_NO_GEOM_VARIANT) {} else
     {
         this(ref const(QSize) size);
         this(ref const(QSizeF) size);
@@ -229,7 +229,7 @@ extern(C++, "QtPrivate") {
     }
     this(ref const(QLocale) locale);
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         this(ref const(QRegExp) regExp);
     }
@@ -297,7 +297,7 @@ extern(C++, "QtPrivate") {
 //    QMap!(QString, QVariant) toMap() const;
 //    QHash!(QString, QVariant) toHash() const;
 
-    version(QT_NO_GEOM_VARIANT){}else
+    version (QT_NO_GEOM_VARIANT) {} else
     {
         QPoint toPoint() const;
         QPointF toPointF() const;
@@ -310,7 +310,7 @@ extern(C++, "QtPrivate") {
     }
     QLocale toLocale() const;
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         QRegExp toRegExp() const;
     }
@@ -335,7 +335,7 @@ extern(C++, "QtPrivate") {
 /+ #endif
 
 #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         void load(ref QDataStream ds);
         void save(ref QDataStream ds) const;
@@ -487,7 +487,7 @@ extern(C++, "QtPrivate") {
     alias f_construct = ExternCPPFunc!(void function(Private* , const(void)* ));
     alias f_clear = ExternCPPFunc!(void function(Private* ));
     alias f_null = ExternCPPFunc!(bool function(const(Private)* ));
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         alias f_load = ExternCPPFunc!(void function(Private* , ref QDataStream ));
         alias f_save = ExternCPPFunc!(void function(const(Private)* , ref QDataStream ));
@@ -532,22 +532,16 @@ protected:
 #endif
 // ### Qt6: FIXME: Remove the special Q_CC_MSVC handling, it was introduced to maintain BC for QTBUG-41810 .
 #if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC) +/
-    /*static if(!defined!"Q_NO_TEMPLATE_FRIENDS")
-    {
-        /+ template<typename T> +/
-        /+ friend inline T qvariant_cast(const QVariant &); +/
-        /+ template<typename T> +/ /+ friend struct QtPrivate::QVariantValueHelper; +/
-    protected:
-    }
-    else
-    {
-    /+ #else +/
-    public:
-    }*/
-    public:
-/+ #endif +/
+    /+ template<typename T> +/
+    /+ friend inline T qvariant_cast(const QVariant &); +/
+    /+ template<typename T> +/ /+ friend struct QtPrivate::QVariantValueHelper; +/
+protected:
+/+ #else
+public:
+#endif +/
     Private d;
     /+ void create(int type, const void *copy); +/
+public:
     bool cmp(ref const(QVariant) other) const;
     int compare(ref const(QVariant) other) const;
     bool convert(const(int) t, void* ptr) const; // ### Qt6: drop const
@@ -582,6 +576,9 @@ public:
     pragma(inline, true) ref const(DataPtr) data_ptr() const return { return d; }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
+
+// Test for https://issues.dlang.org/show_bug.cgi?id=24292
+static assert(!__traits(isPOD, QVariant));
 
 /+ #if QT_DEPRECATED_SINCE(5, 14) +/
 /+ QT_DEPRECATED_X("Use QVariant::fromValue() instead.") +/
@@ -675,17 +672,17 @@ public:
 
         /+ref const_iterator operator =(ref const(const_iterator) other);+/
 
-        const(QVariant) opUnary(string op)() const if(op == "*");
+        const(QVariant) opUnary(string op)() const if (op == "*");
         /+bool operator ==(ref const(const_iterator) o) const;+/
         /+bool operator !=(ref const(const_iterator) o) const;+/
-        ref const_iterator opUnary(string op)() if(op == "++");
+        ref const_iterator opUnary(string op)() if (op == "++");
         /+const_iterator operator ++(int);+/
-        ref const_iterator opUnary(string op)() if(op == "--");
+        ref const_iterator opUnary(string op)() if (op == "--");
         /+const_iterator operator --(int);+/
-        ref const_iterator opOpAssign(string op)(int j) if(op == "+");
-        ref const_iterator opOpAssign(string op)(int j) if(op == "-");
-        const_iterator opBinary(string op)(int j) const if(op == "+");
-        const_iterator opBinary(string op)(int j) const if(op == "-");
+        ref const_iterator opOpAssign(string op)(int j) if (op == "+");
+        ref const_iterator opOpAssign(string op)(int j) if (op == "-");
+        const_iterator opBinary(string op)(int j) const if (op == "+");
+        const_iterator opBinary(string op)(int j) const if (op == "-");
         /+ friend inline const_iterator operator+(int j, const_iterator k) { return k + j; } +/
     }
 
@@ -738,17 +735,17 @@ public:
 
         const(QVariant) value() const;
 
-        const(QVariant) opUnary(string op)() const if(op == "*");
+        const(QVariant) opUnary(string op)() const if (op == "*");
         /+bool operator ==(ref const(const_iterator) o) const;+/
         /+bool operator !=(ref const(const_iterator) o) const;+/
-        ref const_iterator opUnary(string op)() if(op == "++");
+        ref const_iterator opUnary(string op)() if (op == "++");
         /+const_iterator operator ++(int);+/
-        ref const_iterator opUnary(string op)() if(op == "--");
+        ref const_iterator opUnary(string op)() if (op == "--");
         /+const_iterator operator --(int);+/
-        ref const_iterator opOpAssign(string op)(int j) if(op == "+");
-        ref const_iterator opOpAssign(string op)(int j) if(op == "-");
-        const_iterator opBinary(string op)(int j) const if(op == "+");
-        const_iterator opBinary(string op)(int j) const if(op == "-");
+        ref const_iterator opOpAssign(string op)(int j) if (op == "+");
+        ref const_iterator opOpAssign(string op)(int j) if (op == "-");
+        const_iterator opBinary(string op)(int j) const if (op == "+");
+        const_iterator opBinary(string op)(int j) const if (op == "-");
         /+ friend inline const_iterator operator+(int j, const_iterator k) { return k + j; } +/
     }
 
@@ -770,7 +767,7 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }+/
 
-version(QT_MOC){}else
+version (QT_MOC) {} else
 {
 /+extern(C++, "QtPrivate") {
     /+ template<typename T>
@@ -917,20 +914,20 @@ version(QT_MOC){}else
 pragma(inline, true) T qvariant_cast(T)(ref const(QVariant) v)
 {
     // TODO: special cases of qvariant_cast
-    static if(is(T == class))
+    static if (is(T == class))
         static assert(false);
     else
     {
         const(int) vid = qMetaTypeId!(T)();
         if (vid == v.userType())
             return *reinterpret_cast!(T*)(v.constData());
-        static if(__traits(hasMember, T, "rawConstructor"))
+        static if (__traits(hasMember, T, "rawConstructor"))
             mixin("T t = T.init; t.rawConstructor();");
         else
             mixin("T t;");
         if (v.convert(vid, &t))
             return t;
-        static if(__traits(hasMember, T, "rawConstructor"))
+        static if (__traits(hasMember, T, "rawConstructor"))
             mixin("T r = T.init; r.rawConstructor(); return r;");
         else
             mixin("return T();");

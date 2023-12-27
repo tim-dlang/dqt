@@ -228,7 +228,7 @@ public:
         div = 1/div;
         return operator*=(div);
     }+/
-    pragma(inline, true) ref QTransform opOpAssign(string op)(qreal num) if(op == "+")
+    pragma(inline, true) ref QTransform opOpAssign(string op)(qreal num) if (op == "+")
     {
         if (num == 0)
             return this;
@@ -244,7 +244,7 @@ public:
         m_dirty     = TransformationType.TxProject;
         return this;
     }
-    pragma(inline, true) ref QTransform opOpAssign(string op)(qreal num) if(op == "-")
+    pragma(inline, true) ref QTransform opOpAssign(string op)(qreal num) if (op == "-")
     {
         if (num == 0)
             return this;

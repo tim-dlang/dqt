@@ -21,10 +21,10 @@ import qt.core.string;
 import qt.core.stringview;
 import qt.core.typeinfo;
 import qt.helpers;
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
     import qt.core.regexp;
 
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
 {
 }
 
@@ -92,7 +92,7 @@ private:
     alias base0 this;
 /+ #endif +/
 public:
-    version(Windows)
+    version (Windows)
         @disable this();
     /+pragma(inline, true) this()/+ noexcept+/ { }+/
 
@@ -125,7 +125,7 @@ public:
     /+ QStringList &operator=(QList<QString> &&other) noexcept
     { QList<QString>::operator=(std::move(other)); return *this; } +/
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         pragma(inline, true) bool contains(ref const(QString) str, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
         {
@@ -147,7 +147,7 @@ public:
         return /+ QtPrivate:: +/QStringList_contains(&this, str, cs);
     }
 
-    extern(D) pragma(inline, true) QStringList opBinary(string op)(ref const(QStringList) other) const if(op == "~")
+    extern(D) pragma(inline, true) QStringList opBinary(string op)(ref const(QStringList) other) const if (op == "~")
     { QStringList n = this; n ~= other; return n; }
     /+pragma(inline, true) ref QStringList operator <<(ref const(QString) str)
     { append(str); return this; }+/
@@ -175,7 +175,7 @@ public:
     }
 
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         pragma(inline, true) int indexOf(ref const(QRegExp) rx, int from = 0) const
         {
@@ -241,7 +241,7 @@ extern(C++, "QtPrivate") {
                                           /+ Qt:: +/qt.core.namespace.CaseSensitivity cs);
 /+ #endif +/
 
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
 {
     void /+ Q_CORE_EXPORT +/ QStringList_replaceInStrings(QStringList* that, ref const(QRegExp) rx, ref const(QString) after);
     QStringList /+ Q_CORE_EXPORT +/ QStringList_filter(const(QStringList)* that, ref const(QRegExp) re);
@@ -287,7 +287,7 @@ version(QT_NO_REGEXP){}else
 
 
 /+ #endif +/ // QSTRINGLIST_H
-static if(!defined!"QT_NO_DESKTOPSERVICES")
+static if (!defined!"QT_NO_DESKTOPSERVICES")
 {
 
 }

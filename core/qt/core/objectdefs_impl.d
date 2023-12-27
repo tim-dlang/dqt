@@ -445,12 +445,14 @@ extern(C++, "QtPrivate") {
     using QFunctorSlotObjectWithNoArgsImplicitReturn = QFunctorSlotObjectWithNoArgs<Func, typename QtPrivate::FunctionPointer<Func>::ReturnType>; +/
 }
 
-extern(D) struct DQtStaticSlotObject(Params...)
+extern(D) struct DQtStaticSlotObject(Dg, Params...) if (is(Dg == delegate))
 {
     QSlotObjectBase base;
-    alias Dg = void delegate(Params);
     Dg dg;
 
+    /* Need to use a custom mangling, because the template parameters
+     * may not have a C++ mangling. */
+    pragma(mangle, DQtStaticSlotObject.mangleof ~ "__impl")
     extern(C++) static void impl(int which, QSlotObjectBase *this_, QObject r, void **a, bool *ret)
     {
         import core.stdcpp.new_;
@@ -459,7 +461,17 @@ extern(D) struct DQtStaticSlotObject(Params...)
             cpp_delete(cast(DQtStaticSlotObject*)(this_));
             break;
         case QSlotObjectBase.Operation.Call:
-            (cast(DQtStaticSlotObject*)(this_)).dg();
+            mixin((){
+                import std.conv;
+                string r;
+                r = "(cast(DQtStaticSlotObject*)(this_)).dg(";
+                foreach (i; 0 .. Params.length)
+                {
+                    r ~= text("*cast(Params[", i, "]*)a[", i + 1, "], ");
+                }
+                r ~= ");";
+                return r;
+                }());
             break;
         case QSlotObjectBase.Operation.Compare: // not implemented
         case QSlotObjectBase.Operation.NumOperations:
@@ -475,7 +487,7 @@ public:
     }
 }
 
-extern(D) struct DQtMemberSlotObject(T, alias F, Params...) if(is(T: QObject))
+extern(D) struct DQtMemberSlotObject(T, alias F, Params...) if (is(T: QObject))
 {
     QSlotObjectBase base;
 
@@ -498,7 +510,7 @@ extern(D) struct DQtMemberSlotObject(T, alias F, Params...) if(is(T: QObject))
                 import std.conv;
                 string r;
                 r = "dg(";
-                foreach(i; 0..Params.length)
+                foreach (i; 0 .. Params.length)
                 {
                     r ~= text("*cast(Params[", i, "]*)a[", i + 1, "], ");
                 }

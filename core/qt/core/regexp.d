@@ -14,20 +14,20 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_REGEXP){}else
-version(QT_NO_REGEXP_CAPTURE){}else
+version (QT_NO_REGEXP) {} else
+version (QT_NO_REGEXP_CAPTURE) {} else
     import qt.core.stringlist;
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
 {
     import qt.core.namespace;
     import qt.core.string;
     import qt.core.typeinfo;
 }
 
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
 {
 }
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
 {
 
 
@@ -88,7 +88,7 @@ public:
     int indexIn(ref const(QString) str, int offset = 0, CaretMode caretMode = CaretMode.CaretAtZero) const;
     int lastIndexIn(ref const(QString) str, int offset = -1, CaretMode caretMode = CaretMode.CaretAtZero) const;
     int matchedLength() const;
-    version(QT_NO_REGEXP_CAPTURE){}else
+    version (QT_NO_REGEXP_CAPTURE) {} else
     {
         int captureCount() const;
         QStringList capturedTexts() const;
@@ -123,13 +123,13 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QRegExp &);
 
 
 }
-version(QT_NO_REGEXP)
+version (QT_NO_REGEXP)
 {
 extern(C++, class) struct QRegExp;
 }
 
 
-version(QT_NO_REGEXP){}else
+version (QT_NO_REGEXP) {} else
 {
 }
 

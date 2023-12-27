@@ -57,7 +57,7 @@ public:
     final void setItemIcon(int index, ref const(QIcon) icon);
     final QIcon itemIcon(int index) const;
 
-    version(QT_NO_TOOLTIP){}else
+    version (QT_NO_TOOLTIP) {} else
     {
         final void setItemToolTip(int index, ref const(QString) toolTip);
         final QString itemToolTip(int index) const;

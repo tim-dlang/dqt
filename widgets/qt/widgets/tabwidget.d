@@ -70,7 +70,7 @@ public:
     final void setTabIcon(int index, ref const(QIcon)  icon);
 
 /+ #ifndef QT_NO_TOOLTIP +/
-    version(QT_NO_TOOLTIP){}else
+    version (QT_NO_TOOLTIP) {} else
     {
         final void setTabToolTip(int index, ref const(QString)  tip);
         final QString tabToolTip(int index) const;

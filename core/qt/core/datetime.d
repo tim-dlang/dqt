@@ -99,7 +99,7 @@ public:
 /+ #endif
 
 #if QT_STRINGVIEW_LEVEL < 2 +/
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QString) format) const;
         QString toString(ref const(QString) format, QCalendar cal) const;
@@ -159,7 +159,7 @@ private:
 
     /+ friend class QDateTime; +/
     /+ friend class QDateTimePrivate; +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDate &); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDate &); +/
@@ -193,7 +193,7 @@ public:
     int msec() const;
 /+ #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat f = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QString) format) const;
     }
@@ -235,7 +235,7 @@ private:
 
     /+ friend class QDateTime; +/
     /+ friend class QDateTimePrivate; +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QTime &); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QTime &); +/
@@ -253,7 +253,7 @@ private:
     // ### Qt 6: revisit the optimization
     struct ShortData {
         size_t bitfieldData;
-/+        version(LittleEndian)
+/+        version (LittleEndian)
         {
             /+ quintptr status : 8; +/
             final quintptr status() const
@@ -278,7 +278,7 @@ private:
             return value;
         }
 
-        version(BigEndian)
+        version (BigEndian)
         {
             /+ quintptr status : 8; +/
             final quintptr status() const
@@ -367,7 +367,7 @@ public:
 
 /+ #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         QString toString(ref const(QString) format) const;
         QString toString(ref const(QString) format, QCalendar cal) const;
@@ -437,7 +437,7 @@ public:
     static qint64 currentMSecsSinceEpoch()/+ noexcept+/;
     static qint64 currentSecsSinceEpoch()/+ noexcept+/;
 
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QDateTime fromCFDate(CFDateRef date); +/
         /+ CFDateRef toCFDate() const Q_DECL_CF_RETURNS_RETAINED; +/
@@ -455,7 +455,7 @@ private:
     Data d;
 
 /+ #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QDateTime &); +/
         /+ friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QDateTime &); +/

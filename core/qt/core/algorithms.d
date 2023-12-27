@@ -107,19 +107,19 @@ typedef void* LessThan;
 template <typename T> LessThan qLess();
 template <typename T> LessThan qGreater();
 #else +/
-class /+ QT_DEPRECATED_X("Use std::less") +/ qLess(T)
+extern(C++, class) struct /+ QT_DEPRECATED_X("Use std::less") +/ qLess(T)
 {
 public:
-    /+pragma(inline, true) final bool operator ()(ref const(T) t1, ref const(T) t2) const
+    /+pragma(inline, true) bool operator ()(ref const(T) t1, ref const(T) t2) const
     {
         return (t1 < t2);
     }+/
 }
 
-class /+ QT_DEPRECATED_X("Use std::greater") +/ qGreater(T)
+extern(C++, class) struct /+ QT_DEPRECATED_X("Use std::greater") +/ qGreater(T)
 {
 public:
-    /+pragma(inline, true) final bool operator ()(ref const(T) t1, ref const(T) t2) const
+    /+pragma(inline, true) bool operator ()(ref const(T) t1, ref const(T) t2) const
     {
         return (t2 < t1);
     }+/
@@ -259,7 +259,9 @@ void qDeleteAll(ForwardIterator)(ForwardIterator begin, ForwardIterator end)
     import core.stdcpp.new_;
 
     while (begin != end) {
-        cpp_delete(*begin);
+        if (*begin !is null) { // Check for null as a workaround for https://issues.dlang.org/show_bug.cgi?id=24298
+            cpp_delete(*begin);
+        }
         ++begin;
     }
 }

@@ -14,7 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
-version(QT_NO_ACTION){}else
+version (QT_NO_ACTION) {} else
 {
     import qt.core.coreevent;
     import qt.core.list;
@@ -30,12 +30,12 @@ version(QT_NO_ACTION){}else
     import qt.widgets.widget;
 }
 
-version(QT_NO_ACTION)
+version (QT_NO_ACTION)
 {
 class QAction;
 }
 
-version(QT_NO_ACTION){}else
+version (QT_NO_ACTION) {} else
 {
 
 extern(C++, class) struct QActionPrivate;
@@ -144,7 +144,7 @@ public:
     final void setData(ref const(QVariant) var);
     final void setData(T)(T value)
     {
-        static if(is(const(T) == const(QVariant)))
+        static if (is(const(T) == const(QVariant)))
             QVariant v = value;
         else
             QVariant v = QVariant.fromValue(value);
@@ -206,7 +206,7 @@ private:
     /+ friend class QMenuPrivate; +/
     /+ friend class QMenuBar; +/
     /+ friend class QToolButton; +/
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ friend void qt_mac_clear_status_text(QAction *action); +/
     }

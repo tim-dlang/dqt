@@ -28,9 +28,9 @@ import qt.widgets.action;
 import qt.widgets.completer;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
-version(QT_NO_CONTEXTMENU){}else
+version (QT_NO_CONTEXTMENU) {} else
     import qt.widgets.menu;
-version(QT_NO_VALIDATOR){}else
+version (QT_NO_VALIDATOR) {} else
     import qt.gui.validator;
 
 /+ QT_REQUIRE_CONFIG(lineedit); +/
@@ -97,7 +97,7 @@ public:
     final void setReadOnly(bool);
 
 /+ #ifndef QT_NO_VALIDATOR +/
-    version(QT_NO_VALIDATOR){}else
+    version (QT_NO_VALIDATOR) {} else
     {
         mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
         final void setValidator(const(QValidator) );
@@ -175,7 +175,7 @@ public /+ Q_SLOTS +/:
     @QSlot final void selectAll();
     @QSlot final void undo();
     @QSlot final void redo();
-    version(QT_NO_CLIPBOARD){}else
+    version (QT_NO_CLIPBOARD) {} else
     {
         @QSlot final void cut();
         /+ void copy() const; +/
@@ -185,7 +185,7 @@ public /+ Q_SLOTS +/:
 public:
     final void deselect();
     final void insert(ref const(QString) );
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         final QMenu createStandardContextMenu();
     }
@@ -215,7 +215,7 @@ protected:
     override void dropEvent(QDropEvent );
 /+ #endif +/
     override void changeEvent(QEvent );
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         override void contextMenuEvent(QContextMenuEvent );
     }
@@ -235,7 +235,7 @@ private:
     /+ friend class QAbstractSpinBox; +/
     /+ friend class QAccessibleLineEdit; +/
     /+ friend class QComboBox; +/
-    version(QT_KEYPAD_NAVIGATION)
+    version (QT_KEYPAD_NAVIGATION)
     {
         /+ friend class QDateTimeEdit; +/
     }

@@ -63,11 +63,11 @@ public:
         this.i = 0;
     }
 
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(int mask) if(op == "&") { i &= mask; return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(uint mask) if(op == "&") { i &= mask; return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QUrlTwoFlags f) if(op == "|") { i |= f.i; return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E1 f) if(op == "|") { i |= f; return this; }
-    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E2 f) if(op == "|") { i |= f; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(int mask) if (op == "&") { i &= mask; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(uint mask) if (op == "&") { i &= mask; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(QUrlTwoFlags f) if (op == "|") { i |= f.i; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E1 f) if (op == "|") { i |= f; return this; }
+    pragma(inline, true) ref QUrlTwoFlags opOpAssign(string op)(E2 f) if (op == "|") { i |= f; return this; }
     /+pragma(inline, true) ref QUrlTwoFlags operator ^=(QUrlTwoFlags f) { i ^= f.i; return this; }+/
     /+pragma(inline, true) ref QUrlTwoFlags operator ^=(E1 f) { i ^= f; return this; }+/
     /+pragma(inline, true) ref QUrlTwoFlags operator ^=(E2 f) { i ^= f; return this; }+/
@@ -77,11 +77,11 @@ public:
     /+pragma(inline, true) auto opCast(T : int)() const { return i; }+/
     /+pragma(inline, true) bool operator !() const { return !i; }+/
 
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(QUrlTwoFlags f) const if(op == "|")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(QUrlTwoFlags f) const if (op == "|")
     { return QUrlTwoFlags(QFlag(i | f.i)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E1 f) const if(op == "|")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E1 f) const if (op == "|")
     { return QUrlTwoFlags(QFlag(i | f)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if(op == "|")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if (op == "|")
     { return QUrlTwoFlags(QFlag(i | f)); }
     /+pragma(inline, true) QUrlTwoFlags operator ^(QUrlTwoFlags f) const
     { return QUrlTwoFlags(QFlag(i ^ f.i)); }+/
@@ -89,13 +89,13 @@ public:
     { return QUrlTwoFlags(QFlag(i ^ f)); }+/
     /+pragma(inline, true) QUrlTwoFlags operator ^(E2 f) const
     { return QUrlTwoFlags(QFlag(i ^ f)); }+/
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(int mask) const if(op == "&")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(int mask) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & mask)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(uint mask) const if(op == "&")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(uint mask) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & mask)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E1 f) const if(op == "&")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E1 f) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & f)); }
-    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if(op == "&")
+    pragma(inline, true) QUrlTwoFlags opBinary(string op)(E2 f) const if (op == "&")
     { return QUrlTwoFlags(QFlag(i & f)); }
     /+pragma(inline, true) QUrlTwoFlags operator ~() const
     { return QUrlTwoFlags(QFlag(~i)); }+/
@@ -168,7 +168,7 @@ public:
     @disable this(this);
     this(ref const(QUrl) copy);
     /+ref QUrl operator =(ref const(QUrl) copy);+/
-    version(QT_NO_URL_CAST_FROM_STRING)
+    version (QT_NO_URL_CAST_FROM_STRING)
     {
         /+ explicit +/this(ref const(QString) url, ParsingMode mode = ParsingMode.TolerantMode);
     }
@@ -186,12 +186,12 @@ public:
     /+ inline void swap(QUrl &other) noexcept { qSwap(d, other.d); } +/
 
     void setUrl(ref const(QString) url, ParsingMode mode = ParsingMode.TolerantMode);
-//    QString url(FormattingOptions options = FormattingOptions(cast(QUrlTwoFlags.Zero)(ComponentFormattingOption.PrettyDecoded))) const;
-//    QString toString(FormattingOptions options = FormattingOptions(cast(QUrlTwoFlags.Zero)(ComponentFormattingOption.PrettyDecoded))) const;
-//    QString toDisplayString(FormattingOptions options = FormattingOptions(cast(QUrlTwoFlags.Zero)(ComponentFormattingOption.PrettyDecoded))) const;
+    QString url(FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded)) const;
+    QString toString(FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded)) const;
+    QString toDisplayString(FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded)) const;
     /+ Q_REQUIRED_RESULT +/ QUrl adjusted(FormattingOptions options) const;
 
-//    QByteArray toEncoded(FormattingOptions options = ComponentFormattingOption.FullyEncoded) const;
+    QByteArray toEncoded(FormattingOptions options = ComponentFormattingOption.FullyEncoded) const;
     static QUrl fromEncoded(ref const(QByteArray) url, ParsingMode mode = ParsingMode.TolerantMode);
 
     enum UserInputResolutionOption {
@@ -273,7 +273,7 @@ alias UserInputResolutionOptions = QFlags!(UserInputResolutionOption);
                                             ref const(QByteArray) exclude = globalInitVar!QByteArray,
                                             ref const(QByteArray) include = globalInitVar!QByteArray);
 /+ #if defined(Q_OS_DARWIN) || defined(Q_QDOC) +/
-    static if((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
+    static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QUrl fromCFURL(CFURLRef url); +/
         /+ CFURLRef toCFURL() const Q_DECL_CF_RETURNS_RETAINED; +/
@@ -355,8 +355,8 @@ public:
     static QString fromAce(ref const(QByteArray) );
     static QByteArray toAce(ref const(QString) );
     static QStringList idnWhitelist();
-    static QStringList toStringList(ref const(QList!(QUrl)) uris, FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded));
-    static QList!(QUrl) fromStringList(ref const(QStringList) uris, ParsingMode mode = ParsingMode.TolerantMode);
+    //static QStringList toStringList(ref const(QList!(QUrl)) uris, FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded));
+    //static QList!(QUrl) fromStringList(ref const(QStringList) uris, ParsingMode mode = ParsingMode.TolerantMode);
 
     static void setIdnWhitelist(ref const(QStringList) );
     /+ friend Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed) noexcept; +/
@@ -370,6 +370,10 @@ public:
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
+
+// Test for https://issues.dlang.org/show_bug.cgi?id=24292
+static assert(!__traits(isPOD, QUrl));
+
 /+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
@@ -379,7 +383,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::ComponentFormattingOptions)//Q_DECLARE_OPERA
 
 #ifndef Q_QDOC +/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.UrlFormattingOption f1, QUrl.UrlFormattingOption f2)
-{ return QUrl.FormattingOptions(cast(QUrlTwoFlags.Zero)(f1)) | f2; }+/
+{ return QUrl.FormattingOptions(cast(QUrlTwoFlags.Zero) (f1)) | f2; }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.UrlFormattingOption f1, QUrl.FormattingOptions f2)
 { return f2 | f1; }+/
 /+pragma(inline, true) QIncompatibleFlag operator |(QUrl.UrlFormattingOption f1, int f2)
@@ -387,21 +391,21 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::ComponentFormattingOptions)//Q_DECLARE_OPERA
 
 // add operators for OR'ing the two types of flags
 /+pragma(inline, true) ref QUrl.FormattingOptions operator |=(ref QUrl.FormattingOptions i, QUrl.ComponentFormattingOptions f)
-{ i |= cast(QUrl.UrlFormattingOption)(cast(int)(f)); return i; }+/
+{ i |= cast(QUrl.UrlFormattingOption) (cast(int) (f)); return i; }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.UrlFormattingOption i, QUrl.ComponentFormattingOption f)
-{ return i | cast(QUrl.UrlFormattingOption)(int(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption) (int(f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.UrlFormattingOption i, QUrl.ComponentFormattingOptions f)
-{ return i | cast(QUrl.UrlFormattingOption)(cast(int)(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption) (cast(int) (f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.ComponentFormattingOption f, QUrl.UrlFormattingOption i)
-{ return i | cast(QUrl.UrlFormattingOption)(int(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption) (int(f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.ComponentFormattingOptions f, QUrl.UrlFormattingOption i)
-{ return i | cast(QUrl.UrlFormattingOption)(cast(int)(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption) (cast(int) (f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.FormattingOptions i, QUrl.ComponentFormattingOptions f)
-{ return i | cast(QUrl.UrlFormattingOption)(cast(int)(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption) (cast(int) (f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.ComponentFormattingOption f, QUrl.FormattingOptions i)
-{ return i | cast(QUrl.UrlFormattingOption)(int(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption) (int(f)); }+/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.ComponentFormattingOptions f, QUrl.FormattingOptions i)
-{ return i | cast(QUrl.UrlFormattingOption)(cast(int)(f)); }+/
+{ return i | cast(QUrl.UrlFormattingOption) (cast(int) (f)); }+/
 
 //inline QUrl::UrlFormattingOption &operator=(const QUrl::UrlFormattingOption &i, QUrl::ComponentFormattingOptions f)
 //{ i = int(f); f; }

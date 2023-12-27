@@ -37,7 +37,7 @@ import qt.helpers;
 import qt.widgets.abstractscrollarea;
 import qt.widgets.textedit;
 import qt.widgets.widget;
-version(QT_NO_CONTEXTMENU){}else
+version (QT_NO_CONTEXTMENU) {} else
     import qt.widgets.menu;
 
 /+ QT_REQUIRE_CONFIG(textedit); +/
@@ -132,7 +132,7 @@ public:
 
     /+ bool find(const QString &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags()); +/
 /+ #ifndef QT_NO_REGEXP +/
-    version(QT_NO_REGEXP){}else
+    version (QT_NO_REGEXP) {} else
     {
         /+ bool find(const QRegExp &exp, QTextDocument::FindFlags options = QTextDocument::FindFlags()); +/
     }
@@ -147,7 +147,7 @@ public:
     final void ensureCursorVisible();
 
     /+ virtual +/ QVariant loadResource(int type, ref const(QUrl) name);
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         final QMenu createStandardContextMenu();
         final QMenu createStandardContextMenu(ref const(QPoint) position);
@@ -190,7 +190,7 @@ public /+ Q_SLOTS +/:
 
     @QSlot final void setPlainText(ref const(QString) text);
 
-    version(QT_NO_CLIPBOARD){}else
+    version (QT_NO_CLIPBOARD) {} else
     {
         @QSlot final void cut();
         /+ void copy(); +/
@@ -238,7 +238,7 @@ protected:
     /+ virtual +/ override void mouseDoubleClickEvent(QMouseEvent e);
     /+ virtual +/ override bool focusNextPrevChild(bool next);
 /+ #ifndef QT_NO_CONTEXTMENU +/
-    version(QT_NO_CONTEXTMENU){}else
+    version (QT_NO_CONTEXTMENU) {} else
     {
         /+ virtual +/ override void contextMenuEvent(QContextMenuEvent e);
     }

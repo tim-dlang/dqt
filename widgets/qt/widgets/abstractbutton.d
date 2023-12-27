@@ -22,7 +22,7 @@ import qt.gui.icon;
 import qt.helpers;
 import qt.widgets.buttongroup;
 import qt.widgets.widget;
-version(QT_NO_SHORTCUT){}else
+version (QT_NO_SHORTCUT) {} else
     import qt.gui.keysequence;
 
 /+ QT_REQUIRE_CONFIG(abstractbutton); +/
@@ -64,7 +64,7 @@ public:
 
     final QSize iconSize() const;
 
-    version(QT_NO_SHORTCUT){}else
+    version (QT_NO_SHORTCUT) {} else
     {
         final void setShortcut(ref const(QKeySequence) key);
         final void setShortcut(const QString shortcut)

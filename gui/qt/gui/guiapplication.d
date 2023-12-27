@@ -30,9 +30,9 @@ import qt.gui.screen;
 import qt.gui.stylehints;
 import qt.gui.windowdefs;
 import qt.helpers;
-version(QT_NO_CLIPBOARD){}else
+version (QT_NO_CLIPBOARD) {} else
     import qt.gui.clipboard;
-version(QT_NO_CURSOR){}else
+version (QT_NO_CURSOR) {} else
     import qt.gui.cursor;
 
 extern(C++, class) struct QSessionManager;
@@ -96,7 +96,7 @@ public:
 
     final qreal devicePixelRatio() const;
 
-    version(QT_NO_CURSOR){}else
+    version (QT_NO_CURSOR) {} else
     {
         static QCursor* overrideCursor();
         static void setOverrideCursor(ref const(QCursor) );
@@ -107,7 +107,7 @@ public:
     static QFont font();
     static void setFont(ref const(QFont) );
 
-    version(QT_NO_CLIPBOARD){}else
+    version (QT_NO_CLIPBOARD) {} else
     {
         static QClipboard clipboard();
     }
@@ -148,7 +148,7 @@ public:
     static int exec();
     override bool notify(QObject , QEvent );
 
-    version(QT_NO_SESSIONMANAGER){}else
+    version (QT_NO_SESSIONMANAGER) {} else
     {
         // session management
         final bool isSessionRestored() const;
@@ -171,7 +171,7 @@ public:
     @QSignal final void focusWindowChanged(QWindow* focusWindow);
     @QSignal final void applicationStateChanged(/+ Qt:: +/qt.core.namespace.ApplicationState state);
     @QSignal final void layoutDirectionChanged(/+ Qt:: +/qt.core.namespace.LayoutDirection direction);
-    version(QT_NO_SESSIONMANAGER){}else
+    version (QT_NO_SESSIONMANAGER) {} else
     {
         @QSignal final void commitDataRequest(ref QSessionManager sessionManager);
         @QSignal final void saveStateRequest(ref QSessionManager sessionManager);
@@ -192,13 +192,13 @@ private:
 
     /+ Q_PRIVATE_SLOT(d_func(), void _q_updateFocusObject(QObject *object)) +/
 
-    version(QT_NO_GESTURES){}else
+    version (QT_NO_GESTURES) {} else
     {
         /+ friend class QGestureManager; +/
     }
     /+ friend class QFontDatabasePrivate; +/
     /+ friend class QPlatformIntegration; +/
-    version(QT_NO_SESSIONMANAGER){}else
+    version (QT_NO_SESSIONMANAGER) {} else
     {
         /+ friend class QPlatformSessionManager; +/
     }

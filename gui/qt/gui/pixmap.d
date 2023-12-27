@@ -63,7 +63,7 @@ public:
     this(int w, int h);
     /+ explicit +/this(ref const(QSize) );
     this(ref const(QString) fileName, const(char)* format = null, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags = /+ Qt:: +/qt.core.namespace.ImageConversionFlag.AutoColor);
-    version(QT_NO_IMAGEFORMAT_XPM){}else
+    version (QT_NO_IMAGEFORMAT_XPM) {} else
     {
         /+ explicit +/this(const(char**) xpm);
     }
@@ -115,7 +115,7 @@ public:
     bool hasAlpha() const;
     bool hasAlphaChannel() const;
 
-    version(QT_NO_IMAGE_HEURISTIC_MASK){}else
+    version (QT_NO_IMAGE_HEURISTIC_MASK) {} else
     {
         QBitmap createHeuristicMask(bool clipTight = true) const;
     }
@@ -216,7 +216,7 @@ private:
     /+ friend class QOpenGLWidget; +/
     /+ friend class QWidgetPrivate; +/
     /+ friend class QRasterBuffer; +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QPixmap &); +/
     }

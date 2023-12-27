@@ -444,7 +444,7 @@ public:
         string code = "enum Type {";
         // these are merged with QVariant
         /+ QT_FOR_EACH_STATIC_TYPE(QT_DEFINE_METATYPE_ID) +/
-        foreach(t; allBuiltinTypes)
+        foreach (t; allBuiltinTypes)
             code ~= text(t.typeName, " = ", t.typeNameID, ", ");
         code ~= q{
             FirstCoreType = Type.Bool,
@@ -525,7 +525,7 @@ alias TypeFlags = QFlags!(TypeFlag);
 
     alias SaveOperator = ExternCPPFunc!(void function(ref QDataStream , const(void)* ));
     alias LoadOperator = ExternCPPFunc!(void function(ref QDataStream , void* ));
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         static void registerStreamOperators(const(char)* typeName, SaveOperator saveOp,
                                                 LoadOperator loadOp);
@@ -584,7 +584,7 @@ alias TypeFlags = QFlags!(TypeFlag);
     static void* construct(int type, void* where, const(void)* copy);
     static void destruct(int type, void* where);
 
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         static bool save(ref QDataStream stream, int type, const(void)* data);
         static bool load(ref QDataStream stream, int type, void* data);
@@ -620,7 +620,7 @@ alias TypeFlags = QFlags!(TypeFlag);
     {
         if (/+ Q_UNLIKELY +/(isExtended(ExtensionFlag.FlagsEx)))
             return flagsExtended();
-        return QMetaType.TypeFlags(cast(QFlag)(m_typeFlags));
+        return QMetaType.TypeFlags(cast(QFlag) (m_typeFlags));
     }
     pragma(inline, true) const(QMetaObject)* metaObject() const
     {
@@ -832,23 +832,17 @@ private:
 // ### Qt6: FIXME: Remove the special Q_CC_MSVC handling, it was introduced to maintain BC.
 #if !defined(Q_NO_TEMPLATE_FRIENDS) && !defined(Q_CC_MSVC)
 #ifndef Q_CLANG_QDOC +/
-    static if(!defined!"Q_NO_TEMPLATE_FRIENDS" && !versionIsSet!("Windows"))
-    {
-        /+ template<typename, bool> +/ /+ friend struct QtPrivate::ValueTypeIsMetaType; +/
-        /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunction; +/
-        /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunctionOk; +/
-        /+ template<typename, typename, typename> +/ /+ friend struct QtPrivate::ConverterFunctor; +/
-        /+ template<typename, bool> +/ /+ friend struct QtPrivate::AssociativeValueTypeIsMetaType; +/
-        /+ template<typename, bool> +/ /+ friend struct QtPrivate::IsMetaTypePair; +/
-        /+ template<typename, typename> +/ /+ friend struct QtPrivate::MetaTypeSmartPointerHelper; +/
-    }
-    else
-    {
-    /+ #endif
-    #else +/
-    public:
-    }
-/+ #endif +/
+    /+ template<typename, bool> +/ /+ friend struct QtPrivate::ValueTypeIsMetaType; +/
+    /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunction; +/
+    /+ template<typename, typename> +/ /+ friend struct QtPrivate::ConverterMemberFunctionOk; +/
+    /+ template<typename, typename, typename> +/ /+ friend struct QtPrivate::ConverterFunctor; +/
+    /+ template<typename, bool> +/ /+ friend struct QtPrivate::AssociativeValueTypeIsMetaType; +/
+    /+ template<typename, bool> +/ /+ friend struct QtPrivate::IsMetaTypePair; +/
+    /+ template<typename, typename> +/ /+ friend struct QtPrivate::MetaTypeSmartPointerHelper; +/
+/+ #endif
+#else
+public:
+#endif +/
 /*    static bool registerConverterFunction(const(/+ QtPrivate:: +/AbstractConverterFunction)* f, int from, int to);
     static void unregisterConverterFunction(int from, int to);*/
 private:
@@ -899,7 +893,7 @@ struct QMetaTypeFunctionHelper(T, bool Accepted=true) {
             return emplace!T(where, *static_cast!(const(T)*)(t));
         return emplace!T(where);
     }
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         static void Save(ref QDataStream stream, const(void)* t)
         {
@@ -1846,10 +1840,10 @@ extern(D) mixin((){
     import std.conv;
     string code = "template QMetaTypeId2(T)\n";
     code ~= "{\n";
-    code ~= "    static if(std.traits.isBuiltinType!T)\n";
+    code ~= "    static if (std.traits.isBuiltinType!T)\n";
     code ~= "    {\n";
     bool needsElse = false;
-    foreach(i, t; allBuiltinTypes)
+    foreach (i, t; allBuiltinTypes)
     {
         string realType2 = t.realType;
         if(t.dType.length)
@@ -1859,7 +1853,7 @@ extern(D) mixin((){
             code ~= "        ";
             if(needsElse)
                 code ~= "else ";
-            code ~= text("static if(is(T == ", realType2, "))\n");
+            code ~= text("static if (is(T == ", realType2, "))\n");
             code ~= "        {\n";
             code ~= text("            enum { Defined = 1, IsBuiltIn = true, MetaType = ", t.typeNameID, " };\n");
             code ~= text("            pragma(inline, true) static int qt_metatype_id() { return ", t.typeNameID, "; }\n");
@@ -1875,9 +1869,9 @@ extern(D) mixin((){
     code ~= "    else\n";
     code ~= "    {\n";
     needsElse = false;
-    code ~= "        static if(IsInQtPackage!T)\n";
+    code ~= "        static if (IsInQtPackage!T)\n";
     code ~= "        {\n";
-    foreach(i, t; allBuiltinTypes)
+    foreach (i, t; allBuiltinTypes)
     {
         string realType2 = t.realType;
         if(t.dType.length)
@@ -1888,7 +1882,7 @@ extern(D) mixin((){
             if(needsElse)
                 code ~= "else ";
             // TODO: Match templates like QList!(QString)
-            code ~= text("static if(__traits(identifier, T) == \"", realType2, "\")\n");
+            code ~= text("static if (__traits(identifier, T) == \"", realType2, "\")\n");
             code ~= "            {\n";
             code ~= text("                enum { Defined = 1, IsBuiltIn = true, MetaType = ", t.typeNameID, " };\n");
             code ~= text("                pragma(inline, true) static int qt_metatype_id() { return ", t.typeNameID, "; }\n");
@@ -2015,8 +2009,8 @@ int qRegisterNormalizedMetaType(const QT_PREPEND_NAMESPACE(QByteArray) &normaliz
 int qRegisterMetaType(T)(const(char)* typeName
 /+ #ifndef Q_CLANG_QDOC +/
     , T*  dummy = null
-    /+ , typename QtPrivate::MetaTypeDefinedHelper<T, QMetaTypeId2<T>::Defined && !QMetaTypeId2<T>::IsBuiltIn>::DefinedType defined = QtPrivate::MetaTypeDefinedHelper<T, QMetaTypeId2<T>::Defined && !QMetaTypeId2<T>::IsBuiltIn>::Defined
-#endif +/
+    , /+ QtPrivate:: +/MetaTypeDefinedHelper!(T, QMetaTypeId2!(T).Defined && !QMetaTypeId2!(T).IsBuiltIn).DefinedType defined = /+ QtPrivate:: +/MetaTypeDefinedHelper!(T, QMetaTypeId2!(T).Defined && !QMetaTypeId2!(T).IsBuiltIn).DefinedType.Defined
+/+ #endif +/
 )
 {
 /+ #ifdef QT_NO_QOBJECT
@@ -2024,7 +2018,7 @@ int qRegisterMetaType(T)(const(char)* typeName
 #else +/
     /+ QT_PREPEND_NAMESPACE(QByteArray) +/QByteArray normalizedTypeName = QMetaObject.normalizedType(typeName);
 /+ #endif +/
-    return qRegisterNormalizedMetaType!(T)(normalizedTypeName, dummy, defined__1);
+    return qRegisterNormalizedMetaType!(T)(normalizedTypeName, dummy, defined);
 }
 
 /+ #ifndef QT_NO_DATASTREAM

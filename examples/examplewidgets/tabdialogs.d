@@ -47,18 +47,18 @@ private /+ slots +/:
         msgBox.setText(ui.plainTextEditText.toPlainText());
         msgBox.setDetailedText(ui.plainTextEditDetailed.toPlainText());
         QMessageBox.StandardButtons buttons;
-        if(ui.checkBoxOK.isChecked())
+        if (ui.checkBoxOK.isChecked())
             buttons |= QMessageBox.StandardButton.Ok;
-        if(ui.checkBoxCancel.isChecked())
+        if (ui.checkBoxCancel.isChecked())
             buttons |= QMessageBox.StandardButton.Cancel;
-        if(ui.checkBoxYes.isChecked())
+        if (ui.checkBoxYes.isChecked())
             buttons |= QMessageBox.StandardButton.Yes;
-        if(ui.checkBoxNo.isChecked())
+        if (ui.checkBoxNo.isChecked())
             buttons |= QMessageBox.StandardButton.No;
         msgBox.setStandardButtons(buttons);
         int ret = msgBox.exec();
         const(char)* buttonName;
-        switch(ret)
+        switch (ret)
         {
         case QMessageBox.StandardButton.Ok:
             buttonName = "OK";
@@ -138,7 +138,7 @@ private /+ slots +/:
 protected:
     override extern(C++) void changeEvent(QEvent event)
     {
-        if(event.type() == QEvent.Type.LanguageChange)
+        if (event.type() == QEvent.Type.LanguageChange)
             ui.retranslateUi(this);
         QWidget.changeEvent(event);
     }

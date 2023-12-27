@@ -57,7 +57,7 @@ public:
     bool hasExpired() const/+ noexcept+/;
 
     /+ Qt:: +/qt.core.namespace.TimerType timerType() const/+ noexcept+/
-    { return cast(/+ Qt:: +/qt.core.namespace.TimerType)(type & 0xff); }
+    { return cast(/+ Qt:: +/qt.core.namespace.TimerType) (type & 0xff); }
     void setTimerType(/+ Qt:: +/qt.core.namespace.TimerType type);
 
     qint64 remainingTime() const/+ noexcept+/;
@@ -95,9 +95,9 @@ public:
     { return dt + (-msecs); } +/
     /+ friend qint64 operator-(QDeadlineTimer dt1, QDeadlineTimer dt2)
     { return (dt1.deadlineNSecs() - dt2.deadlineNSecs()) / (1000 * 1000); } +/
-    ref QDeadlineTimer opOpAssign(string op)(qint64 msecs) if(op == "+")
+    ref QDeadlineTimer opOpAssign(string op)(qint64 msecs) if (op == "+")
     { this = this + msecs; return this; }
-    ref QDeadlineTimer opOpAssign(string op)(qint64 msecs) if(op == "-")
+    ref QDeadlineTimer opOpAssign(string op)(qint64 msecs) if (op == "-")
     { this = this + (-msecs); return this; }
 
 /+ #if __has_include(<chrono>) || defined(Q_CLANG_QDOC) +/

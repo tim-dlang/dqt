@@ -61,7 +61,7 @@ public:
      return (*(reinterpret_cast!(const(uchar)*)(d.constData())+1+(i>>3)) & (1 << (i & 7))) != 0; }
     pragma(inline, true) void setBit(int i)
     { (mixin(Q_ASSERT(q{uint(i) < uint(QBitArray.size())})));
-     *(reinterpret_cast!(uchar*)(d.data())+1+(i>>3)) |= cast(uchar)(1 << (i & 7)); }
+     *(reinterpret_cast!(uchar*)(d.data())+1+(i>>3)) |= cast(uchar) (1 << (i & 7)); }
     pragma(inline, true) void setBit(int i, bool val)
     { if (val) setBit(i); else clearBit(i); }
     pragma(inline, true) void clearBit(int i)
@@ -69,8 +69,8 @@ public:
      *(reinterpret_cast!(uchar*)(d.data())+1+(i>>3)) &= ~uint(uchar(1 << (i & 7))); }
     pragma(inline, true) bool toggleBit(int i)
     { (mixin(Q_ASSERT(q{uint(i) < uint(QBitArray.size())})));
-     uchar b = cast(uchar)(1<<(i&7)); uchar* p = reinterpret_cast!(uchar*)(d.data())+1+(i>>3);
-     uchar c = cast(uchar)(*p&b); *p^=b; return c!=0; }
+     uchar b = cast(uchar) (1<<(i&7)); uchar* p = reinterpret_cast!(uchar*)(d.data())+1+(i>>3);
+     uchar c = cast(uchar) (*p&b); *p^=b; return c!=0; }
 
     pragma(inline, true) bool at(int i) const { return testBit(i); }
     pragma(inline, true) QBitRef opIndex(int i)
@@ -80,8 +80,8 @@ public:
     { return QBitRef(this, i); }
     pragma(inline, true) bool opIndex(uint i) const { return testBit(i); }
 
-    ref QBitArray opOpAssign(string op)(ref const(QBitArray) ) if(op == "&");
-    ref QBitArray opOpAssign(string op)(ref const(QBitArray) ) if(op == "|");
+    ref QBitArray opOpAssign(string op)(ref const(QBitArray) ) if (op == "&");
+    ref QBitArray opOpAssign(string op)(ref const(QBitArray) ) if (op == "|");
     /+ref QBitArray operator ^=(ref const(QBitArray) );+/
     /+QBitArray  operator ~() const;+/
 

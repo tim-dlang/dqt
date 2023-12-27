@@ -50,15 +50,15 @@ public:
     this(int r, int g, int b, int a = 255)/+ noexcept+/
     {
         this.cspec = isRgbaValid(r, g, b, a) ? Spec.Rgb : Spec.Invalid;
-        this.ct = CT(CT.generated_qcolor_0(cast(ushort)(cspec == Spec.Rgb ? a * 0x0101 : 0),
-                     cast(ushort)(cspec == Spec.Rgb ? r * 0x0101 : 0),
-                     cast(ushort)(cspec == Spec.Rgb ? g * 0x0101 : 0),
-                     cast(ushort)(cspec == Spec.Rgb ? b * 0x0101 : 0),
+        this.ct = CT(CT.generated_qcolor_0(cast(ushort) (cspec == Spec.Rgb ? a * 0x0101 : 0),
+                     cast(ushort) (cspec == Spec.Rgb ? r * 0x0101 : 0),
+                     cast(ushort) (cspec == Spec.Rgb ? g * 0x0101 : 0),
+                     cast(ushort) (cspec == Spec.Rgb ? b * 0x0101 : 0),
                      0));
     }
     this(QRgb rgb)/+ noexcept+/;
     this(QRgba64 rgba64)/+ noexcept+/;
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         pragma(inline, true) this(ref const(QString) aname)
         { setNamedColor(aname); }
@@ -99,7 +99,7 @@ public:
     QString name() const;
     QString name(NameFormat format) const;
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         void setNamedColor(ref const(QString) name);
     }
@@ -240,7 +240,7 @@ public:
 
     /+auto opCast(T : QVariant)() const;+/
 
-    static if(QT_STRINGVIEW_LEVEL < 2)
+    static if (QT_STRINGVIEW_LEVEL < 2)
     {
         static bool isValidColor(ref const(QString) name);
     }
@@ -305,7 +305,7 @@ private:
 
     /+ friend class QColormap; +/
 /+ #ifndef QT_NO_DATASTREAM +/
-    version(QT_NO_DATASTREAM){}else
+    version (QT_NO_DATASTREAM) {} else
     {
         /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QColor &); +/
         /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &); +/
