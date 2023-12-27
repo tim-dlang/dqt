@@ -94,6 +94,7 @@ int main(string[] args)
 
     string compiler = "dmd";
     string qtPath;
+    string dxmlPath;
     bool verbose;
     bool github;
 
@@ -110,6 +111,10 @@ int main(string[] args)
         else if (args[i].startsWith("--qt-path="))
         {
             qtPath = args[i]["--qt-path=".length .. $];
+        }
+        else if (args[i].startsWith("--dxml-path="))
+        {
+            dxmlPath = args[i]["--dxml-path=".length .. $];
         }
         else if (args[i] == "-v")
         {
@@ -276,9 +281,13 @@ int main(string[] args)
             dmdArgs ~= buildPath("core", "qt", "helpers.d");
             dmdArgs ~= buildPath("core", "qt", "std_function.d");
         }
+        if (m == "Widgets" && dxmlPath != "")
+            dmdArgs ~= "-I" ~ dxmlPath;
         foreach_reverse (m2; dependencyClosure([m], moduleDependencies))
         {
             dmdArgs ~= "-I" ~ toLower(m2);
+            if (m2 == "Widgets" && dxmlPath != "")
+                dmdArgs ~= "-I" ~ dxmlPath;
         }
         dmdArgs ~= "-od" ~ buildPath("test_results", os ~ model);
         if (compiler.endsWith("ldc2"))
@@ -351,6 +360,8 @@ int main(string[] args)
         foreach_reverse (m; test.qtModules)
         {
             dmdArgs ~= "-I" ~ m;
+            if (getCapitalizedModuleName(m) == "Widgets" && dxmlPath != "")
+                dmdArgs ~= "-I" ~ dxmlPath;
         }
         foreach_reverse (m; test.qtModules)
         {

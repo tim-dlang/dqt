@@ -30,7 +30,7 @@
 			"sourcePaths": ["widgets"],
 			"importPaths": ["widgets"],
 			"libs": ["Qt6Widgets"],
-			"dependencies": {"dqt:gui":"*"}
+			"dependencies": {"dqt:gui":"*", "dxml": "~>0.4.4"}
 		},
 		{
 			"name": "network",

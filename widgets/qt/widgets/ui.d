@@ -35,15 +35,15 @@ private void writeStringLiteral(R)(ref Appender!string code, R str)
 
 private struct UICodeWriter()
 {
-    import qt.widgets.internal.dxml.dom;
-    import qt.widgets.internal.dxml.util;
+    import dxml.dom;
+    import dxml.util;
     import std.ascii;
     import std.uni;
     import std.conv;
     import std.algorithm;
     import std.exception;
     import std.string;
-    alias DOMEntity = qt.widgets.internal.dxml.dom.DOMEntity!string;
+    alias DOMEntity = dxml.dom.DOMEntity!string;
 
     string customWidgetPackage;
     Appender!string codeVars;
