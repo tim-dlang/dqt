@@ -82,6 +82,14 @@ jobs:
         with:
           compiler: ${{ matrix.dc }}
 
+      - name: Checkout dxml
+        uses: actions/checkout@v3
+        with:
+          path: dxml
+          repository: jmdavis/dxml
+          ref: v0.4.4
+          persist-credentials: false
+
       - name: Update PATH
         if: ${{ matrix.os == 'windows-2022' }}
         run: |
@@ -121,7 +129,7 @@ jobs:
       - name: 'Build & Test'
         timeout-minutes: 5
         run: |
-          ${{ env.DC }} -run runtests.d --github --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=5.15.2/${{ matrix.qt_arch }}
+          ${{ env.DC }} -run runtests.d --github --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=5.15.2/${{ matrix.qt_arch }} --dxml-path=dxml/source
 
 #      - name: Upload test results
 #        uses: actions/upload-artifact@v4
