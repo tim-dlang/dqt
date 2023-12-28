@@ -1075,11 +1075,18 @@ private struct UICodeWriter()
 
             codeSetupAddActions.put("        ");
             codeSetupAddActions.put(info.name);
-            codeSetupAddActions.put(".addAction(");
-            codeSetupAddActions.put(name);
-            if (name in widgetTypes && widgetTypes[name].among("QMenu", "QMenuBar"))
-                codeSetupAddActions.put(".menuAction()");
-            codeSetupAddActions.put(");\n");
+            if (name == "separator")
+            {
+                codeSetupAddActions.put(".addSeparator();\n");
+            }
+            else
+            {
+                codeSetupAddActions.put(".addAction(");
+                codeSetupAddActions.put(name);
+                if (name in widgetTypes && widgetTypes[name].among("QMenu", "QMenuBar"))
+                    codeSetupAddActions.put(".menuAction()");
+                codeSetupAddActions.put(");\n");
+            }
         }
         return WidgetInfo.init;
     }

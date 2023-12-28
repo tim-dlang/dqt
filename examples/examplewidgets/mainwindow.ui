@@ -103,6 +103,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout_Qt"/>
+    <addaction name="separator"/>
     <addaction name="actionSystem_Info"/>
    </widget>
    <widget class="QMenu" name="menuLanguage">
