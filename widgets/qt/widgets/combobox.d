@@ -96,9 +96,9 @@ public:
     final void setFrame(bool);
     final bool hasFrame() const;
 
-    pragma(inline, true) final int findText(ref const(QString) text,
+/+    pragma(inline, true) final int findText(ref const(QString) text,
                             /+ Qt:: +/qt.core.namespace.MatchFlags flags = static_cast!(/+ Qt:: +/qt.core.namespace.MatchFlags)(/+ Qt:: +/qt.core.namespace.MatchFlag.MatchExactly|/+ Qt:: +/qt.core.namespace.MatchFlag.MatchCaseSensitive)) const
-        { return findData(text, /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole, flags); }
+        { return findData(text, /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole, flags); }+/
     final int findData(ref const(QVariant) data, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.UserRole,
                      /+ Qt:: +/qt.core.namespace.MatchFlags flags = static_cast!(/+ Qt:: +/qt.core.namespace.MatchFlags)(/+ Qt:: +/qt.core.namespace.MatchFlag.MatchExactly|/+ Qt:: +/qt.core.namespace.MatchFlag.MatchCaseSensitive)) const;
 
