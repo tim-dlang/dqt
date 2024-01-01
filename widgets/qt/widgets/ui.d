@@ -1054,6 +1054,14 @@ private struct UICodeWriter()
                 codeSetup.put(childInfo.name);
                 codeSetup.put(");\n");
             }
+            else if (info.className == "QStackedWidget")
+            {
+                codeSetup.put("        ");
+                codeSetup.put(info.name);
+                codeSetup.put(".addWidget(");
+                codeSetup.put(childInfo.name);
+                codeSetup.put(");\n");
+            }
             else if (info.className == "QScrollArea")
             {
                 codeSetup.put("        ");

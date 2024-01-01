@@ -13,15 +13,19 @@
 			"targetType": "library",
 			"sourcePaths": ["core"],
 			"importPaths": ["core"],
-			"libs": ["Qt6Core"],
-			"libs-posix": ["stdc++"]
+			"libs-windows": ["Qt6Core"],
+			"libs-linux": ["Qt6Core", "stdc++"],
+			"libs-osx": ["c++"],
+			"lflags-osx": ["-framework", "QtCore"]
 		},
 		{
 			"name": "gui",
 			"targetType": "library",
 			"sourcePaths": ["gui"],
 			"importPaths": ["gui"],
-			"libs": ["Qt6Gui"],
+			"libs-linux": ["Qt6Gui"],
+			"libs-windows": ["Qt6Gui"],
+			"lflags-osx": ["-framework", "QtGui"],
 			"dependencies": {"dqt:core":"*"}
 		},
 		{
@@ -29,7 +33,9 @@
 			"targetType": "library",
 			"sourcePaths": ["widgets"],
 			"importPaths": ["widgets"],
-			"libs": ["Qt6Widgets"],
+			"libs-linux": ["Qt6Widgets"],
+			"libs-windows": ["Qt6Widgets"],
+			"lflags-osx": ["-framework", "QtWidgets"],
 			"dependencies": {"dqt:gui":"*", "dxml": "~>0.4.4"}
 		},
 		{
@@ -37,7 +43,9 @@
 			"targetType": "library",
 			"sourcePaths": ["network"],
 			"importPaths": ["network"],
-			"libs": ["Qt6Network"],
+			"libs-linux": ["Qt6Network"],
+			"libs-windows": ["Qt6Network"],
+			"lflags-osx": ["-framework", "QtNetwork"],
 			"dependencies": {"dqt:core":"*"}
 		},
 		{
@@ -45,7 +53,9 @@
 			"targetType": "library",
 			"sourcePaths": ["webenginecore"],
 			"importPaths": ["webenginecore"],
-			"libs": ["Qt6WebEngineCore"],
+			"libs-linux": ["Qt6WebEngineCore"],
+			"libs-windows": ["Qt6WebEngineCore"],
+			"lflags-osx": ["-framework", "QtWebEngineCore"],
 			"dependencies": {"dqt:gui":"*", "dqt:network":"*"}
 		},
 		{
@@ -53,7 +63,9 @@
 			"targetType": "library",
 			"sourcePaths": ["webenginewidgets"],
 			"importPaths": ["webenginewidgets"],
-			"libs": ["Qt6WebEngineWidgets"],
+			"libs-linux": ["Qt6WebEngineWidgets"],
+			"libs-windows": ["Qt6WebEngineWidgets"],
+			"lflags-osx": ["-framework", "QtWebEngineWidgets"],
 			"dependencies": {"dqt:widgets":"*", "dqt:webenginecore":"*"}
 		},
 		{
