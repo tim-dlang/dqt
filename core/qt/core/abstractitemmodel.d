@@ -522,13 +522,13 @@ protected:
     this(ref QAbstractItemModelPrivate dd, QObject parent);
     }));
 
-/*private:*/
+private:
     /+ Q_DISABLE_COPY(QAbstractTableModel) +/
     mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
-    override QModelIndex parent(ref const(QModelIndex) child) const;
+    protected override QModelIndex parent(ref const(QModelIndex) child) const;
     }));
     mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
-    override bool hasChildren(ref const(QModelIndex) parent) const;
+    protected override bool hasChildren(ref const(QModelIndex) parent) const;
     }));
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
@@ -560,16 +560,16 @@ protected:
     this(ref QAbstractItemModelPrivate dd, QObject parent);
     }));
 
-/*private:*/
+private:
     /+ Q_DISABLE_COPY(QAbstractListModel) +/
     mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
-    override QModelIndex parent(ref const(QModelIndex) child) const;
+    protected override QModelIndex parent(ref const(QModelIndex) child) const;
     }));
     mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
-    override int columnCount(ref const(QModelIndex) parent) const;
+    protected override int columnCount(ref const(QModelIndex) parent) const;
     }));
     mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
-    override bool hasChildren(ref const(QModelIndex) parent) const;
+    protected override bool hasChildren(ref const(QModelIndex) parent) const;
     }));
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }

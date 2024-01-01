@@ -285,7 +285,7 @@ protected:
 /+ #endif +/
 
 private:
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
     protected override void setModel(QAbstractItemModel model);
     }));
     final /+ Qt:: +/qt.core.namespace.SortOrder sortOrder() const;
