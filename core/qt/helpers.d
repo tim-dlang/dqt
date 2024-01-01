@@ -1020,12 +1020,13 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
     {
         string part = declaration[parts[0].start .. parts[0].end];
         if (part.among("static", "override", "final", "extern", "export",
-                "__gshared", "private", "protected", "public", "package") || part[0] == '@')
+                "__gshared") || part[0] == '@')
         {
             attributesEnd = parts[0].end;
             attributesNoComments ~= part ~ " ";
         }
-        else if (part.among("const", "immutable", "shared"))
+        else if (part.among("const", "immutable", "shared",
+            "private", "protected", "public", "package"))
         {
             usedAttributes ~= part ~ " ";
             attributesEnd = parts[0].end;
@@ -1114,10 +1115,10 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
         code ~= ".recreateCppMangling";
         code ~= ");\n";
     }
-    code ~= "static assert(" ~ codeSplitMangling;
+    code ~= "static assert (" ~ codeSplitMangling;
     code ~= "." ~ changeFuncs;
     code ~= ".recreateCppMangling";
-    code ~= " != " ~ dummyFunctionName ~ ".mangleof, \"Redundant use of changeCppMangling\");\n";
+    code ~= " != " ~ codeSplitMangling ~ ".recreateCppMangling, \"Redundant use of changeCppMangling\");\n";
 
     code ~= "pragma(mangle, " ~ codeSplitMangling;
     code ~= "." ~ changeFuncs;
