@@ -109,6 +109,7 @@ public:
     // New entries must be added to the \enum doc in qcalendar.cpp and
     // handled in QCalendarBackend::fromEnum()
     /+ Q_ENUM(System) +/
+    /// Binding for C++ class [QCalendar::SystemId](https://doc.qt.io/qt-6/qcalendar-systemid.html).
     extern(C++, class) struct SystemId
     {
     private:

@@ -58,6 +58,7 @@ version (QT_NO_ACTION) {} else
 extern(C++, class) struct QContextMenuBuilder;
 extern(C++, class) struct QWebChannel;
 
+/// Binding for C++ class [QWebEnginePage](https://doc.qt.io/qt-6/qwebenginepage.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEnginePage : QObject
 {
     mixin(Q_OBJECT);

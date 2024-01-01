@@ -26,6 +26,7 @@ extern(C++, class) struct WebEngineContext;
 
 extern(C++, class) struct QWebEngineUrlSchemePrivate;
 
+/// Binding for C++ class [QWebEngineUrlScheme](https://doc.qt.io/qt-6/qwebengineurlscheme.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineUrlScheme
 {
     mixin(Q_GADGET);

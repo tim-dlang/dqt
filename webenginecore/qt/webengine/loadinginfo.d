@@ -24,6 +24,7 @@ extern(C++, class) struct WebContentsAdapter;
 }
 
 
+/// Binding for C++ class [QWebEngineLoadingInfo](https://doc.qt.io/qt-6/qwebengineloadinginfo.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineLoadingInfo
 {
     mixin(Q_GADGET);

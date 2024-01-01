@@ -25,6 +25,7 @@ import qt.network.ssl;
 
 
 extern(C++, class) struct QSslKeyPrivate;
+/// Binding for C++ class [QSslKey](https://doc.qt.io/qt-6/qsslkey.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_NETWORK_EXPORT +/ QSslKey
 {
 public:

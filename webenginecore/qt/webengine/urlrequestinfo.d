@@ -25,6 +25,7 @@ extern(C++, class) struct InterceptedRequest;
 
 extern(C++, class) struct QWebEngineUrlRequestInfoPrivate;
 
+/// Binding for C++ class [QWebEngineUrlRequestInfo](https://doc.qt.io/qt-6/qwebengineurlrequestinfo.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineUrlRequestInfo
 {
 public:

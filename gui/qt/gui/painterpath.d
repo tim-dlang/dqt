@@ -45,6 +45,7 @@ public:
         CurveToDataElement
     }
 
+    /// Binding for C++ class [QPainterPath::Element](https://doc.qt.io/qt-6/qpainterpath-element.html).
     extern(C++, class) struct Element {
     public:
         qreal x;

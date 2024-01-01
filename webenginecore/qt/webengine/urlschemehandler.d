@@ -18,6 +18,7 @@ import qt.helpers;
 import qt.webengine.urlrequestjob;
 
 
+/// Binding for C++ class [QWebEngineUrlSchemeHandler](https://doc.qt.io/qt-6/qwebengineurlschemehandler.html).
 abstract class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineUrlSchemeHandler : QObject
 {
     mixin(Q_OBJECT);

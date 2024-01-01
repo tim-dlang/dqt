@@ -25,6 +25,7 @@ import qt.helpers;
 
 
 extern(C++, class) struct QNetworkCookiePrivate;
+/// Binding for C++ class [QNetworkCookie](https://doc.qt.io/qt-6/qnetworkcookie.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_NETWORK_EXPORT +/ QNetworkCookie
 {
     mixin(Q_GADGET);

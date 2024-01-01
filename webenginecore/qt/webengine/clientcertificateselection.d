@@ -24,6 +24,7 @@ extern(C++, class) struct ClientCertSelectController;
 }
 
 
+/// Binding for C++ class [QWebEngineClientCertificateSelection](https://doc.qt.io/qt-6/qwebengineclientcertificateselection.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineClientCertificateSelection
 {
 public:

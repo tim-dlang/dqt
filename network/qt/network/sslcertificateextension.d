@@ -21,6 +21,7 @@ import qt.helpers;
 
 extern(C++, class) struct QSslCertificateExtensionPrivate;
 
+/// Binding for C++ class [QSslCertificateExtension](https://doc.qt.io/qt-6/qsslcertificateextension.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_NETWORK_EXPORT +/ QSslCertificateExtension
 {
 public:

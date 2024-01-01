@@ -26,6 +26,7 @@ extern(C++, class) struct RegisterProtocolHandlerRequestController;
 } // namespace QtWebEngineCore
 
 
+/// Binding for C++ class [QWebEngineRegisterProtocolHandlerRequest](https://doc.qt.io/qt-6/qwebengineregisterprotocolhandlerrequest.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineRegisterProtocolHandlerRequest
 {
     mixin(Q_GADGET);

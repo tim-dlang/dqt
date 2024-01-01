@@ -34,6 +34,7 @@ extern(C++, class) struct QWebEngineHistoryModelPrivate;
 extern(C++, class) struct QWebEnginePagePrivate;
 extern(C++, class) struct QQuickWebEngineViewPrivate;
 
+/// Binding for C++ class [QWebEngineHistoryItem](https://doc.qt.io/qt-6/qwebenginehistoryitem.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineHistoryItem
 {
 public:
@@ -66,6 +67,7 @@ private:
 
 /+ Q_DECLARE_SHARED(QWebEngineHistoryItem) +/
 
+/// Binding for C++ class [QWebEngineHistoryModel](https://doc.qt.io/qt-6/qwebenginehistorymodel.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineHistoryModel : QAbstractListModel
 {
     mixin(Q_OBJECT);
@@ -97,6 +99,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
+/// Binding for C++ class [QWebEngineHistory](https://doc.qt.io/qt-6/qwebenginehistory.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineHistory : QObject
 {
     mixin(Q_OBJECT);

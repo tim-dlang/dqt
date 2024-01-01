@@ -26,6 +26,7 @@ extern(C++, class) struct UserScript;
 } // namespace
 
 
+/// Binding for C++ class [QWebEngineScript](https://doc.qt.io/qt-6/qwebenginescript.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineScript
 {
 

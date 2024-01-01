@@ -41,6 +41,7 @@ extern(C++, class) struct QPrinter;
 extern(C++, class) struct QWebEngineViewAccessible;
 extern(C++, class) struct QWebEngineViewPrivate;
 
+/// Binding for C++ class [QWebEngineView](https://doc.qt.io/qt-6/qwebengineview.html).
 class /+ QWEBENGINEWIDGETS_EXPORT +/ QWebEngineView : QWidget
 {
     mixin(Q_OBJECT);

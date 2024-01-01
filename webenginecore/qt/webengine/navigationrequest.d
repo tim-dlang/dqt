@@ -20,6 +20,7 @@ import qt.helpers;
 
 extern(C++, class) struct QWebEngineNavigationRequestPrivate;
 
+/// Binding for C++ class [QWebEngineNavigationRequest](https://doc.qt.io/qt-6/qwebenginenavigationrequest.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineNavigationRequest : QObject
 {
     mixin(Q_OBJECT);

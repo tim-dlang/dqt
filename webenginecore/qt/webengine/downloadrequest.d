@@ -24,6 +24,7 @@ import qt.webengine.page;
 extern(C++, class) struct QWebEngineDownloadRequestPrivate;
 extern(C++, class) struct QWebEngineProfilePrivate;
 
+/// Binding for C++ class [QWebEngineDownloadRequest](https://doc.qt.io/qt-6/qwebenginedownloadrequest.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineDownloadRequest : QObject
 {
     mixin(Q_OBJECT);

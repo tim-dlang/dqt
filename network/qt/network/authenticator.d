@@ -19,6 +19,7 @@ import qt.helpers;
 
 extern(C++, class) struct QAuthenticatorPrivate;
 
+/// Binding for C++ class [QAuthenticator](https://doc.qt.io/qt-6/qauthenticator.html).
 extern(C++, class) struct /+ Q_NETWORK_EXPORT +/ QAuthenticator
 {
 public:

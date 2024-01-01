@@ -27,6 +27,7 @@ extern(C++, class) struct URLRequestCustomJobProxy;
 
 
 
+/// Binding for C++ class [QWebEngineUrlRequestJob](https://doc.qt.io/qt-6/qwebengineurlrequestjob.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineUrlRequestJob : QObject
 {
     mixin(Q_OBJECT);

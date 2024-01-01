@@ -25,6 +25,7 @@ extern(C++, class) struct ProfileAdapter;
 } // namespace QtWebEngineCore
 
 
+/// Binding for C++ class [QWebEngineClientCertificateStore](https://doc.qt.io/qt-6/qwebengineclientcertificatestore.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineClientCertificateStore
 {
 

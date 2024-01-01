@@ -21,6 +21,7 @@ import qt.helpers;
 
 extern(C++, class) struct QWebEngineFullScreenRequestPrivate;
 
+/// Binding for C++ class [QWebEngineFullScreenRequest](https://doc.qt.io/qt-6/qwebenginefullscreenrequest.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineFullScreenRequest
 {
     mixin(Q_GADGET);

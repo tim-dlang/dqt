@@ -24,6 +24,7 @@ extern(C++, class) struct FindTextHelper;
 
 extern(C++, class) struct QWebEngineFindTextResultPrivate;
 
+/// Binding for C++ class [QWebEngineFindTextResult](https://doc.qt.io/qt-6/qwebenginefindtextresult.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineFindTextResult
 {
     mixin(Q_GADGET);

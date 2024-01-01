@@ -22,6 +22,7 @@ extern(C++, class) struct WebEngineSettings;
 }
 
 
+/// Binding for C++ class [QWebEngineSettings](https://doc.qt.io/qt-6/qwebenginesettings.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineSettings
 {
 public:

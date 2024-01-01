@@ -30,6 +30,7 @@ import qt.webengine.urlrequestinterceptor;
 import qt.webengine.urlschemehandler;
 
 
+/// Binding for C++ class [QWebEngineProfile](https://doc.qt.io/qt-6/qwebengineprofile.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineProfile : QObject
 {
     mixin(Q_OBJECT);

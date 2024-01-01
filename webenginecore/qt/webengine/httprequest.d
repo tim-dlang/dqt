@@ -24,6 +24,7 @@ import qt.helpers;
 
 extern(C++, class) struct QWebEngineHttpRequestPrivate;
 
+/// Binding for C++ class [QWebEngineHttpRequest](https://doc.qt.io/qt-6/qwebenginehttprequest.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineHttpRequest
 {
 public:

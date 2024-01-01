@@ -461,7 +461,7 @@ alias Base64Options = QFlags!(Base64Option);
     /+
     extern(C++, class) struct FromBase64Result;
     +/
-    /// Binding for C++ class [FromBase64Result](https://doc.qt.io/qt-6/qbytearray-frombase64result.html).
+    /// Binding for C++ class [QByteArray::FromBase64Result](https://doc.qt.io/qt-6/qbytearray-frombase64result.html).
     extern(C++, class) struct FromBase64Result
     {
     public:

@@ -74,6 +74,7 @@ public:
     /+ Q_DECLARE_FLAGS(RenderHints, RenderHint) +/
 alias RenderHints = QFlags!(RenderHint);    /+ Q_FLAG(RenderHints) +/
 
+    /// Binding for C++ class [QPainter::PixmapFragment](https://doc.qt.io/qt-6/qpainter-pixmapfragment.html).
     extern(C++, class) struct PixmapFragment {
     public:
         qreal x;

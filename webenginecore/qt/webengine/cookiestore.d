@@ -26,6 +26,7 @@ extern(C++, class) struct CookieMonsterDelegateQt;
 
 
 extern(C++, class) struct QWebEngineCookieStorePrivate;
+/// Binding for C++ class [QWebEngineCookieStore](https://doc.qt.io/qt-6/qwebenginecookiestore.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineCookieStore : QObject
 {
     mixin(Q_OBJECT);

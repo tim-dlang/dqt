@@ -20,6 +20,7 @@ import qt.webengine.script;
 
 extern(C++, class) struct QWebEngineScriptCollectionPrivate;
 
+/// Binding for C++ class [QWebEngineScriptCollection](https://doc.qt.io/qt-6/qwebenginescriptcollection.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineScriptCollection
 {
 public:

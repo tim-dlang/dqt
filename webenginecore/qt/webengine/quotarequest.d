@@ -26,6 +26,7 @@ extern(C++, class) struct QuotaRequestController;
 } // namespace QtWebEngineCore
 
 
+/// Binding for C++ class [QWebEngineQuotaRequest](https://doc.qt.io/qt-6/qwebenginequotarequest.html).
 extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineQuotaRequest
 {
     mixin(Q_GADGET);

@@ -28,6 +28,7 @@ class WebContentsAdapter} +/
 
 struct QWebEngineNewWindowRequestPrivate;
 
+/// Binding for C++ class [QWebEngineNewWindowRequest](https://doc.qt.io/qt-6/qwebenginenewwindowrequest.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineNewWindowRequest : QObject
 {
     mixin(Q_OBJECT);

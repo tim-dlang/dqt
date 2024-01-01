@@ -29,6 +29,7 @@ extern(C++, class) struct UserNotificationController;
 
 extern(C++, class) struct QWebEngineNotificationPrivate;
 
+/// Binding for C++ class [QWebEngineNotification](https://doc.qt.io/qt-6/qwebenginenotification.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineNotification : QObject
 {
     mixin(Q_OBJECT);

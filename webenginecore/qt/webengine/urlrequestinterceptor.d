@@ -17,6 +17,7 @@ import qt.core.object;
 import qt.helpers;
 import qt.webengine.urlrequestinfo;
 
+/// Binding for C++ class [QWebEngineUrlRequestInterceptor](https://doc.qt.io/qt-6/qwebengineurlrequestinterceptor.html).
 abstract class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineUrlRequestInterceptor : QObject
 {
     mixin(Q_OBJECT);

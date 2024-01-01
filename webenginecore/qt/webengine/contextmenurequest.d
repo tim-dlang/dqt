@@ -47,6 +47,7 @@ enum /+ class +/ ReferrerPolicy {
 
 
 extern(C++, class) struct QWebEngineContextMenuRequestPrivate;
+/// Binding for C++ class [QWebEngineContextMenuRequest](https://doc.qt.io/qt-6/qwebenginecontextmenurequest.html).
 class /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineContextMenuRequest : QObject
 {
     mixin(Q_OBJECT);

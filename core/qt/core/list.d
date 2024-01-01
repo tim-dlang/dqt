@@ -107,6 +107,7 @@ public:
     using rvalue_ref = T &&;
 #endif +/
 
+    /// Binding for C++ class [QList::iterator](https://doc.qt.io/qt-6/qlist-iterator.html).
     extern(C++, class) struct iterator {
     private:
         T* i = null;
@@ -159,6 +160,7 @@ public:
         operator+(Int j, iterator k) { return k + j; } +/
     }
 
+    /// Binding for C++ class [QList::const_iterator](https://doc.qt.io/qt-6/qlist-const-iterator.html).
     extern(C++, class) struct const_iterator {
     private:
         const(T)* i = null;

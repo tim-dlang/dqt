@@ -39,6 +39,7 @@ import qt.network.sslkey;
 Q_NETWORK_EXPORT size_t qHash(const QSslCertificate &key, size_t seed = 0) noexcept; +/
 
 extern(C++, class) struct QSslCertificatePrivate;
+/// Binding for C++ class [QSslCertificate](https://doc.qt.io/qt-6/qsslcertificate.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_NETWORK_EXPORT +/ QSslCertificate
 {
 public:

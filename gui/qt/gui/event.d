@@ -986,6 +986,7 @@ public:
        Ruby,
        Selection
     }
+    /// Binding for C++ class [QInputMethodEvent::Attribute](https://doc.qt.io/qt-6/qinputmethodevent-attribute.html).
     extern(C++, class) struct Attribute {
     public:
         /+this(AttributeType typ, int s, int l, QVariant val)
