@@ -148,7 +148,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     /+
     extern(C++, class) struct Connection;
     +/
-    /// Binding for C++ class [Connection](https://doc.qt.io/qt-5/qmetaobject-connection.html).
+    /// Binding for C++ class [QMetaObject::Connection](https://doc.qt.io/qt-5/qmetaobject-connection.html).
     extern(C++, class) struct /+ Q_CORE_EXPORT +/ Connection {
     private:
         void* d_ptr; //QObjectPrivate::Connection*

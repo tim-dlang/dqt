@@ -673,6 +673,7 @@ public:
        Ruby,
        Selection
     }
+    /// Binding for C++ class [QInputMethodEvent::Attribute](https://doc.qt.io/qt-5/qinputmethodevent-attribute.html).
     extern(C++, class) struct Attribute {
     public:
         /+this(AttributeType typ, int s, int l, QVariant val)
@@ -1022,6 +1023,7 @@ extern(C++, class) struct QTouchEventTouchPointPrivate;
 class /+ Q_GUI_EXPORT +/ QTouchEvent : QInputEvent
 {
 public:
+    /// Binding for C++ class [QTouchEvent::TouchPoint](https://doc.qt.io/qt-5/qtouchevent-touchpoint.html).
     extern(C++, class) struct /+ Q_GUI_EXPORT +/ TouchPoint
     {
     public:

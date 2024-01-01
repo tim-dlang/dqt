@@ -118,6 +118,7 @@ public:
     final QList!(QTextFrame) childFrames() const;
     final QTextFrame parentFrame() const;
 
+    /// Binding for C++ class [QTextFrame::iterator](https://doc.qt.io/qt-5/qtextframe-iterator.html).
     extern(C++, class) struct /+ Q_GUI_EXPORT +/ iterator {
     private:
         QTextFrame f;
@@ -250,6 +251,7 @@ public:
     void setLineCount(int count);
     int lineCount() const;
 
+    /// Binding for C++ class [QTextBlock::iterator](https://doc.qt.io/qt-5/qtextblock-iterator.html).
     extern(C++, class) struct /+ Q_GUI_EXPORT +/ iterator {
     private:
         const(QTextDocumentPrivate)* p = null;

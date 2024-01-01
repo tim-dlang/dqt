@@ -23,6 +23,7 @@ import qt.network.sslcertificate;
 /+ #ifndef QT_NO_SSL +/
 
 extern(C++, class) struct QSslErrorPrivate;
+/// Binding for C++ class [QSslError](https://doc.qt.io/qt-5/qsslerror.html).
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_NETWORK_EXPORT +/ QSslError
 {
     mixin(Q_GADGET);

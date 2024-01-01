@@ -479,6 +479,7 @@ public:
     extern(C++, class) struct const_iterator;
     +/
 
+    /// Binding for C++ class [QList::iterator](https://doc.qt.io/qt-5/qlist-iterator.html).
     extern(C++, class) struct iterator {
     public:
         Node* i = null;
@@ -545,6 +546,7 @@ public:
     }
     /+ friend class iterator; +/
 
+    /// Binding for C++ class [QList::const_iterator](https://doc.qt.io/qt-5/qlist-const-iterator.html).
     extern(C++, class) struct const_iterator {
     public:
         Node* i = null;
