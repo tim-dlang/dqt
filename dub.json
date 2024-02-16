@@ -16,7 +16,10 @@
 			"libs-windows": ["Qt5Core"],
 			"libs-linux": ["Qt5Core", "stdc++"],
 			"libs-osx": ["c++"],
-			"lflags-osx": ["-framework", "QtCore"]
+			"lflags-osx": ["-framework", "QtCore"],
+			"toolchainRequirements": {
+				"frontend": ">=2.100"
+			}
 		},
 		{
 			"name": "gui",
