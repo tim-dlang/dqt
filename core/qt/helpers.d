@@ -1248,66 +1248,72 @@ template isAnyWrapperCallable(bool isStaticFunction, Overloads...)
 }
 
 // Creates wrapper functions for every function in the current class / struct, which are callable with rvalues.
-enum CREATE_CONVENIENCE_WRAPPERS = q{
-    static foreach (member; __traits(derivedMembers, typeof(this)))
-    {
-        static if ((!(member.length >= 2 && member[0 .. 2] == "__") || member == "__ctor")
-                && !(member.length >= 32 && member[0 .. 32] == "dummyFunctionForChangingMangling")
-                && member != "rawConstructor")
-            static foreach (isStaticFunction; [false, true])
-            {
-                extern(D) static if (() {
-                        bool needsWrapper;
-                        static foreach (F; __traits(getOverloads, typeof(this), member))
-                        {
-                            static if (__traits(getVisibility, F) == "public"
-                                && __traits(isStaticFunction, F) == isStaticFunction
-                                && anyParamConstStructRef!F)
-                            {
-                                needsWrapper = true;
-                            }
-                        }
-                        return needsWrapper;
-                    }())
+version (DQT_NO_CONVENIENCE_WRAPPERS)
+    enum CREATE_CONVENIENCE_WRAPPERS = "";
+else
+    enum CREATE_CONVENIENCE_WRAPPERS = q{
+        static foreach (member; __traits(derivedMembers, typeof(this)))
+        {
+            static if ((!(member.length >= 2 && member[0 .. 2] == "__") || member == "__ctor")
+                    && !(member.length >= 32 && member[0 .. 32] == "dummyFunctionForChangingMangling")
+                    && member != "rawConstructor")
+                static foreach (isStaticFunction; [false, true])
                 {
-                    mixin(() {
-                        static import std.conv;
-                        string code;
-                        string overloadHelper = "dqt_publicOverloads";
-                        if (isStaticFunction)
-                            overloadHelper ~= "Static";
-                        static foreach (i, F; __traits(getOverloads, typeof(this), member))
-                        {
-                            static if (__traits(isStaticFunction, F) == isStaticFunction && __traits(getVisibility, F) == "public")
+                    extern(D) static if (() {
+                            bool needsWrapper;
+                            static foreach (F; __traits(getOverloads, typeof(this), member))
                             {
-                                code ~= "private alias " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ " = __traits(getOverloads, typeof(this), member)[" ~ std.conv.text(i) ~ "];";
+                                static if (__traits(getVisibility, F) == "public"
+                                    && __traits(isStaticFunction, F) == isStaticFunction
+                                    && anyParamConstStructRef!F)
+                                {
+                                    needsWrapper = true;
+                                }
                             }
-                        }
-                        code ~= "public extern(D) pragma(inline, true) ";
-                        if (member == "__ctor")
-                            code ~= "this";
-                        else
+                            return needsWrapper;
+                        }())
+                    {
+                        static if (!__traits(isTemplate, __traits(getMember, typeof(this), member)))
                         {
-                            static if (isStaticFunction)
-                                code ~= "static ";
-                            else static if (is(typeof(this) == class))
-                                code ~= "final ";
-                            code ~= "auto " ~ member;
+                            mixin(() {
+                                static import std.conv;
+                                string code;
+                                string overloadHelper = "dqt_publicOverloads";
+                                if (isStaticFunction)
+                                    overloadHelper ~= "Static";
+                                static foreach (i, F; __traits(getOverloads, typeof(this), member))
+                                {
+                                    static if (__traits(isStaticFunction, F) == isStaticFunction && __traits(getVisibility, F) == "public")
+                                    {
+                                        code ~= "private alias " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ " = __traits(getOverloads, typeof(this), member)[" ~ std.conv.text(i) ~ "];";
+                                    }
+                                }
+                                code ~= "public extern(D) pragma(inline, true) ";
+                                if (member == "__ctor")
+                                    code ~= "this";
+                                else
+                                {
+                                    static if (isStaticFunction)
+                                        code ~= "static ";
+                                    else static if (is(typeof(this) == class))
+                                        code ~= "final ";
+                                    code ~= "auto " ~ member;
+                                }
+                                code ~= "(Params...)(auto ref Params params)";
+                                code ~= "if (isAnyWrapperCallable!(isStaticFunction, __traits(getOverloads, typeof(this), member)).impl!(Params))";
+                                code ~= "{";
+                                if (member == "__ctor")
+                                    code ~= "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ "(params);";
+                                else
+                                    code ~= "return " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ "(params);";
+                                code ~= "}";
+                                return code;
+                            }());
                         }
-                        code ~= "(Params...)(auto ref Params params)";
-                        code ~= "if (isAnyWrapperCallable!(isStaticFunction, __traits(getOverloads, typeof(this), member)).impl!(Params))";
-                        code ~= "{";
-                        if (member == "__ctor")
-                            code ~= "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ "(params);";
-                        else
-                            code ~= "return " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ "(params);";
-                        code ~= "}";
-                        return code;
-                    }());
+                    }
                 }
-            }
-    }
-};
+        }
+    };
 
 private alias parentOf(alias sym) = __traits(parent, sym);
 private alias parentOf(alias sym : T!Args, alias T, Args...) = __traits(parent, T);

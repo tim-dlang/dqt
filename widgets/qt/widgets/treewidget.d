@@ -138,7 +138,7 @@ public:
     pragma(inline, true) final void setBackground(int column, ref const(QBrush) brush)
         { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, brush.style() != /+ Qt:: +/qt.core.namespace.BrushStyle.NoBrush ? QVariant.fromValue(brush) : QVariant()); }
     pragma(inline, true) final void setBackground(int column, const(QColor) color)
-        { setBackground(column, QBrush(color)); }
+        { auto tmp = QBrush(color); setBackground(column, tmp); }
 
     pragma(inline, true) final QBrush foreground(int column) const
         { return qvariant_cast!(QBrush)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole)); }
