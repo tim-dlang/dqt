@@ -80,6 +80,16 @@ auto executeTimeout(string[] args, Duration timeout, const string[string] env = 
     }
 }
 
+string translateCompileArg(string compiler, string arg)
+{
+    if (compiler.endsWith("ldc2"))
+    {
+        if (arg.startsWith("-version="))
+            arg = "--d-version=" ~ arg[9 .. $];
+    }
+    return arg;
+}
+
 int main(string[] args)
 {
     bool anyFailure;
@@ -192,6 +202,13 @@ int main(string[] args)
             {
                 tests[$ - 1].buildOnly = true;
             }
+            else if (line.startsWith("// EXTRA_ARGS:"))
+            {
+                tests[$ - 1].extraArgs ~= line["// EXTRA_ARGS:".length .. $].splitter()
+                    .filter!(m => m.length)
+                    .map!(m => translateCompileArg(compiler, m.idup))
+                    .array;
+            }
             else
             {
                 stderr.writeln("Unknown comment at start of file ", e.name, ": ", line);
@@ -286,6 +303,7 @@ int main(string[] args)
             if (m2 == "Widgets" && dxmlPath != "")
                 dmdArgs ~= "-I" ~ dxmlPath;
         }
+        dmdArgs ~= translateCompileArg(compiler, "-version=DQT_NO_CONVENIENCE_WRAPPERS");
         dmdArgs ~= "-od" ~ buildPath("test_results", os ~ model);
         if (compiler.endsWith("ldc2"))
             dmdArgs ~= "-of" ~ buildPath("test_results", os ~ model, "libdqt" ~ toLower(m) ~ libExt);

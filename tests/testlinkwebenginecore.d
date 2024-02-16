@@ -1,4 +1,5 @@
 // QT_MODULES: webenginecore
+// EXTRA_ARGS: -version=DQT_NO_CONVENIENCE_WRAPPERS
 // BUILD_ONLY
 import imports.linkall;
 import imports.qtmodules;
