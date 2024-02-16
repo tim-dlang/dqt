@@ -53,7 +53,7 @@ uses QWebEngine to show a simple web browser.
 ### Linux
 
 Install the libraries for Qt 6.2.3 using the package manager of the distribution
-or the installer from https://www.qt.io/. It was tested with dmd v2.098.0.
+or the installer from https://www.qt.io/. It was tested with dmd v2.100.0.
 
 You can build and run the example programs using dub:
 ```
@@ -75,7 +75,7 @@ dmd -i -Icore -Igui -Iwidgets -Iexamples -Idxml/source -Jexamples/examplewidgets
 ### Windows
 
 Install Qt 6.2.3 for MSVC 2019 64-bit (and not MinGW) using
-the installer from https://www.qt.io/. It was tested with dmd v2.099.1.
+the installer from https://www.qt.io/. It was tested with dmd v2.100.0.
 
 You can build and run the example programs using dub:
 ```
