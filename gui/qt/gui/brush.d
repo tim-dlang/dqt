@@ -35,7 +35,7 @@ struct QBrushDataPointerDeleter
 }
 
 /// Binding for C++ class [QBrush](https://doc.qt.io/qt-6/qbrush.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBrush
+@SimulateImplicitConstructor @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QBrush
 {
 public:
     @disable this();
@@ -49,7 +49,7 @@ public:
     }
 
     this(/+ Qt:: +/qt.core.namespace.BrushStyle bs);
-    this(ref const(QColor) color, /+ Qt:: +/qt.core.namespace.BrushStyle bs=/+ Qt:: +/qt.core.namespace.BrushStyle.SolidPattern);
+    @SimulateImplicitConstructor this(ref const(QColor) color, /+ Qt:: +/qt.core.namespace.BrushStyle bs=/+ Qt:: +/qt.core.namespace.BrushStyle.SolidPattern);
     this(/+ Qt:: +/qt.core.namespace.GlobalColor color, /+ Qt:: +/qt.core.namespace.BrushStyle bs=/+ Qt:: +/qt.core.namespace.BrushStyle.SolidPattern);
 
     this(ref const(QColor) color, ref const(QPixmap) pixmap);

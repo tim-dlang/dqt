@@ -394,7 +394,7 @@ constexpr decltype(auto) QAnyStringView::visit(Visitor &&v) const
 
 
 /// Binding for C++ class [QString](https://doc.qt.io/qt-6/qstring.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
+@SimulateImplicitConstructor @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
 {
 private:
     alias Data = QTypedArrayData!(wchar);
@@ -411,18 +411,18 @@ public:
     this(QChar c);
     this(qsizetype size, QChar c);
 
-    extern(D) this(const(wchar)[] unicode)
+    @SimulateImplicitConstructor extern(D) this(const(wchar)[] unicode)
     {
         this(cast(const(QChar)*) unicode.ptr, unicode.length);
     }
 
-    extern(D) this(const(char)[] unicode)
+    @SimulateImplicitConstructor extern(D) this(const(char)[] unicode)
     {
         QString s = fromUtf8(QByteArrayView(unicode.ptr, unicode.length));
         this.d = s.d;
     }
 
-    extern(D) this(const(dchar)[] unicode)
+    @SimulateImplicitConstructor extern(D) this(const(dchar)[] unicode)
     {
         QString s = fromUcs4(unicode.ptr, unicode.length);
         this.d = s.d;

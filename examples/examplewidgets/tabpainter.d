@@ -29,14 +29,14 @@ public:
         timer.start();
 
         staticText = QStaticText(globalInitVar!QString);
-        staticText.setText(QString("drawStaticText"));
+        staticText.setText("drawStaticText");
     }
 
 protected:
     override extern(C++) void paintEvent(QPaintEvent e)
     {
         auto p = QPainter(this);
-        drawImage(&p, QString("QPainter(QWidget)"));
+        drawImage(&p, "QPainter(QWidget)");
 
         QImage image = createImage();
         QPixmap pixmap = createPixmap();
@@ -55,7 +55,7 @@ protected:
         import qt.gui.pdfwriter;
 
         scope menu = new QMenu(this);
-        QAction pdfAction = menu.addAction(QString("Create PDF"));
+        QAction pdfAction = menu.addAction("Create PDF");
         QAction selected = menu.exec(event.globalPos());
 
         if (selected == pdfAction)
@@ -67,7 +67,7 @@ protected:
                 writer.setPageSize(QPageSize(QPageSize.PageSizeId.A4));
                 writer.setResolution(50);
                 auto p = QPainter(writer);
-                drawImage(&p, QString("QPainter(QPdfWriter)"));
+                drawImage(&p, "QPainter(QPdfWriter)");
             }
         }
     }
@@ -76,7 +76,7 @@ private:
     QTimer timer;
     QStaticText staticText;
 
-    final void drawImage(QPainter* p, const(QString) title)
+    final void drawImage(QPainter* p, string title)
     {
         import qt.core.datetime;
         import qt.core.namespace;
@@ -86,11 +86,11 @@ private:
         p.drawText(15, 20, title);
         p.setBrush(QBrush(/+ Qt:: +/qt.core.namespace.GlobalColor.blue));
         p.drawRect(15, 30, 100, 30);
-        p.drawText(QRectF(15, 30, 100, 30), QString("drawRect"), QTextOption(/+ Qt:: +/qt.core.namespace.Alignment.AlignCenter));
+        p.drawText(QRectF(15, 30, 100, 30), "drawRect", /+ Qt:: +/qt.core.namespace.Alignment.AlignCenter);
 
         p.setBrush(QBrush(/+ Qt:: +/qt.core.namespace.GlobalColor.green));
         p.drawEllipse(140, 30, 100, 30);
-        p.drawText(QRectF(140, 30, 100, 30), QString("drawEllipse"), QTextOption(/+ Qt:: +/qt.core.namespace.Alignment.AlignCenter));
+        p.drawText(QRectF(140, 30, 100, 30), "drawEllipse", /+ Qt:: +/qt.core.namespace.Alignment.AlignCenter);
 
         p.drawStaticText(270, 30, staticText);
 
@@ -101,9 +101,9 @@ private:
         import qt.core.namespace;
 
         auto image = QImage(400, 100, QImage.Format.Format_RGBA8888);
-        image.fill(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.white));
+        image.fill(/+ Qt:: +/qt.core.namespace.GlobalColor.white);
         auto p = QPainter(image.paintDevice);
-        drawImage(&p, QString("QPainter(QImage)"));
+        drawImage(&p, "QPainter(QImage)");
         return image;
     }
     final QPixmap createPixmap()
@@ -111,16 +111,16 @@ private:
         import qt.core.namespace;
 
         auto image = QPixmap(400, 100);
-        image.fill(QColor(/+ Qt:: +/qt.core.namespace.GlobalColor.gray));
+        image.fill(/+ Qt:: +/qt.core.namespace.GlobalColor.gray);
         auto p = QPainter(image.paintDevice);
-        drawImage(&p, QString("QPainter(QPixmap)"));
+        drawImage(&p, "QPainter(QPixmap)");
         return image;
     }
     final QPicture createPicture()
     {
         QPicture image = QPicture(-1);
         auto p = QPainter(image.paintDevice);
-        drawImage(&p, QString("QPainter(QPicture)"));
+        drawImage(&p, "QPainter(QPicture)");
         return image;
     }
 }

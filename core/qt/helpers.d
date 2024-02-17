@@ -1161,157 +1161,299 @@ template dqtimported(string moduleName)
     mixin("import dqtimported = " ~ moduleName ~ ";");
 }
 
-package template FunctionParameters(alias F)
+/* UDA for constuctors, which should be used for implicit construction
+ * when passing parameters. Mixin CREATE_CONVENIENCE_WRAPPERS will
+ * create wrappers, which simulate these implicit conversions.
+ *
+ * Both the constructors and the surrounding class/struct need to have
+ * the UDA SimulateImplicitConstructor. This makes the mixin a bit
+ * faster and works around https://issues.dlang.org/show_bug.cgi?id=24386
+ */
+struct SimulateImplicitConstructor
+{
+}
+
+template FunctionParameters(alias F)
 {
     static if (is(typeof(F) P == __parameters))
         alias FunctionParameters = P;
 }
-
-template isParamConstStructRef(alias F, size_t i)
+template FunctionParameters2(F)
 {
-    enum isParamConstStructRef = is(FunctionParameters!F[i] == struct)
-        && is(FunctionParameters!F[i] == const)
-        && [__traits(getParameterStorageClasses, F, i)] == ["ref"];
+    static if (is(F P == __parameters))
+        alias FunctionParameters2 = P;
 }
 
-template anyParamConstStructRef(alias F, size_t i = 0)
+private bool areStorageClassesOnlyRef(Args...)(Args storageClasses)
 {
-    static if (i >= FunctionParameters!F.length)
-        enum anyParamConstStructRef = false;
-    else static if (isParamConstStructRef!(F, i))
-        enum anyParamConstStructRef = true;
+    static if (Args.length == 1)
+        return storageClasses[0] == "ref";
     else
-        enum anyParamConstStructRef = anyParamConstStructRef!(F, i + 1);
+        return false;
 }
 
-template dummyFunctionWithSameArgs(alias F)
+private template isParamConstStructRef(F, size_t i)
+{
+    enum isParamConstStructRef = is(FunctionParameters2!F[i] == struct)
+        && is(FunctionParameters2!F[i] == const)
+        && areStorageClassesOnlyRef(__traits(getParameterStorageClasses, F, i));
+}
+
+private template hasUDASimulateImplicitConstructorImpl()
+{
+    enum hasUDASimulateImplicitConstructorImpl = false;
+}
+private template hasUDASimulateImplicitConstructorImpl(alias U, R...)
+{
+    static if (is(U == SimulateImplicitConstructor))
+        enum hasUDASimulateImplicitConstructorImpl = true;
+    else
+        enum hasUDASimulateImplicitConstructorImpl = hasUDASimulateImplicitConstructorImpl!R;
+}
+private template hasUDASimulateImplicitConstructor(alias symbol)
+{
+    enum hasUDASimulateImplicitConstructor = hasUDASimulateImplicitConstructorImpl!(__traits(getAttributes, symbol));
+}
+
+private template anyParamNeedsWrapper(F, size_t i = 0)
+{
+    static if (i >= FunctionParameters2!F.length)
+        enum anyParamNeedsWrapper = false;
+    else static if (isParamConstStructRef!(F, i))
+        enum anyParamNeedsWrapper = true;
+    else static if (is(FunctionParameters2!F == struct) && hasUDASimulateImplicitConstructor!(FunctionParameters2!F[i]))
+        enum anyParamNeedsWrapper = true;
+    else
+        enum anyParamNeedsWrapper = anyParamNeedsWrapper!(F, i + 1);
+}
+
+private template dummyFunctionWithSameArgs(alias F)
 {
     static if (is(typeof(F) Params == __parameters))
         void dummyFunctionWithSameArgs(Params params);
 }
 
-template callableWithNParameters(alias F, size_t n)
+private template callableWithNParameters(alias F, size_t n)
 {
     enum callableWithNParameters = __traits(compiles, () {
-            FunctionParameters!F[0 .. n] params = void;
-            dummyFunctionWithSameArgs!F(params);
-        });
+        FunctionParameters!F[0 .. n] params = void;
+        dummyFunctionWithSameArgs!F(params);
+    });
 }
 
-enum isWrapperCallable(alias F, Params...) = () {
+template implicitCastAllowed(From, To)
+{
+    static if (!is(To == struct))
+        enum implicitCastAllowed = false;
+    else static if (!hasUDASimulateImplicitConstructor!To)
+        enum implicitCastAllowed = false;
+    else
+        enum implicitCastAllowed = () {
+            bool r = false;
+            static if (__traits(hasMember, To, "__ctor"))
+            {
+                static foreach (o; __traits(getOverloads, To, "__ctor"))
+                {
+                    static if (hasUDASimulateImplicitConstructor!o)
+                    {
+                        static assert (callableWithNParameters!(o, 1), "@SimulateImplicitConstructor only allowed on constructors with one parameter.");
+                        static if (is(From : FunctionParameters!o[0]))
+                        {
+                            r = true;
+                        }
+                    }
+                }
+            }
+            return r;
+        }();
+}
+
+/* Using this function is a bit faster, than directly comparing the string
+ * in a static if, because a comparison is lowered to a function call
+ */
+private bool isPublic(string visibility)
+{
+    return visibility == "public";
+}
+
+enum isWrapperCallable(This, alias F, Params...) = () {
     static if (Params.length > FunctionParameters!F.length)
+        return false;
+    else static if (!isPublic(__traits(getVisibility, F)))
         return false;
     else static if (!callableWithNParameters!(F, Params.length))
         return false;
+    else static if (FunctionParameters!F.length == 1 && is(const(FunctionParameters!F[0]) == const(This)))
+        return false;
     else
     {
-        bool r = true;
+        bool callableWithoutWrapper = true;
+        bool callableWithWrapper = true;
         // The parameter types have to be checked with if to work around https://issues.dlang.org/show_bug.cgi?id=13140
         static foreach (i; 0 .. Params.length)
         {
             if (!is(Params[i] : FunctionParameters!F[i]))
-                r = false;
+            {
+                callableWithoutWrapper = false;
+                if (!implicitCastAllowed!(Params[i], FunctionParameters!F[i]))
+                {
+                    callableWithWrapper = false;
+                }
+            }
         }
+
         // Workaround for https://issues.dlang.org/show_bug.cgi?id=12672
-        bool anyParamNeedsTemp;
         static foreach (i; 0 .. Params.length)
         {
-            static if (isParamConstStructRef!(F, i))
+            static if (isParamConstStructRef!(typeof(F), i))
             {
                 static if (!__traits(isRef, Params[i]))
-                    anyParamNeedsTemp = true;
+                    callableWithoutWrapper = false;
             }
             // Ref parameters, which are not const structs should not use a temporary.
-            else if ([__traits(getParameterStorageClasses, F, i)] == ["ref"]
+            else if (areStorageClassesOnlyRef(__traits(getParameterStorageClasses, F, i))
                     && !__traits(isRef, Params[i]))
-                r = false;
+            {
+                callableWithoutWrapper = false;
+                callableWithWrapper = false;
+            }
         }
-        if (!anyParamNeedsTemp)
-            r = false;
+        uint r;
+        if (callableWithoutWrapper)
+            r |= 1;
+        if (callableWithWrapper)
+            r |= 2;
         return r;
     }
 }();
 
-template isAnyWrapperCallable(bool isStaticFunction, Overloads...)
+template isAnyWrapperCallable(This, bool isStaticFunction, Overloads...)
 {
-    template impl(Params...)
+    enum impl(Params...) = () {
+        size_t numCallableWithoutWrapper;
+        size_t numCallableWithWrapper;
+        static foreach (Overload; Overloads)
+        {
+            static if (__traits(isStaticFunction, Overload) == isStaticFunction)
+            {{
+                int callable = isWrapperCallable!(This, Overload, Params);
+                if (callable & 1)
+                    numCallableWithoutWrapper++;
+                if (callable & 2)
+                    numCallableWithWrapper++;
+            }}
+        }
+        return numCallableWithWrapper == 1 && numCallableWithoutWrapper == 0;
+    }();
+}
+
+template generateWrapperCode(string member, bool isStaticFunction, alias Overload)
+{
+    enum impl(Params...) = () {
+        string code;
+        string paramsCode;
+        static foreach (i; 0 .. Params.length)
+        {
+            if (!is(Params[i] : FunctionParameters!Overload[i])
+                && implicitCastAllowed!(Params[i], FunctionParameters!Overload[i]))
+            {
+                code ~= text("auto param", i, " = FunctionParameters!Overload[", i, "](params[", i, "]);\n");
+                paramsCode ~= text("param", i, ", ");
+            }
+            else
+                paramsCode ~= text("params[", i, "], ");
+        }
+        if (member != "__ctor")
+            code ~= "return ";
+        code ~= "Overload(" ~ paramsCode ~ ");\n";
+        return code;
+    }();
+}
+
+private bool isAllowedWrapperNameImpl(string member)
+{
+    return (!(member.length >= 2 && member[0 .. 2] == "__") || member == "__ctor")
+        && !(member.length >= 32 && member[0 .. 32] == "dummyFunctionForChangingMangling")
+        && member != "rawConstructor";
+}
+template isAllowedWrapperName(string member)
+{
+    enum isAllowedWrapperName = isAllowedWrapperNameImpl(member);
+}
+
+private template overloadNeedsWrapper(bool isStaticFunction, alias Overload)
+{
+    static if (!isPublic(__traits(getVisibility, Overload)))
+        enum overloadNeedsWrapper = false;
+    else static if(__traits(isStaticFunction, Overload) != isStaticFunction)
+        enum overloadNeedsWrapper = false;
+    else
+        enum overloadNeedsWrapper = anyParamNeedsWrapper!(typeof(Overload));
+}
+
+template anyOverloadNeedsWrapper(bool isStaticFunction)
+{
+    enum anyOverloadNeedsWrapper = false;
+}
+template anyOverloadNeedsWrapper(bool isStaticFunction, alias Overload0, Overloads...)
+{
+    static if (overloadNeedsWrapper!(isStaticFunction, Overload0))
+        enum anyOverloadNeedsWrapper = true;
+    else
+        enum anyOverloadNeedsWrapper = anyOverloadNeedsWrapper!(isStaticFunction, Overloads);
+}
+
+string buildWrapperMixin(string member, bool isStaticFunction, bool inClass)
+{
+    string code;
+    code ~= "public extern(D) pragma(inline, true) ";
+    if (member == "__ctor")
+        code ~= "this";
+    else
     {
-        static if (Overloads.length == 0)
-            enum impl = false;
-        else static if (__traits(isStaticFunction, Overloads[0]) != isStaticFunction)
-            enum impl = isAnyWrapperCallable!(isStaticFunction, Overloads[1 .. $]).impl!(Params);
-        else static if (isWrapperCallable!(Overloads[0], Params))
-            enum impl = true;
-        else
-            enum impl = isAnyWrapperCallable!(isStaticFunction, Overloads[1 .. $]).impl!(Params);
+        if (isStaticFunction)
+            code ~= "static ";
+        else if (inClass)
+            code ~= "final ";
+        code ~= "auto " ~ member;
     }
+    code ~= q{(Params...)(auto ref Params params)
+        if (isAnyWrapperCallable!(typeof(this), isStaticFunction, __traits(getOverloads, typeof(this), member)).impl!(Params))
+        {
+            static foreach (Overload; __traits(getOverloads, typeof(this), member))
+            {
+                static if (__traits(isStaticFunction, Overload) == isStaticFunction)
+                {
+                    static if (isWrapperCallable!(typeof(this), Overload, Params) == 2)
+                    {
+                        mixin(generateWrapperCode!(member, isStaticFunction, Overload).impl!(Params));
+                    }
+                }
+            }
+        }
+    };
+    return code;
 }
 
 // Creates wrapper functions for every function in the current class / struct, which are callable with rvalues.
+// Also simulates implicit casts of constructors with UDA @SimulateImplicitConstructor.
 version (DQT_NO_CONVENIENCE_WRAPPERS)
     enum CREATE_CONVENIENCE_WRAPPERS = "";
 else
     enum CREATE_CONVENIENCE_WRAPPERS = q{
         static foreach (member; __traits(derivedMembers, typeof(this)))
         {
-            static if ((!(member.length >= 2 && member[0 .. 2] == "__") || member == "__ctor")
-                    && !(member.length >= 32 && member[0 .. 32] == "dummyFunctionForChangingMangling")
-                    && member != "rawConstructor")
+            extern(D) static if (isAllowedWrapperName!member)
+            {
                 static foreach (isStaticFunction; [false, true])
                 {
-                    extern(D) static if (() {
-                            bool needsWrapper;
-                            static foreach (F; __traits(getOverloads, typeof(this), member))
-                            {
-                                static if (__traits(getVisibility, F) == "public"
-                                    && __traits(isStaticFunction, F) == isStaticFunction
-                                    && anyParamConstStructRef!F)
-                                {
-                                    needsWrapper = true;
-                                }
-                            }
-                            return needsWrapper;
-                        }())
+                    static if (anyOverloadNeedsWrapper!(isStaticFunction, __traits(getOverloads, typeof(this), member)))
                     {
                         static if (!__traits(isTemplate, __traits(getMember, typeof(this), member)))
-                        {
-                            mixin(() {
-                                static import std.conv;
-                                string code;
-                                string overloadHelper = "dqt_publicOverloads";
-                                if (isStaticFunction)
-                                    overloadHelper ~= "Static";
-                                static foreach (i, F; __traits(getOverloads, typeof(this), member))
-                                {
-                                    static if (__traits(isStaticFunction, F) == isStaticFunction && __traits(getVisibility, F) == "public")
-                                    {
-                                        code ~= "private alias " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ " = __traits(getOverloads, typeof(this), member)[" ~ std.conv.text(i) ~ "];";
-                                    }
-                                }
-                                code ~= "public extern(D) pragma(inline, true) ";
-                                if (member == "__ctor")
-                                    code ~= "this";
-                                else
-                                {
-                                    static if (isStaticFunction)
-                                        code ~= "static ";
-                                    else static if (is(typeof(this) == class))
-                                        code ~= "final ";
-                                    code ~= "auto " ~ member;
-                                }
-                                code ~= "(Params...)(auto ref Params params)";
-                                code ~= "if (isAnyWrapperCallable!(isStaticFunction, __traits(getOverloads, typeof(this), member)).impl!(Params))";
-                                code ~= "{";
-                                if (member == "__ctor")
-                                    code ~= "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ "(params);";
-                                else
-                                    code ~= "return " ~ "_dqt_overload_" ~ (isStaticFunction ? "static_" : "nonstatic_") ~ member ~ "(params);";
-                                code ~= "}";
-                                return code;
-                            }());
-                        }
+                            mixin(buildWrapperMixin(member, isStaticFunction, is(typeof(this) == class)));
                     }
                 }
+            }
         }
     };
 
