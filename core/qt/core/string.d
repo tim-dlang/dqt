@@ -311,7 +311,7 @@ bool isLatin1(QLatin1String)/+ noexcept+/
 #    define Q_REQUIRED_RESULT_pushed +/
 
 /// Binding for C++ class [QString](https://doc.qt.io/qt-5/qstring.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
+@SimulateImplicitConstructor @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QString
 {
 public:
     alias Data = QStringData;
@@ -342,19 +342,19 @@ public:
     this(QChar c);
     this(int size, QChar c);
 
-    extern(D) this(const(wchar)[] unicode)
+    @SimulateImplicitConstructor extern(D) this(const(wchar)[] unicode)
     {
         this(cast(const(QChar)*) unicode.ptr, cast(int)unicode.length);
     }
 
-    extern(D) this(const(char)[] unicode)
+    @SimulateImplicitConstructor extern(D) this(const(char)[] unicode)
     {
         QString s = fromUtf8_helper(unicode.ptr, cast(int)unicode.length);
         this.d = s.d;
         s.d = Data.sharedNull();
     }
 
-    extern(D) this(const(dchar)[] unicode)
+    @SimulateImplicitConstructor extern(D) this(const(dchar)[] unicode)
     {
         QString s = fromUcs4(unicode.ptr, cast(int)unicode.length);
         this.d = s.d;

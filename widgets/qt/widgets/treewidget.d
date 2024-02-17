@@ -150,8 +150,6 @@ public:
         { return qvariant_cast!(QBrush)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
     pragma(inline, true) final void setBackground(int column, ref const(QBrush) brush)
         { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole, brush.style() != /+ Qt:: +/qt.core.namespace.BrushStyle.NoBrush ? QVariant.fromValue(brush) : QVariant()); }
-    pragma(inline, true) final void setBackground(int column, const(QColor) color)
-        { auto tmp = QBrush(color); setBackground(column, tmp); }
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
     /+ QT_DEPRECATED_X ("Use QTreeWidgetItem::foreground() instead") +/

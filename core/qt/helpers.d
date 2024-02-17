@@ -1143,6 +1143,18 @@ template dqtimported(string moduleName)
     mixin("import dqtimported = " ~ moduleName ~ ";");
 }
 
+/* UDA for constuctors, which should be used for implicit construction
+ * when passing parameters. Mixin CREATE_CONVENIENCE_WRAPPERS will
+ * create wrappers, which simulate these implicit conversions.
+ *
+ * Both the constructors and the surrounding class/struct need to have
+ * the UDA SimulateImplicitConstructor. This makes the mixin a bit
+ * faster and works around https://issues.dlang.org/show_bug.cgi?id=24386
+ */
+struct SimulateImplicitConstructor
+{
+}
+
 template FunctionParameters(alias F)
 {
     static if (is(typeof(F) P == __parameters))
@@ -1169,11 +1181,29 @@ private template isParamConstStructRef(F, size_t i)
         && areStorageClassesOnlyRef(__traits(getParameterStorageClasses, F, i));
 }
 
+private template hasUDASimulateImplicitConstructorImpl()
+{
+    enum hasUDASimulateImplicitConstructorImpl = false;
+}
+private template hasUDASimulateImplicitConstructorImpl(alias U, R...)
+{
+    static if (is(U == SimulateImplicitConstructor))
+        enum hasUDASimulateImplicitConstructorImpl = true;
+    else
+        enum hasUDASimulateImplicitConstructorImpl = hasUDASimulateImplicitConstructorImpl!R;
+}
+private template hasUDASimulateImplicitConstructor(alias symbol)
+{
+    enum hasUDASimulateImplicitConstructor = hasUDASimulateImplicitConstructorImpl!(__traits(getAttributes, symbol));
+}
+
 private template anyParamNeedsWrapper(F, size_t i = 0)
 {
     static if (i >= FunctionParameters2!F.length)
         enum anyParamNeedsWrapper = false;
     else static if (isParamConstStructRef!(F, i))
+        enum anyParamNeedsWrapper = true;
+    else static if (is(FunctionParameters2!F == struct) && hasUDASimulateImplicitConstructor!(FunctionParameters2!F[i]))
         enum anyParamNeedsWrapper = true;
     else
         enum anyParamNeedsWrapper = anyParamNeedsWrapper!(F, i + 1);
@@ -1191,6 +1221,33 @@ private template callableWithNParameters(alias F, size_t n)
         FunctionParameters!F[0 .. n] params = void;
         dummyFunctionWithSameArgs!F(params);
     });
+}
+
+template implicitCastAllowed(From, To)
+{
+    static if (!is(To == struct))
+        enum implicitCastAllowed = false;
+    else static if (!hasUDASimulateImplicitConstructor!To)
+        enum implicitCastAllowed = false;
+    else
+        enum implicitCastAllowed = () {
+            bool r = false;
+            static if (__traits(hasMember, To, "__ctor"))
+            {
+                static foreach (o; __traits(getOverloads, To, "__ctor"))
+                {
+                    static if (hasUDASimulateImplicitConstructor!o)
+                    {
+                        static assert (callableWithNParameters!(o, 1), "@SimulateImplicitConstructor only allowed on constructors with one parameter.");
+                        static if (is(From : FunctionParameters!o[0]))
+                        {
+                            r = true;
+                        }
+                    }
+                }
+            }
+            return r;
+        }();
 }
 
 /* Using this function is a bit faster, than directly comparing the string
@@ -1220,7 +1277,10 @@ enum isWrapperCallable(This, alias F, Params...) = () {
             if (!is(Params[i] : FunctionParameters!F[i]))
             {
                 callableWithoutWrapper = false;
-                callableWithWrapper = false;
+                if (!implicitCastAllowed!(Params[i], FunctionParameters!F[i]))
+                {
+                    callableWithWrapper = false;
+                }
             }
         }
 
@@ -1273,9 +1333,21 @@ template generateWrapperCode(string member, bool isStaticFunction, alias Overloa
 {
     enum impl(Params...) = () {
         string code;
+        string paramsCode;
+        static foreach (i; 0 .. Params.length)
+        {
+            if (!is(Params[i] : FunctionParameters!Overload[i])
+                && implicitCastAllowed!(Params[i], FunctionParameters!Overload[i]))
+            {
+                code ~= text("auto param", i, " = FunctionParameters!Overload[", i, "](params[", i, "]);\n");
+                paramsCode ~= text("param", i, ", ");
+            }
+            else
+                paramsCode ~= text("params[", i, "], ");
+        }
         if (member != "__ctor")
             code ~= "return ";
-        code ~= "Overload(params);\n";
+        code ~= "Overload(" ~ paramsCode ~ ");\n";
         return code;
     }();
 }
@@ -1346,6 +1418,7 @@ string buildWrapperMixin(string member, bool isStaticFunction, bool inClass)
 }
 
 // Creates wrapper functions for every function in the current class / struct, which are callable with rvalues.
+// Also simulates implicit casts of constructors with UDA @SimulateImplicitConstructor.
 version (DQT_NO_CONVENIENCE_WRAPPERS)
     enum CREATE_CONVENIENCE_WRAPPERS = "";
 else

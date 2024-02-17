@@ -53,29 +53,29 @@ private /+ slots +/:
             QAction action = menu.addAction("Current row = " ~ QString.number(currentRow));
             action.setEnabled(false);
 
-            action = menu.addAction(QString("Remove row"));
+            action = menu.addAction("Remove row");
             connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.removeRow(currentRow);
             });
 
-            action = menu.addAction(QString("Add row before"));
+            action = menu.addAction("Add row before");
             connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertRow(currentRow);
             });
 
-            action = menu.addAction(QString("Add row after"));
+            action = menu.addAction("Add row after");
             connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertRow(currentRow + 1);
             });
 
-            action = menu.addAction(QString("Change row header"));
+            action = menu.addAction("Change row header");
             connect(action.signal!"triggered", menu, () {
                 QTableWidgetItem item = ui.tableWidget.verticalHeaderItem(currentRow);
                 bool ok;
                 QString text = QString.create;
                 if (item)
                     text = item.text();
-                text = QInputDialog.getText(this, QString.create(), QString("Row header"), QLineEdit.EchoMode.Normal, text, &ok);
+                text = QInputDialog.getText(this, QString.create(), "Row header", QLineEdit.EchoMode.Normal, text, &ok);
                 if (ok)
                 {
                     if (text.isEmpty())
@@ -97,10 +97,10 @@ private /+ slots +/:
         }
         else
         {
-            QAction action = menu.addAction(QString("No row selected"));
+            QAction action = menu.addAction("No row selected");
             action.setEnabled(false);
 
-            action = menu.addAction(QString("Add row"));
+            action = menu.addAction("Add row");
             connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertRow(ui.tableWidget.rowCount());
             });
@@ -111,29 +111,29 @@ private /+ slots +/:
             QAction action = menu.addAction("Current column = " ~ QString.number(currentColumn));
             action.setEnabled(false);
 
-            action = menu.addAction(QString("Remove column"));
+            action = menu.addAction("Remove column");
             connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.removeColumn(currentColumn);
             });
 
-            action = menu.addAction(QString("Add column before"));
+            action = menu.addAction("Add column before");
             connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertColumn(currentColumn);
             });
 
-            action = menu.addAction(QString("Add column after"));
+            action = menu.addAction("Add column after");
             connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertColumn(currentColumn + 1);
             });
 
-            action = menu.addAction(QString("Change column header"));
+            action = menu.addAction("Change column header");
             connect(action.signal!"triggered", menu, () {
                 QTableWidgetItem item = ui.tableWidget.horizontalHeaderItem(currentColumn);
                 bool ok;
                 QString text = QString.create;
                 if (item)
                     text = item.text();
-                text = QInputDialog.getText(this, QString.create(), QString("Column header"), QLineEdit.EchoMode.Normal, text, &ok);
+                text = QInputDialog.getText(this, QString.create(), "Column header", QLineEdit.EchoMode.Normal, text, &ok);
                 if (ok)
                 {
                     if (text.isEmpty())
@@ -155,10 +155,10 @@ private /+ slots +/:
         }
         else
         {
-            QAction action = menu.addAction(QString("No column selected"));
+            QAction action = menu.addAction("No column selected");
             action.setEnabled(false);
 
-            action = menu.addAction(QString("Add column"));
+            action = menu.addAction("Add column");
             connect(action.signal!"triggered", menu, () {
                 ui.tableWidget.insertColumn(ui.tableWidget.columnCount());
             });
@@ -173,10 +173,10 @@ private /+ slots +/:
                 ui.tableWidget.setItem(currentRow, currentColumn, item);
             }
 
-            QAction action = menu.addAction(QString("Item"));
+            QAction action = menu.addAction("Item");
             action.setEnabled(false);
 
-            action = menu.addAction(QString("Change font"));
+            action = menu.addAction("Change font");
             connect(action.signal!"triggered", menu, () {
                 QFont font = item.font();
                 bool ok;
@@ -185,7 +185,7 @@ private /+ slots +/:
                     item.setFont(font);
             });
 
-            action = menu.addAction(QString("Change background color"));
+            action = menu.addAction("Change background color");
             connect(action.signal!"triggered", menu, () {
                 QBrush brush = item.background();
                 QColor color = QColorDialog.getColor(brush.color(), this);

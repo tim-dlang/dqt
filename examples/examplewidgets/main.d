@@ -34,7 +34,7 @@ int main()
      * and compile it as part of the project, but that would add a C++
      * compiler as a dependency.
      */
-    QResource.registerResource(QString("examples/examplewidgets/resources.rcc"));
+    QResource.registerResource("examples/examplewidgets/resources.rcc");
 
     auto eventLogger = new EventLogger();
     scope a = new QApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);

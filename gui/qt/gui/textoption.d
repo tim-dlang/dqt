@@ -23,7 +23,7 @@ import qt.helpers;
 struct QTextOptionPrivate;
 
 /// Binding for C++ class [QTextOption](https://doc.qt.io/qt-5/qtextoption.html).
-extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextOption
+@SimulateImplicitConstructor extern(C++, class) struct /+ Q_GUI_EXPORT +/ QTextOption
 {
 public:
     enum TabType {
@@ -73,7 +73,7 @@ public:
         return r;
     }*/
 
-    /*implicit*/ this(/+ Qt:: +/qt.core.namespace.Alignment alignment);
+    @SimulateImplicitConstructor this(/+ Qt:: +/qt.core.namespace.Alignment alignment);
     ~this();
 
     @disable this(this);

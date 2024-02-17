@@ -35,7 +35,7 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
 #endif +/
 
 /// Binding for C++ class [QColor](https://doc.qt.io/qt-5/qcolor.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColor
+@SimulateImplicitConstructor @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColor
 {
 public:
     enum Spec { Invalid, Rgb, Hsv, Cmyk, Hsl, ExtendedRgb }
@@ -46,7 +46,7 @@ public:
         this.cspec = Spec.Invalid;
         this.ct = typeof(this.ct)(ushort.max, 0, 0, 0, 0);
     }+/
-    this(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;
+    @SimulateImplicitConstructor this(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;
     this(int r, int g, int b, int a = 255)/+ noexcept+/
     {
         this.cspec = isRgbaValid(r, g, b, a) ? Spec.Rgb : Spec.Invalid;
