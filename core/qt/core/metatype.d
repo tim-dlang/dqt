@@ -461,7 +461,7 @@ alias TypeFlags = QFlags!(TypeFlag);
                 return idHelper();
             }
             return 0;
-        }/+ ; +/
+        }
     }
     qsizetype sizeOf() const
     {
@@ -1846,7 +1846,7 @@ private:
         if (x != e)
             x++;
         return x;
-    }/+ ; +/
+    }
     static const(char)* skipTemplate(const(char)* x, const(char)* e, bool stopAtComa = false)
     {
         int scopeDepth = 0;
@@ -1888,7 +1888,7 @@ private:
             x++;
         }
         return x;
-    }/+ ; +/
+    }
 
     void append(char x)
     {
@@ -1909,7 +1909,7 @@ private:
     {
         while (*x)
             append(*x++);
-    }/+ ; +/
+    }
 
     void normalizeIntegerTypes(ref const(char)* begin, const(char)* end)
     {

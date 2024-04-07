@@ -54,7 +54,7 @@ extern(C++, class) struct QGesture;
 /// Binding for C++ class [QInputEvent](https://doc.qt.io/qt-6/qinputevent.html).
 class /+ Q_GUI_EXPORT +/ QInputEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QInputEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QInputEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -95,7 +95,7 @@ protected:
 /// Binding for C++ class [QPointerEvent](https://doc.qt.io/qt-6/qpointerevent.html).
 class /+ Q_GUI_EXPORT +/ QPointerEvent : QInputEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QPointerEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QPointerEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -152,7 +152,7 @@ class /+ Q_GUI_EXPORT +/ QSinglePointEvent : QPointerEvent
     /+ Q_PROPERTY(QObject *exclusivePointGrabber READ exclusivePointGrabber
                WRITE setExclusivePointGrabber)
 
-    Q_EVENT_DISABLE_COPY(QSinglePointEvent) +/protected:/+ ; +/
+    Q_EVENT_DISABLE_COPY(QSinglePointEvent) +/protected:
     public this(const typeof(this) other)
     {
         super(other);
@@ -259,7 +259,7 @@ protected:
 /// Binding for C++ class [QEnterEvent](https://doc.qt.io/qt-6/qenterevent.html).
 class /+ Q_GUI_EXPORT +/ QEnterEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QEnterEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QEnterEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -307,7 +307,7 @@ public:
 /// Binding for C++ class [QMouseEvent](https://doc.qt.io/qt-6/qmouseevent.html).
 class /+ Q_GUI_EXPORT +/ QMouseEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QMouseEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QMouseEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -380,7 +380,7 @@ public:
 /// Binding for C++ class [QHoverEvent](https://doc.qt.io/qt-6/qhoverevent.html).
 class /+ Q_GUI_EXPORT +/ QHoverEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QHoverEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QHoverEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -433,7 +433,7 @@ class /+ Q_GUI_EXPORT +/ QWheelEvent : QSinglePointEvent
     Q_PROPERTY(Qt::ScrollPhase phase READ phase)
     Q_PROPERTY(bool inverted READ inverted)
 
-    Q_EVENT_DISABLE_COPY(QWheelEvent) +/protected:/+ ; +/
+    Q_EVENT_DISABLE_COPY(QWheelEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -478,7 +478,7 @@ protected:
 /// Binding for C++ class [QTabletEvent](https://doc.qt.io/qt-6/qtabletevent.html).
 class /+ Q_GUI_EXPORT +/ QTabletEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QTabletEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QTabletEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -544,7 +544,7 @@ protected:
 /// Binding for C++ class [QNativeGestureEvent](https://doc.qt.io/qt-6/qnativegestureevent.html).
 class /+ Q_GUI_EXPORT +/ QNativeGestureEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QNativeGestureEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QNativeGestureEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -634,7 +634,7 @@ protected:
 /// Binding for C++ class [QKeyEvent](https://doc.qt.io/qt-6/qkeyevent.html).
 class /+ Q_GUI_EXPORT +/ QKeyEvent : QInputEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QKeyEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QKeyEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -713,7 +713,7 @@ protected:
 /// Binding for C++ class [QFocusEvent](https://doc.qt.io/qt-6/qfocusevent.html).
 class /+ Q_GUI_EXPORT +/ QFocusEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QFocusEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QFocusEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -741,7 +741,7 @@ private:
 /// Binding for C++ class [QPaintEvent](https://doc.qt.io/qt-6/qpaintevent.html).
 class /+ Q_GUI_EXPORT +/ QPaintEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QPaintEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QPaintEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -769,7 +769,7 @@ protected:
 /// Binding for C++ class [QMoveEvent](https://doc.qt.io/qt-6/qmoveevent.html).
 class /+ Q_GUI_EXPORT +/ QMoveEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QMoveEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QMoveEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -794,7 +794,7 @@ protected:
 /// Binding for C++ class [QExposeEvent](https://doc.qt.io/qt-6/qexposeevent.html).
 class /+ Q_GUI_EXPORT +/ QExposeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QExposeEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QExposeEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -821,7 +821,7 @@ protected:
 /// Binding for C++ class [QPlatformSurfaceEvent](https://doc.qt.io/qt-6/qplatformsurfaceevent.html).
 class /+ Q_GUI_EXPORT +/ QPlatformSurfaceEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QPlatformSurfaceEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QPlatformSurfaceEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -850,7 +850,7 @@ protected:
 /// Binding for C++ class [QResizeEvent](https://doc.qt.io/qt-6/qresizeevent.html).
 class /+ Q_GUI_EXPORT +/ QResizeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QResizeEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QResizeEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -876,7 +876,7 @@ protected:
 /// Binding for C++ class [QCloseEvent](https://doc.qt.io/qt-6/qcloseevent.html).
 class /+ Q_GUI_EXPORT +/ QCloseEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QCloseEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QCloseEvent) +/protected:
 public:
     this();
     ~this();
@@ -887,7 +887,7 @@ public:
 /// Binding for C++ class [QIconDragEvent](https://doc.qt.io/qt-6/qicondragevent.html).
 class /+ Q_GUI_EXPORT +/ QIconDragEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QIconDragEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QIconDragEvent) +/protected:
 public:
     this();
     ~this();
@@ -898,7 +898,7 @@ public:
 /// Binding for C++ class [QShowEvent](https://doc.qt.io/qt-6/qshowevent.html).
 class /+ Q_GUI_EXPORT +/ QShowEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QShowEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QShowEvent) +/protected:
 public:
     this();
     ~this();
@@ -909,7 +909,7 @@ public:
 /// Binding for C++ class [QHideEvent](https://doc.qt.io/qt-6/qhideevent.html).
 class /+ Q_GUI_EXPORT +/ QHideEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QHideEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QHideEvent) +/protected:
 public:
     this();
     ~this();
@@ -921,7 +921,7 @@ version (QT_NO_CONTEXTMENU) {} else
 /// Binding for C++ class [QContextMenuEvent](https://doc.qt.io/qt-6/qcontextmenuevent.html).
 class /+ Q_GUI_EXPORT +/ QContextMenuEvent : QInputEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QContextMenuEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QContextMenuEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -972,7 +972,7 @@ version (QT_NO_INPUTMETHOD) {} else
 /// Binding for C++ class [QInputMethodEvent](https://doc.qt.io/qt-6/qinputmethodevent.html).
 class /+ Q_GUI_EXPORT +/ QInputMethodEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QInputMethodEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QInputMethodEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1056,7 +1056,7 @@ private:
 /// Binding for C++ class [QInputMethodQueryEvent](https://doc.qt.io/qt-6/qinputmethodqueryevent.html).
 class /+ Q_GUI_EXPORT +/ QInputMethodQueryEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QInputMethodQueryEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QInputMethodQueryEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1099,7 +1099,7 @@ private:
 /// Binding for C++ class [QDropEvent](https://doc.qt.io/qt-6/qdropevent.html).
 class /+ Q_GUI_EXPORT +/ QDropEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDropEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QDropEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1157,7 +1157,7 @@ protected:
 /// Binding for C++ class [QDragMoveEvent](https://doc.qt.io/qt-6/qdragmoveevent.html).
 class /+ Q_GUI_EXPORT +/ QDragMoveEvent : QDropEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDragMoveEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QDragMoveEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1191,7 +1191,7 @@ protected:
 /// Binding for C++ class [QDragEnterEvent](https://doc.qt.io/qt-6/qdragenterevent.html).
 class /+ Q_GUI_EXPORT +/ QDragEnterEvent : QDragMoveEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDragEnterEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QDragEnterEvent) +/protected:
 public:
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QPoint) pos, /+ Qt:: +/qt.core.namespace.DropActions actions, const(QMimeData) data,
@@ -1205,7 +1205,7 @@ public:
 /// Binding for C++ class [QDragLeaveEvent](https://doc.qt.io/qt-6/qdragleaveevent.html).
 class /+ Q_GUI_EXPORT +/ QDragLeaveEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDragLeaveEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QDragLeaveEvent) +/protected:
 public:
     this();
     ~this();
@@ -1217,7 +1217,7 @@ public:
 /// Binding for C++ class [QHelpEvent](https://doc.qt.io/qt-6/qhelpevent.html).
 class /+ Q_GUI_EXPORT +/ QHelpEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QHelpEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QHelpEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1250,7 +1250,7 @@ version (QT_NO_STATUSTIP) {} else
 /// Binding for C++ class [QStatusTipEvent](https://doc.qt.io/qt-6/qstatustipevent.html).
 class /+ Q_GUI_EXPORT +/ QStatusTipEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QStatusTipEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QStatusTipEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1275,7 +1275,7 @@ private:
 /// Binding for C++ class [QWhatsThisClickedEvent](https://doc.qt.io/qt-6/qwhatsthisclickedevent.html).
 class /+ Q_GUI_EXPORT +/ QWhatsThisClickedEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QWhatsThisClickedEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QWhatsThisClickedEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1300,7 +1300,7 @@ private:
 /// Binding for C++ class [QActionEvent](https://doc.qt.io/qt-6/qactionevent.html).
 class /+ Q_GUI_EXPORT +/ QActionEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QActionEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QActionEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1326,7 +1326,7 @@ private:
 /// Binding for C++ class [QFileOpenEvent](https://doc.qt.io/qt-6/qfileopenevent.html).
 class /+ Q_GUI_EXPORT +/ QFileOpenEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QFileOpenEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QFileOpenEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1354,7 +1354,7 @@ version (QT_NO_TOOLBAR) {} else
 {
 class /+ Q_GUI_EXPORT +/ QToolBarChangeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QToolBarChangeEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QToolBarChangeEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1379,7 +1379,7 @@ private:
 /// Binding for C++ class [QShortcutEvent](https://doc.qt.io/qt-6/qshortcutevent.html).
 class /+ Q_GUI_EXPORT +/ QShortcutEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QShortcutEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QShortcutEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1407,7 +1407,7 @@ protected:
 /// Binding for C++ class [QWindowStateChangeEvent](https://doc.qt.io/qt-6/qwindowstatechangeevent.html).
 class /+ Q_GUI_EXPORT +/ QWindowStateChangeEvent: QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QWindowStateChangeEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QWindowStateChangeEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1437,7 +1437,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QEvent *);
 /// Binding for C++ class [QTouchEvent](https://doc.qt.io/qt-6/qtouchevent.html).
 class /+ Q_GUI_EXPORT +/ QTouchEvent : QPointerEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QTouchEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QTouchEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1498,7 +1498,7 @@ protected:
 /// Binding for C++ class [QScrollPrepareEvent](https://doc.qt.io/qt-6/qscrollprepareevent.html).
 class /+ Q_GUI_EXPORT +/ QScrollPrepareEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QScrollPrepareEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QScrollPrepareEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1534,7 +1534,7 @@ private:
 /// Binding for C++ class [QScrollEvent](https://doc.qt.io/qt-6/qscrollevent.html).
 class /+ Q_GUI_EXPORT +/ QScrollEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QScrollEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QScrollEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1568,7 +1568,7 @@ private:
 
 class /+ Q_GUI_EXPORT +/ QScreenOrientationChangeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QScreenOrientationChangeEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QScreenOrientationChangeEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -1593,7 +1593,7 @@ private:
 
 class /+ Q_GUI_EXPORT +/ QApplicationStateChangeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QApplicationStateChangeEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QApplicationStateChangeEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);

@@ -734,8 +734,6 @@ public:
         T* displace()(qsizetype pos, qsizetype n)
         {
             import core.stdc.string;
-            version (D_LP64)
-                import core.stdc.config;
 
             nInserts = n;
             T* insertionPoint = data.ptr + pos;

@@ -76,7 +76,7 @@ public:
     this(ref const(QBitmap) bitmap);
     ~this();
     /+ref QRegion operator =(ref const(QRegion) );+/
-    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QRegion) +//+ ; +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QRegion) +/
     /+ inline void swap(QRegion &other) noexcept { qSwap(d, other.d); } +/
     bool isEmpty() const;
     bool isNull() const;

@@ -33,7 +33,7 @@ class /+ Q_CORE_EXPORT +/ QEvent           // event base class
     mixin(Q_GADGET);
     /+ QDOC_PROPERTY(bool accepted READ isAccepted WRITE setAccepted)
 
-    Q_EVENT_DISABLE_COPY(QEvent) +/protected:/+ ; +/    
+    Q_EVENT_DISABLE_COPY(QEvent) +/protected:
     this(const QEvent other)
     {
         this.tupleof = (cast(typeof(this))other).tupleof;
@@ -409,7 +409,7 @@ private:
 /// Binding for C++ class [QTimerEvent](https://doc.qt.io/qt-6/qtimerevent.html).
 class /+ Q_CORE_EXPORT +/ QTimerEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QTimerEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QTimerEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -422,7 +422,7 @@ public:
 
     override QTimerEvent clone() const {
         return cpp_new_copy!QTimerEvent(cast() this);
-    }/+ ; +/
+    }
 
 protected:
     int id;
@@ -433,7 +433,7 @@ protected:
 /// Binding for C++ class [QChildEvent](https://doc.qt.io/qt-6/qchildevent.html).
 class /+ Q_CORE_EXPORT +/ QChildEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QChildEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QChildEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -449,7 +449,7 @@ public:
 
     override QChildEvent clone() const {
         return cpp_new_copy!QChildEvent(cast() this);
-    }/+ ; +/
+    }
 
 protected:
     QObject c;
@@ -459,7 +459,7 @@ protected:
 /// Binding for C++ class [QDynamicPropertyChangeEvent](https://doc.qt.io/qt-6/qdynamicpropertychangeevent.html).
 class /+ Q_CORE_EXPORT +/ QDynamicPropertyChangeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDynamicPropertyChangeEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QDynamicPropertyChangeEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -473,7 +473,7 @@ public:
 
     override QDynamicPropertyChangeEvent clone() const {
         return cpp_new_copy!QDynamicPropertyChangeEvent(cast() this);
-    }/+ ; +/
+    }
 
 private:
     QByteArray n;
@@ -482,7 +482,7 @@ private:
 
 class /+ Q_CORE_EXPORT +/ QDeferredDeleteEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDeferredDeleteEvent) +/protected:/+ ; +/
+    /+ Q_EVENT_DISABLE_COPY(QDeferredDeleteEvent) +/protected:
     this(const typeof(this) other)
     {
         super(other);
@@ -495,7 +495,7 @@ public:
 
     override QDeferredDeleteEvent clone() const {
         return cpp_new_copy!QDeferredDeleteEvent(cast() this);
-    }/+ ; +/
+    }
 
 private:
     int level;

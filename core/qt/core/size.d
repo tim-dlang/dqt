@@ -261,6 +261,8 @@ public:
     }+/
     /+pragma(inline, true) ref QSizeF operator /=(qreal c)
     {
+        import qt.core.numeric;
+
         (mixin(Q_ASSERT(q{!qFuzzyIsNull(c) && qIsFinite(c)})));
         wd = wd / c;
         ht = ht / c;

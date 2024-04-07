@@ -164,7 +164,7 @@ public:
             /+ [[nodiscard]] +/ qsizetype size() const/+ noexcept+/ { return chars[1] ? 2 : 1; }
             /+ [[nodiscard]] +/ const(wchar)* begin() const/+ noexcept+/ return { return chars.ptr; }
             /+ [[nodiscard]] +/ const(wchar)* end() const/+ noexcept+/ return { return begin() + size(); }
-        }/+ ; +/
+        }
         return requiresSurrogates(c) ? R([QChar.highSurrogate(c),
                                           QChar.lowSurrogate(c)]) :
                                        R([cast(wchar) (c), '\0']) ;

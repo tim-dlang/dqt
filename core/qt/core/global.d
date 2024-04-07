@@ -1038,7 +1038,7 @@ Q_DECL_COLD_FUNCTION +/
 /+ #  define Q_CHECK_PTR(p) do { if (!(p)) qBadAlloc(); } while (false) +/
 extern(D) alias Q_CHECK_PTR = function string(string p)
 {
-    return mixin(interpolateMixin(q{do { if (!($(p))) qBadAlloc(); } while (false);}));
+    return mixin(interpolateMixin(q{do { if (!($(p))) dqtimported!q{qt.core.global}.qBadAlloc(); } while (false);}));
 };
 /+ #endif +/
 

@@ -574,7 +574,7 @@ private:
  {
         is_convertible_to_view_or_qstring_helper!(/+ std:: +/decay!(T).type) base0;
         alias base0 this;
-}/+ ; +/
+}
 public:
     /+ template <typename...Args> +/
     /+ [[nodiscard]]

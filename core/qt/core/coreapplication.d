@@ -218,8 +218,8 @@ extern(D) alias Q_DECLARE_TR_FUNCTIONS = function string(string context)
 {
     return
     mixin(interpolateMixin(q{    public:
-            pragma(inline, true) static QString tr(const(char)* sourceText, const(char)* disambiguation = null, int n = -1)
-                { return QCoreApplication.translate($(stringifyMacroParameter(context)), sourceText, disambiguation, n); }
+            pragma(inline, true) static dqtimported!q{qt.core.string}.QString tr(const(char)* sourceText, const(char)* disambiguation = null, int n = -1)
+                { return dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate($(stringifyMacroParameter(context)), sourceText, disambiguation, n); }
         private:}));
 };
 

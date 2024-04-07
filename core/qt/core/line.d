@@ -223,6 +223,8 @@ public:
     qreal length() const;
 /+    void setLength(qreal len)
     {
+        import qt.core.numeric;
+
         (mixin(Q_ASSERT(q{qIsFinite(len)})));
         const(qreal) oldLength = length();
         (mixin(Q_ASSERT(q{qIsFinite(oldLength)})));

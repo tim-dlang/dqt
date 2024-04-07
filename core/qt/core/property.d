@@ -36,7 +36,7 @@ static if (!defined!"QT_PROPERTY_COLLECT_BINDING_LOCATION")
 /+ #define QT_SOURCE_LOCATION_NAMESPACE std::experimental
 #define QT_PROPERTY_COLLECT_BINDING_LOCATION +/
 /+ #define QT_PROPERTY_DEFAULT_BINDING_LOCATION QPropertyBindingSourceLocation(std::experimental::source_location::current()) +/
-enum QT_PROPERTY_DEFAULT_BINDING_LOCATION = q{QPropertyBindingSourceLocation(current())};
+enum QT_PROPERTY_DEFAULT_BINDING_LOCATION = q{dqtimported!q{qt.core.property}.QPropertyBindingSourceLocation(/+ std::experimental:: +/source_location.current())};
 /+ #endif +/
 }
 
@@ -92,13 +92,13 @@ struct /+ Q_CORE_EXPORT +/ QPropertyBindingSourceLocation
     quint32 column = 0;
     /+ QPropertyBindingSourceLocation() = default; +/
 /+ #ifdef QT_PROPERTY_COLLECT_BINDING_LOCATION +/
-/+    this(ref UnknownType!q{/+ QT_SOURCE_LOCATION_NAMESPACE:: +/source_location source_location} cppLocation)
+    /+ QPropertyBindingSourceLocation(const QT_SOURCE_LOCATION_NAMESPACE::source_location &cppLocation)
     {
         fileName = cppLocation.file_name();
         functionName = cppLocation.function_name();
         line = cppLocation.line();
         column = cppLocation.column();
-    }+/
+    } +/
 /+ #endif +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
@@ -1006,12 +1006,12 @@ private:
     Class* owner()
     {
         char* that = reinterpret_cast!(char*)(&this);
-        return reinterpret_cast!(Class*)(that - /+ QtPrivate:: +//+ detail:: +/qt.core.propertyprivate.getOffset(Offset));
+        return reinterpret_cast!(Class*)(that - /+ QtPrivate::detail:: +/qt.core.propertyprivate.getOffset(Offset));
     }
     const(Class)* owner() const
     {
         char* that = const_cast!(char*)(reinterpret_cast!(const(char)*)(&this));
-        return reinterpret_cast!(Class*)(that - /+ QtPrivate:: +//+ detail:: +/qt.core.propertyprivate.getOffset(Offset));
+        return reinterpret_cast!(Class*)(that - /+ QtPrivate::detail:: +/qt.core.propertyprivate.getOffset(Offset));
     }
     static void signalCallBack(QUntypedPropertyData* o)
     {
@@ -1282,12 +1282,12 @@ private:
     Class* owner()
     {
         char* that = reinterpret_cast!(char*)(&this);
-        return reinterpret_cast!(Class*)(that - /+ QtPrivate:: +//+ detail:: +/qt.core.propertyprivate.getOffset(Offset));
+        return reinterpret_cast!(Class*)(that - /+ QtPrivate::detail:: +/qt.core.propertyprivate.getOffset(Offset));
     }
     const(Class)* owner() const
     {
         char* that = const_cast!(char*)(reinterpret_cast!(const(char)*)(&this));
-        return reinterpret_cast!(Class*)(that - /+ QtPrivate:: +//+ detail:: +/qt.core.propertyprivate.getOffset(Offset));
+        return reinterpret_cast!(Class*)(that - /+ QtPrivate::detail:: +/qt.core.propertyprivate.getOffset(Offset));
     }
 
 public:

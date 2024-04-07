@@ -114,9 +114,9 @@ public:
     /+bool operator ==(ref const(QTaggedIterator) o) const { return Iterator.operator==(o); }+/
     /+bool operator !=(ref const(QTaggedIterator) o) const { return Iterator.operator!=(o); }+/
     ref QTaggedIterator opUnary(string op)() if (op == "++") { Iterator.operator++(); return this; }
-    /+QTaggedIterator operator ++(int x) { return QTaggedIterator(Iterator.operator++(x)); }+//+ ; +/
+    /+QTaggedIterator operator ++(int x) { return QTaggedIterator(Iterator.operator++(x)); }+/
     ref QTaggedIterator opUnary(string op)() if (op == "--") { Iterator.operator--(); return this; }
-    /+QTaggedIterator operator --(int x) { return QTaggedIterator(Iterator.operator--(x)); }+//+ ; +/
+    /+QTaggedIterator operator --(int x) { return QTaggedIterator(Iterator.operator--(x)); }+/
     ref QTaggedIterator opOpAssign(string op)(qsizetype j) if (op == "+") { Iterator.operator+=(j); return this; }
     ref QTaggedIterator opOpAssign(string op)(qsizetype j) if (op == "-")  { Iterator.operator-=(j); return this; }
     QTaggedIterator opBinary(string op)(qsizetype j) const if (op == "+") { return QTaggedIterator(Iterator.operator+(j)); }
@@ -532,6 +532,6 @@ public:
     Container metaContainer() const
     {
         return m_metaContainer;
-    }/+ ; +/
+    }
 }
 
