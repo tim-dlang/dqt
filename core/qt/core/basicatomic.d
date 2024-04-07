@@ -14,9 +14,8 @@ extern(C++):
 
 import core.atomic;
 import qt.config;
+import qt.core.global;
 import qt.helpers;
-version (D_LP64)
-    import core.stdc.config;
 
 /+ #ifndef QBASICATOMIC_H +/
 /+ #define QBASICATOMIC_H
@@ -62,8 +61,8 @@ public:
     alias Type = T;
     //alias Ops = QAtomicOps!(T);
     // static check that this is a valid integer
-    /+ Q_STATIC_ASSERT_X(QTypeInfo<T>::isIntegral, "template parameter is not an integral type") +/
-    // /+ Q_STATIC_ASSERT_X(QAtomicOpsSupport<sizeof(T)>::IsSupported, "template parameter is an integral of a size not supported on this platform") +/static assert(cast(bool)(QAtomicOpsSupport!(T.sizeof).IsSupported),"template parameter is an integral of a size not supported on this platform");
+//    mixin(Q_STATIC_ASSERT_X(q{QTypeInfo!(T).isIntegral}, q{"template parameter is not an integral type"}));
+//    mixin(Q_STATIC_ASSERT_X(q{QAtomicOpsSupport!(T.sizeof).IsSupported}, q{"template parameter is an integral of a size not supported on this platform"}));
 
     Type _q_value;
 

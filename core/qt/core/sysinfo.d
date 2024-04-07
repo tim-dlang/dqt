@@ -50,17 +50,17 @@ extern(D) alias Q_MV_OSX = function string(string major, string minor)
 /+ #define Q_MV_IOS(major, minor) (QSysInfo::MV_IOS | major << 4 | minor) +/
 extern(D) alias Q_MV_IOS = function string(string major, string minor)
 {
-    return mixin(interpolateMixin(q{(QSysInfo.MacVersion.MV_IOS | $(major) << 4 | $(minor))}));
+    return mixin(interpolateMixin(q{(dqtimported!q{qt.core.sysinfo}.QSysInfo.MacVersion.MV_IOS | $(major) << 4 | $(minor))}));
 };
 /+ #define Q_MV_TVOS(major, minor) (QSysInfo::MV_TVOS | major << 4 | minor) +/
 extern(D) alias Q_MV_TVOS = function string(string major, string minor)
 {
-    return mixin(interpolateMixin(q{(QSysInfo.MacVersion.MV_TVOS | $(major) << 4 | $(minor))}));
+    return mixin(interpolateMixin(q{(dqtimported!q{qt.core.sysinfo}.QSysInfo.MacVersion.MV_TVOS | $(major) << 4 | $(minor))}));
 };
 /+ #define Q_MV_WATCHOS(major, minor) (QSysInfo::MV_WATCHOS | major << 4 | minor) +/
 extern(D) alias Q_MV_WATCHOS = function string(string major, string minor)
 {
-    return mixin(interpolateMixin(q{(QSysInfo.MacVersion.MV_WATCHOS | $(major) << 4 | $(minor))}));
+    return mixin(interpolateMixin(q{(dqtimported!q{qt.core.sysinfo}.QSysInfo.MacVersion.MV_WATCHOS | $(major) << 4 | $(minor))}));
 };
 /// Binding for C++ class [QSysInfo](https://doc.qt.io/qt-5/qsysinfo.html).
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSysInfo {

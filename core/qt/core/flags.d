@@ -94,8 +94,8 @@ extern(C++, class) struct QFlags(Enum)
 {
 private:
     static assert(Enum.sizeof <= int.sizeof,
-                          "QFlags uses an int as storage, so an enum with underlying " ~
-                          "long long will overflow.");
+                          "QFlags uses an int as storage, so an enum with underlying "
+                          ~ "long long will overflow.");
     static assert(is(Enum == enum), "QFlags is only usable on enumeration types.");
 
 /+ #if QT_DEPRECATED_SINCE(5,15) +/

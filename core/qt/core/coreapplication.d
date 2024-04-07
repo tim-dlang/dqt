@@ -226,8 +226,8 @@ private:
 extern(D) alias QT_DECLARE_DEPRECATED_TR_FUNCTIONS = function string(string context)
 {
     return
-            mixin(interpolateMixin(q{/+ QT_DEPRECATED +/ pragma(inline, true) static QString trUtf8(const(char)* sourceText, const(char)* disambiguation = null, int n = -1)
-                { return QCoreApplication.translate($(stringifyMacroParameter(context)), sourceText, disambiguation, n); }}));
+            mixin(interpolateMixin(q{/+ QT_DEPRECATED +/ pragma(inline, true) static dqtimported!q{qt.core.string}.QString trUtf8(const(char)* sourceText, const(char)* disambiguation = null, int n = -1)
+                { return dqtimported!q{qt.core.coreapplication}.QCoreApplication.translate($(stringifyMacroParameter(context)), sourceText, disambiguation, n); }}));
 };
 /+ #endif
 

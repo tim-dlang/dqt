@@ -41,50 +41,61 @@ import qt.helpers;
 
 #ifndef HINSTANCE +/
 struct HINSTANCE__;
-/+ Q_DECLARE_HANDLE(HINSTANCE) +/alias HINSTANCE = HINSTANCE__*;
+alias HINSTANCE = HINSTANCE__*;
+/+ Q_DECLARE_HANDLE(HINSTANCE); +/
 /+ #endif
 #ifndef HDC +/
 struct HDC__;
-/+ Q_DECLARE_HANDLE(HDC) +/alias HDC = HDC__*;
+alias HDC = HDC__*;
+/+ Q_DECLARE_HANDLE(HDC); +/
 /+ #endif
 #ifndef HWND +/
 struct HWND__;
-/+ Q_DECLARE_HANDLE(HWND) +/alias HWND = HWND__*;
+alias HWND = HWND__*;
+/+ Q_DECLARE_HANDLE(HWND); +/
 /+ #endif
 #ifndef HFONT +/
 struct HFONT__;
-/+ Q_DECLARE_HANDLE(HFONT) +/alias HFONT = HFONT__*;
+alias HFONT = HFONT__*;
+/+ Q_DECLARE_HANDLE(HFONT); +/
 /+ #endif
 #ifndef HPEN +/
 struct HPEN__;
-/+ Q_DECLARE_HANDLE(HPEN) +/alias HPEN = HPEN__*;
+alias HPEN = HPEN__*;
+/+ Q_DECLARE_HANDLE(HPEN); +/
 /+ #endif
 #ifndef HBRUSH +/
 struct HBRUSH__;
-/+ Q_DECLARE_HANDLE(HBRUSH) +/alias HBRUSH = HBRUSH__*;
+alias HBRUSH = HBRUSH__*;
+/+ Q_DECLARE_HANDLE(HBRUSH); +/
 /+ #endif
 #ifndef HBITMAP +/
 struct HBITMAP__;
-/+ Q_DECLARE_HANDLE(HBITMAP) +/alias HBITMAP = HBITMAP__*;
+alias HBITMAP = HBITMAP__*;
+/+ Q_DECLARE_HANDLE(HBITMAP); +/
 /+ #endif
 #ifndef HICON +/
 struct HICON__;
-/+ Q_DECLARE_HANDLE(HICON) +/alias HICON = HICON__*;
+alias HICON = HICON__*;
+/+ Q_DECLARE_HANDLE(HICON); +/
 /+ #endif
 #ifndef HCURSOR +/
 alias HCURSOR = HICON;
 /+ #endif
 #ifndef HPALETTE +/
 struct HPALETTE__;
-/+ Q_DECLARE_HANDLE(HPALETTE) +/alias HPALETTE = HPALETTE__*;
+alias HPALETTE = HPALETTE__*;
+/+ Q_DECLARE_HANDLE(HPALETTE); +/
 /+ #endif
 #ifndef HRGN +/
 struct HRGN__;
-/+ Q_DECLARE_HANDLE(HRGN) +/alias HRGN = HRGN__*;
+alias HRGN = HRGN__*;
+/+ Q_DECLARE_HANDLE(HRGN); +/
 /+ #endif
 #ifndef HMONITOR +/
 struct HMONITOR__;
-/+ Q_DECLARE_HANDLE(HMONITOR) +/alias HMONITOR = HMONITOR__*;
+alias HMONITOR = HMONITOR__*;
+/+ Q_DECLARE_HANDLE(HMONITOR); +/
 /+ #endif
 #ifndef _HRESULT_DEFINED +/
 alias HRESULT = cpp_long;
