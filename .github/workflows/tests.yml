@@ -57,7 +57,7 @@ jobs:
     container: ${{ matrix.container }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Debian packages
         if: ${{ matrix.platform == 'debian32' }}
@@ -82,7 +82,7 @@ jobs:
           echo "QTWEBENGINE_DISABLE_SANDBOX=1" >> "$GITHUB_ENV"
 
       - name: Checkout dxml
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: dxml
           repository: jmdavis/dxml
@@ -103,7 +103,7 @@ jobs:
       - name: Cache Qt
         id: cache-qt
         if: ${{ matrix.platform != 'debian32' }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: qt-lib
           key: ${{ runner.os }}-qt-${{ matrix.qt_version }}-${{ matrix.qt_arch }}-${{ matrix.qt_arch_url }}-${{ matrix.qt_platform }}-${{ hashFiles('ci/downloadqt.d') }}
