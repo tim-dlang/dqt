@@ -122,7 +122,7 @@ public:
     QModelRoleData* data() /*const*/ /+ noexcept+/ { return m_modelRoleData; }
     QModelRoleData* begin() /*const*/ /+ noexcept+/ { return m_modelRoleData; }
     QModelRoleData* end() /*const*/ /+ noexcept+/ { return m_modelRoleData + m_len; }
-    ref QModelRoleData opIndex(qsizetype index) const { return m_modelRoleData[index]; }
+    ref QModelRoleData opIndex(qsizetype index) /*const*/ { return m_modelRoleData[index]; }
 
 /+    QVariant* dataForRole(int role) const
     {
