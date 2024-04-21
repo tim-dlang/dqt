@@ -416,7 +416,6 @@ return QStringView(m_data, m_size - n);
 
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(QChar c, qsizetype from = -1, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, QStringView(&c, 1), cs);
     }
@@ -424,19 +423,16 @@ return QStringView(m_data, m_size - n);
     { return lastIndexOf(s, size(), cs); }
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(QStringView s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, s, cs);
     }
     /+ [[nodiscard]] +/ pragma(inline, true) qsizetype lastIndexOf(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, size(), s, cs);
     }
     /+ [[nodiscard]] +/ pragma(inline, true) qsizetype lastIndexOf(QLatin1String s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, s, cs);
     }
@@ -455,7 +451,6 @@ return QStringView(m_data, m_size - n);
     /+ template <typename T = QRegularExpressionMatch, std::enable_if_t<std::is_same_v<T, QRegularExpressionMatch>, bool> = false> +/
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(T,)(ref const(QRegularExpression) re, T* rmatch = null) const
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
 
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, re, size(), rmatch);
@@ -463,7 +458,6 @@ return QStringView(m_data, m_size - n);
 /+ #endif +/
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(ref const(QRegularExpression) re, qsizetype from, QRegularExpressionMatch* rmatch = null) const
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
 
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, re, from, rmatch);

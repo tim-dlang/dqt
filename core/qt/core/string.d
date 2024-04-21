@@ -186,7 +186,6 @@ return QLatin1Char(m_data[i]);
     { return lastIndexOf(s, size(), cs); }
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(QStringView s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, s, cs);
     }
@@ -194,13 +193,11 @@ return QLatin1Char(m_data[i]);
     { return lastIndexOf(s, size(), cs); }
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(QLatin1String s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, s, cs);
     }
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(QChar c, qsizetype from = -1, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, QStringView(&c, 1), cs);
     }
@@ -621,7 +618,6 @@ public:
     { return lastIndexOf(s, size(), cs); }
     /+ [[nodiscard]] +/ qsizetype lastIndexOf(QStringView s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
-        import qt.core.bytearrayalgorithms;
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(QStringView(this), from, s, cs);
     }
