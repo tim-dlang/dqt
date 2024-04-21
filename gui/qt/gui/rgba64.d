@@ -104,7 +104,7 @@ public:
         br = (br - ((br >> 8) & 0xffff0000ffffuL)) >> 8;
         ag = (ag - ((ag >> 8) & 0xffff0000ffffuL));
 /+ #if Q_BYTE_ORDER == Q_BIG_ENDIAN +/
-        static if (versionIsSet!("BigEndian"))
+        version (BigEndian)
         {
             return cast(uint) (((br << 24) & 0xff000000)
                  | ((ag >> 24) & 0xff0000)
@@ -140,7 +140,7 @@ public:
         quint64 ag = ((rgba >> 16) & 0xffff0000ffffuL) * a;
         br = (br + ((br >> 16) & 0xffff0000ffffuL) + 0x800000008000uL);
         ag = (ag + ((ag >> 16) & 0xffff0000ffffuL) + 0x800000008000uL);
-        static if (versionIsSet!("BigEndian"))
+        version (BigEndian)
         {
             ag = ag & 0xffff0000ffff0000uL;
             br = (br >> 16) & 0xffff00000000uL;

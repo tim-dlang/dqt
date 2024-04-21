@@ -212,7 +212,7 @@ public:
 QT_WARNING_DISABLE_DEPRECATED
 #if defined(Q_OS_WIN) || defined(Q_OS_CYGWIN)
     QT_SYSINFO_DEPRECATED_X("Use QOperatingSystemVersion::current()") +/ 
-    static if (versionIsSet!("Windows"))
+    version (Windows)
     {
         extern export static __gshared const(WinVersion) WindowsVersion;
         /+ QT_SYSINFO_DEPRECATED_X("Use QOperatingSystemVersion::current()") +/ static WinVersion windowsVersion();

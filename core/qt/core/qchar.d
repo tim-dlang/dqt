@@ -109,7 +109,8 @@ public:
     } // implicit
 /+ #endif
 #if defined(Q_OS_WIN) +/
-    static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    version (Cygwin) {} else
+    version (Windows)
     {
         mixin(Q_STATIC_ASSERT(q{wchar_t.sizeof == ushort.sizeof}));
     }
