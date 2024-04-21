@@ -137,7 +137,8 @@ public:
 
     // Platform specific conversion functions
 /+ #if defined(Q_OS_WIN) || defined(Q_QDOC) +/
-    static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    version (Cygwin) {} else
+    version (Windows)
     {
         HRGN toHRGN() const;
         static QRegion fromHRGN(HRGN hrgn);

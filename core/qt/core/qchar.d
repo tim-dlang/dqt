@@ -133,7 +133,8 @@ public:
         this.ucs = ch;
     }
 /+ #if defined(Q_OS_WIN) || defined(Q_CLANG_QDOC) +/
-    /+ static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    /+ version (Cygwin) {} else
+    version (Windows)
     {
         this(wchar_t ch)/+ noexcept+/
         {

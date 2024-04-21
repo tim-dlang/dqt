@@ -327,7 +327,8 @@ public:
     }
 /+ #endif
 #if defined(Q_OS_WIN) || defined(Q_QDOC) +/
-    static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
+    version (Cygwin) {} else
+    version (Windows)
     {
         HBITMAP toHBITMAP() const;
         HICON toHICON(ref const(QImage) mask /+ = {} +/) const;
