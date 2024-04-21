@@ -409,18 +409,11 @@ public:
             }
         }
 
-        static if (#configValue!"merged")
-        {
         auto detached = DataPointer(Data.allocate(qMax(asize, size())));
-        }
-    static if (#configValue!"merged")
-    {
-    DataPointer detached__1();
-    }
-        detached__1.copyAppend(constBegin(), constEnd());
-        if (detached__1.d_ptr())
-            detached__1.setFlag(Data.CapacityReserved);
-        d.swap(detached__1);
+        detached.copyAppend(constBegin(), constEnd());
+        if (detached.d_ptr())
+            detached.setFlag(Data.CapacityReserved);
+        d.swap(detached);
     }+/
 /+    pragma(inline, true) void squeeze()
     {
