@@ -62,12 +62,12 @@ version (QT_NO_TRANSLATION) {} else
 /+ # define SLOT(a)     "1"#a +/
 extern(D) alias SLOT = function string(string a)
 {
-    return     mixin(interpolateMixin(q{"1" ~$(stringifyMacroParameter(a))}));
+    return     mixin(interpolateMixin(q{"1"~ $(stringifyMacroParameter(a))}));
 };
 /+ # define SIGNAL(a)   "2"#a +/
 extern(D) alias SIGNAL = function string(string a)
 {
-    return   mixin(interpolateMixin(q{"2" ~$(stringifyMacroParameter(a))}));
+    return   mixin(interpolateMixin(q{"2"~ $(stringifyMacroParameter(a))}));
 };
 /+ #endif
 
