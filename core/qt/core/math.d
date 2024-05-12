@@ -46,11 +46,7 @@ enum QT_SINE_TABLE_SIZE = 256;
 
 int qCeil(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::ceil; +/
     return cast(int) (ceil(v));
@@ -58,11 +54,7 @@ int qCeil(T)(T v)
 
 int qFloor(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::floor; +/
     return cast(int) (floor(v));
@@ -70,11 +62,7 @@ int qFloor(T)(T v)
 
 auto qFabs(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::fabs; +/
     return fabs(v);
@@ -260,11 +248,7 @@ auto qExp(T)(T v)
 
 auto qPow(T1, T2)(T1 x, T2 y)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::pow; +/
     return pow(x, y);

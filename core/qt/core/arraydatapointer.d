@@ -145,7 +145,7 @@ public:
         std.algorithm.swap(size, other.size);
     }
 
-    void clear() /+ noexcept(std::is_nothrow_destructible<T>::value) +/
+    void clear()/+ noexcept(is_nothrow_destructible<T>.value)+/
     {
         QArrayDataPointer tmp;
         swap(tmp);

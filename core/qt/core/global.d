@@ -728,7 +728,7 @@ pragma(inline, true) T qAbs(T)(ref const(T) t) { return t >= 0 ? t : -t; }
 pragma(inline, true) T qAbs(T)(const(T) t) { return t >= 0 ? t : -t; }
 
 // gcc < 10 doesn't have __has_builtin
-static if (defined!"Q_PROCESSOR_ARM_64" || defined!"_M_ARM64" || defined!"__ARM64__" || versionIsSet!("AArch64"))
+version (AArch64)
 {
 // ARM64 has a single instruction that can do C++ rounding with conversion to integer.
 // Note current clang versions have non-constexpr __builtin_round, ### allow clang this path when they fix it.
@@ -741,7 +741,7 @@ pragma(inline, true) qint64 qRound64(double d)
 pragma(inline, true) qint64 qRound64(float f)
 { return qint64(__builtin_roundf(f)); }
 }
-static if (!defined!"Q_PROCESSOR_ARM_64" && !defined!"_M_ARM64" && !defined!"__ARM64__" && defined!"__SSE2__" && !versionIsSet!("AArch64"))
+static if (defined!"__SSE2__")
 {
 // SSE has binary operations directly on floating point making copysign fast
 pragma(inline, true) int qRound(double d)
@@ -753,7 +753,7 @@ pragma(inline, true) qint64 qRound64(double d)
 pragma(inline, true) qint64 qRound64(float f)
 { return cast(qint64) (f + __builtin_copysignf(0.5f, f)); }
 }
-static if (!defined!"Q_PROCESSOR_ARM_64" && !defined!"_M_ARM64" && !defined!"__ARM64__" && !defined!"__SSE2__" && !versionIsSet!("AArch64"))
+static if (!defined!"__SSE2__" && !versionIsSet!("AArch64"))
 {
 pragma(inline, true) int qRound(double d)
 { return d >= 0.0 ? cast(int) (d + 0.5) : cast(int) (d - 0.5); }

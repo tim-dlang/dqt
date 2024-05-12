@@ -93,10 +93,10 @@ public:
     final bool wait(QDeadlineTimer deadline = QDeadlineTimer(QDeadlineTimer.ForeverConstant.Forever));
 /+    final bool wait(cpp_ulong  time)
     {
-        static if (versionIsSet!("CPPCONV_OS_LINUX") && !defined!"__WEBOS__" && (defined!"ANDROID" || defined!"__ANDROID__"))
+        version (Android)
             import qt.core.global;
-        static if (!versionIsSet!("CPPCONV_OS_LINUX") || defined!"__WEBOS__" || (!defined!"ANDROID" && !defined!"__ANDROID__"))
-            import libc.time;
+        version (Android) {} else
+            import core.stdc.time;
 
         if (time == (/+ std:: +/numeric_limits!(cpp_ulong).max)())
             return wait(QDeadlineTimer(QDeadlineTimer.ForeverConstant.Forever));
