@@ -2404,9 +2404,9 @@ public:
     }
 }
 
-struct QMetaTypeInterfaceWrapper(T)
+extern(D) struct QMetaTypeInterfaceWrapper(T)
 {
-    extern(D) static /*immutable*/ QMetaTypeInterface metaType = {
+    extern(D) static __gshared /*immutable*/ QMetaTypeInterface metaType = {
         /*.revision=*/ 0,
         /*.alignment=*/ T.alignof,
         /*.size=*/ T.sizeof,
@@ -2556,7 +2556,13 @@ template qt_incomplete_metaTypeArray(Unique, T...)
     extern(D) mixin((){
         import std.conv;
         string code = text("extern(D) const __gshared QMetaTypeInterface*[", T.length, "] qt_incomplete_metaTypeArray = [");
-        code ~= "T";
+        static foreach (i; 0 .. T.length)
+        {
+            static if (is(T[i] == void))
+                code ~= text("null, ");
+            else
+                code ~= text("&T[", i, "].metaType, ");
+        }
         code ~= "];";
         return code;
     }());

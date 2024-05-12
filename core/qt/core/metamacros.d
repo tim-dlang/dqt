@@ -357,7 +357,7 @@ template MetaObjectImpl(T)
             static foreach (i; 0 .. M.length)
             {{
                 size_t nameId = addString(__traits(identifier, M[i]));
-                size_t parameterCount = Parameters!(M[i]).length;
+                enum size_t parameterCount = Parameters!(M[i]).length;
                 uint flags;
                 flags |= 2; // Public // TODO
                 if(typename == "signals")
@@ -369,8 +369,9 @@ template MetaObjectImpl(T)
                 }));
                 currentOutputIndex += 1 + 2 * parameterCount;
                 initialMetatypeOffsets += 1 + parameterCount;
-                foreach (j; 0 .. 1 + parameterCount)
-                    metaTypes ~= ", null";
+                metaTypes ~= ", void"; // TODO: correct return type
+                static foreach (j; 0 .. parameterCount)
+                    metaTypes ~= ", __traits(toType, \"" ~ QMetaTypeInterfaceWrapper!(Unqual!(Parameters!(M[i])[j])).mangleof ~  "\")";
             }}
         }
         addMethods!(allSignals)("signals", 4);

@@ -19,7 +19,6 @@ QCoreApplication app;
 shared static this()
 {
     import core.runtime;
-    qRegisterMetaType!(int*)("int*");
     app = new QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
     assert(QCoreApplication.instance() is app);
 }
