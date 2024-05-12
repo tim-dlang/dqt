@@ -16,6 +16,7 @@ import qt.config;
 import qt.core.abstractitemmodel;
 import qt.core.flags;
 import qt.core.list;
+import qt.core.metatype;
 import qt.core.object;
 import qt.core.typeinfo;
 import qt.helpers;
@@ -24,16 +25,10 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QItemSelectionRange](https://doc.qt.io/qt-5/qitemselectionrange.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelectionRange
+@Q_DECLARE_METATYPE @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelectionRange
 {
 
 public:
-    @disable this();
-    /+pragma(inline, true) this()
-    {
-        this.tl = typeof(this.tl)();
-        this.br = typeof(this.br)();
-    }+/
 /+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0) +/
     // ### Qt 6: remove them all, the compiler-generated ones are fine
     @disable this(this);
@@ -245,7 +240,7 @@ Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QList<QItemSelectionRange>;
 #endif +/ // Q_CC_MSVC
 
 /// Binding for C++ class [QItemSelection](https://doc.qt.io/qt-5/qitemselection.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelection
+@Q_DECLARE_METATYPE @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelection
 {
     public QList!(QItemSelectionRange) base0;
     alias base0 this;

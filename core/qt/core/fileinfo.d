@@ -18,6 +18,7 @@ import qt.core.dir;
 import qt.core.file;
 import qt.core.global;
 import qt.core.list;
+import qt.core.metatype;
 import qt.core.shareddata;
 import qt.core.string;
 import qt.core.typeinfo;
@@ -27,7 +28,7 @@ extern(C++, class) struct QDirIteratorPrivate;
 extern(C++, class) struct QFileInfoPrivate;
 
 /// Binding for C++ class [QFileInfo](https://doc.qt.io/qt-5/qfileinfo.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QFileInfo
+@Q_DECLARE_METATYPE @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QFileInfo
 {
 private:
     /+ friend class QDirIteratorPrivate; +/

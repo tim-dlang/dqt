@@ -54,7 +54,7 @@ template QTypeInfo(T)
         enum isComplex = false;
         enum isStatic = false;
     }
-    else static if (is(T == int) || is(T == uint) || is(T == double) || is(T == char))
+    else static if (is(T == int) || is(T == uint) || is(T == float) || is(T == double) || is(T == char))
     {
         enum isRelocatable = true;
         enum isComplex = false;

@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.global;
 import qt.core.margins;
+import qt.core.metatype;
 import qt.core.rect;
 import qt.core.shareddata;
 import qt.core.typeinfo;
@@ -24,7 +25,7 @@ import qt.helpers;
 extern(C++, class) struct QPageLayoutPrivate;
 
 /// Binding for C++ class [QPageLayout](https://doc.qt.io/qt-5/qpagelayout.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageLayout
+@Q_DECLARE_METATYPE @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageLayout
 {
 public:
 

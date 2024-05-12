@@ -16,6 +16,7 @@ import qt.config;
 import qt.core.arraydata;
 import qt.core.global;
 import qt.core.list;
+import qt.core.metatype;
 import qt.core.typeinfo;
 import qt.helpers;
 
@@ -25,7 +26,7 @@ import qt.helpers;
 #endif +/
 
 /// Binding for C++ class [QVector](https://doc.qt.io/qt-5/qvector.html).
-extern(C++, class) struct QVector(T)
+@Q_DECLARE_METATYPE extern(C++, class) struct QVector(T)
 {
 private:
     alias Data = QTypedArrayData!(T);

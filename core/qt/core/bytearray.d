@@ -236,11 +236,11 @@ alias Base64Options = QFlags!(Base64Option);
     pragma(inline, true) const(char)* constData() const
     { return cast(const(char)*) (d.data()); }
 
-    extern(D) const(ubyte)[] toConstUByteArray()
+    extern(D) const(ubyte)[] toConstUByteArray() const
     {
         return (cast(const(ubyte)*) constData())[0..length];
     }
-    extern(D) const(char)[] toConstCharArray()
+    extern(D) const(char)[] toConstCharArray() const
     {
         return (cast(const(char)*) constData())[0..length];
     }
@@ -572,6 +572,16 @@ alias Base64Options = QFlags!(Base64Option);
     pragma(inline, true) this(QByteArrayDataPtr dd)
     {
         this.d = static_cast!(Data*)(dd.ptr);
+    }
+
+    bool opEquals(const QByteArray a2) const
+    {
+        import core.stdc.string;
+        return (this.size() == a2.size()) && (memcmp(this.constData(), a2.constData(), this.size())==0);
+    }
+    int opCmp(const QByteArray a2) const
+    {
+        return qstrcmp(this, a2);
     }
 
 private:

@@ -13,9 +13,10 @@ module qt.core.pair;
 extern(C++):
 
 import qt.config;
+import qt.core.metatype;
 import qt.helpers;
 
-struct QPair(T1, T2)
+@Q_DECLARE_METATYPE struct QPair(T1, T2)
 {
     alias first_type = T1;
     alias second_type = T2;

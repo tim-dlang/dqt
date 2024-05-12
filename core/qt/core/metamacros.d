@@ -332,9 +332,9 @@ template MetaObjectImpl(T)
             else static if (is(T2 == struct) || is(T2 == union) || is(T2 == enum))
             {
                 static if (__traits(getLinkage, T2) == "D")
-                    return T2.mangleof ~ "*";
+                    return T2.mangleof;
                 else
-                    return __traits(identifier, T2) ~ "*";
+                    return __traits(identifier, T2);
             }
             else
                 static assert("TODO: Type not yet supported ", T2.stringof);
@@ -582,7 +582,11 @@ enum Q_SIGNAL_IMPL_D = q{
     void*[std.traits.Parameters!(__traits(parent, Dummy)).length + 1] _a = mixin((){
         string r = "[null";
         static foreach (i; 0 .. std.traits.Parameters!(__traits(parent, Dummy)).length)
-            r ~= " , cast(void*)&" ~ std.traits.ParameterIdentifierTuple!(__traits(parent, Dummy))[i];
+        {{
+            enum paramName = std.traits.ParameterIdentifierTuple!(__traits(parent, Dummy))[i];
+            static assert(paramName != "", "Parameter for signal has no name");
+            r ~= " , cast(void*)&" ~ paramName;
+        }}
         r ~= "]";
         return r;
         }());

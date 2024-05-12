@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
+import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.shareddata;
 import qt.core.size;
@@ -26,7 +27,7 @@ import qt.helpers;
 
 extern(C++, class) struct QStaticTextPrivate;
 /// Binding for C++ class [QStaticText](https://doc.qt.io/qt-5/qstatictext.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QStaticText
+@Q_DECLARE_METATYPE @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QStaticText
 {
 public:
     enum PerformanceHint {

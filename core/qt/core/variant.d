@@ -102,7 +102,7 @@ extern(C++, "QtPrivate") {
 }
 
 /// Binding for C++ class [QVariant](https://doc.qt.io/qt-5/qvariant.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QVariant
+/*@Q_DECLARE_METATYPE*/ @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QVariant
 {
  public:
     enum Type {

@@ -140,6 +140,9 @@ public:
         this.i = flag;
     }
 
+    version(Windows)
+        ~this(){} // Makes sure, that QFlags as return type is passed as a hidden pointer parameter.
+
     /+ inline QFlags(std::initializer_list<Enum> flags) noexcept
         : i(initializer_list_helper(flags.begin(), flags.end())) {} +/
 

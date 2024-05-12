@@ -21,6 +21,7 @@ import qt.core.global;
 import qt.core.iodevice;
 import qt.core.list;
 import qt.core.metamacros;
+import qt.core.metatype;
 import qt.core.mimedata;
 import qt.core.namespace;
 import qt.core.object;

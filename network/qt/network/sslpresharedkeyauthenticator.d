@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.bytearray;
+import qt.core.metatype;
 import qt.core.shareddata;
 import qt.core.typeinfo;
 import qt.helpers;
@@ -24,7 +25,7 @@ import qt.helpers;
 extern(C++, class) struct QSslPreSharedKeyAuthenticatorPrivate;
 
 /// Binding for C++ class [QSslPreSharedKeyAuthenticator](https://doc.qt.io/qt-5/qsslpresharedkeyauthenticator.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct QSslPreSharedKeyAuthenticator
+@Q_DECLARE_METATYPE @Q_MOVABLE_TYPE extern(C++, class) struct QSslPreSharedKeyAuthenticator
 {
 public:
     @disable this();

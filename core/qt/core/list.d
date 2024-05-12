@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
+import qt.core.metatype;
 import qt.core.refcount;
 import qt.core.vector;
 import qt.core.typeinfo;
@@ -96,7 +97,7 @@ extern(C++, "QtPrivate") {
 }
 
 /// Binding for C++ class [QList](https://doc.qt.io/qt-5/qlist.html).
-extern(C++, class) struct QList(T)
+@Q_DECLARE_METATYPE extern(C++, class) struct QList(T)
 /+ #ifndef Q_QDOC +/
 
 /+ #endif +/

@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
+import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.pair;
 import qt.core.typeinfo;
@@ -29,7 +30,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QDeadlineTimer](https://doc.qt.io/qt-5/qdeadlinetimer.html).
-@Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDeadlineTimer
+@Q_DECLARE_METATYPE @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QDeadlineTimer
 {
 public:
     enum ForeverConstant { Forever }
