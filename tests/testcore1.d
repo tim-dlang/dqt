@@ -232,11 +232,12 @@ void checkType(T, bool isDefined1, bool isDefined2, int id, int flags)()
 
     if (id >= 0)
     {
+        import std.conv;
         QMetaType metaType = QMetaType(realId);
         assert(metaType.id() == realId);
         static if (!is(T == void))
-            assert(metaType.sizeOf() == T.sizeof);
-        //assert(metaType.flags() == flags);
+            assert(metaType.sizeOf() == T.sizeof, text(T.stringof, " ", metaType.sizeOf(), " ", T.sizeof));
+        //assert(metaType.flags() == flags, text(T.stringof, " ", metaType.flags(), " ", flags));
 
         T* instance = cast(T*) metaType.create();
         assert(instance || id == QMetaType.Type.Void);
