@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.basicatomic;
 import qt.core.global;
+import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.object;
 import qt.helpers;
@@ -269,7 +270,7 @@ extern(C++, "QtSharedPointer") {
     { return A1 != A2; } +/
 
 /// Binding for C++ class [QSharedPointer](https://doc.qt.io/qt-6/qsharedpointer.html).
-extern(C++, class) struct QSharedPointer(T)
+@Q_DECLARE_METATYPE extern(C++, class) struct QSharedPointer(T)
 {
 private:
     alias Data = /+ QtSharedPointer:: +/ExternalRefCountData;

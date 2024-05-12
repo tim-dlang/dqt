@@ -591,17 +591,17 @@ public:
         Q_STATIC_ASSERT_X((QtPrivate::AreArgumentsCompatible<typename SlotType::ReturnType, typename SignalType::ReturnType>::value),
                           "Return type of the slot is not compatible with the return type of the signal.");*/
 
-        const int *types = null;
-        if (type == ConnectionType.QueuedConnection || type == ConnectionType.BlockingQueuedConnection)
-        {
-            assert(false);
-            //types = QtPrivate::ConnectionTypes<typename SignalType::Arguments>::types();
-        }
-
         static assert(Signal.Members.length == 1);
 
         auto signal = getMemberFunctionAddress!(Signal.Members[0]);
         alias UsedParams = Parameters!(Signal.Members[0])[0..Parameters!(Dg).length];
+
+        const(int)* types = null;
+        if (type == ConnectionType.QueuedConnection || type == ConnectionType.BlockingQueuedConnection)
+        {
+            import qt.core.object_impl;
+            types = ConnectionTypes!(Parameters!(Signal.Members[0])).types();
+        }
 
         auto slotObj = cpp_new!(DQtStaticSlotObject!(Dg, UsedParams))(dg);
 
@@ -650,13 +650,6 @@ public:
                           "Signal and slot arguments are not compatible.");
         Q_STATIC_ASSERT_X((QtPrivate::AreArgumentsCompatible<typename SlotType::ReturnType, typename SignalType::ReturnType>::value),
                           "Return type of the slot is not compatible with the return type of the signal.");+/
-
-        const int *types = null;
-        if (type == ConnectionType.QueuedConnection || type == ConnectionType.BlockingQueuedConnection)
-        {
-            assert(false); // TODO
-            //types = QtPrivate::ConnectionTypes<typename SignalType::Arguments>::types();
-        }
 
         enum size_t[2] overloadIndices = delegate size_t[2](){
             size_t[2] r = [size_t.max, size_t.max];
@@ -709,6 +702,13 @@ public:
         auto slot = getMemberFunctionAddress!(Slot.Members[overloadIndices[1]]);
 
         alias UsedParams = Parameters!(Signal.Members[overloadIndices[0]])[0..Parameters!(Slot.Members[overloadIndices[1]]).length];
+
+        const(int)* types = null;
+        if (type == ConnectionType.QueuedConnection || type == ConnectionType.BlockingQueuedConnection)
+        {
+            import qt.core.object_impl;
+            types = ConnectionTypes!(Parameters!(Signal.Members[overloadIndices[0]])).types();
+        }
 
         auto slotObj = cpp_new!(DQtMemberSlotObject!(typeof(Slot.obj), Slot.Members[overloadIndices[1]], UsedParams))(0);
 

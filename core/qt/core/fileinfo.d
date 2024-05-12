@@ -19,6 +19,7 @@ import qt.core.file;
 import qt.core.filedevice;
 import qt.core.global;
 import qt.core.list;
+import qt.core.metatype;
 import qt.core.shareddata;
 import qt.core.string;
 import qt.core.typeinfo;
@@ -33,7 +34,7 @@ static if (false)
 /+ #define QFILEINFO_MAYBE_EXPLICIT explicit +/
 
 /// Binding for C++ class [QFileInfo](https://doc.qt.io/qt-6/qfileinfo.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QFileInfo
+@Q_DECLARE_METATYPE @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QFileInfo
 {
 private:
     /+ friend class QDirIteratorPrivate; +/

@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.metamacros;
+import qt.core.metatype;
 import qt.core.shareddata;
 import qt.helpers;
 
@@ -25,7 +26,7 @@ extern(C++, class) struct FindTextHelper;
 extern(C++, class) struct QWebEngineFindTextResultPrivate;
 
 /// Binding for C++ class [QWebEngineFindTextResult](https://doc.qt.io/qt-6/qwebenginefindtextresult.html).
-extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineFindTextResult
+@Q_DECLARE_METATYPE extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineFindTextResult
 {
     mixin(Q_GADGET);
     /+ Q_PROPERTY(int numberOfMatches READ numberOfMatches CONSTANT FINAL)

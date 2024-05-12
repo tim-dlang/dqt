@@ -153,11 +153,11 @@ alias Base64Options = QFlags!(Base64Option);
     pragma(inline, true) const(char)* constData() const
     { return data(); }
 
-    extern(D) const(ubyte)[] toConstUByteArray()
+    extern(D) const(ubyte)[] toConstUByteArray() const
     {
         return (cast(const(ubyte)*)constData())[0..length];
     }
-    extern(D) const(char)[] toConstCharArray()
+    extern(D) const(char)[] toConstCharArray() const
     {
         return (cast(const(char)*)constData())[0..length];
     }
@@ -589,6 +589,21 @@ alias Base64Options = QFlags!(Base64Option);
     /+ explicit +/ pragma(inline, true) this(ref DataPointer dd)
     {
         this.d = dd;
+    }
+
+    bool opEquals(const QByteArray a2) const
+    {
+        return QByteArrayView(this) == QByteArrayView(a2);
+    }
+    int opCmp(const QByteArray a2) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return compareMemory(QByteArrayView(this), QByteArrayView(a2));
+    }
+    bool opEquals(const char* a2) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return a2 ? compareMemory(QByteArrayView(this), QByteArrayView(a2)) == 0 : this.isEmpty();
     }
 
 private:

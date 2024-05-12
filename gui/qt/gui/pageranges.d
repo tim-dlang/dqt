@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.list;
+import qt.core.metatype;
 import qt.core.shareddata;
 import qt.core.string;
 import qt.core.typeinfo;
@@ -23,7 +24,7 @@ import qt.helpers;
 extern(C++, class) struct QPageRangesPrivate;
 /+ QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QPageRangesPrivate, Q_GUI_EXPORT) +/
 /// Binding for C++ class [QPageRanges](https://doc.qt.io/qt-6/qpageranges.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageRanges
+@Q_DECLARE_METATYPE @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QPageRanges
 {
 public:
     @disable this();

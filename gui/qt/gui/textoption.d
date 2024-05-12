@@ -16,6 +16,7 @@ import qt.config;
 import qt.core.flags;
 import qt.core.global;
 import qt.core.list;
+import qt.core.metatype;
 import qt.core.namespace;
 import qt.core.qchar;
 import qt.helpers;
@@ -34,7 +35,7 @@ public:
     }
 
     // Workaround for https://issues.dlang.org/show_bug.cgi?id=20701
-    extern(C++, struct) struct /+ Q_GUI_EXPORT +/ Tab {
+    @Q_DECLARE_METATYPE extern(C++, struct) struct /+ Q_GUI_EXPORT +/ Tab {
         @disable this();
         /+pragma(inline, true) this()
         {

@@ -17,6 +17,7 @@ import qt.core.arraydata;
 import qt.core.arraydataops;
 import qt.core.arraydatapointer;
 import qt.core.global;
+import qt.core.metatype;
 import qt.core.string;
 import qt.core.typeinfo;
 import qt.helpers;
@@ -73,7 +74,7 @@ template<typename T> class QVector : public QList<T> {};
 #endif +/
 
 /// Binding for C++ class [QList](https://doc.qt.io/qt-6/qlist.html).
-extern(C++, class) struct QList(T)
+@Q_DECLARE_METATYPE extern(C++, class) struct QList(T)
 /+ #ifndef Q_QDOC +/
 
 /+ #endif +/

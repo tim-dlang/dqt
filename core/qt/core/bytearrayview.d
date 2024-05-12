@@ -355,6 +355,17 @@ public:
     /+ friend inline bool operator>=(QByteArrayView lhs, QByteArrayView rhs) noexcept
     { return !(lhs < rhs); } +/
 
+    bool opEquals(const QByteArrayView rhs) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return this.size() == rhs.size() && compareMemory(this, rhs) == 0;
+    }
+    int opCmp(const QByteArrayView rhs) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return compareMemory(this, rhs);
+    }
+
 private:
     qsizetype m_size = 0;
     const(storage_type)* m_data = null;

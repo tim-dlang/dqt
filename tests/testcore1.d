@@ -4,6 +4,8 @@ module testcore1;
 import qt.config;
 import qt.core.coreapplication;
 import qt.core.list;
+import qt.core.metatype;
+import qt.core.namespace;
 import qt.core.object;
 import qt.core.string;
 import qt.core.typeinfo;
@@ -11,14 +13,44 @@ import qt.core.variant;
 import qt.core.vector;
 import qt.helpers;
 import std.stdio;
+import std.string;
 
 QCoreApplication app;
 shared static this()
 {
     import core.runtime;
+    qRegisterMetaType!(int*)("int*");
     app = new QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
     assert(QCoreApplication.instance() is app);
 }
+
+@Q_DECLARE_METATYPE extern(C++) struct CustomStruct1
+{
+    int i = 0;
+    static __gshared int numConstructed;
+    static __gshared int numCopied;
+    static __gshared int numDestructed;
+
+    this(int i)
+    {
+        this.i = i;
+
+        numConstructed++;
+    }
+    @disable this(this);
+    this(ref const(CustomStruct1) other)
+    {
+        this.i =  other.i;
+
+        numCopied++;
+    }
+    ~this()
+    {
+        i = -1;
+        numDestructed++;
+    }
+}
+/+ Q_DECLARE_METATYPE(CustomStruct1); +/
 
 class TestObject : QObject
 {
@@ -64,6 +96,14 @@ public:
     {
         /+ emit +/ signalPointerInt(p);
     }
+    @QInvokable final void emitSignalObjects(QObject o1, TestObject o2)
+    {
+        /+ emit +/ signalObjects(o1, o2);
+    }
+    @QInvokable final void emitSignalCustomStruct1(CustomStruct1 s)
+    {
+        /+ emit +/ signalCustomStruct1(s);
+    }
 
 /+ signals +/public:
     @QSignal final void signalVoid() {mixin(Q_SIGNAL_IMPL_D);}
@@ -74,6 +114,8 @@ public:
     @QSignal final void signalListInt(ref const(QList!(int)) l) {mixin(Q_SIGNAL_IMPL_D);}
     @QSignal final void signalVectorInt(ref const(QVector!(int)) v) {mixin(Q_SIGNAL_IMPL_D);}
     @QSignal final void signalPointerInt(int* p) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalObjects(QObject o1, TestObject o2) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalCustomStruct1(CustomStruct1 s) {mixin(Q_SIGNAL_IMPL_D);}
 
 public /+ slots +/:
     @QSlot final void onSignalVoid()
@@ -110,7 +152,16 @@ public /+ slots +/:
     }
     @QSlot final void onSignalPointerInt(int* p)
     {
-        lastStr = "int* " ~ QString.number(*p);
+        lastStr = "int* " ~ QString.number(*p) ~ " 0x" ~ QString.number(cast(ulong) p, 16);
+    }
+    @QSlot final void onSignalObjects(QObject o1, TestObject o2)
+    {
+        lastStr = "objects " ~ o1.objectName() ~ " " ~ QString(fromStringz(o1.metaObject().className())) ~ " 0x" ~ QString.number(cast(ulong) cast(void*) o1, 16)
+                       ~ " " ~ o2.objectName() ~ " " ~ QString(fromStringz(o2.metaObject().className())) ~ " 0x" ~ QString.number(cast(ulong) cast(void*) o2, 16);
+    }
+    @QSlot final void onSignalCustomStruct1(CustomStruct1 s)
+    {
+        lastStr = "CustomStruct1 " ~ QString.number(s.i);
     }
 
 }
@@ -137,11 +188,68 @@ unittest
     assert(s.toConstWString == "QString::fromUcs4: abc äöüÄÖÜßẞ αβ ∃∀ ∨∧⊥¬ ≤≥≠ 𝕆🎵🎶"w);
 }
 
-void checkType(T, bool relocatable, bool complex)()
+void checkType(T, bool isDefined1, bool isDefined2, int id, int flags)()
 {
-    //writefln("checkType!(%s, %d, %d)();\n", T.stringof, QTypeInfo!T.isRelocatable, QTypeInfo!T.isComplex);
+    int realId = /+ QtPrivate:: +/qt.core.metatype.QMetaTypeIdHelper!(T).qt_metatype_id();
+    /*string idName;
+    if (/+ QtPrivate:: +/qt.core.metatype.QMetaTypeIdHelper!(T).qt_metatype_id() < 0)
+        idName = "-1";
+    else if (/+ QtPrivate:: +/qt.core.metatype.QMetaTypeIdHelper!(T).qt_metatype_id() < QMetaType.Type.User)
+        idName = "QMetaType.Type." ~ T.stringof;
+    else
+        idName = "QMetaType.Type.User";
+    writef("    checkType!(%s, %d, %d, %s, ", T.stringof, QMetaTypeId!T.Defined, QMetaTypeId2!T.Defined, idName);
+    bool first = true;
+    foreach (name; __traits(allMembers, QMetaType.TypeFlag))
+    {
+        if (name == "MovableType") // alias
+            continue;
+        if (QMetaTypeTypeFlags!T.Flags & __traits(getMember, QMetaType.TypeFlag, name))
+        {
+            if (!first)
+                write(" | ");
+            write("QMetaType.TypeFlag.", name);
+            first = false;
+        }
+    }
+    if (first)
+        write("0");
+    writeln(")();");*/
+
+    enum bool relocatable = (flags & QMetaType.TypeFlag.RelocatableType) != 0;
+    enum bool complex = (flags & QMetaType.TypeFlag.NeedsConstruction) != 0;
+
     static assert(QTypeInfo!(T).isRelocatable == relocatable);
     static assert(QTypeInfo!(T).isComplex == complex);
+    static assert(QMetaTypeId!(T).Defined == isDefined1);
+    static assert(QMetaTypeId2!(T).Defined == isDefined2);
+    if (id < 0)
+        assert(realId < 0);
+    else if (id < QMetaType.Type.User)
+        assert(realId == id);
+    else
+        assert(realId >= QMetaType.Type.User);
+    static assert(/+ QtPrivate:: +/QMetaTypeTypeFlags!(T).Flags == flags);
+
+    if (id >= 0)
+    {
+        QMetaType metaType = QMetaType(realId);
+        assert(metaType.id() == realId);
+        static if (!is(T == void))
+            assert(metaType.sizeOf() == T.sizeof);
+        //assert(metaType.flags() == flags);
+
+        T* instance = cast(T*) metaType.create();
+        assert(instance || id == QMetaType.Type.Void);
+        if (instance)
+        {
+            T* instance2 = cast(T*) metaType.create(instance);
+            assert(instance2);
+            assert(instance != instance2);
+            metaType.destroy(instance);
+            metaType.destroy(instance2);
+        }
+    }
 }
 
 unittest
@@ -149,56 +257,78 @@ unittest
     import core.stdc.wchar_;
     import qt.core.abstractitemmodel;
     import qt.core.bytearray;
+    import qt.core.bytearraylist;
+    import qt.core.flags;
+    import qt.core.global;
     import qt.core.itemselectionmodel;
     import qt.core.line;
     import qt.core.locale;
-    import qt.core.namespace;
     import qt.core.pair;
     import qt.core.point;
+    import qt.core.qchar;
     import qt.core.size;
+    import qt.core.stringlist;
     import qt.core.stringview;
     import qt.core.timezone;
     import qt.core.url;
 
-    checkType!(double, 1, 0)();
-    checkType!(int, 1, 0)();
-    checkType!(uint, 1, 0)();
-    checkType!(int*, 1, 0)();
-    checkType!(void*, 1, 0)();
-    checkType!(void, 0, 0)();
-    checkType!(ubyte, 1, 0)();
-    checkType!(char, 1, 0)();
-    checkType!(wchar, 1, 0)();
-    checkType!(wchar_t, 1, 0)();
-    checkType!(QLocale.Country, 1, 0)();
-    checkType!(/+ Qt:: +/qt.core.namespace.DayOfWeek, 1, 0)();
-    checkType!(QTimeZone.OffsetData, 1, 1)();
-    checkType!(QByteArray, 1, 1)();
-    checkType!(QItemSelectionRange, 1, 1)();
-    checkType!(QLine, 1, 1)();
-    checkType!(QLineF, 1, 1)();
-    checkType!(QLocale, 1, 1)();
-    checkType!(QModelIndex, 1, 1)();
-    checkType!(QObject, 1, 0)();
-    checkType!(qt.core.pair.QPair!(double, QSize), 1, 1)();
-    checkType!(QPersistentModelIndex, 1, 1)();
-    checkType!(QPoint, 1, 0)();
-    checkType!(QPointF, 1, 0)();
-    checkType!(QSize, 1, 1)();
-    checkType!(QString, 1, 1)();
-    checkType!(QStringView, 1, 0)();
-    checkType!(QUrl, 1, 1)();
-    checkType!(QVariant, 1, 1)();
-    checkType!(QAbstractItemModel, 1, 0)();
-    checkType!(QTimeZone.OffsetData, 1, 1)();
-    checkType!(QList!(int), 1, 1)();
-    checkType!(QList!(void*), 1, 1)();
-    checkType!(QList!(QSize), 1, 1)();
-    checkType!(QVector!(int), 1, 1)();
-    checkType!(QVector!(void*), 1, 1)();
-    checkType!(QVector!(QSize), 1, 1)();
-    checkType!(/+ Qt:: +/qt.core.namespace.Edge, 1, 0)();
-    checkType!(/+ Qt:: +/qt.core.namespace.Edges, 1, 0)();
+    checkType!(float, 0, 1, QMetaType.Type.Float, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(double, 0, 1, QMetaType.Type.Double, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(qreal, 0, 1, QMetaType.Type.QReal, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(int, 0, 1, QMetaType.Type.Int, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(uint, 0, 1, QMetaType.Type.UInt, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(int*, 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer)();
+    checkType!(void*, 0, 1, QMetaType.Type.VoidStar, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer)();
+    checkType!(void, 0, 1, QMetaType.Type.Void, 0)();
+    checkType!(char, 0, 1, QMetaType.Type.Char, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(ubyte, 0, 1, QMetaType.Type.UChar, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(wchar, 0, 1, QMetaType.Type.Char16, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(dchar, 0, 1, QMetaType.Type.Char32, QMetaType.TypeFlag.RelocatableType)();
+    //checkType!(wchar_t, 0, 0, -1, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QChar, 0, 1, QMetaType.Type.QChar, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QLocale.Country, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration)();
+    checkType!(/+ Qt:: +/qt.core.namespace.DayOfWeek, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration)();
+    checkType!(QTimeZone.OffsetData, 0, 0, -1, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QByteArray, 0, 1, QMetaType.Type.QByteArray, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QItemSelectionRange, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QLine, 0, 1, QMetaType.Type.QLine, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QLineF, 0, 1, QMetaType.Type.QLineF, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QLocale, 1, 1, QMetaType.Type.QLocale, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsGadget)();
+    checkType!(QLocale*, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToGadget | QMetaType.TypeFlag.IsPointer)();
+    checkType!(QModelIndex, 0, 1, QMetaType.Type.QModelIndex, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QObject, 1, 1, QMetaType.Type.QObjectStar, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToQObject | QMetaType.TypeFlag.IsPointer)();
+    checkType!(/+ std:: +/pair!(double, QSize), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QPersistentModelIndex, 0, 1, QMetaType.Type.QPersistentModelIndex, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QPoint, 0, 1, QMetaType.Type.QPoint, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QPointF, 0, 1, QMetaType.Type.QPointF, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QSize, 0, 1, QMetaType.Type.QSize, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QString, 0, 1, QMetaType.Type.QString, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QStringView, 0, 0, -1, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QUrl, 0, 1, QMetaType.Type.QUrl, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QVariant, 0, 1, QMetaType.Type.QVariant, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QAbstractItemModel, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToQObject | QMetaType.TypeFlag.IsPointer)();
+    checkType!(QTimeZone.OffsetData, 0, 0, -1, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QList!(int), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QList!(void*), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QList!(QSize), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QList!(QLocale), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QVector!(int), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QVector!(void*), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QVector!(QSize), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QVector!(QLocale), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QStringList, 1, 1, QMetaType.Type.QStringList, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QVariantList, 1, 1, QMetaType.Type.QVariantList, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QByteArrayList, 1, 1, QMetaType.Type.QByteArrayList, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(/+ Qt:: +/qt.core.namespace.Edge, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration)();
+    checkType!(QFlags!(/+ Qt:: +/qt.core.namespace.Edge), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration)();
+    checkType!(QList!(/+ Qt:: +/qt.core.namespace.Edge), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!( QList!(QFlags!(/+ Qt:: +/qt.core.namespace.Edge)), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+
+    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
+    checkType!(CustomStruct1, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction)();
+    assert(CustomStruct1.numConstructed == 0);
+    assert(CustomStruct1.numCopied == 1);
+    assert(CustomStruct1.numDestructed == 2);
 }
 
 unittest
@@ -206,13 +336,12 @@ unittest
     import core.stdc.string;
     import core.stdcpp.new_;
     import qt.core.metaobject;
-    import qt.core.metatype;
     import qt.core.objectdefs;
 
     const(QMetaObject)* mo = &TestObject.staticMetaObject;
     assert(strcmp(mo.className(), "TestObject") == 0);
     //assert(mo->constructorCount() == 2);
-    assert(mo.methodCount() - mo.methodOffset() == 8 + 8 + 8);
+    assert(mo.methodCount() - mo.methodOffset() == 10 + 10 + 10);
 
     TestObject a = cpp_new!TestObject();
     assert(a.metaObject() == mo);
@@ -252,15 +381,28 @@ unittest
     assert(method.name().toConstCharArray() == "signalListInt");
     assert(method.methodSignature().toConstCharArray() == "signalListInt(QList<int>)");
     assert(method.parameterCount() == 1);
+    assert(method.parameterType(0) == qMetaTypeId!(QList!(int))());
 
     method = mo.method(mo.methodOffset() + 6);
     assert(method.name().toConstCharArray() == "signalVectorInt");
     assert(method.methodSignature().toConstCharArray() == "signalVectorInt(QList<int>)");
     assert(method.parameterCount() == 1);
+    assert(method.parameterType(0) == qMetaTypeId!(QVector!(int))());
 
     method = mo.method(mo.methodOffset() + 7);
     assert(method.name().toConstCharArray() == "signalPointerInt");
     assert(method.methodSignature().toConstCharArray() == "signalPointerInt(int*)");
+    assert(method.parameterCount() == 1);
+
+    method = mo.method(mo.methodOffset() + 8);
+    assert(method.name().toConstCharArray() == "signalObjects");
+    assert(method.methodSignature().toConstCharArray() == "signalObjects(QObject*,TestObject*)");
+    assert(method.parameterCount() == 2);
+    assert(method.parameterType(0) == QMetaType.Type.QObjectStar);
+
+    method = mo.method(mo.methodOffset() + 9);
+    assert(method.name().toConstCharArray() == "signalCustomStruct1");
+    assert(method.methodSignature().toConstCharArray() == "signalCustomStruct1(CustomStruct1)");
     assert(method.parameterCount() == 1);
 }
 
@@ -271,60 +413,76 @@ void connectByString(TestObject a, TestObject b)
 
     QObject.connect(a, (mixin(SIGNAL(q{signalVoid()}))).ptr, b, (mixin(SLOT(q{onSignalVoid()}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalInt(int)}))).ptr, b, (mixin(SLOT(q{onSignalInt(int)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalInt3(int,int,int)}))).ptr, b, (mixin(SLOT(q{onSignalInt3(int,int,int)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalInt3(int, int, int)}))).ptr, b, (mixin(SLOT(q{onSignalInt3(int, int, int)}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalDouble(double)}))).ptr, b, (mixin(SLOT(q{onSignalDouble(double)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalString(const QString&)}))).ptr, b, (mixin(SLOT(q{onSignalString(const QString&)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalListInt(const QList<int>&)}))).ptr, b, (mixin(SLOT(q{onSignalListInt(const QList<int>&)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalVectorInt(const QVector<int>&)}))).ptr, b, (mixin(SLOT(q{onSignalVectorInt(const QVector<int>&)}))).ptr);
-    QObject.connect(a, (mixin(SIGNAL(q{signalPointerInt(int*)}))).ptr, b, (mixin(SLOT(q{onSignalPointerInt(int*)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalString(const QString &)}))).ptr, b, (mixin(SLOT(q{onSignalString(const QString &)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalListInt(const QList<int> &)}))).ptr, b, (mixin(SLOT(q{onSignalListInt(const QList<int> &)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalVectorInt(const QVector<int> &)}))).ptr, b, (mixin(SLOT(q{onSignalVectorInt(const QVector<int> &)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalPointerInt(int *)}))).ptr, b, (mixin(SLOT(q{onSignalPointerInt(int *)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalObjects(QObject*,TestObject*)}))).ptr, b, (mixin(SLOT(q{onSignalObjects(QObject*,TestObject*)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalCustomStruct1(CustomStruct1)}))).ptr, b, (mixin(SLOT(q{onSignalCustomStruct1(CustomStruct1)}))).ptr);
 }
 
-void connectByPointer(TestObject a, TestObject b)
+void connectByPointer(TestObject a, TestObject b, /+ Qt:: +/qt.core.namespace.ConnectionType type = /+ Qt:: +/qt.core.namespace.ConnectionType.AutoConnection)
 {
     import qt.core.list;
     import qt.core.object;
     import qt.core.vector;
 
-    QObject.connect(a.signal!"signalVoid", b.slot!"onSignalVoid");
-    QObject.connect(a.signal!"signalInt", b.slot!"onSignalInt");
-    QObject.connect(a.signal!"signalInt3", b.slot!"onSignalInt3");
-    QObject.connect(a.signal!"signalDouble", b.slot!"onSignalDouble");
-    QObject.connect(a.signal!"signalString", b.slot!"onSignalString");
-    QObject.connect(a.signal!"signalListInt", b.slot!"onSignalListInt");
-    QObject.connect(a.signal!"signalVectorInt", b.slot!"onSignalVectorInt");
-    QObject.connect(a.signal!"signalPointerInt", b.slot!"onSignalPointerInt");
+    QObject.connect(a.signal!"signalVoid", b.slot!"onSignalVoid", type);
+    QObject.connect(a.signal!"signalInt", b.slot!"onSignalInt", type);
+    QObject.connect(a.signal!"signalInt3", b.slot!"onSignalInt3", type);
+    QObject.connect(a.signal!"signalDouble", b.slot!"onSignalDouble", type);
+    QObject.connect(a.signal!"signalString", b.slot!"onSignalString", type);
+    QObject.connect(a.signal!"signalListInt", b.slot!"onSignalListInt", type);
+    QObject.connect(a.signal!"signalVectorInt", b.slot!"onSignalVectorInt", type);
+    QObject.connect(a.signal!"signalPointerInt", b.slot!"onSignalPointerInt", type);
+    QObject.connect(a.signal!"signalObjects", b.slot!"onSignalObjects", type);
+    QObject.connect(a.signal!"signalCustomStruct1", b.slot!"onSignalCustomStruct1", type);
 }
 
-void testSignals(TestObject a, TestObject b)
+void testSignals(TestObject a, void delegate(string) check)
 {
+    import core.stdcpp.new_;
     import qt.core.list;
+    import qt.core.timer;
     import qt.core.vector;
 
+    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
     a.emitSignalVoid();
-    assert(b.lastStr == "void");
+    check("void");
     a.emitSignalInt(5);
-    assert(b.lastStr == "int 5");
+    check("int 5");
     a.emitSignalInt3(1, 2, 3);
-    assert(b.lastStr == "int3 1 2 3");
+    check("int3 1 2 3");
     a.emitSignalDouble(16.5);
-    assert(b.lastStr == "double 16.5");
+    check("double 16.5");
     auto tmp = QString("test"); a.emitSignalString(tmp);
-    assert(b.lastStr == "QString test");
+    check("QString test");
     QList!(int) l = QList!(int).create();
     l ~= 10;
     l ~= 11;
     l ~= 12;
     a.emitSignalListInt(l);
-    assert(b.lastStr == "QList<int> 10 11 12");
+    check("QList<int> 10 11 12");
     QVector!(int) v = QVector!(int).create();
     v ~= 20;
     v ~= 21;
     v ~= 22;
     a.emitSignalVectorInt(v);
-    assert(b.lastStr == "QVector<int> 20 21 22");
-    int x = 30;
-    a.emitSignalPointerInt(&x);
-    assert(b.lastStr == "int* 30");
+    check("QVector<int> 20 21 22");
+    int *x = new int;
+    *x = 30;
+    a.emitSignalPointerInt(x);
+    check(format("int* 30 0x%x", cast(ulong) x));
+    QObject o1 = cpp_new!QTimer(a);
+    o1.setObjectName("obj1");
+    TestObject o2 = cpp_new!TestObject(a);
+    o2.setObjectName("obj2");
+    a.emitSignalObjects(o1, o2);
+    check(format("objects obj1 QTimer 0x%x obj2 TestObject 0x%x", cast(ulong) cast(void*) o1, cast(ulong) cast(void*) o2));
+    a.emitSignalCustomStruct1(CustomStruct1(50));
+    check("CustomStruct1 50");
 }
 
 unittest
@@ -334,7 +492,15 @@ unittest
     TestObject a = cpp_new!TestObject();
     TestObject b = cpp_new!TestObject();
     connectByString(a, b);
-    testSignals(a, b);
+    testSignals(a, (string expected) {
+        assert(b.lastStr == expected);
+    });
+    assert(CustomStruct1.numConstructed == 1);
+    assert(CustomStruct1.numCopied == 2);
+    assert(CustomStruct1.numDestructed == 3);
+
+    cpp_delete(a);
+    cpp_delete(b);
 }
 
 unittest
@@ -344,7 +510,113 @@ unittest
     TestObject a = cpp_new!TestObject();
     TestObject b = cpp_new!TestObject();
     connectByPointer(a, b);
-    testSignals(a, b);
+    testSignals(a, (string expected) {
+        assert(b.lastStr == expected);
+    });
+    assert(CustomStruct1.numConstructed == 1);
+    assert(CustomStruct1.numCopied == 2);
+    assert(CustomStruct1.numDestructed == 3);
+
+    cpp_delete(a);
+    cpp_delete(b);
+}
+
+unittest
+{
+    import core.stdcpp.new_;
+    import qt.core.eventloop;
+    import qt.core.stringlist;
+    import std.conv;
+
+    scope eventLoop = new QEventLoop;
+    TestObject a = cpp_new!TestObject();
+    TestObject b = cpp_new!TestObject();
+    connectByPointer(a, b, /+ Qt:: +/qt.core.namespace.ConnectionType.QueuedConnection);
+
+    string[] receivedValues;
+    string[] expectedValues;
+
+    TestObject dummy = cpp_new!TestObject();
+    QObject.connect(dummy.signal!"signalVoid", eventLoop, () {
+        receivedValues ~= text(b.lastStr.toConstWString);
+    }, /+ Qt:: +/qt.core.namespace.ConnectionType.QueuedConnection);
+
+    TestObject dummy2 = cpp_new!TestObject();
+    QObject.connect(dummy2.signal!"signalVoid", eventLoop.slot!"quit", /+ Qt:: +/qt.core.namespace.ConnectionType.QueuedConnection);
+
+    testSignals(a, (string expected) {
+        expectedValues ~= expected;
+        dummy.emitSignalVoid();
+    });
+
+    dummy2.emitSignalVoid();
+
+    assert(receivedValues.length == 0);
+    assert(CustomStruct1.numConstructed == 1);
+    assert(CustomStruct1.numCopied == 2);
+    assert(CustomStruct1.numDestructed == 2);
+
+    eventLoop.exec();
+
+    assert(receivedValues == expectedValues);
+    assert(CustomStruct1.numConstructed == 1);
+    assert(CustomStruct1.numCopied == 3);
+    assert(CustomStruct1.numDestructed == 4);
+
+    cpp_delete(a);
+    cpp_delete(b);
+}
+
+unittest
+{
+    import core.stdcpp.new_;
+    import qt.core.stringlist;
+    import qt.core.thread;
+    import std.conv;
+
+    QThread thread = cpp_new!QThread;
+    TestObject a = cpp_new!TestObject();
+    TestObject b = cpp_new!TestObject();
+    b.moveToThread(thread);
+    connectByPointer(a, b);
+
+    string[] receivedValues;
+    string[] expectedValues;
+
+    TestObject dummy = cpp_new!TestObject();
+    dummy.moveToThread(thread);
+    QObject.connect(dummy.signal!"signalVoid", dummy, () {
+        receivedValues ~= text(b.lastStr.toConstWString);
+    });
+
+    TestObject dummy2 = cpp_new!TestObject();
+    dummy2.moveToThread(thread);
+    QObject.connect(dummy.signal!"signalVoid", dummy2, () {
+        thread.quit();
+    });
+
+    testSignals(a, (string expected) {
+        expectedValues ~= expected;
+        dummy.emitSignalVoid();
+    });
+
+    dummy2.emitSignalVoid();
+
+    assert(receivedValues.length == 0);
+    assert(CustomStruct1.numConstructed == 1);
+    assert(CustomStruct1.numCopied == 2);
+    assert(CustomStruct1.numDestructed == 2);
+
+    thread.start();
+    thread.wait();
+
+    assert(receivedValues == expectedValues);
+    assert(CustomStruct1.numConstructed == 1);
+    assert(CustomStruct1.numCopied == 3);
+    assert(CustomStruct1.numDestructed == 4);
+
+    cpp_delete(a);
+    cpp_delete(b);
 }
 
 void compareVariant(ref const(QVariant) v, const(char)* expected)

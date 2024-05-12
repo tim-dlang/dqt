@@ -21,6 +21,7 @@ version (QT_NO_GESTURES) {} else
     import qt.core.global;
     import qt.core.list;
     import qt.core.map;
+    import qt.core.metatype;
     import qt.core.namespace;
     import qt.core.object;
     import qt.core.point;

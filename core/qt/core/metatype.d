@@ -21,9 +21,11 @@ import qt.core.datastream;
 import qt.core.flags;
 import qt.core.global;
 import qt.core.iterable;
+import qt.core.list;
 import qt.core.object;
 import qt.core.objectdefs;
 import qt.core.typeinfo;
+import qt.core.variant;
 import qt.helpers;
 import std.traits;
 
@@ -135,16 +137,16 @@ enum immutable(BuiltinTypeInfo[]) coreClasses = [
 ] ~ itemModelClasses;
 
 enum immutable(BuiltinTypeInfo[]) corePointers = [
-    BuiltinTypeInfo("QObjectStar", 39, "QObject*"),
+    BuiltinTypeInfo("QObjectStar", 39, "QObject*", "QObject"),
 ];
 
 enum immutable(BuiltinTypeInfo[]) coreTemplates = [
     BuiltinTypeInfo("QVariantMap", 8, "QVariantMap"),
-    BuiltinTypeInfo("QVariantList", 9, "QVariantList"),
+    BuiltinTypeInfo("QVariantList", 9, "QVariantList", "QList!(QVariant)"),
     BuiltinTypeInfo("QVariantHash", 28, "QVariantHash"),
     BuiltinTypeInfo("QVariantPair", 58, "QVariantPair"),
-    BuiltinTypeInfo("QByteArrayList", 49, "QByteArrayList"),
-    BuiltinTypeInfo("QStringList", 11, "QStringList"),
+    BuiltinTypeInfo("QByteArrayList", 49, "QByteArrayList", "QList!(QByteArray)"),
+    BuiltinTypeInfo("QStringList", 11, "QStringList", "QList!(QString)"),
 ];
 
 /+ #if QT_CONFIG(shortcut) +/
@@ -300,18 +302,10 @@ To convertImplicit(From, To)(ref const(From) from)
     template<typename, typename>
     struct MetaTypeSmartPointerHelper; +/
 
-    struct IsQFlags(T) {
-        /+ std:: +/false_type base0;
-        alias base0 this;
-}
+    enum IsQFlags(T) = is(T : QFlags!X, X);
 
-    /+ template<typename Enum>
-    struct IsQFlags<QFlags<Enum>> : std::true_type {}; +/
+    enum IsEnumOrFlags(T) = is(T == enum) || IsQFlags!T;
 
-    struct IsEnumOrFlags(T) {
-        /+ std:: +/disjunction!(/+ std:: +/is_enum!(T), IsQFlags!(T)) base0;
-        alias base0 this;
-}
 }  // namespace QtPrivate
 
 /// Binding for C++ class [QMetaType](https://doc.qt.io/qt-6/qmetatype.html).
@@ -400,7 +394,7 @@ public:
     }
     /+ Q_DECLARE_FLAGS(TypeFlags, TypeFlag) +/
 alias TypeFlags = QFlags!(TypeFlag);
-    /+ static void registerNormalizedTypedef(const QT_PREPEND_NAMESPACE(QByteArray) &normalizedTypeName, QMetaType type); +/
+    static void registerNormalizedTypedef(/+ QT_PREPEND_NAMESPACE(QByteArray) +/ ref const(.QByteArray) normalizedTypeName, QMetaType type);
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
     /+ QT_DEPRECATED_VERSION_6_0 +/
@@ -484,7 +478,9 @@ alias TypeFlags = QFlags!(TypeFlag);
         return d_ptr ? d_ptr.name : null;
     }
 
-    /+ void *create(const void *copy = nullptr) const; +/
+    mixin(mangleWindows("?create@QMetaType@@QEBAPEAXPEBX@Z", q{
+    void *create(const void *copy = null) const;
+    }));
     void destroy(void* data) const;
     void* construct(void* where, const(void)* copy = null) const;
     void destruct(void* data) const;
@@ -871,14 +867,14 @@ extern(C++, "QtPrivate")
     struct IsPointerToTypeDerivedFromQObject<const void*>
     {
         enum { Value = false };
-    };
-    template<>
-    struct IsPointerToTypeDerivedFromQObject<QObject*>
-    {
-        enum { Value = true };
-    };
+    }; +/
 
-    template<typename T>
+    struct IsPointerToTypeDerivedFromQObject(T : QObject)
+    {
+        enum { Value = true }
+    }
+
+    /+ template<typename T>
     struct IsPointerToTypeDerivedFromQObject<T*>
     {
         typedef qint8 yes_type;
@@ -893,37 +889,40 @@ extern(C++, "QtPrivate")
         enum { Value = sizeof(checkType(static_cast<T*>(nullptr))) == sizeof(yes_type) };
     }; +/
 
-    struct IsGadgetHelper(T, Enable) { enum { IsRealGadget = false, IsGadgetOrDerivedFrom = false } }
-
-    /+ template<typename T>
-    struct IsGadgetHelper<T, typename T::QtGadgetHelper>
+    struct IsGadgetHelper(T) if (!__traits(hasMember, T, "QtGadgetHelper") || isPointer!T)
     {
-        template <typename X>
+        enum { IsRealGadget = false, IsGadgetOrDerivedFrom = false }
+    }
+
+    struct IsGadgetHelper(T) if (__traits(hasMember, T, "QtGadgetHelper") && !isPointer!T)
+    {
+        /*template <typename X>
         static char checkType(void (X::*)());
-        static void *checkType(void (T::*)());
+        static void *checkType(void (T::*)());*/
         enum {
-            IsRealGadget = sizeof(checkType(&T::qt_check_for_QGADGET_macro)) == sizeof(void *),
+            IsRealGadget = true, // sizeof(checkType(&T::qt_check_for_QGADGET_macro)) == sizeof(void *),
             IsGadgetOrDerivedFrom = true
-        };
-    }; +/
+        }
+    }
 
-    struct IsPointerToGadgetHelper(T, Enable) { enum { IsRealGadget = false, IsGadgetOrDerivedFrom = false } }
-
-    /+ template<typename T>
-    struct IsPointerToGadgetHelper<T*, typename T::QtGadgetHelper>
+    struct IsPointerToGadgetHelper(T) if (!__traits(hasMember, T, "QtGadgetHelper") || !isPointer!T)
     {
-        using BaseType = T;
+        enum { IsRealGadget = false, IsGadgetOrDerivedFrom = false }
+    }
+
+    struct IsPointerToGadgetHelper(T) if (__traits(hasMember, T, "QtGadgetHelper") && isPointer!T)
+    {
+        /*using BaseType = T;
         template <typename X>
         static char checkType(void (X::*)());
-        static void *checkType(void (T::*)());
+        static void *checkType(void (T::*)());*/
         enum {
-            IsRealGadget = !IsPointerToTypeDerivedFromQObject<T*>::Value && sizeof(checkType(&T::qt_check_for_QGADGET_macro)) == sizeof(void *),
-            IsGadgetOrDerivedFrom = !IsPointerToTypeDerivedFromQObject<T*>::Value
-        };
-    };
+            IsRealGadget = !IsPointerToTypeDerivedFromQObject!T.Value, // && sizeof(checkType(&T::qt_check_for_QGADGET_macro)) == sizeof(void *),
+            IsGadgetOrDerivedFrom = !IsPointerToTypeDerivedFromQObject!T.Value
+        }
+    }
 
-
-    template<typename T> char qt_getEnumMetaObject(const T&); +/
+    /+ template<typename T> char qt_getEnumMetaObject(const T&); +/
 
     struct IsQEnumHelper(T) {
         static ref const(T) declval();
@@ -983,7 +982,8 @@ extern(C++, "QtPrivate")
         static if (is(const(T): const(QObject)))
         {
             static const(QMetaObject)* value() { return &T.staticMetaObject; }
-            static const(QMetaObject)* metaObjectFunction(const(QMetaTypeInterface)*) { return &T.staticMetaObject; }
+            static const(QMetaObject)* metaObjectFunctionImpl(const(QMetaTypeInterface)*) { return &T.staticMetaObject; }
+            extern(D) static immutable metaObjectFunction = &metaObjectFunctionImpl;
         }
         else
         {
@@ -1151,32 +1151,19 @@ extern(C++, "QtPrivate")
     Q_CORE_EXPORT bool isBuiltinType(const QByteArray &type); +/
 } // namespace QtPrivate
 
-struct QMetaTypeIdQObject(T, /+ int +/ /+ =
-    QtPrivate::IsPointerToTypeDerivedFromQObject<T>::Value ? QMetaType::PointerToQObject :
-    QtPrivate::IsGadgetHelper<T>::IsRealGadget             ? QMetaType::IsGadget :
-    QtPrivate::IsPointerToGadgetHelper<T>::IsRealGadget    ? QMetaType::PointerToGadget :
-    QtPrivate::IsQEnumHelper<T>::Value                     ? QMetaType::IsEnumeration : 0 +/)
-{
-    enum {
-        Defined = 0
-    }
-}
-
-alias QMetaTypeId(T) = QMetaTypeIdQObject!(T);
-
 extern(D) mixin((){
     import std.conv;
     string code = "template QMetaTypeId2(T)\n";
     code ~= "{\n";
-    code ~= "    static if (std.traits.isBuiltinType!T)\n";
+    code ~= "    static if ((std.traits.isBuiltinType!T && !is(T == enum)) || is(T == void*))\n";
     code ~= "    {\n";
     bool needsElse = false;
     foreach (i, t; allBuiltinTypes)
     {
         string realType2 = t.realType;
-        if(t.dType.length)
+        if (t.dType.length)
             realType2 = t.dType;
-        if(realType2[0] != 'Q')
+        if (realType2[0] != 'Q')
         {
             code ~= "        ";
             if(needsElse)
@@ -1192,7 +1179,9 @@ extern(D) mixin((){
     }
     code ~= "        else\n";
     code ~= "        {\n";
-    code ~= "            static assert(false, \"type not supported \" ~ T.stringof);\n";
+    code ~= "            enum { Defined = QMetaTypeId!(T).Defined, IsBuiltIn=false }\n";
+    code ~= "            static if (Defined)\n";
+    code ~= "                pragma(inline, true) static int qt_metatype_id() { return QMetaTypeId!(T).qt_metatype_id(); }\n";
     code ~= "        }\n";
     code ~= "    }\n";
     code ~= "    else\n";
@@ -1203,15 +1192,14 @@ extern(D) mixin((){
     foreach (i, t; allBuiltinTypes)
     {
         string realType2 = t.realType;
-        if(t.dType.length)
+        if (t.dType.length)
             realType2 = t.dType;
-        if(realType2[0] == 'Q')
+        if (realType2[0] == 'Q')
         {
             code ~= "            ";
             if(needsElse)
                 code ~= "else ";
-            // TODO: Match templates like QList!(QString)
-            code ~= text("static if (__traits(identifier, T) == \"", realType2, "\")\n");
+            code ~= text("static if (T.stringof == \"", realType2, "\")\n");
             code ~= "            {\n";
             code ~= text("                enum { Defined = 1, IsBuiltIn = true, MetaType = ", t.typeNameID, " };\n");
             code ~= text("                pragma(inline, true) static int qt_metatype_id() { return ", t.typeNameID, "; }\n");
@@ -1223,13 +1211,15 @@ extern(D) mixin((){
     code ~= "            else\n";
     code ~= "            {\n";
     code ~= "                enum { Defined = QMetaTypeId!(T).Defined, IsBuiltIn=false }\n";
-    code ~= "                pragma(inline, true) static int qt_metatype_id() { return QMetaTypeId!(T).qt_metatype_id(); }\n";
+    code ~= "                static if (Defined)\n";
+    code ~= "                    pragma(inline, true) static int qt_metatype_id() { return QMetaTypeId!(T).qt_metatype_id(); }\n";
     code ~= "            }\n";
     code ~= "        }\n";
     code ~= "        else\n";
     code ~= "        {\n";
     code ~= "            enum { Defined = QMetaTypeId!(T).Defined, IsBuiltIn=false }\n";
-    code ~= "            pragma(inline, true) static int qt_metatype_id() { return QMetaTypeId!(T).qt_metatype_id(); }\n";
+    code ~= "            static if (Defined)\n";
+    code ~= "                pragma(inline, true) static int qt_metatype_id() { return QMetaTypeId!(T).qt_metatype_id(); }\n";
     code ~= "        }\n";
     code ~= "    }\n";
     code ~= "}\n";
@@ -1243,26 +1233,22 @@ template <typename T>
 struct QMetaTypeId2<T&> { enum {Defined = false }; }; +/
 
 extern(C++, "QtPrivate") {
-    struct QMetaTypeIdHelper(T, bool Defined=QMetaTypeId2!(T).Defined) {
-        pragma(inline, true) static int qt_metatype_id()
-        { return QMetaTypeId2!(T).qt_metatype_id(); }
+    struct QMetaTypeIdHelper(T) {
+        static if (QMetaTypeId2!(T).Defined)
+            pragma(inline, true) static int qt_metatype_id()
+            { return QMetaTypeId2!(T).qt_metatype_id(); }
+        else
+            pragma(inline, true) static int qt_metatype_id()
+            { return -1; }
     }
-    /+ template <typename T> struct QMetaTypeIdHelper<T, false> {
-        static inline constexpr int qt_metatype_id()
-        { return -1; }
-    };
-
     // Function pointers don't derive from QObject
-    template <typename Result, typename... Args>
+    /+ template <typename Result, typename... Args>
     struct IsPointerToTypeDerivedFromQObject<Result(*)(Args...)> { enum { Value = false }; };
 
     template<typename T>
-    inline constexpr bool IsQmlListType = false;
+    inline constexpr bool IsQmlListType = false; +/
 
-    template<typename T, bool = std::is_enum<T>::value>
-    constexpr bool IsUnsignedEnum = false;
-    template<typename T>
-    constexpr bool IsUnsignedEnum<T, true> = !std::is_signed_v<std::underlying_type_t<T>>; +/
+    enum IsUnsignedEnum(T) = is(T == enum) && true/*isUnsigned!(OriginalType!(T))*/;
 
     private template RemovePointer(T)
     {
@@ -1277,16 +1263,16 @@ extern(C++, "QtPrivate") {
         enum { Flags = (QTypeInfo!(T).isRelocatable ? QMetaType.TypeFlag.RelocatableType : 0)
                      | (QTypeInfo!(T).isComplex ? QMetaType.TypeFlag.NeedsConstruction : 0)
                      | (QTypeInfo!(T).isComplex ? QMetaType.TypeFlag.NeedsDestruction : 0)
-                     // TODO
-                     /*| (IsPointerToTypeDerivedFromQObject!(T).Value ? QMetaType.TypeFlag.PointerToQObject : 0)
+                     | (IsPointerToTypeDerivedFromQObject!(T).Value ? QMetaType.TypeFlag.PointerToQObject : 0)
                      | (IsSharedPointerToTypeDerivedFromQObject!(T).Value ? QMetaType.TypeFlag.SharedPointerToQObject : 0)
                      | (IsWeakPointerToTypeDerivedFromQObject!(T).Value ? QMetaType.TypeFlag.WeakPointerToQObject : 0)
                      | (IsTrackingPointerToTypeDerivedFromQObject!(T).Value ? QMetaType.TypeFlag.TrackingPointerToQObject : 0)
-                     | (IsEnumOrFlags!(T).value ? QMetaType.TypeFlag.IsEnumeration : 0)
+                     | (IsEnumOrFlags!(T) ? QMetaType.TypeFlag.IsEnumeration : 0)
                      | (IsGadgetHelper!(T).IsGadgetOrDerivedFrom ? QMetaType.TypeFlag.IsGadget : 0)
-                     | (IsPointerToGadgetHelper!(T).IsGadgetOrDerivedFrom ? QMetaType.TypeFlag.PointerToGadget : 0)*/
+                     | (IsPointerToGadgetHelper!(T).IsGadgetOrDerivedFrom ? QMetaType.TypeFlag.PointerToGadget : 0)
                      | (QTypeInfo!(T).isPointer ? QMetaType.TypeFlag.IsPointer : 0)
-                     //| (IsUnsignedEnum!(T) ? QMetaType.TypeFlag.IsUnsignedEnumeration : 0)
+                     | (IsUnsignedEnum!(T) ? QMetaType.TypeFlag.IsUnsignedEnumeration : 0)
+                     //TODO
                      //| (IsQmlListType!(T) ? QMetaType.TypeFlag.IsQmlList : 0)
                      | (is(RemovePointer!(T) == const) ? QMetaType.TypeFlag.IsConst : 0)
              };
@@ -1319,31 +1305,30 @@ extern(C++, "QtPrivate") {
 
 }
 
-/+ template <typename T>
-int qRegisterNormalizedMetaType(const QT_PREPEND_NAMESPACE(QByteArray) &normalizedTypeName)
+int qRegisterNormalizedMetaType(T)(/+ QT_PREPEND_NAMESPACE(QByteArray) +/ ref const(QByteArray) normalizedTypeName)
 {
-#ifndef QT_NO_QOBJECT
-    Q_ASSERT_X(normalizedTypeName == QMetaObject::normalizedType(normalizedTypeName.constData()),
-               "qRegisterNormalizedMetaType",
+/+ #ifndef QT_NO_QOBJECT +/
+    (mixin(Q_ASSERT_X(q{normalizedTypeName == QMetaObject.normalizedType(normalizedTypeName.constData())},q{
+               "qRegisterNormalizedMetaType"},q{
                "qRegisterNormalizedMetaType was called with a not normalized type name, "
-               "please call qRegisterMetaType instead.");
-#endif
+               "please call qRegisterMetaType instead."})));
+/+ #endif +/
 
-    const QMetaType metaType = QMetaType::fromType<T>();
-    const int id = metaType.id();
+    const(QMetaType) metaType = QMetaType.fromType!(T)();
+    const(int) id = metaType.id();
 
-    QtPrivate::SequentialContainerTransformationHelper<T>::registerConverter();
-    QtPrivate::SequentialContainerTransformationHelper<T>::registerMutableView();
-    QtPrivate::AssociativeContainerTransformationHelper<T>::registerConverter();
-    QtPrivate::AssociativeContainerTransformationHelper<T>::registerMutableView();
-    QtPrivate::MetaTypePairHelper<T>::registerConverter();
-    QtPrivate::MetaTypeSmartPointerHelper<T>::registerConverter();
+/+    /+ QtPrivate:: +/SequentialContainerTransformationHelper!(T).registerConverter();
+    /+ QtPrivate:: +/SequentialContainerTransformationHelper!(T).registerMutableView();
+    /+ QtPrivate:: +/AssociativeContainerTransformationHelper!(T).registerConverter();
+    /+ QtPrivate:: +/AssociativeContainerTransformationHelper!(T).registerMutableView();
+    /+ QtPrivate:: +/MetaTypePairHelper!(T).IsPair.registerConverter();
+    /+ QtPrivate:: +/MetaTypeSmartPointerHelper!(T).registerConverter();+/
 
     if (normalizedTypeName != metaType.name())
-        QMetaType::registerNormalizedTypedef(normalizedTypeName, metaType);
+        QMetaType.registerNormalizedTypedef(normalizedTypeName, metaType);
 
     return id;
-} +/
+}
 
 int qRegisterMetaType(T)(const(char)* typeName)
 {
@@ -1357,7 +1342,7 @@ int qRegisterMetaType(T)(const(char)* typeName)
 
 pragma(inline, true) int qMetaTypeId(T)()
 {
-    static if (cast(bool) (QMetaTypeId2!(T).IsBuiltIn)) {
+    static if (QMetaTypeId2!(T).IsBuiltIn) {
         return QMetaTypeId2!(T).MetaType;
     } else {
         return QMetaType.fromType!(T)().id();
@@ -1370,93 +1355,106 @@ pragma(inline, true) int qRegisterMetaType(T)()
     return id;
 }
 
-/+ #ifndef QT_NO_QOBJECT
-template <typename T>
-struct QMetaTypeIdQObject<T*, QMetaType::PointerToQObject>
+/+ #ifndef QT_NO_QOBJECT +/
+
+struct QMetaTypeIdQObject(T)
 {
-    enum {
-        Defined = 1
-    };
-
-    static int qt_metatype_id()
+    static if (IsPointerToTypeDerivedFromQObject!T.Value)
     {
-        static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
-        if (const int id = metatype_id.loadAcquire())
-            return id;
-        const char *const cName = T::staticMetaObject.className();
-        QByteArray typeName;
-        typeName.reserve(strlen(cName) + 1);
-        typeName.append(cName).append('*');
-        const int newId = qRegisterNormalizedMetaType<T *>(typeName);
-        metatype_id.storeRelease(newId);
-        return newId;
+        enum {
+            Defined = 1
+        }
+
+        static int qt_metatype_id()
+        {
+            import core.stdc.string;
+            import qt.core.basicatomic;
+            static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
+            if (const int id = metatype_id.loadAcquire())
+                return id;
+            const char* cName = T.staticMetaObject.className();
+            QByteArray typeName;
+            typeName.reserve(strlen(cName) + 1);
+            typeName.append(cName).append('*');
+            const int newId = qRegisterNormalizedMetaType!(T)(typeName);
+            metatype_id.storeRelease(newId);
+            return newId;
+        }
     }
-};
-
-template <typename T>
-struct QMetaTypeIdQObject<T, QMetaType::IsGadget>
-{
-    enum {
-        Defined = std::is_default_constructible<T>::value
-    };
-
-    static int qt_metatype_id()
+    else static if (IsGadgetHelper!T.IsRealGadget)
     {
-        static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
-        if (const int id = metatype_id.loadAcquire())
-            return id;
-        const char *const cName = T::staticMetaObject.className();
-        const int newId = qRegisterNormalizedMetaType<T>(cName);
-        metatype_id.storeRelease(newId);
-        return newId;
+        enum {
+            Defined = 1 //std::is_default_constructible<T>::value
+        }
+
+        static int qt_metatype_id()
+        {
+            import qt.core.basicatomic;
+            static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
+            if (const int id = metatype_id.loadAcquire())
+                return id;
+            const char* cName = T.staticMetaObject.className();
+            QByteArray cNameB = QByteArray(cName);
+            const int newId = qRegisterNormalizedMetaType!(T)(cNameB);
+            metatype_id.storeRelease(newId);
+            return newId;
+        }
     }
-};
-
-template <typename T>
-struct QMetaTypeIdQObject<T*, QMetaType::PointerToGadget>
-{
-    enum {
-        Defined = 1
-    };
-
-    static int qt_metatype_id()
+    else static if (IsPointerToGadgetHelper!T.IsRealGadget)
     {
-        static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
-        if (const int id = metatype_id.loadAcquire())
-            return id;
-        const char *const cName = T::staticMetaObject.className();
-        QByteArray typeName;
-        typeName.reserve(strlen(cName) + 1);
-        typeName.append(cName).append('*');
-        const int newId = qRegisterNormalizedMetaType<T *>(typeName);
-        metatype_id.storeRelease(newId);
-        return newId;
+        enum {
+            Defined = 1
+        }
+
+        static int qt_metatype_id()
+        {
+            import core.stdc.string;
+            import qt.core.basicatomic;
+            static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
+            if (const int id = metatype_id.loadAcquire())
+                return id;
+            const char* cName = T.staticMetaObject.className();
+            QByteArray typeName;
+            typeName.reserve(strlen(cName) + 1);
+            typeName.append(cName).append('*');
+            const int newId = qRegisterNormalizedMetaType!(T)(typeName);
+            metatype_id.storeRelease(newId);
+            return newId;
+        }
     }
-};
-
-template <typename T>
-struct QMetaTypeIdQObject<T, QMetaType::IsEnumeration>
-{
-    enum {
-        Defined = 1
-    };
-
-    static int qt_metatype_id()
+    else static if (is(T == enum) || is(T : QFlags!X, X) /*IsQEnumHelper!T.Value*/)
     {
-        static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0);
-        if (const int id = metatype_id.loadAcquire())
-            return id;
-        const char *eName = qt_getEnumName(T());
-        const char *cName = qt_getEnumMetaObject(T())->className();
-        QByteArray typeName;
-        typeName.reserve(strlen(cName) + 2 + strlen(eName));
-        typeName.append(cName).append("::").append(eName);
-        const int newId = qRegisterNormalizedMetaType<T>(typeName);
-        metatype_id.storeRelease(newId);
-        return newId;
+        enum {
+            Defined = 1
+        }
+
+        static int qt_metatype_id()
+        {
+            import core.stdc.string;
+            import qt.core.basicatomic;
+            static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
+            if (const int id = metatype_id.loadAcquire())
+                return id;
+            /*const char *eName = qt_getEnumName(T());
+            const char *cName = qt_getEnumMetaObject(T()).className();*/
+            const char *eName = __traits(identifier, T);
+            const char *cName = __traits(identifier, __traits(parent, T));
+            QByteArray typeName;
+            typeName.reserve(strlen(cName) + 2 + strlen(eName));
+            typeName.append(cName).append("::").append(eName);
+            const int newId = qRegisterNormalizedMetaType!(T)(typeName);
+            metatype_id.storeRelease(newId);
+            return newId;
+        }
     }
-};
-#endif
+    else
+    {
+        enum {
+            Defined = 0
+        }
+    }
+}
+/+ #endif
 
 #define Q_DECLARE_OPAQUE_POINTER(POINTER)                               \
     QT_BEGIN_NAMESPACE namespace QtPrivate {                            \
@@ -1467,36 +1465,40 @@ struct QMetaTypeIdQObject<T, QMetaType::IsEnumeration>
         };                                                              \
     } QT_END_NAMESPACE                                                  \
     /**/
++/
 
-#ifndef Q_MOC_RUN
-#define Q_DECLARE_METATYPE(TYPE) Q_DECLARE_METATYPE_IMPL(TYPE)
-#define Q_DECLARE_METATYPE_IMPL(TYPE)                                   \
-    QT_BEGIN_NAMESPACE                                                  \
-    template <>                                                         \
-    struct QMetaTypeId< TYPE >                                          \
-    {                                                                   \
-        enum { Defined = 1 };                                           \
-        static int qt_metatype_id()                                     \
-            {                                                           \
-                static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0); \
-                if (const int id = metatype_id.loadAcquire())           \
-                    return id;                                          \
-                constexpr auto arr = QtPrivate::typenameHelper<TYPE>(); \
-                auto name = arr.data();                                 \
-                if (QByteArrayView(name) == (#TYPE)) {                  \
-                    const int id = qRegisterNormalizedMetaType<TYPE>(name); \
-                    metatype_id.storeRelease(id);                       \
-                    return id;                                          \
-                }                                                       \
-                const int newId = qRegisterMetaType< TYPE >(#TYPE);     \
-                metatype_id.storeRelease(newId);                        \
-                return newId;                                           \
-            }                                                           \
-    };                                                                  \
-    QT_END_NAMESPACE
-#endif // Q_MOC_RUN
+enum Q_DECLARE_METATYPE;
 
-#define Q_DECLARE_BUILTIN_METATYPE(TYPE, METATYPEID, NAME) \
+struct QMetaTypeId(TYPE) if (getUDAs!(TYPE, Q_DECLARE_METATYPE).length == 0)
+{
+    enum Defined = QMetaTypeIdQObject!TYPE.Defined;
+    static if (Defined)
+        alias qt_metatype_id = QMetaTypeIdQObject!TYPE.qt_metatype_id;
+}
+
+struct QMetaTypeId(TYPE) if (getUDAs!(TYPE, Q_DECLARE_METATYPE).length > 0)
+{
+    enum { Defined = 1 }
+    static int qt_metatype_id()
+    {
+        import qt.core.basicatomic;
+        static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
+        if (const int id = metatype_id.loadAcquire())
+            return id;
+        /*constexpr auto arr = QtPrivate::typenameHelper<TYPE>();
+        auto name = arr.data();
+        if (QByteArrayView(name) == (#TYPE)) {
+            const int id = qRegisterNormalizedMetaType<TYPE>(name);
+            metatype_id.storeRelease(id);
+            return id;
+        }*/
+        const int newId = qRegisterMetaType!(TYPE)(TYPE.stringof);
+        metatype_id.storeRelease(newId);
+        return newId;
+    }
+}
+
+/+ #define Q_DECLARE_BUILTIN_METATYPE(TYPE, METATYPEID, NAME) \
     QT_BEGIN_NAMESPACE \
     template<> struct QMetaTypeId2<NAME> \
     { \
@@ -1516,35 +1518,37 @@ extern(C++, class) struct QMatrix4x4;
 extern(C++, class) struct QQuaternion;
 /+ QT_FOR_EACH_STATIC_GUI_CLASS(QT_FORWARD_DECLARE_STATIC_TYPES_ITER)
 QT_FOR_EACH_STATIC_WIDGETS_CLASS(QT_FORWARD_DECLARE_STATIC_TYPES_ITER)
-#undef QT_FORWARD_DECLARE_STATIC_TYPES_ITER
+#undef QT_FORWARD_DECLARE_STATIC_TYPES_ITER +/
 
-#define Q_DECLARE_METATYPE_TEMPLATE_1ARG(SINGLE_ARG_TEMPLATE) \
-QT_BEGIN_NAMESPACE \
-template <typename T> \
-struct QMetaTypeId< SINGLE_ARG_TEMPLATE<T> > \
-{ \
-    enum { \
-        Defined = QMetaTypeId2<T>::Defined \
-    }; \
-    static int qt_metatype_id() \
-    { \
-        static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0); \
-        if (const int id = metatype_id.loadRelaxed()) \
-            return id; \
-        const char *tName = QMetaType::fromType<T>().name(); \
-        Q_ASSERT(tName); \
-        const size_t tNameLen = qstrlen(tName); \
-        QByteArray typeName; \
-        typeName.reserve(sizeof(#SINGLE_ARG_TEMPLATE) + 1 + tNameLen + 1 + 1); \
-        typeName.append(#SINGLE_ARG_TEMPLATE, int(sizeof(#SINGLE_ARG_TEMPLATE)) - 1) \
-            .append('<').append(tName, tNameLen); \
-        typeName.append('>'); \
-        const int newId = qRegisterNormalizedMetaType< SINGLE_ARG_TEMPLATE<T> >(typeName); \
-        metatype_id.storeRelease(newId); \
-        return newId; \
-    } \
-}; \
-namespace QtPrivate { \
+alias QVariantList = QList!(QVariant);
+
+/+ #define Q_DECLARE_METATYPE_TEMPLATE_1ARG(SINGLE_ARG_TEMPLATE) \
+QT_BEGIN_NAMESPACE \ +/
+struct QMetaTypeId(X : C!T, alias C, T) if (is(const(X) == const(C!T)) && __traits(identifier, C) != "QFlags")
+{
+    enum Defined = QMetaTypeId2!T.Defined;
+    static int qt_metatype_id()
+    {
+        import qt.core.basicatomic;
+        import qt.core.bytearrayalgorithms;
+        static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
+        if (const int id = metatype_id.loadRelaxed())
+            return id;
+        const char *tName = QMetaType.fromType!T().name();
+        assert(tName);
+        const size_t tNameLen = qstrlen(tName);
+        QByteArray typeName;
+        immutable containerName = __traits(identifier, C);
+        typeName.reserve(containerName.length + 1 + tNameLen + 1 + 1);
+        typeName.append(containerName.ptr, containerName.length)
+            .append('<').append(tName, tNameLen);
+        typeName.append('>');
+        const int newId = qRegisterNormalizedMetaType!(C!T)(typeName);
+        metatype_id.storeRelease(newId);
+        return newId;
+    }
+}
+/+ namespace QtPrivate { \
 template<typename T> \
 struct IsSequentialContainer<SINGLE_ARG_TEMPLATE<T> > \
 { \
@@ -1554,35 +1558,35 @@ struct IsSequentialContainer<SINGLE_ARG_TEMPLATE<T> > \
 QT_END_NAMESPACE
 
 #define Q_DECLARE_METATYPE_TEMPLATE_2ARG(DOUBLE_ARG_TEMPLATE) \
-QT_BEGIN_NAMESPACE \
-template<typename T, typename U> \
-struct QMetaTypeId< DOUBLE_ARG_TEMPLATE<T, U> > \
-{ \
-    enum { \
-        Defined = QMetaTypeId2<T>::Defined && QMetaTypeId2<U>::Defined \
-    }; \
-    static int qt_metatype_id() \
-    { \
-        static QBasicAtomicInt metatype_id = Q_BASIC_ATOMIC_INITIALIZER(0); \
-        if (const int id = metatype_id.loadAcquire()) \
-            return id; \
-        const char *tName = QMetaType::fromType<T>().name(); \
-        const char *uName = QMetaType::fromType<U>().name(); \
-        Q_ASSERT(tName); \
-        Q_ASSERT(uName); \
-        const size_t tNameLen = qstrlen(tName); \
-        const size_t uNameLen = qstrlen(uName); \
-        QByteArray typeName; \
-        typeName.reserve(sizeof(#DOUBLE_ARG_TEMPLATE) + 1 + tNameLen + 1 + uNameLen + 1 + 1); \
-        typeName.append(#DOUBLE_ARG_TEMPLATE, int(sizeof(#DOUBLE_ARG_TEMPLATE)) - 1) \
-            .append('<').append(tName, tNameLen).append(',').append(uName, uNameLen); \
-        typeName.append('>'); \
-        const int newId = qRegisterNormalizedMetaType< DOUBLE_ARG_TEMPLATE<T, U> >(typeName); \
-        metatype_id.storeRelease(newId); \
-        return newId; \
-    } \
-}; \
-QT_END_NAMESPACE
+QT_BEGIN_NAMESPACE \ +/
+struct QMetaTypeId(X : C!(T, U), alias C, T, U) if (is(const(X) == const(C!(T, U))))
+{
+    enum Defined = QMetaTypeId2!T.Defined && QMetaTypeId2!U.Defined;
+    static int qt_metatype_id()
+    {
+        import qt.core.basicatomic;
+        import qt.core.bytearrayalgorithms;
+        static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
+        if (const int id = metatype_id.loadAcquire())
+            return id;
+        const char *tName = QMetaType.fromType!T().name();
+        const char *uName = QMetaType.fromType!U().name();
+        assert(tName);
+        assert(uName);
+        const size_t tNameLen = qstrlen(tName);
+        const size_t uNameLen = qstrlen(uName);
+        QByteArray typeName;
+        immutable containerName = __traits(identifier, C);
+        typeName.reserve(containerName.length + 1 + tNameLen + 1 + uNameLen + 1 + 1);
+        typeName.append(containerName.ptr, containerName.length)
+            .append('<').append(tName, tNameLen).append(',').append(uName, uNameLen);
+        typeName.append('>');
+        const int newId = qRegisterNormalizedMetaType!(C!(T, U))(typeName);
+        metatype_id.storeRelease(newId);
+        return newId;
+    }
+}
+/+QT_END_NAMESPACE
 
 namespace QtPrivate {
 
@@ -2311,12 +2315,18 @@ public:
     {
         import core.lifetime;
 
-        static if (__traits(compiles, {S s;}) || __traits(hasMember, S, "rawConstructor")) {
+        static if (is(S == class))
+        {
             return (const QMetaTypeInterface *, void *addr) {
-                static if (__traits(hasMember, S, "rawConstructor")) {
-                    (cast(S*)addr).rawConstructor();
+                *cast(S*) addr = null;
+            };
+        }
+        else static if (__traits(compiles, {S s;}) || __traits(hasMember, S, "rawConstructor")) {
+            return (const QMetaTypeInterface *, void *addr) {
+                static if (is(S == struct) && __traits(hasMember, S, "rawConstructor")) {
+                    (cast(S*) addr).rawConstructor();
                 } else {
-                    emplace!S(cast(S*)addr);
+                    emplace!S(cast(S*) addr);
                 }
             };
         } else {
@@ -2328,15 +2338,21 @@ public:
     {
         import core.lifetime;
 
-        static if (__traits(compiles, (ref S other){S s = other;})) {
+        static if (is(S == class))
+        {
+            return (const QMetaTypeInterface *, void *addr, const void *other) {
+                *cast(S*) addr = *cast(S*) other;
+            };
+        }
+        else static if (__traits(compiles, (ref S other){S s = other;})) {
             return (const QMetaTypeInterface *, void *addr, const void *other) {
                 static if (is(S == struct) && __traits(hasCopyConstructor, S)) {
                     // Workaround for https://issues.dlang.org/show_bug.cgi?id=22766
                     import core.stdc.string;
                     memset(addr, 0, S.sizeof);
-                    (*cast(S*)addr).__ctor(*cast(S*)other);
+                    (*cast(S*) addr).__ctor(*cast(S*) other);
                 } else {
-                    copyEmplace!S(*cast(S*)other, *cast(S*)addr);
+                    copyEmplace!S(*cast(S*) other, *cast(S*) addr);
                 }
             };
         } else {
@@ -2350,7 +2366,7 @@ public:
 
         static if (0 /*/+ std:: +/is_move_constructible_v!(S)*/) {
             return (const QMetaTypeInterface *, void *addr, void *other) {
-                emplace!S(cast(S*)addr, /+ std:: +/move(*reinterpret_cast!(S*)(other)));
+                emplace!S(cast(S*) addr, /+ std:: +/move(*reinterpret_cast!(S*)(other)));
             };
         } else {
             return null;
@@ -2359,7 +2375,9 @@ public:
 
     static QMetaTypeInterface.DtorFn getDtor()
     {
-        static if (1 /*/+ std:: +/is_destructible_v!(S) && !/+ std:: +/is_trivially_destructible_v!(S)*/)
+        static if (is(S == class))
+            return null;
+        else static if (1 /*/+ std:: +/is_destructible_v!(S) && !/+ std:: +/is_trivially_destructible_v!(S)*/)
             return (const QMetaTypeInterface *, void *addr) {
                 destroy!false(*reinterpret_cast!(S*)(addr));
             };
@@ -2388,7 +2406,7 @@ public:
 
 struct QMetaTypeInterfaceWrapper(T)
 {
-    extern(D) static immutable QMetaTypeInterface metaType = {
+    extern(D) static /*immutable*/ QMetaTypeInterface metaType = {
         /*.revision=*/ 0,
         /*.alignment=*/ T.alignof,
         /*.size=*/ T.sizeof,

@@ -16,6 +16,7 @@ import qt.config;
 import qt.core.abstractitemmodel;
 import qt.core.flags;
 import qt.core.list;
+import qt.core.metatype;
 import qt.core.object;
 import qt.core.property;
 import qt.core.typeinfo;
@@ -25,7 +26,7 @@ import qt.helpers;
 
 
 /// Binding for C++ class [QItemSelectionRange](https://doc.qt.io/qt-6/qitemselectionrange.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelectionRange
+@Q_DECLARE_METATYPE @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QItemSelectionRange
 {
 
 public:
@@ -228,7 +229,7 @@ private:
 // We export each out-of-line method individually to prevent MSVC from
 // exporting the whole QList class.
 /// Binding for C++ class [QItemSelection](https://doc.qt.io/qt-6/qitemselection.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct QItemSelection
+@Q_DECLARE_METATYPE @Q_RELOCATABLE_TYPE extern(C++, class) struct QItemSelection
 {
     public QList!(QItemSelectionRange) base0;
     alias base0 this;

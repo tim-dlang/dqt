@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.list;
 import qt.core.metamacros;
+import qt.core.metatype;
 import qt.core.object;
 import qt.core.sharedpointer_impl;
 import qt.core.string;
@@ -29,7 +30,7 @@ extern(C++, class) struct CertificateErrorController;
 
 
 /// Binding for C++ class [QWebEngineCertificateError](https://doc.qt.io/qt-6/qwebenginecertificateerror.html).
-extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineCertificateError
+@Q_DECLARE_METATYPE extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineCertificateError
 {
     mixin(Q_GADGET);
     /+ Q_PROPERTY(QUrl url READ url CONSTANT FINAL)

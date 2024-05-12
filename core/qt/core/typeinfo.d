@@ -53,7 +53,7 @@ template QTypeInfo(T)
         enum isRelocatable = true;
         enum isComplex = false;
     }
-    else static if (is(T == int) || is(T == uint) || is(T == double))
+    else static if (is(T == int) || is(T == uint) || is(T == float) || is(T == double) || is(T == char))
     {
         enum isRelocatable = true;
         enum isComplex = false;
@@ -108,7 +108,7 @@ template QTypeInfo(T)
     }
     enum isLarge = T.sizeof > (void*).sizeof;
     enum isIntegral = is_integral!T;
-    enum isPointer = is(T == X*, X);
+    enum isPointer = is(T == X*, X) || is(T == class);
 
     //pragma(msg, T.stringof, " ", isRelocatable, isComplex, isLarge);
 }
