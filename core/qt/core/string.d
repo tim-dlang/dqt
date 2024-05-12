@@ -1252,7 +1252,7 @@ public:
     pragma(inline, true) bool isNull() const { return d.isNull(); }
 
 
-    bool isSimpleText() const;
+    //bool isSimpleText() const;
     bool isRightToLeft() const;
     /+ [[nodiscard]] +/ bool isValidUtf16() const/+ noexcept+/
     { return QStringView(this).isValidUtf16(); }

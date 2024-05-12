@@ -480,7 +480,7 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-class /+ Q_CORE_EXPORT +/ QDeferredDeleteEvent : QEvent
+/+ class /+ Q_CORE_EXPORT +/ QDeferredDeleteEvent : QEvent
 {
     /+ Q_EVENT_DISABLE_COPY(QDeferredDeleteEvent) +/protected:
     this(const typeof(this) other)
@@ -501,5 +501,5 @@ private:
     int level;
     /+ friend class QCoreApplication; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
-}
+} +/
 
