@@ -376,13 +376,22 @@ class QRegularExpression;
 
     /+ template<typename T>
 #ifndef Q_CLANG_QDOC +/
-    pragma(inline, true) static QVariant fromValue(T)(ref const T value)/+ ->
+    pragma(inline, true) extern(D) static QVariant fromValue(T)(ref const T value)/+ ->
         std::enable_if_t<std::is_copy_constructible_v<T>, QVariant> +/
 /+ #else
     static inline QVariant fromValue(const T &value)
 #endif +/
     {
-        return QVariant(QMetaType.fromType!(T)(), &value);
+        import std.traits;
+        static if (isSomeString!T)
+        {
+            QString s = QString(value);
+            return fromValue(s);
+        }
+        else
+        {
+            return QVariant(QMetaType.fromType!(T)(), &value);
+        }
     }
 
 /+ #if (__has_include(<variant>) && __cplusplus >= 201703L) || defined(Q_CLANG_QDOC) +/

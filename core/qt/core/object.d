@@ -241,6 +241,19 @@ protected:
     struct QScriptable{}
 
     /++
+        UDA for Qt properties.
+
+        Meta data for marked member functions will be collected by
+        `Q_OBJECT_D` for use at runtime.
+    +/
+    public struct QPropertyDef
+    {
+        string name;
+
+        string notify;
+    }
+
+    /++
         String constant for mixin in every class inheriting `QObject`.
 
         This is equivalent to the C++ macro [Q_OBJECT](https://doc.qt.io/qt-6/qobject.html#Q_OBJECT).
@@ -730,9 +743,9 @@ public:
     version (QT_NO_PROPERTIES) {} else
     {
         final bool setProperty(const(char)* name, ref const(QVariant) value);
-        final bool setProperty(T)(const(char)* name, auto ref T value)
+        extern(D) final bool setProperty(T)(const(char)* name, auto ref T value)
         {
-            QVariant v = QVariant(value);
+            QVariant v = QVariant.fromValue(value);
             return setProperty(name, v);
         }
         final QVariant property(const(char)* name) const;

@@ -425,6 +425,12 @@ public:
         this.d = s.d;
     }
 
+    @disable this(this);
+    this(ref const(QString) s)
+    {
+        d = (cast(QString*) &s).d;
+    }
+
     //
     // QString inline members
     //
