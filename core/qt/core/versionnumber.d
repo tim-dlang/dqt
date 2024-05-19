@@ -93,7 +93,7 @@ private:
             if (isUsingPointer() && other.isUsingPointer()) {
                 *pointer_segments = *other.pointer_segments;
             } else if (other.isUsingPointer()) {
-                pointer_segments = cpp_new!QVector!(int)(*other.pointer_segments);
+                pointer_segments = cpp_new!(QVector!(int))(*other.pointer_segments);
             } else {
                 if (isUsingPointer())
                     cpp_delete(pointer_segments);
