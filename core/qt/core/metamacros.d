@@ -331,6 +331,8 @@ template MetaObjectImpl(T)
                 return "QMetaType.Type.Bool";
             else static if (is(T2 == double))
                 return "QMetaType.Type.Double";
+            else static if (is(T2 == void))
+                return "QMetaType.Type.Void";
             else static if (is(const(T2) == const(QString)))
                 return "QMetaType.Type.QString";
             else static if (is(const(T2) == const(QPoint)))
@@ -546,7 +548,7 @@ template MetaObjectImpl(T)
                 metaDataCode ~= "    // " ~ typename ~ ": parameters\n";
             static foreach (i; 0 .. M.length)
             {
-                metaDataCode ~= "                    QMetaType.Type.Void, "; // TODO: correct return type
+                metaDataCode ~= text("                    ", typeToMeta!(ReturnType!(M[i])), ", ");
                 foreach (P; Parameters!(M[i]))
                     metaDataCode ~= typeToMeta!(P) ~ ", ";
                 foreach (j, P; Parameters!(M[i]))
@@ -787,14 +789,18 @@ enum Q_OBJECT_D = q{
                     mixin((){
                             string methodCallCases;
                             static foreach (i; 0 .. allMethods.length)
-                            {
-                                methodCallCases ~= text("\n                    case ", i, ": _t.", __traits(identifier, allMethods[i]), "(");
+                            {{
+                                string call = text("_t.", __traits(identifier, allMethods[i]), "(");
                                 static foreach (j, P; Parameters!(allMethods[i]))
                                 {
-                                    methodCallCases ~= text("*cast(Parameters!(allMethods[", i, "])[", j, "]*)(_a[", j + 1, "]), ");
+                                    call ~= text("*cast(Parameters!(allMethods[", i, "])[", j, "]*)(_a[", j + 1, "]), ");
                                 }
-                                methodCallCases ~= "); break;";
-                            }
+                                call ~= ")";
+                                static if (is(ReturnType!(allMethods[i]) == void))
+                                    methodCallCases ~= text("\n                    case ", i, ": ", call, "; break;");
+                                else
+                                    methodCallCases ~= text("\n                    case ", i, ": {if (_a[0]) *cast(ReturnType!(allMethods[", i, "])*)(_a[0]) = ", call, "; else ", call, ";} break;");
+                            }}
                             return methodCallCases;
                         }());
                 default: {}

@@ -228,6 +228,11 @@ public /+ slots +/:
         @QSignal final void string1Changed() {mixin(Q_SIGNAL_IMPL_D);}
     }
 
+    @QInvokable final QString toUpper(ref const(QString) s)
+    {
+        return s.toUpper();
+    }
+
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -408,7 +413,7 @@ unittest
     const(QMetaObject)* mo = &TestObject.staticMetaObject;
     assert(strcmp(mo.className(), "TestObject") == 0);
     //assert(mo->constructorCount() == 2);
-    assert(mo.methodCount() - mo.methodOffset() == 10 + 10 + 10 + 3);
+    assert(mo.methodCount() - mo.methodOffset() == 10 + 10 + 10 + 3 + 1);
 
     TestObject a = cpp_new!TestObject();
     assert(a.metaObject() == mo);
@@ -471,6 +476,13 @@ unittest
     assert(method.name().toConstCharArray() == "signalCustomStruct1");
     assert(method.methodSignature().toConstCharArray() == "signalCustomStruct1(CustomStruct1)");
     assert(method.parameterCount() == 1);
+
+    method = mo.method(mo.methodOffset() + 33);
+    assert(method.name().toConstCharArray() == "toUpper");
+    assert(method.methodSignature().toConstCharArray() == "toUpper(QString)");
+    assert(method.parameterCount() == 1);
+    assert(method.parameterType(0) == QMetaType.Type.QString);
+    assert(method.returnType() == QMetaType.Type.QString);
 
     assert(mo.propertyCount() - mo.propertyOffset() == 4);
     QMetaProperty prop = mo.property(mo.propertyOffset() + 0);
@@ -911,6 +923,25 @@ unittest
     changes = [];
     o.setProperty("string1", "test2");
     assert(changes == []);
+
+    cpp_delete(o);
+}
+
+unittest
+{
+    import core.stdcpp.new_;
+    import qt.core.objectdefs;
+
+    TestObject o = cpp_new!TestObject();
+
+    QString s = QString("Test");
+    QString s2 = o.toUpper(s);
+    assert(s2 == "TEST");
+
+    QString s3 = QString.create;
+    s = QString("abc");
+    QMetaObject.invokeMethod(o, "toUpper", mixin(Q_RETURN_ARG(q{QString}, q{s3})), mixin(Q_ARG(q{QString}, q{s})));
+    assert(s3 == "ABC");
 
     cpp_delete(o);
 }
