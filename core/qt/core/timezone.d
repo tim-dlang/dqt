@@ -72,6 +72,12 @@ public:
             this.abbreviation = QString.create;
             emplace!QDateTime(&this.atUtc);
         }
+
+        @disable this(this);
+        this(ref const(OffsetData) other)
+        {
+            this.tupleof = (*cast(OffsetData*) &other).tupleof;
+        }
     }
     alias OffsetDataList = QVector!(OffsetData);
 

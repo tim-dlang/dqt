@@ -370,10 +370,18 @@ extern(C++, "QtPrivate") {
     pragma(inline, true) T value(T)() const
     { return qvariant_cast!T(this); }
 
-    static QVariant fromValue(T)(ref const T value)
+    extern(D) static QVariant fromValue(T)(ref const T value)
     {
         import std.traits;
-        return QVariant(qMetaTypeId!T(), &value, isPointer!T);
+        static if (isSomeString!T)
+        {
+            QString s = QString(value);
+            return fromValue(s);
+        }
+        else
+        {
+            return QVariant(qMetaTypeId!T(), &value, isPointer!T);
+        }
     }
 
 /+ #if (__has_include(<variant>) && __cplusplus >= 201703L) || defined(Q_CLANG_QDOC)

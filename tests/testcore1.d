@@ -73,6 +73,7 @@ public:
     {
         super(parent);
         lastStr = QString.create;
+        m_string1 = QString.create;
     }
 
     QString lastStr;
@@ -177,6 +178,57 @@ public /+ slots +/:
         lastStr = "CustomStruct1 " ~ QString.number(s.i);
     }
 
+    private bool m_bool1 = false;
+    @QPropertyDef
+    {
+        final bool bool1() const
+        {
+            return m_bool1;
+        }
+        final void setBool1(bool bool1)
+        {
+            if (m_bool1 != bool1)
+            {
+                m_bool1 = bool1;
+                /+ emit +/ bool1Changed();
+            }
+        }
+        @QSignal final void bool1Changed() {mixin(Q_SIGNAL_IMPL_D);}
+    }
+
+    @QPropertyDef("notBool1", notify: "bool1Changed")
+    {
+        final bool notBool1() const
+        {
+            return !m_bool1;
+        }
+    }
+
+    @QPropertyDef("bool2")
+    {
+        private bool m_bool2 = false;
+        @QSignal final void bool2Changed() {mixin(Q_SIGNAL_IMPL_D);}
+    }
+
+    private QString m_string1;
+    @QPropertyDef
+    {
+        final QString string1() const
+        {
+            return m_string1;
+        }
+        final void setString1(ref const(QString) string1)
+        {
+            if (m_string1 != string1)
+            {
+                m_string1 = string1;
+                /+ emit +/ string1Changed();
+            }
+        }
+        @QSignal final void string1Changed() {mixin(Q_SIGNAL_IMPL_D);}
+    }
+
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
 unittest
@@ -356,7 +408,7 @@ unittest
     const(QMetaObject)* mo = &TestObject.staticMetaObject;
     assert(strcmp(mo.className(), "TestObject") == 0);
     //assert(mo->constructorCount() == 2);
-    assert(mo.methodCount() - mo.methodOffset() == 10 + 10 + 10);
+    assert(mo.methodCount() - mo.methodOffset() == 10 + 10 + 10 + 3);
 
     TestObject a = cpp_new!TestObject();
     assert(a.metaObject() == mo);
@@ -419,6 +471,43 @@ unittest
     assert(method.name().toConstCharArray() == "signalCustomStruct1");
     assert(method.methodSignature().toConstCharArray() == "signalCustomStruct1(CustomStruct1)");
     assert(method.parameterCount() == 1);
+
+    assert(mo.propertyCount() - mo.propertyOffset() == 4);
+    QMetaProperty prop = mo.property(mo.propertyOffset() + 0);
+    assert(fromStringz(prop.name()) == "bool1");
+    assert(prop.type() == QVariant.Type.Bool);
+    assert(prop.isWritable());
+    assert(prop.isReadable());
+    assert(prop.hasNotifySignal());
+    assert(prop.notifySignalIndex() == mo.methodOffset() + 10);
+    assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "bool1Changed");
+
+    prop = mo.property(mo.propertyOffset() + 1);
+    assert(fromStringz(prop.name()) == "notBool1");
+    assert(prop.type() == QVariant.Type.Bool);
+    assert(!prop.isWritable());
+    assert(prop.isReadable());
+    assert(prop.hasNotifySignal());
+    assert(prop.notifySignalIndex() == mo.methodOffset() + 10);
+    assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "bool1Changed");
+
+    prop = mo.property(mo.propertyOffset() + 2);
+    assert(fromStringz(prop.name()) == "bool2");
+    assert(prop.type() == QVariant.Type.Bool);
+    assert(prop.isWritable());
+    assert(prop.isReadable());
+    assert(prop.hasNotifySignal());
+    assert(prop.notifySignalIndex() == mo.methodOffset() + 11);
+    assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "bool2Changed");
+
+    prop = mo.property(mo.propertyOffset() + 3);
+    assert(fromStringz(prop.name()) == "string1");
+    assert(prop.type() == QVariant.Type.String);
+    assert(prop.isWritable());
+    assert(prop.isReadable());
+    assert(prop.hasNotifySignal());
+    assert(prop.notifySignalIndex() == mo.methodOffset() + 12);
+    assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "string1Changed");
 }
 
 void connectByString(TestObject a, TestObject b)
@@ -765,4 +854,63 @@ unittest
     assert(qCountLeadingZeroBits(0x80000000U) == 0);
     assert(qCountLeadingZeroBits(0x8000000000000000U) == 0);
     assert(qCountLeadingZeroBits(0xffffffff80000000U) == 0);
+}
+
+unittest
+{
+    import core.stdcpp.new_;
+    import qt.core.stringlist;
+
+    TestObject o = cpp_new!TestObject();
+
+    string[] changes;
+    QObject.connect(o.signal!"bool1Changed", o, () {
+        changes ~= "bool1Changed";
+    });
+    QObject.connect(o.signal!"bool2Changed", o, () {
+        changes ~= "bool2Changed";
+    });
+    QObject.connect(o.signal!"string1Changed", o, () {
+        changes ~= "string1Changed";
+    });
+
+    assert(o.property("bool1").toString() == "false");
+    assert(o.property("notBool1").toString() == "true");
+    assert(o.property("bool2").toString() == "false");
+    assert(o.property("string1").toString() == "");
+
+    o.setBool1(true);
+    assert(changes == ["bool1Changed"]);
+    assert(o.property("bool1").toString() == "true");
+    assert(o.property("notBool1").toString() == "false");
+
+    changes = [];
+    o.setBool1(true);
+    assert(changes == []);
+
+    o.setProperty("bool1", false);
+    assert(changes == ["bool1Changed"]);
+    assert(o.property("bool1").toString() == "false");
+    assert(o.property("notBool1").toString() == "true");
+
+    changes = [];
+    o.setProperty("bool2", true);
+    assert(changes == ["bool2Changed"]);
+    assert(o.property("bool2").toBool());
+
+    changes = [];
+    o.setString1("test1");
+    assert(changes == ["string1Changed"]);
+    assert(o.property("string1").toString() == "test1");
+
+    changes = [];
+    o.setProperty("string1", "test2");
+    assert(changes == ["string1Changed"]);
+    assert(o.property("string1").toString() == "test2");
+
+    changes = [];
+    o.setProperty("string1", "test2");
+    assert(changes == []);
+
+    cpp_delete(o);
 }

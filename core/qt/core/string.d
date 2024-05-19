@@ -361,16 +361,19 @@ public:
         s.d = Data.sharedNull();
     }
 
+    @disable this(this);
+    this(ref const(QString) s)
+    {
+        d = (cast(QString*) &s).d;
+        d.ref_.ref_();
+    }
+
     //
     // QString inline members
     //
     pragma(inline, true) this(QLatin1String aLatin1)
     {
         this.d = fromLatin1_helper(aLatin1.latin1(), aLatin1.size());
-    }
-    this(this)
-    {
-        d.ref_.ref_();
     }
     pragma(inline, true) ~this() { if (!d.ref_.deref()) Data.deallocate(d); }
     /+ref QString operator =(QChar c);+/

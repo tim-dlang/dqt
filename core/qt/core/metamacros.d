@@ -253,6 +253,7 @@ template MetaObjectImpl(T)
     alias allSlots = Filter!(IsQSlot, allFunctions);
     alias allInvokables = Filter!(IsQInvokable, allFunctions);
     alias allMethods = std.meta.AliasSeq!(allSignals, allSlots, allInvokables);
+    alias allFields = T.tupleof;
 
     /*pragma(msg, allSignals);
     pragma(msg, allSlots);
@@ -265,7 +266,9 @@ template MetaObjectImpl(T)
 
     string generateCode()
     {
+        import std.algorithm;
         import std.conv;
+        import std.ascii;
 
         string concatenatedStrings;
         string stringLiteralsCode;
@@ -284,29 +287,6 @@ template MetaObjectImpl(T)
         }
 
         addString(__traits(identifier, T));
-
-        size_t currentOutputIndex = 0;
-
-        currentOutputIndex += 14;
-
-        size_t methodsStartIndex = currentOutputIndex;
-
-        string metaDataCode = mixin(interpolateMixin(q{
-             // content:
-                   8,       // revision
-                   0,       // classname
-                   0,    0, // classinfo
-                   $(text(allMethods.length)),   $(text(methodsStartIndex)), // methods
-                   0,    0, // properties
-                   0,    0, // enums/sets
-                   0,    0, // constructors
-                   0,       // flags
-                   $(text(allSignals.length)),       // signalCount
-
-        }));
-
-        assert(methodsStartIndex == currentOutputIndex);
-        currentOutputIndex += 5 * allMethods.length;
 
         string typeToMetaComplex(T2)()
         {
@@ -337,7 +317,7 @@ template MetaObjectImpl(T)
                     return __traits(identifier, T2);
             }
             else
-                static assert("TODO: Type not yet supported ", T2.stringof);
+                static assert(false, "TODO: Type not yet supported ", T2.stringof);
         }
         string typeToMeta(T2)()
         {
@@ -358,6 +338,188 @@ template MetaObjectImpl(T)
             else
                 return text("0x80000000 | ", addString(typeToMetaComplex!T2()));
         }
+
+        struct PropertyInfo
+        {
+            string name;
+            string type;
+            string typeCode;
+            size_t readFunc = size_t.max;
+            string readFuncCode;
+            size_t writeFunc = size_t.max;
+            string writeFuncCode;
+            size_t notifyFunc = size_t.max;
+            string notifyFuncCode;
+            size_t field = size_t.max;
+        }
+        PropertyInfo*[] allPropertyInfos;
+        size_t[string] propertyInfoByName;
+        PropertyInfo* getPropertyInfo(string name)
+        {
+            if (name in propertyInfoByName)
+                return allPropertyInfos[propertyInfoByName[name]];
+            allPropertyInfos ~= new PropertyInfo(name);
+            propertyInfoByName[name] = allPropertyInfos.length - 1;
+            return allPropertyInfos[$ - 1];
+        }
+        void updatePropertyInfo(PropertyInfo* propertyInfo, QObject.QPropertyDef prop, string typeName, string typeCode)
+        {
+            if (typeName != "")
+            {
+                assert(propertyInfo.type == "" || propertyInfo.type == typeName, "Conflicting types for property " ~ propertyInfo.name ~ ": " ~ propertyInfo.type ~ " != "~ typeName);
+                propertyInfo.type = typeName;
+            }
+            if (propertyInfo.typeCode == "")
+            {
+                propertyInfo.typeCode = typeCode;
+            }
+            if (prop.notify)
+            {
+                static foreach (i, F; allSignals)
+                {
+                    if (__traits(identifier, F) == prop.notify)
+                    {
+                        if (Parameters!F.length)
+                        {
+                            assert(false, "Notify signal for property with parameters not supported");
+                        }
+                        else if (!(propertyInfo.notifyFunc == size_t.max || propertyInfo.notifyFunc == i))
+                        {
+                            assert(false, "Duplicate notify signals for property " ~ propertyInfo.name ~ ": " ~ __traits(identifier, F));
+                        }
+                        else
+                        {
+                            propertyInfo.notifyFunc = i;
+                            propertyInfo.notifyFuncCode = __traits(identifier, F) ~ "()";
+                        }
+                    }
+                }
+            }
+        }
+        static foreach (i, F; allFunctions)
+        {
+            static foreach (prop_; getUDAs!(F, QObject.QPropertyDef))
+            {{
+                static if (is(prop_ == struct))
+                    enum QObject.QPropertyDef prop = prop_.init;
+                else
+                    enum QObject.QPropertyDef prop = prop_;
+                static if (IsQSignal!F)
+                {
+                    static if (prop.name.length)
+                        enum name = prop.name;
+                    else static if (__traits(identifier, F).endsWith("Changed"))
+                        enum name = __traits(identifier, F)[0 .. $ - 7];
+                    else
+                        static assert(false, "No name for property signal " ~ __traits(identifier, F));
+
+                    auto propertyInfo = getPropertyInfo(name);
+                    // Handled in separate loop
+                }
+                else static if (Parameters!F.length == 0)
+                {
+                    static if (prop.name.length)
+                        enum name = prop.name;
+                    else
+                        enum name = __traits(identifier, F);
+
+                    enum string typeName = typeToMeta!(ReturnType!F);
+
+                    auto propertyInfo = getPropertyInfo(name);
+                    assert(propertyInfo.readFunc == size_t.max || propertyInfo.readFunc == i, "Duplicate getters for property " ~ name ~ ": " ~ __traits(identifier, F));
+                    propertyInfo.readFunc = i;
+                    updatePropertyInfo(propertyInfo, prop, typeName, text("ReturnType!(allFunctions[", i, "])"));
+                    propertyInfo.readFuncCode = __traits(identifier, F) ~ "()";
+                }
+                else static if (Parameters!F.length == 1)
+                {
+                    static if (prop.name.length)
+                        enum name = prop.name;
+                    else static if (__traits(identifier, F).startsWith("set") && __traits(identifier, F).length >= 4)
+                        enum name = toLower(__traits(identifier, F)[3]) ~ __traits(identifier, F)[4 .. $];
+                    else
+                        enum name = __traits(identifier, F);
+
+                    enum string typeName = typeToMeta!(Parameters!F[0]);
+
+                    auto propertyInfo = getPropertyInfo(name);
+                    assert(propertyInfo.writeFunc == size_t.max || propertyInfo.writeFunc == i, "Duplicate setters for property " ~ name ~ ": " ~ __traits(identifier, F));
+                    propertyInfo.writeFunc = i;
+                    updatePropertyInfo(propertyInfo, prop, typeName, text("Parameters!(allFunctions[", i, "])[0]"));
+                    propertyInfo.writeFuncCode = text("_t.", __traits(identifier, F), "(*cast(allPropertyTypes[", propertyInfoByName[name], "]*)(_v));");
+                }
+                else
+                    static assert(false, "Unsupported function for property " ~ __traits(identifier, F));
+            }}
+        }
+        static foreach (i, F; allSignals)
+        {
+            static foreach (prop_; getUDAs!(F, QObject.QPropertyDef))
+            {{
+                static if (is(prop_ == struct))
+                    enum QObject.QPropertyDef prop = prop_.init;
+                else
+                    enum QObject.QPropertyDef prop = prop_;
+
+                static assert(Parameters!F.length == 0, "Notify signal for property with parameters not supported");
+
+                static if (prop.name.length)
+                    enum name = prop.name;
+                else static if (__traits(identifier, F).endsWith("Changed"))
+                    enum name = __traits(identifier, F)[0 .. $ - 7];
+                else
+                    static assert(false, "No name for property signal " ~ __traits(identifier, F));
+
+                auto propertyInfo = getPropertyInfo(name);
+                assert(propertyInfo.notifyFunc == size_t.max || propertyInfo.notifyFunc == i, "Duplicate notify signals for property " ~ name ~ ": " ~ __traits(identifier, F));
+                propertyInfo.notifyFunc = i;
+                updatePropertyInfo(propertyInfo, prop, "", "");
+                propertyInfo.notifyFuncCode = __traits(identifier, F) ~ "()";
+            }}
+        }
+        static foreach (i, F; allFields)
+        {
+            static foreach (prop_; getUDAs!(F, QObject.QPropertyDef))
+            {{
+                static if (is(prop_ == struct))
+                    enum QObject.QPropertyDef prop = prop_.init;
+                else
+                    enum QObject.QPropertyDef prop = prop_;
+
+                static if (prop.name.length)
+                    enum name = prop.name;
+                else
+                    enum name = __traits(identifier, F);
+
+                enum string typeName = typeToMeta!(typeof(F));
+
+                auto propertyInfo = getPropertyInfo(name);
+                assert(propertyInfo.field == size_t.max, "Duplicate fields for property " ~ name ~ ": " ~ __traits(identifier, F));
+                assert(propertyInfo.readFunc == size_t.max && propertyInfo.writeFunc == size_t.max,
+                    "Field and getter/setter for property " ~ name ~ ": " ~ __traits(identifier, F));
+                propertyInfo.field = i;
+                propertyInfo.readFuncCode = __traits(identifier, F);
+                updatePropertyInfo(propertyInfo, prop, typeName, text("typeof(allFields[", i, "])"));
+
+                string value = text("*cast(allPropertyTypes[", propertyInfoByName[name], "]*)(_v)");
+                propertyInfo.writeFuncCode = text("if (_t.", __traits(identifier, F), " != ", value, ") {");
+                propertyInfo.writeFuncCode ~= text("_t.", __traits(identifier, F), " = ", value, ";");
+                if (propertyInfo.notifyFuncCode != "")
+                    propertyInfo.writeFuncCode ~= text(" /*emit*/ _t.", propertyInfo.notifyFuncCode, ";");
+                propertyInfo.writeFuncCode ~= text("}");
+            }}
+        }
+
+        size_t currentOutputIndex = 0;
+
+        currentOutputIndex += 14;
+
+        size_t methodsStartIndex = currentOutputIndex;
+
+        string metaDataCode;
+
+        assert(methodsStartIndex == currentOutputIndex);
+        currentOutputIndex += 5 * allMethods.length;
 
         void addMethods(M...)(string typename, uint type)
         {
@@ -395,6 +557,56 @@ template MetaObjectImpl(T)
         addMethodParameters!(allSignals)("signals");
         addMethodParameters!(allSlots)("slots");
         addMethodParameters!(allInvokables)("methods");
+
+        size_t propertiesStartIndex = 0;
+        string allPropertyTypesCode;
+        string allReadFuncCode;
+        string allWriteFuncCode;
+
+        if (allPropertyInfos.length)
+        {
+            propertiesStartIndex = currentOutputIndex;
+            metaDataCode ~= "    // properties: name, type, flags\n";
+            foreach (propertyInfo; allPropertyInfos)
+            {
+                size_t nameId = addString(propertyInfo.name);
+                uint flags = 0x00095000;
+                if (propertyInfo.readFunc != size_t.max || propertyInfo.field != size_t.max)
+                    flags |= 1;
+                if (propertyInfo.writeFunc != size_t.max || propertyInfo.field != size_t.max)
+                    flags |= 2;
+                if (propertyInfo.notifyFunc != size_t.max)
+                    flags |= 0x400000;
+                assert(propertyInfo.type != "", "Missing type for property " ~ propertyInfo.name);
+                metaDataCode ~= mixin(interpolateMixin(q{
+                       $(text(nameId)), $(propertyInfo.type), $(text(flags)), $("// " ~ propertyInfo.name)
+                }));
+                currentOutputIndex += 3;
+            }
+            metaDataCode ~= "    // properties: notify_signal_id\n";
+            foreach (propertyInfo; allPropertyInfos)
+            {
+                metaDataCode ~= mixin(interpolateMixin(q{
+                       $(text(propertyInfo.notifyFunc != size_t.max ? propertyInfo.notifyFunc : 0)), $("// " ~ propertyInfo.name)
+                }));
+                currentOutputIndex += 1;
+            }
+
+            foreach (propertyInfo; allPropertyInfos)
+            {
+                if (allPropertyTypesCode.length)
+                    allPropertyTypesCode ~= ", ";
+                allPropertyTypesCode ~= propertyInfo.typeCode;
+
+                if (allReadFuncCode.length)
+                    allReadFuncCode ~= ", ";
+                allReadFuncCode ~= "\"" ~ propertyInfo.readFuncCode ~ "\"";
+
+                if (allWriteFuncCode.length)
+                    allWriteFuncCode ~= ", ";
+                allWriteFuncCode ~= "\"" ~ propertyInfo.writeFuncCode ~ "\"";
+            }
+        }
 
         addString("");
 
@@ -445,6 +657,17 @@ template MetaObjectImpl(T)
             };
 
             extern(C++) static __gshared const uint[$(text(currentOutputIndex + 1))] meta_data = [
+             // content:
+                   8,       // revision
+                   0,       // classname
+                   0,    0, // classinfo
+                   $(text(allMethods.length)),   $(text(methodsStartIndex)), // methods
+                   $(text(allPropertyInfos.length)),    $(text(propertiesStartIndex)), // properties
+                   0,    0, // enums/sets
+                   0,    0, // constructors
+                   0,       // flags
+                   $(text(allSignals.length)),       // signalCount
+
                     $(metaDataCode)
                    0        // eod
             ];
@@ -478,6 +701,10 @@ template MetaObjectImpl(T)
                     null
                 } };
             }
+
+            alias allPropertyTypes = AliasSeq!($(allPropertyTypesCode));
+            enum allReadFuncCode = [$(allReadFuncCode)];
+            enum allWriteFuncCode = [$(allWriteFuncCode)];
         }));
     }
     //pragma(msg, generateCode());
@@ -523,29 +750,51 @@ enum Q_OBJECT_D = q{
                     *reinterpret_cast!(int*)(_a[0]) = -1;
                 _id -= allMethods.length;
             }
+
+            version(QT_NO_PROPERTIES) {}
+            else
+            {
+                enum propertyCount = qt.core.metamacros.MetaObjectImpl!(typeof(this)).allPropertyTypes.length;
+                if (_c == qt.core.objectdefs.QMetaObject.Call.ReadProperty || _c == qt.core.objectdefs.QMetaObject.Call.WriteProperty
+                        || _c == qt.core.objectdefs.QMetaObject.Call.ResetProperty || _c == qt.core.objectdefs.QMetaObject.Call.RegisterPropertyMetaType) {
+                    qt_static_metacall(this, _c, _id, _a);
+                    _id -= propertyCount;
+                } else if (_c == qt.core.objectdefs.QMetaObject.Call.QueryPropertyDesignable) {
+                    _id -= propertyCount;
+                } else if (_c == qt.core.objectdefs.QMetaObject.Call.QueryPropertyScriptable) {
+                    _id -= propertyCount;
+                } else if (_c == qt.core.objectdefs.QMetaObject.Call.QueryPropertyStored) {
+                    _id -= propertyCount;
+                } else if (_c == qt.core.objectdefs.QMetaObject.Call.QueryPropertyEditable) {
+                    _id -= propertyCount;
+                } else if (_c == qt.core.objectdefs.QMetaObject.Call.QueryPropertyUser) {
+                    _id -= propertyCount;
+                }
+            }
             return _id;
         }
         extern(C++) static void qt_static_metacall(dqtimported!"qt.core.object".QObject _o, qt.core.objectdefs.QMetaObject.Call _c, int _id, void **_a)
         {
             import qt.core.metamacros;
             import qt.core.objectdefs;
+            import std.conv;
+            import std.traits;
             if (_c == qt.core.objectdefs.QMetaObject.Call.InvokeMetaMethod) {
                 alias allMethods = qt.core.metamacros.MetaObjectImpl!(typeof(this)).allMethods;
-                import std.conv, std.traits;
                 auto _t = static_cast!(typeof(this))(_o);
                 //Q_UNUSED(_t)
                 switch (_id) {
                     mixin((){
                             string methodCallCases;
                             static foreach (i; 0 .. allMethods.length)
-                            {{
+                            {
                                 methodCallCases ~= text("\n                    case ", i, ": _t.", __traits(identifier, allMethods[i]), "(");
                                 static foreach (j, P; Parameters!(allMethods[i]))
                                 {
                                     methodCallCases ~= text("*cast(Parameters!(allMethods[", i, "])[", j, "]*)(_a[", j + 1, "]), ");
                                 }
                                 methodCallCases ~= "); break;";
-                            }}
+                            }
                             return methodCallCases;
                         }());
                 default: {}
@@ -567,6 +816,47 @@ enum Q_OBJECT_D = q{
                         return;
                     }
                 }}
+            }
+            version(QT_NO_PROPERTIES) {}
+            else
+            {
+                alias allPropertyTypes = qt.core.metamacros.MetaObjectImpl!(typeof(this)).allPropertyTypes;
+                alias allFunctions = qt.core.metamacros.MetaObjectImpl!(typeof(this)).allFunctions;
+                alias allFields = qt.core.metamacros.MetaObjectImpl!(typeof(this)).allFields;
+                enum allReadFuncCode = qt.core.metamacros.MetaObjectImpl!(typeof(this)).allReadFuncCode;
+                enum allWriteFuncCode = qt.core.metamacros.MetaObjectImpl!(typeof(this)).allWriteFuncCode;
+                if (_c == qt.core.objectdefs.QMetaObject.Call.ReadProperty) {
+                    auto _t = static_cast!(typeof(this))(_o);
+                    void *_v = _a[0];
+                    switch (_id) {
+                        mixin((){
+                                string cases;
+                                static foreach (i; 0 .. allPropertyTypes.length)
+                                {
+                                    if (allReadFuncCode[i].length)
+                                        cases ~= text("\n                    case ", i, ": *cast(allPropertyTypes[", i, "]*)(_v) = _t.", allReadFuncCode[i], "; break;");
+                                }
+                                return cases;
+                            }());
+                    default: {}
+                    }
+                } else if (_c == qt.core.objectdefs.QMetaObject.Call.WriteProperty) {
+                    auto _t = static_cast!(typeof(this))(_o);
+                    void *_v = _a[0];
+                    switch (_id) {
+                        mixin((){
+                                string cases;
+                                static foreach (i; 0 .. allPropertyTypes.length)
+                                {
+                                    if (allWriteFuncCode[i].length)
+                                        cases ~= text("\n                    case ", i, ": ", allWriteFuncCode[i], " break;");
+                                }
+                                return cases;
+                            }());
+                    default: {}
+                    }
+                } else if (_c == qt.core.objectdefs.QMetaObject.Call.ResetProperty) {
+                }
             }
             //Q_UNUSED(_a);
         }
