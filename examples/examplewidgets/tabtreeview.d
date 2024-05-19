@@ -25,6 +25,7 @@ public:
         desc = QString.create;
         childs = QVector!(RandomTreeItem*).create();
     }
+    @disable this(this);
     QString name;
     QString desc;
     QVector!(RandomTreeItem*) childs;
