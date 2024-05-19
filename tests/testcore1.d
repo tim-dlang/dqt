@@ -16,11 +16,25 @@ import std.stdio;
 import std.string;
 
 QCoreApplication app;
+bool sameRuntimeVersion;
 shared static this()
 {
     import core.runtime;
+    import core.stdc.stdio;
+    import core.stdcpp.new_;
+    import qt.core.config;
+    import qt.core.libraryinfo;
+    import qt.core.versionnumber;
+
     app = new QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
     assert(QCoreApplication.instance() is app);
+
+    QVersionNumber runtimeVersion = QLibraryInfo.version_();
+    printf("Qt runtime version: %d.%d.%d\n", runtimeVersion.majorVersion(), runtimeVersion.minorVersion(), runtimeVersion.microVersion());
+    printf("Qt header version: %d.%d.%d\n", QT_VERSION_MAJOR, QT_VERSION_MINOR, QT_VERSION_PATCH);
+    sameRuntimeVersion = runtimeVersion.majorVersion() == QT_VERSION_MAJOR && runtimeVersion.minorVersion() == QT_VERSION_MINOR;
+    if (!sameRuntimeVersion)
+        printf("Some tests are disabled, because the Qt runtime version is different from the header version.\n");
 }
 
 @Q_DECLARE_METATYPE extern(C++) struct CustomStruct1
@@ -237,7 +251,8 @@ void checkType(T, bool isDefined1, bool isDefined2, int id, int flags)()
         assert(metaType.id() == realId);
         static if (!is(T == void))
             assert(metaType.sizeOf() == T.sizeof, text(T.stringof, " ", metaType.sizeOf(), " ", T.sizeof));
-        //assert(metaType.flags() == flags, text(T.stringof, " ", metaType.flags(), " ", flags));
+        if (sameRuntimeVersion)
+            assert(metaType.flags() == flags, text(T.stringof, " ", metaType.flags(), " ", flags));
 
         T* instance = cast(T*) metaType.create();
         assert(instance || id == QMetaType.Type.Void);

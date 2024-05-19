@@ -906,6 +906,23 @@ package FunctionManglingCpp mangleStdFunction(FunctionManglingCpp parsed)
     return parsed;
 }
 
+package FunctionManglingCpp mangleChangeName(FunctionManglingCpp parsed, string newName)
+{
+    import std.algorithm;
+    version (Windows)
+    {
+        assert(parsed.nameParts[0].startsWith("?"));
+        auto parts = parsed.nameParts[0].split("@");
+        parts[0] = "?" ~ newName;
+        parsed.nameParts[0] = parts.join("@");
+    }
+    else
+    {
+        parsed.nameParts[$ - 1] = text(newName.length, newName);
+    }
+    return parsed;
+}
+
 string recreateCppMangling(FunctionManglingCpp parsed)
 {
     string mangling;
