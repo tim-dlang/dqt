@@ -2430,13 +2430,13 @@ extern(D) struct QMetaTypeInterfaceWrapper(T)
 
 struct QMetaTypeInterfaceWrapper(T: void)
 {
-    static immutable QMetaTypeInterface metaType =
+    extern(D) static __gshared /*immutable*/ QMetaTypeInterface metaType =
     {
         /*.revision=*/ 0,
         /*.alignment=*/ 0,
         /*.size=*/ 0,
         /*.flags=*/ 0,
-        /*.typeId=*/ BuiltinMetaType!(void).value,
+        /*.typeId=*/ QBasicAtomicInt(BuiltinMetaType!(void).value),
         /*.metaObjectFn=*/ null,
         /*.name=*/ "void",
         /*.defaultCtr=*/ null,

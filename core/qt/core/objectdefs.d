@@ -75,13 +75,21 @@ extern(D) alias SIGNAL = function string(string a)
 #define QMETHOD_CODE  0                        // member type codes
 #define QSLOT_CODE    1
 #define QSIGNAL_CODE  2 +/
-/+ #endif // QT_NO_META_MACROS
+/+ #endif +/ // QT_NO_META_MACROS
 
-#define Q_ARG(type, data) QArgument<type >(#type, data)
-#define Q_RETURN_ARG(type, data) QReturnArgument<type >(#type, data)
+/+ #define Q_ARG(type, data) QArgument<type >(#type, data) +/
+extern(D) alias Q_ARG = function string(string type, string data)
+{
+    return mixin(interpolateMixin(q{imported!q{qt.core.objectdefs}.QArgument!($(type)) ($(stringifyMacroParameter(type)), $(data))}));
+};
+/+ #define Q_RETURN_ARG(type, data) QReturnArgument<type >(#type, data) +/
+extern(D) alias Q_RETURN_ARG = function string(string type, string data)
+{
+    return mixin(interpolateMixin(q{imported!q{qt.core.objectdefs}.QReturnArgument!($(type)) ($(stringifyMacroParameter(type)), $(data))}));
+};
 
 
-namespace QtPrivate {
+/+ namespace QtPrivate {
 class QMetaTypeInterface} +/
 
 struct QMethodRawArguments
@@ -273,7 +281,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
                                  QGenericArgument val8 = QGenericArgument(),
                                  QGenericArgument val9 = QGenericArgument());
 
-/+    pragma(inline, true) static bool invokeMethod(QObject obj, const(char)* member,
+    pragma(inline, true) static bool invokeMethod(QObject obj, const(char)* member,
                                  QGenericReturnArgument ret,
                                  QGenericArgument val0 = QGenericArgument(null),
                                  QGenericArgument val1 = QGenericArgument(),
@@ -288,7 +296,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     {
         return invokeMethod(obj, member, /+ Qt:: +/qt.core.namespace.ConnectionType.AutoConnection, ret, val0, val1, val2, val3,
                 val4, val5, val6, val7, val8, val9);
-    }+/
+    }
 
 /+    pragma(inline, true) static bool invokeMethod(QObject obj, const(char)* member,
                                  /+ Qt:: +/qt.core.namespace.ConnectionType type,
