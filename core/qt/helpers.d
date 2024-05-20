@@ -98,7 +98,7 @@ string interpolateMixin(string code)
         string part = nextCodePart(code[i .. $]);
         if (i < code.length + 1 && code[i] == '$' && code[i + 1] == '(')
         {
-            r ~= "\" ~ ";
+            r ~= "\" ~ (";
             i += 2;
             size_t numParens = 1;
             while (i < code.length)
@@ -142,7 +142,7 @@ string interpolateMixin(string code)
                 r ~= part2;
                 i += part2.length;
             }
-            r ~= " ~ \"";
+            r ~= ") ~ \"";
             continue;
         }
         else

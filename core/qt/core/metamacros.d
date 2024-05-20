@@ -353,6 +353,7 @@ template MetaObjectImpl(T)
             size_t notifyFunc = size_t.max;
             string notifyFuncCode;
             size_t field = size_t.max;
+            bool isConstant;
         }
         PropertyInfo*[] allPropertyInfos;
         size_t[string] propertyInfoByName;
@@ -396,6 +397,10 @@ template MetaObjectImpl(T)
                         }
                     }
                 }
+            }
+            if (prop.isConstant)
+            {
+                propertyInfo.isConstant = true;
             }
         }
         static foreach (i, F; allFunctions)
@@ -579,7 +584,10 @@ template MetaObjectImpl(T)
                     flags |= 2;
                 if (propertyInfo.notifyFunc != size_t.max)
                     flags |= 0x400000;
+                if (propertyInfo.isConstant)
+                    flags |= 0x400;
                 assert(propertyInfo.type != "", "Missing type for property " ~ propertyInfo.name);
+                assert(propertyInfo.isConstant || propertyInfo.notifyFunc != size_t.max, "Property " ~ propertyInfo.name ~ " has no notify signal and is not marked constant");
                 metaDataCode ~= mixin(interpolateMixin(q{
                        $(text(nameId)), $(propertyInfo.type), $(text(flags)), $("// " ~ propertyInfo.name)
                 }));
