@@ -430,7 +430,7 @@ template MetaObjectImpl(T)
                     else
                         enum name = __traits(identifier, F);
 
-                    enum string typeName = typeToMeta!(ReturnType!F);
+                    string typeName = typeToMeta!(ReturnType!F);
 
                     auto propertyInfo = getPropertyInfo(name);
                     assert(propertyInfo.readFunc == size_t.max || propertyInfo.readFunc == i, "Duplicate getters for property " ~ name ~ ": " ~ __traits(identifier, F));
@@ -447,7 +447,7 @@ template MetaObjectImpl(T)
                     else
                         enum name = __traits(identifier, F);
 
-                    enum string typeName = typeToMeta!(Parameters!F[0]);
+                    string typeName = typeToMeta!(Parameters!F[0]);
 
                     auto propertyInfo = getPropertyInfo(name);
                     assert(propertyInfo.writeFunc == size_t.max || propertyInfo.writeFunc == i, "Duplicate setters for property " ~ name ~ ": " ~ __traits(identifier, F));
@@ -498,7 +498,7 @@ template MetaObjectImpl(T)
                 else
                     enum name = __traits(identifier, F);
 
-                enum string typeName = typeToMeta!(typeof(F));
+                string typeName = typeToMeta!(typeof(F));
 
                 auto propertyInfo = getPropertyInfo(name);
                 assert(propertyInfo.field == size_t.max, "Duplicate fields for property " ~ name ~ ": " ~ __traits(identifier, F));
@@ -786,6 +786,7 @@ enum Q_OBJECT_D = q{
         extern(C++) static void qt_static_metacall(dqtimported!"qt.core.object".QObject _o, qt.core.objectdefs.QMetaObject.Call _c, int _id, void **_a)
         {
             import qt.core.metamacros;
+            import qt.core.metatype;
             import qt.core.objectdefs;
             import std.conv;
             import std.traits;
@@ -870,6 +871,18 @@ enum Q_OBJECT_D = q{
                     default: {}
                     }
                 } else if (_c == qt.core.objectdefs.QMetaObject.Call.ResetProperty) {
+                } else if (_c == qt.core.objectdefs.QMetaObject.Call.RegisterPropertyMetaType) {
+                    switch (_id) {
+                    default: *cast(int*)(_a[0]) = -1; break;
+                        mixin((){
+                                string cases;
+                                static foreach (i; 0 .. allPropertyTypes.length)
+                                {
+                                    cases ~= text("\n                    case ", i, ": *cast(int*)(_a[0]) = qRegisterMetaType!(allPropertyTypes[", i, "])(); break;");
+                                }
+                                return cases;
+                            }());
+                    }
                 }
             }
             //Q_UNUSED(_a);

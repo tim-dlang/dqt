@@ -233,6 +233,24 @@ public /+ slots +/:
         return cast(uint) ((void*).sizeof);
     }
 
+    private CustomStruct1 m_customStruct1;
+    @QPropertyDef
+    {
+        final CustomStruct1 customStruct1() const
+        {
+            return m_customStruct1;
+        }
+        final void setCustomStruct1(ref const(CustomStruct1) customStruct1)
+        {
+            if (m_customStruct1.i != customStruct1.i)
+            {
+                m_customStruct1 = customStruct1;
+                /+ emit +/ customStruct1Changed();
+            }
+        }
+        @QSignal final void customStruct1Changed() {mixin(Q_SIGNAL_IMPL_D);}
+    }
+
     @QInvokable final QString toUpper(ref const(QString) s)
     {
         return s.toUpper();
@@ -418,7 +436,7 @@ unittest
     const(QMetaObject)* mo = &TestObject.staticMetaObject;
     assert(strcmp(mo.className(), "TestObject") == 0);
     //assert(mo->constructorCount() == 2);
-    assert(mo.methodCount() - mo.methodOffset() == 10 + 10 + 10 + 3 + 1);
+    assert(mo.methodCount() - mo.methodOffset() == 10 + 10 + 10 + 4 + 1);
 
     TestObject a = cpp_new!TestObject();
     assert(a.metaObject() == mo);
@@ -482,14 +500,14 @@ unittest
     assert(method.methodSignature().toConstCharArray() == "signalCustomStruct1(CustomStruct1)");
     assert(method.parameterCount() == 1);
 
-    method = mo.method(mo.methodOffset() + 33);
+    method = mo.method(mo.methodOffset() + 34);
     assert(method.name().toConstCharArray() == "toUpper");
     assert(method.methodSignature().toConstCharArray() == "toUpper(QString)");
     assert(method.parameterCount() == 1);
     assert(method.parameterType(0) == QMetaType.Type.QString);
     assert(method.returnType() == QMetaType.Type.QString);
 
-    assert(mo.propertyCount() - mo.propertyOffset() == 5);
+    assert(mo.propertyCount() - mo.propertyOffset() == 6);
     QMetaProperty prop = mo.property(mo.propertyOffset() + 0);
     assert(fromStringz(prop.name()) == "bool1");
     assert(prop.type() == QVariant.Type.Bool);
@@ -537,6 +555,16 @@ unittest
     assert(prop.isReadable());
     assert(prop.isConstant());
     assert(!prop.hasNotifySignal());
+
+    prop = mo.property(mo.propertyOffset() + 5);
+    assert(fromStringz(prop.name()) == "customStruct1");
+    assert(fromStringz(prop.typeName()) == "CustomStruct1");
+    assert(prop.isWritable());
+    assert(prop.isReadable());
+    assert(!prop.isConstant());
+    assert(prop.hasNotifySignal());
+    assert(prop.notifySignalIndex() == mo.methodOffset() + 13);
+    assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "customStruct1Changed");
 }
 
 void connectByString(TestObject a, TestObject b)
@@ -942,6 +970,24 @@ unittest
     assert(changes == []);
 
     assert(o.property("pointerSize").value!uint() == (void*).sizeof);
+
+    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
+    o.setProperty("customStruct1", CustomStruct1(5));
+    assert(CustomStruct1.numConstructed == 1);
+    assert(CustomStruct1.numCopied == 2 + 1); // Currently one more copy than in C++.
+    assert(CustomStruct1.numDestructed == 3 + 1);
+
+    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
+    assert(o.customStruct1().i == 5);
+    assert(CustomStruct1.numConstructed == 0);
+    assert(CustomStruct1.numCopied == 1);
+    assert(CustomStruct1.numDestructed == 1);
+
+    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
+    assert(o.property("customStruct1").value!CustomStruct1().i == 5);
+    assert(CustomStruct1.numConstructed == 0);
+    assert(CustomStruct1.numCopied == 2);
+    assert(CustomStruct1.numDestructed == 3);
 
     cpp_delete(o);
 }
