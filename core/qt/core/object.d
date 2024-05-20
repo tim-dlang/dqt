@@ -251,6 +251,8 @@ protected:
         string name;
 
         string notify;
+
+        bool isConstant;
     }
 
     /++

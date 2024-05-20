@@ -228,6 +228,11 @@ public /+ slots +/:
         @QSignal final void string1Changed() {mixin(Q_SIGNAL_IMPL_D);}
     }
 
+    @QPropertyDef(isConstant: true) final uint pointerSize()
+    {
+        return cast(uint) ((void*).sizeof);
+    }
+
     @QInvokable final QString toUpper(ref const(QString) s)
     {
         return s.toUpper();
@@ -484,12 +489,13 @@ unittest
     assert(method.parameterType(0) == QMetaType.Type.QString);
     assert(method.returnType() == QMetaType.Type.QString);
 
-    assert(mo.propertyCount() - mo.propertyOffset() == 4);
+    assert(mo.propertyCount() - mo.propertyOffset() == 5);
     QMetaProperty prop = mo.property(mo.propertyOffset() + 0);
     assert(fromStringz(prop.name()) == "bool1");
     assert(prop.typeId() == QMetaType.Type.Bool);
     assert(prop.isWritable());
     assert(prop.isReadable());
+    assert(!prop.isConstant());
     assert(prop.hasNotifySignal());
     assert(prop.notifySignalIndex() == mo.methodOffset() + 10);
     assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "bool1Changed");
@@ -499,6 +505,7 @@ unittest
     assert(prop.typeId() == QMetaType.Type.Bool);
     assert(!prop.isWritable());
     assert(prop.isReadable());
+    assert(!prop.isConstant());
     assert(prop.hasNotifySignal());
     assert(prop.notifySignalIndex() == mo.methodOffset() + 10);
     assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "bool1Changed");
@@ -508,6 +515,7 @@ unittest
     assert(prop.typeId() == QMetaType.Type.Bool);
     assert(prop.isWritable());
     assert(prop.isReadable());
+    assert(!prop.isConstant());
     assert(prop.hasNotifySignal());
     assert(prop.notifySignalIndex() == mo.methodOffset() + 11);
     assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "bool2Changed");
@@ -517,9 +525,18 @@ unittest
     assert(prop.typeId() == QMetaType.Type.QString);
     assert(prop.isWritable());
     assert(prop.isReadable());
+    assert(!prop.isConstant());
     assert(prop.hasNotifySignal());
     assert(prop.notifySignalIndex() == mo.methodOffset() + 12);
     assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "string1Changed");
+
+    prop = mo.property(mo.propertyOffset() + 4);
+    assert(fromStringz(prop.name()) == "pointerSize");
+    assert(prop.typeId() == QMetaType.Type.UInt);
+    assert(!prop.isWritable());
+    assert(prop.isReadable());
+    assert(prop.isConstant());
+    assert(!prop.hasNotifySignal());
 }
 
 void connectByString(TestObject a, TestObject b)
@@ -938,6 +955,8 @@ unittest
     changes = [];
     o.setProperty("string1", "test2");
     assert(changes == []);
+
+    assert(o.property("pointerSize").value!uint() == (void*).sizeof);
 
     cpp_delete(o);
 }
