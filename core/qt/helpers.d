@@ -505,7 +505,7 @@ version (Windows)
                         __FILE__, ":", __LINE__, ": ", mangling));
                 i++;
             }
-            if (functionType != 1)
+            if (functionType != 1 && accessLevel != 3)
             {
                 enforce(i + 1 < mangling.length, text("Unexpected mangling ",
                         __FILE__, ":", __LINE__, ": ", mangling));
@@ -737,15 +737,22 @@ package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, st
             // none / static / virtual / thunk
             uint functionType = ((parsed.flags[0] - 'A') % 8) / 2;
 
-            if (attributes.canFind("static"))
-                functionType = 1;
-            else if (attributes.canFind("final") || !isClass || name == "this")
-                functionType = 0;
-            else
-                functionType = 2;
+            if (accessLevel != 3)
+            {
+                if (attributes.canFind("static"))
+                    functionType = 1;
+                else if (attributes.canFind("final") || !isClass || name == "this")
+                    functionType = 0;
+                else
+                    functionType = 2;
+            }
 
             parsed.flags = [cast(char)('A' + accessLevel * 8 + functionType * 2)];
-            if (attributes2.canFind("const"))
+            if (accessLevel == 3)
+            {
+                parsed.flags ~= "A";
+            }
+            else if (attributes2.canFind("const"))
             {
                 static if (size_t.sizeof == 8)
                     parsed.flags ~= "EBA";

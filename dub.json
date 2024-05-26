@@ -52,6 +52,36 @@
 			"dependencies": {"dqt:core":"*"}
 		},
 		{
+			"name": "qml",
+			"targetType": "library",
+			"sourcePaths": ["qml"],
+			"importPaths": ["qml"],
+			"libs-linux": ["Qt5Qml"],
+			"libs-windows": ["Qt5Qml"],
+			"lflags-osx": ["-framework", "QtQml"],
+			"dependencies": {"dqt:gui":"*"}
+		},
+		{
+			"name": "quick",
+			"targetType": "library",
+			"sourcePaths": ["quick"],
+			"importPaths": ["quick"],
+			"libs-linux": ["Qt5Quick"],
+			"libs-windows": ["Qt5Quick"],
+			"lflags-osx": ["-framework", "QtQuick"],
+			"dependencies": {"dqt:qml":"*"}
+		},
+		{
+			"name": "quickcontrols2",
+			"targetType": "library",
+			"sourcePaths": ["quickcontrols2"],
+			"importPaths": ["quickcontrols2"],
+			"libs-linux": ["Qt5QuickControls2"],
+			"libs-windows": ["Qt5QuickControls2"],
+			"lflags-osx": ["-framework", "QtQuickControls2"],
+			"dependencies": {"dqt:quick":"*"}
+		},
+		{
 			"name": "webenginecore",
 			"targetType": "library",
 			"sourcePaths": ["webenginecore"],
@@ -71,6 +101,7 @@
 			"lflags-osx": ["-framework", "QtWebEngineWidgets"],
 			"dependencies": {"dqt:widgets":"*", "dqt:webenginecore":"*"}
 		},
+
 		{
 			"name": "helloworld",
 			"targetType": "executable",
@@ -86,6 +117,14 @@
 			"importPaths": ["examples/examplewidgets"],
 			"stringImportPaths": ["examples/examplewidgets"],
 			"dependencies": {"dqt:widgets":"*"}
+		},
+		{
+			"name": "exampleqml",
+			"targetType": "executable",
+			"sourcePaths": ["examples/exampleqml"],
+			"importPaths": ["examples/exampleqml"],
+			"stringImportPaths": ["examples/exampleqml"],
+			"dependencies": {"dqt:quickcontrols2":"*"}
 		},
 		{
 			"name": "examplebrowser",

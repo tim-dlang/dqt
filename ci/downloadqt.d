@@ -156,6 +156,7 @@ int main(string[] args)
     if ("icu" in archives)
         downloadArchive("icu");
     downloadArchive("qtdeclarative");
+    downloadArchive("qtquickcontrols2");
     downloadArchive("qtlocation");
     downloadArchive("qtwebchannel");
     downloadArchive("qtwebengine.qtwebengine");
