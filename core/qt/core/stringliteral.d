@@ -19,7 +19,7 @@ import qt.helpers;
 
 /+ #if 0
 #pragma qt_class(QStringLiteral)
-#endif
+#endif +/
 
 
 // all our supported compilers support Unicode string literals,
@@ -27,7 +27,12 @@ import qt.helpers;
 // to lacking stdlib support. But QStringLiteral only needs the
 // core language feature, so just use u"" here unconditionally:
 
-#define QT_UNICODE_LITERAL(str) u"" str +/
+/+ #define QT_UNICODE_LITERAL(str) u"" str +/
+template QT_UNICODE_LITERAL(params...) if (params.length == 1)
+{
+    enum str = params[0];
+    enum QT_UNICODE_LITERAL = ""w ~ str;
+}
 
 alias QStringPrivate = QArrayDataPointer!(wchar);
 
@@ -43,5 +48,11 @@ extern(C++, "QtPrivate") {
 /+ #define QStringLiteral(str) \
     (QString(QtPrivate::qMakeStringPrivate(QT_UNICODE_LITERAL(str)))) \
     /**/ +/
+extern(D) alias QStringLiteral = function string(string str)
+{
+    return
+            mixin(interpolateMixin(q{(imported!q{qt.core.string}.QString(/+ QtPrivate:: +/qt.core.stringliteral.qMakeStringPrivate(staticString!(const(wchar), imported!q{qt.core.stringliteral}.QT_UNICODE_LITERAL!($(str))))))}));
+            /**/
+};
 
 

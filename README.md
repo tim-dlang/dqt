@@ -3,7 +3,7 @@
 DQt contains experimental bindings for using a subset of [Qt](https://www.qt.io/)
 with the [D Programming Language](https://dlang.org/). Qt is a library for writing
 cross-platform graphical user interfaces. Currently bindings exist for
-the Qt modules core, gui, widgets and webenginewidgets.
+the Qt modules core, gui, widgets, qml and webenginewidgets.
 
 ## Features
 
@@ -60,6 +60,7 @@ You can build and run the example programs using dub:
 dub run :helloworld
 dub run :examplewidgets
 dub run :examplebrowser
+dub run :exampleqml
 ```
 
 Alternatively dmd can be used directly:
@@ -84,6 +85,7 @@ You can build and run the example programs using dub:
 dub run --compiler=dmd --arch=x86_64 :helloworld --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplewidgets --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplebrowser --build-mode=allAtOnce
+dub run --compiler=dmd --arch=x86_64 :exampleqml --build-mode=allAtOnce
 ```
 
 Alternatively dmd can be used directly:

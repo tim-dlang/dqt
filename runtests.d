@@ -164,11 +164,14 @@ int main(string[] args)
     moduleDependencies["widgets"] = ["gui"];
     moduleDependencies["gui"] = ["core"];
     moduleDependencies["network"] = ["core"];
+    moduleDependencies["qml"] = ["gui"];
+    moduleDependencies["quick"] = ["qml"];
+    moduleDependencies["quickcontrols2"] = ["quick"];
     moduleDependencies["webenginecore"] = ["gui", "network"];
     moduleDependencies["webenginewidgets"] = ["webenginecore", "widgets"];
 
     immutable allQtModules = [
-        "Core", "Gui", "Widgets", "Network", "WebEngineCore", "WebEngineWidgets"
+        "Core", "Gui", "Widgets", "Network", "Qml", "Quick", "QuickControls2", "WebEngineCore", "WebEngineWidgets"
     ];
     string getCapitalizedModuleName(string m)
     {
@@ -219,6 +222,8 @@ int main(string[] args)
             ["-Iexamples"], true);
     tests ~= Test(buildPath("examples", "examplewidgets", "main.d"), ["widgets"],
             ["-Iexamples", "-J" ~ buildPath("examples", "examplewidgets")], true);
+    tests ~= Test(buildPath("examples", "exampleqml", "main.d"), ["quickcontrols2"],
+            ["-Iexamples"], true);
     tests ~= Test(buildPath("examples", "examplebrowser", "main.d"), ["webenginewidgets"],
             ["-Iexamples", "-J" ~ buildPath("examples", "examplebrowser")], true);
 
@@ -354,6 +359,7 @@ int main(string[] args)
             stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000,
                     sw.peek.total!"msecs" % 1000);
             stderr.writeln("Skipping ", test.name);
+            anyFailure = true;
             continue;
         }
 

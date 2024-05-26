@@ -67,7 +67,8 @@ size_t linkAll(alias m)()
             }}
         }
         // Don't link functions with extern(D) linkage, because alias to lambda does not work with separate compilation.
-        static if(is(typeof(__traits(getMember, m, s)) == function) && __traits(getLinkage, __traits(getMember, m, s)) != "D")
+        static if(is(typeof(__traits(getMember, m, s)) == function) && __traits(getLinkage, __traits(getMember, m, s)) != "D"
+            && !s.simpleStartsWith("dummyFunctionForChangingMangling"))
         {
             sum += cast(size_t)&__traits(getMember, m, s);
         }
