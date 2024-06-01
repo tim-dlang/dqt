@@ -12,13 +12,22 @@
 module qt.core.pair;
 extern(C++):
 
-import core.stdcpp.xutility : StdNamespace;
 import qt.config;
 import qt.helpers;
 
 /+ #if 0
 #pragma qt_class(QPair)
 #endif +/
+
+version (Android)
+{
+    import core.internal.traits : AliasSeq;
+    enum StdNamespace = AliasSeq!("std", "__ndk1");
+}
+else
+{
+    import core.stdcpp.xutility : StdNamespace;
+}
 
 extern(C++, (StdNamespace)) struct pair(T1, T2)
 {

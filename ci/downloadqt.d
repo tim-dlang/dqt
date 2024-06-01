@@ -70,13 +70,17 @@ int main(string[] args)
         return 1;
     }
 
+    string qtArch2;
+    if (qtArch.startsWith("android_") && qtVersion.startsWith("6."))
+        qtArch2 = qtArch[7 .. $];
+
     if (qtArchUrl == "")
         qtArchUrl = qtArch;
 
     string urlPrefix = text("https://download.qt.io/online/qtsdkrepository/",
-            qtPlatform, "/qt", qtVersion[0], "_", qtVersion.replace(".", ""), "/");
+            qtPlatform, "/qt", qtVersion[0], "_", qtVersion.replace(".", ""), qtArch2, "/");
     string packageNamePrefix = text("qt.qt", qtVersion[0], ".", qtVersion.replace(".", ""), ".");
-    string updatesFile = text("Qt-Updates-", qtPlatform.replace("/", "-"), "-", qtVersion, ".xml");
+    string updatesFile = text("Qt-Updates-", qtPlatform.replace("/", "-"), "-", qtVersion, qtArch2, ".xml");
 
     downloadFile(urlPrefix ~ "Updates.xml", updatesFile);
 
@@ -138,17 +142,26 @@ int main(string[] args)
         }
     }
 
+    bool anyFailure;
     void downloadArchive(string shortName)
     {
+        if (shortName !in archives)
+        {
+            writeln("Missing: ", shortName);
+            anyFailure = true;
+            return;
+        }
         Archive archive = archives[shortName];
         downloadFile(urlPrefix ~ archive.packageName ~ "/" ~ archive.version_ ~ archive.archiveName,
                 archive.version_ ~ archive.archiveName);
         runCommand([
             "7z", "x", archive.version_ ~ archive.archiveName,
-            qtVersion ~ "/" ~ qtArch ~ "/lib", qtVersion ~ "/" ~ qtArch ~ "/bin",
+            qtVersion ~ "/" ~ qtArch ~ "/lib",
+            qtVersion ~ "/" ~ qtArch ~ "/bin",
             qtVersion ~ "/" ~ qtArch ~ "/plugins/platforms",
             qtVersion ~ "/" ~ qtArch ~ "/libexec",
-            qtVersion ~ "/" ~ qtArch ~ "/resources", "-oqt-lib"
+            qtVersion ~ "/" ~ qtArch ~ "/resources",
+            "-oqt-lib"
         ]);
     }
 
@@ -156,9 +169,21 @@ int main(string[] args)
     if ("icu" in archives)
         downloadArchive("icu");
     downloadArchive("qtdeclarative");
-    downloadArchive("addons.qtpositioning.qtpositioning");
-    downloadArchive("addons.qtwebchannel.qtwebchannel");
-    downloadArchive("addons.qtwebengine.qtwebengine");
+    if (qtVersion.startsWith("5."))
+    {
+        downloadArchive("qtquickcontrols2");
+        downloadArchive("qtlocation");
+        downloadArchive("qtwebchannel");
+        if (!qtArch.startsWith("android"))
+            downloadArchive("qtwebengine.qtwebengine");
+    }
+    else if (qtVersion.startsWith("6."))
+    {
+        downloadArchive("addons.qtpositioning.qtpositioning");
+        downloadArchive("addons.qtwebchannel.qtwebchannel");
+        if (!qtArch.startsWith("android"))
+            downloadArchive("addons.qtwebengine.qtwebengine");
+    }
 
-    return 0;
+    return anyFailure;
 }

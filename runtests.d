@@ -105,6 +105,7 @@ int main(string[] args)
     string compiler = "dmd";
     string qtPath;
     string dxmlPath;
+    string archSuffix;
     bool verbose;
     bool github;
 
@@ -121,6 +122,10 @@ int main(string[] args)
         else if (args[i].startsWith("--qt-path="))
         {
             qtPath = args[i]["--qt-path=".length .. $];
+        }
+        else if (args[i].startsWith("--arch-suffix="))
+        {
+            archSuffix = args[i]["--arch-suffix=".length .. $];
         }
         else if (args[i].startsWith("--dxml-path="))
         {
@@ -160,6 +165,8 @@ int main(string[] args)
         SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
     }
 
+    string resultsDir = buildPath("test_results", os ~ model.replace("triple=", "-"));
+
     string[][string] moduleDependencies;
     moduleDependencies["widgets"] = ["gui"];
     moduleDependencies["gui"] = ["core"];
@@ -187,7 +194,7 @@ int main(string[] args)
     {
         tests ~= Test(e.name, [], [
             "-main", "-unittest", "-Itests",
-            "-I" ~ buildPath("test_results", os ~ model, "tests"), "-Jtests"
+            "-I" ~ buildPath(resultsDir, "tests"), "-Jtests"
         ]);
         File f = File(e.name, "r");
         foreach (line; f.byLine)
@@ -233,8 +240,8 @@ int main(string[] args)
 
     // Create module qtmodules.d, which contains lists of all D modules per Qt module.
     {
-        mkdirRecurse(buildPath("test_results", os ~ model, "tests", "imports"));
-        File moduleListFile = File(buildPath("test_results", os ~ model,
+        mkdirRecurse(buildPath(resultsDir, "tests", "imports"));
+        File moduleListFile = File(buildPath(resultsDir,
                 "tests", "imports", "qtmodules.d"), "w");
         moduleListFile.writeln("module imports.qtmodules;");
         foreach (m; allQtModules)
@@ -264,7 +271,7 @@ int main(string[] args)
 
     // Create module testfiles.d, which contains lists of files in the test files.
     {
-        File fileListFile = File(buildPath("test_results", os ~ model, "tests",
+        File fileListFile = File(buildPath(resultsDir, "tests",
                 "imports", "testfiles.d"), "w");
         fileListFile.writeln("module imports.testfiles;");
         foreach (m; ["Ui"])
@@ -312,9 +319,9 @@ int main(string[] args)
                 dmdArgs ~= "-I" ~ dxmlPath;
         }
         dmdArgs ~= translateCompileArg(compiler, "-version=DQT_NO_CONVENIENCE_WRAPPERS");
-        dmdArgs ~= "-od" ~ buildPath("test_results", os ~ model);
+        dmdArgs ~= "-od" ~ resultsDir;
         if (compiler.endsWith("ldc2"))
-            dmdArgs ~= "-of" ~ buildPath("test_results", os ~ model, "libdqt" ~ toLower(m) ~ libExt);
+            dmdArgs ~= "-of" ~ buildPath(resultsDir, "libdqt" ~ toLower(m) ~ libExt);
         else
             dmdArgs ~= "-of" ~ "libdqt" ~ toLower(m) ~ libExt;
 
@@ -351,7 +358,15 @@ int main(string[] args)
         bool canTest = true;
         foreach_reverse (m; test.qtModules)
             if (m !in moduleCompiled)
+            {
                 canTest = false;
+                anyFailure = true;
+            }
+
+        if (model.canFind("android") && test.name.canFind("webengine"))
+            canTest = false;
+        if (model.canFind("android") && test.name.canFind("examplebrowser"))
+            canTest = false;
 
         if (!canTest)
         {
@@ -359,11 +374,10 @@ int main(string[] args)
             stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000,
                     sw.peek.total!"msecs" % 1000);
             stderr.writeln("Skipping ", test.name);
-            anyFailure = true;
             continue;
         }
 
-        string resultDir = buildPath("test_results", os ~ model, dirName(test.name));
+        string resultDir = buildPath(resultsDir, dirName(test.name));
         string executable = buildPath(resultDir, baseName(test.name, ".d") ~ exeExt);
 
         string[] dmdArgs = [compiler];
@@ -389,19 +403,19 @@ int main(string[] args)
         }
         foreach_reverse (m; test.qtModules)
         {
-            dmdArgs ~= buildPath("test_results", os ~ model, "libdqt" ~ m ~ libExt);
+            dmdArgs ~= buildPath(resultsDir, "libdqt" ~ m ~ libExt);
         }
         foreach_reverse (m; test.qtModules)
         {
             version (Windows)
-                dmdArgs ~= "Qt6" ~ getCapitalizedModuleName(m) ~ ".lib";
+                dmdArgs ~= "Qt6" ~ getCapitalizedModuleName(m) ~ archSuffix ~ ".lib";
             else version (OSX)
             {
                 dmdArgs ~= "-L-framework";
-                dmdArgs ~= "-LQt" ~ getCapitalizedModuleName(m);
+                dmdArgs ~= "-LQt" ~ getCapitalizedModuleName(m) ~ archSuffix;
             }
             else
-                dmdArgs ~= "-L-lQt6" ~ getCapitalizedModuleName(m);
+                dmdArgs ~= "-L-lQt6" ~ getCapitalizedModuleName(m) ~ archSuffix;
         }
         dmdArgs ~= "-od" ~ resultDir;
         dmdArgs ~= "-of" ~ executable;
@@ -470,7 +484,8 @@ int main(string[] args)
         }
 
         string testOutput;
-        if (!test.buildOnly)
+        bool buildOnly = test.buildOnly || model.canFind("android");
+        if (!buildOnly)
         {
             string[] testArgs = [absolutePath(executable)];
             auto testRes = executeTimeout(testArgs, 2.minutes, env, resultDir);
@@ -493,7 +508,7 @@ int main(string[] args)
         }
         sw.stop();
         stderr.writef("[%d.%03d] ", sw.peek.total!"msecs" / 1000, sw.peek.total!"msecs" % 1000);
-        stderr.writeln("Done ", test.name, testOutput.length ? ": " : "", testOutput);
+        stderr.writeln("Done ", test.name, buildOnly ? " (build only)" : "", testOutput.length ? ": " : "", testOutput);
     }
 
     return anyFailure;
