@@ -54,24 +54,31 @@ jobs:
             model: 32
 
           - platform: android_armv7
-            os: ubuntu-22.04
-            model: triple=armv7a--linux-android29
+            os: ubuntu-24.04
+            model: triple=armv7a--linux-android30
             qt_version: 6.2.3
             qt_arch: android_armv7
             qt_arch_suffix: _armeabi-v7a
             qt_platform: linux_x64/android
             dc: ldc-1.38.0
+            android_arch: armeabi-v7a
+            android_arch2: arm-linux-androideabi
+            android_arch3: arm
             ldc_android_arch: armv7a
             ndk_clang: armv7a-linux-androideabi30-clang
 
           - platform: android_arm64
-            os: ubuntu-22.04
-            model: triple=aarch64--linux-android29
+            os: ubuntu-24.04
+            model: triple=aarch64--linux-android30
             qt_version: 6.2.3
             qt_arch: android_arm64_v8a
             qt_arch_suffix: _arm64-v8a
             qt_platform: linux_x64/android
             dc: ldc-1.38.0
+            android_arch: arm64-v8a
+            android_arch2: aarch64-linux-android
+            android_arch3: arm64
+            android_bits_suffix: 64
             ldc_android_arch: aarch64
             ndk_clang: aarch64-linux-android30-clang
 
@@ -120,6 +127,25 @@ jobs:
           echo "        \"%%ldcbinarypath%%/../lib-android_${{ matrix.ldc_android_arch }}\"," >> $LDC_PATH/etc/ldc2.conf
           echo "    ];" >> $LDC_PATH/etc/ldc2.conf
           echo "};" >> $LDC_PATH/etc/ldc2.conf
+
+      - name: Create Android chroot
+        if: ${{ matrix.android_arch != '' }}
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -qq install -y qemu-user-static
+          wget https://android.googlesource.com/platform/prebuilts/runtime/+archive/refs/tags/android-platform-13.0.0_r19/mainline/runtime/apex.tar.gz
+          tar xf apex.tar.gz com.android.runtime-${{ matrix.android_arch3 }}.apex
+          unzip com.android.runtime-${{ matrix.android_arch3 }}.apex apex_payload.img
+          sudo mount -o loop,ro,noload apex_payload.img /mnt
+          mkdir -p android-chroot-${{ matrix.android_arch3 }}/system/bin
+          mkdir -p android-chroot-${{ matrix.android_arch3 }}/linkerconfig
+          touch android-chroot-${{ matrix.android_arch3 }}/linkerconfig/ld.config.txt
+          mkdir -p android-chroot-${{ matrix.android_arch3 }}/system/lib${{ matrix.android_bits_suffix }}
+          cp $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${{ matrix.android_arch2 }}/*.so android-chroot-${{ matrix.android_arch3 }}/system/lib${{ matrix.android_bits_suffix }}
+          cp $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${{ matrix.android_arch2 }}/30/*.so android-chroot-${{ matrix.android_arch3 }}/system/lib${{ matrix.android_bits_suffix }}
+          cp /mnt/bin/linker* android-chroot-${{ matrix.android_arch3 }}/system/bin
+          cp /mnt/lib${{ matrix.android_bits_suffix }}/bionic/*.so android-chroot-${{ matrix.android_arch3 }}/system/lib${{ matrix.android_bits_suffix }}
+          sudo sh -c "echo 65535 > /proc/sys/kernel/pid_max"
 
       - name: Checkout dxml
         uses: actions/checkout@v4

@@ -26,6 +26,12 @@ shared static this()
     import qt.core.libraryinfo;
     import qt.core.versionnumber;
 
+    version (Android)
+    {
+        import imports.androidhelpers;
+        registerAndroidJVM();
+    }
+
     app = new QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
     assert(QCoreApplication.instance() is app);
 
@@ -820,26 +826,36 @@ unittest
     QVariant v;
     static if ((void*).sizeof == 8)
         compareVariant(v, "00000000 00000000 00000000 00000000 00000000 00000000 02000000 00000000");
+    else version (Android)
+        compareVariant(v, "00000000 00000000 00000000 ???????? 02000000 ????????");
     else
         compareVariant(v, "00000000 00000000 00000000 02000000");
     v = QVariant(5);
     static if ((void*).sizeof == 8)
         compareVariant(v, "05000000 00000000 00000000 00000000 00000000 00000000 ???????? ????????");
+    else version (Android)
+        compareVariant(v, "05000000 00000000 00000000 ???????? ???????? ????????");
     else
         compareVariant(v, "05000000 00000000 00000000 ????????");
     v = QVariant(100.0f);
     static if ((void*).sizeof == 8)
         compareVariant(v, "0000C842 00000000 00000000 00000000 00000000 00000000 ???????? ????????");
+    else version (Android)
+        compareVariant(v, "0000C842 00000000 00000000 ???????? ???????? ????????");
     else
         compareVariant(v, "0000C842 00000000 00000000 ????????");
     v = QVariant(100.0);
     static if ((void*).sizeof == 8)
         compareVariant(v, "00000000 00005940 00000000 00000000 00000000 00000000 ???????? ????????");
+    else version (Android)
+        compareVariant(v, "00000000 00005940 00000000 ???????? ???????? ????????");
     else
         compareVariant(v, "00000000 00005940 00000000 ????????");
     v = QVariant(cast(int)'A');
     static if ((void*).sizeof == 8)
         compareVariant(v, "41000000 00000000 00000000 00000000 00000000 00000000 ???????? ????????");
+    else version (Android)
+        compareVariant(v, "41000000 00000000 00000000 ???????? ???????? ????????");
     else
         compareVariant(v, "41000000 00000000 00000000 ????????");
 }
