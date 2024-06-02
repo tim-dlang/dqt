@@ -22,6 +22,15 @@ import std.stdio;
 import std.string;
 import std.traits;
 
+shared static this()
+{
+    version (Android)
+    {
+        import imports.androidhelpers;
+        registerAndroidJVM();
+    }
+}
+
 void dumpObject(ref Appender!string appender, QObject obj, string indent)
 {
     const QMetaObject *meta = obj.metaObject();

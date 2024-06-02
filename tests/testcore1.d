@@ -26,6 +26,12 @@ shared static this()
     import qt.core.libraryinfo;
     import qt.core.versionnumber;
 
+    version (Android)
+    {
+        import imports.androidhelpers;
+        registerAndroidJVM();
+    }
+
     app = new QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
     assert(QCoreApplication.instance() is app);
 

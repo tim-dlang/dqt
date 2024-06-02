@@ -11,7 +11,13 @@ import std.stdio;
 unittest
 {
     string dqtRoot = environment.get("DQT_ROOT");
-    mkdirRecurse(buildPath("ui"));
+
+    /*
+    This folder is currently created in runtests.d, because it can
+    currently not be created on Android armv7a, because of
+    https://github.com/ldc-developers/ldc/issues/4677.
+    */
+    //mkdirRecurse(buildPath("ui"));
 
     bool anyFailure;
     size_t countFiles;

@@ -347,6 +347,13 @@ int main(string[] args)
         }
     }
 
+    /*
+    This folder is used by tests/testuicompare.d, but it can currently
+    not be created in the test on Android armv7a, because of
+    https://github.com/ldc-developers/ldc/issues/4677.
+    */
+    mkdirRecurse(buildPath(resultsDir, "tests", "ui"));
+
     // Compile and run the tests
     foreach (ref test; tests)
     {
@@ -494,10 +501,19 @@ int main(string[] args)
         }
 
         string testOutput;
-        bool buildOnly = test.buildOnly || model.canFind("android");
+        bool buildOnly = test.buildOnly;
+
+        if (model.canFind("android") && test.name == "tests/testuicompile.d")
+            buildOnly = true; // We have no offscreen plugin for Android.
+
         if (!buildOnly)
         {
-            string[] testArgs = [absolutePath(executable)];
+            string[] testArgs;
+            if (model.startsWith("triple=aarch64--linux-android"))
+                testArgs ~= ["qemu-aarch64-static", "-L", absolutePath("android-chroot-arm64")];
+            else if (model.startsWith("triple=armv7a--linux-android"))
+                testArgs ~= ["qemu-arm-static", "-L", absolutePath("android-chroot-arm")];
+            testArgs ~= absolutePath(executable);
             auto testRes = executeTimeout(testArgs, 2.minutes, env, resultDir);
             if (testRes.status || verbose)
             {
