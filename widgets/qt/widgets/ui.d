@@ -1041,6 +1041,32 @@ private struct UICodeWriter()
                     codeSetup.put(".setMenuBar(");
                 else if (childInfo.className == "QStatusBar")
                     codeSetup.put(".setStatusBar(");
+                else if (childInfo.className.among("QToolBar", "QDockWidget"))
+                {
+                    string area;
+                    string attrName = (childInfo.className == "QToolBar") ? "toolBarArea" : "dockWidgetArea";
+                    foreach (cc; c.children.filter!`a.name == "attribute"`)
+                    {
+                        if (cc.attributes.any!(a => a.name == "name" && a.value == attrName))
+                        {
+                            string parseEnum(string EnumName)(string value, bool valueIsEnum)
+                            {
+                                enum enumFullName = "dqtimported!q{qt.core.namespace}." ~ EnumName;
+                                alias enumType = mixin(enumFullName);
+                                return enumFullName ~ "." ~ (valueIsEnum ? parse!enumType(value) : cast(enumType) value.to!int).to!string;
+                            }
+                            enforce(cc.children.length == 1);
+                            DOMEntity areaEntity = cc.children[0];
+                            enforce(areaEntity.name.among("enum", "number"));
+                            enforce(areaEntity.children.length == 1);
+                            enforce(areaEntity.children[0].type == EntityType.text);
+                            auto properParseEnum = (childInfo.className == "QToolBar") ? &parseEnum!"ToolBarArea" : &parseEnum!"DockWidgetArea";
+                            area = properParseEnum(areaEntity.children[0].text, areaEntity.name == "enum");
+                            break;
+                        }
+                    }
+                    codeSetup.put(".add" ~ childInfo.className[1..$] ~ "(" ~ area ~ ", ");
+                }
                 else
                     codeSetup.put(".setCentralWidget(");
                 codeSetup.put(childInfo.name);
