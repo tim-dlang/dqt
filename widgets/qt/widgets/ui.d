@@ -1031,6 +1031,14 @@ private struct UICodeWriter()
                 codeSetup.put("dqtimported!q{qt.core.string}.QString.create()"); // TODO: not translateable strings
                 codeSetup.put(");\n");
             }
+            else if (info.className == "QDockWidget")
+            {
+                codeSetup.put("        ");
+                codeSetup.put(info.name);
+                codeSetup.put(".setWidget(");
+                codeSetup.put(childInfo.name);
+                codeSetup.put(");");
+            }
             else if (info.className == "QMainWindow")
             {
                 if (childInfo.className != "QMenuBar" && childInfo.className != "QStatusBar")
