@@ -22,10 +22,11 @@ jobs:
         exclude:
           - { platform: win32, dc: ldc-latest }
           - { platform: debian32, dc: ldc-latest }
+          - { platform: osx64, dc: dmd-2.103.1 }
 
         include:
           - platform: linux64
-            os: ubuntu-22.04
+            os: ubuntu-24.04
             model: 64
             qt_version: 5.15.2
             qt_arch: gcc_64
@@ -48,14 +49,14 @@ jobs:
             qt_platform: windows_x86/desktop
 
           - platform: osx64
-            os: macos-12
+            os: macos-13
             model: 64
             qt_version: 5.15.2
             qt_arch: clang_64
             qt_platform: mac_x64/desktop
 
           - platform: debian32
-            os: ubuntu-22.04
+            os: ubuntu-24.04
             container: debian:11
             model: 32
 
