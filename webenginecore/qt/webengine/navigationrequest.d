@@ -69,8 +69,8 @@ private:
 /+ #endif +/
 
 private:
-    this(ref const(QUrl) url, NavigationType navigationType, bool mainFrame,
-                                    QObject parent = null);
+    /*this(ref const(QUrl) url, NavigationType navigationType, bool mainFrame,
+                                    QObject parent = null);*/
 
     /+ friend class QWebEnginePagePrivate; +/
     /+ friend class QQuickWebEngineViewPrivate; +/
