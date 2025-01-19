@@ -216,31 +216,31 @@ private:
     int id; int inter; int del;
     /+ uint single : 1; +/
     ubyte bitfieldData_single;
-    uint single() const
+    final uint single() const
     {
         return (bitfieldData_single >> 0) & 0x1;
     }
-    uint single(uint value)
+    final uint single(uint value)
     {
         bitfieldData_single = (bitfieldData_single & ~0x1) | ((value & 0x1) << 0);
         return value;
     }
     /+ uint nulltimer : 1; +/
-    uint nulltimer() const
+    final uint nulltimer() const
     {
         return (bitfieldData_single >> 1) & 0x1;
     }
-    uint nulltimer(uint value)
+    final uint nulltimer(uint value)
     {
         bitfieldData_single = (bitfieldData_single & ~0x2) | ((value & 0x1) << 1);
         return value;
     }
     /+ uint type : 2; +/
-    uint type() const
+    final uint type() const
     {
         return (bitfieldData_single >> 2) & 0x3;
     }
-    uint type(uint value)
+    final uint type(uint value)
     {
         bitfieldData_single = (bitfieldData_single & ~0xc) | ((value & 0x3) << 2);
         return value;

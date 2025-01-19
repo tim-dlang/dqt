@@ -174,21 +174,21 @@ private:
     struct Data {
         /+ uint current_group : 4; +/
         uint bitfieldData_current_group;
-        final uint current_group() const
+        uint current_group() const
         {
             return (bitfieldData_current_group >> 0) & 0xf;
         }
-        final uint current_group(uint value)
+        uint current_group(uint value)
         {
             bitfieldData_current_group = (bitfieldData_current_group & ~0xf) | ((value & 0xf) << 0);
             return value;
         }
         /+ uint resolve_mask : 28; +/
-        final uint resolve_mask() const
+        uint resolve_mask() const
         {
             return (bitfieldData_current_group >> 4) & 0xfffffff;
         }
-        final uint resolve_mask(uint value)
+        uint resolve_mask(uint value)
         {
             bitfieldData_current_group = (bitfieldData_current_group & ~0xfffffff0) | ((value & 0xfffffff) << 4);
             return value;

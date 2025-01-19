@@ -303,21 +303,21 @@ private:
 
     /+ mutable uint m_type : 5; +/
     ushort bitfieldData_m_type;
-    final uint m_type() const
+    uint m_type() const
     {
         return (bitfieldData_m_type >> 0) & 0x1f;
     }
-    final uint m_type(uint value)
+    uint m_type(uint value)
     {
         bitfieldData_m_type = (bitfieldData_m_type & ~0x1f) | ((value & 0x1f) << 0);
         return value;
     }
     /+ mutable uint m_dirty : 5; +/
-    final uint m_dirty() const
+    uint m_dirty() const
     {
         return (bitfieldData_m_type >> 5) & 0x1f;
     }
-    final uint m_dirty(uint value)
+    uint m_dirty(uint value)
     {
         bitfieldData_m_type = (bitfieldData_m_type & ~0x3e0) | ((value & 0x1f) << 5);
         return value;

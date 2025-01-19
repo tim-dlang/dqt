@@ -461,31 +461,31 @@ extern(C++, "QtPrivate") {
         }Data data;
         /+ uint type : 30; +/
         uint bitfieldData_type = Type.Invalid | (uint(1) << 31);
-        final uint type() const
+        uint type() const
         {
             return (bitfieldData_type >> 0) & 0x3fffffff;
         }
-        final uint type(uint value)
+        uint type(uint value)
         {
             bitfieldData_type = (bitfieldData_type & ~0x3fffffff) | ((value & 0x3fffffff) << 0);
             return value;
         }
         /+ uint is_shared : 1; +/
-        final uint is_shared() const
+        uint is_shared() const
         {
             return (bitfieldData_type >> 30) & 0x1;
         }
-        final uint is_shared(uint value)
+        uint is_shared(uint value)
         {
             bitfieldData_type = (bitfieldData_type & ~0x40000000) | ((value & 0x1) << 30);
             return value;
         }
         /+ uint is_null : 1; +/
-        final uint is_null() const
+        uint is_null() const
         {
             return (bitfieldData_type >> 31) & 0x1;
         }
-        final uint is_null(uint value)
+        uint is_null(uint value)
         {
             bitfieldData_type = (bitfieldData_type & ~0x80000000) | ((value & 0x1) << 31);
             return value;

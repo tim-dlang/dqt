@@ -188,81 +188,81 @@ private:
     struct Bits {
         /+ quint32 horStretch : 8; +/
         uint bitfieldData_horStretch;
-        final quint32 horStretch() const
+        quint32 horStretch() const
         {
             return (bitfieldData_horStretch >> 0) & 0xff;
         }
-        final quint32 horStretch(quint32 value)
+        quint32 horStretch(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xff) | ((value & 0xff) << 0);
             return value;
         }
         /+ quint32 verStretch : 8; +/
-        final quint32 verStretch() const
+        quint32 verStretch() const
         {
             return (bitfieldData_horStretch >> 8) & 0xff;
         }
-        final quint32 verStretch(quint32 value)
+        quint32 verStretch(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xff00) | ((value & 0xff) << 8);
             return value;
         }
         /+ quint32 horPolicy : 4; +/
-        final quint32 horPolicy() const
+        quint32 horPolicy() const
         {
             return (bitfieldData_horStretch >> 16) & 0xf;
         }
-        final quint32 horPolicy(quint32 value)
+        quint32 horPolicy(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xf0000) | ((value & 0xf) << 16);
             return value;
         }
         /+ quint32 verPolicy : 4; +/
-        final quint32 verPolicy() const
+        quint32 verPolicy() const
         {
             return (bitfieldData_horStretch >> 20) & 0xf;
         }
-        final quint32 verPolicy(quint32 value)
+        quint32 verPolicy(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xf00000) | ((value & 0xf) << 20);
             return value;
         }
         /+ quint32 ctype : 5; +/
-        final quint32 ctype() const
+        quint32 ctype() const
         {
             return (bitfieldData_horStretch >> 24) & 0x1f;
         }
-        final quint32 ctype(quint32 value)
+        quint32 ctype(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x1f000000) | ((value & 0x1f) << 24);
             return value;
         }
         /+ quint32 hfw : 1; +/
-        final quint32 hfw() const
+        quint32 hfw() const
         {
             return (bitfieldData_horStretch >> 29) & 0x1;
         }
-        final quint32 hfw(quint32 value)
+        quint32 hfw(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x20000000) | ((value & 0x1) << 29);
             return value;
         }
         /+ quint32 wfh : 1; +/
-        final quint32 wfh() const
+        quint32 wfh() const
         {
             return (bitfieldData_horStretch >> 30) & 0x1;
         }
-        final quint32 wfh(quint32 value)
+        quint32 wfh(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x40000000) | ((value & 0x1) << 30);
             return value;
         }
         /+ quint32 retainSizeWhenHidden : 1; +/
-        final quint32 retainSizeWhenHidden() const
+        quint32 retainSizeWhenHidden() const
         {
             return (bitfieldData_horStretch >> 31) & 0x1;
         }
-        final quint32 retainSizeWhenHidden(quint32 value)
+        quint32 retainSizeWhenHidden(quint32 value)
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x80000000) | ((value & 0x1) << 31);
             return value;

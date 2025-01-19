@@ -24,21 +24,21 @@ struct /+ Q_CORE_EXPORT +/ QArrayData
     int size;
     /+ uint alloc : 31; +/
     uint bitfieldData_alloc;
-    final uint alloc() const
+    uint alloc() const
     {
         return (bitfieldData_alloc >> 0) & 0x7fffffff;
     }
-    final uint alloc(uint value)
+    uint alloc(uint value)
     {
         bitfieldData_alloc = (bitfieldData_alloc & ~0x7fffffff) | ((value & 0x7fffffff) << 0);
         return value;
     }
     /+ uint capacityReserved : 1; +/
-    final uint capacityReserved() const
+    uint capacityReserved() const
     {
         return (bitfieldData_alloc >> 31) & 0x1;
     }
-    final uint capacityReserved(uint value)
+    uint capacityReserved(uint value)
     {
         bitfieldData_alloc = (bitfieldData_alloc & ~0x80000000) | ((value & 0x1) << 31);
         return value;

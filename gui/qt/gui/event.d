@@ -249,51 +249,51 @@ protected:
     /+ Qt:: +/qt.core.namespace.MouseButtons mouseState = /+ Qt:: +/qt.core.namespace.MouseButton.NoButton;
     /+ uint _unused_ : 2; +/ // Kept for binary compatibility
     uint bitfieldData__unused_;
-    uint _unused_() const
+    final uint _unused_() const
     {
         return (bitfieldData__unused_ >> 0) & 0x3;
     }
-    uint _unused_(uint value)
+    final uint _unused_(uint value)
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0x3) | ((value & 0x3) << 0);
         return value;
     }
     /+ uint src: 2; +/
-    uint src() const
+    final uint src() const
     {
         return (bitfieldData__unused_ >> 2) & 0x3;
     }
-    uint src(uint value)
+    final uint src(uint value)
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0xc) | ((value & 0x3) << 2);
         return value;
     }
     /+ bool invertedScrolling : 1; +/
-    bool invertedScrolling() const
+    final bool invertedScrolling() const
     {
         return (bitfieldData__unused_ >> 4) & 0x1;
     }
-    bool invertedScrolling(bool value)
+    final bool invertedScrolling(bool value)
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0x10) | ((value & 0x1) << 4);
         return value;
     }
     /+ uint ph : 3; +/
-    uint ph() const
+    final uint ph() const
     {
         return (bitfieldData__unused_ >> 5) & 0x7;
     }
-    uint ph(uint value)
+    final uint ph(uint value)
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0xe0) | ((value & 0x7) << 5);
         return value;
     }
     /+ int reserved : 24; +/
-    int reserved() const
+    final int reserved() const
     {
         return (bitfieldData__unused_ >> 8) & 0xffffff;
     }
-    int reserved(int value)
+    final int reserved(int value)
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0xffffff00) | ((value & 0xffffff) << 8);
         return value;
@@ -466,11 +466,11 @@ protected:
     ushort c;
     /+ ushort autor:1; +/
     ubyte bitfieldData_autor;
-    ushort autor() const
+    final ushort autor() const
     {
         return (bitfieldData_autor >> 0) & 0x1;
     }
-    ushort autor(ushort value)
+    final ushort autor(ushort value)
     {
         bitfieldData_autor = (bitfieldData_autor & ~0x1) | ((value & 0x1) << 0);
         return value;
@@ -648,11 +648,11 @@ protected:
     QPoint gp;
     /+ uint reas : 8; +/
     ubyte bitfieldData_reas;
-    uint reas() const
+    final uint reas() const
     {
         return (bitfieldData_reas >> 0) & 0xff;
     }
-    uint reas(uint value)
+    final uint reas(uint value)
     {
         bitfieldData_reas = (bitfieldData_reas & ~0xff) | ((value & 0xff) << 0);
         return value;
@@ -916,11 +916,11 @@ public:
 private:
     /+ uint tog : 1; +/
     ubyte bitfieldData_tog;
-    uint tog() const
+    final uint tog() const
     {
         return (bitfieldData_tog >> 0) & 0x1;
     }
-    uint tog(uint value)
+    final uint tog(uint value)
     {
         bitfieldData_tog = (bitfieldData_tog & ~0x1) | ((value & 0x1) << 0);
         return value;

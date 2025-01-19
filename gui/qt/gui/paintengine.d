@@ -240,31 +240,31 @@ protected:
 
     /+ uint active : 1; +/
     ubyte bitfieldData_active;
-    uint active() const
+    final uint active() const
     {
         return (bitfieldData_active >> 0) & 0x1;
     }
-    uint active(uint value)
+    final uint active(uint value)
     {
         bitfieldData_active = (bitfieldData_active & ~0x1) | ((value & 0x1) << 0);
         return value;
     }
     /+ uint selfDestruct : 1; +/
-    uint selfDestruct() const
+    final uint selfDestruct() const
     {
         return (bitfieldData_active >> 1) & 0x1;
     }
-    uint selfDestruct(uint value)
+    final uint selfDestruct(uint value)
     {
         bitfieldData_active = (bitfieldData_active & ~0x2) | ((value & 0x1) << 1);
         return value;
     }
     /+ uint extended : 1; +/
-    uint extended() const
+    final uint extended() const
     {
         return (bitfieldData_active >> 2) & 0x1;
     }
-    uint extended(uint value)
+    final uint extended(uint value)
     {
         bitfieldData_active = (bitfieldData_active & ~0x4) | ((value & 0x1) << 2);
         return value;
