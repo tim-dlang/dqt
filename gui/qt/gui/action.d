@@ -103,23 +103,23 @@ public:
     }
 
     /+ template<typename T = QWidget*> +/
-    /+final QList!(T) associatedWidgets(T)() const
+    /+ QList<T> associatedWidgets() const
     {
-        QList!(T) result;
+        QList<T> result;
         for (auto object : associatedObjects())
-            if (auto widget = qobject_cast!(T)(object))
+            if (auto widget = qobject_cast<T>(object))
                 result.append(widget);
         return result;
-    }+/
+    } +/
     /+ template<typename T = QGraphicsWidget*> +/
-    /+final QList!(T) associatedGraphicsWidgets(T)() const
+    /+ QList<T> associatedGraphicsWidgets() const
     {
-        QList!(T) result;
+        QList<T> result;
         for (auto object : associatedObjects())
-            if (auto graphicsWidget = qobject_cast!(T)(object))
+            if (auto graphicsWidget = qobject_cast<T>(object))
                 result.append(graphicsWidget);
         return result;
-    }+/
+    } +/
 /+ #endif
 #endif +/
 

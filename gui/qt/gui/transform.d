@@ -255,7 +255,7 @@ private:
         } +/
 
 public:
-    //auto asAffineMatrix() { return Affine (m_matrix) ; }
+    //auto asAffineMatrix() { return Affine ( m_matrix ); }
     /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &s, Affine &m); +/
     /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &s, const Affine &m); +/
 

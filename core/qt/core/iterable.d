@@ -82,7 +82,7 @@ extern(C++, class) struct QTaggedIterator(Iterator, IteratorCategory)
     public Iterator base0;
     alias base0 this;
 public:
-    alias iterator_category = IteratorCategory;
+    /+ using iterator_category = IteratorCategory; +/
     /+ QTaggedIterator(Iterator &&it) : Iterator(std::move(it))
     {
         const QMetaContainer metaContainer = this->metaContainer();

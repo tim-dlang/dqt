@@ -62,7 +62,6 @@ public:
         pragma(inline, true) this(ref const(QString) aname)
         { setNamedColor(aname); }
     }
-
     /+ explicit +/ pragma(inline, true) this(QStringView aname)
     { setNamedColor(aname); }
     pragma(inline, true) this(const(char)* aname)

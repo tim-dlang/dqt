@@ -51,7 +51,7 @@ extern(C++, "QtPrivate") {
 extern(D) alias QStringLiteral = function string(string str)
 {
     return
-            mixin(interpolateMixin(q{(imported!q{qt.core.string}.QString(/+ QtPrivate:: +/qt.core.stringliteral.qMakeStringPrivate(staticString!(const(wchar), imported!q{qt.core.stringliteral}.QT_UNICODE_LITERAL!($(str))))))}));
+            mixin(interpolateMixin(q{(dqtimported!q{qt.core.string}.QString(/+ QtPrivate:: +/qt.core.stringliteral.qMakeStringPrivate(staticString!(const(wchar), dqtimported!q{qt.core.stringliteral}.QT_UNICODE_LITERAL!($(str))))))}));
             /**/
 };
 

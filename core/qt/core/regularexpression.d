@@ -357,9 +357,9 @@ extern(C++, class) struct QRegularExpressionMatchIteratorRangeBasedForIterator
 public:
     alias value_type = QRegularExpressionMatch;
     alias difference_type = int;
-//    alias reference_type = ref const(QRegularExpressionMatch);
+    /+ using reference_type = const QRegularExpressionMatch &; +/
     alias pointer_type = const(QRegularExpressionMatch)*;
-//    alias iterator_category = /+ std:: +/forward_iterator_tag;
+    /+ using iterator_category = std::forward_iterator_tag; +/
 
     @disable this();
     /+this()

@@ -2189,7 +2189,7 @@ public:
 // size
 /+int qNormalizeType(const(char)* begin, const(char)* end, char* output)
 {
-    return QTypeNormalizer { output} .normalizeType(begin, end);
+    return QTypeNormalizer ( output ).normalizeType(begin, end);
 }+/
 
 /+ template<typename T>

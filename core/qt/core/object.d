@@ -854,6 +854,7 @@ inline T qobject_cast(const QObject *object)
     return static_cast<T>(ObjType::staticMetaObject.cast(object));
 }
 
+
 template <class T> inline const char * qobject_interface_iid()
 { return nullptr; } +/
 

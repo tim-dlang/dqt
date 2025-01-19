@@ -34,7 +34,7 @@ public:
     /+ QColorTransform(QColorTransform &&colorTransform) = default; +/
     /+ref QColorTransform operator =(ref const(QColorTransform) other)/+ noexcept+/
     {
-        QColorTransform{other}.swap(this);
+        QColorTransform(other).swap(this);
         return this;
     }+/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QColorTransform) +/

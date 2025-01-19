@@ -120,7 +120,7 @@ public:
         using iterator_category = std::contiguous_iterator_tag;
         using element_type = value_type;
 #else +/
-//        alias iterator_category = /+ std:: +/random_access_iterator_tag;
+        /+ using iterator_category = std::random_access_iterator_tag; +/
 /+ #endif +/
 
         alias pointer__1 = T*;
@@ -173,7 +173,7 @@ public:
         using iterator_category = std::contiguous_iterator_tag;
         using element_type = const value_type;
 #else +/
-//        alias iterator_category = /+ std:: +/random_access_iterator_tag;
+        /+ using iterator_category = std::random_access_iterator_tag; +/
 /+ #endif +/
         alias pointer__1 = const(T)*;
         /+ using reference = const T &; +/
