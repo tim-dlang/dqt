@@ -79,12 +79,12 @@ extern(D) alias SIGNAL = function string(string a)
 /+ #define Q_ARG(type, data) QArgument<type >(#type, data) +/
 extern(D) alias Q_ARG = function string(string type, string data)
 {
-    return mixin(interpolateMixin(q{imported!q{qt.core.objectdefs}.QArgument!($(type)) ($(stringifyMacroParameter(type)), $(data))}));
+    return mixin(interpolateMixin(q{dqtimported!q{qt.core.objectdefs}.QArgument!($(type)) ($(stringifyMacroParameter(type)), $(data))}));
 };
 /+ #define Q_RETURN_ARG(type, data) QReturnArgument<type >(#type, data) +/
 extern(D) alias Q_RETURN_ARG = function string(string type, string data)
 {
-    return mixin(interpolateMixin(q{imported!q{qt.core.objectdefs}.QReturnArgument!($(type)) ($(stringifyMacroParameter(type)), $(data))}));
+    return mixin(interpolateMixin(q{dqtimported!q{qt.core.objectdefs}.QReturnArgument!($(type)) ($(stringifyMacroParameter(type)), $(data))}));
 };
 
 

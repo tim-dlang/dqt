@@ -484,7 +484,7 @@ public:
     extern(C++, class) struct iterator {
     public:
         Node* i = null;
-//        alias iterator_category = /+ std:: +/random_access_iterator_tag;
+        /+ typedef std::random_access_iterator_tag  iterator_category; +/
         // ### Qt6: use int
         alias difference_type = qptrdiff;
         alias value_type = T;
@@ -551,7 +551,7 @@ public:
     extern(C++, class) struct const_iterator {
     public:
         Node* i = null;
-//        alias iterator_category = /+ std:: +/random_access_iterator_tag;
+        /+ typedef std::random_access_iterator_tag  iterator_category; +/
         // ### Qt6: use int
         alias difference_type = qptrdiff;
         alias value_type = T;

@@ -39,7 +39,7 @@ public:
     { } +/
     /+ref QColorTransform operator =(ref const(QColorTransform) other)/+ noexcept+/
     {
-        QColorTransform{other}.swap(this);
+        QColorTransform(other).swap(this);
         return this;
     }+/
     /+ QColorTransform &operator=(QColorTransform &&other) noexcept

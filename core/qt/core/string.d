@@ -2315,10 +2315,10 @@ struct ArgBase {
 }+/
 
 /+
-                 pragma(inline, true) QStringViewArg   qStringLikeToArg(ref const(QString) s)/+ noexcept+/ { return QStringViewArg{qToStringViewIgnoringNull(s)}; }
-pragma(inline, true) QStringViewArg   qStringLikeToArg(QStringView s)/+ noexcept+/ { return QStringViewArg{s}; }
-                 pragma(inline, true) QStringViewArg   qStringLikeToArg(ref const(QChar) c)/+ noexcept+/ { return QStringViewArg{QStringView{&c, 1}}; }
-pragma(inline, true) QLatin1StringArg qStringLikeToArg(QLatin1String s)/+ noexcept+/ { return QLatin1StringArg{s}; }
+                 pragma(inline, true) QStringViewArg   qStringLikeToArg(ref const(QString) s)/+ noexcept+/ { return QStringViewArg(qToStringViewIgnoringNull(s)); }
+pragma(inline, true) QStringViewArg   qStringLikeToArg(QStringView s)/+ noexcept+/ { return QStringViewArg(s); }
+                 pragma(inline, true) QStringViewArg   qStringLikeToArg(ref const(QChar) c)/+ noexcept+/ { return QStringViewArg(QStringView(&c, 1)); }
+pragma(inline, true) QLatin1StringArg qStringLikeToArg(QLatin1String s)/+ noexcept+/ { return QLatin1StringArg(s); }
 +/
 } // namespace QtPrivate
 
