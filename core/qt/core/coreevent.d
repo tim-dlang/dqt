@@ -353,41 +353,41 @@ private:
     bool m_unused = false;
     /+ quint16 m_reserved : 13; +/
     ushort bitfieldData_m_reserved;
-    quint16 m_reserved() const
+    final quint16 m_reserved() const
     {
         return (bitfieldData_m_reserved >> 0) & 0x1fff;
     }
-    quint16 m_reserved(quint16 value)
+    final quint16 m_reserved(quint16 value)
     {
         bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x1fff) | ((value & 0x1fff) << 0);
         return value;
     }
     /+ quint16 m_inputEvent : 1; +/
-    quint16 m_inputEvent() const
+    final quint16 m_inputEvent() const
     {
         return (bitfieldData_m_reserved >> 13) & 0x1;
     }
-    quint16 m_inputEvent(quint16 value)
+    final quint16 m_inputEvent(quint16 value)
     {
         bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x2000) | ((value & 0x1) << 13);
         return value;
     }
     /+ quint16 m_pointerEvent : 1; +/
-    quint16 m_pointerEvent() const
+    final quint16 m_pointerEvent() const
     {
         return (bitfieldData_m_reserved >> 14) & 0x1;
     }
-    quint16 m_pointerEvent(quint16 value)
+    final quint16 m_pointerEvent(quint16 value)
     {
         bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x4000) | ((value & 0x1) << 14);
         return value;
     }
     /+ quint16 m_singlePointEvent : 1; +/
-    quint16 m_singlePointEvent() const
+    final quint16 m_singlePointEvent() const
     {
         return (bitfieldData_m_reserved >> 15) & 0x1;
     }
-    quint16 m_singlePointEvent(quint16 value)
+    final quint16 m_singlePointEvent(quint16 value)
     {
         bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x8000) | ((value & 0x1) << 15);
         return value;

@@ -212,43 +212,43 @@ protected:
     quint16 m_reserved;
     /+ quint16 m_reserved2  : 11; +/
     ushort bitfieldData_m_reserved2;
-    quint16 m_reserved2() const
+    final quint16 m_reserved2() const
     {
         return (bitfieldData_m_reserved2 >> 0) & 0x7ff;
     }
-    quint16 m_reserved2(quint16 value)
+    final quint16 m_reserved2(quint16 value)
     {
         bitfieldData_m_reserved2 = (bitfieldData_m_reserved2 & ~0x7ff) | ((value & 0x7ff) << 0);
         return value;
     }
     // for QMouseEvent
     /+ quint16 m_doubleClick : 1; +/
-    quint16 m_doubleClick() const
+    final quint16 m_doubleClick() const
     {
         return (bitfieldData_m_reserved2 >> 11) & 0x1;
     }
-    quint16 m_doubleClick(quint16 value)
+    final quint16 m_doubleClick(quint16 value)
     {
         bitfieldData_m_reserved2 = (bitfieldData_m_reserved2 & ~0x800) | ((value & 0x1) << 11);
         return value;
     }
     // for QWheelEvent
     /+ quint16 m_phase : 3; +/
-    quint16 m_phase() const
+    final quint16 m_phase() const
     {
         return (bitfieldData_m_reserved2 >> 12) & 0x7;
     }
-    quint16 m_phase(quint16 value)
+    final quint16 m_phase(quint16 value)
     {
         bitfieldData_m_reserved2 = (bitfieldData_m_reserved2 & ~0x7000) | ((value & 0x7) << 12);
         return value;
     }
     /+ quint16 m_invertedScrolling : 1; +/
-    quint16 m_invertedScrolling() const
+    final quint16 m_invertedScrolling() const
     {
         return (bitfieldData_m_reserved2 >> 15) & 0x1;
     }
-    quint16 m_invertedScrolling(quint16 value)
+    final quint16 m_invertedScrolling(quint16 value)
     {
         bitfieldData_m_reserved2 = (bitfieldData_m_reserved2 & ~0x8000) | ((value & 0x1) << 15);
         return value;
@@ -608,21 +608,21 @@ protected:
     /+ Qt:: +/qt.core.namespace.NativeGestureType m_gestureType;
     /+ quint32 m_fingerCount : 4; +/
     uint bitfieldData_m_fingerCount;
-    quint32 m_fingerCount() const
+    final quint32 m_fingerCount() const
     {
         return (bitfieldData_m_fingerCount >> 0) & 0xf;
     }
-    quint32 m_fingerCount(quint32 value)
+    final quint32 m_fingerCount(quint32 value)
     {
         bitfieldData_m_fingerCount = (bitfieldData_m_fingerCount & ~0xf) | ((value & 0xf) << 0);
         return value;
     }
     /+ quint32 m_reserved : 28; +/
-    quint32 m_reserved() const
+    final quint32 m_reserved() const
     {
         return (bitfieldData_m_fingerCount >> 4) & 0xfffffff;
     }
-    quint32 m_reserved(quint32 value)
+    final quint32 m_reserved(quint32 value)
     {
         bitfieldData_m_fingerCount = (bitfieldData_m_fingerCount & ~0xfffffff0) | ((value & 0xfffffff) << 4);
         return value;
@@ -687,21 +687,21 @@ protected:
     quint32 m_nativeModifiers;
     /+ quint16 m_count      : 15; +/
     ushort bitfieldData_m_count;
-    quint16 m_count() const
+    final quint16 m_count() const
     {
         return (bitfieldData_m_count >> 0) & 0x7fff;
     }
-    quint16 m_count(quint16 value)
+    final quint16 m_count(quint16 value)
     {
         bitfieldData_m_count = (bitfieldData_m_count & ~0x7fff) | ((value & 0x7fff) << 0);
         return value;
     }
     /+ quint16 m_autoRepeat : 1; +/
-    quint16 m_autoRepeat() const
+    final quint16 m_autoRepeat() const
     {
         return (bitfieldData_m_count >> 15) & 0x1;
     }
-    quint16 m_autoRepeat(quint16 value)
+    final quint16 m_autoRepeat(quint16 value)
     {
         bitfieldData_m_count = (bitfieldData_m_count & ~0x8000) | ((value & 0x1) << 15);
         return value;
@@ -954,11 +954,11 @@ protected:
     QPoint m_globalPos;
     /+ uint m_reason : 8; +/
     ubyte bitfieldData_m_reason;
-    uint m_reason() const
+    final uint m_reason() const
     {
         return (bitfieldData_m_reason >> 0) & 0xff;
     }
-    uint m_reason(uint value)
+    final uint m_reason(uint value)
     {
         bitfieldData_m_reason = (bitfieldData_m_reason & ~0xff) | ((value & 0xff) << 0);
         return value;
@@ -1483,11 +1483,11 @@ protected:
     QEventPoint.States m_touchPointStates = QEventPoint.State.Unknown;
     /+ quint32 m_reserved : 24; +/
     uint bitfieldData_m_reserved;
-    quint32 m_reserved() const
+    final quint32 m_reserved() const
     {
         return (bitfieldData_m_reserved >> 0) & 0xffffff;
     }
-    quint32 m_reserved(quint32 value)
+    final quint32 m_reserved(quint32 value)
     {
         bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0xffffff) | ((value & 0xffffff) << 0);
         return value;

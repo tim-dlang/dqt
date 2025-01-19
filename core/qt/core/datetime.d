@@ -243,11 +243,11 @@ private:
 /+        version (LittleEndian)
         {
             /+ quintptr status : 8; +/
-            final quintptr status() const
+            quintptr status() const
             {
                 return (bitfieldData_status >> 0) & 0xff;
             }
-            final quintptr status(quintptr value)
+            quintptr status(quintptr value)
             {
                 bitfieldData_status = (bitfieldData_status & ~0xff) | ((value & 0xff) << 0);
                 return value;
@@ -259,11 +259,11 @@ private:
 #else +/
         // note: this is only 24 bits on 32-bit systems...
         /+ qintptr msecs : sizeof(void *) * 8 - 8; +/
-        final qintptr msecs() const
+        qintptr msecs() const
         {
             return (bitfieldData_msecs >> 0) & 0x1;
         }
-        final qintptr msecs(qintptr value)
+        qintptr msecs(qintptr value)
         {
             bitfieldData_status = (bitfieldData_status & ~0x100) | ((value & 0x1) << 8);
             return value;
@@ -275,11 +275,11 @@ private:
         version (BigEndian)
         {
             /+ quintptr status : 8; +/
-            final quintptr status() const
+            quintptr status() const
             {
                 return (bitfieldData_msecs >> 65) & 0xff;
             }
-            final quintptr status(quintptr value)
+            quintptr status(quintptr value)
             {
                 bitfieldData_msecs = (bitfieldData_msecs & ~0x1fe) | ((value & 0xff) << 65);
                 return value;

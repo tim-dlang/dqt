@@ -80,111 +80,111 @@ public:
     /+ Qt:: +/qt.core.namespace.WindowFlags window_flags;
     /+ uint window_state : 4; +/
     uint bitfieldData_window_state;
-    final uint window_state() const
+    uint window_state() const
     {
         return (bitfieldData_window_state >> 0) & 0xf;
     }
-    final uint window_state(uint value)
+    uint window_state(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0xf) | ((value & 0xf) << 0);
         return value;
     }
     /+ uint focus_policy : 4; +/
-    final uint focus_policy() const
+    uint focus_policy() const
     {
         return (bitfieldData_window_state >> 4) & 0xf;
     }
-    final uint focus_policy(uint value)
+    uint focus_policy(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0xf0) | ((value & 0xf) << 4);
         return value;
     }
     /+ uint sizehint_forced :1; +/
-    final uint sizehint_forced() const
+    uint sizehint_forced() const
     {
         return (bitfieldData_window_state >> 8) & 0x1;
     }
-    final uint sizehint_forced(uint value)
+    uint sizehint_forced(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x100) | ((value & 0x1) << 8);
         return value;
     }
     /+ uint is_closing :1; +/
-    final uint is_closing() const
+    uint is_closing() const
     {
         return (bitfieldData_window_state >> 9) & 0x1;
     }
-    final uint is_closing(uint value)
+    uint is_closing(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x200) | ((value & 0x1) << 9);
         return value;
     }
     /+ uint in_show : 1; +/
-    final uint in_show() const
+    uint in_show() const
     {
         return (bitfieldData_window_state >> 10) & 0x1;
     }
-    final uint in_show(uint value)
+    uint in_show(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x400) | ((value & 0x1) << 10);
         return value;
     }
     /+ uint in_set_window_state : 1; +/
-    final uint in_set_window_state() const
+    uint in_set_window_state() const
     {
         return (bitfieldData_window_state >> 11) & 0x1;
     }
-    final uint in_set_window_state(uint value)
+    uint in_set_window_state(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x800) | ((value & 0x1) << 11);
         return value;
     }
     /+ mutable uint fstrut_dirty : 1; +/
-    final uint fstrut_dirty() const
+    uint fstrut_dirty() const
     {
         return (bitfieldData_window_state >> 12) & 0x1;
     }
-    final uint fstrut_dirty(uint value)
+    uint fstrut_dirty(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x1000) | ((value & 0x1) << 12);
         return value;
     }
     /+ uint context_menu_policy : 3; +/
-    final uint context_menu_policy() const
+    uint context_menu_policy() const
     {
         return (bitfieldData_window_state >> 13) & 0x7;
     }
-    final uint context_menu_policy(uint value)
+    uint context_menu_policy(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0xe000) | ((value & 0x7) << 13);
         return value;
     }
     /+ uint window_modality : 2; +/
-    final uint window_modality() const
+    uint window_modality() const
     {
         return (bitfieldData_window_state >> 16) & 0x3;
     }
-    final uint window_modality(uint value)
+    uint window_modality(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x30000) | ((value & 0x3) << 16);
         return value;
     }
     /+ uint in_destructor : 1; +/
-    final uint in_destructor() const
+    uint in_destructor() const
     {
         return (bitfieldData_window_state >> 18) & 0x1;
     }
-    final uint in_destructor(uint value)
+    uint in_destructor(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x40000) | ((value & 0x1) << 18);
         return value;
     }
     /+ uint unused : 13; +/
-    final uint unused() const
+    uint unused() const
     {
         return (bitfieldData_window_state >> 19) & 0x1fff;
     }
-    final uint unused(uint value)
+    uint unused(uint value)
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0xfff80000) | ((value & 0x1fff) << 19);
         return value;

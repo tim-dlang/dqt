@@ -127,51 +127,51 @@ alias Flags = QFlags!(Flag);    pragma(inline, true) void setFlags(Flags aflags)
 private:
     /+ uint align : 9; +/
     uint bitfieldData_align;
-    final uint align_() const
+    uint align_() const
     {
         return (bitfieldData_align >> 0) & 0x1ff;
     }
-    final uint align_(uint value)
+    uint align_(uint value)
     {
         bitfieldData_align = (bitfieldData_align & ~0x1ff) | ((value & 0x1ff) << 0);
         return value;
     }
     /+ uint wordWrap : 4; +/
-    final uint wordWrap() const
+    uint wordWrap() const
     {
         return (bitfieldData_align >> 9) & 0xf;
     }
-    final uint wordWrap(uint value)
+    uint wordWrap(uint value)
     {
         bitfieldData_align = (bitfieldData_align & ~0x1e00) | ((value & 0xf) << 9);
         return value;
     }
     /+ uint design : 1; +/
-    final uint design() const
+    uint design() const
     {
         return (bitfieldData_align >> 13) & 0x1;
     }
-    final uint design(uint value)
+    uint design(uint value)
     {
         bitfieldData_align = (bitfieldData_align & ~0x2000) | ((value & 0x1) << 13);
         return value;
     }
     /+ uint direction : 2; +/
-    final uint direction() const
+    uint direction() const
     {
         return (bitfieldData_align >> 14) & 0x3;
     }
-    final uint direction(uint value)
+    uint direction(uint value)
     {
         bitfieldData_align = (bitfieldData_align & ~0xc000) | ((value & 0x3) << 14);
         return value;
     }
     /+ uint unused : 16; +/
-    final uint unused() const
+    uint unused() const
     {
         return (bitfieldData_align >> 16) & 0xffff;
     }
-    final uint unused(uint value)
+    uint unused(uint value)
     {
         bitfieldData_align = (bitfieldData_align & ~0xffff0000) | ((value & 0xffff) << 16);
         return value;

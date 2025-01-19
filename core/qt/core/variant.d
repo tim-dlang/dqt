@@ -477,31 +477,31 @@ public:
         }generated_qvariant_0 data;
         quintptr bitfield = 1 << 1;
         /+ quintptr is_shared : 1; +/
-        final quintptr is_shared() const
+        quintptr is_shared() const
         {
             return (bitfield >> 0) & 0x1;
         }
-        final quintptr is_shared(quintptr value)
+        quintptr is_shared(quintptr value)
         {
             bitfield = (bitfield & ~0x1) | ((value & 0x1) << 0);
             return value;
         }
         /+ quintptr is_null : 1; +/
-        final quintptr is_null() const
+        quintptr is_null() const
         {
             return (bitfield >> 1) & 0x1;
         }
-        final quintptr is_null(quintptr value)
+        quintptr is_null(quintptr value)
         {
             bitfield = (bitfield & ~0x2) | ((value & 0x1) << 1);
             return value;
         }
         /+ quintptr packedType : sizeof(QMetaType) * 8 - 2; +/
-        final quintptr packedType() const
+        quintptr packedType() const
         {
             return (bitfield >> 2) & 0x1;
         }
-        final quintptr packedType(quintptr value)
+        quintptr packedType(quintptr value)
         {
             bitfield = (bitfield & ~0x4) | ((value & 0x1) << 2);
             return value;

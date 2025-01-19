@@ -361,31 +361,31 @@ public:
 
     /+ Qt::TextElideMode textElideMode:2; +/
     uint bitfieldData_textElideMode;
-    final qt.core.namespace.TextElideMode textElideMode() const
+    qt.core.namespace.TextElideMode textElideMode() const
     {
         return cast(qt.core.namespace.TextElideMode)((bitfieldData_textElideMode >> 0) & 0x3);
     }
-    final qt.core.namespace.TextElideMode textElideMode(qt.core.namespace.TextElideMode value)
+    qt.core.namespace.TextElideMode textElideMode(qt.core.namespace.TextElideMode value)
     {
         bitfieldData_textElideMode = (bitfieldData_textElideMode & ~0x3) | ((value & 0x3) << 0);
         return value;
     }
     /+ bool isSectionDragTarget:1; +/
-    final bool isSectionDragTarget() const
+    bool isSectionDragTarget() const
     {
         return (bitfieldData_textElideMode >> 2) & 0x1;
     }
-    final bool isSectionDragTarget(bool value)
+    bool isSectionDragTarget(bool value)
     {
         bitfieldData_textElideMode = (bitfieldData_textElideMode & ~0x4) | ((value & 0x1) << 2);
         return value;
     }
     /+ int unused:29; +/
-    final int unused() const
+    int unused() const
     {
         return (bitfieldData_textElideMode >> 3) & 0x1fffffff;
     }
-    final int unused(int value)
+    int unused(int value)
     {
         bitfieldData_textElideMode = (bitfieldData_textElideMode & ~0xfffffff8) | ((value & 0x1fffffff) << 3);
         return value;
