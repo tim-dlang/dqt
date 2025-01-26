@@ -226,8 +226,7 @@ public:
 
     /+ [[nodiscard]] +/ pragma(inline, true) QString toString() const
     {
-        (mixin(Q_ASSERT(q{QBasicUtf8StringView.size() == cast(int)(QBasicUtf8StringView.size())})));
-        return QString.fromUtf8(data(), cast(int)(size()));
+        return QString.fromUtf8(data(), size());
     } // defined in qstring.h
 
     /+ [[nodiscard]] +/ qsizetype size() const/+ noexcept+/ { return m_size; }
@@ -286,6 +285,13 @@ return m_data[n];
     { verify(n); m_size = n; }
     void chop(qsizetype n)
     { verify(n); m_size -= n; }
+
+    /+ [[nodiscard]] +/ pragma(inline, true) bool isValidUtf8() const/+ noexcept+/
+    {
+        import qt.core.bytearrayview;
+
+        return QByteArrayView(reinterpret_cast!(const(char)*)(data()), size()).isValidUtf8();
+    }
 
     //
     // STL compatibility API:

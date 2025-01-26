@@ -18,6 +18,7 @@ version (QT_NO_VALIDATOR) {} else
 {
     import qt.core.locale;
     import qt.core.object;
+    import qt.core.objectdefs_impl;
     import qt.core.regularexpression;
     import qt.core.string;
 }
@@ -126,8 +127,10 @@ public:
     }
     /+ Q_ENUM(Notation) +/
     override QValidator.State validate(ref QString , ref int ) const;
+    override void fixup(ref QString input) const;
 
-    final void setRange(double bottom, double top, int decimals = 0);
+    final void setRange(double bottom, double top, int decimals);
+    final void setRange(double bottom, double top);
     final void setBottom(double);
     final void setTop(double);
     final void setDecimals(int);

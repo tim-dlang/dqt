@@ -17,7 +17,7 @@ import qt.core.namespace;
 import qt.core.propertyprivate;
 import qt.helpers;
 
-/+ template <typename Class, typename T, auto Offset, auto Setter, auto Signal>
+/+ template <typename Class, typename T, auto Offset, auto Setter, auto Signal, auto Getter>
 class QObjectCompatProperty; +/
 struct QPropertyDelayedNotifications;
 
@@ -43,7 +43,7 @@ private:
     /+ mutable +/ QBindingStorageData* d = null;
     QBindingStatus* bindingStatus = null;
 
-    /+ template<typename Class, typename T, auto Offset, auto Setter, auto Signal> +/
+    /+ template<typename Class, typename T, auto Offset, auto Setter, auto Signal, auto Getter> +/
     /+ friend class QObjectCompatProperty; +/
     /+ friend class QObjectPrivate; +/
     /+ friend class QtPrivate::QPropertyBindingData; +/
@@ -74,8 +74,11 @@ public:
             return null;
         return bindingData_helper(data);
     }
-    // ### Qt 7: remove unused BIC shim
-    void maybeUpdateBindingAndRegister(const(QUntypedPropertyData)* data) const { registerDependency(data); }
+
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        void maybeUpdateBindingAndRegister(const(QUntypedPropertyData)* data) const { registerDependency(data); }
+    }
 
     /+ QtPrivate:: +/qt.core.propertyprivate.QPropertyBindingData* bindingData(QUntypedPropertyData* data, bool create)
     {
@@ -86,8 +89,11 @@ public:
 private:
     void clear();
     void registerDependency_helper(const(QUntypedPropertyData)* data) const;
-    // ### Unused, but keep for BC
-    void maybeUpdateBindingAndRegister_helper(const(QUntypedPropertyData)* data) const;
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        // ### Unused, but keep for BC
+        void maybeUpdateBindingAndRegister_helper(const(QUntypedPropertyData)* data) const;
+    }
     /+ QtPrivate:: +/qt.core.propertyprivate.QPropertyBindingData* bindingData_helper(const(QUntypedPropertyData)* data) const;
     /+ QtPrivate:: +/qt.core.propertyprivate.QPropertyBindingData* bindingData_helper(QUntypedPropertyData* data, bool create);
     mixin(CREATE_CONVENIENCE_WRAPPERS);

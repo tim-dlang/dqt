@@ -64,7 +64,7 @@ class /+ Q_GUI_EXPORT +/ QAction : QObject
                NOTIFY changed)
     Q_PROPERTY(bool shortcutVisibleInContextMenu READ isShortcutVisibleInContextMenu
                WRITE setShortcutVisibleInContextMenu NOTIFY changed)
-    Q_PROPERTY(Priority priority READ priority WRITE setPriority) +/
+    Q_PROPERTY(Priority priority READ priority WRITE setPriority NOTIFY changed) +/
 
 public:
     // note this is copied into qplatformmenu.h, which must stay in sync
@@ -94,7 +94,8 @@ public:
         QWidget, QMenu, and QGraphicsWidget can be expected to be fully defined.
     */
     /+ template<typename T = QWidget*> +/
-    final T parentWidget(T)() const
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use parent() with qobject_cast() instead") +/
+        final T parentWidget(T)() const
     {
         auto result = parent();
         while (result && !qobject_cast!(T)(result))
@@ -103,7 +104,8 @@ public:
     }
 
     /+ template<typename T = QWidget*> +/
-    /+ QList<T> associatedWidgets() const
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use associatedObjects() with qobject_cast() instead")
+    QList<T> associatedWidgets() const
     {
         QList<T> result;
         for (auto object : associatedObjects())
@@ -112,7 +114,8 @@ public:
         return result;
     } +/
     /+ template<typename T = QGraphicsWidget*> +/
-    /+ QList<T> associatedGraphicsWidgets() const
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use associatedObjects() with qobject_cast() instead")
+    QList<T> associatedGraphicsWidgets() const
     {
         QList<T> result;
         for (auto object : associatedObjects())
@@ -198,8 +201,7 @@ public:
     final void setMenuRole(MenuRole menuRole);
     final MenuRole menuRole() const;
 
-/+ #if QT_DEPRECATED_SINCE(6,0)
-#ifdef Q_CLANG_QDOC
+/+ #ifdef Q_CLANG_QDOC
     QMenu *menu() const;
     void setMenu(QMenu *menu);
 #else +/
@@ -213,8 +215,7 @@ public:
     {
         setMenuObject(m);
     }
-/+ #endif
-#endif +/
+/+ #endif +/
 
     final void setIconVisibleInMenu(bool visible);
     final bool isIconVisibleInMenu() const;
@@ -256,7 +257,9 @@ private:
     /+ friend class QToolButton; +/
     /+ friend class QGraphicsWidget; +/
 
-    final QObject menuObject() const;
+    mixin(changeWindowsMangling(q{mangleChangeAccess("private")}, q{
+    package(qt) final QObject menuObject() const;
+    }));
     final void setMenuObject(QObject object);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }

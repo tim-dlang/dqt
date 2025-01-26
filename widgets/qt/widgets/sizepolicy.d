@@ -22,8 +22,6 @@ import qt.core.variant;
 import qt.helpers;
 
 
-/+ Q_DECL_CONST_FUNCTION inline size_t qHash(QSizePolicy key, size_t seed = 0) noexcept; +/
-
 /// Binding for C++ class [QSizePolicy](https://doc.qt.io/qt-6/qsizepolicy.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_WIDGETS_EXPORT +/ QSizePolicy
 {
@@ -103,7 +101,7 @@ alias ControlTypes = QFlags!(ControlType);    /+ Q_FLAG(ControlTypes) +/
     /+bool operator ==(ref const(QSizePolicy) s) const/+ noexcept+/ { return data == s.data; }+/
     /+bool operator !=(ref const(QSizePolicy) s) const/+ noexcept+/ { return data != s.data; }+/
 
-    /+ friend Q_DECL_CONST_FUNCTION size_t qHash(QSizePolicy key, size_t seed) noexcept { return qHash(key.data, seed); } +/
+    /+ friend Q_DECL_CONST_FUNCTION size_t qHash(QSizePolicy key, size_t seed = 0) noexcept { return qHash(key.data, seed); } +/
 
     /+auto opCast(T : QVariant)() const;+/
 
@@ -265,21 +263,35 @@ private:
 /+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator |(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator &(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/{return QFlags!(QSizePolicy.ControlTypes.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator &(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator ^(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/{return QFlags!(QSizePolicy.ControlTypes.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator ^(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QSizePolicy.ControlTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QSizePolicy.ControlTypes.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QSizePolicy.ControlTypes.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QSizePolicy.ControlTypes operator ~(QSizePolicy.ControlTypes.enum_type e)/+noexcept+/{return~QSizePolicy.ControlTypes(e);}+/
+/+pragma(inline, true) void operator |(QSizePolicy.ControlTypes.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QSizePolicy.ControlTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_TYPEINFO(QSizePolicy, Q_PRIMITIVE_TYPE);
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(QSizePolicy::ControlTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(QSizePolicy::ControlTypes) +/
+/+pragma(inline, true) int operator |(QSizePolicy.Policy lhs, QSizePolicy.PolicyFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)|qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator &(QSizePolicy.Policy lhs, QSizePolicy.PolicyFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)&qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator ^(QSizePolicy.Policy lhs, QSizePolicy.PolicyFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)^qToUnderlying(rhs));}+/
+/+ Q_DECLARE_MIXED_ENUM_OPERATORS(int, QSizePolicy::Policy, QSizePolicy::PolicyFlag)
 #ifndef QT_NO_DATASTREAM
 Q_WIDGETS_EXPORT QDataStream &operator<<(QDataStream &, const QSizePolicy &);
 Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &);

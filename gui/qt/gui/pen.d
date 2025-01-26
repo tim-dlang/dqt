@@ -56,7 +56,7 @@ public:
     /+ QPen(QPen &&other) noexcept
         : d(qExchange(other.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPen) +/
-    /+ void swap(QPen &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QPen &other) noexcept { qt_ptr_swap(d, other.d); } +/
 
     /+ Qt:: +/qt.core.namespace.PenStyle style() const;
     void setStyle(/+ Qt:: +/qt.core.namespace.PenStyle);

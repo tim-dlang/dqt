@@ -13,6 +13,7 @@ module qt.core.dir;
 extern(C++):
 
 import qt.config;
+import qt.core.file;
 import qt.core.fileinfo;
 import qt.core.flags;
 import qt.core.qchar;
@@ -100,7 +101,7 @@ alias SortFlags = QFlags!(SortFlag);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QDir) +/
 
     /+ void swap(QDir &other) noexcept
-    { qSwap(d_ptr, other.d_ptr); } +/
+    { d_ptr.swap(other.d_ptr); } +/
 
     void setPath(ref const(QString) path);
 /+ #ifdef Q_CLANG_QDOC
@@ -172,6 +173,7 @@ alias SortFlags = QFlags!(SortFlag);
                                     SortFlags sort = SortFlag.NoSort) const;+/
 
     bool mkdir(ref const(QString) dirName) const;
+    bool mkdir(ref const(QString) dirName, QFile.Permissions permissions) const;
     bool rmdir(ref const(QString) dirName) const;
     bool mkpath(ref const(QString) dirPath) const;
     bool rmpath(ref const(QString) dirPath) const;
@@ -256,17 +258,27 @@ private:
 /+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator |(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator &(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/{return QFlags!(QDir.Filters.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator &(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator ^(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/{return QFlags!(QDir.Filters.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator ^(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QDir.Filters.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QDir.Filters.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QDir.Filters.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QDir.Filters.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QDir.Filters.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QDir.Filters operator ~(QDir.Filters.enum_type e)/+noexcept+/{return~QDir.Filters(e);}+/
+/+pragma(inline, true) void operator |(QDir.Filters.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QDir.Filters.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_SHARED(QDir)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::Filters) +/
@@ -274,17 +286,27 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::Filters) +/
 /+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator |(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator &(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)/+noexcept+/{return QFlags!(QDir.SortFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator &(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator ^(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)/+noexcept+/{return QFlags!(QDir.SortFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator ^(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QDir.SortFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QDir.SortFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QDir.SortFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QDir.SortFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QDir.SortFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QDir.SortFlags operator ~(QDir.SortFlags.enum_type e)/+noexcept+/{return~QDir.SortFlags(e);}+/
+/+pragma(inline, true) void operator |(QDir.SortFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QDir.SortFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::SortFlags)
 #ifndef QT_NO_DEBUG_STREAM
 class QDebug;

@@ -21,7 +21,6 @@ import qt.core.metamacros;
 import qt.core.namespace;
 import qt.core.point;
 import qt.core.rect;
-import qt.core.scopedpointer;
 import qt.core.string;
 import qt.gui.brush;
 import qt.gui.color;
@@ -69,7 +68,7 @@ public:
         VerticalSubpixelPositioning = 0x08,
         LosslessImageRendering = 0x40,
     }
-    /+ Q_FLAG(RenderHint) +/
+    /+ Q_ENUM(RenderHint) +/
 
     /+ Q_DECLARE_FLAGS(RenderHints, RenderHint) +/
 alias RenderHints = QFlags!(RenderHint);    /+ Q_FLAG(RenderHints) +/
@@ -706,7 +705,7 @@ private:
     /+ Q_DISABLE_COPY(QPainter) +/
 @disable this(this);
 /+this(ref const(QPainter));+//+ref QPainter operator =(ref const(QPainter));+/
-    QScopedPointer!(QPainterPrivate) d_ptr;
+    /+ std:: +//*unique_ptr!(QPainterPrivate)*/ QPainterPrivate* d_ptr;
 
     /+ friend class QWidget; +/
     /+ friend class QFontEngine; +/
@@ -729,17 +728,27 @@ private:
 /+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator |(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator &(QPainter.RenderHints.enum_type f1, QPainter.RenderHints.enum_type f2)/+noexcept+/{return QFlags!(QPainter.RenderHints.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator &(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator ^(QPainter.RenderHints.enum_type f1, QPainter.RenderHints.enum_type f2)/+noexcept+/{return QFlags!(QPainter.RenderHints.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QPainter.RenderHints.enum_type) operator ^(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QPainter.RenderHints.enum_type f1, QPainter.RenderHints.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QPainter.RenderHints.enum_type f1, QPainter.RenderHints.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QPainter.RenderHints.enum_type f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QPainter.RenderHints.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QPainter.RenderHints.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QPainter.RenderHints.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QPainter.RenderHints.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QPainter.RenderHints.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QPainter.RenderHints.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QPainter.RenderHints operator ~(QPainter.RenderHints.enum_type e)/+noexcept+/{return~QPainter.RenderHints(e);}+/
+/+pragma(inline, true) void operator |(QPainter.RenderHints.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QPainter.RenderHints.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 /+ Q_DECLARE_TYPEINFO(QPainter::PixmapFragment, Q_RELOCATABLE_TYPE);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPainter::RenderHints)

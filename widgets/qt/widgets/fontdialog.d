@@ -95,16 +95,26 @@ private:
 /+pragma(inline, true) QFlags!(QFontDialog.FontDialogOptions.enum_type) operator |(QFontDialog.FontDialogOptions.enum_type f1, QFlags!(QFontDialog.FontDialogOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QFontDialog.FontDialogOptions.enum_type) operator &(QFontDialog.FontDialogOptions.enum_type f1, QFontDialog.FontDialogOptions.enum_type f2)/+noexcept+/{return QFlags!(QFontDialog.FontDialogOptions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QFontDialog.FontDialogOptions.enum_type) operator &(QFontDialog.FontDialogOptions.enum_type f1, QFlags!(QFontDialog.FontDialogOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QFontDialog.FontDialogOptions.enum_type) operator ^(QFontDialog.FontDialogOptions.enum_type f1, QFontDialog.FontDialogOptions.enum_type f2)/+noexcept+/{return QFlags!(QFontDialog.FontDialogOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QFontDialog.FontDialogOptions.enum_type) operator ^(QFontDialog.FontDialogOptions.enum_type f1, QFlags!(QFontDialog.FontDialogOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QFontDialog.FontDialogOptions.enum_type f1, QFontDialog.FontDialogOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFontDialog.FontDialogOptions.enum_type f1, QFlags!(QFontDialog.FontDialogOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QFontDialog.FontDialogOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFontDialog.FontDialogOptions.enum_type f1, QFontDialog.FontDialogOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFontDialog.FontDialogOptions.enum_type f1, QFlags!(QFontDialog.FontDialogOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QFontDialog.FontDialogOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QFontDialog.FontDialogOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QFontDialog.FontDialogOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFontDialog.FontDialogOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFontDialog.FontDialogOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFontDialog.FontDialogOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QFontDialog.FontDialogOptions operator ~(QFontDialog.FontDialogOptions.enum_type e)/+noexcept+/{return~QFontDialog.FontDialogOptions(e);}+/
+/+pragma(inline, true) void operator |(QFontDialog.FontDialogOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QFontDialog.FontDialogOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QFontDialog::FontDialogOptions) +/

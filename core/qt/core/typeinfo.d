@@ -18,10 +18,9 @@ import std.meta;
 enum QTypeInfoFlags {
     Q_COMPLEX_TYPE = 0,
     Q_PRIMITIVE_TYPE = 0x1,
-    Q_STATIC_TYPE = 0,
-    Q_MOVABLE_TYPE = 0x2,               // ### Qt6: merge movable and relocatable once QList no longer depends on it
+    Q_RELOCATABLE_TYPE = 0x2,
+    Q_MOVABLE_TYPE = 0x2,
     Q_DUMMY_TYPE = 0x4,
-    Q_RELOCATABLE_TYPE = 0x8
 };
 /*static foreach (name; __traits(allMembers, QTypeInfoFlags))
 {

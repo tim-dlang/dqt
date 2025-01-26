@@ -34,12 +34,7 @@ import qt.helpers;
 
 extern(C++, class) struct QTextFormatPrivate;
 
-/+ #ifndef QT_NO_DATASTREAM
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextLength &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);
-#endif
-
-#ifndef QT_NO_DEBUG_STREAM
+/+ #ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextLength &);
 #endif +/
 
@@ -91,11 +86,6 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QTextLength, Q_PRIMITIVE_TYPE);
-
-#ifndef QT_NO_DATASTREAM
-Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextFormat &);
-Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFormat &);
-#endif
 
 #ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QTextFormat &);
@@ -195,6 +185,7 @@ public:
         OldFontLetterSpacingType = 0x2033,
         OldFontStretch = 0x2034,
         OldTextUnderlineColor = 0x2010,
+        OldFontFamily = 0x2000, // same as FontFamily
 
         ObjectType = 0x2f00,
 
@@ -304,7 +295,7 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
     ~this();
 
     /+ void swap(QTextFormat &other)
-    { qSwap(d, other.d); qSwap(format_type, other.format_type); } +/
+    { d.swap(other.d); std::swap(format_type, other.format_type); } +/
 
     void merge(ref const(QTextFormat) other);
 
@@ -404,17 +395,27 @@ private:
 /+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator |(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator &(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator &(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator ^(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator ^(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QTextFormat.PageBreakFlags operator ~(QTextFormat.PageBreakFlags.enum_type e)/+noexcept+/{return~QTextFormat.PageBreakFlags(e);}+/
+/+pragma(inline, true) void operator |(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextFormat::PageBreakFlags) +/
 /// Binding for C++ class [QTextCharFormat](https://doc.qt.io/qt-6/qtextcharformat.html).
@@ -463,13 +464,23 @@ public:
 
     pragma(inline, true) void setFontFamilies(ref const(QStringList) families)
     { auto tmp = QVariant(families); setProperty(Property.FontFamilies, tmp); }
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/
     pragma(inline, true) QVariant fontFamilies() const
     { return property(Property.FontFamilies); }
+/+ #else
+    inline QStringList fontFamilies() const
+    { return property(FontFamilies).toStringList(); }
+#endif +/
 
     pragma(inline, true) void setFontStyleName(ref const(QString) styleName)
     { setProperty(Property.FontStyleName, styleName); }
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/
     pragma(inline, true) QVariant fontStyleName() const
     { return property(Property.FontStyleName); }
+/+ #else
+    inline QStringList fontStyleName() const
+    { return property(FontStyleName).toStringList(); }
+#endif +/
 
     pragma(inline, true) void setFontPointSize(qreal size)
     { setProperty(Property.FontPointSize, size); }
@@ -624,6 +635,8 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
     /+ friend class QTextFormat; +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextCharFormat &); +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextCharFormat &); +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -742,6 +755,8 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
     /+ friend class QTextFormat; +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextBlockFormat &); +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextBlockFormat &); +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -831,14 +846,20 @@ public:
     pragma(inline, true) qreal height() const
     { return doubleProperty(Property.ImageHeight); }
 
-    pragma(inline, true) void setQuality(int aquality = 100)
+    pragma(inline, true) void setQuality(int aquality)
     { setProperty(Property.ImageQuality, aquality); }
+/+ #if QT_DEPRECATED_SINCE(6, 3) +/
+    /+ QT_DEPRECATED_VERSION_X_6_3("Pass a quality value, the default is 100") +/ pragma(inline, true) void setQuality()
+    { setQuality(100); }
+/+ #endif +/
     pragma(inline, true) int quality() const
     { return intProperty(Property.ImageQuality); }
 
 protected:
     /+ explicit +/this(ref const(QTextFormat) format);
     /+ friend class QTextFormat; +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextListFormat &); +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextListFormat &); +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -945,6 +966,8 @@ public:
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
     /+ friend class QTextFormat; +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextFrameFormat &); +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextFrameFormat &); +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -1169,6 +1192,8 @@ public:
 
 protected:
     /+ explicit +/this(ref const(QTextFormat) fmt);
+    /+ friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextTableCellFormat &); +/
+    /+ friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextTableCellFormat &); +/
     /+ friend class QTextFormat; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }

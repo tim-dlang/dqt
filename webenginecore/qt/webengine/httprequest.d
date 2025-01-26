@@ -49,7 +49,7 @@ public:
     /+ref QWebEngineHttpRequest operator =(ref const(QWebEngineHttpRequest) other);+/
 
     //static QWebEngineHttpRequest postRequest(ref const(QUrl) url, ref const(QMap!(QString, QString)) postData);
-    /+ void swap(QWebEngineHttpRequest &other) Q_DECL_NOTHROW { qSwap(d, other.d); } +/
+    /+ void swap(QWebEngineHttpRequest &other) noexcept { d.swap(other.d); } +/
 
     /+bool operator ==(ref const(QWebEngineHttpRequest) other) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QWebEngineHttpRequest) other) const { return !operator==(other); }+/

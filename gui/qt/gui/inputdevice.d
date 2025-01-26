@@ -19,6 +19,7 @@ import qt.core.list;
 import qt.core.object;
 import qt.core.rect;
 import qt.core.string;
+import qt.core.stringlist;
 import qt.helpers;
 
 /+ class QDebug; +/
@@ -86,6 +87,7 @@ alias Capabilities = QFlags!(Capability);    /+ Q_FLAG(Capabilities) +/
     final QString seatName() const;
     final QRect availableVirtualGeometry() const;
 
+    static QStringList seatNames();
     //static QList!(const(QInputDevice)) devices();
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static const(QInputDevice) primaryKeyboard(ref const(QString) seatName = globalInitVar!QString);
@@ -106,34 +108,54 @@ protected:
 /+pragma(inline, true) QFlags!(QInputDevice.DeviceTypes.enum_type) operator |(QInputDevice.DeviceTypes.enum_type f1, QFlags!(QInputDevice.DeviceTypes.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QInputDevice.DeviceTypes.enum_type) operator &(QInputDevice.DeviceTypes.enum_type f1, QInputDevice.DeviceTypes.enum_type f2)/+noexcept+/{return QFlags!(QInputDevice.DeviceTypes.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QInputDevice.DeviceTypes.enum_type) operator &(QInputDevice.DeviceTypes.enum_type f1, QFlags!(QInputDevice.DeviceTypes.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QInputDevice.DeviceTypes.enum_type) operator ^(QInputDevice.DeviceTypes.enum_type f1, QInputDevice.DeviceTypes.enum_type f2)/+noexcept+/{return QFlags!(QInputDevice.DeviceTypes.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QInputDevice.DeviceTypes.enum_type) operator ^(QInputDevice.DeviceTypes.enum_type f1, QFlags!(QInputDevice.DeviceTypes.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QInputDevice.DeviceTypes.enum_type f1, QInputDevice.DeviceTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QInputDevice.DeviceTypes.enum_type f1, QFlags!(QInputDevice.DeviceTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QInputDevice.DeviceTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QInputDevice.DeviceTypes.enum_type f1, QInputDevice.DeviceTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QInputDevice.DeviceTypes.enum_type f1, QFlags!(QInputDevice.DeviceTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QInputDevice.DeviceTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QInputDevice.DeviceTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QInputDevice.DeviceTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QInputDevice.DeviceTypes.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QInputDevice.DeviceTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QInputDevice.DeviceTypes.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QInputDevice.DeviceTypes operator ~(QInputDevice.DeviceTypes.enum_type e)/+noexcept+/{return~QInputDevice.DeviceTypes(e);}+/
+/+pragma(inline, true) void operator |(QInputDevice.DeviceTypes.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QInputDevice.DeviceTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QInputDevice::DeviceTypes) +/
 /+pragma(inline, true) QFlags!(QInputDevice.Capabilities.enum_type) operator |(QInputDevice.Capabilities.enum_type f1, QInputDevice.Capabilities.enum_type f2)/+noexcept+/{return QFlags!(QInputDevice.Capabilities.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QInputDevice.Capabilities.enum_type) operator |(QInputDevice.Capabilities.enum_type f1, QFlags!(QInputDevice.Capabilities.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QInputDevice.Capabilities.enum_type) operator &(QInputDevice.Capabilities.enum_type f1, QInputDevice.Capabilities.enum_type f2)/+noexcept+/{return QFlags!(QInputDevice.Capabilities.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QInputDevice.Capabilities.enum_type) operator &(QInputDevice.Capabilities.enum_type f1, QFlags!(QInputDevice.Capabilities.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QInputDevice.Capabilities.enum_type) operator ^(QInputDevice.Capabilities.enum_type f1, QInputDevice.Capabilities.enum_type f2)/+noexcept+/{return QFlags!(QInputDevice.Capabilities.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QInputDevice.Capabilities.enum_type) operator ^(QInputDevice.Capabilities.enum_type f1, QFlags!(QInputDevice.Capabilities.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QInputDevice.Capabilities.enum_type f1, QInputDevice.Capabilities.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QInputDevice.Capabilities.enum_type f1, QFlags!(QInputDevice.Capabilities.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QInputDevice.Capabilities.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QInputDevice.Capabilities.enum_type f1, QInputDevice.Capabilities.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QInputDevice.Capabilities.enum_type f1, QFlags!(QInputDevice.Capabilities.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QInputDevice.Capabilities.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QInputDevice.Capabilities.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QInputDevice.Capabilities.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QInputDevice.Capabilities.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QInputDevice.Capabilities.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QInputDevice.Capabilities.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QInputDevice.Capabilities operator ~(QInputDevice.Capabilities.enum_type e)/+noexcept+/{return~QInputDevice.Capabilities(e);}+/
+/+pragma(inline, true) void operator |(QInputDevice.Capabilities.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QInputDevice.Capabilities.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QInputDevice::Capabilities)
 #ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QInputDevice *);

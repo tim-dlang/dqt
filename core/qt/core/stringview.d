@@ -25,14 +25,7 @@ import qt.core.typeinfo;
 import qt.helpers;
 
 /*
-    This macro enables three "levels" of QStringView support:
-
-    1. offer QStringView, overload some functions taking QString with
-    QStringView
-
-    2. Obsolete: QStringRef and its overloads have been removed.
-
-    3. like 2, but replace functions taking QString, too.
+    Obsolete.
 */
 /+ #ifndef QT_STRINGVIEW_LEVEL
 #  define QT_STRINGVIEW_LEVEL 1
@@ -124,7 +117,7 @@ private:
     /+ using if_compatible_container = typename std::enable_if<QtPrivate::IsContainerCompatibleWithQStringView<T>::value, bool>::type; +/
 
     /+ template <typename Char> +/
-    /+ static qsizetype lengthHelperPointer(const Char *str) noexcept
+    /+ static constexpr qsizetype lengthHelperPointer(const Char *str) noexcept
     {
 #if defined(__cpp_lib_is_constant_evaluated)
         if (std::is_constant_evaluated())
@@ -414,7 +407,9 @@ return QStringView(m_data, m_size - n);
         return /+ QtPrivate:: +/qt.core.stringalgorithms.count(this, s, cs);
     }
 
-    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QChar c, qsizetype from = -1, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    { return lastIndexOf(c, -1, cs); }
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QChar c, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, QStringView(&c, 1), cs);

@@ -51,7 +51,7 @@ public:
     /+ QNetworkCookie &operator=(QNetworkCookie &&other) noexcept { swap(other); return *this; } +/
     /+ref QNetworkCookie operator =(ref const(QNetworkCookie) other);+/
 
-    /+ void swap(QNetworkCookie &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QNetworkCookie &other) noexcept { d.swap(other.d); } +/
 
     /+bool operator ==(ref const(QNetworkCookie) other) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QNetworkCookie) other) const

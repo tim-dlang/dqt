@@ -51,7 +51,7 @@ public:
     /+ explicit +/this(qint64 msecs, /+ Qt:: +/qt.core.namespace.TimerType type = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer)/+ noexcept+/;
 
     /+ void swap(QDeadlineTimer &other) noexcept
-    { qSwap(t1, other.t1); qSwap(t2, other.t2); qSwap(type, other.type); } +/
+    { std::swap(t1, other.t1); std::swap(t2, other.t2); std::swap(type, other.type); } +/
 
     bool isForever() const/+ noexcept+/
     { return t1 == qint64.max; }
@@ -184,5 +184,5 @@ template <>#endif
 Q_DECLARE_SHARED(QDeadlineTimer)
 
 
-Q_DECLARE_METATYPE(QDeadlineTimer) +/
+QT_DECL_METATYPE_EXTERN(QDeadlineTimer, Q_CORE_EXPORT) +/
 

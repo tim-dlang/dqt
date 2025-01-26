@@ -13,16 +13,19 @@ module qt.core.uuid;
 extern(C++):
 
 import qt.config;
+import qt.core.anystringview;
 import qt.core.bytearray;
+import qt.core.bytearrayview;
 import qt.core.global;
 import qt.core.namespace;
 import qt.core.string;
-import qt.core.stringview;
 import qt.core.typeinfo;
 import qt.helpers;
 version (Cygwin) {} else
 version (Windows)
     import core.stdc.config;
+static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    import qt.core.stringview;
 
 version (Cygwin) {} else
 version (Windows)
@@ -79,48 +82,45 @@ public:
         Id128           = 3
     }
 
-/+ #if defined(Q_COMPILER_UNIFORM_INIT) && !defined(Q_CLANG_QDOC)
-
-    constexpr QUuid() noexcept : data1(0), data2(0), data3(0), data4{0,0,0,0,0,0,0,0} {}
-
-    constexpr QUuid(uint l, ushort w1, ushort w2, uchar b1, uchar b2, uchar b3,
-                           uchar b4, uchar b5, uchar b6, uchar b7, uchar b8) noexcept
-        : data1(l), data2(w1), data3(w2), data4{b1, b2, b3, b4, b5, b6, b7, b8} {}
-#else +/
     @disable this();
     /+this()/+ noexcept+/
     {
-        data1 = 0;
-        data2 = 0;
-        data3 = 0;
-        for (int i = 0; i < 8; i++)
-            data4[i] = 0;
+        this.data1 = 0;
+        this.data2 = 0;
+        this.data3 = 0;
+        this.data4 = [0,0,0,0,0,0,0,0];
     }+/
-    this(uint l, ushort w1, ushort w2, uchar b1, uchar b2, uchar b3, uchar b4, uchar b5, uchar b6, uchar b7, uchar b8)/+ noexcept+/
-    {
-        data1 = l;
-        data2 = w1;
-        data3 = w2;
-        data4[0] = b1;
-        data4[1] = b2;
-        data4[2] = b3;
-        data4[3] = b4;
-        data4[4] = b5;
-        data4[5] = b6;
-        data4[6] = b7;
-        data4[7] = b8;
-    }
-/+ #endif +/
 
-    /+ explicit +/this(ref const(QString) );
-    static QUuid fromString(QStringView string)/+ noexcept+/;
-    static QUuid fromString(QLatin1String string)/+ noexcept+/;
-    /+ explicit +/this(const(char)* );
+    this(uint l, ushort w1, ushort w2, uchar b1, uchar b2, uchar b3,
+                               uchar b4, uchar b5, uchar b6, uchar b7, uchar b8)/+ noexcept+/
+    {
+        this.data1 = l;
+        this.data2 = w1;
+        this.data3 = w2;
+        this.data4 = [b1, b2, b3, b4, b5, b6, b7, b8];
+    }
+
+    /+ explicit +/this(QAnyStringView string)/+ noexcept+/
+    {
+        this = fromString(string);
+    }
+    static QUuid fromString(QAnyStringView string)/+ noexcept+/;
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        /+ explicit +/this(ref const(QString) );
+        static QUuid fromString(QStringView string)/+ noexcept+/;
+        static QUuid fromString(QLatin1String string)/+ noexcept+/;
+        /+ explicit +/this(const(char)* );
+        /+ explicit +/this(ref const(QByteArray) );
+    }
     QString toString(StringFormat mode = StringFormat.WithBraces) const;
-    /+ explicit +/this(ref const(QByteArray) );
     QByteArray toByteArray(StringFormat mode = StringFormat.WithBraces) const;
     QByteArray toRfc4122() const;
-    static QUuid fromRfc4122(ref const(QByteArray) );
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        static QUuid fromRfc4122(ref const(QByteArray) );
+    }
+    static QUuid fromRfc4122(QByteArrayView)/+ noexcept+/;
     bool isNull() const/+ noexcept+/;
 
     /+bool operator ==(ref const(QUuid) orig) const/+ noexcept+/
@@ -144,27 +144,19 @@ public:
     /+bool operator <(ref const(QUuid) other) const/+ noexcept+/;+/
     /+bool operator >(ref const(QUuid) other) const/+ noexcept+/;+/
 
-/+ #if defined(Q_OS_WIN) || defined(Q_CLANG_QDOC)
-    // On Windows we have a type GUID that is used by the platform API, so we
-    // provide convenience operators to cast from and to this type.
-#if defined(Q_COMPILER_UNIFORM_INIT) && !defined(Q_CLANG_QDOC)
-    constexpr QUuid(const GUID &guid) noexcept
-        : data1(guid.Data1), data2(guid.Data2), data3(guid.Data3),
-          data4{guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
-                guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]} {}
-#else +/
     version (Cygwin) {} else
     version (Windows)
     {
+        // On Windows we have a type GUID that is used by the platform API, so we
+        // provide convenience operators to cast from and to this type.
         this(ref const(GUID) guid)/+ noexcept+/
         {
-            data1 = cast(uint) (guid.Data1);
-            data2 = guid.Data2;
-            data3 = guid.Data3;
-            for (int i = 0; i < 8; i++)
-                data4[i] = guid.Data4[i];
+            this.data1 = guid.Data1;
+            this.data2 = guid.Data2;
+            this.data3 = guid.Data3;
+            this.data4 = [guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3],
+                            guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]];
         }
-    /+ #endif +/
 
         /+ref QUuid operator =(ref const(GUID) guid)/+ noexcept+/
         {
@@ -188,7 +180,6 @@ public:
             return !(this == guid);
         }+/
     }
-/+ #endif +/
     static QUuid createUuid();
 /+ #ifndef QT_BOOTSTRAPPED +/
     static QUuid createUuidV3(ref const(QUuid) ns, ref const(QByteArray) baseData);
@@ -217,9 +208,9 @@ public:
         /+ NSUUID *toNSUUID() const Q_DECL_NS_RETURNS_AUTORELEASED; +/
     }
 
-    uint    data1;
-    ushort  data2;
-    ushort  data3;
+    uint    data1 = 0;
+    ushort  data2 = 0;
+    ushort  data3 = 0;
     uchar[8]   data4;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }

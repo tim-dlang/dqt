@@ -55,7 +55,7 @@ public:
     /+ref QSslKey operator =(ref const(QSslKey) other);+/
     ~this();
 
-    /+ void swap(QSslKey &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QSslKey &other) noexcept { d.swap(other.d); } +/
 
     bool isNull() const;
     void clear();

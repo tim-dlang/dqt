@@ -99,7 +99,14 @@ public /+ Q_SLOTS +/:
 
 protected:
     this(ref QQmlComponentPrivate dd, QObject parent);
-    @QInvokable final void createObject(QQmlV4Function* );
+
+/+ #if QT_DEPRECATED_SINCE(6, 3) +/
+    /+ QT_DEPRECATED_X("Use the overload with proper arguments") +/
+        @QInvokable final void createObject(QQmlV4Function* );
+/+ #endif +/
+
+/+    @QInvokable final QObject createObject(
+                QObject parent = null, ref const(QVariantMap) properties /+ = {} +/);+/
     @QInvokable final void incubateObject(QQmlV4Function* );
 
 private:

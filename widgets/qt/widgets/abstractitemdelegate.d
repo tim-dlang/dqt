@@ -17,6 +17,7 @@ import qt.core.abstractitemmodel;
 import qt.core.coreevent;
 import qt.core.list;
 import qt.core.object;
+import qt.core.objectdefs_impl;
 import qt.core.size;
 import qt.gui.event;
 import qt.gui.painter;

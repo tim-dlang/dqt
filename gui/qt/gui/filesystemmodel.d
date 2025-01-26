@@ -171,16 +171,26 @@ private:
 /+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator |(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator &(QFileSystemModel.Options.enum_type f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/{return QFlags!(QFileSystemModel.Options.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator &(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator ^(QFileSystemModel.Options.enum_type f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/{return QFlags!(QFileSystemModel.Options.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QFileSystemModel.Options.enum_type) operator ^(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QFileSystemModel.Options.enum_type f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileSystemModel.Options.enum_type f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileSystemModel.Options.enum_type f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QFileSystemModel.Options.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QFileSystemModel.Options.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFileSystemModel.Options.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFileSystemModel.Options.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileSystemModel.Options.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QFileSystemModel.Options operator ~(QFileSystemModel.Options.enum_type e)/+noexcept+/{return~QFileSystemModel.Options(e);}+/
+/+pragma(inline, true) void operator |(QFileSystemModel.Options.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QFileSystemModel.Options.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QFileSystemModel::Options) +/

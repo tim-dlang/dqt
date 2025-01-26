@@ -1033,7 +1033,6 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
         //code ~= "pragma(msg, q{" ~ part ~ "});";
         i += part.length;
     }
-
     /*foreach (i, part; parts)
         code ~= "pragma(msg, q{" ~ text(i, ": ") ~ declaration[part.start .. part.end] ~ "});";*/
 
@@ -1059,6 +1058,16 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
         else
             break;
         parts = parts[1 .. $];
+
+        if (part.among("package", "extern") && parts.length)
+        {
+            part = declaration[parts[0].start .. parts[0].end];
+            if (part.length && part[0] == '(')
+            {
+                assert(part[$ - 1] == ')');
+                parts = parts[1 .. $];
+            }
+        }
     }
     string attributes = declaration[0 .. attributesEnd];
     assert(parts.length >= 3, text(parts.length));
@@ -1151,6 +1160,12 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
 
     code ~= declaration;
     return code;
+}
+
+unittest
+{
+    changeCppMangling("mangleChangeAccess(\"private\")", "\r\n    package(qt) final QObject menuObject() const;\r\n    ", 260LU);
+    changeCppMangling("mangleClassesTailConst", "\r\n    const(QAbstractItemModel) model() const;\r\n    ", 263LU);
 }
 
 package string changeCppManglingNoop(bool debugHere = false)(string changeFuncs,

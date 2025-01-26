@@ -12,6 +12,7 @@
 module qt.core.bytearrayview;
 extern(C++):
 
+import core.stdc.config;
 import qt.config;
 import qt.core.bytearray;
 import qt.core.global;
@@ -252,6 +253,71 @@ public:
     void chop(qsizetype n)
     { (mixin(Q_ASSERT(q{n >= 0}))); (mixin(Q_ASSERT(q{n <= QByteArrayView.size()}))); m_size -= n; }
 
+    // Defined in qbytearray.cpp:
+    /+ [[nodiscard]] +/ QByteArrayView trimmed() const/+ noexcept+/
+    {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.trimmed(this);
+    }
+    /+ [[nodiscard]] +/ short toShort(bool* ok = null, int base = 10) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toIntegral!(short)(this, ok, base);
+    }
+    /+ [[nodiscard]] +/ ushort toUShort(bool* ok = null, int base = 10) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toIntegral!(ushort)(this, ok, base);
+    }
+    /+ [[nodiscard]] +/ int toInt(bool* ok = null, int base = 10) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toIntegral!(int)(this, ok, base);
+    }
+    /+ [[nodiscard]] +/ uint toUInt(bool* ok = null, int base = 10) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toIntegral!(uint)(this, ok, base);
+    }
+    /+ [[nodiscard]] +/ cpp_long toLong(bool* ok = null, int base = 10) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toIntegral!(cpp_long)(this, ok, base);
+    }
+    /+ [[nodiscard]] +/ cpp_ulong toULong(bool* ok = null, int base = 10) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toIntegral!(cpp_ulong)(this, ok, base);
+    }
+    /+ [[nodiscard]] +/ qlonglong toLongLong(bool* ok = null, int base = 10) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toIntegral!(qlonglong)(this, ok, base);
+    }
+    /+ [[nodiscard]] +/ qulonglong toULongLong(bool* ok = null, int base = 10) const
+    {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toIntegral!(qulonglong)(this, ok, base);
+    }
+    /+ [[nodiscard]] +/ float toFloat(bool* ok = null) const
+    {
+        import qt.core.bytearrayalgorithms;
+
+        const r = /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toFloat(this);
+        if (ok)
+            *ok = cast(bool)(r);
+        return r.value_or(0.0f);
+    }
+    /+ [[nodiscard]] +/ double toDouble(bool* ok = null) const
+    {
+        import qt.core.bytearrayalgorithms;
+
+        const r = /+ QtPrivate:: +/qt.core.bytearrayalgorithms.toDouble(this);
+        if (ok)
+            *ok = cast(bool)(r);
+        return r.value_or(0.0);
+    }
+
     /+ [[nodiscard]] +/ bool startsWith(QByteArrayView other) const/+ noexcept+/
     {
         import qt.core.bytearrayalgorithms;
@@ -314,6 +380,11 @@ public:
 
         return cs == /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive ? /+ QtPrivate:: +/qt.core.bytearrayalgorithms.compareMemory(this, a) :
                                          qstrnicmp(data(), size(), a.data(), a.size());
+    }
+
+    /+ [[nodiscard]] +/ pragma(inline, true) bool isValidUtf8() const/+ noexcept+/ {
+        import qt.core.bytearrayalgorithms;
+        return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.isValidUtf8(this);
     }
 
     //

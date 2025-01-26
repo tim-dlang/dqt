@@ -38,16 +38,6 @@ enum /+ class +/ Uncomparable : CompareUnderlyingType
     Unordered = -127
 }
 
-// [cmp.categories.pre] / 3, but using a safe bool trick
-// and also rejecting std::nullptr_t (unlike the example)
-extern(C++, class) struct CompareAgainstLiteralZero {
-public:
-    alias SafeZero = ExternCPPFunc!(void function())/+ CompareAgainstLiteralZero::* +/;
-    /+ Q_IMPLICIT +/ this(SafeZero)/+ noexcept+/ {}
-
-    /+ template <typename T, std::enable_if_t<!std::is_same_v<T, int>, bool> = false> +/
-    this(T,)(T) /+ = delete +/;
-}
 } // namespace QtPrivate
 
 // [cmp.partialord]

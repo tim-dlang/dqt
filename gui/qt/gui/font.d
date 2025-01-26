@@ -160,8 +160,8 @@ public:
     this(ref const(QFont) font);
     ~this();
 
-    /+ void swap(QFont &other)
-    { qSwap(d, other.d); qSwap(resolve_mask, other.resolve_mask); } +/
+    /+ void swap(QFont &other) noexcept
+    { d.swap(other.d); std::swap(resolve_mask, other.resolve_mask); } +/
 
     QString family() const;
     void setFamily(ref const(QString) );

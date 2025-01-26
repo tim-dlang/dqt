@@ -33,6 +33,7 @@ import qt.gui.font;
 import qt.gui.fontinfo;
 import qt.gui.fontmetrics;
 import qt.gui.icon;
+import qt.gui.keysequence;
 import qt.gui.paintdevice;
 import qt.gui.paintengine;
 import qt.gui.painter;
@@ -49,8 +50,6 @@ version (QT_NO_ACTION) {} else
     import qt.gui.action;
 version (QT_NO_CURSOR) {} else
     import qt.gui.cursor;
-version (QT_NO_SHORTCUT) {} else
-    import qt.gui.keysequence;
 
 
 alias QWidgetList = QList!(QWidget);
@@ -281,8 +280,30 @@ class /+ Q_WIDGETS_EXPORT +/ QWidget : QObject, QPaintDeviceInterface
 #endif
     Q_PROPERTY(QLocale locale READ locale WRITE setLocale RESET unsetLocale)
     Q_PROPERTY(QString windowFilePath READ windowFilePath WRITE setWindowFilePath)
-    Q_PROPERTY(Qt::InputMethodHints inputMethodHints READ inputMethodHints WRITE setInputMethodHints) +/
+    Q_PROPERTY(Qt::InputMethodHints inputMethodHints READ inputMethodHints WRITE setInputMethodHints)
 
+#if 0
+    // ### TODO: make this work (requires SFINAE-friendly connect())
+    template <typename...Args>
+    using compatible_action_slot_args = std::void_t<
+        decltype(QObject::connect(std::declval<QAction*>(), &QAction::triggered,
+                                  std::declval<Args>()...))
+    >;
+#else +/
+    // good-enough compromise for now
+    /+ template <typename...Args> +/
+  /+  alias compatible_action_slot_args(Args) = /+ std:: +/enable_if_t!(/+ std:: +/conjunction_v!(
+    /+ #if QT_CONFIG(shortcut) +/
+                /+ std:: +/
+                disjunction!(
+                    /+ std:: +/is_same!(Args, /+ Qt:: +/qt.core.namespace.ConnectionType),
+                    /+ std:: +/negation!(/+ std:: +/is_convertible!(Args, QKeySequence)))...,
+    /+ #endif +/
+                /+ std:: +/negation!(/+ std:: +/is_convertible!(Args, QIcon))...,
+                /+ std:: +/negation!(/+ std:: +/is_convertible!(Args, const(char)*))...,
+                /+ std:: +/negation!(/+ std:: +/is_convertible!(Args, QString))...)
+            );+/
+/+ #endif +/
 public:
     enum RenderFlag {
         DrawWindowBackground = 0x1,
@@ -691,16 +712,74 @@ public:
     final bool acceptDrops() const;
     final void setAcceptDrops(bool on);
 
+/+ #ifndef QT_NO_ACTION +/
+    //actions
     version (QT_NO_ACTION) {} else
     {
-        //actions
         final void addAction(QAction action);
         final void addActions(ref const(QList!(QAction)) actions);
         final void insertActions(QAction before, ref const(QList!(QAction)) actions);
         final void insertAction(QAction before, QAction action);
         final void removeAction(QAction action);
         final QList!(QAction) actions() const;
+
+        // convenience action factories
+        final QAction addAction(ref const(QString) text);
+        final QAction addAction(ref const(QIcon) icon, ref const(QString) text);
+        mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+        final QAction addAction(ref const(QString) text, const(QObject) receiver,
+                               const(char)* member, /+ Qt:: +/qt.core.namespace.ConnectionType type = /+ Qt:: +/qt.core.namespace.ConnectionType.AutoConnection);
+        }));
+        mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+        final QAction addAction(ref const(QIcon) icon, ref const(QString) text, const(QObject) receiver,
+                               const(char)* member, /+ Qt:: +/qt.core.namespace.ConnectionType type = /+ Qt:: +/qt.core.namespace.ConnectionType.AutoConnection);
+        }));
+        /+ template <typename...Args, typename = compatible_action_slot_args<Args...>> +/
+        /+ QAction *addAction(const QString &text, Args&&...args)
+        {
+            QAction *result = addAction(text);
+            connect(result, &QAction::triggered, std::forward<Args>(args)...);
+            return result;
+        } +/
+        /+ template <typename...Args, typename = compatible_action_slot_args<Args...>> +/
+        /+ QAction *addAction(const QIcon &icon, const QString &text, Args&&...args)
+        {
+            QAction *result = addAction(icon, text);
+            connect(result, &QAction::triggered, std::forward<Args>(args)...);
+            return result;
+        } +/
+
+    /+ #if QT_CONFIG(shortcut) +/
+        final QAction addAction(ref const(QString) text, ref const(QKeySequence) shortcut);
+        final QAction addAction(ref const(QIcon) icon, ref const(QString) text, ref const(QKeySequence) shortcut);
+        mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+        final QAction addAction(ref const(QString) text, ref const(QKeySequence) shortcut,
+                               const(QObject) receiver, const(char)* member,
+                               /+ Qt:: +/qt.core.namespace.ConnectionType type = /+ Qt:: +/qt.core.namespace.ConnectionType.AutoConnection);
+        }));
+        mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+        final QAction addAction(ref const(QIcon) icon, ref const(QString) text, ref const(QKeySequence) shortcut,
+                               const(QObject) receiver, const(char)* member,
+                               /+ Qt:: +/qt.core.namespace.ConnectionType type = /+ Qt:: +/qt.core.namespace.ConnectionType.AutoConnection);
+        }));
+
+        /+ template <typename...Args, typename = compatible_action_slot_args<Args...>> +/
+        /+ QAction *addAction(const QString &text, const QKeySequence &shortcut, Args&&...args)
+        {
+            QAction *result = addAction(text, shortcut);
+            connect(result, &QAction::triggered, std::forward<Args>(args)...);
+            return result;
+        } +/
+        /+ template <typename...Args, typename = compatible_action_slot_args<Args...>> +/
+        /+ QAction *addAction(const QIcon &icon, const QString &text, const QKeySequence &shortcut, Args&&...args)
+        {
+            QAction *result = addAction(icon, text, shortcut);
+            connect(result, &QAction::triggered, std::forward<Args>(args)...);
+            return result;
+        } +/
     }
+/+ #endif // QT_CONFIG(shortcut)
+#endif +/ // QT_NO_ACTION
 
     pragma(inline, true) final QWidget parentWidget() const
     { return static_cast!(QWidget)(QObject.parent()); }
@@ -897,17 +976,27 @@ private:
 /+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator |(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator &(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QWidget.RenderFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator &(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator ^(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QWidget.RenderFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator ^(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QWidget.RenderFlags operator ~(QWidget.RenderFlags.enum_type e)/+noexcept+/{return~QWidget.RenderFlags(e);}+/
+/+pragma(inline, true) void operator |(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QWidget::RenderFlags)
 #ifndef Q_QDOC

@@ -49,6 +49,9 @@ public:
     this(int w, int h);
     /+ explicit +/this(ref const(QSize) );
     /+ explicit +/this(ref const(QString) fileName, const(char)* format = null);
+    mixin(changeWindowsMangling(q{mangleChangeFunctionType("virtual")}, q{
+    ~this();
+    }));
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
     /+/+ QT_DEPRECATED_VERSION_X_6_0("Use fromPixmap instead.") +/ ref QBitmap operator =(ref const(QPixmap) );+/

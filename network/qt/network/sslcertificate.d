@@ -73,7 +73,7 @@ public:
     /+ref QSslCertificate operator =(ref const(QSslCertificate) other);+/
 
     /+ void swap(QSslCertificate &other) noexcept
-    { qSwap(d, other.d); } +/
+    { d.swap(other.d); } +/
 
     /+bool operator ==(ref const(QSslCertificate) other) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QSslCertificate) other) const { return !operator==(other); }+/

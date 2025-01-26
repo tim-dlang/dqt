@@ -171,7 +171,7 @@ public:
     QKeyCombination opIndex(uint i) const;
     /+ref QKeySequence operator =(ref const(QKeySequence) other);+/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QKeySequence) +/
-    /+ void swap(QKeySequence &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QKeySequence &other) noexcept { qt_ptr_swap(d, other.d); } +/
 
     /+bool operator ==(ref const(QKeySequence) other) const;+/
     /+pragma(inline, true) bool operator != (ref const(QKeySequence) other) const

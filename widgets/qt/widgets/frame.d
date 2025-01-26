@@ -100,4 +100,11 @@ private:
     /+ Q_DECLARE_PRIVATE(QFrame) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
+/+pragma(inline, true) int operator |(QFrame.Shape lhs, QFrame.Shadow rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)|qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator &(QFrame.Shape lhs, QFrame.Shadow rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)&qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator ^(QFrame.Shape lhs, QFrame.Shadow rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)^qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator |(QFrame.Shadow lhs, QFrame.Shape rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)|qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator &(QFrame.Shadow lhs, QFrame.Shape rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)&qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator ^(QFrame.Shadow lhs, QFrame.Shape rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)^qToUnderlying(rhs));}+/
 
+/+ Q_DECLARE_MIXED_ENUM_OPERATORS_SYMMETRIC(int, QFrame::Shape, QFrame::Shadow) +/

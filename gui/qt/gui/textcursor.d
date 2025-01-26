@@ -44,7 +44,7 @@ public:
     /+ref QTextCursor operator =(ref const(QTextCursor) other);+/
     ~this();
 
-    /+ void swap(QTextCursor &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QTextCursor &other) noexcept { d.swap(other.d); } +/
 
     bool isNull() const;
 

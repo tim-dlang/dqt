@@ -68,7 +68,7 @@ public:
     /+ref QPageLayout operator =(ref const(QPageLayout) other);+/
     ~this();
 
-    /+ void swap(QPageLayout &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QPageLayout &other) noexcept { d.swap(other.d); } +/
 
     bool isEquivalentTo(ref const(QPageLayout) other) const;
 

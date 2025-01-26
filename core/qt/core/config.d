@@ -49,11 +49,15 @@ import qt.helpers;
 
 #define QT_FEATURE_cxx2a -1
 
+#define QT_FEATURE_cxx2b -1
+
 #define QT_FEATURE_c99 1
 
 #define QT_FEATURE_c11 1
 
-#define QT_FEATURE_signaling_nan 1 +/
+#define QT_FEATURE_signaling_nan 1
+
+#define QT_FEATURE_zstd -1 +/
 
 /+ #define QT_FEATURE_thread 1 +/
 enum QT_FEATURE_thread = 1;
@@ -66,16 +70,16 @@ enum QT_FEATURE_future = 1;
 #define QT_FEATURE_dbus 1
 
 
-#define QT_VERSION_STR "6.2.3" +/
+#define QT_VERSION_STR "6.3.2" +/
 
 /+ #define QT_VERSION_MAJOR 6 +/
 enum QT_VERSION_MAJOR = 6;
 
-/+ #define QT_VERSION_MINOR 2 +/
-enum QT_VERSION_MINOR = 2;
+/+ #define QT_VERSION_MINOR 3 +/
+enum QT_VERSION_MINOR = 3;
 
-/+ #define QT_VERSION_PATCH 3 +/
-enum QT_VERSION_PATCH = 3;
+/+ #define QT_VERSION_PATCH 2 +/
+enum QT_VERSION_PATCH = 2;
 /+ #define QT_LARGEFILE_SUPPORT 64
 #define QT_VISIBILITY_AVAILABLE
 #define QT_REDUCE_RELOCATIONS

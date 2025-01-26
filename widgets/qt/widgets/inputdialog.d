@@ -184,16 +184,26 @@ private:
 /+pragma(inline, true) QFlags!(QInputDialog.InputDialogOptions.enum_type) operator |(QInputDialog.InputDialogOptions.enum_type f1, QFlags!(QInputDialog.InputDialogOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QInputDialog.InputDialogOptions.enum_type) operator &(QInputDialog.InputDialogOptions.enum_type f1, QInputDialog.InputDialogOptions.enum_type f2)/+noexcept+/{return QFlags!(QInputDialog.InputDialogOptions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QInputDialog.InputDialogOptions.enum_type) operator &(QInputDialog.InputDialogOptions.enum_type f1, QFlags!(QInputDialog.InputDialogOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QInputDialog.InputDialogOptions.enum_type) operator ^(QInputDialog.InputDialogOptions.enum_type f1, QInputDialog.InputDialogOptions.enum_type f2)/+noexcept+/{return QFlags!(QInputDialog.InputDialogOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QInputDialog.InputDialogOptions.enum_type) operator ^(QInputDialog.InputDialogOptions.enum_type f1, QFlags!(QInputDialog.InputDialogOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QInputDialog.InputDialogOptions.enum_type f1, QInputDialog.InputDialogOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QInputDialog.InputDialogOptions.enum_type f1, QFlags!(QInputDialog.InputDialogOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QInputDialog.InputDialogOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QInputDialog.InputDialogOptions.enum_type f1, QInputDialog.InputDialogOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QInputDialog.InputDialogOptions.enum_type f1, QFlags!(QInputDialog.InputDialogOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QInputDialog.InputDialogOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QInputDialog.InputDialogOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QInputDialog.InputDialogOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QInputDialog.InputDialogOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QInputDialog.InputDialogOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QInputDialog.InputDialogOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QInputDialog.InputDialogOptions operator ~(QInputDialog.InputDialogOptions.enum_type e)/+noexcept+/{return~QInputDialog.InputDialogOptions(e);}+/
+/+pragma(inline, true) void operator |(QInputDialog.InputDialogOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QInputDialog.InputDialogOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QInputDialog::InputDialogOptions) +/

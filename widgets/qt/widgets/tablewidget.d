@@ -53,6 +53,14 @@ public:
         this.m_right = right;
     }
 
+    /+ friend bool operator==(const QTableWidgetSelectionRange &lhs,
+                           const QTableWidgetSelectionRange &rhs) noexcept
+    { return lhs.m_top == rhs.m_top && lhs.m_left == rhs.m_left
+          && lhs.m_bottom == rhs.m_bottom && lhs.m_right == rhs.m_right; } +/
+    /+ friend bool operator!=(const QTableWidgetSelectionRange &lhs,
+                           const QTableWidgetSelectionRange &rhs) noexcept
+    { return !(lhs == rhs); } +/
+
     pragma(inline, true) int topRow() const { return m_top; }
     pragma(inline, true) int bottomRow() const { return m_bottom; }
     pragma(inline, true) int leftColumn() const { return m_left; }

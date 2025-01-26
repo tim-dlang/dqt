@@ -245,7 +245,7 @@ public:
     /+ inline QPersistentModelIndex(QPersistentModelIndex &&other) noexcept
         : d(qExchange(other.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPersistentModelIndex) +/
-    /+ inline void swap(QPersistentModelIndex &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QPersistentModelIndex &other) noexcept { qt_ptr_swap(d, other.d); } +/
     /+bool operator ==(ref const(QModelIndex) other) const;+/
     /+bool operator !=(ref const(QModelIndex) other) const;+/
     /+ref QPersistentModelIndex operator =(ref const(QModelIndex) other);+/
@@ -482,17 +482,27 @@ private:
 /+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator &(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator &(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator ^(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator ^(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QAbstractItemModel.CheckIndexOptions operator ~(QAbstractItemModel.CheckIndexOptions.enum_type e)/+noexcept+/{return~QAbstractItemModel.CheckIndexOptions(e);}+/
+/+pragma(inline, true) void operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemModel::CheckIndexOptions) +/
 /// Binding for C++ class [QAbstractTableModel](https://doc.qt.io/qt-6/qabstracttablemodel.html).
@@ -580,5 +590,5 @@ private:
 { return size_t((size_t(index.row()) << 4) + size_t(index.column()) + index.internalId()) ^ seed; }
 
 
-Q_DECLARE_METATYPE(QModelIndexList) +/
+QT_DECL_METATYPE_EXTERN(QModelIndexList, Q_CORE_EXPORT) +/
 

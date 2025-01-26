@@ -114,16 +114,26 @@ private:
 /+pragma(inline, true) QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) operator |(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) operator &(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QTreeWidgetItemIterator.IteratorFlags.enum_type f2)/+noexcept+/{return QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) operator &(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) operator ^(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QTreeWidgetItemIterator.IteratorFlags.enum_type f2)/+noexcept+/{return QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) operator ^(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QTreeWidgetItemIterator.IteratorFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QTreeWidgetItemIterator.IteratorFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QTreeWidgetItemIterator.IteratorFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QTreeWidgetItemIterator.IteratorFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QTreeWidgetItemIterator.IteratorFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QTreeWidgetItemIterator.IteratorFlags operator ~(QTreeWidgetItemIterator.IteratorFlags.enum_type e)/+noexcept+/{return~QTreeWidgetItemIterator.IteratorFlags(e);}+/
+/+pragma(inline, true) void operator |(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QTreeWidgetItemIterator.IteratorFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTreeWidgetItemIterator::IteratorFlags) +/

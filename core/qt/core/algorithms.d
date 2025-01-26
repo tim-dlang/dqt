@@ -314,7 +314,7 @@ pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint64 v)/+ noexcept+
 pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint8 v)/+ noexcept+/
 {
     uint  c = 8; // c will be the number of zero bits on the right
-    v &= -int(signed(v));
+    v &= cast(quint8) (-signed(v));
     if (v) c--;
     if (v & 0x0000000F) c -= 4;
     if (v & 0x00000033) c -= 2;
@@ -325,7 +325,7 @@ pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint8 v)/+ noexcept+/
 pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint16 v)/+ noexcept+/
 {
     uint  c = 16; // c will be the number of zero bits on the right
-    v &= -int(signed(v));
+    v &= cast(quint16) (-signed(v));
     if (v) c--;
     if (v & 0x000000FF) c -= 8;
     if (v & 0x00000F0F) c -= 4;

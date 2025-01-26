@@ -100,17 +100,27 @@ alias ArrayOptions = QFlags!(ArrayOption);
 /+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator |(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator &(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator &(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator ^(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator ^(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QArrayData.ArrayOptions operator ~(QArrayData.ArrayOptions.enum_type e)/+noexcept+/{return~QArrayData.ArrayOptions(e);}+/
+/+pragma(inline, true) void operator |(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QArrayData::ArrayOptions) +/
 struct QTypedArrayData(T)

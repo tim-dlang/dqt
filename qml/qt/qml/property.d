@@ -74,6 +74,10 @@ public:
     this(ref const(QQmlProperty) );
     /+ref QQmlProperty operator =(ref const(QQmlProperty) );+/
 
+    /+ QQmlProperty(QQmlProperty &&other) noexcept : d(std::exchange(other.d, nullptr)) {} +/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QQmlProperty) +/
+
+    /+ void swap(QQmlProperty &other) noexcept { qt_ptr_swap(d, other.d); } +/
     /+bool operator ==(ref const(QQmlProperty) ) const;+/
 
     Type type() const;
@@ -123,7 +127,7 @@ public:
 
 private:
     /+ friend class QQmlPropertyPrivate; +/
-    QQmlPropertyPrivate* d;
+    QQmlPropertyPrivate* d = null;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 alias QQmlProperties = QList!(QQmlProperty);

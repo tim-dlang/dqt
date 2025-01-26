@@ -303,7 +303,7 @@ return /+ q_no_char8_t:: +/qt.core.utf8stringview.QUtf8StringView(m_data_utf8, s
     /+ [[nodiscard]] +/ pragma(inline, true) QLatin1String asLatin1StringView() const
     {
         (mixin(Q_ASSERT(q{QAnyStringView.isLatin1()})));
-        return QLatin1String(m_data_utf8, cast(int)(size()));
+        return QLatin1String(m_data_utf8, size());
     }
     /+ [[nodiscard]] +/ size_t charSize() const/+ noexcept+/ { return isUtf16() ? 2 : 1; }
     /+ Q_ALWAYS_INLINE +/ pragma(inline, true) void verify(qsizetype pos, qsizetype n = 0) const

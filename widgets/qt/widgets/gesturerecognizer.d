@@ -70,17 +70,27 @@ alias Result = QFlags!(ResultFlag);
 /+pragma(inline, true) QFlags!(QGestureRecognizer.Result.enum_type) operator |(QGestureRecognizer.Result.enum_type f1, QFlags!(QGestureRecognizer.Result.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QGestureRecognizer.Result.enum_type) operator &(QGestureRecognizer.Result.enum_type f1, QGestureRecognizer.Result.enum_type f2)/+noexcept+/{return QFlags!(QGestureRecognizer.Result.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QGestureRecognizer.Result.enum_type) operator &(QGestureRecognizer.Result.enum_type f1, QFlags!(QGestureRecognizer.Result.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QGestureRecognizer.Result.enum_type) operator ^(QGestureRecognizer.Result.enum_type f1, QGestureRecognizer.Result.enum_type f2)/+noexcept+/{return QFlags!(QGestureRecognizer.Result.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QGestureRecognizer.Result.enum_type) operator ^(QGestureRecognizer.Result.enum_type f1, QFlags!(QGestureRecognizer.Result.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QGestureRecognizer.Result.enum_type f1, QGestureRecognizer.Result.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QGestureRecognizer.Result.enum_type f1, QFlags!(QGestureRecognizer.Result.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QGestureRecognizer.Result.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QGestureRecognizer.Result.enum_type f1, QGestureRecognizer.Result.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QGestureRecognizer.Result.enum_type f1, QFlags!(QGestureRecognizer.Result.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QGestureRecognizer.Result.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QGestureRecognizer.Result.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QGestureRecognizer.Result.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QGestureRecognizer.Result.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QGestureRecognizer.Result.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QGestureRecognizer.Result.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QGestureRecognizer.Result operator ~(QGestureRecognizer.Result.enum_type e)/+noexcept+/{return~QGestureRecognizer.Result(e);}+/
+/+pragma(inline, true) void operator |(QGestureRecognizer.Result.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QGestureRecognizer.Result.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QGestureRecognizer::Result) +/
 

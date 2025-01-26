@@ -19,6 +19,8 @@ import qt.helpers;
 /// Binding for C++ class [QIODeviceBase](https://doc.qt.io/qt-6/qiodevicebase.html).
 extern(C++, class) struct QIODeviceBase
 {
+protected:
+    /+ ~QIODeviceBase() = default; +/
 public:
     enum OpenModeFlag {
         NotOpen = 0x0000,
@@ -33,5 +35,6 @@ public:
         ExistingOnly = 0x0080
     }
     /+ Q_DECLARE_FLAGS(OpenMode, OpenModeFlag) +/
-alias OpenMode = QFlags!(OpenModeFlag);}
+alias OpenMode = QFlags!(OpenModeFlag);    mixin(CREATE_CONVENIENCE_WRAPPERS);
+}
 

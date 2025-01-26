@@ -142,17 +142,27 @@ protected:
 /+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator |(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator &(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/{return QFlags!(QPointingDevice.PointerTypes.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator &(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator ^(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/{return QFlags!(QPointingDevice.PointerTypes.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator ^(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QPointingDevice.PointerTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QPointingDevice.PointerTypes.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QPointingDevice.PointerTypes.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QPointingDevice.PointerTypes operator ~(QPointingDevice.PointerTypes.enum_type e)/+noexcept+/{return~QPointingDevice.PointerTypes(e);}+/
+/+pragma(inline, true) void operator |(QPointingDevice.PointerTypes.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QPointingDevice.PointerTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QPointingDevice::PointerTypes)
 #ifndef QT_NO_DEBUG_STREAM

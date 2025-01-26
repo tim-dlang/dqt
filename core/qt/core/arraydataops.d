@@ -22,11 +22,6 @@ import qt.helpers;
 
 extern(C++, "QtPrivate") {
 
-/+ QT_WARNING_PUSH
-#if defined(Q_CC_GNU) && Q_CC_GNU >= 700
-QT_WARNING_DISABLE_GCC("-Wstringop-overflow")
-#endif +/
-
 template QPodArrayOps(T)
 {
 //    public QArrayDataPointer!(T) base0;
@@ -274,7 +269,6 @@ public:
         this_.ptr = pair.second;
     }
 }
-/+ QT_WARNING_POP +/
 
 template QGenericArrayOps(T)
 {
@@ -973,10 +967,23 @@ public:
         (mixin(Q_ASSERT(q{distance >= 0 && distance <= this.allocatedCapacity() - this.size})));
         /+ Q_UNUSED(distance) +/
 
-        T* iter = this.end();
-        for (; b != e; ++iter, ++b) {
-            core.lifetime.emplace!T(iter, *b);
-            ++this.size;
+/+ #if __cplusplus >= 202002L && defined(__cpp_concepts) && defined(__cpp_lib_concepts)
+        constexpr bool canUseCopyAppend =
+                std::contiguous_iterator<It> &&
+                std::is_same_v<
+                    std::remove_cv_t<typename std::iterator_traits<It>::value_type>,
+                    T
+                >;
+        if constexpr (canUseCopyAppend) {
+            this->copyAppend(std::to_address(b), std::to_address(e));
+        } else
+#endif +/
+        {
+            T* iter = this.end();
+            for (; b != e; ++iter, ++b) {
+                core.lifetime.emplace!T(iter, *b);
+                ++this.size;
+            }
         }
     }
 

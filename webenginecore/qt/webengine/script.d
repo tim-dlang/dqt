@@ -93,7 +93,7 @@ public:
     /+bool operator ==(ref const(QWebEngineScript) other) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QWebEngineScript) other) const
     { return !operator==(other); }+/
-    /+ void swap(QWebEngineScript &other) { qSwap(d, other.d); } +/
+    /+ void swap(QWebEngineScript &other) noexcept { d.swap(other.d); } +/
 
 private:
     /+ friend class QWebEngineScriptCollectionPrivate; +/

@@ -106,7 +106,8 @@ public:
 
     enum MetaInformation {
         DocumentTitle,
-        DocumentUrl
+        DocumentUrl,
+        CssMedia
     }
     final void setMetaInformation(MetaInformation info, ref const(QString) );
     final QString metaInformation(MetaInformation info) const;
@@ -308,16 +309,26 @@ private:
 /+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator |(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator &(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextDocument.FindFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator &(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator ^(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextDocument.FindFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator ^(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QTextDocument.FindFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QTextDocument.FindFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTextDocument.FindFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QTextDocument.FindFlags operator ~(QTextDocument.FindFlags.enum_type e)/+noexcept+/{return~QTextDocument.FindFlags(e);}+/
+/+pragma(inline, true) void operator |(QTextDocument.FindFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QTextDocument.FindFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextDocument::FindFlags) +/

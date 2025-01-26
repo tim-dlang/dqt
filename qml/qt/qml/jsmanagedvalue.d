@@ -117,6 +117,7 @@ private:
     void setProperty(ref const(QString) name, ref const(QJSValue) value);
     bool deleteProperty(ref const(QString) name);
 
+    //  ### Qt 7 use qsizetype instead.
     // Array indexing
     bool hasProperty(quint32 arrayIndex) const;
     bool hasOwnProperty(quint32 arrayIndex) const;

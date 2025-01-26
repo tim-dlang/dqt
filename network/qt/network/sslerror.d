@@ -88,7 +88,7 @@ public:
     this(ref const(QSslError) other);
 
     /+ void swap(QSslError &other) noexcept
-    { qSwap(d, other.d); } +/
+    { d.swap(other.d); } +/
 
     ~this();
     /+ QSslError &operator=(QSslError &&other) noexcept { swap(other); return *this; } +/

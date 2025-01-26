@@ -26,6 +26,7 @@ import qt.helpers;
 #pragma qt_sync_stop_processing
 #endif +/
 
+extern(C++, class) struct QObjectPrivate;
 
 extern(C++, "QtPrivate") {
     /+ template <typename T> struct RemoveRef { typedef T Type; };
@@ -112,9 +113,32 @@ extern(C++, "QtPrivate") {
     template<int N>
     struct Indexes { using Value = makeIndexSequence<N>; };
 
-    template<typename Func> struct FunctionPointer { enum {ArgumentCount = -1, IsPointerToMemberFunction = false}; };
+    template<typename Func> struct FunctionPointer { enum {ArgumentCount = -1, IsPointerToMemberFunction = false}; }; +/
 
-    template <typename, typename, typename, typename> struct FunctorCall;
+/+    pragma(inline, true) void assertObjectType(ObjPrivate)(QObjectPrivate* d);
+    pragma(inline, true) void assertObjectType(Obj)(QObject o)
+    {
+        import qt.core.global;
+
+        // ensure all three compile
+        /+ [[maybe_unused]] +/ auto staticcast = [](QObject *obj) { return static_cast!(Obj*)(
+mixin(!defined!"__cpp_rtti" ? q{obj__1} : q{obj__2})); };
+        /+ [[maybe_unused]] +/ auto qobjcast = [](QObject *obj) { return Obj.staticMetaObject.cast_(
+mixin(!defined!"__cpp_rtti" ? q{obj__1} : q{obj__2})); };
+        static if (defined!"__cpp_rtti")
+        {
+            /+ [[maybe_unused]] +/ auto dyncast = [](QObject *obj) { return dynamic_cast!(Obj*)(obj__2); };
+            auto cast_ = dyncast;
+        }
+        else
+        {
+            auto cast_ = qobjcast;
+        }
+        (mixin(Q_ASSERT_X(q{cast_(o)},q{ Obj::staticMetaObject.className()},q{
+                   "Called object is not of the correct type (class destructor may have already run)"})));
+    }+/
+
+    /+ template <typename, typename, typename, typename> struct FunctorCall;
     template <int... II, typename... SignalArgs, typename R, typename Function>
     struct FunctorCall<IndexesList<II...>, List<SignalArgs...>, R, Function> {
         static void call(Function &f, void **arg) {
@@ -123,30 +147,36 @@ extern(C++, "QtPrivate") {
     };
     template <int... II, typename... SignalArgs, typename R, typename... SlotArgs, typename SlotRet, class Obj>
     struct FunctorCall<IndexesList<II...>, List<SignalArgs...>, R, SlotRet (Obj::*)(SlotArgs...)> {
-        static void call(SlotRet (Obj::*f)(SlotArgs...), Obj *o, void **arg) {
+        static void call(SlotRet (Obj::*f)(SlotArgs...), Obj *o, void **arg)
+        {
+            assertObjectType<Obj>(o);
             (o->*f)((*reinterpret_cast<typename RemoveRef<SignalArgs>::Type *>(arg[II+1]))...), ApplyReturnValue<R>(arg[0]);
         }
     };
     template <int... II, typename... SignalArgs, typename R, typename... SlotArgs, typename SlotRet, class Obj>
     struct FunctorCall<IndexesList<II...>, List<SignalArgs...>, R, SlotRet (Obj::*)(SlotArgs...) const> {
-        static void call(SlotRet (Obj::*f)(SlotArgs...) const, Obj *o, void **arg) {
+        static void call(SlotRet (Obj::*f)(SlotArgs...) const, Obj *o, void **arg)
+        {
+            assertObjectType<Obj>(o);
             (o->*f)((*reinterpret_cast<typename RemoveRef<SignalArgs>::Type *>(arg[II+1]))...), ApplyReturnValue<R>(arg[0]);
         }
     };
-#if defined(__cpp_noexcept_function_type) && __cpp_noexcept_function_type >= 201510
     template <int... II, typename... SignalArgs, typename R, typename... SlotArgs, typename SlotRet, class Obj>
     struct FunctorCall<IndexesList<II...>, List<SignalArgs...>, R, SlotRet (Obj::*)(SlotArgs...) noexcept> {
-        static void call(SlotRet (Obj::*f)(SlotArgs...) noexcept, Obj *o, void **arg) {
+        static void call(SlotRet (Obj::*f)(SlotArgs...) noexcept, Obj *o, void **arg)
+        {
+            assertObjectType<Obj>(o);
             (o->*f)((*reinterpret_cast<typename RemoveRef<SignalArgs>::Type *>(arg[II+1]))...), ApplyReturnValue<R>(arg[0]);
         }
     };
     template <int... II, typename... SignalArgs, typename R, typename... SlotArgs, typename SlotRet, class Obj>
     struct FunctorCall<IndexesList<II...>, List<SignalArgs...>, R, SlotRet (Obj::*)(SlotArgs...) const noexcept> {
-        static void call(SlotRet (Obj::*f)(SlotArgs...) const noexcept, Obj *o, void **arg) {
+        static void call(SlotRet (Obj::*f)(SlotArgs...) const noexcept, Obj *o, void **arg)
+        {
+            assertObjectType<Obj>(o);
             (o->*f)((*reinterpret_cast<typename RemoveRef<SignalArgs>::Type *>(arg[II+1]))...), ApplyReturnValue<R>(arg[0]);
         }
     };
-#endif
 
     template<class Obj, typename Ret, typename... Args> struct FunctionPointer<Ret (Obj::*) (Args...)>
     {
@@ -185,7 +215,6 @@ extern(C++, "QtPrivate") {
         }
     };
 
-#if defined(__cpp_noexcept_function_type) && __cpp_noexcept_function_type >= 201510
     template<class Obj, typename Ret, typename... Args> struct FunctionPointer<Ret (Obj::*) (Args...) noexcept>
     {
         typedef Obj Object;
@@ -222,7 +251,6 @@ extern(C++, "QtPrivate") {
             FunctorCall<typename Indexes<ArgumentCount>::Value, SignalArgs, R, Function>::call(f, arg);
         }
     };
-#endif
 
     template<typename Function, int N> struct Functor
     {
@@ -332,10 +360,13 @@ extern(C++, "QtPrivate") {
         QAtomicInt m_ref;
         // don't use virtual functions here; we don't want the
         // compiler to create tons of per-polymorphic-class stuff that
-        // we'll never need. We just use one function pointer.
+        // we'll never need. We just use one function pointer, and the
+        // Operations enum below to distinguish requests
         alias ImplFn = ExternCPPFunc!(void function(int which, QSlotObjectBase* this_, QObject receiver, void** args, bool* ret));
         const(ImplFn) m_impl;
     protected:
+        // The operations that can be requested by calls to m_impl,
+        // see the member functions that call m_impl below for details
         enum Operation {
             Destroy,
             Call,

@@ -152,7 +152,9 @@ public:
 /+ #endif +/
         ItemIsFocusScope          = 0x04,
         ItemHasContents           = 0x08,
-        ItemAcceptsDrops          = 0x10
+        ItemAcceptsDrops          = 0x10,
+        ItemIsViewport            = 0x20,
+        ItemObservesViewport      = 0x40,
         // Remember to increment the size of QQuickItemPrivate::flags
     }
     /+ Q_DECLARE_FLAGS(Flags, Flag) +/
@@ -294,6 +296,7 @@ alias Flags = QFlags!(Flag);    /+ Q_FLAG(Flags) +/
 
     /+ virtual +/ QRectF boundingRect() const;
     /+ virtual +/ QRectF clipRect() const;
+    final QQuickItem viewportItem() const;
 
     final bool hasActiveFocus() const;
     final bool hasFocus() const;
@@ -370,6 +373,9 @@ alias Flags = QFlags!(Flag);    /+ Q_FLAG(Flags) +/
     @QInvokable final void forceActiveFocus(/+ Qt:: +/qt.core.namespace.FocusReason reason);
     /+ Q_REVISION(2, 1) +/ @QInvokable final QQuickItem nextItemInFocusChain(bool forward = true);
     @QInvokable final QQuickItem childAt(qreal x, qreal y) const;
+    /+ Q_REVISION(6, 3) +/ @QInvokable final void ensurePolished();
+
+    /+ Q_REVISION(6, 3) +/ @QInvokable final void dumpItemTree() const;
 
 /+ #if QT_CONFIG(im) +/
     /+ virtual +/ QVariant inputMethodQuery(/+ Qt:: +/qt.core.namespace.InputMethodQuery query) const;
@@ -481,7 +487,6 @@ protected:
     /+ virtual +/ void releaseResources();
     /+ virtual +/ void updatePolish();
 
-protected:
     this(ref QQuickItemPrivate dd, QQuickItem parent = null);
 
 private:
@@ -493,6 +498,7 @@ private:
     /+ friend class QSGRenderer; +/
     /+ friend class QAccessibleQuickItem; +/
     /+ friend class QQuickAccessibleAttached; +/
+    /+ friend class QQuickAnchorChanges; +/
     /+ Q_DISABLE_COPY(QQuickItem) +/
     /+ Q_DECLARE_PRIVATE(QQuickItem) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
@@ -501,22 +507,36 @@ private:
 /+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator |(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator &(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)/+noexcept+/{return QFlags!(QQuickItem.Flags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator &(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator ^(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)/+noexcept+/{return QFlags!(QQuickItem.Flags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator ^(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QQuickItem.Flags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QQuickItem.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QQuickItem.Flags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QQuickItem.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QQuickItem.Flags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QQuickItem.Flags operator ~(QQuickItem.Flags.enum_type e)/+noexcept+/{return~QQuickItem.Flags(e);}+/
+/+pragma(inline, true) void operator |(QQuickItem.Flags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QQuickItem.Flags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QQuickItem::Flags)
 #ifndef QT_NO_DEBUG_STREAM
-QDebug Q_QUICK_EXPORT operator<<(QDebug debug, QQuickItem *item);
+QDebug Q_QUICK_EXPORT operator<<(QDebug debug,
+#if QT_VERSION >= QT_VERSION_CHECK(7, 0, 0)
+                                 const
 #endif
+                                 QQuickItem *item);
+#endif // QT_NO_DEBUG_STREAM
 
 
 QML_DECLARE_TYPE(QQuickItem)

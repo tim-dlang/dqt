@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.bytearray;
+import qt.core.bytearrayview;
 import qt.core.global;
 import qt.core.iodevice;
 import qt.core.metamacros;
@@ -73,15 +74,29 @@ public:
     /+ explicit +/this(Algorithm method);
     ~this();
 
-    void reset();
+    void reset()/+ noexcept+/;
 
-    void addData(const(char)* data, qsizetype length);
-    void addData(ref const(QByteArray) data);
+/+ #if QT_DEPRECATED_SINCE(6, 4) +/
+    /+ QT_DEPRECATED_VERSION_X_6_4("Use the QByteArrayView overload instead") +/
+        void addData(const(char)* data, qsizetype length);
+/+ #endif
+#if QT_CORE_REMOVED_SINCE(6, 3) +/
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        void addData(ref const(QByteArray) data);
+    }
+/+ #endif +/
+    void addData(QByteArrayView data)/+ noexcept+/;
     bool addData(QIODevice device);
 
     QByteArray result() const;
+    QByteArrayView resultView() const/+ noexcept+/;
 
-    /+ static QByteArray hash(const QByteArray &data, Algorithm method); +/
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        /+ static QByteArray hash(const QByteArray &data, Algorithm method); +/
+    }
+    /+ static QByteArray hash(QByteArrayView data, Algorithm method); +/
     static int hashLength(Algorithm method);
 private:
     /+ Q_DISABLE_COPY(QCryptographicHash) +/

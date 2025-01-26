@@ -49,11 +49,6 @@ version (QT_NO_GEOM_VARIANT) {} else
 #endif
 #ifndef QT_BOOTSTRAPPED
 #endif
-#if __has_include(<variant>) && __cplusplus >= 201703L
-#elif defined(Q_CLANG_QDOC)
-namespace std { template<typename...> struct variant; }
-#endif
-
 
 
 #if QT_CONFIG(easingcurve)
@@ -213,7 +208,7 @@ class QRegularExpression;
     { other.d = Private(); } +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QVariant) +/
 
-    /+ inline void swap(QVariant &other) noexcept { qSwap(d, other.d); } +/
+    /+ inline void swap(QVariant &other) noexcept { std::swap(d, other.d); } +/
 
     int userType() const { return typeId(); }
     int typeId() const { return metaType().id(); }
@@ -394,7 +389,6 @@ class QRegularExpression;
         }
     }
 
-/+ #if (__has_include(<variant>) && __cplusplus >= 201703L) || defined(Q_CLANG_QDOC) +/
     /+ template<typename... Types> +/
     /+ static inline QVariant fromStdVariant(const std::variant<Types...> &value)
     {
@@ -402,7 +396,6 @@ class QRegularExpression;
             return QVariant();
         return std::visit([](const auto &arg) { return fromValue(arg); }, value);
     } +/
-/+ #endif +/
 
     /+ template<typename T> +/
     bool canConvert(T)() const
@@ -460,7 +453,7 @@ public:
         extern(D) static immutable size_t MaxInternalSize = 3*(void*).sizeof;
         /+ template<typename T> +/
         /+ static constexpr bool CanUseInternalSpace = (QTypeInfo<T>::isRelocatable && sizeof(T) <= MaxInternalSize && alignof(T) <= alignof(double)); +/
-        static bool canUseInternalSpace(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface* type)
+        static bool canUseInternalSpace(const(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface)* type)
         {
             import qt.core.flags;
 
@@ -537,19 +530,19 @@ public:
         // determine internal storage at compile time
         /+ template<typename T> +/
         ref const(T) get(T)() const
-        { return *static_cast!(const(T)*)(storage()); }
+        { return *static_cast!(const(T)*)(CanUseInternalSpace!(T) ? &data.data : data.shared_.data()); }
         /+ template<typename T> +/
         void set(T)(ref const(T) t)
         { *static_cast!(T*)(CanUseInternalSpace!(T) ? &data.data : data.shared_.data()) = t; }
 
-        pragma(inline, true) QMetaType type() const
+        pragma(inline, true) const(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface)* typeInterface() const
         {
-            return QMetaType(reinterpret_cast!(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface*)(packedType << 2));
+            return reinterpret_cast!(const(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface)*)(packedType << 2);
         }
 
-        pragma(inline, true) /+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface*  typeInterface() const
+        pragma(inline, true) QMetaType type() const
         {
-            return reinterpret_cast!(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface*)(packedType << 2);
+            return QMetaType(typeInterface());
         }
 
         pragma(inline, true) int typeId() const
@@ -617,13 +610,11 @@ public:
 static assert(!__traits(isPOD, QVariant));
 
 /+ template<>
-#if __has_include(<variant>) && __cplusplus >= 201703L
 template<>
 inline QVariant QVariant::fromValue(const std::monostate &)
 {
     return QVariant();
 }
-#endif
 
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &s, QVariant &p);
@@ -697,6 +688,7 @@ extern(C++, "QtPrivate") {
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QVariantTypeCoercer
 {
 public:
+    // ### Qt7: Pass QMetaType as value rather than const ref.
     const(void)* convert(ref const(QVariant) value, ref const(QMetaType) type);
     const(void)* coerce(ref const(QVariant) value, ref const(QMetaType) type);
 

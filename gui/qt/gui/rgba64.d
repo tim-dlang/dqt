@@ -96,14 +96,12 @@ public:
     quint8 alpha8() const { return div_257(alpha()); }
     uint toArgb32() const
     {
-/+ #if defined(__cpp_constexpr) && __cpp_constexpr-0 >= 201304 +/
         quint64 br = rgba & 0xffff0000ffffuL;
         quint64 ag = (rgba >> 16) & 0xffff0000ffffuL;
         br += 0x8000000080uL;
         ag += 0x8000000080uL;
         br = (br - ((br >> 8) & 0xffff0000ffffuL)) >> 8;
         ag = (ag - ((ag >> 8) & 0xffff0000ffffuL));
-/+ #if Q_BYTE_ORDER == Q_BIG_ENDIAN +/
         version (BigEndian)
         {
             return cast(uint) (((br << 24) & 0xff000000)
@@ -113,16 +111,11 @@ public:
         }
         else
         {
-    /+ #else +/
             return cast(uint) (((ag >> 16) & 0xff000000)
                  | ((br << 16) & 0xff0000)
                  | (ag         & 0xff00)
                  | ((br >> 32) & 0xff));
         }
-/+ #endif
-#else
-        return uint((alpha8() << 24) | (red8() << 16) | (green8() << 8) | blue8());
-#endif +/
     }
     ushort toRgb16() const
     {

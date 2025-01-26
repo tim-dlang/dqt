@@ -119,8 +119,12 @@ version (QT_NO_TRANSLATION)
 # define Q_DECL_HIDDEN_STATIC_METACALL Q_DECL_HIDDEN
 #endif
 
-#if defined(Q_CC_CLANG) && Q_CC_CLANG >= 306
-#  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_CLANG("-Winconsistent-missing-override")
+#if defined(Q_CC_CLANG)
+#  if Q_CC_CLANG >= 1100
+#    define Q_OBJECT_NO_OVERRIDE_WARNING    QT_WARNING_DISABLE_CLANG("-Winconsistent-missing-override") QT_WARNING_DISABLE_CLANG("-Wsuggest-override")
+#  elif Q_CC_CLANG >= 306
+#    define Q_OBJECT_NO_OVERRIDE_WARNING    QT_WARNING_DISABLE_CLANG("-Winconsistent-missing-override")
+#  endif
 #elif defined(Q_CC_GNU) && !defined(Q_CC_INTEL) && Q_CC_GNU >= 501
 #  define Q_OBJECT_NO_OVERRIDE_WARNING      QT_WARNING_DISABLE_GCC("-Wsuggest-override")
 #else
@@ -886,10 +890,9 @@ enum Q_SIGNAL_IMPL_D = q{
     qt.core.objectdefs.QMetaObject.activate(this, &staticMetaObject, dqtimported!q{qt.core.metamacros}.MetaObjectImpl!(typeof(this)).signalIndex!(__traits(parent, Dummy)), _a.ptr);
 };
 
-/+ #define Q_OBJECT_FAKE Q_OBJECT QT_ANNOTATE_CLASS(qt_fake, "") +/
-/+ #define Q_GADGET \
+/+ #define Q_GADGET_EXPORT(...) \
 public: \
-    static const QMetaObject staticMetaObject; \
+    static __VA_ARGS__ const QMetaObject staticMetaObject; \
     void qt_check_for_QGADGET_macro(); \
     typedef void QtGadgetHelper; \
 private: \
@@ -899,21 +902,28 @@ private: \
     QT_WARNING_POP \
     QT_ANNOTATE_CLASS(qt_qgadget, "") \
     /*end*/ +/
-enum Q_GADGET =
-q{    public:
-        static import qt.core.objectdefs;
-        extern(C++) extern } ~ exportOnWindows ~ q{static __gshared const(qt.core.objectdefs.QMetaObject) staticMetaObject;
-        /+ void qt_check_for_QGADGET_macro(); +/
-        alias QtGadgetHelper = void;
-    private:
-        /+ QT_WARNING_PUSH
-        Q_OBJECT_NO_ATTRIBUTES_WARNING +/
-        /+ Q_DECL_HIDDEN_STATIC_METACALL +/ static void qt_static_metacall(dqtimported!q{qt.core.object}.QObject , qt.core.objectdefs.QMetaObject.Call, int, void** );};
-        /+ QT_WARNING_POP
-        QT_ANNOTATE_CLASS(qt_qgadget, "") +/
-        /*end*/
+extern(D) alias Q_GADGET_EXPORT = function string(string __VA_ARGS__)
+{
+    return
+    mixin(interpolateMixin(q{    public:
+            static import qt.core.objectdefs;
+            $(__VA_ARGS__) extern(C++) extern } ~ exportOnWindows ~ q{static __gshared const(qt.core.objectdefs.QMetaObject) staticMetaObject;
+            /+ void qt_check_for_QGADGET_macro(); +/
+            alias QtGadgetHelper = void;
+        private:
+            /+ QT_WARNING_PUSH
+            Q_OBJECT_NO_ATTRIBUTES_WARNING +/
+            /+ Q_DECL_HIDDEN_STATIC_METACALL +/ static void qt_static_metacall(dqtimported!q{qt.core.object}.QObject , qt.core.objectdefs.QMetaObject.Call, int, void** );}));
+            /+ QT_WARNING_POP
+            QT_ANNOTATE_CLASS(qt_qgadget, "") +/
+            /*end*/
+};
 
-/* qmake ignore Q_NAMESPACE_EXPORT */
+/* qmake ignore Q_GADGET */
+/+ #define Q_GADGET Q_GADGET_EXPORT() +/
+enum Q_GADGET = Q_GADGET_EXPORT(q{});
+
+    /* qmake ignore Q_NAMESPACE_EXPORT */
 /+ #define Q_NAMESPACE_EXPORT(...) \
     extern __VA_ARGS__ const QMetaObject staticMetaObject; \
     QT_ANNOTATE_CLASS(qt_qnamespace, "") \

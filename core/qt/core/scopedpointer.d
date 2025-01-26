@@ -78,7 +78,7 @@ alias QScopedPointerDeleteLater = QScopedPointerObjectDeleteLater!(QObject);
 /+ #endif +/
 
 /// Binding for C++ class [QScopedPointer](https://doc.qt.io/qt-6/qscopedpointer.html).
-extern(C++, class) struct QScopedPointer(T, Cleanup = QScopedPointerDeleter!T)
+extern(C++, class) struct /+ [[nodiscard]] +/ QScopedPointer(T, Cleanup = QScopedPointerDeleter!T)
 {
 private:
     static if (is(T == class))
@@ -164,7 +164,7 @@ public:
     /+ QT_DEPRECATED_VERSION_X_6_2("Use std::unique_ptr instead of QScopedPointer.")
     void swap(QScopedPointer<T, Cleanup> &other) noexcept
     {
-        qSwap(d, other.d);
+        qt_ptr_swap(d, other.d);
     } +/
 /+ #endif +/
 
@@ -210,12 +210,12 @@ protected:
     P d;
 
 private:
-    /+ Q_DISABLE_COPY(QScopedPointer) +/
+    /+ Q_DISABLE_COPY_MOVE(QScopedPointer) +/
 @disable this(this);
 /+this(ref const(QScopedPointer));+//+ref QScopedPointer operator =(ref const(QScopedPointer));+/}
 
 /// Binding for C++ class [QScopedArrayPointer](https://doc.qt.io/qt-6/qscopedarraypointer.html).
-extern(C++, class) struct QScopedArrayPointer(T, Cleanup )
+extern(C++, class) struct /+ [[nodiscard]] +/ QScopedArrayPointer(T, Cleanup )
 {
     public QScopedPointer!(T, Cleanup) base0;
     alias base0 this;
@@ -228,6 +228,7 @@ public:
     {
         this.QScopedPointer!(T, Cleanup) = null;
     }+/
+    /+ inline ~QScopedArrayPointer() = default; +/
 
     /+ template <typename D, if_same_type<D> = true> +/
     /+ explicit +/this(D,)(D* p)
@@ -264,7 +265,7 @@ private:
         // allowed and results in undefined behavior.
     }
 
-    /+ Q_DISABLE_COPY(QScopedArrayPointer) +/
+    /+ Q_DISABLE_COPY_MOVE(QScopedArrayPointer) +/
 @disable this(this);
 /+this(ref const(QScopedArrayPointer));+//+ref QScopedArrayPointer operator =(ref const(QScopedArrayPointer));+/}
 

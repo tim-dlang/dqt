@@ -221,7 +221,7 @@ public:
     ~this();
 
 
-    /+ void swap(QPageSize &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QPageSize &other) noexcept { d.swap(other.d); } +/
 
     /+ friend Q_GUI_EXPORT bool operator==(const QPageSize &lhs, const QPageSize &rhs); +/
     bool isEquivalentTo(ref const(QPageSize) other) const;

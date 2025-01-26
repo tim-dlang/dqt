@@ -69,6 +69,10 @@ public:
 /+ template <> struct QListSpecialMethods<QByteArray>;
 template <> struct QListSpecialMethods<QString>;
 
+#if !defined(QT_STRICT_QLIST_ITERATORS) && (QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)) && !defined(Q_OS_WIN)
+#define QT_STRICT_QLIST_ITERATORS
+#endif
+
 #ifdef Q_QDOC // define QVector for QDoc
 template<typename T> class QVector : public QList<T> {};
 #endif +/
@@ -108,28 +112,42 @@ public:
     using rvalue_ref = T &&;
 #endif +/
 
+    /+
+    extern(C++, class) struct const_iterator;
+    +/
     /// Binding for C++ class [QList::iterator](https://doc.qt.io/qt-6/qlist-iterator.html).
     extern(C++, class) struct iterator {
     private:
+        /+ friend class QList<T>; +/
+        /+ friend class const_iterator; +/
         T* i = null;
+        static if (defined!"QT_STRICT_QLIST_ITERATORS")
+        {
+            /+ explicit +/pragma(inline, true) this(T* n)
+            {
+                this.i = n;
+            }
+        }
+
     public:
         alias difference_type__1 = qsizetype;
         alias value_type__1 = T;
         // libstdc++ shipped with gcc < 11 does not have a fix for defect LWG 3346
 /+ #if __cplusplus >= 202002L && (!defined(_GLIBCXX_RELEASE) || _GLIBCXX_RELEASE >= 11)
-        using iterator_category = std::contiguous_iterator_tag;
+        using iterator_concept = std::contiguous_iterator_tag;
         using element_type = value_type;
-#else +/
+#endif +/
         /+ using iterator_category = std::random_access_iterator_tag; +/
-/+ #endif +/
-
         alias pointer__1 = T*;
         /+ using reference = T &; +/
 
         /+ inline constexpr iterator() = default; +/
-        pragma(inline, true) this(T* n)
+        static if (!defined!"QT_STRICT_QLIST_ITERATORS")
         {
-            this.i = n;
+            /+ explicit +/pragma(inline, true) this(T* n)
+            {
+                this.i = n;
+            }
         }
         pragma(inline, true) ref T opUnary(string op)() const if (op == "*") { return *cast(T*) i; }
         /+pragma(inline, true) T* operator ->() const { return i; }+/
@@ -140,52 +158,86 @@ public:
         /+pragma(inline, true) bool operator <=(iterator other) const { return i <= other.i; }+/
         /+pragma(inline, true) bool operator >(iterator other) const { return i > other.i; }+/
         /+pragma(inline, true) bool operator >=(iterator other) const { return i >= other.i; }+/
+        /+pragma(inline, true) bool operator ==(const_iterator o) const { return i == o.i; }+/
+        /+pragma(inline, true) bool operator !=(const_iterator o) const { return i != o.i; }+/
+        /+pragma(inline, true) bool operator <(const_iterator other) const { return i < other.i; }+/
+        /+pragma(inline, true) bool operator <=(const_iterator other) const { return i <= other.i; }+/
+        /+pragma(inline, true) bool operator >(const_iterator other) const { return i > other.i; }+/
+        /+pragma(inline, true) bool operator >=(const_iterator other) const { return i >= other.i; }+/
         /+pragma(inline, true) bool operator ==(pointer p) const { return i == p; }+/
         /+pragma(inline, true) bool operator !=(pointer p) const { return i != p; }+/
         pragma(inline, true) ref iterator opUnary(string op)() if (op == "++") { ++i; return this; }
-        /+pragma(inline, true) iterator operator ++(int) { T* n = i; ++i; return cast(iterator) (n); }+/
-        pragma(inline, true) ref iterator opUnary(string op)() if (op == "--") { i--; return this; }
-        /+pragma(inline, true) iterator operator --(int) { T* n = i; i--; return cast(iterator) (n); }+/
+        /+pragma(inline, true) iterator operator ++(int) { auto copy = this; ++this; return cast(iterator) (copy); }+/
+        pragma(inline, true) ref iterator opUnary(string op)() if (op == "--") { --i; return this; }
+        /+pragma(inline, true) iterator operator --(int) { auto copy = this; --this; return cast(iterator) (copy); }+/
         pragma(inline, true) qsizetype opBinary(string op)(iterator j) const if (op == "-") { return i - j.i; }
-        /+pragma(inline, true) auto opCast(T : T)() const { return i; }+/
+        static if (!defined!"QT_STRICT_QLIST_ITERATORS")
+        {
+            /+/+ QT_DEPRECATED_VERSION_X_6_3("Use operator* or operator-> rather than relying on "
+                                                "the implicit conversion between a QList/QVector::iterator "
+                                                "and a raw pointer") +/
+                    pragma(inline, true) auto opCast(T : T)() const { return i; }+/
 
-        /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, iterator>
-        &operator+=(Int j) { i+=j; return *this; } +/
-        /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, iterator>
-        &operator-=(Int j) { i-=j; return *this; } +/
-        /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, iterator>
-        operator+(Int j) const { return iterator(i+j); } +/
-        /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, iterator>
-        operator-(Int j) const { return iterator(i-j); } +/
-        /+ template <typename Int> +/ /+ friend std::enable_if_t<std::is_integral_v<Int>, iterator>
-        operator+(Int j, iterator k) { return k + j; } +/
+            /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, iterator>
+            &operator+=(Int j) { i+=j; return *this; } +/
+            /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, iterator>
+            &operator-=(Int j) { i-=j; return *this; } +/
+            /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, iterator>
+            operator+(Int j) const { return iterator(i+j); } +/
+            /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, iterator>
+            operator-(Int j) const { return iterator(i-j); } +/
+            /+ template <typename Int> +/ /+ friend std::enable_if_t<std::is_integral_v<Int>, iterator>
+            operator+(Int j, iterator k) { return k + j; } +/
+        }
+        else
+        {
+            /+pragma(inline, true) ref iterator operator +=(qsizetype j) { i += j; return this; }+/
+            /+pragma(inline, true) ref iterator operator -=(qsizetype j) { i -= j; return this; }+/
+            /+pragma(inline, true) iterator operator +(qsizetype j) const { return iterator(i + j); }+/
+            /+pragma(inline, true) iterator operator -(qsizetype j) const { return iterator(i - j); }+/
+            /+ friend inline iterator operator+(qsizetype j, iterator k) { return k + j; } +/
+        }
+        pragma(inline, true) iterator opBinary(string op)(qsizetype j) if (op == "+") { return iterator(i+j); }
+        pragma(inline, true) iterator opBinary(string op)(qsizetype j) if (op == "-") { return iterator(i-j); }
     }
 
     /// Binding for C++ class [QList::const_iterator](https://doc.qt.io/qt-6/qlist-const-iterator.html).
     extern(C++, class) struct const_iterator {
     private:
+        /+ friend class QList<T>; +/
+        /+ friend class iterator; +/
         const(T)* i = null;
+        static if (defined!"QT_STRICT_QLIST_ITERATORS")
+        {
+            /+ explicit +/pragma(inline, true) this(const(T)* n)
+            {
+                this.i = n;
+            }
+        }
+
     public:
         alias difference_type__1 = qsizetype;
         alias value_type__1 = T;
         // libstdc++ shipped with gcc < 11 does not have a fix for defect LWG 3346
 /+ #if __cplusplus >= 202002L && (!defined(_GLIBCXX_RELEASE) || _GLIBCXX_RELEASE >= 11)
-        using iterator_category = std::contiguous_iterator_tag;
+        using iterator_concept = std::contiguous_iterator_tag;
         using element_type = const value_type;
-#else +/
+#endif +/
         /+ using iterator_category = std::random_access_iterator_tag; +/
-/+ #endif +/
         alias pointer__1 = const(T)*;
         /+ using reference = const T &; +/
 
         /+ inline constexpr const_iterator() = default; +/
-        pragma(inline, true) this(const(T)* n)
+        static if (!defined!"QT_STRICT_QLIST_ITERATORS")
         {
-            this.i = n;
+            /+ explicit +/pragma(inline, true) this(const(T)* n)
+            {
+                this.i = n;
+            }
         }
         /*pragma(inline, true) this(iterator o)
         {
-            this.i = o;
+            this.i = o.i;
         }*/
         pragma(inline, true) ref const(T) opUnary(string op)() const if (op == "*") { return *i; }
         /+pragma(inline, true) const(T)* operator ->() const { return i; }+/
@@ -196,16 +248,45 @@ public:
         /+pragma(inline, true) bool operator <=(const_iterator other) const { return i <= other.i; }+/
         /+pragma(inline, true) bool operator >(const_iterator other) const { return i > other.i; }+/
         /+pragma(inline, true) bool operator >=(const_iterator other) const { return i >= other.i; }+/
-        /+pragma(inline, true) bool operator ==(iterator o) const { return i == const_iterator(o).i; }+/
-        /+pragma(inline, true) bool operator !=(iterator o) const { return i != const_iterator(o).i; }+/
+        /+pragma(inline, true) bool operator ==(iterator o) const { return i == o.i; }+/
+        /+pragma(inline, true) bool operator !=(iterator o) const { return i != o.i; }+/
+        /+pragma(inline, true) bool operator <(iterator other) const { return i < other.i; }+/
+        /+pragma(inline, true) bool operator <=(iterator other) const { return i <= other.i; }+/
+        /+pragma(inline, true) bool operator >(iterator other) const { return i > other.i; }+/
+        /+pragma(inline, true) bool operator >=(iterator other) const { return i >= other.i; }+/
         /+pragma(inline, true) bool operator ==(pointer p) const { return i == p; }+/
         /+pragma(inline, true) bool operator !=(pointer p) const { return i != p; }+/
         pragma(inline, true) ref const_iterator opUnary(string op)() if (op == "++") { ++i; return this; }
-        /+pragma(inline, true) const_iterator operator ++(int) { const(T)* n = i; ++i; return cast(const_iterator) (n); }+/
-        pragma(inline, true) ref const_iterator opUnary(string op)() if (op == "--") { i--; return this; }
-        /+pragma(inline, true) const_iterator operator --(int) { const(T)* n = i; i--; return cast(const_iterator) (n); }+/
+        /+pragma(inline, true) const_iterator operator ++(int) { auto copy = this; ++this; return cast(const_iterator) (copy); }+/
+        pragma(inline, true) ref const_iterator opUnary(string op)() if (op == "--") { --i; return this; }
+        /+pragma(inline, true) const_iterator operator --(int) { auto copy = this; --this; return cast(const_iterator) (copy); }+/
         pragma(inline, true) qsizetype opBinary(string op)(const_iterator j) const if (op == "-") { return i - j.i; }
-        /+pragma(inline, true) auto opCast(T : const(T))() const { return i; }+/
+        static if (!defined!"QT_STRICT_QLIST_ITERATORS")
+        {
+            /+/+ QT_DEPRECATED_VERSION_X_6_3("Use operator* or operator-> rather than relying on "
+                                                "the implicit conversion between a QList/QVector::const_iterator "
+                                                "and a raw pointer") +/
+                    pragma(inline, true) auto opCast(T : const(T))() const { return i; }+/
+
+            /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
+            &operator+=(Int j) { i+=j; return *this; } +/
+            /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
+            &operator-=(Int j) { i-=j; return *this; } +/
+            /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
+            operator+(Int j) const { return const_iterator(i+j); } +/
+            /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
+            operator-(Int j) const { return const_iterator(i-j); } +/
+            /+ template <typename Int> +/ /+ friend std::enable_if_t<std::is_integral_v<Int>, const_iterator>
+            operator+(Int j, const_iterator k) { return k + j; } +/
+        }
+        else
+        {
+            /+pragma(inline, true) ref const_iterator operator +=(qsizetype j) { i += j; return this; }+/
+            /+pragma(inline, true) ref const_iterator operator -=(qsizetype j) { i -= j; return this; }+/
+            /+pragma(inline, true) const_iterator operator +(qsizetype j) const { return const_iterator(i + j); }+/
+            /+pragma(inline, true) const_iterator operator -(qsizetype j) const { return const_iterator(i - j); }+/
+            /+ friend inline const_iterator operator+(qsizetype j, const_iterator k) { return k + j; } +/
+        }
         int opCmp(const const_iterator other) const
         {
             if (i < other.i)
@@ -215,19 +296,8 @@ public:
 
             return 0;
         }
-
-        /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
-        &operator+=(Int j) { i+=j; return *this; } +/
-        /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
-        &operator-=(Int j) { i-=j; return *this; } +/
-        /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
-        operator+(Int j) const { return const_iterator(i+j); } +/
-        pragma(inline, true) const_iterator opBinary(string op, Int)(Int j) const if (op == "+" && isIntegral!Int) { return const_iterator(i+j); }
-        /+ template <typename Int> +/ /+ std::enable_if_t<std::is_integral_v<Int>, const_iterator>
-        operator-(Int j) const { return const_iterator(i-j); } +/
-        pragma(inline, true) const_iterator opBinary(string op, Int)(Int j) const if (op == "-" && isIntegral!Int) { return const_iterator(i-j); }
-        /+ template <typename Int> +/ /+ friend std::enable_if_t<std::is_integral_v<Int>, const_iterator>
-        operator+(Int j, const_iterator k) { return k + j; } +/
+        pragma(inline, true) const_iterator opBinary(string op)(qsizetype j) const if (op == "+") { return const_iterator(i+j); }
+        pragma(inline, true) const_iterator opBinary(string op)(qsizetype j) const if (op == "-") { return const_iterator(i-j); }
     }
     alias Iterator = iterator;
     alias ConstIterator = const_iterator;
@@ -300,9 +370,11 @@ public:
             const distance = /+ std:: +/distance(i1, i2);
             if (distance) {
                 d = DataPointer(Data.allocate(distance));
+                // appendIteratorRange can deal with contiguous iterators on its own,
+                // this is an optimization for C++17 code.
                 static if (/+ std:: +/is_same_v!(/+ std:: +/decay_t!(InputIterator), iterator) ||
                               /+ std:: +/is_same_v!(/+ std:: +/decay_t!(InputIterator), const_iterator)) {
-                    d.copyAppend(i1, i2);
+                    d.copyAppend(i1.i, i2.i);
                 } else {
                     d.appendIteratorRange(i1, i2);
                }
@@ -317,7 +389,7 @@ public:
 
     // compiler-generated special member functions are fine!
 
-    /+ void swap(QList<T> &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QList &other) noexcept { d.swap(other.d); } +/
 
 /+ #ifndef Q_CLANG_QDOC +/
     /+ template <typename U = T> +/
@@ -329,7 +401,7 @@ public:
             return cast(qt.core.typeinfo.compare_eq_result_container!(QList, U)) (true);
 
         // do element-by-element comparison
-        return d.compare(begin(), other.begin(), size());
+        return d.compare(data(), other.data(), size());
     }+/
     /+ template <typename U = T> +/
     /+/+ QTypeTraits:: +/qt.core.typeinfo.compare_eq_result_container!(QList, U) operator !=(U)(ref const(QList) other) const
@@ -411,7 +483,7 @@ public:
         }
 
         auto detached = DataPointer(Data.allocate(qMax(asize, size())));
-        detached.copyAppend(constBegin(), constEnd());
+        detached.copyAppend(d.begin(), d.end());
         if (detached.d_ptr())
             detached.setFlag(Data.CapacityReserved);
         d.swap(detached);
@@ -432,7 +504,7 @@ public:
     }
             if (size()) {
                 if (d.needsDetach())
-                    detached__1.copyAppend(constBegin(), constEnd());
+                    detached__1.copyAppend(d.data(), d.data() + d.size);
                 else
                     detached__1.moveAppend(d.data(), d.data() + d.size);
             }
@@ -477,7 +549,7 @@ public:
     void append()(parameter_type t) { emplaceBack(t); }
     /*pragma(inline, true) void append(const_iterator i1, const_iterator i2)
     {
-        DataOps.growAppend(d, i1, i2);
+        d.growAppend(i1.i, i2.i);
     }*/
 /+    void append(rvalue_ref t)
     {
@@ -505,7 +577,7 @@ public:
     pragma(inline, true) ref T emplaceBack(Args...)(auto ref Args /+ && +/ args)
     {
         DataOps.emplace(d, d.size, args /*/+ std:: +/forward!(Args)(args)...*/);
-        return *(d.end() - 1);
+        return *(end() - 1);
     }
 
     /+ template <typename ...Args> +/
@@ -523,7 +595,7 @@ public:
         (mixin(Q_ASSERT_X(q{n >= 0},q{ "QList::insert"},q{ "invalid count"})));
         if (/+ Q_LIKELY +/(n))
             d.insert(i, n, t);
-        return d.begin() + i;
+        return begin() + i;
     }+/
 /+    iterator insert(const_iterator before, parameter_type t)
     {
@@ -560,9 +632,9 @@ public:
     /+ template <typename ...Args> +/
     iterator emplace(Args...)(qsizetype i, auto ref Args /+ && +/ args)
     {
-        mixin(Q_ASSERT_X(q{i >= 0 && i <= d.size},q{ "QList<T>::insert"},q{ "index out of range"}));
+        (mixin(Q_ASSERT_X(q{i >= 0 && i <= QList.d.size},q{ "QList<T>::insert"},q{ "index out of range"})));
         DataOps.emplace(d, i, args /*std::forward<Args>(args)...*/);
-        return d.begin() + i;
+        return begin() + i;
     }
 /+ #if 0
     template< class InputIt >
@@ -746,7 +818,7 @@ public:
         qsizetype n = /+ std:: +/distance(abegin, aend);
         remove(i, n);
 
-        return d.begin() + i;
+        return begin() + i;
     }+/
 //    pragma(inline, true) iterator erase(const_iterator pos) { return erase(pos, cast(const_iterator) (pos+1)); }
 
@@ -784,7 +856,7 @@ public:
     {
     DataPointer copied__1();
     }
-        copied__1.copyAppend(constBegin() + p, constBegin() + p + l);
+        copied__1.copyAppend(data() + p, data() + p + l);
         return cast(QList!(T)) (copied__1);
     }+/
 
@@ -821,7 +893,7 @@ public:
         (mixin(Q_ASSERT_X(q{i >= 0 && i < QList.size() && j >= 0 && j < QList.size()},q{
                     "QList<T>::swap"},q{ "index out of range"})));
         detach();
-        qt.core.arraydatapointer.qSwap(d.begin()[i], d.begin()[j]);
+        qSwap(d.begin()[i], d.begin()[j]);
     }
 
     // STL compatibility
@@ -894,12 +966,10 @@ public:
     }
 }
 
-/+ #if defined(__cpp_deduction_guides) && __cpp_deduction_guides >= 201606
-template <typename InputIterator,
+/+ template <typename InputIterator,
           typename ValueType = typename std::iterator_traits<InputIterator>::value_type,
           QtPrivate::IfIsInputIterator<InputIterator> = true>
-QList(InputIterator, InputIterator) -> QList<ValueType>;
-#endif
+QList(, ) -> QList<ValueType>;
 
 
 template <typename T>
@@ -914,7 +984,7 @@ inline void QList<T>::append(QList<T> &&other)
     // due to precondition &other != this, we can unconditionally modify 'this'
     d.detachAndGrow(QArrayData::GrowsAtEnd, other.size(), nullptr, nullptr);
     Q_ASSERT(d.freeSpaceAtEnd() >= other.size());
-    d->moveAppend(other.begin(), other.end());
+    d->moveAppend(other.d->begin(), other.d->end());
 } +/
 
 

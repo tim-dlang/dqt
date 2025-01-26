@@ -133,22 +133,19 @@ alias MatchOptions = QFlags!(MatchOption);
     }
     /+ Q_DECLARE_FLAGS(WildcardConversionOptions, WildcardConversionOption) +/
 alias WildcardConversionOptions = QFlags!(WildcardConversionOption);
-    static if (QT_STRINGVIEW_LEVEL < 2)
+    static QString escape(ref const(QString) str)
     {
-        static QString escape(ref const(QString) str)
-        {
-            return escape(qToStringViewIgnoringNull(str));
-        }
+        return escape(qToStringViewIgnoringNull(str));
+    }
 
-        static QString wildcardToRegularExpression(ref const(QString) str, WildcardConversionOptions options = WildcardConversionOption.DefaultWildcardConversion)
-        {
-            return wildcardToRegularExpression(qToStringViewIgnoringNull(str), options);
-        }
+    static QString wildcardToRegularExpression(ref const(QString) str, WildcardConversionOptions options = WildcardConversionOption.DefaultWildcardConversion)
+    {
+        return wildcardToRegularExpression(qToStringViewIgnoringNull(str), options);
+    }
 
-        pragma(inline, true) static QString anchoredPattern(ref const(QString) expression)
-        {
-            return anchoredPattern(qToStringViewIgnoringNull(expression));
-        }
+    pragma(inline, true) static QString anchoredPattern(ref const(QString) expression)
+    {
+        return anchoredPattern(qToStringViewIgnoringNull(expression));
     }
 
     static QString escape(QStringView str);
@@ -176,17 +173,27 @@ private:
 /+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator |(QRegularExpression.PatternOptions.enum_type f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator &(QRegularExpression.PatternOptions.enum_type f1, QRegularExpression.PatternOptions.enum_type f2)/+noexcept+/{return QFlags!(QRegularExpression.PatternOptions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator &(QRegularExpression.PatternOptions.enum_type f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator ^(QRegularExpression.PatternOptions.enum_type f1, QRegularExpression.PatternOptions.enum_type f2)/+noexcept+/{return QFlags!(QRegularExpression.PatternOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator ^(QRegularExpression.PatternOptions.enum_type f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QRegularExpression.PatternOptions.enum_type f1, QRegularExpression.PatternOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QRegularExpression.PatternOptions.enum_type f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QRegularExpression.PatternOptions.enum_type f1, QRegularExpression.PatternOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QRegularExpression.PatternOptions.enum_type f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QRegularExpression.PatternOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QRegularExpression.PatternOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QRegularExpression.PatternOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QRegularExpression.PatternOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QRegularExpression.PatternOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QRegularExpression.PatternOptions operator ~(QRegularExpression.PatternOptions.enum_type e)/+noexcept+/{return~QRegularExpression.PatternOptions(e);}+/
+/+pragma(inline, true) void operator |(QRegularExpression.PatternOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QRegularExpression.PatternOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_SHARED(QRegularExpression)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QRegularExpression::PatternOptions) +/
@@ -194,17 +201,27 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QRegularExpression::PatternOptions) +/
 /+pragma(inline, true) QFlags!(QRegularExpression.MatchOptions.enum_type) operator |(QRegularExpression.MatchOptions.enum_type f1, QFlags!(QRegularExpression.MatchOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QRegularExpression.MatchOptions.enum_type) operator &(QRegularExpression.MatchOptions.enum_type f1, QRegularExpression.MatchOptions.enum_type f2)/+noexcept+/{return QFlags!(QRegularExpression.MatchOptions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QRegularExpression.MatchOptions.enum_type) operator &(QRegularExpression.MatchOptions.enum_type f1, QFlags!(QRegularExpression.MatchOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QRegularExpression.MatchOptions.enum_type) operator ^(QRegularExpression.MatchOptions.enum_type f1, QRegularExpression.MatchOptions.enum_type f2)/+noexcept+/{return QFlags!(QRegularExpression.MatchOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QRegularExpression.MatchOptions.enum_type) operator ^(QRegularExpression.MatchOptions.enum_type f1, QFlags!(QRegularExpression.MatchOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QRegularExpression.MatchOptions.enum_type f1, QRegularExpression.MatchOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QRegularExpression.MatchOptions.enum_type f1, QFlags!(QRegularExpression.MatchOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QRegularExpression.MatchOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QRegularExpression.MatchOptions.enum_type f1, QRegularExpression.MatchOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QRegularExpression.MatchOptions.enum_type f1, QFlags!(QRegularExpression.MatchOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QRegularExpression.MatchOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QRegularExpression.MatchOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QRegularExpression.MatchOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QRegularExpression.MatchOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QRegularExpression.MatchOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QRegularExpression.MatchOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QRegularExpression.MatchOptions operator ~(QRegularExpression.MatchOptions.enum_type e)/+noexcept+/{return~QRegularExpression.MatchOptions(e);}+/
+/+pragma(inline, true) void operator |(QRegularExpression.MatchOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QRegularExpression.MatchOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QRegularExpression::MatchOptions)
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QRegularExpression &re);
@@ -252,15 +269,16 @@ public:
 
     int lastCapturedIndex() const;
 
+    bool hasCaptured(ref const(QString) name) const
+    { return hasCaptured(QStringView(name)); }
+    bool hasCaptured(QStringView name) const;
+    bool hasCaptured(int nth) const;
+
     QString captured(int nth = 0) const;
     QStringView capturedView(int nth = 0) const;
 
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        QString captured(ref const(QString) name) const
-        { return captured(QStringView(name)); }
-    }
-
+    QString captured(ref const(QString) name) const
+    { return captured(QStringView(name)); }
     QString captured(QStringView name) const;
     QStringView capturedView(QStringView name) const;
 
@@ -270,15 +288,12 @@ public:
     qsizetype capturedLength(int nth = 0) const;
     qsizetype capturedEnd(int nth = 0) const;
 
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        qsizetype capturedStart(ref const(QString) name) const
-        { return capturedStart(QStringView(name)); }
-        qsizetype capturedLength(ref const(QString) name) const
-        { return capturedLength(QStringView(name)); }
-        qsizetype capturedEnd(ref const(QString) name) const
-        { return capturedEnd(QStringView(name)); }
-    }
+    qsizetype capturedStart(ref const(QString) name) const
+    { return capturedStart(QStringView(name)); }
+    qsizetype capturedLength(ref const(QString) name) const
+    { return capturedLength(QStringView(name)); }
+    qsizetype capturedEnd(ref const(QString) name) const
+    { return capturedEnd(QStringView(name)); }
 
     qsizetype capturedStart(QStringView name) const;
     qsizetype capturedLength(QStringView name) const;

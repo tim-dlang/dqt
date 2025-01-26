@@ -14,6 +14,8 @@ extern(C++):
 
 import qt.config;
 import qt.helpers;
+static if (defined!"QT_CORE_BUILD_REMOVED_API" && !versionIsSet!("QT_NO_DATASTREAM"))
+    import qt.core.float16;
 version (QT_NO_DATASTREAM) {} else
 {
     import qt.core.bytearray;
@@ -27,9 +29,12 @@ version (QT_NO_DATASTREAM) {} else
 
 /+ #ifdef Status
 #error qdatastream.h must be included before any header file that defines Status
+#endif
+
+
+#if QT_CORE_REMOVED_SINCE(6, 3)
+class qfloat16;
 #endif +/
-
-
 
 version (QT_NO_DATASTREAM) {} else
 {
@@ -81,8 +86,9 @@ public:
         Qt_6_0 = 20,
         Qt_6_1 = Version.Qt_6_0,
         Qt_6_2 = Version.Qt_6_0,
-        Qt_DefaultCompiledVersion = Version.Qt_6_2
-/+ #if QT_VERSION >= 0x060300
+        Qt_6_3 = Version.Qt_6_0,
+        Qt_DefaultCompiledVersion = Version.Qt_6_3
+/+ #if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
 #error Add the datastream version for this Qt version and update Qt_DefaultCompiledVersion
 #endif +/
     }
@@ -158,7 +164,10 @@ public:
     /+ref QDataStream operator >>(ref /+ std:: +/nullptr_t ptr) { ptr = null; return this; }+/
 
     /+ref QDataStream operator >>(ref bool i);+/
-    /+ref QDataStream operator >>(ref qfloat16 f);+/
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        /+ref QDataStream operator >>(ref qfloat16 f);+/
+    }
     /+ref QDataStream operator >>(ref float f);+/
     /+ref QDataStream operator >>(ref double f);+/
     /+ref QDataStream operator >>(ref char* str);+/
@@ -181,7 +190,10 @@ public:
     { return this << qint64(i); }+/
     /+ref QDataStream operator <<(/+ std:: +/nullptr_t) { return this; }+/
     /+ref QDataStream operator <<(bool i);+/
-    /+ref QDataStream operator <<(qfloat16 f);+/
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        /+ref QDataStream operator <<(qfloat16 f);+/
+    }
     /+ref QDataStream operator <<(float f);+/
     /+ref QDataStream operator <<(double f);+/
     /+ref QDataStream operator <<(const(char)* str);+/
@@ -470,7 +482,6 @@ inline QDataStreamIfHasOStreamOperatorsContainer<QMultiMap<Key, T>, Key, T> oper
     return QtPrivate::writeAssociativeMultiContainer(s, map);
 }
 
-#ifndef QT_NO_DATASTREAM
 template <class T1, class T2>
 inline QDataStreamIfHasIStreamOperators<T1, T2> operator>>(QDataStream& s, std::pair<T1, T2> &p)
 {
@@ -484,7 +495,6 @@ inline QDataStreamIfHasOStreamOperators<T1, T2> operator<<(QDataStream& s, const
     s << p.first << p.second;
     return s;
 }
-#endif
 
 #else
 
@@ -547,6 +557,9 @@ inline QDataStream &operator<<(QDataStream &s, QKeyCombination combination)
 
 }
 
+version (QT_NO_DATASTREAM) {} else
+{
+}
 
 version (QT_NO_DATASTREAM)
 {

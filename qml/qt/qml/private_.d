@@ -44,6 +44,7 @@ import qt.qml.jsvalue;
 
 extern(C++, class) struct QQmlPropertyValueInterceptor;
 extern(C++, class) struct QQmlContextData;
+extern(C++, class) struct QQmlFinalizerHook;
 
 extern(C++, "QQmlPrivate") {
 alias QQmlAttachedPropertiesFuncP(A) = ExternCPPFunc!(A* function(QObject ));
@@ -434,6 +435,7 @@ extern(C++, "QQmlPrivate")
         QQmlCustomParser* customParser;
 
         QTypeRevision revision;
+        int finalizerCast;
         // If this is extended ensure "version" is bumped!!!
     }
 
@@ -466,6 +468,9 @@ extern(C++, "QQmlPrivate")
 
         ExternCPPFunc!(QQmlCustomParser* function()) customParserFactory;
         QVector!(int)* qmlTypeIds;
+        int finalizerCast;
+
+        bool forceAnonymous;
     }
 
     struct RegisterInterface {
@@ -562,6 +567,8 @@ extern(C++, "QQmlPrivate")
     }+/
 
     /+ struct /+ Q_QML_EXPORT +/ AOTCompiledContext {
+        enum uint_: uint { InvalidStringId = (/+ std:: +/numeric_limits!(uint_).max)() }
+
         QQmlContextData* qmlContext;
         QObject qmlScopeObject;
         QJSEngine engine;
@@ -574,10 +581,11 @@ extern(C++, "QQmlPrivate")
         void setReturnValueUndefined() const;
 
         // Run QQmlPropertyCapture::captureProperty() without retrieving the value.
-        bool captureLookup(uint index, QObject object) const;
-        bool captureQmlContextPropertyLookup(uint index) const;
-        QMetaType lookupResultMetaType(uint index) const;
-        void storeNameSloppy(uint nameIndex, void* value, QMetaType type) const;
+        bool captureLookup(uint_ index, QObject object) const;
+        bool captureQmlContextPropertyLookup(uint_ index) const;
+        QMetaType lookupResultMetaType(uint_ index) const;
+        void storeNameSloppy(uint_ nameIndex, void* value, QMetaType type) const;
+        QJSValue javaScriptGlobalProperty(uint_ nameIndex) const;
 
         // All of these lookup functions should be used as follows:
         //
@@ -599,46 +607,49 @@ extern(C++, "QQmlPrivate")
         // the exception should be propagated. If not, the original lookup can be tried again.
 
         bool callQmlContextPropertyLookup(
-                        uint index, void** args, const(QMetaType)* types, int argc) const;
-        void initCallQmlContextPropertyLookup(uint index) const;
+                        uint_ index, void** args, const(QMetaType)* types, int argc) const;
+        void initCallQmlContextPropertyLookup(uint_ index) const;
 
-        bool loadContextIdLookup(uint index, void* target) const;
-        void initLoadContextIdLookup(uint index) const;
+        bool loadContextIdLookup(uint_ index, void* target) const;
+        void initLoadContextIdLookup(uint_ index) const;
 
-        bool callObjectPropertyLookup(uint index, QObject object,
+        bool callObjectPropertyLookup(uint_ index, QObject object,
                                               void** args, const(QMetaType)* types, int argc) const;
-        void initCallObjectPropertyLookup(uint index) const;
+        void initCallObjectPropertyLookup(uint_ index) const;
 
-        bool callGlobalLookup(uint index, void** args, const(QMetaType)* types, int argc) const;
-        void initCallGlobalLookup(uint index) const;
+        bool callGlobalLookup(uint_ index, void** args, const(QMetaType)* types, int argc) const;
+        void initCallGlobalLookup(uint_ index) const;
 
-        bool loadGlobalLookup(uint index, void* target, QMetaType type) const;
-        void initLoadGlobalLookup(uint index) const;
+        bool loadGlobalLookup(uint_ index, void* target, QMetaType type) const;
+        void initLoadGlobalLookup(uint_ index) const;
 
-        bool loadScopeObjectPropertyLookup(uint index, void* target) const;
-        void initLoadScopeObjectPropertyLookup(uint index, QMetaType type) const;
+        bool loadScopeObjectPropertyLookup(uint_ index, void* target) const;
+        void initLoadScopeObjectPropertyLookup(uint_ index, QMetaType type) const;
 
-        bool loadTypeLookup(uint index, void* target) const;
-        void initLoadTypeLookup(uint index) const;
+        bool loadSingletonLookup(uint_ index, void* target) const;
+        void initLoadSingletonLookup(uint_ index, uint_ importNamespace) const;
 
-        bool loadAttachedLookup(uint index, QObject object, void* target) const;
-        void initLoadAttachedLookup(uint index, QObject object) const;
+        bool loadAttachedLookup(uint_ index, QObject object, void* target) const;
+        void initLoadAttachedLookup(uint_ index, uint_ importNamespace, QObject object) const;
 
-        bool getObjectLookup(uint index, QObject object, void* target) const;
-        void initGetObjectLookup(uint index, QObject object, QMetaType type) const;
+        bool loadTypeLookup(uint_ index, void* target) const;
+        void initLoadTypeLookup(uint_ index, uint_ importNamespace) const;
 
-        bool getValueLookup(uint index, void* value, void* target) const;
-        void initGetValueLookup(uint index, const(QMetaObject)* metaObject, QMetaType type) const;
+        bool getObjectLookup(uint_ index, QObject object, void* target) const;
+        void initGetObjectLookup(uint_ index, QObject object, QMetaType type) const;
 
-        bool getEnumLookup(uint index, int* target) const;
-        void initGetEnumLookup(uint index, const(QMetaObject)* metaObject,
+        bool getValueLookup(uint_ index, void* value, void* target) const;
+        void initGetValueLookup(uint_ index, const(QMetaObject)* metaObject, QMetaType type) const;
+
+        bool getEnumLookup(uint_ index, int* target) const;
+        void initGetEnumLookup(uint_ index, const(QMetaObject)* metaObject,
                                        const(char)* enumerator, const(char)* enumValue) const;
 
-        bool setObjectLookup(uint index, QObject object, void* value) const;
-        void initSetObjectLookup(uint index, QObject object, QMetaType type) const;
+        bool setObjectLookup(uint_ index, QObject object, void* value) const;
+        void initSetObjectLookup(uint_ index, QObject object, QMetaType type) const;
 
-        bool setValueLookup(uint index, void* target, void* value) const;
-        void initSetValueLookup(uint index, const(QMetaObject)* metaObject, QMetaType type) const;
+        bool setValueLookup(uint_ index, void* target, void* value) const;
+        void initSetValueLookup(uint_ index, const(QMetaObject)* metaObject, QMetaType type) const;
     }
 
     struct AOTCompiledFunction {
@@ -676,12 +687,26 @@ extern(C++, "QQmlPrivate")
 
     int /+ Q_QML_EXPORT +/ qmlregister(RegistrationType, void* );
     void /+ Q_QML_EXPORT +/ qmlunregister(RegistrationType, quintptr);
+
+/+ #if QT_DEPRECATED_SINCE(6, 3) +/
 /+    struct /+ Q_QML_EXPORT +/ SingletonFunctor
+    {
+        /+/+ QT_DEPRECATED +/ QObject operator ()(QQmlEngine , QJSEngine );+/
+        QPointer!(ValueClass!(QObject)) m_object;
+        bool alreadyCalled = false;
+    }+/
+/+ #endif +/
+
+/+    struct /+ Q_QML_EXPORT +/ SingletonInstanceFunctor
     {
         /+QObject operator ()(QQmlEngine , QJSEngine );+/
 
         QPointer!(ValueClass!(QObject)) m_object;
-        bool alreadyCalled = false;
+
+        // Not a QPointer, so that you cannot assign it to a different
+        // engine when the first one is deleted.
+        // That would mess up the QML contexts.
+        QQmlEngine m_engine = null;
     }+/
 
     int indexOfOwnClassInfo(const(QMetaObject)* metaObject, const(char)* key, int startOffset = -1)
@@ -910,17 +935,19 @@ extern(C++, "QQmlPrivate")
 
     void qmlRegisterTypeAndRevisions(T, E)(const(char)* uri, int versionMajor,
                                          const(QMetaObject)* classInfoMetaObject,
-                                         QVector!(int)* qmlTypeIds, const(QMetaObject)* extension)
+                                         QVector!(int)* qmlTypeIds, const(QMetaObject)* extension,
+                                         bool forceAnonymous = false)
     {
         import qt.qml.parserstatus;
         import qt.qml.propertyvaluesource;
 
         RegisterTypeAndRevisions type = RegisterTypeAndRevisions(
-            0,
+            2,
             QmlMetaType!(T).self(),
             QmlMetaType!(T).list(),
             cast(int) (T.sizeof),
-            Constructors!(T).createInto, null,
+            Constructors!(T).createInto,
+            null,
             ValueType!(T, E).create,
 
             uri,
@@ -940,7 +967,10 @@ extern(C++, "QQmlPrivate")
             extension ? extension : ExtendedType!(E).staticMetaObject(),
 
             &qmlCreateCustomParser!(T),
-            qmlTypeIds)
+            qmlTypeIds,
+            StaticCastSelector!(T, QQmlFinalizerHook).cast_(),
+
+            forceAnonymous)
         ;
 
         // Initialize the extension so that we can find it by name or ID.
@@ -969,7 +999,7 @@ extern(C++, "QQmlPrivate")
     /+ template<>
     void Q_QML_EXPORT qmlRegisterTypeAndRevisions<QQmlTypeNotAvailable, void>(
             const char *uri, int versionMajor, const QMetaObject *classInfoMetaObject,
-            QVector<int> *qmlTypeIds, const QMetaObject *); +/
+            QVector<int> *qmlTypeIds, const QMetaObject *, bool); +/
 
    /+ /+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface metaTypeForNamespace(
                 ref const(/+ QtPrivate:: +/qt.core.metatype.QMetaTypeInterface.MetaObjectFn) metaObjectFunction, const(char)* name)

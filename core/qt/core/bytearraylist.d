@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.bytearray;
+import qt.core.global;
 import qt.core.list;
 import qt.helpers;
 
@@ -29,7 +30,11 @@ typedef QMutableListIterator<QByteArray> QMutableByteArrayListIterator;
 #ifndef Q_CLANG_QDOC +/
 
 extern(C++, "QtPrivate") {
+static if (defined!"QT_CORE_BUILD_REMOVED_API" && ((configValue!"__SIZEOF_POINTER__" != 4 && defined!"__SIZEOF_POINTER__") || (!defined!"__SIZEOF_POINTER__" && (configValue!"Q_PROCESSOR_WORDSIZE" != 4 || versionIsSet!("D_LP64") || versionIsSet!("D_LP64")))))
+{
     QByteArray /+ Q_CORE_EXPORT +/ QByteArrayList_join(const(QByteArrayList)* that, const(char)* separator, int separatorLength);
+}
+    QByteArray /+ Q_CORE_EXPORT +/ QByteArrayList_join(const(QByteArrayList)* that, const(char)* sep, qsizetype len);
 }
 /+ #endif
 
@@ -48,15 +53,15 @@ public:
     using QListSpecialMethodsBase<QByteArray>::lastIndexOf;
     using QListSpecialMethodsBase<QByteArray>::contains;
 
-    inline QByteArray join() const
-    { return QtPrivate::QByteArrayList_join(self(), nullptr, 0); }
-    inline QByteArray join(const QByteArray &sep) const
+    QByteArray join(QByteArrayView sep = {}) const
     {
-        Q_ASSERT(sep.size() <= (std::numeric_limits<int>::max)());
         return QtPrivate::QByteArrayList_join(self(), sep.data(), sep.size());
     }
+    Q_WEAK_OVERLOAD
+    inline QByteArray join(const QByteArray &sep) const
+    { return join(qToByteArrayViewIgnoringNull(sep)); }
     inline QByteArray join(char sep) const
-    { return QtPrivate::QByteArrayList_join(self(), &sep, 1); }
+    { return join({&sep, 1}); }
 }; +/
 
 

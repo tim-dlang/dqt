@@ -51,12 +51,12 @@ extern(D) alias Q_ASSERT_X = function string(string cond, string where, string w
 #endif +/
 
 /*
-   QT_VERSION is (major << 16) + (minor << 8) + patch.
+   QT_VERSION is (major << 16) | (minor << 8) | patch.
 */
 /+ #define QT_VERSION      QT_VERSION_CHECK(QT_VERSION_MAJOR, QT_VERSION_MINOR, QT_VERSION_PATCH) +/
 enum QT_VERSION =      QT_VERSION_CHECK!(QT_VERSION_MAJOR, QT_VERSION_MINOR, QT_VERSION_PATCH);
 /*
-   can be used like #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
+   can be used like #if (QT_VERSION >= QT_VERSION_CHECK(6, 4, 0))
 */
 /+ #define QT_VERSION_CHECK(major, minor, patch) ((major<<16)|(minor<<8)|(patch)) +/
 template QT_VERSION_CHECK(params...) if (params.length == 3)
@@ -72,6 +72,33 @@ template QT_VERSION_CHECK(params...) if (params.length == 3)
 #endif
 
 /*
+   The Qt modules' export macros.
+   The options are:
+    - defined(QT_STATIC): Qt was built or is being built in static mode
+    - defined(QT_SHARED): Qt was built or is being built in shared/dynamic mode
+   If neither was defined, then QT_SHARED is implied. If Qt was compiled in static
+   mode, QT_STATIC is defined in qconfig.h. In shared mode, QT_STATIC is implied
+   for the bootstrapped tools.
+*/
+
+#ifdef QT_BOOTSTRAPPED
+#  ifdef QT_SHARED
+#    error "QT_SHARED and QT_BOOTSTRAPPED together don't make sense. Please fix the build"
+#  elif !defined(QT_STATIC)
+#    define QT_STATIC
+#  endif
+#endif
+
+#if defined(QT_SHARED) || !defined(QT_STATIC)
+#  ifdef QT_STATIC
+#    error "Both QT_SHARED and QT_STATIC defined, please make up your mind"
+#  endif
+#  ifndef QT_SHARED
+#    define QT_SHARED
+#  endif
+#endif
+
+/*
     The QT_CONFIG macro implements a safe compile time check for features of Qt.
     Features can be in three states:
         0 or undefined: This will lead to a compile error when testing for it
@@ -80,6 +107,24 @@ template QT_VERSION_CHECK(params...) if (params.length == 3)
 */
 #define QT_CONFIG(feature) (1/QT_FEATURE_##feature == 1)
 #define QT_REQUIRE_CONFIG(feature) Q_STATIC_ASSERT_X(QT_FEATURE_##feature == 1, "Required feature " #feature " for file " __FILE__ " not available.")
+
+/*
+   helper macros to make some simple code work active in Qt 6 or Qt 7 only,
+   like:
+     struct QT6_ONLY(Q_CORE_EXPORT) QTrivialClass
+     {
+         void QT7_ONLY(Q_CORE_EXPORT) void operate();
+     }
+*/
+#if QT_VERSION_MAJOR == 7
+#  define QT7_ONLY(...)         __VA_ARGS__
+#  define QT6_ONLY(...)
+#elif QT_VERSION_MAJOR == 6
+#  define QT7_ONLY(...)
+#  define QT6_ONLY(...)         __VA_ARGS__
+#else
+#  error Qt major version not 6 or 7
+#endif
 
 /* These two macros makes it possible to turn the builtin line expander into a
  * string literal. */
@@ -95,6 +140,20 @@ template QT_VERSION_CHECK(params...) if (params.length == 3)
 #    error "Qt requires a C++17 compiler"
 #  endif
 #endif // __cplusplus
+
+#if defined(__cplusplus) && defined(Q_CC_MSVC) && !defined(Q_CC_CLANG)
+#  if Q_CC_MSVC < 1927
+     // Check below only works with 16.7 or newer
+#    error "Qt requires at least Visual Studio 2019 version 16.7 (VC++ version 14.27). Please upgrade."
+#  endif
+
+// On MSVC we require /permissive- set by user code. Check that we are
+// under its rules -- for instance, check that std::nullptr_t->bool is
+// not an implicit conversion, as per
+// https://docs.microsoft.com/en-us/cpp/overview/cpp-conformance-improvements?view=msvc-160#nullptr_t-is-only-convertible-to-bool-as-a-direct-initialization
+static_assert(!std::is_convertible_v<std::nullptr_t, bool>,
+              "On MSVC you must pass the /permissive- option to the compiler.");
+#endif
 
 #if defined (__ELF__)
 #  define Q_OF_ELF
@@ -204,10 +263,6 @@ namespace QT_NAMESPACE {}
 # define QT_END_INCLUDE_NAMESPACE
 
 #endif /* __cplusplus */
-
-#if defined(Q_OS_DARWIN) && !defined(QT_LARGEFILE_SUPPORT)
-#  define QT_LARGEFILE_SUPPORT 64
-#endif
 
 #ifndef __ASSEMBLER__ +/
 
@@ -442,40 +497,6 @@ enum /+ class +/ Deprecated_t {init}
 extern(D) immutable Deprecated_t Deprecated = Deprecated_t();
 }
 /+ #endif
-
-/*
-   The Qt modules' export macros.
-   The options are:
-    - defined(QT_STATIC): Qt was built or is being built in static mode
-    - defined(QT_SHARED): Qt was built or is being built in shared/dynamic mode
-   If neither was defined, then QT_SHARED is implied. If Qt was compiled in static
-   mode, QT_STATIC is defined in qconfig.h. In shared mode, QT_STATIC is implied
-   for the bootstrapped tools.
-*/
-
-#ifdef QT_BOOTSTRAPPED
-#  ifdef QT_SHARED
-#    error "QT_SHARED and QT_BOOTSTRAPPED together don't make sense. Please fix the build"
-#  elif !defined(QT_STATIC)
-#    define QT_STATIC
-#  endif
-#endif
-
-#if defined(QT_SHARED) || !defined(QT_STATIC)
-#  ifdef QT_STATIC
-#    error "Both QT_SHARED and QT_STATIC defined, please make up your mind"
-#  endif
-#  ifndef QT_SHARED
-#    define QT_SHARED
-#  endif
-#  if defined(QT_BUILD_CORE_LIB)
-#    define Q_CORE_EXPORT Q_DECL_EXPORT
-#  else
-#    define Q_CORE_EXPORT Q_DECL_IMPORT
-#  endif
-#else
-#  define Q_CORE_EXPORT
-#endif
 
 /*
    Some classes do not permit copies to be made of an object. These
@@ -766,50 +787,6 @@ pragma(inline, true) qint64 qRound64(float d)
 { return d >= 0.0f ? cast(qint64) (d + 0.5f) : cast(qint64) (d - 0.5f); }
 }
 
-extern(C++, "QTypeTraits") {
-
-extern(C++, "detail") {
-struct Promoted(T, U,
-         
-)
-{
-    alias type = /+ decltype(T() + U()) +/T;
-}
-}
-
-alias Promoted(T, U) = /+ detail:: +/Promoted!(T, U).type;
-
-}
-
-pragma(inline, true) ref const(T) qMin(T)(ref const(T) a, ref const(T) b) { return (a < b) ? a : b; }
-pragma(inline, true) const(T)  qMin(T)(const(T) a, const(T) b) { return (a < b) ? a : b; }
-pragma(inline, true) ref const(T) qMax(T)(ref const(T) a, ref const(T) b) { return (a < b) ? b : a; }
-pragma(inline, true) const(T)  qMax(T)(const(T) a, const(T) b) { return (a < b) ? b : a; }
-pragma(inline, true) ref const(T) qBound(T)(ref const(T) min, ref const(T) val, ref const(T) max)
-{ return qMax(min, qMin(max, val)); }
-pragma(inline, true) const(T) qBound(T)(const(T) min, const(T) val, const(T) max)
-{ return qMax(min, qMin(max, val)); }
-/+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qMin(T, U)(ref const(T) a, ref const(U) b)
-{
-    alias P = /+ QTypeTraits:: +/Promoted!(T, U);
-    P _a = a;
-    P _b = b;
-    return (_a < _b) ? _a : _b;
-}
-pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qMax(T, U)(ref const(T) a, ref const(U) b)
-{
-    alias P = /+ QTypeTraits:: +/Promoted!(T, U);
-    P _a = a;
-    P _b = b;
-    return (_a < _b) ? _b : _a;
-}
-pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(T) min, ref const(U) val, ref const(T) max)
-{ return qMax(min, qMin(max, val)); }
-pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(T) min, ref const(T) val, ref const(U) max)
-{ return qMax(min, qMin(max, val)); }
-pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(U) min, ref const(T) val, ref const(T) max)
-{ return qMax(min, qMin(max, val)); }+/
-
 /+ #ifndef Q_FORWARD_DECLARE_OBJC_CLASS
 #  ifdef __OBJC__
 #    define Q_FORWARD_DECLARE_OBJC_CLASS(classname) @class classname
@@ -945,18 +922,17 @@ pragma(inline, true) void qt_noop() {}
 #  define QT_THROW(A) qt_noop()
 #  define QT_RETHROW qt_noop()
 #  define QT_TERMINATE_ON_EXCEPTION(expr) do { expr; } while (false)
-#else +/
-/+ #  define QT_TRY try
+#else
+#  define QT_TRY try
 #  define QT_CATCH(A) catch (A)
-#  define QT_THROW(A) throw A +/
-/+ #  define QT_RETHROW throw +/
-enum QT_RETHROW = q{throw};
-/+ #  ifdef Q_COMPILER_NOEXCEPT
+#  define QT_THROW(A) throw A
+#  define QT_RETHROW throw
+#  ifdef Q_COMPILER_NOEXCEPT
 #    define QT_TERMINATE_ON_EXCEPTION(expr) do { expr; } while (false)
 #  else
 #    define QT_TERMINATE_ON_EXCEPTION(expr) do { try { expr; } catch (...) { qTerminate(); } } while (false)
-#  endif +/
-/+ #endif +/
+#  endif
+#endif +/
 
 /+ Q_CORE_EXPORT +/ /+ Q_DECL_CONST_FUNCTION +/ bool qSharedBuild()/+ noexcept+/;
 
@@ -990,7 +966,7 @@ enum QT_RETHROW = q{throw};
 */
 #ifndef qUtf16Printable
 #  define qUtf16Printable(string) \
-    static_cast<const wchar_t*>(static_cast<const void*>(QString(string).utf16()))
+    static_cast<const wchar_t*>(static_cast<const void*>(QtPrivate::asString(string).utf16()))
 #endif +/
 
 /+ Q_DECL_COLD_FUNCTION +/
@@ -1044,11 +1020,75 @@ extern(D) alias Q_CHECK_PTR = function string(string p)
 
 pragma(inline, true) T* q_check_ptr(T)(T* p) { mixin(Q_CHECK_PTR(q{p})); return p; }
 
+/+ #if 0
+#pragma qt_class(QFunctionPointer)
+#endif +/
 alias QFunctionPointer = ExternCPPFunc!(void function());
 
 /+ #if !defined(Q_UNIMPLEMENTED)
 #  define Q_UNIMPLEMENTED() qWarning("Unimplemented code.")
 #endif +/
+
+extern(C++, "QTypeTraits") {
+
+extern(C++, "detail") {
+struct Promoted(T, U,
+         
+)
+{
+    alias type = /+ decltype(T() + U()) +/T;
+}
+}
+
+alias Promoted(T, U) = /+ detail:: +/Promoted!(T, U).type;
+
+}
+
+pragma(inline, true) ref const(T) qMin(T)(ref const(T) a, ref const(T) b) { return (a < b) ? a : b; }
+pragma(inline, true) const(T)  qMin(T)(const(T) a, const(T) b) { return (a < b) ? a : b; }
+pragma(inline, true) ref const(T) qMax(T)(ref const(T) a, ref const(T) b) { return (a < b) ? b : a; }
+pragma(inline, true) const(T)  qMax(T)(const(T) a, const(T) b) { return (a < b) ? b : a; }
+pragma(inline, true) ref const(T) qBound(T)(ref const(T) min, ref const(T) val, ref const(T) max)
+{
+    (mixin(Q_ASSERT(q{!(max < min)})));
+    return qMax(min, qMin(max, val));
+}
+pragma(inline, true) const(T) qBound(T)(const(T) min, const(T) val, const(T) max)
+{
+    (mixin(Q_ASSERT(q{!(max < min)})));
+    return qMax(min, qMin(max, val));
+}
+/+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qMin(T, U)(ref const(T) a, ref const(U) b)
+{
+    alias P = /+ QTypeTraits:: +/Promoted!(T, U);
+    P _a = a;
+    P _b = b;
+    return (_a < _b) ? _a : _b;
+}
+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qMax(T, U)(ref const(T) a, ref const(U) b)
+{
+    alias P = /+ QTypeTraits:: +/Promoted!(T, U);
+    P _a = a;
+    P _b = b;
+    return (_a < _b) ? _b : _a;
+}
+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(T) min, ref const(U) val, ref const(T) max)
+{
+    (mixin(Q_ASSERT(q{!(max < min)})));
+    return qMax(min, qMin(max, val));
+}
+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(T) min, ref const(T) val, ref const(U) max)
+{
+    alias P = /+ QTypeTraits:: +/Promoted!(T, U);
+    (mixin(Q_ASSERT(q{!(P(max) < P(min))})));
+    return qMax(min, qMin(max, val));
+}
+pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(U) min, ref const(T) val, ref const(T) max)
+{
+    alias P = /+ QTypeTraits:: +/Promoted!(T, U);
+    (mixin(Q_ASSERT(q{!(P(max) < P(min))})));
+    return qMax(min, qMin(max, val));
+}+/
 
 /+ [[nodiscard]] +/ bool qFuzzyCompare(double p1, double p2)
 {
@@ -1128,7 +1168,16 @@ void qSwap(T)(ref T value1, ref T value2)
     swap(value1, value2);
 }
 
-/+ QT_WARNING_POP +/
+// pure compile-time micro-optimization for our own headers, so not documented:
+/+ template <typename T>
+constexpr inline void qt_ptr_swap(T* &lhs, T* &rhs) noexcept
+{
+    T *tmp = lhs;
+    lhs = rhs;
+    rhs = tmp;
+}
+
+QT_WARNING_POP +/
 
 /+ Q_CORE_EXPORT +/ void* qMallocAligned(size_t size, size_t alignment) /+ Q_ALLOC_SIZE(1) +/;
 /+ Q_CORE_EXPORT +/ void* qReallocAligned(void* ptr, size_t size, size_t oldsize, size_t alignment) /+ Q_ALLOC_SIZE(2) +/;
@@ -1175,6 +1224,7 @@ void qAsConst(const T &&) = delete;
 // like std::exchange
 template <typename T, typename U = T>
 constexpr T qExchange(T &t, U &&newValue)
+noexcept(std::conjunction_v<std::is_nothrow_move_constructible<T>, std::is_nothrow_assignable<T &, U>>)
 {
     T old = std::move(t);
     t = std::forward<U>(newValue);
@@ -1324,7 +1374,8 @@ version (QT_NO_TRANSLATION) {} else
 // return a much more powerful QStringFormatter instead of a QString.
 /+ Q_CORE_EXPORT +/ QString qtTrId(const(char)* id, int n = -1);
 
-/+ #define QT_TRID_NOOP(id) id +/
+/+ #define QT_TRID_NOOP(id) id
+#define QT_TRID_N_NOOP(id) id +/
 
 }
 

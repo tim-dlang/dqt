@@ -99,14 +99,30 @@ extern(C++, "QtPrivate") {
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QStringView haystack, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
 
 /+ #if QT_CONFIG(regularexpression) +/
+// ### Qt 7: unify these overloads;
+// remove the ones taking only a QStringView, export the others, adjust callers
+/+ [[nodiscard]] +/ /*qsizetype indexOf(QStringView viewHaystack,
+                                const(QString)* stringHaystack,
+                                ref const(QRegularExpression) re,
+                                qsizetype from = 0,
+                                QRegularExpressionMatch* rmatch = null);*/
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ qsizetype indexOf(QStringView haystack,
                                               ref const(QRegularExpression) re,
                                               qsizetype from = 0,
                                               QRegularExpressionMatch* rmatch = null);
+/+ [[nodiscard]] +/ qsizetype lastIndexOf(QStringView viewHaystack,
+                                    const(QString)* stringHaystack,
+                                    ref const(QRegularExpression) re,
+                                    qsizetype from = -1,
+                                    QRegularExpressionMatch* rmatch = null);
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ qsizetype lastIndexOf(QStringView haystack,
                                                   ref const(QRegularExpression) re,
                                                   qsizetype from = -1,
                                                   QRegularExpressionMatch* rmatch = null);
+/+ [[nodiscard]] +/ /*bool contains(QStringView viewHaystack,
+                            const(QString)* stringHaystack,
+                            ref const(QRegularExpression) re,
+                            QRegularExpressionMatch* rmatch = null);*/
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ bool contains(QStringView haystack,
                                           ref const(QRegularExpression) re,
                                           QRegularExpressionMatch* rmatch = null);

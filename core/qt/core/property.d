@@ -28,8 +28,9 @@ import qt.helpers;
 #define QT_PROPERTY_COLLECT_BINDING_LOCATION
 #define QT_PROPERTY_DEFAULT_BINDING_LOCATION QPropertyBindingSourceLocation(std::source_location::current())
 #endif
-#endif +/
+#endif
 
+#if __has_include(<experimental/source_location>) && !defined(Q_CLANG_QDOC) +/
 static if (!defined!"QT_PROPERTY_COLLECT_BINDING_LOCATION")
 {
 /+ #if defined(__cpp_lib_experimental_source_location) +/
@@ -37,10 +38,11 @@ static if (!defined!"QT_PROPERTY_COLLECT_BINDING_LOCATION")
 #define QT_PROPERTY_COLLECT_BINDING_LOCATION +/
 /+ #define QT_PROPERTY_DEFAULT_BINDING_LOCATION QPropertyBindingSourceLocation(std::experimental::source_location::current()) +/
 enum QT_PROPERTY_DEFAULT_BINDING_LOCATION = q{dqtimported!q{qt.core.property}.QPropertyBindingSourceLocation(/+ std::experimental:: +/source_location.current())};
-/+ #endif +/
+/+ #endif +/ // defined(__cpp_lib_experimental_source_location)
 }
+/+ #endif
 
-/+ #if !defined(QT_PROPERTY_COLLECT_BINDING_LOCATION)
+#if !defined(QT_PROPERTY_COLLECT_BINDING_LOCATION)
 #define QT_PROPERTY_DEFAULT_BINDING_LOCATION QPropertyBindingSourceLocation()
 #endif +/
 
@@ -84,6 +86,7 @@ public:
     void setValueBypassingBindings(rvalue_ref v) { val = /+ std:: +/move(v); }*/
 }
 
+// ### Qt 7: un-export
 struct /+ Q_CORE_EXPORT +/ QPropertyBindingSourceLocation
 {
     const(char)* fileName = null;
@@ -91,8 +94,20 @@ struct /+ Q_CORE_EXPORT +/ QPropertyBindingSourceLocation
     quint32 line = 0;
     quint32 column = 0;
     /+ QPropertyBindingSourceLocation() = default; +/
-/+ #ifdef QT_PROPERTY_COLLECT_BINDING_LOCATION +/
-    /+ QPropertyBindingSourceLocation(const QT_SOURCE_LOCATION_NAMESPACE::source_location &cppLocation)
+/+ #ifdef __cpp_lib_source_location +/
+    static if (defined!"__cpp_lib_source_location")
+    {
+        this(ref UnknownType!q{/+ std:: +/source_location} cppLocation)
+        {
+            fileName = cppLocation.file_name();
+            functionName = cppLocation.function_name();
+            line = cppLocation.line();
+            column = cppLocation.column();
+        }
+    }
+/+ #endif
+#ifdef __cpp_lib_experimental_source_location +/
+    /+ constexpr QPropertyBindingSourceLocation(const std::experimental::source_location &cppLocation)
     {
         fileName = cppLocation.file_name();
         functionName = cppLocation.function_name();
@@ -220,7 +235,6 @@ public:
 } +/
 
 struct QPropertyObserverPrivate;
-struct QPropertyObserverPointer;
 
 extern(C++, class) struct QPropertyObserverBase
 {

@@ -120,7 +120,7 @@ public:
     }
     override void setTimestamp(quint64 timestamp);
     final qsizetype pointCount() const { return m_points.count(); }
-//    final ref QEventPoint point(qsizetype i) { return m_points[i]; }
+//    final ref QEventPoint point(qsizetype i);
     final ref const(QList!(QEventPoint)) points() const { return m_points; }
     final QEventPoint* pointById(int id);
     final bool allPointsGrabbed() const;
@@ -371,8 +371,8 @@ public:
         final QPointF windowPos() const { return scenePosition(); }
     /+ QT_DEPRECATED_VERSION_X_6_0("Use globalPosition()") +/
         final QPointF screenPos() const { return globalPosition(); }
-    final /+ Qt:: +/qt.core.namespace.MouseEventSource source() const;
 /+ #endif +/ // QT_DEPRECATED_SINCE(6, 0)
+    final /+ Qt:: +/qt.core.namespace.MouseEventSource source() const;
     final /+ Qt:: +/qt.core.namespace.MouseEventFlags flags() const;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
@@ -388,10 +388,17 @@ class /+ Q_GUI_EXPORT +/ QHoverEvent : QSinglePointEvent
     }
 public:
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    this(Type type, ref const(QPointF) pos, ref const(QPointF) oldPos,
+    this(Type type, ref const(QPointF) pos, ref const(QPointF) globalPos, ref const(QPointF) oldPos,
                     /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers = /+ Qt:: +/qt.core.namespace.KeyboardModifier.NoModifier,
                     const(QPointingDevice) device = QPointingDevice.primaryPointingDevice());
     }));
+/+ #if QT_DEPRECATED_SINCE(6, 3) +/
+    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+    /+ QT_DEPRECATED_VERSION_X_6_3("Use the other constructor") +/this(Type type, ref const(QPointF) pos, ref const(QPointF) oldPos,
+                    /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers = /+ Qt:: +/qt.core.namespace.KeyboardModifier.NoModifier,
+                    const(QPointingDevice) device = QPointingDevice.primaryPointingDevice());
+    }));
+/+ #endif +/
     ~this();
 
     override QHoverEvent clone() const {
@@ -815,6 +822,7 @@ public:
 
 protected:
     QRegion m_region;
+    /+ friend class QWidgetWindow; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

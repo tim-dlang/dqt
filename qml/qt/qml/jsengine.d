@@ -85,6 +85,33 @@ public:
         return qjsvalue_cast!(T)(value);
     }
 
+    /+ template <typename T> +/
+    pragma(inline, true) final T fromVariant(T)(ref const(QVariant) value)
+    {
+        static if (/+ std:: +/is_same_v!(T, QVariant))
+            return value;
+
+        const(QMetaType) targetType = QMetaType.fromType!(T)();
+        if (value.metaType() == targetType)
+            return *reinterpret_cast!(const(T)*)(value.constData());
+
+        static if (/+ std:: +/is_same_v!(T,const(/+ std:: +/remove_const_t!(/+ std:: +/remove_pointer_t!(T)))*)) {
+            alias nonConstT = /+ std:: +/remove_const_t!(/+ std:: +/remove_pointer_t!(T))*;
+            const(QMetaType) nonConstTargetType = QMetaType.fromType!(nonConstT)();
+            if (value.metaType() == nonConstTargetType)
+                return *reinterpret_cast!(const(nonConstT)*)(value.constData());
+        }
+
+        {
+            T t;
+            if (convertVariant(value, QMetaType.fromType!(T)(), &t))
+                return t;
+
+            QMetaType.convert(value.metaType(), value.constData(), targetType, &t);
+            return t;
+        }
+    }
+
     final void collectGarbage();
 
     enum ObjectOwnership { CppOwnership, JavaScriptOwnership }
@@ -129,6 +156,7 @@ private:
     static bool convertManaged(ref const(QJSManagedValue) value, QMetaType type, void* ptr);
     static bool convertV2(ref const(QJSValue) value, int type, void* ptr);
     static bool convertV2(ref const(QJSValue) value, QMetaType metaType, void* ptr);
+    final bool convertVariant(ref const(QVariant) value, QMetaType metaType, void* ptr);
 
     /+ template<typename T> +/
     /+ friend inline T qjsvalue_cast(const QJSValue &); +/
@@ -149,17 +177,27 @@ private:
 /+pragma(inline, true) QFlags!(QJSEngine.Extensions.enum_type) operator |(QJSEngine.Extensions.enum_type f1, QFlags!(QJSEngine.Extensions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QJSEngine.Extensions.enum_type) operator &(QJSEngine.Extensions.enum_type f1, QJSEngine.Extensions.enum_type f2)/+noexcept+/{return QFlags!(QJSEngine.Extensions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QJSEngine.Extensions.enum_type) operator &(QJSEngine.Extensions.enum_type f1, QFlags!(QJSEngine.Extensions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QJSEngine.Extensions.enum_type) operator ^(QJSEngine.Extensions.enum_type f1, QJSEngine.Extensions.enum_type f2)/+noexcept+/{return QFlags!(QJSEngine.Extensions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QJSEngine.Extensions.enum_type) operator ^(QJSEngine.Extensions.enum_type f1, QFlags!(QJSEngine.Extensions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QJSEngine.Extensions.enum_type f1, QJSEngine.Extensions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QJSEngine.Extensions.enum_type f1, QFlags!(QJSEngine.Extensions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QJSEngine.Extensions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QJSEngine.Extensions.enum_type f1, QJSEngine.Extensions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QJSEngine.Extensions.enum_type f1, QFlags!(QJSEngine.Extensions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QJSEngine.Extensions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QJSEngine.Extensions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QJSEngine.Extensions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QJSEngine.Extensions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QJSEngine.Extensions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QJSEngine.Extensions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QJSEngine.Extensions operator ~(QJSEngine.Extensions.enum_type e)/+noexcept+/{return~QJSEngine.Extensions(e);}+/
+/+pragma(inline, true) void operator |(QJSEngine.Extensions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QJSEngine.Extensions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QJSEngine::Extensions) +/
 T qjsvalue_cast(T)(ref const(QJSValue) value)

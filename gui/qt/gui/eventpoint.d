@@ -28,6 +28,8 @@ import qt.helpers;
 
 extern(C++, class) struct QEventPointPrivate;
 /+ QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QEventPointPrivate, Q_GUI_EXPORT) +/
+extern(C++, class) struct QMutableEventPoint;
+
 /// Binding for C++ class [QEventPoint](https://doc.qt.io/qt-6/qeventpoint.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QEventPoint
 {
@@ -83,7 +85,7 @@ alias States = QFlags!(State);    /+ Q_FLAG(States) +/
     /+bool operator !=(ref const(QEventPoint) other) const/+ noexcept+/ { return !operator==(other); }+/
     ~this();
     /+ inline void swap(QEventPoint &other) noexcept
-    { qSwap(d, other.d); } +/
+    { d.swap(other.d); } +/
 
     QPointF position() const;
     QPointF pressPosition() const;

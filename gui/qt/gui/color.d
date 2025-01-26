@@ -37,6 +37,8 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QColor &);
 @SimulateImplicitConstructor @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_GUI_EXPORT +/ QColor
 {
 public:
+    // ### Qt7: make this "enum Spec: quint8 {...}" and reorder the members below for tighter
+    //          struct packing. QColor could fit into the inline storage of a QVariant on 32bit.
     enum Spec { Invalid, Rgb, Hsv, Cmyk, Hsl, ExtendedRgb }
     enum NameFormat { HexRgb, HexArgb }
 
@@ -57,11 +59,8 @@ public:
     }
     this(QRgb rgb)/+ noexcept+/;
     this(QRgba64 rgba64)/+ noexcept+/;
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        pragma(inline, true) this(ref const(QString) aname)
-        { setNamedColor(aname); }
-    }
+    pragma(inline, true) this(ref const(QString) aname)
+    { setNamedColor(aname); }
     /+ explicit +/ pragma(inline, true) this(QStringView aname)
     { setNamedColor(aname); }
     pragma(inline, true) this(const(char)* aname)
@@ -79,10 +78,7 @@ public:
 
     QString name(NameFormat format = NameFormat.HexRgb) const;
 
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        void setNamedColor(ref const(QString) name);
-    }
+    void setNamedColor(ref const(QString) name);
     void setNamedColor(QStringView name);
     void setNamedColor(QLatin1String name);
 
@@ -212,10 +208,7 @@ public:
 
     /+auto opCast(T : QVariant)() const;+/
 
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        static bool isValidColor(ref const(QString) name);
-    }
+    static bool isValidColor(ref const(QString) name);
     static bool isValidColor(QStringView)/+ noexcept+/;
     static bool isValidColor(QLatin1String)/+ noexcept+/;
 
@@ -299,10 +292,7 @@ public: // can't give friendship to a namespace, so it needs to be public
 #endif +/ // Q_COMPILER_UNIFORM_INIT
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QColor, Q_RELOCATABLE_TYPE);
-
-#if QT_STRINGVIEW_LEVEL < 2
-#endif +/
+/+ Q_DECLARE_TYPEINFO(QColor, Q_RELOCATABLE_TYPE); +/
 
 extern(D)
 //extern(C++, "QColorConstants")

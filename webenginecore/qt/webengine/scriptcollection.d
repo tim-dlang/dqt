@@ -44,6 +44,7 @@ private:
     /+ friend class QWebEngineProfilePrivate; +/
     /+ friend class QQuickWebEngineProfilePrivate; +/
     /+ friend class QQuickWebEngineViewPrivate; +/
+    /+ friend class QQuickWebEngineScriptCollectionPrivate; +/
     this(QWebEngineScriptCollectionPrivate* );
 
     QScopedPointer!(QWebEngineScriptCollectionPrivate) d;

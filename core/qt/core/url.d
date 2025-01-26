@@ -187,7 +187,7 @@ public:
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QUrl) +/
     ~this();
 
-    /+ inline void swap(QUrl &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QUrl &other) noexcept { qt_ptr_swap(d, other.d); } +/
 
     void setUrl(ref const(QString) url, ParsingMode mode = ParsingMode.TolerantMode);
     QString url(FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded)) const;
@@ -277,8 +277,20 @@ alias UserInputResolutionOptions = QFlags!(UserInputResolutionOption);
         /+ NSURL *toNSURL() const Q_DECL_NS_RETURNS_AUTORELEASED; +/
     }
 
-    static QString fromAce(ref const(QByteArray) );
-    static QByteArray toAce(ref const(QString) );
+    enum AceProcessingOption : uint {
+        IgnoreIDNWhitelist = 0x1,
+        AceTransitionalProcessing = 0x2,
+    }
+    /+ Q_DECLARE_FLAGS(AceProcessingOptions, AceProcessingOption) +/
+alias AceProcessingOptions = QFlags!(AceProcessingOption);
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        static QString fromAce(ref const(QByteArray) );
+        static QByteArray toAce(ref const(QString) );
+    }
+    static QString fromAce(ref const(QByteArray) domain, AceProcessingOptions options/* = {}*/);
+    static QByteArray toAce(ref const(QString) domain, AceProcessingOptions options/* = {}*/);
+
     static QStringList idnWhitelist();
     //static QStringList toStringList(ref const(QList!(QUrl)) uris, FormattingOptions options = FormattingOptions(ComponentFormattingOption.PrettyDecoded));
     //static QList!(QUrl) fromStringList(ref const(QStringList) uris, ParsingMode mode = ParsingMode.TolerantMode);
@@ -303,21 +315,57 @@ static assert(!__traits(isPOD, QUrl));
 /+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator &(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator &(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator ^(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator ^(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QUrl.ComponentFormattingOptions operator ~(QUrl.ComponentFormattingOptions.enum_type e)/+noexcept+/{return~QUrl.ComponentFormattingOptions(e);}+/
+/+pragma(inline, true) void operator |(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_SHARED(QUrl)
-Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::ComponentFormattingOptions)//Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::FormattingOptions)
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::ComponentFormattingOptions) +/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator |(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.AceProcessingOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator |(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator &(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.AceProcessingOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator &(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator ^(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.AceProcessingOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator ^(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QUrl.AceProcessingOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QUrl.AceProcessingOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QUrl.AceProcessingOptions operator ~(QUrl.AceProcessingOptions.enum_type e)/+noexcept+/{return~QUrl.AceProcessingOptions(e);}+/
+/+pragma(inline, true) void operator |(QUrl.AceProcessingOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QUrl.AceProcessingOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
+//Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::FormattingOptions)
+/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::AceProcessingOptions)
 #ifndef Q_QDOC +/
 /+pragma(inline, true) QUrl.FormattingOptions operator |(QUrl.UrlFormattingOption f1, QUrl.UrlFormattingOption f2)
 { return QUrl.FormattingOptions(f1) | f2; }+/

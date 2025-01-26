@@ -33,8 +33,11 @@ import qt.helpers;
 
 
 
-/+ template<typename Class, typename T, auto Offset, auto Setter, auto Signal>
+/+ template<typename Class, typename T, auto Offset, auto Setter, auto Signal, auto Getter>
 class QObjectCompatProperty; +/
+
+struct QBindingObserverPtr;
+//alias PendingBindingObserverList = QVarLengthArray!(QBindingObserverPtr);
 
 extern(C++, "QtPrivate") {
 // QPropertyBindingPrivatePtr operates on a RefCountingMixin solely so that we can inline
@@ -103,7 +106,7 @@ public:
     /+bool operator !() const/+ noexcept+/ { return d is null; }+/
 
     /+ void swap(QPropertyBindingPrivatePtr &other) noexcept
-    { qSwap(d, other.d); } +/
+    { qt_ptr_swap(d, other.d); } +/
 
     /+ friend bool operator==(const QPropertyBindingPrivatePtr &p1, const QPropertyBindingPrivatePtr &p2) noexcept
     { return p1.d == p2.d; } +/
@@ -132,6 +135,7 @@ private:
 }
 
 struct QPropertyBindingDataPointer;
+struct QPropertyObserverPointer;
 
 extern(C++, class) struct QUntypedPropertyData
 {
@@ -159,6 +163,12 @@ struct QPropertyProxyBindingData
 
 extern(C++, "QtPrivate") {
 
+/*  used in BindingFunctionVTable::createFor; on all other compilers, void would work, but on
+    MSVC this causes C2182 when compiling in C++20 mode. As we only need to provide some default
+    value which gets ignored, we introduce this dummy type.
+*/
+struct MSVCWorkAround {}
+
 struct BindingFunctionVTable
 {
     alias CallFn = ExternCPPFunc!(bool function(QMetaType, QUntypedPropertyData* , void* ));
@@ -169,7 +179,7 @@ struct BindingFunctionVTable
     const(MoveCtrFn) moveConstruct;
     const(qsizetype) size;
 
-    /+ template<typename Callable, typename PropertyType=void> +/
+    /+ template<typename Callable, typename PropertyType=MSVCWorkAround> +/
     /+ static constexpr BindingFunctionVTable createFor()
     {
         static_assert (alignof(Callable) <= alignof(std::max_align_t), "Bindings do not support overaligned functors!");
@@ -180,7 +190,7 @@ struct BindingFunctionVTable
                     static_assert (std::is_invocable_r_v<bool, Callable, QMetaType, QUntypedPropertyData *> );
                     auto untypedEvaluationFunction = static_cast<Callable *>(f);
                     return std::invoke(*untypedEvaluationFunction, metaType, dataPtr);
-                } else if constexpr (!std::is_same_v<PropertyType, void>) { // check for void to workaround MSVC issue
+                } else if constexpr (!std::is_same_v<PropertyType, MSVCWorkAround>) {
                     Q_UNUSED(metaType);
                     QPropertyData<PropertyType> *propertyPtr = static_cast<QPropertyData<PropertyType> *>(dataPtr);
                     // That is allowed by POSIX even if Callable is a function pointer
@@ -207,7 +217,7 @@ struct BindingFunctionVTable
     } +/
 }
 
-/+ template<typename Callable, typename PropertyType=void>
+/+ template<typename Callable, typename PropertyType=MSVCWorkAround>
 inline constexpr BindingFunctionVTable bindingFunctionVTable = BindingFunctionVTable::createFor<Callable, PropertyType>(); +/
 
 
@@ -240,7 +250,7 @@ private:
     /+ friend class QT_PREPEND_NAMESPACE(QQmlPropertyBinding); +/
     /+ friend struct QT_PREPEND_NAMESPACE(QPropertyDelayedNotifications); +/
 
-    /+ template<typename Class, typename T, auto Offset, auto Setter, auto Signal> +/
+    /+ template<typename Class, typename T, auto Offset, auto Setter, auto Signal, auto Getter> +/
     /+ friend class QT_PREPEND_NAMESPACE(QObjectCompatProperty); +/
 
     /+ Q_DISABLE_COPY(QPropertyBindingData) +/
@@ -312,6 +322,12 @@ private:
     quintptr d() /*const*/ { return d_ref(); }
     void registerWithCurrentlyEvaluatingBinding_helper(qt.core.bindingstorage.BindingEvaluationState* currentBinding) const;
     void removeBinding_helper();
+
+    enum NotificationResult { Delayed, Evaluated }
+    /*NotificationResult notifyObserver_helper(
+                QUntypedPropertyData* propertyDataPtr, QBindingStorage* storage,
+                QPropertyObserverPointer observer,
+                ref PendingBindingObserverList bindingObservers) const;*/
 }
 
 extern(C++, class) struct QTagPreservingPointerToPointer(T, Tag)

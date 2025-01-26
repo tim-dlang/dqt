@@ -66,7 +66,7 @@ public:
     /+ref QBrush operator =(ref const(QBrush) brush);+/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QBrush) +/
     /+ inline void swap(QBrush &other) noexcept
-    { qSwap(d, other.d); } +/
+    { d.swap(other.d); } +/
 
     /+auto opCast(T : QVariant)() const;+/
 

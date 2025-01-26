@@ -120,7 +120,7 @@ public:
 
     /+ void swap(QTaggedPointer &other) noexcept
     {
-        qSwap(d, other.d);
+        std::swap(d, other.d);
     } +/
 
     /+ friend inline bool operator==(QTaggedPointer lhs, QTaggedPointer rhs) noexcept

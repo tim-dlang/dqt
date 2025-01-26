@@ -70,8 +70,8 @@ private:
         {
             import core.stdcpp.new_;
 
-            if (dataFitsInline(seg.begin(), seg.size()))
-                setInlineData(seg.begin(), seg.size());
+            if (dataFitsInline(seg.data(), seg.size()))
+                setInlineData(seg.data(), seg.size());
             else
                 pointer_segments = cpp_new!(QList!(int))(seg);
         }+/
@@ -113,20 +113,20 @@ private:
 
         /+ void swap(SegmentStorage &other) noexcept
         {
-            qSwap(dummy, other.dummy);
+            std::swap(dummy, other.dummy);
         } +/
 
         /+ explicit SegmentStorage(QList<int> &&seg)
         {
-            if (dataFitsInline(seg.begin(), seg.size()))
-                setInlineData(seg.begin(), seg.size());
+            if (dataFitsInline(std::as_const(seg).data(), seg.size()))
+                setInlineData(std::as_const(seg).data(), seg.size());
             else
                 pointer_segments = new QList<int>(std::move(seg));
         } +/
         /+ SegmentStorage(std::initializer_list<int> args)
         {
-            if (dataFitsInline(args.begin(), int(args.size()))) {
-                setInlineData(args.begin(), int(args.size()));
+            if (dataFitsInline(std::data(args), int(args.size()))) {
+                setInlineData(std::data(args), int(args.size()));
             } else {
                 pointer_segments = new QList<int>(args);
             }
@@ -263,15 +263,15 @@ public:
 
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static int compare(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2)/+ noexcept+/;
 
-    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ static QVersionNumber commonPrefix(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2);
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber commonPrefix(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2);
 
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ QString toString() const;
     static if (QT_STRINGVIEW_LEVEL < 2)
     {
-        /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ static QVersionNumber fromString(ref const(QString) string, int* suffixIndex = null);
+        /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(ref const(QString) string, int* suffixIndex = null);
     }
-    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ static QVersionNumber fromString(QLatin1String string, int* suffixIndex = null);
-    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ static QVersionNumber fromString(QStringView string, int* suffixIndex = null);
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(QLatin1String string, int* suffixIndex = null);
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(QStringView string, int* suffixIndex = null);
 
     /+ [[nodiscard]] friend bool operator> (const QVersionNumber &lhs, const QVersionNumber &rhs) noexcept
     { return compare(lhs, rhs) > 0; } +/
@@ -479,6 +479,6 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QTypeRevision &revision);
 #endif
 
 
-Q_DECLARE_METATYPE(QVersionNumber)
-Q_DECLARE_METATYPE(QTypeRevision) +/
+QT_DECL_METATYPE_EXTERN(QVersionNumber, Q_CORE_EXPORT)
+QT_DECL_METATYPE_EXTERN(QTypeRevision, Q_CORE_EXPORT) +/
 

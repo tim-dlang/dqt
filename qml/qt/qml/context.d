@@ -90,5 +90,3 @@ private:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ Q_DECLARE_METATYPE(QList<QObject*>) +/
-

@@ -42,18 +42,18 @@ extern(C++, "QSsl") {
     }
 
     enum SslProtocol {
-        TlsV1_0,
-        TlsV1_1,
+        TlsV1_0 /+ QT_DEPRECATED_VERSION_X_6_3("Use TlsV1_2OrLater instead.") +/,
+        TlsV1_1 /+ QT_DEPRECATED_VERSION_X_6_3("Use TlsV1_2OrLater instead.") +/,
         TlsV1_2,
         AnyProtocol,
         SecureProtocols,
 
-        TlsV1_0OrLater,
-        TlsV1_1OrLater,
+        TlsV1_0OrLater /+ QT_DEPRECATED_VERSION_X_6_3("Use TlsV1_2OrLater instead.") +/,
+        TlsV1_1OrLater /+ QT_DEPRECATED_VERSION_X_6_3("Use TlsV1_2OrLater instead.") +/,
         TlsV1_2OrLater,
 
-        DtlsV1_0,
-        DtlsV1_0OrLater,
+        DtlsV1_0 /+ QT_DEPRECATED_VERSION_X_6_3("Use DtlsV1_2OrLater instead.") +/,
+        DtlsV1_0OrLater /+ QT_DEPRECATED_VERSION_X_6_3("Use DtlsV1_2OrLater instead.") +/,
         DtlsV1_2,
         DtlsV1_2OrLater,
 
@@ -144,16 +144,26 @@ alias SslOptions = QFlags!(SslOption);
 /+pragma(inline, true) QFlags!(SslOptions.enum_type) operator |(SslOptions.enum_type f1, QFlags!(SslOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(SslOptions.enum_type) operator &(SslOptions.enum_type f1, SslOptions.enum_type f2)/+noexcept+/{return QFlags!(SslOptions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(SslOptions.enum_type) operator &(SslOptions.enum_type f1, QFlags!(SslOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(SslOptions.enum_type) operator ^(SslOptions.enum_type f1, SslOptions.enum_type f2)/+noexcept+/{return QFlags!(SslOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(SslOptions.enum_type) operator ^(SslOptions.enum_type f1, QFlags!(SslOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(SslOptions.enum_type f1, SslOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(SslOptions.enum_type f1, QFlags!(SslOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(SslOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(SslOptions.enum_type f1, SslOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(SslOptions.enum_type f1, QFlags!(SslOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(SslOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(SslOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, SslOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(SslOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, SslOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(SslOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) SslOptions operator ~(SslOptions.enum_type e)/+noexcept+/{return~SslOptions(e);}+/
+/+pragma(inline, true) void operator |(SslOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(SslOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QSsl::SslOptions) +/

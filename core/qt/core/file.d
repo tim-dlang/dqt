@@ -155,53 +155,119 @@ public:
 
     final bool exists() const;
     static bool exists(ref const(QString) fileName);
+/+ #ifdef Q_CLANG_QDOC
+    static bool exists(const std::filesystem::path &fileName);
+#elif QT_CONFIG(cxx17_filesystem)
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    static bool exists(const T &fileName)
+    {
+        return exists(QtPrivate::fromFilesystemPath(fileName));
+    }
+#endif +/ // QT_CONFIG(cxx17_filesystem)
 
     final QString symLinkTarget() const;
     static QString symLinkTarget(ref const(QString) fileName);
+/+ #ifdef Q_CLANG_QDOC
+    std::filesystem::path filesystemSymLinkTarget() const;
+    static std::filesystem::path filesystemSymLinkTarget(const std::filesystem::path &fileName);
+#elif QT_CONFIG(cxx17_filesystem)
+    std::filesystem::path filesystemSymLinkTarget() const
+    {
+        return QtPrivate::toFilesystemPath(symLinkTarget());
+    }
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    static std::filesystem::path filesystemSymLinkTarget(const T &fileName)
+    {
+        return QtPrivate::toFilesystemPath(symLinkTarget(QtPrivate::fromFilesystemPath(fileName)));
+    }
+#endif +/ // QT_CONFIG(cxx17_filesystem)
 
     final bool remove();
     static bool remove(ref const(QString) fileName);
+/+ #ifdef Q_CLANG_QDOC
+    static bool remove(const std::filesystem::path &fileName);
+#elif QT_CONFIG(cxx17_filesystem)
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    static bool remove(const T &fileName)
+    {
+        return remove(QtPrivate::fromFilesystemPath(fileName));
+    }
+#endif +/ // QT_CONFIG(cxx17_filesystem)
 
     final bool moveToTrash();
     static bool moveToTrash(ref const(QString) fileName, QString* pathInTrash = null);
+/+ #ifdef Q_CLANG_QDOC
+    static bool moveToTrash(const std::filesystem::path &fileName, QString *pathInTrash = nullptr);
+#elif QT_CONFIG(cxx17_filesystem)
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    static bool moveToTrash(const T &fileName, QString *pathInTrash = nullptr)
+    {
+        return moveToTrash(QtPrivate::fromFilesystemPath(fileName), pathInTrash);
+    }
+#endif +/ // QT_CONFIG(cxx17_filesystem)
 
     final bool rename(ref const(QString) newName);
+    static bool rename(ref const(QString) oldName, ref const(QString) newName);
 /+ #ifdef Q_CLANG_QDOC
     bool rename(const std::filesystem::path &newName);
+    static bool rename(const std::filesystem::path &oldName,
+                       const std::filesystem::path &newName);
 #elif QT_CONFIG(cxx17_filesystem)
     template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
     bool rename(const T &newName)
     {
         return rename(QtPrivate::fromFilesystemPath(newName));
     }
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    static bool rename(const T &oldName, const T &newName)
+    {
+        return rename(QtPrivate::fromFilesystemPath(oldName),
+                      QtPrivate::fromFilesystemPath(newName));
+    }
 #endif +/ // QT_CONFIG(cxx17_filesystem)
-    static bool rename(ref const(QString) oldName, ref const(QString) newName);
 
     final bool link(ref const(QString) newName);
+    static bool link(ref const(QString) fileName, ref const(QString) newName);
 /+ #ifdef Q_CLANG_QDOC
     bool link(const std::filesystem::path &newName);
+    static bool link(const std::filesystem::path &fileName,
+                     const std::filesystem::path &newName);
 #elif QT_CONFIG(cxx17_filesystem)
     template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
     bool link(const T &newName)
     {
         return link(QtPrivate::fromFilesystemPath(newName));
     }
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    static bool link(const T &fileName, const T &newName)
+    {
+        return link(QtPrivate::fromFilesystemPath(fileName),
+                    QtPrivate::fromFilesystemPath(newName));
+    }
 #endif +/ // QT_CONFIG(cxx17_filesystem)
-    static bool link(ref const(QString) oldname, ref const(QString) newName);
 
     /+ bool copy(const QString &newName); +/
+    /+ static bool copy(const QString &fileName, const QString &newName); +/
 /+ #ifdef Q_CLANG_QDOC
     bool copy(const std::filesystem::path &newName);
+    static bool copy(const std::filesystem::path &fileName,
+                     const std::filesystem::path &newName);
 #elif QT_CONFIG(cxx17_filesystem)
     template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
     bool copy(const T &newName)
     {
         return copy(QtPrivate::fromFilesystemPath(newName));
     }
+    template<typename T, QtPrivate::ForceFilesystemPath<T> = 0>
+    static bool copy(const T &fileName, const T &newName)
+    {
+        return copy(QtPrivate::fromFilesystemPath(fileName),
+                    QtPrivate::fromFilesystemPath(newName));
+    }
 #endif +/ // QT_CONFIG(cxx17_filesystem)
-    /+ static bool copy(const QString &fileName, const QString &newName); +/
 
     override bool open(OpenMode flags);
+    final bool open(OpenMode flags, Permissions permissions);
     //final bool open(FILE* f, OpenMode ioFlags, FileHandleFlags handleFlags=FileHandleFlag.DontCloseHandle);
     final bool open(int fd, OpenMode ioFlags, FileHandleFlags handleFlags=FileHandleFlag.DontCloseHandle);
 

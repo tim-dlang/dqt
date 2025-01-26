@@ -52,7 +52,7 @@ public:
     /+ref QStaticText operator =(ref const(QStaticText) );+/
     ~this();
 
-    /+ void swap(QStaticText &other) noexcept { qSwap(data, other.data); } +/
+    /+ void swap(QStaticText &other) noexcept { data.swap(other.data); } +/
 
     void setText(ref const(QString) text);
     QString text() const;

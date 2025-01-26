@@ -185,19 +185,29 @@ private:
 /+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator |(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator &(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/{return QFlags!(QTextOption.Flags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator &(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator ^(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/{return QFlags!(QTextOption.Flags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator ^(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QTextOption.Flags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QTextOption.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QTextOption.Flags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QTextOption.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QTextOption.Flags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QTextOption.Flags operator ~(QTextOption.Flags.enum_type e)/+noexcept+/{return~QTextOption.Flags(e);}+/
+/+pragma(inline, true) void operator |(QTextOption.Flags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QTextOption.Flags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextOption::Flags)
 
-Q_DECLARE_METATYPE( QTextOption::Tab ) +/
+QT_DECL_METATYPE_EXTERN_TAGGED(QTextOption::Tab, QTextOption_Tab, Q_GUI_EXPORT) +/
 

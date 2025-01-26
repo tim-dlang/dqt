@@ -46,6 +46,9 @@ public:
     /+ void start(std::function<void()> functionToRun, int priority = 0); +/
     /+ bool tryStart(std::function<void()> functionToRun); +/
 
+    final void startOnReservedThread(QRunnable runnable);
+    /+ void startOnReservedThread(std::function<void()> functionToRun); +/
+
     final int expiryTimeout() const;
     final void setExpiryTimeout(int expiryTimeout);
 

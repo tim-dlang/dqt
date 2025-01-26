@@ -19,6 +19,10 @@ import qt.helpers;
 extern(C++, class) struct QJSNumberCoercion
 {
 public:
+    static bool isInteger(double d) {
+        return equals(d, d) && equals(static_cast!(int)(d), d);
+    }
+
     static int toInteger(double d) {
         if (!equals(d, d))
             return 0;

@@ -94,17 +94,27 @@ alias MouseButtons = QFlags!(MouseButton);
 /+pragma(inline, true) QFlags!(MouseButtons.enum_type) operator |(MouseButtons.enum_type f1, QFlags!(MouseButtons.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(MouseButtons.enum_type) operator &(MouseButtons.enum_type f1, MouseButtons.enum_type f2)/+noexcept+/{return QFlags!(MouseButtons.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(MouseButtons.enum_type) operator &(MouseButtons.enum_type f1, QFlags!(MouseButtons.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(MouseButtons.enum_type) operator ^(MouseButtons.enum_type f1, MouseButtons.enum_type f2)/+noexcept+/{return QFlags!(MouseButtons.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(MouseButtons.enum_type) operator ^(MouseButtons.enum_type f1, QFlags!(MouseButtons.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(MouseButtons.enum_type f1, MouseButtons.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(MouseButtons.enum_type f1, QFlags!(MouseButtons.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(MouseButtons.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(MouseButtons.enum_type f1, MouseButtons.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(MouseButtons.enum_type f1, QFlags!(MouseButtons.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(MouseButtons.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(MouseButtons.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, MouseButtons.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(MouseButtons.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, MouseButtons.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(MouseButtons.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) MouseButtons operator ~(MouseButtons.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~MouseButtons(e)},q{~MouseButtons(e)});}+/
+/+pragma(inline, true) void operator |(MouseButtons.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(MouseButtons.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(MouseButtons) +/
     enum Orientation {
         Horizontal = 0x1,
@@ -117,17 +127,27 @@ alias Orientations = QFlags!(Orientation);
 /+pragma(inline, true) QFlags!(Orientations.enum_type) operator |(Orientations.enum_type f1, QFlags!(Orientations.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(Orientations.enum_type) operator &(Orientations.enum_type f1, Orientations.enum_type f2)/+noexcept+/{return QFlags!(Orientations.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(Orientations.enum_type) operator &(Orientations.enum_type f1, QFlags!(Orientations.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(Orientations.enum_type) operator ^(Orientations.enum_type f1, Orientations.enum_type f2)/+noexcept+/{return QFlags!(Orientations.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(Orientations.enum_type) operator ^(Orientations.enum_type f1, QFlags!(Orientations.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(Orientations.enum_type f1, Orientations.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(Orientations.enum_type f1, QFlags!(Orientations.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(Orientations.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Orientations.enum_type f1, Orientations.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Orientations.enum_type f1, QFlags!(Orientations.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(Orientations.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(Orientations.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, Orientations.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(Orientations.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, Orientations.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Orientations.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) Orientations operator ~(Orientations.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~Orientations(e)},q{~Orientations(e)});}+/
+/+pragma(inline, true) void operator |(Orientations.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(Orientations.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(Orientations) +/
     enum FocusPolicy {
         NoFocus = 0,
@@ -159,17 +179,27 @@ alias SplitBehavior = QFlags!(SplitBehaviorFlags);
 /+pragma(inline, true) QFlags!(SplitBehavior.enum_type) operator |(SplitBehavior.enum_type f1, QFlags!(SplitBehavior.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(SplitBehavior.enum_type) operator &(SplitBehavior.enum_type f1, SplitBehavior.enum_type f2)/+noexcept+/{return QFlags!(SplitBehavior.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(SplitBehavior.enum_type) operator &(SplitBehavior.enum_type f1, QFlags!(SplitBehavior.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(SplitBehavior.enum_type) operator ^(SplitBehavior.enum_type f1, SplitBehavior.enum_type f2)/+noexcept+/{return QFlags!(SplitBehavior.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(SplitBehavior.enum_type) operator ^(SplitBehavior.enum_type f1, QFlags!(SplitBehavior.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(SplitBehavior.enum_type f1, SplitBehavior.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(SplitBehavior.enum_type f1, QFlags!(SplitBehavior.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(SplitBehavior.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(SplitBehavior.enum_type f1, SplitBehavior.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(SplitBehavior.enum_type f1, QFlags!(SplitBehavior.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(SplitBehavior.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(SplitBehavior.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, SplitBehavior.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(SplitBehavior.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, SplitBehavior.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(SplitBehavior.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) SplitBehavior operator ~(SplitBehavior.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~SplitBehavior(e)},q{~SplitBehavior(e)});}+/
+/+pragma(inline, true) void operator |(SplitBehavior.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(SplitBehavior.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(SplitBehavior) +/
     enum TileRule {
         StretchTile,
@@ -210,17 +240,27 @@ alias Alignment = QFlags!(AlignmentFlag);
 /+pragma(inline, true) QFlags!(Alignment.enum_type) operator |(Alignment.enum_type f1, QFlags!(Alignment.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(Alignment.enum_type) operator &(Alignment.enum_type f1, Alignment.enum_type f2)/+noexcept+/{return QFlags!(Alignment.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(Alignment.enum_type) operator &(Alignment.enum_type f1, QFlags!(Alignment.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(Alignment.enum_type) operator ^(Alignment.enum_type f1, Alignment.enum_type f2)/+noexcept+/{return QFlags!(Alignment.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(Alignment.enum_type) operator ^(Alignment.enum_type f1, QFlags!(Alignment.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(Alignment.enum_type f1, Alignment.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(Alignment.enum_type f1, QFlags!(Alignment.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(Alignment.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Alignment.enum_type f1, Alignment.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Alignment.enum_type f1, QFlags!(Alignment.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(Alignment.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(Alignment.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, Alignment.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(Alignment.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, Alignment.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Alignment.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) Alignment operator ~(Alignment.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~Alignment(e)},q{~Alignment(e)});}+/
+/+pragma(inline, true) void operator |(Alignment.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(Alignment.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(Alignment) +/
     enum TextFlag {
         TextSingleLine = 0x0100,
@@ -239,14 +279,26 @@ alias Alignment = QFlags!(AlignmentFlag);
         // size of a multi-variant string.
         TextLongestVariant = 0x80000
     }
-
+/+pragma(inline, true) int operator |(AlignmentFlag lhs, TextFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)|qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator &(AlignmentFlag lhs, TextFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)&qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator ^(AlignmentFlag lhs, TextFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)^qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator |(TextFlag lhs, AlignmentFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)|qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator &(TextFlag lhs, AlignmentFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)&qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator ^(TextFlag lhs, AlignmentFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)^qToUnderlying(rhs));}+/
+    /+ Q_DECLARE_MIXED_ENUM_OPERATORS_SYMMETRIC(int, AlignmentFlag, TextFlag) +/
     enum TextElideMode {
         ElideLeft,
         ElideRight,
         ElideMiddle,
         ElideNone
     }
-
+/+pragma(inline, true) int operator |(TextElideMode lhs, TextFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)|qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator &(TextElideMode lhs, TextFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)&qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator ^(TextElideMode lhs, TextFlag rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)^qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator |(TextFlag lhs, TextElideMode rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)|qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator &(TextFlag lhs, TextElideMode rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)&qToUnderlying(rhs));}+/
+/+pragma(inline, true) int operator ^(TextFlag lhs, TextElideMode rhs)/+noexcept+/{return static_cast!(int)(qToUnderlying(lhs)^qToUnderlying(rhs));}+/
+    /+ Q_DECLARE_MIXED_ENUM_OPERATORS_SYMMETRIC(int, TextElideMode, TextFlag) +/
     enum WhiteSpaceMode {
         WhiteSpaceNormal,
         WhiteSpacePre,
@@ -305,17 +357,27 @@ alias WindowFlags = QFlags!(WindowType);
 /+pragma(inline, true) QFlags!(WindowFlags.enum_type) operator |(WindowFlags.enum_type f1, QFlags!(WindowFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(WindowFlags.enum_type) operator &(WindowFlags.enum_type f1, WindowFlags.enum_type f2)/+noexcept+/{return QFlags!(WindowFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(WindowFlags.enum_type) operator &(WindowFlags.enum_type f1, QFlags!(WindowFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(WindowFlags.enum_type) operator ^(WindowFlags.enum_type f1, WindowFlags.enum_type f2)/+noexcept+/{return QFlags!(WindowFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(WindowFlags.enum_type) operator ^(WindowFlags.enum_type f1, QFlags!(WindowFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(WindowFlags.enum_type f1, WindowFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(WindowFlags.enum_type f1, QFlags!(WindowFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(WindowFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(WindowFlags.enum_type f1, WindowFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(WindowFlags.enum_type f1, QFlags!(WindowFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(WindowFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(WindowFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, WindowFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(WindowFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, WindowFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(WindowFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) WindowFlags operator ~(WindowFlags.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~WindowFlags(e)},q{~WindowFlags(e)});}+/
+/+pragma(inline, true) void operator |(WindowFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(WindowFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(WindowFlags) +/
     enum WindowState {
         WindowNoState    = 0x00000000,
@@ -331,17 +393,27 @@ alias WindowStates = QFlags!(WindowState);
 /+pragma(inline, true) QFlags!(WindowStates.enum_type) operator |(WindowStates.enum_type f1, QFlags!(WindowStates.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(WindowStates.enum_type) operator &(WindowStates.enum_type f1, WindowStates.enum_type f2)/+noexcept+/{return QFlags!(WindowStates.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(WindowStates.enum_type) operator &(WindowStates.enum_type f1, QFlags!(WindowStates.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(WindowStates.enum_type) operator ^(WindowStates.enum_type f1, WindowStates.enum_type f2)/+noexcept+/{return QFlags!(WindowStates.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(WindowStates.enum_type) operator ^(WindowStates.enum_type f1, QFlags!(WindowStates.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(WindowStates.enum_type f1, WindowStates.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(WindowStates.enum_type f1, QFlags!(WindowStates.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(WindowStates.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(WindowStates.enum_type f1, WindowStates.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(WindowStates.enum_type f1, QFlags!(WindowStates.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(WindowStates.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(WindowStates.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, WindowStates.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(WindowStates.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, WindowStates.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(WindowStates.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) WindowStates operator ~(WindowStates.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~WindowStates(e)},q{~WindowStates(e)});}+/
+/+pragma(inline, true) void operator |(WindowStates.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(WindowStates.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(WindowStates) +/
     enum ApplicationState {
         ApplicationSuspended    = 0x00000000,
@@ -366,17 +438,27 @@ alias ScreenOrientations = QFlags!(ScreenOrientation);
 /+pragma(inline, true) QFlags!(ScreenOrientations.enum_type) operator |(ScreenOrientations.enum_type f1, QFlags!(ScreenOrientations.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(ScreenOrientations.enum_type) operator &(ScreenOrientations.enum_type f1, ScreenOrientations.enum_type f2)/+noexcept+/{return QFlags!(ScreenOrientations.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(ScreenOrientations.enum_type) operator &(ScreenOrientations.enum_type f1, QFlags!(ScreenOrientations.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(ScreenOrientations.enum_type) operator ^(ScreenOrientations.enum_type f1, ScreenOrientations.enum_type f2)/+noexcept+/{return QFlags!(ScreenOrientations.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(ScreenOrientations.enum_type) operator ^(ScreenOrientations.enum_type f1, QFlags!(ScreenOrientations.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(ScreenOrientations.enum_type f1, ScreenOrientations.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(ScreenOrientations.enum_type f1, QFlags!(ScreenOrientations.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(ScreenOrientations.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ScreenOrientations.enum_type f1, ScreenOrientations.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ScreenOrientations.enum_type f1, QFlags!(ScreenOrientations.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(ScreenOrientations.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(ScreenOrientations.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, ScreenOrientations.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(ScreenOrientations.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, ScreenOrientations.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ScreenOrientations.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) ScreenOrientations operator ~(ScreenOrientations.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~ScreenOrientations(e)},q{~ScreenOrientations(e)});}+/
+/+pragma(inline, true) void operator |(ScreenOrientations.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(ScreenOrientations.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(ScreenOrientations) +/
     enum WidgetAttribute {
         WA_Disabled = 0,
@@ -605,17 +687,27 @@ alias ImageConversionFlags = QFlags!(ImageConversionFlag);
 /+pragma(inline, true) QFlags!(ImageConversionFlags.enum_type) operator |(ImageConversionFlags.enum_type f1, QFlags!(ImageConversionFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(ImageConversionFlags.enum_type) operator &(ImageConversionFlags.enum_type f1, ImageConversionFlags.enum_type f2)/+noexcept+/{return QFlags!(ImageConversionFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(ImageConversionFlags.enum_type) operator &(ImageConversionFlags.enum_type f1, QFlags!(ImageConversionFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(ImageConversionFlags.enum_type) operator ^(ImageConversionFlags.enum_type f1, ImageConversionFlags.enum_type f2)/+noexcept+/{return QFlags!(ImageConversionFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(ImageConversionFlags.enum_type) operator ^(ImageConversionFlags.enum_type f1, QFlags!(ImageConversionFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(ImageConversionFlags.enum_type f1, ImageConversionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(ImageConversionFlags.enum_type f1, QFlags!(ImageConversionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(ImageConversionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ImageConversionFlags.enum_type f1, ImageConversionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ImageConversionFlags.enum_type f1, QFlags!(ImageConversionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(ImageConversionFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(ImageConversionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, ImageConversionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(ImageConversionFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, ImageConversionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ImageConversionFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) ImageConversionFlags operator ~(ImageConversionFlags.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~ImageConversionFlags(e)},q{~ImageConversionFlags(e)});}+/
+/+pragma(inline, true) void operator |(ImageConversionFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(ImageConversionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(ImageConversionFlags) +/
     enum BGMode {
         TransparentMode,
@@ -1176,17 +1268,27 @@ alias KeyboardModifiers = QFlags!(KeyboardModifier);
 /+pragma(inline, true) QFlags!(KeyboardModifiers.enum_type) operator |(KeyboardModifiers.enum_type f1, QFlags!(KeyboardModifiers.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(KeyboardModifiers.enum_type) operator &(KeyboardModifiers.enum_type f1, KeyboardModifiers.enum_type f2)/+noexcept+/{return QFlags!(KeyboardModifiers.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(KeyboardModifiers.enum_type) operator &(KeyboardModifiers.enum_type f1, QFlags!(KeyboardModifiers.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(KeyboardModifiers.enum_type) operator ^(KeyboardModifiers.enum_type f1, KeyboardModifiers.enum_type f2)/+noexcept+/{return QFlags!(KeyboardModifiers.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(KeyboardModifiers.enum_type) operator ^(KeyboardModifiers.enum_type f1, QFlags!(KeyboardModifiers.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(KeyboardModifiers.enum_type f1, KeyboardModifiers.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(KeyboardModifiers.enum_type f1, QFlags!(KeyboardModifiers.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(KeyboardModifiers.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(KeyboardModifiers.enum_type f1, KeyboardModifiers.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(KeyboardModifiers.enum_type f1, QFlags!(KeyboardModifiers.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(KeyboardModifiers.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(KeyboardModifiers.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, KeyboardModifiers.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(KeyboardModifiers.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, KeyboardModifiers.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(KeyboardModifiers.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) KeyboardModifiers operator ~(KeyboardModifiers.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~KeyboardModifiers(e)},q{~KeyboardModifiers(e)});}+/
+/+pragma(inline, true) void operator |(KeyboardModifiers.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(KeyboardModifiers.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(KeyboardModifiers) +/
     //shorter names for shortcuts
     // The use of all-caps identifiers has the potential for clashing with
@@ -1207,17 +1309,27 @@ alias Modifiers = QFlags!(Modifier);
 /+pragma(inline, true) QFlags!(Modifiers.enum_type) operator |(Modifiers.enum_type f1, QFlags!(Modifiers.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(Modifiers.enum_type) operator &(Modifiers.enum_type f1, Modifiers.enum_type f2)/+noexcept+/{return QFlags!(Modifiers.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(Modifiers.enum_type) operator &(Modifiers.enum_type f1, QFlags!(Modifiers.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(Modifiers.enum_type) operator ^(Modifiers.enum_type f1, Modifiers.enum_type f2)/+noexcept+/{return QFlags!(Modifiers.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(Modifiers.enum_type) operator ^(Modifiers.enum_type f1, QFlags!(Modifiers.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(Modifiers.enum_type f1, Modifiers.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(Modifiers.enum_type f1, QFlags!(Modifiers.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(Modifiers.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Modifiers.enum_type f1, Modifiers.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Modifiers.enum_type f1, QFlags!(Modifiers.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(Modifiers.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(Modifiers.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, Modifiers.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(Modifiers.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, Modifiers.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Modifiers.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) Modifiers operator ~(Modifiers.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~Modifiers(e)},q{~Modifiers(e)});}+/
+/+pragma(inline, true) void operator |(Modifiers.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(Modifiers.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(Modifiers) +/
     enum ArrowType {
         NoArrow,
@@ -1353,17 +1465,27 @@ alias DockWidgetAreas = QFlags!(DockWidgetArea);
 /+pragma(inline, true) QFlags!(DockWidgetAreas.enum_type) operator |(DockWidgetAreas.enum_type f1, QFlags!(DockWidgetAreas.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(DockWidgetAreas.enum_type) operator &(DockWidgetAreas.enum_type f1, DockWidgetAreas.enum_type f2)/+noexcept+/{return QFlags!(DockWidgetAreas.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(DockWidgetAreas.enum_type) operator &(DockWidgetAreas.enum_type f1, QFlags!(DockWidgetAreas.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(DockWidgetAreas.enum_type) operator ^(DockWidgetAreas.enum_type f1, DockWidgetAreas.enum_type f2)/+noexcept+/{return QFlags!(DockWidgetAreas.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(DockWidgetAreas.enum_type) operator ^(DockWidgetAreas.enum_type f1, QFlags!(DockWidgetAreas.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(DockWidgetAreas.enum_type f1, DockWidgetAreas.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(DockWidgetAreas.enum_type f1, QFlags!(DockWidgetAreas.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(DockWidgetAreas.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(DockWidgetAreas.enum_type f1, DockWidgetAreas.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(DockWidgetAreas.enum_type f1, QFlags!(DockWidgetAreas.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(DockWidgetAreas.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(DockWidgetAreas.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, DockWidgetAreas.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(DockWidgetAreas.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, DockWidgetAreas.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(DockWidgetAreas.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) DockWidgetAreas operator ~(DockWidgetAreas.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~DockWidgetAreas(e)},q{~DockWidgetAreas(e)});}+/
+/+pragma(inline, true) void operator |(DockWidgetAreas.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(DockWidgetAreas.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(DockWidgetAreas) +/
     enum ToolBarArea {
         LeftToolBarArea = 0x1,
@@ -1386,17 +1508,27 @@ alias ToolBarAreas = QFlags!(ToolBarArea);
 /+pragma(inline, true) QFlags!(ToolBarAreas.enum_type) operator |(ToolBarAreas.enum_type f1, QFlags!(ToolBarAreas.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(ToolBarAreas.enum_type) operator &(ToolBarAreas.enum_type f1, ToolBarAreas.enum_type f2)/+noexcept+/{return QFlags!(ToolBarAreas.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(ToolBarAreas.enum_type) operator &(ToolBarAreas.enum_type f1, QFlags!(ToolBarAreas.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(ToolBarAreas.enum_type) operator ^(ToolBarAreas.enum_type f1, ToolBarAreas.enum_type f2)/+noexcept+/{return QFlags!(ToolBarAreas.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(ToolBarAreas.enum_type) operator ^(ToolBarAreas.enum_type f1, QFlags!(ToolBarAreas.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(ToolBarAreas.enum_type f1, ToolBarAreas.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(ToolBarAreas.enum_type f1, QFlags!(ToolBarAreas.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(ToolBarAreas.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ToolBarAreas.enum_type f1, ToolBarAreas.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ToolBarAreas.enum_type f1, QFlags!(ToolBarAreas.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(ToolBarAreas.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(ToolBarAreas.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, ToolBarAreas.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(ToolBarAreas.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, ToolBarAreas.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ToolBarAreas.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) ToolBarAreas operator ~(ToolBarAreas.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~ToolBarAreas(e)},q{~ToolBarAreas(e)});}+/
+/+pragma(inline, true) void operator |(ToolBarAreas.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(ToolBarAreas.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(ToolBarAreas) +/
     enum DateFormat {
         TextDate,      // default Qt
@@ -1453,17 +1585,27 @@ alias Edges = QFlags!(Edge);
 /+pragma(inline, true) QFlags!(Edges.enum_type) operator |(Edges.enum_type f1, QFlags!(Edges.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(Edges.enum_type) operator &(Edges.enum_type f1, Edges.enum_type f2)/+noexcept+/{return QFlags!(Edges.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(Edges.enum_type) operator &(Edges.enum_type f1, QFlags!(Edges.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(Edges.enum_type) operator ^(Edges.enum_type f1, Edges.enum_type f2)/+noexcept+/{return QFlags!(Edges.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(Edges.enum_type) operator ^(Edges.enum_type f1, QFlags!(Edges.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(Edges.enum_type f1, Edges.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(Edges.enum_type f1, QFlags!(Edges.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(Edges.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Edges.enum_type f1, Edges.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Edges.enum_type f1, QFlags!(Edges.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(Edges.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(Edges.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, Edges.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(Edges.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, Edges.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(Edges.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) Edges operator ~(Edges.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~Edges(e)},q{~Edges(e)});}+/
+/+pragma(inline, true) void operator |(Edges.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(Edges.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(Edges) +/
     enum ConnectionType {
         AutoConnection,
@@ -1572,17 +1714,27 @@ alias InputMethodQueries = QFlags!(InputMethodQuery);
 /+pragma(inline, true) QFlags!(InputMethodQueries.enum_type) operator |(InputMethodQueries.enum_type f1, QFlags!(InputMethodQueries.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(InputMethodQueries.enum_type) operator &(InputMethodQueries.enum_type f1, InputMethodQueries.enum_type f2)/+noexcept+/{return QFlags!(InputMethodQueries.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(InputMethodQueries.enum_type) operator &(InputMethodQueries.enum_type f1, QFlags!(InputMethodQueries.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(InputMethodQueries.enum_type) operator ^(InputMethodQueries.enum_type f1, InputMethodQueries.enum_type f2)/+noexcept+/{return QFlags!(InputMethodQueries.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(InputMethodQueries.enum_type) operator ^(InputMethodQueries.enum_type f1, QFlags!(InputMethodQueries.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(InputMethodQueries.enum_type f1, InputMethodQueries.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(InputMethodQueries.enum_type f1, QFlags!(InputMethodQueries.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(InputMethodQueries.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(InputMethodQueries.enum_type f1, InputMethodQueries.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(InputMethodQueries.enum_type f1, QFlags!(InputMethodQueries.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(InputMethodQueries.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(InputMethodQueries.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, InputMethodQueries.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(InputMethodQueries.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, InputMethodQueries.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(InputMethodQueries.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) InputMethodQueries operator ~(InputMethodQueries.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~InputMethodQueries(e)},q{~InputMethodQueries(e)});}+/
+/+pragma(inline, true) void operator |(InputMethodQueries.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(InputMethodQueries.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(InputMethodQueries) +/
     enum InputMethodHint {
         ImhNone = 0x0,
@@ -1622,17 +1774,27 @@ alias InputMethodHints = QFlags!(InputMethodHint);
 /+pragma(inline, true) QFlags!(InputMethodHints.enum_type) operator |(InputMethodHints.enum_type f1, QFlags!(InputMethodHints.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(InputMethodHints.enum_type) operator &(InputMethodHints.enum_type f1, InputMethodHints.enum_type f2)/+noexcept+/{return QFlags!(InputMethodHints.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(InputMethodHints.enum_type) operator &(InputMethodHints.enum_type f1, QFlags!(InputMethodHints.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(InputMethodHints.enum_type) operator ^(InputMethodHints.enum_type f1, InputMethodHints.enum_type f2)/+noexcept+/{return QFlags!(InputMethodHints.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(InputMethodHints.enum_type) operator ^(InputMethodHints.enum_type f1, QFlags!(InputMethodHints.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(InputMethodHints.enum_type f1, InputMethodHints.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(InputMethodHints.enum_type f1, QFlags!(InputMethodHints.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(InputMethodHints.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(InputMethodHints.enum_type f1, InputMethodHints.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(InputMethodHints.enum_type f1, QFlags!(InputMethodHints.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(InputMethodHints.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(InputMethodHints.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, InputMethodHints.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(InputMethodHints.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, InputMethodHints.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(InputMethodHints.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) InputMethodHints operator ~(InputMethodHints.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~InputMethodHints(e)},q{~InputMethodHints(e)});}+/
+/+pragma(inline, true) void operator |(InputMethodHints.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(InputMethodHints.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(InputMethodHints) +/
     enum EnterKeyType {
         EnterKeyDefault,
@@ -1656,6 +1818,7 @@ alias InputMethodHints = QFlags!(InputMethodHint);
     enum LayoutDirection {
         LeftToRight,
         RightToLeft,
+        // ### Qt 7: make auto the first one (with value 0)
         LayoutDirectionAuto
     }
 
@@ -1688,17 +1851,27 @@ alias DropActions = QFlags!(DropAction);
 /+pragma(inline, true) QFlags!(DropActions.enum_type) operator |(DropActions.enum_type f1, QFlags!(DropActions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(DropActions.enum_type) operator &(DropActions.enum_type f1, DropActions.enum_type f2)/+noexcept+/{return QFlags!(DropActions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(DropActions.enum_type) operator &(DropActions.enum_type f1, QFlags!(DropActions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(DropActions.enum_type) operator ^(DropActions.enum_type f1, DropActions.enum_type f2)/+noexcept+/{return QFlags!(DropActions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(DropActions.enum_type) operator ^(DropActions.enum_type f1, QFlags!(DropActions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(DropActions.enum_type f1, DropActions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(DropActions.enum_type f1, QFlags!(DropActions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(DropActions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(DropActions.enum_type f1, DropActions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(DropActions.enum_type f1, QFlags!(DropActions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(DropActions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(DropActions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, DropActions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(DropActions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, DropActions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(DropActions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) DropActions operator ~(DropActions.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~DropActions(e)},q{~DropActions(e)});}+/
+/+pragma(inline, true) void operator |(DropActions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(DropActions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(DropActions) +/
     enum CheckState {
         Unchecked,
@@ -1753,17 +1926,27 @@ alias ItemFlags = QFlags!(ItemFlag);
 /+pragma(inline, true) QFlags!(ItemFlags.enum_type) operator |(ItemFlags.enum_type f1, QFlags!(ItemFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(ItemFlags.enum_type) operator &(ItemFlags.enum_type f1, ItemFlags.enum_type f2)/+noexcept+/{return QFlags!(ItemFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(ItemFlags.enum_type) operator &(ItemFlags.enum_type f1, QFlags!(ItemFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(ItemFlags.enum_type) operator ^(ItemFlags.enum_type f1, ItemFlags.enum_type f2)/+noexcept+/{return QFlags!(ItemFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(ItemFlags.enum_type) operator ^(ItemFlags.enum_type f1, QFlags!(ItemFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(ItemFlags.enum_type f1, ItemFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(ItemFlags.enum_type f1, QFlags!(ItemFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(ItemFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ItemFlags.enum_type f1, ItemFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ItemFlags.enum_type f1, QFlags!(ItemFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(ItemFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(ItemFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, ItemFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(ItemFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, ItemFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(ItemFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) ItemFlags operator ~(ItemFlags.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~ItemFlags(e)},q{~ItemFlags(e)});}+/
+/+pragma(inline, true) void operator |(ItemFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(ItemFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(ItemFlags) +/
     enum MatchFlag {
         MatchExactly = 0,
@@ -1784,17 +1967,27 @@ alias MatchFlags = QFlags!(MatchFlag);
 /+pragma(inline, true) QFlags!(MatchFlags.enum_type) operator |(MatchFlags.enum_type f1, QFlags!(MatchFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(MatchFlags.enum_type) operator &(MatchFlags.enum_type f1, MatchFlags.enum_type f2)/+noexcept+/{return QFlags!(MatchFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(MatchFlags.enum_type) operator &(MatchFlags.enum_type f1, QFlags!(MatchFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(MatchFlags.enum_type) operator ^(MatchFlags.enum_type f1, MatchFlags.enum_type f2)/+noexcept+/{return QFlags!(MatchFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(MatchFlags.enum_type) operator ^(MatchFlags.enum_type f1, QFlags!(MatchFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(MatchFlags.enum_type f1, MatchFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(MatchFlags.enum_type f1, QFlags!(MatchFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(MatchFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(MatchFlags.enum_type f1, MatchFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(MatchFlags.enum_type f1, QFlags!(MatchFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(MatchFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(MatchFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, MatchFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(MatchFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, MatchFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(MatchFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) MatchFlags operator ~(MatchFlags.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~MatchFlags(e)},q{~MatchFlags(e)});}+/
+/+pragma(inline, true) void operator |(MatchFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(MatchFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(MatchFlags) +/
     alias HANDLE = void*;
 
@@ -1821,17 +2014,27 @@ alias TextInteractionFlags = QFlags!(TextInteractionFlag);
 /+pragma(inline, true) QFlags!(TextInteractionFlags.enum_type) operator |(TextInteractionFlags.enum_type f1, QFlags!(TextInteractionFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(TextInteractionFlags.enum_type) operator &(TextInteractionFlags.enum_type f1, TextInteractionFlags.enum_type f2)/+noexcept+/{return QFlags!(TextInteractionFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(TextInteractionFlags.enum_type) operator &(TextInteractionFlags.enum_type f1, QFlags!(TextInteractionFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(TextInteractionFlags.enum_type) operator ^(TextInteractionFlags.enum_type f1, TextInteractionFlags.enum_type f2)/+noexcept+/{return QFlags!(TextInteractionFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(TextInteractionFlags.enum_type) operator ^(TextInteractionFlags.enum_type f1, QFlags!(TextInteractionFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(TextInteractionFlags.enum_type f1, TextInteractionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(TextInteractionFlags.enum_type f1, QFlags!(TextInteractionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(TextInteractionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(TextInteractionFlags.enum_type f1, TextInteractionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(TextInteractionFlags.enum_type f1, QFlags!(TextInteractionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(TextInteractionFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(TextInteractionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, TextInteractionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(TextInteractionFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, TextInteractionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(TextInteractionFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) TextInteractionFlags operator ~(TextInteractionFlags.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~TextInteractionFlags(e)},q{~TextInteractionFlags(e)});}+/
+/+pragma(inline, true) void operator |(TextInteractionFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(TextInteractionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(TextInteractionFlags) +/
     enum EventPriority {
         HighEventPriority = 1,
@@ -1883,17 +2086,27 @@ alias TouchPointStates = QFlags!(TouchPointState);
 /+pragma(inline, true) QFlags!(TouchPointStates.enum_type) operator |(TouchPointStates.enum_type f1, QFlags!(TouchPointStates.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(TouchPointStates.enum_type) operator &(TouchPointStates.enum_type f1, TouchPointStates.enum_type f2)/+noexcept+/{return QFlags!(TouchPointStates.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(TouchPointStates.enum_type) operator &(TouchPointStates.enum_type f1, QFlags!(TouchPointStates.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(TouchPointStates.enum_type) operator ^(TouchPointStates.enum_type f1, TouchPointStates.enum_type f2)/+noexcept+/{return QFlags!(TouchPointStates.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(TouchPointStates.enum_type) operator ^(TouchPointStates.enum_type f1, QFlags!(TouchPointStates.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(TouchPointStates.enum_type f1, TouchPointStates.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(TouchPointStates.enum_type f1, QFlags!(TouchPointStates.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(TouchPointStates.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(TouchPointStates.enum_type f1, TouchPointStates.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(TouchPointStates.enum_type f1, QFlags!(TouchPointStates.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(TouchPointStates.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(TouchPointStates.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, TouchPointStates.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(TouchPointStates.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, TouchPointStates.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(TouchPointStates.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) TouchPointStates operator ~(TouchPointStates.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~TouchPointStates(e)},q{~TouchPointStates(e)});}+/
+/+pragma(inline, true) void operator |(TouchPointStates.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(TouchPointStates.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(TouchPointStates) +/
 version (QT_NO_GESTURES) {} else
 {
@@ -1931,17 +2144,27 @@ alias GestureFlags = QFlags!(GestureFlag);
 /+pragma(inline, true) QFlags!(GestureFlags.enum_type) operator |(GestureFlags.enum_type f1, QFlags!(GestureFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(GestureFlags.enum_type) operator &(GestureFlags.enum_type f1, GestureFlags.enum_type f2)/+noexcept+/{return QFlags!(GestureFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(GestureFlags.enum_type) operator &(GestureFlags.enum_type f1, QFlags!(GestureFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(GestureFlags.enum_type) operator ^(GestureFlags.enum_type f1, GestureFlags.enum_type f2)/+noexcept+/{return QFlags!(GestureFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(GestureFlags.enum_type) operator ^(GestureFlags.enum_type f1, QFlags!(GestureFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(GestureFlags.enum_type f1, GestureFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(GestureFlags.enum_type f1, QFlags!(GestureFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(GestureFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(GestureFlags.enum_type f1, GestureFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(GestureFlags.enum_type f1, QFlags!(GestureFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(GestureFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(GestureFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, GestureFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(GestureFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, GestureFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(GestureFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) GestureFlags operator ~(GestureFlags.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~GestureFlags(e)},q{~GestureFlags(e)});}+/
+/+pragma(inline, true) void operator |(GestureFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(GestureFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(GestureFlags) +/
     enum NativeGestureType
     {
@@ -2002,17 +2225,27 @@ alias MouseEventFlags = QFlags!(MouseEventFlag);
 /+pragma(inline, true) QFlags!(MouseEventFlags.enum_type) operator |(MouseEventFlags.enum_type f1, QFlags!(MouseEventFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(MouseEventFlags.enum_type) operator &(MouseEventFlags.enum_type f1, MouseEventFlags.enum_type f2)/+noexcept+/{return QFlags!(MouseEventFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(MouseEventFlags.enum_type) operator &(MouseEventFlags.enum_type f1, QFlags!(MouseEventFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(MouseEventFlags.enum_type) operator ^(MouseEventFlags.enum_type f1, MouseEventFlags.enum_type f2)/+noexcept+/{return QFlags!(MouseEventFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(MouseEventFlags.enum_type) operator ^(MouseEventFlags.enum_type f1, QFlags!(MouseEventFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(MouseEventFlags.enum_type f1, MouseEventFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(MouseEventFlags.enum_type f1, QFlags!(MouseEventFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(MouseEventFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(MouseEventFlags.enum_type f1, MouseEventFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(MouseEventFlags.enum_type f1, QFlags!(MouseEventFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(MouseEventFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(MouseEventFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, MouseEventFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(MouseEventFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, MouseEventFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(MouseEventFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) MouseEventFlags operator ~(MouseEventFlags.enum_type e)/+noexcept+/{returnUnresolvedMergeConflict!(q{~MouseEventFlags(e)},q{~MouseEventFlags(e)});}+/
+/+pragma(inline, true) void operator |(MouseEventFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(MouseEventFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
     /+ Q_DECLARE_OPERATORS_FOR_FLAGS(MouseEventFlags) +/
     enum ChecksumType {
         ChecksumIso3309,
@@ -2118,7 +2351,7 @@ alias MouseEventFlags = QFlags!(MouseEventFlag);
     Q_ENUM_NS(TimerType)
     Q_ENUM_NS(ScrollPhase)
     Q_ENUM_NS(MouseEventSource)
-    Q_FLAG_NS(MouseEventFlag)
+    Q_FLAG_NS(MouseEventFlags)
     Q_ENUM_NS(ChecksumType)
     Q_ENUM_NS(HighDpiScaleFactorRoundingPolicy)
     Q_ENUM_NS(TabFocusBehavior)

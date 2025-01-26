@@ -78,11 +78,8 @@ public:
 
 #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        QString toString(ref const(QString) format, QCalendar cal/* = QCalendar()*/) const
-        { return toString(qToStringViewIgnoringNull(format), cal); }
-    }
+    QString toString(ref const(QString) format, QCalendar cal/* = QCalendar()*/) const
+    { return toString(qToStringViewIgnoringNull(format), cal); }
     QString toString(QStringView format, QCalendar cal/* = QCalendar()*/) const;
 /+ #endif +/
     bool setDate(int year, int month, int day); // Gregorian-optimized
@@ -104,17 +101,12 @@ public:
     static QDate fromString(QStringView string, QStringView format, QCalendar cal/* = QCalendar()*/)
     { auto tmp = string.toString(); return fromString(tmp, format, cal); }
     static QDate fromString(ref const(QString) string, QStringView format, QCalendar cal/* = QCalendar()*/);
-/+ # if QT_STRINGVIEW_LEVEL < 2 +/
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        static QDate fromString(ref const(QString) string, /+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate)
-        { return fromString(qToStringViewIgnoringNull(string), format); }
-        static QDate fromString(ref const(QString) string, ref const(QString) format,
-                                    QCalendar cal/* = QCalendar()*/)
-        { return fromString(string, qToStringViewIgnoringNull(format), cal); }
-    }
-/+ # endif
-#endif +/
+    static QDate fromString(ref const(QString) string, /+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate)
+    { return fromString(qToStringViewIgnoringNull(string), format); }
+    static QDate fromString(ref const(QString) string, ref const(QString) format,
+                                QCalendar cal/* = QCalendar()*/)
+    { return fromString(string, qToStringViewIgnoringNull(format), cal); }
+/+ #endif +/
     static bool isValid(int y, int m, int d);
     static bool isLeapYear(int year);
 
@@ -173,11 +165,8 @@ public:
     int msec() const;
 /+ #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat f = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        QString toString(ref const(QString) format) const
-        { return toString(qToStringViewIgnoringNull(format)); }
-    }
+    QString toString(ref const(QString) format) const
+    { return toString(qToStringViewIgnoringNull(format)); }
     QString toString(QStringView format) const;
 /+ #endif +/
     bool setHMS(int h, int m, int s, int ms = 0);
@@ -196,16 +185,11 @@ public:
     static QTime fromString(QStringView string, QStringView format)
     { auto tmp = string.toString(); return fromString(tmp, format); }
     static QTime fromString(ref const(QString) string, QStringView format);
-/+ # if QT_STRINGVIEW_LEVEL < 2 +/
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        static QTime fromString(ref const(QString) string, /+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate)
-        { return fromString(qToStringViewIgnoringNull(string), format); }
-        static QTime fromString(ref const(QString) string, ref const(QString) format)
-        { return fromString(string, qToStringViewIgnoringNull(format)); }
-    }
-/+ # endif
-#endif +/
+    static QTime fromString(ref const(QString) string, /+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate)
+    { return fromString(qToStringViewIgnoringNull(string), format); }
+    static QTime fromString(ref const(QString) string, ref const(QString) format)
+    { return fromString(string, qToStringViewIgnoringNull(format)); }
+/+ #endif +/
     static bool isValid(int h, int m, int s, int ms = 0);
 
 private:
@@ -302,6 +286,9 @@ private:
         /+ Data(Data &&other); +/
 //        ~this();
 
+        /+ void swap(Data &other) noexcept
+        { std::swap(data, other.data); } +/
+
         bool isShort() const;
         void detach();
 
@@ -335,7 +322,7 @@ public:
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QDateTime) +/
     /+ref QDateTime operator =(ref const(QDateTime) other)/+ noexcept+/;+/
 
-    /+ void swap(QDateTime &other) noexcept { qSwap(d.d, other.d.d); } +/
+    /+ void swap(QDateTime &other) noexcept { d.swap(other.d); } +/
 
     bool isNull() const;
     bool isValid() const;
@@ -365,11 +352,8 @@ public:
 
 /+ #if QT_CONFIG(datestring) +/
     QString toString(/+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate) const;
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        QString toString(ref const(QString) format, QCalendar cal/* = QCalendar()*/) const
-        { return toString(qToStringViewIgnoringNull(format), cal); }
-    }
+    QString toString(ref const(QString) format, QCalendar cal/* = QCalendar()*/) const
+    { return toString(qToStringViewIgnoringNull(format), cal); }
     QString toString(QStringView format, QCalendar cal/* = QCalendar()*/) const;
 /+ #endif +/
     /+ [[nodiscard]] +/ QDateTime addDays(qint64 days) const;
@@ -399,17 +383,12 @@ public:
     { auto tmp = string.toString(); return fromString(tmp, format, cal); }
     static QDateTime fromString(ref const(QString) string, QStringView format,
                                     QCalendar cal/* = QCalendar()*/);
-/+ # if QT_STRINGVIEW_LEVEL < 2 +/
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        static QDateTime fromString(ref const(QString) string, /+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate)
-        { return fromString(qToStringViewIgnoringNull(string), format); }
-        static QDateTime fromString(ref const(QString) string, ref const(QString) format,
-                                        QCalendar cal/* = QCalendar()*/)
-        { return fromString(string, qToStringViewIgnoringNull(format), cal); }
-    }
-/+ # endif
-#endif +/
+    static QDateTime fromString(ref const(QString) string, /+ Qt:: +/qt.core.namespace.DateFormat format = /+ Qt:: +/qt.core.namespace.DateFormat.TextDate)
+    { return fromString(qToStringViewIgnoringNull(string), format); }
+    static QDateTime fromString(ref const(QString) string, ref const(QString) format,
+                                    QCalendar cal/* = QCalendar()*/)
+    { return fromString(string, qToStringViewIgnoringNull(format), cal); }
+/+ #endif +/
 
     static QDateTime fromMSecsSinceEpoch(qint64 msecs, /+ Qt:: +/qt.core.namespace.TimeSpec spec = /+ Qt:: +/qt.core.namespace.TimeSpec.LocalTime,
                                              int offsetFromUtc = 0);

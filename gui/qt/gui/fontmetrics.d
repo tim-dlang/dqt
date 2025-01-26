@@ -23,6 +23,7 @@ import qt.core.string;
 import qt.core.typeinfo;
 import qt.gui.font;
 import qt.gui.paintdevice;
+import qt.gui.textoption;
 import qt.helpers;
 
 /+ #ifndef QT_INCLUDE_COMPAT
@@ -46,7 +47,7 @@ public:
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QFontMetrics) +/
 
     /+ void swap(QFontMetrics &other) noexcept
-    { qSwap(d, other.d); } +/
+    { d.swap(other.d); } +/
 
     int ascent() const;
     int capHeight() const;
@@ -68,11 +69,13 @@ public:
     int rightBearing(QChar) const;
 
     int horizontalAdvance(ref const(QString) , int len = -1) const;
+    int horizontalAdvance(ref const(QString) , ref const(QTextOption) textOption) const;
     int horizontalAdvance(QChar) const;
 
     QRect boundingRect(QChar) const;
 
     QRect boundingRect(ref const(QString) text) const;
+    QRect boundingRect(ref const(QString) text, ref const(QTextOption) textOption) const;
     QRect boundingRect(ref const(QRect) r, int flags, ref const(QString) text, int tabstops = 0, int* tabarray = null) const;
     pragma(inline, true) QRect boundingRect(int x, int y, int w, int h, int flags, ref const(QString) text,
                                   int tabstops = 0, int* tabarray = null) const
@@ -80,6 +83,7 @@ public:
     QSize size(int flags, ref const(QString) str, int tabstops = 0, int* tabarray = null) const;
 
     QRect tightBoundingRect(ref const(QString) text) const;
+    QRect tightBoundingRect(ref const(QString) text, ref const(QTextOption) textOption) const;
 
     QString elidedText(ref const(QString) text, /+ Qt:: +/qt.core.namespace.TextElideMode mode, int width, int flags = 0) const;
 
@@ -120,7 +124,7 @@ public:
     /+ref QFontMetricsF operator =(ref const(QFontMetrics) );+/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QFontMetricsF) +/
 
-    /+ void swap(QFontMetricsF &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QFontMetricsF &other) noexcept { d.swap(other.d); } +/
 
     qreal ascent() const;
     qreal capHeight() const;
@@ -143,13 +147,16 @@ public:
 
     qreal horizontalAdvance(ref const(QString) string, int length = -1) const;
     qreal horizontalAdvance(QChar) const;
+    qreal horizontalAdvance(ref const(QString) string, ref const(QTextOption) textOption) const;
 
     QRectF boundingRect(ref const(QString) string) const;
+    QRectF boundingRect(ref const(QString) text, ref const(QTextOption) textOption) const;
     QRectF boundingRect(QChar) const;
     QRectF boundingRect(ref const(QRectF) r, int flags, ref const(QString) string, int tabstops = 0, int* tabarray = null) const;
     QSizeF size(int flags, ref const(QString) str, int tabstops = 0, int* tabarray = null) const;
 
     QRectF tightBoundingRect(ref const(QString) text) const;
+    QRectF tightBoundingRect(ref const(QString) text, ref const(QTextOption) textOption) const;
 
     QString elidedText(ref const(QString) text, /+ Qt:: +/qt.core.namespace.TextElideMode mode, qreal width, int flags = 0) const;
 

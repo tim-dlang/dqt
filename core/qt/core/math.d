@@ -221,7 +221,7 @@ auto qHypot(Tx x, Ty y)
     return hypot(x, y);
 }
 
-#if __cpp_lib_hypot >= 201603L // Expected to be true
+#if defined(__cpp_lib_hypot) && __cpp_lib_hypot >= 201603L // Expected to be true
 template <typename Tx, typename Ty, typename Tz>
 auto qHypot(Tx x, Ty y, Tz z)
 {
@@ -507,6 +507,8 @@ pragma(inline, true) quint64 qConstexprNextPowerOfTwo(qint64 v)
 /+ #if defined(__cpp_lib_int_pow2) && __cpp_lib_int_pow2 >= 202002L +/
     static if ((configValue!"__cpp_lib_int_pow2" >= 202002 && defined!"__cpp_lib_int_pow2"))
     {
+        if (static_cast!(qint32)(v) < 0)
+            return 0; // std::bit_ceil() is undefined for values that would overflow, but we document them to be 0
         return /+ std:: +/bit_ceil(v + 1);
     }
     else
@@ -526,6 +528,8 @@ pragma(inline, true) quint64 qConstexprNextPowerOfTwo(qint64 v)
 /+ #if defined(__cpp_lib_int_pow2) && __cpp_lib_int_pow2 >= 202002L +/
     static if ((configValue!"__cpp_lib_int_pow2" >= 202002 && defined!"__cpp_lib_int_pow2"))
     {
+        if (static_cast!(qint64)(v) < 0)
+            return 0; // std::bit_ceil() is undefined for values that would overflow, but we document them to be 0
         return /+ std:: +/bit_ceil(v + 1);
     }
     else

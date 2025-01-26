@@ -61,17 +61,27 @@ private:
 /+pragma(inline, true) QFlags!(QQmlImageProviderBase.Flags.enum_type) operator |(QQmlImageProviderBase.Flags.enum_type f1, QFlags!(QQmlImageProviderBase.Flags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QQmlImageProviderBase.Flags.enum_type) operator &(QQmlImageProviderBase.Flags.enum_type f1, QQmlImageProviderBase.Flags.enum_type f2)/+noexcept+/{return QFlags!(QQmlImageProviderBase.Flags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QQmlImageProviderBase.Flags.enum_type) operator &(QQmlImageProviderBase.Flags.enum_type f1, QFlags!(QQmlImageProviderBase.Flags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QQmlImageProviderBase.Flags.enum_type) operator ^(QQmlImageProviderBase.Flags.enum_type f1, QQmlImageProviderBase.Flags.enum_type f2)/+noexcept+/{return QFlags!(QQmlImageProviderBase.Flags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QQmlImageProviderBase.Flags.enum_type) operator ^(QQmlImageProviderBase.Flags.enum_type f1, QFlags!(QQmlImageProviderBase.Flags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QQmlImageProviderBase.Flags.enum_type f1, QQmlImageProviderBase.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QQmlImageProviderBase.Flags.enum_type f1, QFlags!(QQmlImageProviderBase.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QQmlImageProviderBase.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QQmlImageProviderBase.Flags.enum_type f1, QQmlImageProviderBase.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QQmlImageProviderBase.Flags.enum_type f1, QFlags!(QQmlImageProviderBase.Flags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QQmlImageProviderBase.Flags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QQmlImageProviderBase.Flags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QQmlImageProviderBase.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QQmlImageProviderBase.Flags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QQmlImageProviderBase.Flags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QQmlImageProviderBase.Flags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QQmlImageProviderBase.Flags operator ~(QQmlImageProviderBase.Flags.enum_type e)/+noexcept+/{return~QQmlImageProviderBase.Flags(e);}+/
+/+pragma(inline, true) void operator |(QQmlImageProviderBase.Flags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QQmlImageProviderBase.Flags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QQmlImageProviderBase::Flags) +/
 extern(C++, class) struct QQmlEnginePrivate;
 extern(C++, class) struct QQmlImportsPrivate;
@@ -95,6 +105,7 @@ public:
 
     final void clearComponentCache();
     final void trimComponentCache();
+    final void clearSingletons();
 
     final QStringList importPathList() const;
     final void setImportPathList(ref const(QStringList) paths);

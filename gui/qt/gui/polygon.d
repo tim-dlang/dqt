@@ -57,10 +57,9 @@ public:
     /+ Q_GUI_EXPORT +/ void point(int i, int* x, int* y) const;
     pragma(inline, true) QPoint point(int index) const
     { return at(index); }
-    pragma(inline, true) void setPoint(int index, int x, int y)
-    { (this)[index] = QPoint(x, y); }
+    /+ Q_GUI_EXPORT +/ void setPoint(int index, int x, int y);
     pragma(inline, true) void setPoint(int index, ref const(QPoint) pt)
-    { (this)[index] = pt; }
+    { setPoint(index, pt.x(), pt.y()); }
     /+ Q_GUI_EXPORT +/ void setPoints(int nPoints, const(int)* points);
     /+ Q_GUI_EXPORT +/ void setPoints(int nPoints, int firstx, int firsty, ...);
     /+ Q_GUI_EXPORT +/ void putPoints(int index, int nPoints, const(int)* points);

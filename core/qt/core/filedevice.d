@@ -127,48 +127,78 @@ private:
 /+pragma(inline, true) QFlags!(QFileDevice.Permissions.enum_type) operator |(QFileDevice.Permissions.enum_type f1, QFlags!(QFileDevice.Permissions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QFileDevice.Permissions.enum_type) operator &(QFileDevice.Permissions.enum_type f1, QFileDevice.Permissions.enum_type f2)/+noexcept+/{return QFlags!(QFileDevice.Permissions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QFileDevice.Permissions.enum_type) operator &(QFileDevice.Permissions.enum_type f1, QFlags!(QFileDevice.Permissions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QFileDevice.Permissions.enum_type) operator ^(QFileDevice.Permissions.enum_type f1, QFileDevice.Permissions.enum_type f2)/+noexcept+/{return QFlags!(QFileDevice.Permissions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QFileDevice.Permissions.enum_type) operator ^(QFileDevice.Permissions.enum_type f1, QFlags!(QFileDevice.Permissions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QFileDevice.Permissions.enum_type f1, QFileDevice.Permissions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFileDevice.Permissions.enum_type f1, QFlags!(QFileDevice.Permissions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QFileDevice.Permissions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileDevice.Permissions.enum_type f1, QFileDevice.Permissions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileDevice.Permissions.enum_type f1, QFlags!(QFileDevice.Permissions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QFileDevice.Permissions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QFileDevice.Permissions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QFileDevice.Permissions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFileDevice.Permissions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFileDevice.Permissions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileDevice.Permissions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QFileDevice.Permissions operator ~(QFileDevice.Permissions.enum_type e)/+noexcept+/{return~QFileDevice.Permissions(e);}+/
+/+pragma(inline, true) void operator |(QFileDevice.Permissions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QFileDevice.Permissions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QFileDevice::Permissions) +/
 /+pragma(inline, true) QFlags!(QFileDevice.FileHandleFlags.enum_type) operator |(QFileDevice.FileHandleFlags.enum_type f1, QFileDevice.FileHandleFlags.enum_type f2)/+noexcept+/{return QFlags!(QFileDevice.FileHandleFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QFileDevice.FileHandleFlags.enum_type) operator |(QFileDevice.FileHandleFlags.enum_type f1, QFlags!(QFileDevice.FileHandleFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QFileDevice.FileHandleFlags.enum_type) operator &(QFileDevice.FileHandleFlags.enum_type f1, QFileDevice.FileHandleFlags.enum_type f2)/+noexcept+/{return QFlags!(QFileDevice.FileHandleFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QFileDevice.FileHandleFlags.enum_type) operator &(QFileDevice.FileHandleFlags.enum_type f1, QFlags!(QFileDevice.FileHandleFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QFileDevice.FileHandleFlags.enum_type) operator ^(QFileDevice.FileHandleFlags.enum_type f1, QFileDevice.FileHandleFlags.enum_type f2)/+noexcept+/{return QFlags!(QFileDevice.FileHandleFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QFileDevice.FileHandleFlags.enum_type) operator ^(QFileDevice.FileHandleFlags.enum_type f1, QFlags!(QFileDevice.FileHandleFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QFileDevice.FileHandleFlags.enum_type f1, QFileDevice.FileHandleFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFileDevice.FileHandleFlags.enum_type f1, QFlags!(QFileDevice.FileHandleFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QFileDevice.FileHandleFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileDevice.FileHandleFlags.enum_type f1, QFileDevice.FileHandleFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileDevice.FileHandleFlags.enum_type f1, QFlags!(QFileDevice.FileHandleFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QFileDevice.FileHandleFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QFileDevice.FileHandleFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QFileDevice.FileHandleFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFileDevice.FileHandleFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFileDevice.FileHandleFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileDevice.FileHandleFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QFileDevice.FileHandleFlags operator ~(QFileDevice.FileHandleFlags.enum_type e)/+noexcept+/{return~QFileDevice.FileHandleFlags(e);}+/
+/+pragma(inline, true) void operator |(QFileDevice.FileHandleFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QFileDevice.FileHandleFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QFileDevice::FileHandleFlags) +/
 /+pragma(inline, true) QFlags!(QFileDevice.MemoryMapFlags.enum_type) operator |(QFileDevice.MemoryMapFlags.enum_type f1, QFileDevice.MemoryMapFlags.enum_type f2)/+noexcept+/{return QFlags!(QFileDevice.MemoryMapFlags.enum_type)(f1)|f2;}+/
 /+pragma(inline, true) QFlags!(QFileDevice.MemoryMapFlags.enum_type) operator |(QFileDevice.MemoryMapFlags.enum_type f1, QFlags!(QFileDevice.MemoryMapFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QFileDevice.MemoryMapFlags.enum_type) operator &(QFileDevice.MemoryMapFlags.enum_type f1, QFileDevice.MemoryMapFlags.enum_type f2)/+noexcept+/{return QFlags!(QFileDevice.MemoryMapFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QFileDevice.MemoryMapFlags.enum_type) operator &(QFileDevice.MemoryMapFlags.enum_type f1, QFlags!(QFileDevice.MemoryMapFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QFileDevice.MemoryMapFlags.enum_type) operator ^(QFileDevice.MemoryMapFlags.enum_type f1, QFileDevice.MemoryMapFlags.enum_type f2)/+noexcept+/{return QFlags!(QFileDevice.MemoryMapFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QFileDevice.MemoryMapFlags.enum_type) operator ^(QFileDevice.MemoryMapFlags.enum_type f1, QFlags!(QFileDevice.MemoryMapFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QFileDevice.MemoryMapFlags.enum_type f1, QFileDevice.MemoryMapFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFileDevice.MemoryMapFlags.enum_type f1, QFlags!(QFileDevice.MemoryMapFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QFileDevice.MemoryMapFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileDevice.MemoryMapFlags.enum_type f1, QFileDevice.MemoryMapFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileDevice.MemoryMapFlags.enum_type f1, QFlags!(QFileDevice.MemoryMapFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QFileDevice.MemoryMapFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QFileDevice.MemoryMapFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QFileDevice.MemoryMapFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QFileDevice.MemoryMapFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFileDevice.MemoryMapFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QFileDevice.MemoryMapFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QFileDevice.MemoryMapFlags operator ~(QFileDevice.MemoryMapFlags.enum_type e)/+noexcept+/{return~QFileDevice.MemoryMapFlags(e);}+/
+/+pragma(inline, true) void operator |(QFileDevice.MemoryMapFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QFileDevice.MemoryMapFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QFileDevice::MemoryMapFlags) +/

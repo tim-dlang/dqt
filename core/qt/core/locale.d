@@ -378,6 +378,8 @@ public:
         Zarma = 325,
         Zhuang = 326,
         Zulu = 327,
+        Kaingang = 328,
+        Nheengatu = 329,
 
         Afan = Language.Oromo,
         Bengali = Language.Bangla,
@@ -399,7 +401,7 @@ public:
         Uigur = Language.Uyghur,
         Walamo = Language.Wolaytta,
 
-        LastLanguage = Language.Zulu
+        LastLanguage = Language.Nheengatu
     }
 
     enum Script : ushort {
@@ -910,6 +912,7 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     }
 
     /+ explicit +/this(ref const(QString) name);
+    /+ explicit +/this(QStringView name);
     this(Language language, Territory territory);
     this(Language language, Script script = Script.AnyScript, Territory territory = Country.AnyTerritory);
     @disable this(this);
@@ -918,7 +921,7 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     /+ref QLocale operator =(ref const(QLocale) other);+/
     ~this();
 
-    /+ void swap(QLocale &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QLocale &other) noexcept { d.swap(other.d); } +/
 
     Language language() const;
     Script script() const;
@@ -935,33 +938,28 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
 /+ #if QT_DEPRECATED_SINCE(6, 6) +/
     /+ QT_DEPRECATED_VERSION_X_6_6("Use nativeTerritoryName() instead") +/
         QString nativeCountryName() const;
-/+ #endif
-
-#if QT_STRINGVIEW_LEVEL < 2 +/
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        short toShort(ref const(QString) s, bool* ok = null) const
-        { return toShort(qToStringViewIgnoringNull(s), ok); }
-        ushort toUShort(ref const(QString) s, bool* ok = null) const
-        { return toUShort(qToStringViewIgnoringNull(s), ok); }
-        int toInt(ref const(QString) s, bool* ok = null) const
-        { return toInt(qToStringViewIgnoringNull(s), ok); }
-        uint toUInt(ref const(QString) s, bool* ok = null) const
-        { return toUInt(qToStringViewIgnoringNull(s), ok); }
-        cpp_long toLong(ref const(QString) s, bool* ok = null) const
-        { return toLong(qToStringViewIgnoringNull(s), ok); }
-        cpp_ulong toULong(ref const(QString) s, bool* ok = null) const
-        { return toULong(qToStringViewIgnoringNull(s), ok); }
-        qlonglong toLongLong(ref const(QString) s, bool* ok = null) const
-        { return toLongLong(qToStringViewIgnoringNull(s), ok); }
-        qulonglong toULongLong(ref const(QString) s, bool* ok = null) const
-        { return toULongLong(qToStringViewIgnoringNull(s), ok); }
-        float toFloat(ref const(QString) s, bool* ok = null) const
-        { return toFloat(qToStringViewIgnoringNull(s), ok); }
-        double toDouble(ref const(QString) s, bool* ok = null) const
-        { return toDouble(qToStringViewIgnoringNull(s), ok); }
-    }
 /+ #endif +/
+
+    short toShort(ref const(QString) s, bool* ok = null) const
+    { return toShort(qToStringViewIgnoringNull(s), ok); }
+    ushort toUShort(ref const(QString) s, bool* ok = null) const
+    { return toUShort(qToStringViewIgnoringNull(s), ok); }
+    int toInt(ref const(QString) s, bool* ok = null) const
+    { return toInt(qToStringViewIgnoringNull(s), ok); }
+    uint toUInt(ref const(QString) s, bool* ok = null) const
+    { return toUInt(qToStringViewIgnoringNull(s), ok); }
+    cpp_long toLong(ref const(QString) s, bool* ok = null) const
+    { return toLong(qToStringViewIgnoringNull(s), ok); }
+    cpp_ulong toULong(ref const(QString) s, bool* ok = null) const
+    { return toULong(qToStringViewIgnoringNull(s), ok); }
+    qlonglong toLongLong(ref const(QString) s, bool* ok = null) const
+    { return toLongLong(qToStringViewIgnoringNull(s), ok); }
+    qulonglong toULongLong(ref const(QString) s, bool* ok = null) const
+    { return toULongLong(qToStringViewIgnoringNull(s), ok); }
+    float toFloat(ref const(QString) s, bool* ok = null) const
+    { return toFloat(qToStringViewIgnoringNull(s), ok); }
+    double toDouble(ref const(QString) s, bool* ok = null) const
+    { return toDouble(qToStringViewIgnoringNull(s), ok); }
 
     short toShort(QStringView s, bool* ok = null) const;
     ushort toUShort(QStringView s, bool* ok = null) const;
@@ -986,14 +984,11 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     QString toString(float f, char format = 'g', int precision = 6) const
     { return toString(double(f), format, precision); }
 
-    static if (QT_STRINGVIEW_LEVEL < 2)
-    {
-        // (Can't inline first two: passing by value doesn't work when only forward-declared.)
-        QString toString(QDate date, ref const(QString) format) const;
-        QString toString(QTime time, ref const(QString) format) const;
-        QString toString(ref const(QDateTime) dateTime, ref const(QString) format) const
-        { return toString(dateTime, qToStringViewIgnoringNull(format)); }
-    }
+    // (Can't inline first two: passing by value doesn't work when only forward-declared.)
+    QString toString(QDate date, ref const(QString) format) const;
+    QString toString(QTime time, ref const(QString) format) const;
+    QString toString(ref const(QDateTime) dateTime, ref const(QString) format) const
+    { return toString(dateTime, qToStringViewIgnoringNull(format)); }
     QString toString(QDate date, QStringView format) const;
     QString toString(QTime time, QStringView format) const;
     QString toString(ref const(QDateTime) dateTime, QStringView format) const;
@@ -1072,8 +1067,30 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
 
     QStringList uiLanguages() const;
 
-    static QString languageToCode(Language language);
-    static Language codeToLanguage(QStringView languageCode)/+ noexcept+/;
+    enum LanguageCodeType {
+        ISO639Part1 = 1 << 0,
+        ISO639Part2B = 1 << 1,
+        ISO639Part2T = 1 << 2,
+        ISO639Part3 = 1 << 3,
+        LegacyLanguageCode = 1 << 15,
+
+        ISO639Part2 = LanguageCodeType.ISO639Part2B | LanguageCodeType.ISO639Part2T,
+        ISO639Alpha2 = LanguageCodeType.ISO639Part1,
+        ISO639Alpha3 = LanguageCodeType.ISO639Part2 | LanguageCodeType.ISO639Part3,
+        ISO639 = LanguageCodeType.ISO639Alpha2 | LanguageCodeType.ISO639Alpha3,
+
+        AnyLanguageCode = -1
+    }
+    /+ Q_DECLARE_FLAGS(LanguageCodeTypes, LanguageCodeType) +/
+alias LanguageCodeTypes = QFlags!(LanguageCodeType);
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        static QString languageToCode(Language language);
+        static Language codeToLanguage(QStringView languageCode)/+ noexcept+/;
+    }
+    static QString languageToCode(Language language, LanguageCodeTypes codeTypes = LanguageCodeType.AnyLanguageCode);
+    static Language codeToLanguage(QStringView languageCode,
+                                       LanguageCodeTypes codeTypes = LanguageCodeType.AnyLanguageCode)/+ noexcept+/;
     static QString territoryToCode(Territory territory);
     static Territory codeToTerritory(QStringView territoryCode)/+ noexcept+/;
 /+ #if QT_DEPRECATED_SINCE(6, 6) +/
@@ -1133,19 +1150,55 @@ private:
 /+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator &(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/{return QFlags!(QLocale.NumberOptions.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator &(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator ^(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/{return QFlags!(QLocale.NumberOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator ^(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QLocale.NumberOptions operator ~(QLocale.NumberOptions.enum_type e)/+noexcept+/{return~QLocale.NumberOptions(e);}+/
+/+pragma(inline, true) void operator |(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 /+ Q_DECLARE_SHARED(QLocale)
-Q_DECLARE_OPERATORS_FOR_FLAGS(QLocale::NumberOptions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(QLocale::NumberOptions) +/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator |(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/{return QFlags!(QLocale.LanguageCodeTypes.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator |(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator &(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/{return QFlags!(QLocale.LanguageCodeTypes.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator &(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator ^(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/{return QFlags!(QLocale.LanguageCodeTypes.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator ^(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(int f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator +(QLocale.LanguageCodeTypes.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(int f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/;+/
+/+pragma(inline, true) void operator -(QLocale.LanguageCodeTypes.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QLocale.LanguageCodeTypes operator ~(QLocale.LanguageCodeTypes.enum_type e)/+noexcept+/{return~QLocale.LanguageCodeTypes(e);}+/
+/+pragma(inline, true) void operator |(QLocale.LanguageCodeTypes.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QLocale.LanguageCodeTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
+/+ Q_DECLARE_OPERATORS_FOR_FLAGS(QLocale::LanguageCodeTypes)
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QLocale &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLocale &);

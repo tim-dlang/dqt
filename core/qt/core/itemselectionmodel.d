@@ -54,8 +54,8 @@ public:
 
     /+ void swap(QItemSelectionRange &other) noexcept
     {
-        qSwap(tl, other.tl);
-        qSwap(br, other.br);
+        tl.swap(other.tl);
+        br.swap(other.br);
     } +/
 
     pragma(inline, true) int top() const { return tl.row(); }
@@ -213,17 +213,27 @@ private:
 /+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator &(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator &(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator ^(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator ^(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QItemSelectionModel.SelectionFlags operator ~(QItemSelectionModel.SelectionFlags.enum_type e)/+noexcept+/{return~QItemSelectionModel.SelectionFlags(e);}+/
+/+pragma(inline, true) void operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QItemSelectionModel::SelectionFlags) +/
 // We export each out-of-line method individually to prevent MSVC from
@@ -255,6 +265,6 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QItemSelectionRange &);
 #endif
 
 
-Q_DECLARE_METATYPE(QItemSelectionRange)
-Q_DECLARE_METATYPE(QItemSelection) +/
+QT_DECL_METATYPE_EXTERN(QItemSelectionRange, Q_CORE_EXPORT)
+QT_DECL_METATYPE_EXTERN(QItemSelection, Q_CORE_EXPORT) +/
 

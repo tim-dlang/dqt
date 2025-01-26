@@ -89,7 +89,7 @@ public:
     /+ QCursor(QCursor &&other) noexcept : d(qExchange(other.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QCursor) +/
 
-    /+ void swap(QCursor &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QCursor &other) noexcept { qt_ptr_swap(d, other.d); } +/
 
     /+auto opCast(T : QVariant)() const;+/
 
@@ -97,8 +97,10 @@ public:
     void setShape(/+ Qt:: +/qt.core.namespace.CursorShape newShape);
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
-    QBitmap bitmap(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const { return bitmap(); }
-    QBitmap mask(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const { return mask(); }
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use the overload without argument instead.") +/
+        QBitmap bitmap(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const { return bitmap(); }
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use the overload without argument instead.") +/
+        QBitmap mask(/+ Qt:: +/qt.core.namespace.ReturnByValueConstant) const { return mask(); }
 /+ #endif +/ // QT_DEPRECATED_SINCE(6, 0)
     QBitmap bitmap() const;
     QBitmap mask() const;

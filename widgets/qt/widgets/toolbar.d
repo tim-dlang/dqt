@@ -15,17 +15,20 @@ extern(C++):
 import qt.config;
 import qt.core.coreevent;
 import qt.core.namespace;
-import qt.core.object;
 import qt.core.point;
 import qt.core.rect;
 import qt.core.size;
 import qt.core.string;
 import qt.gui.action;
 import qt.gui.event;
-import qt.gui.icon;
 import qt.helpers;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
+static if (defined!"QT_WIDGETS_BUILD_REMOVED_API")
+{
+    import qt.core.object;
+    import qt.gui.icon;
+}
 
 /+ QT_REQUIRE_CONFIG(toolbar); +/
 
@@ -69,62 +72,18 @@ public:
     final void clear();
 
     /+ using QWidget::addAction; +/
-    final QAction addAction(ref const(QString) text);
-    final QAction addAction(ref const(QIcon) icon, ref const(QString) text);
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QAction addAction(ref const(QString) text, const(QObject) receiver, const(char)* member);
-    }));
-    mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    final QAction addAction(ref const(QIcon) icon, ref const(QString) text,
-                           const(QObject) receiver, const(char)* member);
-    }));
-/+ #ifdef Q_CLANG_QDOC
-    template<typename Functor>
-    QAction *addAction(const QString &text, Functor functor);
-    template<typename Functor>
-    QAction *addAction(const QString &text, const QObject *context, Functor functor);
-    template<typename Functor>
-    QAction *addAction(const QIcon &icon, const QString &text, Functor functor);
-    template<typename Functor>
-    QAction *addAction(const QIcon &icon, const QString &text, const QObject *context, Functor functor);
-#else +/
-    // addAction(QString): Connect to a QObject slot / functor or function pointer (with context)
-    /+ template<class Obj, typename Func1> +/
-    /+ inline typename std::enable_if<!std::is_same<const char*, Func1>::value
-        && QtPrivate::IsPointerToTypeDerivedFromQObject<Obj*>::Value, QAction *>::type
-        addAction(const QString &text, const Obj *object, Func1 slot)
+    static if (defined!"QT_WIDGETS_BUILD_REMOVED_API")
     {
-        QAction *result = addAction(text);
-        connect(result, &QAction::triggered, object, std::move(slot));
-        return result;
-    } +/
-    // addAction(QString): Connect to a functor or function pointer (without context)
-    /+ template <typename Func1> +/
-    /+ inline QAction *addAction(const QString &text, Func1 slot)
-    {
-        QAction *result = addAction(text);
-        connect(result, &QAction::triggered, slot);
-        return result;
-    } +/
-    // addAction(QString): Connect to a QObject slot / functor or function pointer (with context)
-    /+ template<class Obj, typename Func1> +/
-    /+ inline typename std::enable_if<!std::is_same<const char*, Func1>::value
-        && QtPrivate::IsPointerToTypeDerivedFromQObject<Obj*>::Value, QAction *>::type
-        addAction(const QIcon &actionIcon, const QString &text, const Obj *object, Func1 slot)
-    {
-        QAction *result = addAction(actionIcon, text);
-        connect(result, &QAction::triggered, object, std::move(slot));
-        return result;
-    } +/
-    // addAction(QIcon, QString): Connect to a functor or function pointer (without context)
-    /+ template <typename Func1> +/
-    /+ inline QAction *addAction(const QIcon &actionIcon, const QString &text, Func1 slot)
-    {
-        QAction *result = addAction(actionIcon, text);
-        connect(result, &QAction::triggered, slot);
-        return result;
-    } +/
-/+ #endif +/ // !Q_CLANG_QDOC
+        final QAction addAction(ref const(QString) text);
+        final QAction addAction(ref const(QIcon) icon, ref const(QString) text);
+        mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+        final QAction addAction(ref const(QString) text, const(QObject) receiver, const(char)* member);
+        }));
+        mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
+        final QAction addAction(ref const(QIcon) icon, ref const(QString) text,
+                               const(QObject) receiver, const(char)* member);
+        }));
+    }
 
     final QAction addSeparator();
     final QAction insertSeparator(QAction before);

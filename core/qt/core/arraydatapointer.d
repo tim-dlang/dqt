@@ -397,10 +397,11 @@ public:
     qsizetype size = 0;
 }
 
-/+pragma(inline, true) void qSwap(T)(ref QArrayDataPointer!(T) p1, ref QArrayDataPointer!(T) p2)/+ noexcept+/
+/+ template <class T>
+inline void swap(QArrayDataPointer<T> &p1, QArrayDataPointer<T> &p2) noexcept
 {
     p1.swap(p2);
-}+/
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //  Q_ARRAY_LITERAL
@@ -409,7 +410,7 @@ public:
 // mmappable portion of the executable (typically, .rodata section).
 
 // Hide array inside a lambda
-/+ #define Q_ARRAY_LITERAL(Type, ...) \
+#define Q_ARRAY_LITERAL(Type, ...) \
     ([]() -> QArrayDataPointer<Type> { \
         static Type const data[] = { __VA_ARGS__ }; \
         return QArrayDataPointer<Type>::fromRawData(const_cast<Type *>(data), std::size(data)); \

@@ -127,7 +127,7 @@ public:
         RotationAngleChanged = 0x2,
         CenterPointChanged = 0x4
     }
-    /+ Q_FLAG(ChangeFlag) +/
+    /+ Q_ENUM(ChangeFlag) +/
     /+ Q_DECLARE_FLAGS(ChangeFlags, ChangeFlag) +/
 alias ChangeFlags = QFlags!(ChangeFlag);    /+ Q_FLAG(ChangeFlags) +/
 
@@ -184,17 +184,27 @@ public:
 /+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator |(QPinchGesture.ChangeFlags.enum_type f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
 /+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator &(QPinchGesture.ChangeFlags.enum_type f1, QPinchGesture.ChangeFlags.enum_type f2)/+noexcept+/{return QFlags!(QPinchGesture.ChangeFlags.enum_type)(f1)&f2;}+/
 /+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator &(QPinchGesture.ChangeFlags.enum_type f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator ^(QPinchGesture.ChangeFlags.enum_type f1, QPinchGesture.ChangeFlags.enum_type f2)/+noexcept+/{return QFlags!(QPinchGesture.ChangeFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator ^(QPinchGesture.ChangeFlags.enum_type f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
 /+pragma(inline, true) void operator +(QPinchGesture.ChangeFlags.enum_type f1, QPinchGesture.ChangeFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QPinchGesture.ChangeFlags.enum_type f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(int f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QPinchGesture.ChangeFlags.enum_type f1, QPinchGesture.ChangeFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QPinchGesture.ChangeFlags.enum_type f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QPinchGesture.ChangeFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 /+pragma(inline, true) void operator +(int f1, QPinchGesture.ChangeFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator +(QPinchGesture.ChangeFlags.enum_type f1, int f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(int f1, QPinchGesture.ChangeFlags.enum_type f2)/+noexcept+/;+/
 /+pragma(inline, true) void operator -(QPinchGesture.ChangeFlags.enum_type f1, int f2)/+noexcept+/;+/
+static if (defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QPinchGesture.ChangeFlags operator ~(QPinchGesture.ChangeFlags.enum_type e)/+noexcept+/{return~QPinchGesture.ChangeFlags(e);}+/
+/+pragma(inline, true) void operator |(QPinchGesture.ChangeFlags.enum_type f1, int f2)/+noexcept+/;+/
+}
+static if (!defined!"QT_TYPESAFE_FLAGS")
+{
+/+pragma(inline, true) QIncompatibleFlag operator |(QPinchGesture.ChangeFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+}
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QPinchGesture::ChangeFlags)
 

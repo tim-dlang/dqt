@@ -84,11 +84,23 @@ public:
 
     static QList!(int) standardSizes();
 
-/+ #if QT_DEPRECATED_SINCE(6, 0) +/
-    /+ QT_DEPRECATED_VERSION_X_6_0("Call the static functions instead") explicit QFontDatabase() = default; +/
-/+ #else
-    QFontDatabase() = delete;
-#endif +/
+    static if (!versionIsSet!("QT_BUILD_GUI_LIB"))
+    {
+        /+ QT_DEPRECATED_VERSION_X_6_0("Call the static functions instead") explicit QFontDatabase() = default; +/
+    }
+    else
+    {
+        @disable this();
+        pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
+        void rawConstructor() /+ = delete +/;
+        static typeof(this) create()
+        {
+            typeof(this) r = typeof(this).init;
+            r.rawConstructor();
+            return r;
+        }
+
+    }
 
     static QList!(WritingSystem) writingSystems();
     static QList!(WritingSystem) writingSystems(ref const(QString) family);

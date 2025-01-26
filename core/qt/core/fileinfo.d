@@ -83,7 +83,7 @@ public:
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QFileInfo) +/
 
     /+ void swap(QFileInfo &other) noexcept
-    { qSwap(d_ptr, other.d_ptr); } +/
+    { d_ptr.swap(other.d_ptr); } +/
 
     /+bool operator ==(ref const(QFileInfo) fileinfo) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QFileInfo) fileinfo) const { return !(operator==(fileinfo)); }+/
@@ -204,5 +204,5 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QFileInfo &);
 #endif
 
 
-Q_DECLARE_METATYPE(QFileInfo) +/
+QT_DECL_METATYPE_EXTERN(QFileInfo, Q_CORE_EXPORT) +/
 

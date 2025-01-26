@@ -61,7 +61,7 @@ alias GlyphRunFlags = QFlags!(GlyphRunFlag);
     /+ref QGlyphRun operator =(ref const(QGlyphRun) other);+/
     ~this();
 
-    /+ void swap(QGlyphRun &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QGlyphRun &other) noexcept { d.swap(other.d); } +/
 
     QRawFont rawFont() const;
     void setRawFont(ref const(QRawFont) rawFont);

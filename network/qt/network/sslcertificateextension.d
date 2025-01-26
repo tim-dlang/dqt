@@ -41,7 +41,7 @@ public:
     /+ref QSslCertificateExtension operator =(ref const(QSslCertificateExtension) other);+/
     ~this();
 
-    /+ void swap(QSslCertificateExtension &other) noexcept { qSwap(d, other.d); } +/
+    /+ void swap(QSslCertificateExtension &other) noexcept { d.swap(other.d); } +/
 
     QString oid() const;
     QString name() const;
