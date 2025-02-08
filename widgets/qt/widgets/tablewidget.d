@@ -138,10 +138,22 @@ public:
     pragma(inline, true) final void setFont(ref const(QFont) afont)
     { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.FontRole, afont); }
 
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/
     pragma(inline, true) final int textAlignment() const
         { return data(/+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole).toInt(); }
-    pragma(inline, true) final void setTextAlignment(int alignment)
+/+ #else
+    inline Qt::Alignment textAlignment() const
+    { return qvariant_cast<Qt::Alignment>(data(Qt::TextAlignmentRole)); }
+#endif
+#if QT_DEPRECATED_SINCE(6, 4) +/
+    /+ QT_DEPRECATED_VERSION_X_6_4("Use the overload taking Qt::Alignment") +/
+        pragma(inline, true) final void setTextAlignment(int alignment)
         { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole, alignment); }
+    pragma(inline, true) final void setTextAlignment(/+ Qt:: +/qt.core.namespace.AlignmentFlag alignment)
+        { auto tmp = QVariant.fromValue(/+ Qt:: +/qt.core.namespace.Alignment(alignment)); setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole, tmp); }
+/+ #endif +/
+    pragma(inline, true) final void setTextAlignment(/+ Qt:: +/qt.core.namespace.Alignment alignment)
+        { auto tmp = QVariant.fromValue(alignment); setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole, tmp); }
 
     pragma(inline, true) final QBrush background() const
         { return qvariant_cast!(QBrush)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
@@ -154,7 +166,7 @@ public:
         { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole, brush.style() != /+ Qt:: +/qt.core.namespace.BrushStyle.NoBrush ? QVariant.fromValue(brush) : QVariant()); }
 
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.CheckState checkState() const
-        { return static_cast!(/+ Qt:: +/qt.core.namespace.CheckState)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.CheckStateRole).toInt()); }
+        { return qvariant_cast!(/+ Qt:: +/qt.core.namespace.CheckState)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.CheckStateRole)); }
     pragma(inline, true) final void setCheckState(/+ Qt:: +/qt.core.namespace.CheckState state)
         { setData(/+ Qt:: +/qt.core.namespace.ItemDataRole.CheckStateRole, cast(int)state); }
 

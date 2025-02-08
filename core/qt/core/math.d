@@ -504,11 +504,10 @@ pragma(inline, true) quint64 qConstexprNextPowerOfTwo(qint64 v)
 
 /+pragma(inline, true) quint32 qNextPowerOfTwo(quint32 v)
 {
+    (mixin(Q_ASSERT(q{static_cast!(qint32)(v) >= 0}))); // There is a next power of two
 /+ #if defined(__cpp_lib_int_pow2) && __cpp_lib_int_pow2 >= 202002L +/
     static if ((configValue!"__cpp_lib_int_pow2" >= 202002 && defined!"__cpp_lib_int_pow2"))
     {
-        if (static_cast!(qint32)(v) < 0)
-            return 0; // std::bit_ceil() is undefined for values that would overflow, but we document them to be 0
         return /+ std:: +/bit_ceil(v + 1);
     }
     else
@@ -525,11 +524,10 @@ pragma(inline, true) quint64 qConstexprNextPowerOfTwo(qint64 v)
 
 /+pragma(inline, true) quint64 qNextPowerOfTwo(quint64 v)
 {
+    (mixin(Q_ASSERT(q{static_cast!(qint64)(v) >= 0}))); // There is a next power of two
 /+ #if defined(__cpp_lib_int_pow2) && __cpp_lib_int_pow2 >= 202002L +/
     static if ((configValue!"__cpp_lib_int_pow2" >= 202002 && defined!"__cpp_lib_int_pow2"))
     {
-        if (static_cast!(qint64)(v) < 0)
-            return 0; // std::bit_ceil() is undefined for values that would overflow, but we document them to be 0
         return /+ std:: +/bit_ceil(v + 1);
     }
     else

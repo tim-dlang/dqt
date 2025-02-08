@@ -44,6 +44,7 @@ public /+ Q_SLOTS +/:
 
 /+ Q_SIGNALS +/public:
     @QSignal final void objectCreated(QObject object, ref const(QUrl) url);
+    @QSignal final void objectCreationFailed(ref const(QUrl) url);
 
 private:
     /+ Q_DISABLE_COPY(QQmlApplicationEngine) +/

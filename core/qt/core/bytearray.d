@@ -106,6 +106,7 @@ alias Base64Options = QFlags!(Base64Option);
 
     bool isEmpty() const/+ noexcept+/ { return size() == 0; }
     void resize(qsizetype size);
+    void resize(qsizetype size, char c);
 
     ref QByteArray fill(char c, qsizetype size = -1);
 
@@ -431,6 +432,7 @@ alias Base64Options = QFlags!(Base64Option);
     QByteArray toPercentEncoding(ref const(QByteArray) exclude/* = globalInitVar!QByteArray*/,
                                      ref const(QByteArray) include/* = globalInitVar!QByteArray*/,
                                      char percent/* = '%'*/) const;
+    /+ [[nodiscard]] +/ QByteArray percentDecoded(char percent = '%') const;
 
     pragma(inline, true) ref QByteArray setNum(short n, int base = 10)
     { return setNum(qlonglong(n), base); }
@@ -574,19 +576,29 @@ alias Base64Options = QFlags!(Base64Option);
     void shrink_to_fit() { squeeze(); }
     iterator erase(const_iterator first, const_iterator last);
 
-    /+ static inline QByteArray fromStdString(const std::string &s); +/
-    /+ inline std::string toStdString() const; +/
+    /+ static QByteArray fromStdString(const std::string &s); +/
+    /+ std::string toStdString() const; +/
 
     pragma(inline, true) qsizetype size() const/+ noexcept+/ { return d.size; }
-    pragma(inline, true) qsizetype count() const/+ noexcept+/ { return size(); }
+/+ #if QT_DEPRECATED_SINCE(6, 4) +/
+    /+ QT_DEPRECATED_VERSION_X_6_4("Use size() or length() instead.") +/
+        pragma(inline, true) qsizetype count() const/+ noexcept+/ { return size(); }
+/+ #endif +/
     pragma(inline, true) qsizetype length() const/+ noexcept+/ { return size(); }
-    bool isNull() const/+ noexcept+/;
+    /+ QT_CORE_INLINE_SINCE(6, 4) +/
+        pragma(inline, true) bool isNull() const/+ noexcept+/
+    {
+        return d.isNull();
+    }
 
     pragma(inline, true) ref DataPointer data_ptr() return { return d; }
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/
     /+ explicit +/ pragma(inline, true) this(ref DataPointer dd)
     {
         this.d = dd;
     }
+/+ #endif +/
+    /+ explicit inline QByteArray(DataPointer &&dd) : d(std::move(dd)) {} +/
 
     bool opEquals(const QByteArray a2) const
     {
@@ -607,7 +619,6 @@ private:
     void reallocData(qsizetype alloc, QArrayData.AllocationOption option);
     void reallocGrowData(qsizetype n);
     void expand(qsizetype i);
-    /+ QByteArray nulTerminated() const; +/
 
     static QByteArray toLower_helper(ref const(QByteArray) a);
     static QByteArray toLower_helper(ref QByteArray a);
@@ -665,11 +676,8 @@ version (QT_USE_QSTRINGBUILDER) {} else
 { return QByteArray(&a1, 1) ~= a2; }+/
 }
 
-/+ inline std::string QByteArray::toStdString() const
-{ return std::string(constData(), length()); }
-
-inline QByteArray QByteArray::fromStdString(const std::string &s)
-{ return QByteArray(s.data(), qsizetype(s.size())); }
+/+ #if QT_CORE_INLINE_IMPL_SINCE(6, 4)
+#endif
 
 #if !defined(QT_NO_DATASTREAM) || defined(QT_BOOTSTRAPPED)
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QByteArray &);
@@ -707,6 +715,18 @@ qsizetype erase_if(Predicate)(ref QByteArray ba, Predicate pred)
     return /+ QtPrivate:: +/qt.core.containertools_impl.sequential_erase_if(ba, pred);
 }
 
+/+ extern(C++, "Qt") {
+/+ inline +/ 
+inlineextern(C++, "Literals") {
+/+ inline namespace StringLiterals {
+
+} +/ // StringLiterals
+} // Literals
+} +/ // Qt
+
 /+ inline namespace QtLiterals {
+#if QT_DEPRECATED_SINCE(6, 8)
+
+#endif // QT_DEPRECATED_SINCE(6, 8)
 } +/ // QtLiterals
 

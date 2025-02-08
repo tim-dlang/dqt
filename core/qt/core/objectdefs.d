@@ -434,7 +434,8 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
         IndexOfMethod,
         RegisterPropertyMetaType,
         RegisterMethodArgumentMetaType,
-        BindableProperty
+        BindableProperty,
+        CustomCall
     }
 
     int static_metacall(Call, int, void** ) const;
@@ -446,6 +447,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     }
 
     struct SuperData {
+        alias Getter = ExternCPPFunc!(const(QMetaObject)* function());
         const(QMetaObject)* direct;
         /+ SuperData() = default; +/
         this(typeof(null))
@@ -461,7 +463,6 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
 
         static if ((versionIsSet!("QT_NO_DATA_RELOCATION") || (versionIsSet!("Windows") && !versionIsSet!("Cygwin"))))
         {
-            alias Getter = ExternCPPFunc!(const(QMetaObject)* function());
             Getter indirect = null;
             this(Getter g)
             {
@@ -475,6 +476,10 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
         }
         else
         {
+            this(Getter g)
+            {
+                this.direct = g();
+            }
             /+auto opCast(T : const(QMetaObject))() const
             { return cast(const(QMetaObject)) (direct); }+/
             static SuperData link(alias MO)()

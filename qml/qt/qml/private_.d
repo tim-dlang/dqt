@@ -103,10 +103,13 @@ extern(C++, "QQmlPrivate")
             // the size that was allocated.
             UnresolvedMergeConflict!(q{.operator delete},q{.operator delete}) (ptr);
         }+/
-        /+static void operator delete(void* , void* ) {
+/+ #ifdef Q_CC_MSVC
+        static void operator delete(void *, void *) {
             // Deliberately empty placement delete operator.
             // Silences MSVC warning C4291: no matching operator delete found
-        }+/
+            // On MinGW it causes -Wmismatched-new-delete, though.
+        }
+#endif +/
     }
 
     enum /+ class +/ ConstructionMode
@@ -439,7 +442,7 @@ extern(C++, "QQmlPrivate")
         // If this is extended ensure "version" is bumped!!!
     }
 
-    struct RegisterTypeAndRevisions {
+    /*struct RegisterTypeAndRevisions {
         int structVersion;
 
         QMetaType typeId;
@@ -471,7 +474,8 @@ extern(C++, "QQmlPrivate")
         int finalizerCast;
 
         bool forceAnonymous;
-    }
+        QMetaSequence listMetaSequence;
+    }*/
 
     struct RegisterInterface {
         int structVersion;
@@ -548,7 +552,11 @@ extern(C++, "QQmlPrivate")
         int structVersion;
         const(char)* uri;
         QTypeRevision version_;
+
+        // ### Qt7: Remove typeName. It's ignored because the only valid name is "list",
+        //          and that's automatic.
         const(char)* typeName;
+
         QMetaType typeId;
         QMetaSequence metaSequence;
         QTypeRevision revision;
@@ -572,7 +580,10 @@ extern(C++, "QQmlPrivate")
         QQmlContextData* qmlContext;
         QObject qmlScopeObject;
         QJSEngine engine;
-        /+ QV4:: +/ExecutableCompilationUnit* compilationUnit;
+        union {
+            /+ QV4:: +/ExecutableCompilationUnit* compilationUnit;
+            qintptr extraData;
+        }
 
         QQmlEngine qmlEngine() const;
 
@@ -653,7 +664,7 @@ extern(C++, "QQmlPrivate")
     }
 
     struct AOTCompiledFunction {
-        int index;
+        qintptr extraData;
         QMetaType returnType;
         QList!(QMetaType) argumentTypes;
         ExternCPPFunc!(void function(const(AOTCompiledContext)* context, void* resultPtr, void** arguments)) functionPtr;
@@ -800,6 +811,18 @@ extern(C++, "QQmlPrivate")
         return elementName;
     }+/
 
+    /+
+    struct QmlMarkerFunction;
+    +/
+
+    /+ template<typename Ret, typename Class>
+    struct QmlMarkerFunction<Ret (Class::*)()>
+    {
+        using ClassType = Class;
+    }; +/
+
+    alias QmlTypeHasMarker(T, Marker) = /+ std:: +/is_same!(T, UnknownType!q{QmlMarkerFunction!(Marker).ClassType});
+
     
         struct QmlExtended(T, )
     {
@@ -809,7 +832,9 @@ extern(C++, "QQmlPrivate")
     /+ template<class T>
     struct QmlExtended<T, std::void_t<typename T::QmlExtendedType>>
     {
-        using Type = typename T::QmlExtendedType;
+        using Type = typename std::conditional<
+                QmlTypeHasMarker<T, decltype(&T::qt_qmlMarker_extended)>::value,
+                typename T::QmlExtendedType, void>::type;
     }; +/
 
     
@@ -821,7 +846,13 @@ extern(C++, "QQmlPrivate")
     /+ template<class T>
     struct QmlExtendedNamespace<T, std::void_t<decltype(T::qmlExtendedNamespace())>>
     {
-        static constexpr const QMetaObject *metaObject() { return T::qmlExtendedNamespace(); }
+        static constexpr const QMetaObject *metaObject()
+        {
+            if constexpr (QmlTypeHasMarker<T, decltype(&T::qt_qmlMarker_extendedNamespace)>::value)
+                return T::qmlExtendedNamespace();
+            else
+                return nullptr;
+        }
     }; +/
 
     
@@ -888,6 +919,12 @@ extern(C++, "QQmlPrivate")
 
     struct QmlMetaType(T)
     {
+        static bool hasAcceptableCtors()
+        {
+            return /+ std:: +/is_base_of_v!(ValueClass!(QObject), T)
+                    || (/+ std:: +/is_default_constructible_v!(T) && /+ std:: +/is_copy_constructible_v!(T));
+        }
+
         static QMetaType self()
         {
             static if (/+ std:: +/is_base_of_v!(ValueClass!(QObject), T))
@@ -903,7 +940,15 @@ extern(C++, "QQmlPrivate")
             static if (/+ std:: +/is_base_of_v!(ValueClass!(QObject), T))
                 return QMetaType.fromType!(QQmlListProperty!(T))();
             else
-                return QMetaType();
+                return QMetaType.fromType!(QList!(T))();
+        }
+
+        static QMetaSequence sequence()
+        {
+            static if (/+ std:: +/is_base_of_v!(ValueClass!(QObject), T))
+                return QMetaSequence();
+            else
+                return QMetaSequence.fromContainer!(QList!(T))();
         }
     }
 
@@ -911,6 +956,7 @@ extern(C++, "QQmlPrivate")
                                               const(QMetaObject)* classInfoMetaObject,
                                               QVector!(int)* qmlTypeIds, const(QMetaObject)* extension)
     {
+        static assert(/+ std:: +/is_base_of_v!(ValueClass!(QObject), T));
         RegisterSingletonTypeAndRevisions api = RegisterSingletonTypeAndRevisions(
             0,
 
@@ -933,16 +979,48 @@ extern(C++, "QQmlPrivate")
         qmlregister(RegistrationType.SingletonAndRevisionsRegistration, &api);
     }
 
-    void qmlRegisterTypeAndRevisions(T, E)(const(char)* uri, int versionMajor,
+    /+void qmlRegisterTypeAndRevisions(T, E)(const(char)* uri, int versionMajor,
                                          const(QMetaObject)* classInfoMetaObject,
                                          QVector!(int)* qmlTypeIds, const(QMetaObject)* extension,
                                          bool forceAnonymous = false)
     {
         import qt.qml.parserstatus;
         import qt.qml.propertyvaluesource;
+        version (QT_NO_WARNING_OUTPUT) {} else
+            import qt.core.logging;
+
+/+ #if QT_DEPRECATED_SINCE(6, 4) +/
+        // ### Qt7: Remove the warnings, and leave only the static asserts below.
+        if (!QmlMetaType!(T).hasAcceptableCtors()) {
+            static if (!versionIsSet!("QT_NO_WARNING_OUTPUT"))
+            {
+                mixin(qWarning)() << QMetaType.fromType!(T)().name()
+                           << "is neither a QObject, nor default- and copy-constructible."
+                           << "You should not use it as a QML type.";
+            }
+            else
+            {
+    while(false)QMessageLogger().noDebug()<<QMetaType.fromType!(T)().name()<<"is neither a QObject, nor default- and copy-constructible."<<"You should not use it as a QML type.";
+            }
+        }
+        if (!/+ std:: +/is_base_of_v!(ValueClass!(QObject), T) && QQmlTypeInfo!(T).hasAttachedProperties) {
+            static if (!versionIsSet!("QT_NO_WARNING_OUTPUT"))
+            {
+                mixin(qWarning)() << QMetaType.fromType!(T)().name()
+                           << "is not a QObject, but has attached properties. This won't work.";
+            }
+            else
+            {
+    while(false)QMessageLogger().noDebug()<<QMetaType.fromType!(T)().name()<<"is not a QObject, but has attached properties. This won't work.";
+            }
+        }
+/+ #else
+        static_assert(QmlMetaType<T>::hasAcceptableCtors());
+        static_assert(std::is_base_of_v<QObject, T> || !QQmlTypeInfo<T>::hasAttachedProperties);
+#endif +/
 
         RegisterTypeAndRevisions type = RegisterTypeAndRevisions(
-            2,
+            3,
             QmlMetaType!(T).self(),
             QmlMetaType!(T).list(),
             cast(int) (T.sizeof),
@@ -970,14 +1048,15 @@ extern(C++, "QQmlPrivate")
             qmlTypeIds,
             StaticCastSelector!(T, QQmlFinalizerHook).cast_(),
 
-            forceAnonymous)
+            forceAnonymous,
+            QmlMetaType!(T).sequence(),)
         ;
 
         // Initialize the extension so that we can find it by name or ID.
         qMetaTypeId!(E)();
 
         qmlregister(RegistrationType.TypeAndRevisionsRegistration, &type);
-    }
+    }+/
 
     void qmlRegisterSequenceAndRevisions(T)(const(char)* uri, int versionMajor,
                                              const(QMetaObject)* classInfoMetaObject,
@@ -1024,6 +1103,8 @@ extern(C++, "QQmlPrivate")
             /*.legacyRegisterOp=*/ null)
         ;
     }+/
+
+    /+ Q_QML_EXPORT +/ QObject qmlExtendedObject(QObject , int);
 
 } // namespace QQmlPrivate
 

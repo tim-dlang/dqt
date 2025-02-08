@@ -23,9 +23,6 @@ import qt.helpers;
 /+ #ifdef max
 // un-pollute the namespace. We need std::numeric_limits::max() and std::chrono::duration::max()
 #  undef max
-#endif
-
-#if __has_include(<chrono>)
 #endif +/
 
 
@@ -101,7 +98,6 @@ public:
     ref QDeadlineTimer opOpAssign(string op)(qint64 msecs) if (op == "-")
     { this = this + (-msecs); return this; }
 
-/+ #if __has_include(<chrono>) || defined(Q_CLANG_QDOC) +/
     /+ template <class Clock, class Duration> +/
     /+ QDeadlineTimer(std::chrono::time_point<Clock, Duration> deadline_,
                    Qt::TimerType type_ = Qt::CoarseTimer) : t2(0)
@@ -159,7 +155,6 @@ public:
     /+ template <class Rep, class Period> +/
     /+ friend QDeadlineTimer operator+=(QDeadlineTimer &dt, std::chrono::duration<Rep, Period> value)
     { return dt = dt + value; } +/
-/+ #endif +/
 
 private:
     qint64 t1;
@@ -174,7 +169,7 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
-/+ #if __has_include(<chrono>) && (defined(Q_OS_DARWIN) || defined(Q_OS_LINUX) || (defined(Q_CC_MSVC) && Q_CC_MSVC >= 1900))
+/+ #if defined(Q_OS_DARWIN) || defined(Q_OS_LINUX) || (defined(Q_CC_MSVC) && Q_CC_MSVC >= 1900)
 // We know for these OS/compilers that the std::chrono::steady_clock uses the same
 // reference time as QDeadlineTimer
 

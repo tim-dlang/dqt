@@ -669,7 +669,7 @@ public:
     bool isValid() const { return isBlockFormat(); }
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
-    { auto tmp = cast(int) (aalignment); setProperty(Property.BlockAlignment, tmp); }
+    { auto tmp = aalignment.toInt(); setProperty(Property.BlockAlignment, tmp); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const
     { int a = intProperty(Property.BlockAlignment); if (a == 0) a = /+ Qt:: +/qt.core.namespace.AlignmentFlag.AlignLeft; return qt.core.namespace.Alignment(QFlag(a)); }
 
@@ -740,7 +740,7 @@ public:
     { return boolProperty(Property.BlockNonBreakableLines); }
 
     pragma(inline, true) void setPageBreakPolicy(PageBreakFlags flags)
-    { auto tmp = cast(int) (flags); setProperty(Property.PageBreakPolicy, tmp); }
+    { auto tmp = flags.toInt(); setProperty(Property.PageBreakPolicy, tmp); }
     pragma(inline, true) PageBreakFlags pageBreakPolicy() const
     { return PageBreakFlags(cast(QFlag) (intProperty(Property.PageBreakPolicy))); }
 
@@ -959,7 +959,7 @@ public:
     { return lengthProperty(Property.FrameHeight); }
 
     pragma(inline, true) void setPageBreakPolicy(PageBreakFlags flags)
-    { auto tmp = cast(int) (flags); setProperty(Property.PageBreakPolicy, tmp); }
+    { auto tmp = flags.toInt(); setProperty(Property.PageBreakPolicy, tmp); }
     pragma(inline, true) PageBreakFlags pageBreakPolicy() const
     { return PageBreakFlags(cast(QFlag) (intProperty(Property.PageBreakPolicy))); }
 
@@ -1021,7 +1021,7 @@ public:
     { setProperty(Property.TableCellPadding, apadding); }
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
-    { auto tmp = cast(int) (aalignment); setProperty(Property.BlockAlignment, tmp); }
+    { auto tmp = aalignment.toInt(); setProperty(Property.BlockAlignment, tmp); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const
     { return qt.core.namespace.Alignment(QFlag(intProperty(Property.BlockAlignment))); }
 

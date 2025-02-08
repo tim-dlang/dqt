@@ -40,6 +40,9 @@ import qt.helpers;
 #endif
 
 
+template <class T>
+T qobject_cast(const QObject *object);
+
 //
 // forward declarations
 //

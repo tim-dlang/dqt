@@ -633,6 +633,7 @@ mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
                                                                       const(QMetaObject)* );
 /+ Q_QML_EXPORT +/ QObject qmlAttachedPropertiesObject(QObject , QQmlAttachedPropertiesFunc func,
                                                   bool create = true);
+/+ Q_QML_EXPORT +/ QObject qmlExtendedObject(QObject );
 
 //The C++ version of protected namespaces in qmldir
 /+ Q_QML_EXPORT +/ bool qmlProtectModule(const(char)* uri, int majVersion);
@@ -878,35 +879,37 @@ inline void qmlRegisterNamespaceAndRevisions(const QMetaObject *metaObject,
                                              const QMetaObject *classInfoMetaObject,
                                              const QMetaObject *extensionMetaObject)
 {
-    QQmlPrivate::RegisterTypeAndRevisions type = { 1,
-                                                   QMetaType(),
-                                                   QMetaType(),
-                                                   0,
-                                                   nullptr,
-                                                   nullptr,
-                                                   nullptr,
+    QQmlPrivate::RegisterTypeAndRevisions type = {
+        3,
+        QMetaType(),
+        QMetaType(),
+        0,
+        nullptr,
+        nullptr,
+        nullptr,
 
-                                                   uri,
-                                                   QTypeRevision::fromMajorVersion(versionMajor),
+        uri,
+        QTypeRevision::fromMajorVersion(versionMajor),
 
-                                                   metaObject,
-                                                   (classInfoMetaObject ? classInfoMetaObject
-                                                                        : metaObject),
+        metaObject,
+        (classInfoMetaObject ? classInfoMetaObject : metaObject),
 
-                                                   nullptr,
-                                                   nullptr,
+        nullptr,
+        nullptr,
 
-                                                   -1,
-                                                   -1,
-                                                   -1,
+        -1,
+        -1,
+        -1,
 
-                                                   nullptr,
-                                                   extensionMetaObject,
+        nullptr,
+        extensionMetaObject,
 
-                                                   &qmlCreateCustomParser<void>,
-                                                   qmlTypeIds,
-                                                   -1,
-                                                   false };
+        &qmlCreateCustomParser<void>,
+        qmlTypeIds,
+        -1,
+        false,
+        QMetaSequence()
+    };
 
     qmlregister(QQmlPrivate::TypeAndRevisionsRegistration, &type);
 }

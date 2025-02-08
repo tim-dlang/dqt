@@ -13,7 +13,10 @@ module qt.core.object;
 extern(C++):
 
 import qt.config;
+import qt.core.anystringview;
+import qt.core.atomic;
 import qt.core.bindingstorage;
+import qt.core.bytearray;
 import qt.core.coreevent;
 import qt.core.list;
 import qt.core.metamacros;
@@ -25,22 +28,15 @@ import qt.core.property;
 import qt.core.scopedpointer;
 import qt.core.string;
 import qt.core.thread;
+import qt.core.variant;
 import qt.helpers;
 import std.traits;
 import std.meta;
-version (QT_NO_PROPERTIES) {} else
-{
-    import qt.core.bytearray;
-    import qt.core.variant;
-}
 
 /+ #ifndef QT_NO_QOBJECT +/
 
 /+ #ifdef QT_INCLUDE_COMPAT
-#endif
-#if __has_include(<chrono>)
 #endif +/
-
 
 
 extern(C++, class) struct QAccessibleWidget;
@@ -147,26 +143,56 @@ public:
         return value;
     }
     /+ uint deleteLaterCalled : 1; +/
-    final uint deleteLaterCalled() const
+    final bool deleteLaterCalled() const
     {
         return (bitfieldData_isWidget >> 7) & 0x1;
     }
-    final uint deleteLaterCalled(uint value)
+    final bool deleteLaterCalled(bool value)
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x80) | ((value & 0x1) << 7);
         return value;
     }
-    /+ uint unused : 24; +/
+    /+ uint isQuickItem : 1; +/
+    final bool isQuickItem() const
+    {
+        return (bitfieldData_isWidget >> 8) & 0x1;
+    }
+    final bool isQuickItem(bool value)
+    {
+        bitfieldData_isWidget = (bitfieldData_isWidget & ~0x100) | ((value & 0x1) << 8);
+        return value;
+    }
+    /+ uint willBeWidget : 1; +/ // for handling widget-specific bits in QObject's ctor
+    final bool willBeWidget() const
+    {
+        return (bitfieldData_isWidget >> 9) & 0x1;
+    }
+    final bool willBeWidget(bool value)
+    {
+        bitfieldData_isWidget = (bitfieldData_isWidget & ~0x200) | ((value & 0x1) << 9);
+        return value;
+    }
+    /+ uint wasWidget : 1; +/ // for properly cleaning up in QObject's dtor
+    final bool wasWidget() const
+    {
+        return (bitfieldData_isWidget >> 10) & 0x1;
+    }
+    final bool wasWidget(bool value)
+    {
+        bitfieldData_isWidget = (bitfieldData_isWidget & ~0x400) | ((value & 0x1) << 10);
+        return value;
+    }
+    /+ uint unused : 21; +/
     final uint unused() const
     {
-        return (bitfieldData_isWidget >> 8) & 0xffffff;
+        return (bitfieldData_isWidget >> 11) & 0x1fffff;
     }
     final uint unused(uint value)
     {
-        bitfieldData_isWidget = (bitfieldData_isWidget & ~0xffffff00) | ((value & 0xffffff) << 8);
+        bitfieldData_isWidget = (bitfieldData_isWidget & ~0xfffff800) | ((value & 0x1fffff) << 11);
         return value;
     }
-    int postedEvents;
+    QAtomicInt postedEvents;
     QDynamicMetaObjectData* metaObject;
     QBindingStorage bindingStorage;
 
@@ -290,7 +316,13 @@ public:
     }
 
     final QString objectName() const;
-    final void setObjectName(ref const(QString) name);
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        final void setObjectName(ref const(QString) name);
+    }
+    /+ Q_WEAK_OVERLOAD +/
+    final void setObjectName(ref const(QString) name) { doSetObjectName(name); }
+    final void setObjectName(QAnyStringView name);
     extern(D) final void setObjectName(const(char)[] name)
     {
         QString s = QString.fromUtf8(name.ptr, cast(int)name.length);
@@ -300,6 +332,7 @@ public:
 
     pragma(inline, true) final bool isWidgetType() const { return d_ptr.isWidget; }
     pragma(inline, true) final bool isWindowType() const { return d_ptr.isWindow; }
+    pragma(inline, true) final bool isQuickItemType() const { return d_ptr.isQuickItem; }
 
     pragma(inline, true) final bool signalsBlocked() const/+ noexcept+/ { return d_ptr.blockSig; }
     final bool blockSignals(bool b)/+ noexcept+/;
@@ -308,13 +341,11 @@ public:
     final void moveToThread(QThread thread);
 
     final int startTimer(int interval, /+ Qt:: +/qt.core.namespace.TimerType timerType = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer);
-/+ #if __has_include(<chrono>) +/
     /+ Q_ALWAYS_INLINE
     int startTimer(std::chrono::milliseconds time, Qt::TimerType timerType = Qt::CoarseTimer)
     {
         return startTimer(int(time.count()), timerType);
     } +/
-/+ #endif +/
     final void killTimer(int id);
 
     /+ template<typename T> +/
@@ -762,19 +793,16 @@ public:
     final void dumpObjectTree() const;
     final void dumpObjectInfo() const;
 
-    version (QT_NO_PROPERTIES) {} else
+    final bool setProperty(const(char)* name, ref const(QVariant) value);
+    extern(D) final bool setProperty(T)(const(char)* name, auto ref T value)
     {
-        final bool setProperty(const(char)* name, ref const(QVariant) value);
-        extern(D) final bool setProperty(T)(const(char)* name, auto ref T value)
-        {
-            QVariant v = QVariant.fromValue(value);
-            return setProperty(name, v);
-        }
-        final QVariant property(const(char)* name) const;
-        final QList!(QByteArray) dynamicPropertyNames() const;
-        final QBindingStorage* bindingStorage() { return &d_ptr.bindingStorage; }
-        final const(QBindingStorage)* bindingStorage() const { return &d_ptr.bindingStorage; }
+        QVariant v = QVariant.fromValue(value);
+        return setProperty(name, v);
     }
+    final QVariant property(const(char)* name) const;
+    final QList!(QByteArray) dynamicPropertyNames() const;
+    final QBindingStorage* bindingStorage() { return &d_ptr.bindingStorage; }
+    final const(QBindingStorage)* bindingStorage() const { return &d_ptr.bindingStorage; }
 
 /+ Q_SIGNALS +/public:
     @QSignal final void destroyed(QObject  /+ = nullptr +/);
@@ -822,6 +850,7 @@ protected:
     /+ friend class QThreadData; +/
 
 private:
+    final void doSetObjectName(ref const(QString) name);
     /+ Q_DISABLE_COPY(QObject) +/
     /+ Q_PRIVATE_SLOT(d_func(), void _q_reregisterTimers(void *)) +/
 
@@ -962,7 +991,7 @@ namespace QtPrivate {
     inline QObject & deref_for_methodcall(QObject &o) { return  o; }
     inline QObject & deref_for_methodcall(QObject *o) { return *o; }
 }
-#define Q_SET_OBJECT_NAME(obj) QT_PREPEND_NAMESPACE(QtPrivate)::deref_for_methodcall(obj).setObjectName(QLatin1String(#obj)) +/
+#define Q_SET_OBJECT_NAME(obj) QT_PREPEND_NAMESPACE(QtPrivate)::deref_for_methodcall(obj).setObjectName(QLatin1StringView(#obj)) +/
 
 
 /+ #endif +/

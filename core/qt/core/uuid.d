@@ -109,7 +109,7 @@ public:
     {
         /+ explicit +/this(ref const(QString) );
         static QUuid fromString(QStringView string)/+ noexcept+/;
-        static QUuid fromString(QLatin1String string)/+ noexcept+/;
+        static QUuid fromString(QLatin1StringView string)/+ noexcept+/;
         /+ explicit +/this(const(char)* );
         /+ explicit +/this(ref const(QByteArray) );
     }

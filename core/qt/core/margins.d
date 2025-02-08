@@ -17,6 +17,7 @@ import qt.core.global;
 import qt.core.typeinfo;
 import qt.helpers;
 
+
 /*****************************************************************************
   QMargins class
  *****************************************************************************/
@@ -107,6 +108,8 @@ public:
         return (){return this = this / divisor;
     }();
     }+/
+
+    /+ [[nodiscard]] +/ pragma(inline, true) QMarginsF toMarginsF() const/+ noexcept+/ { return QMarginsF(this); }
 
 private:
     int m_left = 0;

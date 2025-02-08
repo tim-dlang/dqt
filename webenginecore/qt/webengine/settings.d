@@ -68,6 +68,7 @@ public:
         JavascriptCanPaste,
         DnsPrefetchEnabled,
         PdfViewerEnabled,
+        NavigateOnDropEnabled,
     }
 
     enum FontSize {

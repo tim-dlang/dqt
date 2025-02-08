@@ -115,10 +115,10 @@ public:
     { setData(afont, /+ Qt:: +/qt.core.namespace.ItemDataRole.FontRole); }
 
 /+    pragma(inline, true) final /+ Qt:: +/qt.core.namespace.Alignment textAlignment() const {
-        return /+ Qt:: +/qt.core.namespace.Alignment(qvariant_cast!(int)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole)));
+        return qvariant_cast!(/+ Qt:: +/qt.core.namespace.Alignment)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole));
     }
     pragma(inline, true) final void setTextAlignment(/+ Qt:: +/qt.core.namespace.Alignment atextAlignment)
-    { auto tmp = const(QVariant) (cast(int) (atextAlignment)); setData(tmp, /+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole); }+/
+    { auto tmp = cast(ref const(QVariant)) (QVariant.fromValue(atextAlignment)); setData(tmp, /+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole); }+/
 
     pragma(inline, true) final QBrush background() const {
         return qvariant_cast!(QBrush)(data(/+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole));
@@ -159,38 +159,38 @@ public:
     final void setEnabled(bool enabled);
 
     pragma(inline, true) final bool isEditable() const {
-        return (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsEditable) != 0;
+        return cast(bool) (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsEditable);
     }
     final void setEditable(bool editable);
 
     pragma(inline, true) final bool isSelectable() const {
-        return (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsSelectable) != 0;
+        return cast(bool) (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsSelectable);
     }
     final void setSelectable(bool selectable);
 
     pragma(inline, true) final bool isCheckable() const {
-        return (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsUserCheckable) != 0;
+        return cast(bool) (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsUserCheckable);
     }
     final void setCheckable(bool checkable);
 
     pragma(inline, true) final bool isAutoTristate() const {
-        return (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsAutoTristate) != 0;
+        return cast(bool) (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsAutoTristate);
     }
     final void setAutoTristate(bool tristate);
 
     pragma(inline, true) final bool isUserTristate() const {
-        return (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsUserTristate) != 0;
+        return cast(bool) (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsUserTristate);
     }
     final void setUserTristate(bool tristate);
 
 /+ #if QT_CONFIG(draganddrop) +/
     pragma(inline, true) final bool isDragEnabled() const {
-        return (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsDragEnabled) != 0;
+        return cast(bool) (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsDragEnabled);
     }
     final void setDragEnabled(bool dragEnabled);
 
     pragma(inline, true) final bool isDropEnabled() const {
-        return (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsDropEnabled) != 0;
+        return cast(bool) (flags() & /+ Qt:: +/qt.core.namespace.ItemFlag.ItemIsDropEnabled);
     }
     final void setDropEnabled(bool dropEnabled);+/
 /+ #endif +/ // QT_CONFIG(draganddrop)

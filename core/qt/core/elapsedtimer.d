@@ -23,7 +23,8 @@ public:
     enum ClockType {
         SystemTime,
         MonotonicClock,
-        TickCounter,
+        TickCounter /+ Q_DECL_ENUMERATOR_DEPRECATED_X(
+                "Not supported anymore. Use PerformanceCounter instead.") +/,
         MachAbsoluteTime,
         PerformanceCounter
     }

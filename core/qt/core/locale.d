@@ -911,7 +911,11 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
         return r;
     }
 
-    /+ explicit +/this(ref const(QString) name);
+    /+ QT_CORE_INLINE_SINCE(6, 4) +/
+        /+ explicit +/pragma(inline, true) this(ref const(QString) name)
+        {
+            this(qToStringViewIgnoringNull(name));
+        }
     /+ explicit +/this(QStringView name);
     this(Language language, Territory territory);
     this(Language language, Script script = Script.AnyScript, Territory territory = Country.AnyTerritory);
@@ -1199,6 +1203,9 @@ static if (!defined!"QT_TYPESAFE_FLAGS")
 /+pragma(inline, true) QIncompatibleFlag operator |(QLocale.LanguageCodeTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QLocale::LanguageCodeTypes)
+#if QT_CORE_INLINE_IMPL_SINCE(6, 4)
+#endif
+
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, const QLocale &);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLocale &);

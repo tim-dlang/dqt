@@ -22,6 +22,7 @@ struct CGPoint;
 #endif +/
 
 
+
 /// Binding for C++ class [QPoint](https://doc.qt.io/qt-6/qpoint.html).
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QPoint
 {
@@ -148,6 +149,7 @@ public:
     {
         /+ [[nodiscard]] Q_CORE_EXPORT CGPoint toCGPoint() const noexcept; +/
     }
+    /+ [[nodiscard]] +/ pragma(inline, true) QPointF toPointF() const/+ noexcept+/ { return QPointF(this); }
 
 
     pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if (op == "+")

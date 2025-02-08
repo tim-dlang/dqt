@@ -84,11 +84,30 @@ public:
         return !isNull();
     }+/
 
-    /+ref QTaggedPointer operator =(T* other)/+ noexcept+/
+/+ #ifdef Q_QDOC
+    QTaggedPointer &operator=(T *other) noexcept;
+#else +/
+    // Disables the usage of `ptr = {}`, which would go through this operator
+    // (rather than using the implicitly-generated assignment operator).
+    // The operators have different semantics: the ones here leave the tag intact,
+    // the implicitly-generated one overwrites it.
+    /+ template <typename U,
+              std::enable_if_t<std::is_convertible_v<U *, T *>, bool> = false> +/
+    /+ref QTaggedPointer operator =(U,)(U* other)/+ noexcept+/
     {
-        d = reinterpret_cast!(quintptr)(other) | (d & tagMask());
+        T* otherT = other;
+        d = reinterpret_cast!(quintptr)(otherT) | (d & tagMask());
         return this;
     }+/
+
+    /+ template <typename U,
+              std::enable_if_t<std::is_null_pointer_v<U>, bool> = false> +/
+    /+ref QTaggedPointer operator =(U,)(U)/+ noexcept+/
+    {
+        d = reinterpret_cast!(quintptr)(static_cast!(T*)(null)) | (d & tagMask());
+        return this;
+    }+/
+/+ #endif +/
 
     static Tag maximumTag()/+ noexcept+/
     {

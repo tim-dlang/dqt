@@ -113,7 +113,7 @@ private:
         reinterpret_cast!(QList!(T*)*)(p.data).append(v);
     }
     static qsizetype qlist_count(QQmlListProperty* p) {
-        return reinterpret_cast!(QList!(T*)*)(p.data).count();
+        return reinterpret_cast!(QList!(T*)*)(p.data).size();
     }
     static T* qlist_at(QQmlListProperty* p, qsizetype idx) {
         return reinterpret_cast!(QList!(T*)*)(p.data).at(idx);
@@ -142,7 +142,7 @@ private:
             for (qsizetype i = 0; i < length; ++i)
                 stash.append(i == idx ? v : list.at(list, i));
             list.clear(list);
-            for (T *item : qAsConst(stash))
+            for (T *item : /+ std:: +/as_const(stash))
                 list.append(list, item);
         } else {
             stash.reserve(length - idx - 1);
@@ -175,7 +175,7 @@ private:
         for (qsizetype i = 0; i < length; ++i)
             stash.append(list.at(list, i));
         list.clear(list);
-        for (T *item : qAsConst(stash))
+        for (T *item : /+ std:: +/as_const(stash))
             list.append(list, item);
     } +/
 }
@@ -196,8 +196,15 @@ public:
         return r;
     }
 
-    /+ explicit +/this(ref const(QVariant) variant, QQmlEngine engine = null);
-    this(QObject , const(char)* property, QQmlEngine  /+ = nullptr +/);
+
+/+ #if QT_DEPRECATED_SINCE(6, 4) +/
+    /+ QT_DEPRECATED_X("Drop the QQmlEngine* argument") +/this(ref const(QVariant) variant, /+ [[maybe_unused]] +/ QQmlEngine engine);
+
+    /+ QT_DEPRECATED_X("Drop the QQmlEngine* argument") +/this(QObject o, const(char)* property, /+ [[maybe_unused]] +/ QQmlEngine engine);
+/+ #endif +/
+
+    /+ explicit +/this(ref const(QVariant) variant);
+    this(QObject o, const(char)* property);
     @disable this(this);
     this(ref const(QQmlListReference) );
     /+ref QQmlListReference operator =(ref const(QQmlListReference) );+/

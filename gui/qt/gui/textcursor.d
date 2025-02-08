@@ -165,10 +165,16 @@ public:
 
     void insertFragment(ref const(QTextDocumentFragment) fragment);
 
+/+ #ifndef QT_NO_TEXTHTMLPARSER +/
     version (QT_NO_TEXTHTMLPARSER) {} else
     {
         void insertHtml(ref const(QString) html);
     }
+/+ #endif // QT_NO_TEXTHTMLPARSER
+#if QT_CONFIG(textmarkdownreader) +/
+    void insertMarkdown(ref const(QString) markdown,
+                            QTextDocument.MarkdownFeatures features = QTextDocument.MarkdownFeature.MarkdownDialectGitHub);
+/+ #endif +/ // textmarkdownreader
 
     void insertImage(ref const(QTextImageFormat) format, QTextFrameFormat.Position alignment);
     void insertImage(ref const(QTextImageFormat) format);

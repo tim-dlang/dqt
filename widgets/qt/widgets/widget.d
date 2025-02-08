@@ -268,7 +268,7 @@ class /+ Q_WIDGETS_EXPORT +/ QWidget : QObject, QPaintDeviceInterface
 #if QT_CONFIG(whatsthis)
     Q_PROPERTY(QString whatsThis READ whatsThis WRITE setWhatsThis)
 #endif
-#ifndef QT_NO_ACCESSIBILITY
+#if QT_CONFIG(accessibility)
     Q_PROPERTY(QString accessibleName READ accessibleName WRITE setAccessibleName)
     Q_PROPERTY(QString accessibleDescription READ accessibleDescription WRITE setAccessibleDescription)
 #endif
@@ -330,10 +330,10 @@ alias RenderFlags = QFlags!(RenderFlag);
 /+ #if QT_DEPRECATED_SINCE(6, 1) +/
     /+ QT_DEPRECATED_VERSION_X_6_1("Use isWindow()") +/
         pragma(inline, true) final bool isTopLevel() const
-    { return (cast(bool) (windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
+    { return cast(bool) (windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window); }
 /+ #endif +/
     pragma(inline, true) final bool isWindow() const
-    { return (cast(bool) (windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window)); }
+    { return cast(bool) (windowType() & /+ Qt:: +/qt.core.namespace.WindowType.Window); }
 
     pragma(inline, true) final bool isModal() const
     { return data.window_modality != /+ Qt:: +/qt.core.namespace.WindowModality.NonModal; }
@@ -544,14 +544,11 @@ public:
     final void setWhatsThis(ref const(QString) );
     final QString whatsThis() const;
 /+ #endif
-#ifndef QT_NO_ACCESSIBILITY +/
-    version (QT_NO_ACCESSIBILITY) {} else
-    {
-        final QString accessibleName() const;
-        final void setAccessibleName(ref const(QString) name);
-        final QString accessibleDescription() const;
-        final void setAccessibleDescription(ref const(QString) description);
-    }
+#if QT_CONFIG(accessibility) +/
+    final QString accessibleName() const;
+    final void setAccessibleName(ref const(QString) name);
+    final QString accessibleDescription() const;
+    final void setAccessibleDescription(ref const(QString) description);
 /+ #endif +/
 
     final void setLayoutDirection(/+ Qt:: +/qt.core.namespace.LayoutDirection direction);
@@ -791,7 +788,7 @@ public:
     final void overrideWindowFlags(/+ Qt:: +/qt.core.namespace.WindowFlags type);
 
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.WindowType windowType() const
-    { return static_cast!(/+ Qt:: +/qt.core.namespace.WindowType)(int((data.window_flags & /+ Qt:: +/qt.core.namespace.WindowType.WindowType_Mask))); }
+    { return static_cast!(/+ Qt:: +/qt.core.namespace.WindowType)((data.window_flags & /+ Qt:: +/qt.core.namespace.WindowType.WindowType_Mask).toInt()); }
 
     /+ static QWidget *find(WId); +/
     pragma(inline, true) final QWidget childAt(int ax, int ay) const

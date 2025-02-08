@@ -35,7 +35,6 @@ import qt.helpers;
 version (QT_NO_PRINTER) {} else
     import qt.gui.pagedpaintdevice;
 
-extern(C++, class) struct QTextDocumentPrivate;
 /+ Q_MOC_INCLUDE(<QtGui/qtextcursor.h>) +/
 
 
@@ -57,6 +56,7 @@ public:
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
+extern(C++, class) struct QTextDocumentPrivate;
 
 /// Binding for C++ class [QTextDocument](https://doc.qt.io/qt-6/qtextdocument.html).
 class /+ Q_GUI_EXPORT +/ QTextDocument : QObject
@@ -68,6 +68,7 @@ class /+ Q_GUI_EXPORT +/ QTextDocument : QObject
     Q_PROPERTY(QSizeF pageSize READ pageSize WRITE setPageSize)
     Q_PROPERTY(QFont defaultFont READ defaultFont WRITE setDefaultFont)
     Q_PROPERTY(bool useDesignMetrics READ useDesignMetrics WRITE setUseDesignMetrics)
+    Q_PROPERTY(bool layoutEnabled READ isLayoutEnabled WRITE setLayoutEnabled)
     Q_PROPERTY(QSizeF size READ size)
     Q_PROPERTY(qreal textWidth READ textWidth WRITE setTextWidth)
     Q_PROPERTY(int blockCount READ blockCount)
@@ -227,6 +228,9 @@ alias FindFlags = QFlags!(FindFlag);
 
     final void setUseDesignMetrics(bool b);
     final bool useDesignMetrics() const;
+
+    final void setLayoutEnabled(bool b);
+    final bool isLayoutEnabled() const;
 
     final void drawContents(QPainter* painter, ref const(QRectF) rect = globalInitVar!QRectF);
 

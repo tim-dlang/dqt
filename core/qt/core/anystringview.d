@@ -24,9 +24,11 @@ import qt.core.utf8stringview;
 import qt.helpers;
 
 /+ #ifdef __cpp_impl_three_way_comparison
-#endif
+#endif +/
+extern(C++, class) struct tst_QAnyStringView;
 
-template <typename, typename> class QStringBuilder;
+
+/+ template <typename, typename> class QStringBuilder;
 template <typename> struct QConcatenable; +/
 
 /// Binding for C++ class [QAnyStringView](https://doc.qt.io/qt-6/qanystringview.html).
@@ -41,13 +43,14 @@ private:
         QtPrivate::IsCompatibleCharType<Char>,
         QtPrivate::IsCompatibleChar8Type<Char>
     >, bool>; +/
+    enum if_compatible_char(Char) = is(const(Char) == const(wchar)) || is(const(Char) == const(char)) || is(const(Char) == const(QChar));
 
     /+ template <typename Pointer> +/
     /+ using if_compatible_pointer = std::enable_if_t<std::disjunction_v<
         QtPrivate::IsCompatiblePointer<Pointer>,
         QtPrivate::IsCompatiblePointer8<Pointer>
     >, bool>; +/
-
+    enum if_compatible_pointer(Pointer) = is(const(Pointer) == const(wchar*)) || is(const(Pointer) == const(char*)) || is(const(Pointer) == const(QChar*));
 
     /+ template <typename T> +/
     /+ using if_compatible_container = std::enable_if_t<std::disjunction_v<
@@ -59,32 +62,70 @@ private:
 //    static assert(/+ QtPrivate:: +/qt.core.stringview.IsContainerCompatibleWithQStringView!(QAnyStringView).value == false);
 //    static assert(/+ QtPrivate:: +/qt.core.utf8stringview.IsContainerCompatibleWithQUtf8StringView!(QAnyStringView).value == false);
 
-    /+ template <typename Char> +/
-    static /+ std:: +/size_t encodeType(Char)(qsizetype sz)/+ noexcept+/
+    /+ template<typename Char> +/
+    static bool isAsciiOnlyCharsAtCompileTime(Char)(Char* str, qsizetype sz)/+ noexcept+/
     {
-        // only deals with Utf8 and Utf16 - there's only one way to create
-        // a Latin1 string, and that ctor deals with the tag itself
+        // do not perform check if not at compile time
+/+ #if !(defined(__cpp_lib_is_constant_evaluated) || defined(Q_CC_GNU))
+        Q_UNUSED(str);
+        Q_UNUSED(sz);
+        return false;
+#else
+#  if defined(__cpp_lib_is_constant_evaluated) +/
+        static if (defined!"__cpp_lib_is_constant_evaluated")
+        {
+            if (!__ctfe)
+                return false;
+        }
+        else
+        {
+    /+ #  elif defined(Q_CC_GNU) && !defined(Q_CC_CLANG) +/
+            if (!str/* || !__builtin_constant_p(*str)*/)
+                return false;
+        }
+/+ #  endif +/
+        static if (Char.sizeof != char.sizeof) {
+            /+ Q_UNUSED(str) +/
+            /+ Q_UNUSED(sz) +/
+            return false;
+        } else {
+            for (qsizetype i = 0; i < sz; ++i) {
+                if (uchar(str[i]) > 0x7f)
+                    return false;
+            }
+            return true;
+        }
+/+ #endif +/
+    }
+
+    /+ template<typename Char> +/
+    static /+ std:: +/size_t encodeType(Char)(const(Char)* str, qsizetype sz)/+ noexcept+/
+    {
+        // Utf16 if 16 bit, Latin1 if ASCII, else Utf8
         (mixin(Q_ASSERT(q{sz >= 0})));
         (mixin(Q_ASSERT(q{sz <= qsizetype(SizeMask)})));
-        return /+ std:: +/size_t(sz) | uint(Char.sizeof == wchar.sizeof) * Tag.Utf16;
+        (mixin(Q_ASSERT(q{str || !sz})));
+        return /+ std:: +/size_t(sz) | uint(Char.sizeof == wchar.sizeof) * Tag.Utf16
+                | uint(isAsciiOnlyCharsAtCompileTime(cast(Char*) (str), sz)) * Tag.Latin1;
     }
 
     /+ template <typename Char> +/
-    /+ static qsizetype lengthHelperPointer(const Char *str) noexcept
+    static qsizetype lengthHelperPointer(Char)(const Char* str)/+ noexcept+/
     {
-#if defined(Q_CC_GNU) && !defined(Q_CC_CLANG) && !defined(Q_CC_INTEL)
+/+ #if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
         if (__builtin_constant_p(*str)) {
             qsizetype result = 0;
             while (*str++ != '\0')
                 ++result;
             return result;
         }
-#endif
-        static if (sizeof(Char) == sizeof(char16_t))
-            return QtPrivate::qustrlen(reinterpret_cast<const char16_t*>(str));
+#endif +/
+        import core.stdc.string: strlen;
+        static if (Char.sizeof == wchar.sizeof)
+            return /+ QtPrivate:: +/qustrlen(cast(const char16_t*)(str));
         else
-            return qsizetype(strlen(reinterpret_cast<const char*>(str)));
-    } +/
+            return qsizetype(strlen(cast(const char*)(str)));
+    }
 
     /+ template <typename Container> +/
     static qsizetype lengthHelperContainer(Container)(ref const(Container) c)/+ noexcept+/
@@ -122,16 +163,14 @@ public:
     }
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    this(Char)(const(Char)* str, qsizetype len) if (is(const(Char) == const(wchar)) || is(const(Char) == const(char)) || is(const(Char) == const(QChar)))
+    this(Char)(const(Char)* str, qsizetype len) if (if_compatible_char!Char)
     {
         this.m_data = typeof(this.m_data)(str);
-        (mixin(Q_ASSERT(q{len >= 0})));
-        (mixin(Q_ASSERT(q{str || !len})));
-        this.m_size = encodeType!(Char)(len);
+        this.m_size = encodeType!(Char)(str, len);
     }
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    this(Char,)(const(Char)* f, const(Char)* l)
+    this(Char,)(const(Char)* f, const(Char)* l) if (if_compatible_char!Char)
     {
         this(f, l - f);
     }
@@ -145,9 +184,9 @@ public:
 #else +/
 
     /+ template <typename Pointer, if_compatible_pointer<Pointer> = true> +/
-    this(Pointer,)(ref const(Pointer) str)/+ noexcept+/
+    this(Pointer,)(ref const(Pointer) str)/+ noexcept+/ if (if_compatible_pointer!Pointer)
     {
-        this(QAnyStringView(str, str ? lengthHelperPointer(str) : 0));
+        this = QAnyStringView(str, str ? lengthHelperPointer(str) : 0);
     }
 /+ #endif +/
 
@@ -160,11 +199,11 @@ public:
     {
         this(str.isNull() ? null : str.data(), str.size());
     }
-/+    pragma(inline, true) this(QLatin1String str)/+ noexcept+/
+    pragma(inline, true) this(QLatin1StringView str)/+ noexcept+/
     {
-        this.m_data = typeof(this.m_data)({str.data()});
-        this.m_size = {size_t(str.size()) | Tag.Latin1};
-    }+/
+        this.m_data = typeof(this.m_data)(str.data());
+        this.m_size = size_t(str.size()) | Tag.Latin1;
+    }
 
     // defined in qstringbuilder.h
     /+ template <typename A, typename B> +/
@@ -172,13 +211,13 @@ public:
                           typename QConcatenable<QStringBuilder<A, B>>::ConvertTo &&capacity = {}); +/
 
     /+ template <typename Container, if_compatible_container<Container> = true> +/
-    this(Container,)(ref const(Container) c)/+ noexcept+/
+    /*this(Container,)(ref const(Container) c)/+ noexcept+/
     {
         this(/+ std:: +/data(c), lengthHelperContainer(c));
-    }
+    }*/
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    this(Char,)(ref const(Char) c)/+ noexcept+/
+    this(Char,)(ref const(Char) c)/+ noexcept+/ if (if_compatible_char!Char)
     {
         this(&c, 1);
     }
@@ -204,7 +243,7 @@ public:
     }
 
     /+ template <typename Char, size_t Size, if_compatible_char<Char> = true> +/
-    /+ [[nodiscard]] +/ static QAnyStringView fromArray(Char,size_t Size,)(ref const(Char)[Size] string)/+ noexcept+/
+    /+ [[nodiscard]] +/ static QAnyStringView fromArray(Char,size_t Size,)(ref const(Char)[Size] string)/+ noexcept+/ if (if_compatible_char!Char)
     { return QAnyStringView(string, Size); }
 
     // defined in qstring.h:
@@ -223,6 +262,15 @@ public:
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static int compare(QAnyStringView lhs, QAnyStringView rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static bool equal(QAnyStringView lhs, QAnyStringView rhs)/+ noexcept+/;
 
+    extern(D) static immutable bool detects_US_ASCII_at_compile_time =
+/+ #ifdef __cpp_lib_is_constant_evaluated +/
+            mixin((defined!"__cpp_lib_is_constant_evaluated") ? q{
+                    true
+                } : q{
+        /+ #else +/
+                    false
+                })/+ #endif +/
+                ;
     //
     // STL compatibility API:
     //
@@ -300,10 +348,10 @@ return QStringView(m_data_utf16, size());
     { return (){ (mixin(Q_ASSERT(q{QAnyStringView.isUtf8()})));
 return /+ q_no_char8_t:: +/qt.core.utf8stringview.QUtf8StringView(m_data_utf8, size());
 }(); }
-    /+ [[nodiscard]] +/ pragma(inline, true) QLatin1String asLatin1StringView() const
+    /+ [[nodiscard]] +/ pragma(inline, true) QLatin1StringView asLatin1StringView() const
     {
         (mixin(Q_ASSERT(q{QAnyStringView.isLatin1()})));
-        return QLatin1String(m_data_utf8, size());
+        return QLatin1StringView(m_data_utf8, size());
     }
     /+ [[nodiscard]] +/ size_t charSize() const/+ noexcept+/ { return isUtf16() ? 2 : 1; }
     /+ Q_ALWAYS_INLINE +/ pragma(inline, true) void verify(qsizetype pos, qsizetype n = 0) const
@@ -319,6 +367,7 @@ return /+ q_no_char8_t:: +/qt.core.utf8stringview.QUtf8StringView(m_data_utf8, s
         const(wchar)* m_data_utf16;
     }
     size_t m_size;
+    /+ friend class ::tst_QAnyStringView; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QAnyStringView, Q_PRIMITIVE_TYPE); +/

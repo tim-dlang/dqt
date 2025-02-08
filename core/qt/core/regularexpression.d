@@ -26,7 +26,6 @@ import qt.helpers;
 /+ QT_REQUIRE_CONFIG(regularexpression); +/
 
 
-
 struct QRegularExpressionPrivate;
 
 /+ QT_DECLARE_QESDP_SPECIALIZATION_DTOR_WITH_EXPORT(QRegularExpressionPrivate, Q_CORE_EXPORT)

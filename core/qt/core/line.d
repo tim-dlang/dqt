@@ -18,12 +18,13 @@ import qt.core.point;
 import qt.core.typeinfo;
 import qt.helpers;
 
+
 /*******************************************************************************
  * class QLine
  *******************************************************************************/
 
 /// Binding for C++ class [QLine](https://doc.qt.io/qt-6/qline.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLine
+@Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLine
 {
 public:
     /+pragma(inline, true) this() { }+/
@@ -128,11 +129,13 @@ public:
     }+/
     /+pragma(inline, true) bool operator !=(ref const(QLine) d) const/+ noexcept+/ { return !(this == d); }+/
 
+    /+ [[nodiscard]] +/ pragma(inline, true) QLineF toLineF() const/+ noexcept+/ { return QLineF(this); }
+
 private:
     QPoint pt1; QPoint pt2;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QLine, Q_RELOCATABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QLine, Q_PRIMITIVE_TYPE);
 
 /*******************************************************************************
  * class QLine inline members
@@ -151,7 +154,7 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QLine &);
  * class QLineF
  *******************************************************************************/
 /// Binding for C++ class [QLineF](https://doc.qt.io/qt-6/qlinef.html).
-@Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLineF
+@Q_PRIMITIVE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLineF
 {
 public:
 
@@ -171,11 +174,13 @@ public:
         this.pt1 = typeof(this.pt1)(x1pos, y1pos);
         this.pt2 = typeof(this.pt2)(x2pos, y2pos);
     }
-    /+pragma(inline, true) this(ref const(QLine) line)
+    pragma(inline, true) this(ref const(QLine) line)
     {
-        this.pt1 = line.p1();
-        this.pt2 = line.p2();
-    }+/
+        auto p1 = line.p1();
+        this.pt1 = p1;
+        auto p2 = line.p2();
+        this.pt2 = p2;
+    }
 
     /+ [[nodiscard]] +/ static QLineF fromPolar(qreal length, qreal angle);
 
@@ -309,7 +314,7 @@ private:
     QPointF pt1; QPointF pt2;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+ Q_DECLARE_TYPEINFO(QLineF, Q_RELOCATABLE_TYPE);
+/+ Q_DECLARE_TYPEINFO(QLineF, Q_PRIMITIVE_TYPE);
 
 /*******************************************************************************
  * class QLineF inline members

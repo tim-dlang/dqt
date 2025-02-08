@@ -72,43 +72,6 @@ template QT_VERSION_CHECK(params...) if (params.length == 3)
 #endif
 
 /*
-   The Qt modules' export macros.
-   The options are:
-    - defined(QT_STATIC): Qt was built or is being built in static mode
-    - defined(QT_SHARED): Qt was built or is being built in shared/dynamic mode
-   If neither was defined, then QT_SHARED is implied. If Qt was compiled in static
-   mode, QT_STATIC is defined in qconfig.h. In shared mode, QT_STATIC is implied
-   for the bootstrapped tools.
-*/
-
-#ifdef QT_BOOTSTRAPPED
-#  ifdef QT_SHARED
-#    error "QT_SHARED and QT_BOOTSTRAPPED together don't make sense. Please fix the build"
-#  elif !defined(QT_STATIC)
-#    define QT_STATIC
-#  endif
-#endif
-
-#if defined(QT_SHARED) || !defined(QT_STATIC)
-#  ifdef QT_STATIC
-#    error "Both QT_SHARED and QT_STATIC defined, please make up your mind"
-#  endif
-#  ifndef QT_SHARED
-#    define QT_SHARED
-#  endif
-#endif
-
-/*
-    The QT_CONFIG macro implements a safe compile time check for features of Qt.
-    Features can be in three states:
-        0 or undefined: This will lead to a compile error when testing for it
-        -1: The feature is not available
-        1: The feature is available
-*/
-#define QT_CONFIG(feature) (1/QT_FEATURE_##feature == 1)
-#define QT_REQUIRE_CONFIG(feature) Q_STATIC_ASSERT_X(QT_FEATURE_##feature == 1, "Required feature " #feature " for file " __FILE__ " not available.")
-
-/*
    helper macros to make some simple code work active in Qt 6 or Qt 7 only,
    like:
      struct QT6_ONLY(Q_CORE_EXPORT) QTrivialClass
@@ -124,6 +87,40 @@ template QT_VERSION_CHECK(params...) if (params.length == 3)
 #  define QT6_ONLY(...)         __VA_ARGS__
 #else
 #  error Qt major version not 6 or 7
+#endif
+
+/* Macro and tag type to help overload resolution on functions
+   that are, e.g., QT_REMOVED_SINCE'ed. Example use:
+
+   #if QT_CORE_REMOVED_SINCE(6, 4)
+   int size() const;
+   #endif
+   qsizetype size(QT6_DECL_NEW_OVERLOAD) const;
+
+   in the normal cpp file:
+
+   qsizetype size(QT6_IMPL_NEW_OVERLOAD) const {
+      ~~~
+   }
+
+   in removed_api.cpp:
+
+   int size() const { return int(size(QT6_CALL_NEW_OVERLOAD)); }
+*/
+#ifdef Q_CLANG_QDOC
+# define QT6_DECL_NEW_OVERLOAD
+# define QT6_DECL_NEW_OVERLOAD_TAIL
+# define QT6_IMPL_NEW_OVERLOAD
+# define QT6_IMPL_NEW_OVERLOAD_TAIL
+# define QT6_CALL_NEW_OVERLOAD
+# define QT6_CALL_NEW_OVERLOAD_TAIL
+#else
+# define QT6_DECL_NEW_OVERLOAD QT6_ONLY(Qt::Disambiguated_t = Qt::Disambiguated)
+# define QT6_DECL_NEW_OVERLOAD_TAIL QT6_ONLY(, QT6_DECL_NEW_OVERLOAD)
+# define QT6_IMPL_NEW_OVERLOAD QT6_ONLY(Qt::Disambiguated_t)
+# define QT6_IMPL_NEW_OVERLOAD_TAIL QT6_ONLY(, QT6_IMPL_NEW_OVERLOAD)
+# define QT6_CALL_NEW_OVERLOAD QT6_ONLY(Qt::Disambiguated)
+# define QT6_CALL_NEW_OVERLOAD_TAIL QT6_ONLY(, QT6_CALL_NEW_OVERLOAD)
 #endif
 
 /* These two macros makes it possible to turn the builtin line expander into a
@@ -189,80 +186,6 @@ static_assert(!std::is_convertible_v<std::nullptr_t, bool>,
 #  endif /* __COUNTER__ */
 #  define Q_STATIC_ASSERT_X(Condition, Message) Q_STATIC_ASSERT(Condition)
 #endif
-
-#ifdef __cplusplus
-
-#if !defined(QT_NAMESPACE) || defined(Q_MOC_RUN) /* user namespace */
-
-# define QT_PREPEND_NAMESPACE(name) ::name
-# define QT_USE_NAMESPACE
-# define QT_BEGIN_NAMESPACE
-# define QT_END_NAMESPACE
-# define QT_BEGIN_INCLUDE_NAMESPACE
-# define QT_END_INCLUDE_NAMESPACE
-#ifndef QT_BEGIN_MOC_NAMESPACE
-# define QT_BEGIN_MOC_NAMESPACE
-#endif
-#ifndef QT_END_MOC_NAMESPACE
-# define QT_END_MOC_NAMESPACE
-#endif
-# define QT_FORWARD_DECLARE_CLASS(name) class name;
-# define QT_FORWARD_DECLARE_STRUCT(name) struct name;
-# define QT_MANGLE_NAMESPACE(name) name
-
-#else /* user namespace */
-
-# define QT_PREPEND_NAMESPACE(name) ::QT_NAMESPACE::name
-# define QT_USE_NAMESPACE using namespace ::QT_NAMESPACE;
-# define QT_BEGIN_NAMESPACE namespace QT_NAMESPACE {
-# define QT_END_NAMESPACE }
-# define QT_BEGIN_INCLUDE_NAMESPACE }
-# define QT_END_INCLUDE_NAMESPACE namespace QT_NAMESPACE {
-#ifndef QT_BEGIN_MOC_NAMESPACE
-# define QT_BEGIN_MOC_NAMESPACE QT_USE_NAMESPACE
-#endif
-#ifndef QT_END_MOC_NAMESPACE
-# define QT_END_MOC_NAMESPACE
-#endif
-# define QT_FORWARD_DECLARE_CLASS(name) \
-    QT_BEGIN_NAMESPACE class name; QT_END_NAMESPACE \
-    using QT_PREPEND_NAMESPACE(name);
-
-# define QT_FORWARD_DECLARE_STRUCT(name) \
-    QT_BEGIN_NAMESPACE struct name; QT_END_NAMESPACE \
-    using QT_PREPEND_NAMESPACE(name);
-
-# define QT_MANGLE_NAMESPACE0(x) x
-# define QT_MANGLE_NAMESPACE1(a, b) a##_##b
-# define QT_MANGLE_NAMESPACE2(a, b) QT_MANGLE_NAMESPACE1(a,b)
-# define QT_MANGLE_NAMESPACE(name) QT_MANGLE_NAMESPACE2( \
-        QT_MANGLE_NAMESPACE0(name), QT_MANGLE_NAMESPACE0(QT_NAMESPACE))
-
-namespace QT_NAMESPACE {}
-
-# ifndef QT_BOOTSTRAPPED
-# ifndef QT_NO_USING_NAMESPACE
-   /*
-    This expands to a "using QT_NAMESPACE" also in _header files_.
-    It is the only way the feature can be used without too much
-    pain, but if people _really_ do not want it they can add
-    DEFINES += QT_NO_USING_NAMESPACE to their .pro files.
-    */
-   QT_USE_NAMESPACE
-# endif
-# endif
-
-#endif /* user namespace */
-
-#else /* __cplusplus */
-
-# define QT_BEGIN_NAMESPACE
-# define QT_END_NAMESPACE
-# define QT_USE_NAMESPACE
-# define QT_BEGIN_INCLUDE_NAMESPACE
-# define QT_END_INCLUDE_NAMESPACE
-
-#endif /* __cplusplus */
 
 #ifndef __ASSEMBLER__ +/
 
@@ -484,11 +407,111 @@ alias qreal = double;
 # define QT_DEPRECATED_VERSION_6_6
 #endif
 
+#if QT_DEPRECATED_WARNINGS_SINCE >= QT_VERSION_CHECK(6, 7, 0)
+# define QT_DEPRECATED_VERSION_X_6_7(text) QT_DEPRECATED_X(text)
+# define QT_DEPRECATED_VERSION_6_7         QT_DEPRECATED
+#else
+# define QT_DEPRECATED_VERSION_X_6_7(text)
+# define QT_DEPRECATED_VERSION_6_7
+#endif
+
+#if QT_DEPRECATED_WARNINGS_SINCE >= QT_VERSION_CHECK(6, 8, 0)
+# define QT_DEPRECATED_VERSION_X_6_8(text) QT_DEPRECATED_X(text)
+# define QT_DEPRECATED_VERSION_6_8         QT_DEPRECATED
+#else
+# define QT_DEPRECATED_VERSION_X_6_8(text)
+# define QT_DEPRECATED_VERSION_6_8
+#endif
+
 #define QT_DEPRECATED_VERSION_X_5(minor, text)      QT_DEPRECATED_VERSION_X_5_##minor(text)
 #define QT_DEPRECATED_VERSION_X(major, minor, text) QT_DEPRECATED_VERSION_X_##major##_##minor(text)
 
 #define QT_DEPRECATED_VERSION_5(minor)      QT_DEPRECATED_VERSION_5_##minor
 #define QT_DEPRECATED_VERSION(major, minor) QT_DEPRECATED_VERSION_##major##_##minor
+
+/*
+    QT_IF_DEPRECATED_SINCE(major, minor, whenTrue, whenFalse) expands to
+    \a whenTrue if the specified (\a major, \a minor) version is less than or
+    equal to the deprecation version defined by QT_DISABLE_DEPRECATED_BEFORE,
+    and to \a whenFalse otherwise.
+
+    Currently used for QT_INLINE_SINCE(maj, min), but can also be helpful for
+    other macros of that kind.
+
+    The implementation uses QT_DEPRECATED_SINCE(maj, min) to define a bunch of
+    helper QT_IF_DEPRECATED_SINCE_X_Y macros, which expand to \a whenTrue or
+    \a whenFalse depending on the value of QT_DEPRECATED_SINCE.
+
+    If you need to use QT_IF_DEPRECATED_SINCE() for a (major, minor) version,
+    that is not yet covered by the list below, you need to copy the definition
+    and change the major and minor versions accordingly. For example, for
+    version (X, Y), you will need to add
+
+    \code
+    #if QT_DEPRECATED_SINCE(X, Y)
+    # define QT_IF_DEPRECATED_SINCE_X_Y(whenTrue, whenFalse) whenFalse
+    #else
+    # define QT_IF_DEPRECATED_SINCE_X_Y(whenTrue, whenFalse) whenTrue
+    #endif
+    \endcode
+*/
+
+#define QT_IF_DEPRECATED_SINCE(major, minor, whenTrue, whenFalse) \
+    QT_IF_DEPRECATED_SINCE_ ## major ## _ ## minor(whenTrue, whenFalse)
+
+#if QT_DEPRECATED_SINCE(6, 0)
+# define QT_IF_DEPRECATED_SINCE_6_0(whenTrue, whenFalse) whenFalse
+#else
+# define QT_IF_DEPRECATED_SINCE_6_0(whenTrue, whenFalse) whenTrue
+#endif
+
+#if QT_DEPRECATED_SINCE(6, 1)
+# define QT_IF_DEPRECATED_SINCE_6_1(whenTrue, whenFalse) whenFalse
+#else
+# define QT_IF_DEPRECATED_SINCE_6_1(whenTrue, whenFalse) whenTrue
+#endif
+
+#if QT_DEPRECATED_SINCE(6, 2)
+# define QT_IF_DEPRECATED_SINCE_6_2(whenTrue, whenFalse) whenFalse
+#else
+# define QT_IF_DEPRECATED_SINCE_6_2(whenTrue, whenFalse) whenTrue
+#endif
+
+#if QT_DEPRECATED_SINCE(6, 3)
+# define QT_IF_DEPRECATED_SINCE_6_3(whenTrue, whenFalse) whenFalse
+#else
+# define QT_IF_DEPRECATED_SINCE_6_3(whenTrue, whenFalse) whenTrue
+#endif
+
+#if QT_DEPRECATED_SINCE(6, 4)
+# define QT_IF_DEPRECATED_SINCE_6_4(whenTrue, whenFalse) whenFalse
+#else
+# define QT_IF_DEPRECATED_SINCE_6_4(whenTrue, whenFalse) whenTrue
+#endif
+
+#if QT_DEPRECATED_SINCE(6, 5)
+# define QT_IF_DEPRECATED_SINCE_6_5(whenTrue, whenFalse) whenFalse
+#else
+# define QT_IF_DEPRECATED_SINCE_6_5(whenTrue, whenFalse) whenTrue
+#endif
+
+#if QT_DEPRECATED_SINCE(6, 6)
+# define QT_IF_DEPRECATED_SINCE_6_6(whenTrue, whenFalse) whenFalse
+#else
+# define QT_IF_DEPRECATED_SINCE_6_6(whenTrue, whenFalse) whenTrue
+#endif
+
+#if QT_DEPRECATED_SINCE(6, 7)
+# define QT_IF_DEPRECATED_SINCE_6_7(whenTrue, whenFalse) whenFalse
+#else
+# define QT_IF_DEPRECATED_SINCE_6_7(whenTrue, whenFalse) whenTrue
+#endif
+
+#if QT_DEPRECATED_SINCE(6, 8)
+# define QT_IF_DEPRECATED_SINCE_6_8(whenTrue, whenFalse) whenFalse
+#else
+# define QT_IF_DEPRECATED_SINCE_6_8(whenTrue, whenFalse) whenTrue
+#endif
 
 #ifdef __cplusplus +/
 // A tag to help mark stuff deprecated (cf. QStringViewLiteral)
@@ -689,7 +712,8 @@ alias qsizetype = QIntegerForSizeof!(/+ std:: +/size_t).Signed;
 #endif
 
 #ifdef QT_ASCII_CAST_WARNINGS
-#  define QT_ASCII_CAST_WARN Q_DECL_DEPRECATED_X("Use fromUtf8, QStringLiteral, or QLatin1String")
+#  define QT_ASCII_CAST_WARN \
+    Q_DECL_DEPRECATED_X("Use fromUtf8, QStringLiteral, or QLatin1StringView")
 #else
 #  define QT_ASCII_CAST_WARN
 #endif
@@ -906,7 +930,7 @@ pragma(inline, true) void qt_noop() {}
 
 /+ #if !defined(QT_NO_EXCEPTIONS)
 #  if !defined(Q_MOC_RUN)
-#    if (defined(Q_CC_CLANG) && !defined(Q_CC_INTEL) && !__has_feature(cxx_exceptions)) || \
+#    if (defined(Q_CC_CLANG) && !__has_feature(cxx_exceptions)) || \
         (defined(Q_CC_GNU) && !defined(__EXCEPTIONS))
 #      define QT_NO_EXCEPTIONS
 #    endif
@@ -1242,85 +1266,21 @@ constexpr std::underlying_type_t<Enum> qToUnderlying(Enum e) noexcept
 #define Q_IMPLICIT explicit(false)
 #else
 #define Q_IMPLICIT
-#endif +/
+#endif
 
-/+version (QT_NO_FOREACH) {} else
-{
-
-extern(C++, "QtPrivate") {
-
-/+ template <typename T>
-class QForeachContainer {
-    Q_DISABLE_COPY(QForeachContainer)
-public:
-    QForeachContainer(const T &t) : c(t), i(qAsConst(c).begin()), e(qAsConst(c).end()) {}
-    QForeachContainer(T &&t) : c(std::move(t)), i(qAsConst(c).begin()), e(qAsConst(c).end())  {}
-
-    QForeachContainer(QForeachContainer &&other)
-        : c(std::move(other.c)),
-          i(qAsConst(c).begin()),
-          e(qAsConst(c).end()),
-          control(std::move(other.control))
-    {
-    }
-
-    QForeachContainer &operator=(QForeachContainer &&other)
-    {
-        c = std::move(other.c);
-        i = qAsConst(c).begin();
-        e = qAsConst(c).end();
-        control = std::move(other.control);
-        return *this;
-    }
-
-    T c;
-    typename T::const_iterator i, e;
-    int control = 1;
-}; +/
-
-// Containers that have a detach function are considered shared, and are OK in a foreach loop
-pragma(inline, true) void warnIfContainerIsNotShared(T, )(int) {}
-
-/+ #if QT_DEPRECATED_SINCE(6, 0) +/
-// Other containers will copy themselves if used in foreach, this use is deprecated
-/+ QT_DEPRECATED_VERSION_X_6_0("Do not use foreach/Q_FOREACH with containers which are not implicitly shared. "
-    "Prefer using a range-based for loop with these containers: `for (const auto &it : container)`, "
-    "keeping in mind that range-based for doesn't copy the container as Q_FOREACH does") +/
-pragma(inline, true) void warnIfContainerIsNotShared(T)(...) {}
-/+ #endif
-
-template<typename T>
-QForeachContainer<typename std::decay<T>::type> qMakeForeachContainer(T &&t)
-{
-    warnIfContainerIsNotShared<typename std::decay<T>::type>(0);
-    return QForeachContainer<typename std::decay<T>::type>(std::forward<T>(t));
-} +/
-
-}
-
-// Use C++17 if statement with initializer. User's code ends up in a else so
-// scoping of different ifs is not broken
-/+ #define Q_FOREACH_IMPL(variable, name, container)                                             \
-    for (auto name = QtPrivate::qMakeForeachContainer(container); name.i != name.e; ++name.i) \
-        if (variable = *name.i; false) {} else
-
-#define Q_FOREACH_JOIN(A, B) Q_FOREACH_JOIN_IMPL(A, B)
-#define Q_FOREACH_JOIN_IMPL(A, B) A ## B
-
-#define Q_FOREACH(variable, container) \
-    Q_FOREACH_IMPL(variable, Q_FOREACH_JOIN(_container_, __LINE__), container) +/
-} +/
-
-/+ #define Q_FOREVER for(;;)
-#ifndef QT_NO_KEYWORDS
-# ifndef QT_NO_FOREACH
-#  ifndef foreach
-#    define foreach Q_FOREACH
-#  endif
-# endif // QT_NO_FOREACH
-#  ifndef forever
-#    define forever Q_FOREVER
-#  endif
+#ifdef __cpp_constinit
+# if defined(Q_CC_MSVC) && !defined(Q_CC_CLANG)
+   // https://developercommunity.visualstudio.com/t/C:-constinit-for-an-optional-fails-if-/1406069
+#  define Q_CONSTINIT
+# else
+#  define Q_CONSTINIT constinit
+# endif
+#elif defined(__has_cpp_attribute) && __has_cpp_attribute(clang::require_constant_initialization)
+# define Q_CONSTINIT [[clang::require_constant_initialization]]
+#elif defined(Q_CC_GNU_ONLY) && Q_CC_GNU >= 1000
+# define Q_CONSTINIT __constinit
+#else
+# define Q_CONSTINIT
 #endif +/
 
 pragma(inline, true) T* qGetPtrHelper(T)(T* ptr)/+ noexcept+/ { return ptr; }
@@ -1452,8 +1412,9 @@ pragma(inline, true) int qIntCast(float f) { return cast(int) (f); }
 
 /+ #define QT_MODULE(x)
 
-#if !defined(QT_BOOTSTRAPPED) && defined(QT_REDUCE_RELOCATIONS) && defined(__ELF__) && \
-    (!defined(__PIC__) || (defined(__PIE__) && defined(Q_CC_GNU) && Q_CC_GNU >= 500))
+#if defined(QT_BOOTSTRAPPED) || defined(QT_USE_PROTECTED_VISIBILITY) || !defined(__ELF__) || defined(__PIC__)
+// this is fine
+#elif defined(QT_REDUCE_RELOCATIONS)
 #  error "You must build your code with position independent code if Qt was built with -reduce-relocations. "\
          "Compile your code with -fPIC (and not with -fPIE)."
 #endif

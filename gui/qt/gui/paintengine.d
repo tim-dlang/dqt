@@ -219,7 +219,7 @@ alias DirtyFlags = QFlags!(DirtyFlag);
     pragma(inline, true) final void clearDirty(DirtyFlags df)
     {
         (mixin(Q_ASSERT(q{QPaintEngine.state})));
-        state.dirtyFlags &= DirtyFlags(QFlag(~static_cast!(uint)(df)));
+        state.dirtyFlags &= ~df;
     }
 
     final bool hasFeature(PaintEngineFeatures feature) const { return cast(bool) (gccaps & feature); }

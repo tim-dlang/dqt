@@ -12,6 +12,11 @@
 module qt.core.shareddata;
 extern(C++):
 
+version (Windows) {} else
+    version = NotWindowsOrCygwin;
+version (Cygwin)
+    version = NotWindowsOrCygwin;
+
 import qt.config;
 import qt.core.atomic;
 import qt.helpers;
@@ -177,6 +182,8 @@ private:
     void detach_helper()()
     {
         import core.stdcpp.new_;
+        static if (configValue!"QT_LEAN_HEADERS" >= 1 && defined!"QT_LEAN_HEADERS" && defined!"_GNU_SOURCE" && (!versionIsSet!("Windows") || versionIsSet!("Cygwin")))
+            import libc.sched;
 
         T* x = clone();
         x.ref_.ref_();
@@ -313,6 +320,8 @@ private:
     void detach_helper()()
     {
         import core.stdcpp.new_;
+        static if (configValue!"QT_LEAN_HEADERS" >= 1 && defined!"QT_LEAN_HEADERS" && defined!"_GNU_SOURCE" && (!versionIsSet!("Windows") || versionIsSet!("Cygwin")))
+            import libc.sched;
 
         T* x = clone();
         x.ref_.ref_();

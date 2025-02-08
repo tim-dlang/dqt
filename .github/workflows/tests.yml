@@ -29,14 +29,14 @@ jobs:
           - platform: linux64
             os: ubuntu-24.04
             model: 64
-            qt_version: 6.3.2
+            qt_version: 6.4.2
             qt_arch: gcc_64
             qt_platform: linux_x64/desktop
 
           - platform: win64
             os: windows-2022
             model: 64
-            qt_version: 6.3.2
+            qt_version: 6.4.2
             qt_arch: msvc2019_64
             qt_arch_url: win64_msvc2019_64
             qt_platform: windows_x86/desktop
@@ -44,7 +44,7 @@ jobs:
           - platform: osx64
             os: macos-13
             model: 64
-            qt_version: 6.3.2
+            qt_version: 6.4.2
             qt_arch: macos
             qt_arch_url: clang_64
             qt_platform: mac_x64/desktop
@@ -57,7 +57,7 @@ jobs:
           - platform: android_armv7
             os: ubuntu-24.04
             model: triple=armv7a--linux-android30
-            qt_version: 6.3.2
+            qt_version: 6.4.2
             qt_arch: android_armv7
             qt_arch_suffix: _armeabi-v7a
             qt_platform: linux_x64/android
@@ -71,7 +71,7 @@ jobs:
           - platform: android_arm64
             os: ubuntu-24.04
             model: triple=aarch64--linux-android30
-            qt_version: 6.3.2
+            qt_version: 6.4.2
             qt_arch: android_arm64_v8a
             qt_arch_suffix: _arm64-v8a
             qt_platform: linux_x64/android

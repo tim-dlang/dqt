@@ -23,6 +23,7 @@ import qt.core.variant;
 import qt.helpers;
 
 
+
 // We export each out-of-line method individually to prevent MSVC from
 // exporting the whole QList class.
 /// Binding for C++ class [QPolygon](https://doc.qt.io/qt-6/qpolygon.html).
@@ -73,6 +74,8 @@ public:
     /+ [[nodiscard]] +/ /+ Q_GUI_EXPORT +/ QPolygon subtracted(ref const(QPolygon) r) const;
 
     /+ Q_GUI_EXPORT +/ bool intersects(ref const(QPolygon) r) const;
+
+    /+ [[nodiscard]] +/ pragma(inline, true) QPolygonF toPolygonF() const { return QPolygonF(this); }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_SHARED(QPolygon)

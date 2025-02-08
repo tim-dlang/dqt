@@ -55,6 +55,8 @@ import qt.helpers;
 
 #define QT_FEATURE_c11 1
 
+#define QT_FEATURE_reduce_relocations 1
+
 #define QT_FEATURE_signaling_nan 1
 
 #define QT_FEATURE_zstd -1 +/
@@ -70,13 +72,13 @@ enum QT_FEATURE_future = 1;
 #define QT_FEATURE_dbus 1
 
 
-#define QT_VERSION_STR "6.3.2" +/
+#define QT_VERSION_STR "6.4.2" +/
 
 /+ #define QT_VERSION_MAJOR 6 +/
 enum QT_VERSION_MAJOR = 6;
 
-/+ #define QT_VERSION_MINOR 3 +/
-enum QT_VERSION_MINOR = 3;
+/+ #define QT_VERSION_MINOR 4 +/
+enum QT_VERSION_MINOR = 4;
 
 /+ #define QT_VERSION_PATCH 2 +/
 enum QT_VERSION_PATCH = 2;
@@ -100,9 +102,10 @@ enum QT_VERSION_PATCH = 2;
 #define QT_COMPILER_SUPPORTS_AVX512VL 1
 #define QT_COMPILER_SUPPORTS_AVX512IFMA 1
 #define QT_COMPILER_SUPPORTS_AVX512VBMI 1
+#define QT_COMPILER_SUPPORTS_AVX512VBMI2 1
 #define QT_COMPILER_SUPPORTS_AES 1
+#define QT_COMPILER_SUPPORTS_VAES 1
 #define QT_COMPILER_SUPPORTS_RDRND 1
 #define QT_COMPILER_SUPPORTS_RDSEED 1
-#define QT_COMPILER_SUPPORTS_SHA 1
-#define QT_COMPILER_SUPPORTS_SIMD_ALWAYS 1 +/
+#define QT_COMPILER_SUPPORTS_SHA 1 +/
 

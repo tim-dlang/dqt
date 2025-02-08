@@ -288,7 +288,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QPageSize &pageSize);
 #endif
 
 
-Q_DECLARE_METATYPE(QPageSize)
-Q_DECLARE_METATYPE(QPageSize::PageSizeId)
-Q_DECLARE_METATYPE(QPageSize::Unit) +/
+QT_DECL_METATYPE_EXTERN(QPageSize, Q_GUI_EXPORT)
+QT_DECL_METATYPE_EXTERN_TAGGED(QPageSize::PageSizeId, QPageSize__PageSizeId, Q_GUI_EXPORT)
+QT_DECL_METATYPE_EXTERN_TAGGED(QPageSize::Unit, QPageSize__Unit, Q_GUI_EXPORT) +/
 

@@ -40,10 +40,12 @@ version (QT_NO_INPUTMETHOD) {} else
     import qt.core.variant;
 
 /+ #if QT_CONFIG(shortcut)
-#endif
+#endif +/
+
+extern(C++, class) struct tst_QEvent;
 
 
-#if QT_CONFIG(gestures) +/
+/+ #if QT_CONFIG(gestures) +/
 version (QT_NO_GESTURES)
 {
 extern(C++, class) struct QGesture;
@@ -54,20 +56,10 @@ extern(C++, class) struct QGesture;
 /// Binding for C++ class [QInputEvent](https://doc.qt.io/qt-6/qinputevent.html).
 class /+ Q_GUI_EXPORT +/ QInputEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QInputEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ explicit +/this(Type type, const(QInputDevice) m_dev, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers = /+ Qt:: +/qt.core.namespace.KeyboardModifier.NoModifier);
     }));
-    ~this();
-    override QInputEvent clone() const {
-        return cpp_new_copy!QInputEvent(cast() this);
-    }
 
     final const(QInputDevice) device() const { return m_dev; }
     final QInputDevice.DeviceType deviceType() const { return m_dev ? m_dev.type() : QInputDevice.DeviceType.Unknown; }
@@ -95,22 +87,11 @@ protected:
 /// Binding for C++ class [QPointerEvent](https://doc.qt.io/qt-6/qpointerevent.html).
 class /+ Q_GUI_EXPORT +/ QPointerEvent : QInputEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QPointerEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ explicit +/this(Type type, const(QPointingDevice) dev,
                                /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers = /+ Qt:: +/qt.core.namespace.KeyboardModifier.NoModifier, ref const(QList!(QEventPoint)) points = globalInitVar!(QList!(QEventPoint)));
     }));
-    ~this();
-
-    override QPointerEvent clone() const {
-        return cpp_new_copy!QPointerEvent(cast() this);
-    }
 
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final const(QPointingDevice) pointingDevice() const;
@@ -119,7 +100,7 @@ public:
         return pointingDevice() ? pointingDevice().pointerType() : QPointingDevice.PointerType.Unknown;
     }
     override void setTimestamp(quint64 timestamp);
-    final qsizetype pointCount() const { return m_points.count(); }
+    final qsizetype pointCount() const { return m_points.size(); }
 //    final ref QEventPoint point(qsizetype i);
     final ref const(QList!(QEventPoint)) points() const { return m_points; }
     final QEventPoint* pointById(int id);
@@ -150,18 +131,9 @@ class /+ Q_GUI_EXPORT +/ QSinglePointEvent : QPointerEvent
 {
     mixin(Q_GADGET);
     /+ Q_PROPERTY(QObject *exclusivePointGrabber READ exclusivePointGrabber
-               WRITE setExclusivePointGrabber)
+               WRITE setExclusivePointGrabber) +/
 
-    Q_EVENT_DISABLE_COPY(QSinglePointEvent) +/protected:
-    public this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
-    // Workaround for https://issues.dlang.org/show_bug.cgi?id=22811
-    // Destructor added to prevent DMD error "class `qt.gui.event.QEnterEvent` use of `qt.gui.event.QPointerEvent.~this()` is hidden by `QEnterEvent`"
-    ~this(){}
+    mixin(Q_DECL_EVENT_COMMON);
 
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.MouseButton button() const { return m_button; }
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.MouseButtons buttons() const { return m_mouseState; }
@@ -182,11 +154,8 @@ public:
     final void setExclusivePointGrabber(QObject exclusiveGrabber)
     { QPointerEvent.setExclusiveGrabber(points().first(), exclusiveGrabber); }
 
-    override QSinglePointEvent clone() const {
-        return cpp_new_copy!QSinglePointEvent(cast() this);
-    }
-
 protected:
+    /+ friend class ::tst_QEvent; +/
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(Type type, const(QPointingDevice) dev, ref const(QEventPoint) point,
                           /+ Qt:: +/qt.core.namespace.MouseButton button, /+ Qt:: +/qt.core.namespace.MouseButtons buttons,
@@ -259,22 +228,11 @@ protected:
 /// Binding for C++ class [QEnterEvent](https://doc.qt.io/qt-6/qenterevent.html).
 class /+ Q_GUI_EXPORT +/ QEnterEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QEnterEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QPointF) localPos, ref const(QPointF) scenePos, ref const(QPointF) globalPos,
                     const(QPointingDevice) device = QPointingDevice.primaryPointingDevice());
     }));
-    ~this();
-
-    override QEnterEvent clone() const {
-        return cpp_new_copy!QEnterEvent(cast() this);
-    }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0)
 #ifndef QT_NO_INTEGER_EVENT_COORDINATES +/
@@ -307,18 +265,14 @@ public:
 /// Binding for C++ class [QMouseEvent](https://doc.qt.io/qt-6/qmouseevent.html).
 class /+ Q_GUI_EXPORT +/ QMouseEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QMouseEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
+/+ #if QT_DEPRECATED_SINCE(6, 4) +/
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    this(Type type, ref const(QPointF) localPos, /+ Qt:: +/qt.core.namespace.MouseButton button,
+    /+ QT_DEPRECATED_VERSION_X_6_4("Use another constructor") +/this(Type type, ref const(QPointF) localPos, /+ Qt:: +/qt.core.namespace.MouseButton button,
                     /+ Qt:: +/qt.core.namespace.MouseButtons buttons, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers,
                     const(QPointingDevice) device = QPointingDevice.primaryPointingDevice());
     }));
+/+ #endif +/
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(Type type, ref const(QPointF) localPos, ref const(QPointF) globalPos,
                     /+ Qt:: +/qt.core.namespace.MouseButton button, /+ Qt:: +/qt.core.namespace.MouseButtons buttons,
@@ -337,11 +291,6 @@ public:
                     /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers, /+ Qt:: +/qt.core.namespace.MouseEventSource source,
                     const(QPointingDevice) device = QPointingDevice.primaryPointingDevice());
     }));
-    ~this();
-
-    override QMouseEvent clone() const {
-        return cpp_new_copy!QMouseEvent(cast() this);
-    }
 
 /+ #ifndef QT_NO_INTEGER_EVENT_COORDINATES +/
     version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
@@ -380,15 +329,9 @@ public:
 /// Binding for C++ class [QHoverEvent](https://doc.qt.io/qt-6/qhoverevent.html).
 class /+ Q_GUI_EXPORT +/ QHoverEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QHoverEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
-    this(Type type, ref const(QPointF) pos, ref const(QPointF) globalPos, ref const(QPointF) oldPos,
+    this(Type type, ref const(QPointF) scenePos, ref const(QPointF) globalPos, ref const(QPointF) oldPos,
                     /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers = /+ Qt:: +/qt.core.namespace.KeyboardModifier.NoModifier,
                     const(QPointingDevice) device = QPointingDevice.primaryPointingDevice());
     }));
@@ -398,14 +341,9 @@ public:
                     /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers = /+ Qt:: +/qt.core.namespace.KeyboardModifier.NoModifier,
                     const(QPointingDevice) device = QPointingDevice.primaryPointingDevice());
     }));
-/+ #endif +/
-    ~this();
+/+ #endif
 
-    override QHoverEvent clone() const {
-        return cpp_new_copy!QHoverEvent(cast() this);
-    }
-
-/+ #if QT_DEPRECATED_SINCE(6, 0)
+#if QT_DEPRECATED_SINCE(6, 0)
 #ifndef QT_NO_INTEGER_EVENT_COORDINATES +/
     version (QT_NO_INTEGER_EVENT_COORDINATES) {} else
     {
@@ -438,15 +376,9 @@ class /+ Q_GUI_EXPORT +/ QWheelEvent : QSinglePointEvent
     Q_PROPERTY(QPoint pixelDelta READ pixelDelta)
     Q_PROPERTY(QPoint angleDelta READ angleDelta)
     Q_PROPERTY(Qt::ScrollPhase phase READ phase)
-    Q_PROPERTY(bool inverted READ inverted)
+    Q_PROPERTY(bool inverted READ inverted) +/
 
-    Q_EVENT_DISABLE_COPY(QWheelEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     enum { DefaultDeltasPerStep = 120 }
 
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
@@ -455,11 +387,6 @@ public:
                     bool inverted, /+ Qt:: +/qt.core.namespace.MouseEventSource source = /+ Qt:: +/qt.core.namespace.MouseEventSource.MouseEventNotSynthesized,
                     const(QPointingDevice) device = QPointingDevice.primaryPointingDevice());
     }));
-    ~this();
-
-    override QWheelEvent clone() const {
-        return cpp_new_copy!QWheelEvent(cast() this);
-    }
 
     pragma(inline, true) final QPoint pixelDelta() const { return m_pixelDelta; }
     pragma(inline, true) final QPoint angleDelta() const { return m_angleDelta; }
@@ -485,13 +412,7 @@ protected:
 /// Binding for C++ class [QTabletEvent](https://doc.qt.io/qt-6/qtabletevent.html).
 class /+ Q_GUI_EXPORT +/ QTabletEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QTabletEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(Type t, const(QPointingDevice) device,
                      ref const(QPointF) pos, ref const(QPointF) globalPos,
@@ -500,11 +421,6 @@ public:
                      /+ Qt:: +/qt.core.namespace.KeyboardModifiers keyState,
                      /+ Qt:: +/qt.core.namespace.MouseButton button, /+ Qt:: +/qt.core.namespace.MouseButtons buttons);
     }));
-    ~this();
-
-    override QTabletEvent clone() const {
-        return cpp_new_copy!QTabletEvent(cast() this);
-    }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
     /+ QT_DEPRECATED_VERSION_X_6_0("Use position()") +/
@@ -551,13 +467,7 @@ protected:
 /// Binding for C++ class [QNativeGestureEvent](https://doc.qt.io/qt-6/qnativegestureevent.html).
 class /+ Q_GUI_EXPORT +/ QNativeGestureEvent : QSinglePointEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QNativeGestureEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
 /+ #if QT_DEPRECATED_SINCE(6, 2) +/
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     /+ QT_DEPRECATED_VERSION_X_6_2("Use the other constructor") +/this(/+ Qt:: +/qt.core.namespace.NativeGestureType type, const(QPointingDevice) dev, ref const(QPointF) localPos, ref const(QPointF) scenePos,
@@ -569,11 +479,6 @@ public:
                             ref const(QPointF) localPos, ref const(QPointF) scenePos, ref const(QPointF) globalPos,
                             qreal value, ref const(QPointF) delta, quint64 sequenceId = ulong.max);
     }));
-    ~this();
-
-    override QNativeGestureEvent clone() const {
-        return cpp_new_copy!QNativeGestureEvent(cast() this);
-    }
 
     final /+ Qt:: +/qt.core.namespace.NativeGestureType gestureType() const { return m_gestureType; }
     final int fingerCount() const { return m_fingerCount; }
@@ -641,13 +546,7 @@ protected:
 /// Binding for C++ class [QKeyEvent](https://doc.qt.io/qt-6/qkeyevent.html).
 class /+ Q_GUI_EXPORT +/ QKeyEvent : QInputEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QKeyEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     this(Type type, int key, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers, ref const(QString) text = globalInitVar!QString,
                   bool autorep = false, quint16 count = 1);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
@@ -656,11 +555,6 @@ public:
                   ref const(QString) text = globalInitVar!QString, bool autorep = false, quint16 count = 1,
                   const(QInputDevice) device = QInputDevice.primaryKeyboard());
     }));
-    ~this();
-
-    override QKeyEvent clone() const {
-        return cpp_new_copy!QKeyEvent(cast() this);
-    }
 
     final int key() const { return m_key; }
 /+ #if QT_CONFIG(shortcut) +/
@@ -720,19 +614,8 @@ protected:
 /// Binding for C++ class [QFocusEvent](https://doc.qt.io/qt-6/qfocusevent.html).
 class /+ Q_GUI_EXPORT +/ QFocusEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QFocusEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(Type type, /+ Qt:: +/qt.core.namespace.FocusReason reason=/+ Qt:: +/qt.core.namespace.FocusReason.OtherFocusReason);
-    ~this();
-
-    override QFocusEvent clone() const {
-        return cpp_new_copy!QFocusEvent(cast() this);
-    }
 
     pragma(inline, true) final bool gotFocus() const { return type() == Type.FocusIn; }
     pragma(inline, true) final bool lostFocus() const { return type() == Type.FocusOut; }
@@ -748,20 +631,9 @@ private:
 /// Binding for C++ class [QPaintEvent](https://doc.qt.io/qt-6/qpaintevent.html).
 class /+ Q_GUI_EXPORT +/ QPaintEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QPaintEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(ref const(QRegion) paintRegion);
     /+ explicit +/this(ref const(QRect) paintRect);
-    ~this();
-
-    override QPaintEvent clone() const {
-        return cpp_new_copy!QPaintEvent(cast() this);
-    }
 
     pragma(inline, true) final ref const(QRect) rect() const { return m_rect; }
     pragma(inline, true) final ref const(QRegion) region() const { return m_region; }
@@ -776,19 +648,8 @@ protected:
 /// Binding for C++ class [QMoveEvent](https://doc.qt.io/qt-6/qmoveevent.html).
 class /+ Q_GUI_EXPORT +/ QMoveEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QMoveEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     this(ref const(QPoint) pos, ref const(QPoint) oldPos);
-    ~this();
-
-    override QMoveEvent clone() const {
-        return cpp_new_copy!QMoveEvent(cast() this);
-    }
 
     pragma(inline, true) final ref const(QPoint) pos() const { return m_pos; }
     pragma(inline, true) final ref const(QPoint) oldPos() const { return m_oldPos;}
@@ -801,19 +662,8 @@ protected:
 /// Binding for C++ class [QExposeEvent](https://doc.qt.io/qt-6/qexposeevent.html).
 class /+ Q_GUI_EXPORT +/ QExposeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QExposeEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(ref const(QRegion) m_region);
-    ~this();
-
-    override QExposeEvent clone() const {
-        return cpp_new_copy!QExposeEvent(cast() this);
-    }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
     /+ QT_DEPRECATED_VERSION_X_6_0("Handle QPaintEvent instead") +/
@@ -829,24 +679,13 @@ protected:
 /// Binding for C++ class [QPlatformSurfaceEvent](https://doc.qt.io/qt-6/qplatformsurfaceevent.html).
 class /+ Q_GUI_EXPORT +/ QPlatformSurfaceEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QPlatformSurfaceEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     enum SurfaceEventType {
         SurfaceCreated,
         SurfaceAboutToBeDestroyed
     }
 
     /+ explicit +/this(SurfaceEventType surfaceEventType);
-    ~this();
-
-    override QPlatformSurfaceEvent clone() const {
-        return cpp_new_copy!QPlatformSurfaceEvent(cast() this);
-    }
 
     pragma(inline, true) final SurfaceEventType surfaceEventType() const { return m_surfaceEventType; }
 
@@ -858,19 +697,8 @@ protected:
 /// Binding for C++ class [QResizeEvent](https://doc.qt.io/qt-6/qresizeevent.html).
 class /+ Q_GUI_EXPORT +/ QResizeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QResizeEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     this(ref const(QSize) size, ref const(QSize) oldSize);
-    ~this();
-
-    override QResizeEvent clone() const {
-        return cpp_new_copy!QResizeEvent(cast() this);
-    }
 
     pragma(inline, true) final ref const(QSize) size() const { return m_size; }
     pragma(inline, true) final ref const(QSize) oldSize()const { return m_oldSize;}
@@ -884,10 +712,9 @@ protected:
 /// Binding for C++ class [QCloseEvent](https://doc.qt.io/qt-6/qcloseevent.html).
 class /+ Q_GUI_EXPORT +/ QCloseEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QCloseEvent) +/protected:
-public:
+    /+ Q_DECL_EVENT_COMMON(QCloseEvent) +/
+protected:public:override QCloseEvent clone()const;~this();private:public:
     this();
-    ~this();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -895,10 +722,9 @@ public:
 /// Binding for C++ class [QIconDragEvent](https://doc.qt.io/qt-6/qicondragevent.html).
 class /+ Q_GUI_EXPORT +/ QIconDragEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QIconDragEvent) +/protected:
-public:
+    /+ Q_DECL_EVENT_COMMON(QIconDragEvent) +/
+protected:public:override QIconDragEvent clone()const;~this();private:public:
     this();
-    ~this();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -906,10 +732,9 @@ public:
 /// Binding for C++ class [QShowEvent](https://doc.qt.io/qt-6/qshowevent.html).
 class /+ Q_GUI_EXPORT +/ QShowEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QShowEvent) +/protected:
-public:
+    /+ Q_DECL_EVENT_COMMON(QShowEvent) +/
+protected:public:override QShowEvent clone()const;~this();private:public:
     this();
-    ~this();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -917,10 +742,9 @@ public:
 /// Binding for C++ class [QHideEvent](https://doc.qt.io/qt-6/qhideevent.html).
 class /+ Q_GUI_EXPORT +/ QHideEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QHideEvent) +/protected:
-public:
+    /+ Q_DECL_EVENT_COMMON(QHideEvent) +/
+protected:public:override QHideEvent clone()const;~this();private:public:
     this();
-    ~this();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -929,23 +753,14 @@ version (QT_NO_CONTEXTMENU) {} else
 /// Binding for C++ class [QContextMenuEvent](https://doc.qt.io/qt-6/qcontextmenuevent.html).
 class /+ Q_GUI_EXPORT +/ QContextMenuEvent : QInputEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QContextMenuEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     enum Reason { Mouse, Keyboard, Other }
 
     this(Reason reason, ref const(QPoint) pos, ref const(QPoint) globalPos,
                           /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers = /+ Qt:: +/qt.core.namespace.KeyboardModifier.NoModifier);
-    this(Reason reason, ref const(QPoint) pos);
-    ~this();
-
-    override QContextMenuEvent clone() const {
-        return cpp_new_copy!QContextMenuEvent(cast() this);
-    }
+/+ #if QT_DEPRECATED_SINCE(6, 4) +/
+    /+ QT_DEPRECATED_VERSION_X_6_4("Use the other constructor") +/this(Reason reason, ref const(QPoint) pos);
+/+ #endif +/
 
     pragma(inline, true) final int x() const { return m_pos.x(); }
     pragma(inline, true) final int y() const { return m_pos.y(); }
@@ -980,13 +795,7 @@ version (QT_NO_INPUTMETHOD) {} else
 /// Binding for C++ class [QInputMethodEvent](https://doc.qt.io/qt-6/qinputmethodevent.html).
 class /+ Q_GUI_EXPORT +/ QInputMethodEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QInputMethodEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     enum AttributeType {
        TextFormat,
        Cursor,
@@ -1023,12 +832,7 @@ public:
         }
     }
     this();
-//    this(ref const(QString) preeditText, ref const(QList!(Attribute)) /+ QList<Attribute> +/ attributes);
-    ~this();
-
-    override QInputMethodEvent clone() const {
-        return cpp_new_copy!QInputMethodEvent(cast() this);
-    }
+    this(ref const(QString) preeditText, ref const(QList!(Attribute)) attributes);
 
     final void setCommitString(ref const(QString) commitString, int replaceFrom = 0, int replaceLength = 0);
     pragma(inline, true) final ref const(QList!(Attribute)) attributes() const { return m_attributes; }
@@ -1064,19 +868,8 @@ private:
 /// Binding for C++ class [QInputMethodQueryEvent](https://doc.qt.io/qt-6/qinputmethodqueryevent.html).
 class /+ Q_GUI_EXPORT +/ QInputMethodQueryEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QInputMethodQueryEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(/+ Qt:: +/qt.core.namespace.InputMethodQueries queries);
-    ~this();
-
-    override QInputMethodQueryEvent clone() const {
-        return cpp_new_copy!QInputMethodQueryEvent(cast() this);
-    }
 
     final /+ Qt:: +/qt.core.namespace.InputMethodQueries queries() const { return m_queries; }
 
@@ -1107,22 +900,11 @@ private:
 /// Binding for C++ class [QDropEvent](https://doc.qt.io/qt-6/qdropevent.html).
 class /+ Q_GUI_EXPORT +/ QDropEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDropEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QPointF) pos, /+ Qt:: +/qt.core.namespace.DropActions actions, const(QMimeData) data,
                    /+ Qt:: +/qt.core.namespace.MouseButtons buttons, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers, Type type = Type.Drop);
     }));
-    ~this();
-
-    override QDropEvent clone() const {
-        return cpp_new_copy!QDropEvent(cast() this);
-    }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
     /+ QT_DEPRECATED_VERSION_X_6_0("Use position().toPoint()") +/
@@ -1165,22 +947,11 @@ protected:
 /// Binding for C++ class [QDragMoveEvent](https://doc.qt.io/qt-6/qdragmoveevent.html).
 class /+ Q_GUI_EXPORT +/ QDragMoveEvent : QDropEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDragMoveEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QPoint) pos, /+ Qt:: +/qt.core.namespace.DropActions actions, const(QMimeData) data,
                        /+ Qt:: +/qt.core.namespace.MouseButtons buttons, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers, Type type = Type.DragMove);
     }));
-    ~this();
-
-    override QDragMoveEvent clone() const {
-        return cpp_new_copy!QDragMoveEvent(cast() this);
-    }
 
     pragma(inline, true) final QRect answerRect() const { return m_rect; }
 
@@ -1199,13 +970,12 @@ protected:
 /// Binding for C++ class [QDragEnterEvent](https://doc.qt.io/qt-6/qdragenterevent.html).
 class /+ Q_GUI_EXPORT +/ QDragEnterEvent : QDragMoveEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDragEnterEvent) +/protected:
-public:
+    /+ Q_DECL_EVENT_COMMON(QDragEnterEvent) +/
+protected:public:override QDragEnterEvent clone()const;~this();private:public:
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     this(ref const(QPoint) pos, /+ Qt:: +/qt.core.namespace.DropActions actions, const(QMimeData) data,
                         /+ Qt:: +/qt.core.namespace.MouseButtons buttons, /+ Qt:: +/qt.core.namespace.KeyboardModifiers modifiers);
     }));
-    ~this();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
@@ -1213,10 +983,9 @@ public:
 /// Binding for C++ class [QDragLeaveEvent](https://doc.qt.io/qt-6/qdragleaveevent.html).
 class /+ Q_GUI_EXPORT +/ QDragLeaveEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDragLeaveEvent) +/protected:
-public:
+    /+ Q_DECL_EVENT_COMMON(QDragLeaveEvent) +/
+protected:public:override QDragLeaveEvent clone()const;~this();private:public:
     this();
-    ~this();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ #endif +/ // QT_CONFIG(draganddrop)
@@ -1225,19 +994,8 @@ public:
 /// Binding for C++ class [QHelpEvent](https://doc.qt.io/qt-6/qhelpevent.html).
 class /+ Q_GUI_EXPORT +/ QHelpEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QHelpEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     this(Type type, ref const(QPoint) pos, ref const(QPoint) globalPos);
-    ~this();
-
-    override QHelpEvent clone() const {
-        return cpp_new_copy!QHelpEvent(cast() this);
-    }
 
     pragma(inline, true) final int x() const { return m_pos.x(); }
     pragma(inline, true) final int y() const { return m_pos.y(); }
@@ -1258,19 +1016,8 @@ version (QT_NO_STATUSTIP) {} else
 /// Binding for C++ class [QStatusTipEvent](https://doc.qt.io/qt-6/qstatustipevent.html).
 class /+ Q_GUI_EXPORT +/ QStatusTipEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QStatusTipEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(ref const(QString) tip);
-    ~this();
-
-    override QStatusTipEvent clone() const {
-        return cpp_new_copy!QStatusTipEvent(cast() this);
-    }
 
     pragma(inline, true) final QString tip() /*const*/ { return m_tip; }
 private:
@@ -1283,19 +1030,8 @@ private:
 /// Binding for C++ class [QWhatsThisClickedEvent](https://doc.qt.io/qt-6/qwhatsthisclickedevent.html).
 class /+ Q_GUI_EXPORT +/ QWhatsThisClickedEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QWhatsThisClickedEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(ref const(QString) href);
-    ~this();
-
-    override QWhatsThisClickedEvent clone() const {
-        return cpp_new_copy!QWhatsThisClickedEvent(cast() this);
-    }
 
     pragma(inline, true) final QString href() /*const*/ { return m_href; }
 private:
@@ -1308,19 +1044,8 @@ private:
 /// Binding for C++ class [QActionEvent](https://doc.qt.io/qt-6/qactionevent.html).
 class /+ Q_GUI_EXPORT +/ QActionEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QActionEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     this(int type, QAction action, QAction before = null);
-    ~this();
-
-    override QActionEvent clone() const {
-        return cpp_new_copy!QActionEvent(cast() this);
-    }
 
     pragma(inline, true) final QAction action() /*const*/ { return m_action; }
     pragma(inline, true) final QAction before() /*const*/ { return m_before; }
@@ -1334,20 +1059,9 @@ private:
 /// Binding for C++ class [QFileOpenEvent](https://doc.qt.io/qt-6/qfileopenevent.html).
 class /+ Q_GUI_EXPORT +/ QFileOpenEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QFileOpenEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(ref const(QString) file);
     /+ explicit +/this(ref const(QUrl) url);
-    ~this();
-
-    override QFileOpenEvent clone() const {
-        return cpp_new_copy!QFileOpenEvent(cast() this);
-    }
 
     pragma(inline, true) final QString file() /*const*/ { return m_file; }
     final QUrl url() const { return m_url; }
@@ -1362,19 +1076,8 @@ version (QT_NO_TOOLBAR) {} else
 {
 class /+ Q_GUI_EXPORT +/ QToolBarChangeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QToolBarChangeEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(bool t);
-    ~this();
-
-    override QToolBarChangeEvent clone() const {
-        return cpp_new_copy!QToolBarChangeEvent(cast() this);
-    }
 
     pragma(inline, true) final bool toggle() const { return m_toggle; }
 private:
@@ -1387,19 +1090,8 @@ private:
 /// Binding for C++ class [QShortcutEvent](https://doc.qt.io/qt-6/qshortcutevent.html).
 class /+ Q_GUI_EXPORT +/ QShortcutEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QShortcutEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     this(ref const(QKeySequence) key, int id, bool ambiguous = false);
-    ~this();
-
-    override QShortcutEvent clone() const {
-        return cpp_new_copy!QShortcutEvent(cast() this);
-    }
 
     pragma(inline, true) final ref const(QKeySequence) key() const { return m_sequence; }
     pragma(inline, true) final int shortcutId() const { return m_shortcutId; }
@@ -1415,19 +1107,8 @@ protected:
 /// Binding for C++ class [QWindowStateChangeEvent](https://doc.qt.io/qt-6/qwindowstatechangeevent.html).
 class /+ Q_GUI_EXPORT +/ QWindowStateChangeEvent: QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QWindowStateChangeEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(/+ Qt:: +/qt.core.namespace.WindowStates oldState, bool isOverride = false);
-    ~this();
-
-    override QWindowStateChangeEvent clone() const {
-        return cpp_new_copy!QWindowStateChangeEvent(cast() this);
-    }
 
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.WindowStates oldState() const { return m_oldStates; }
     final bool isOverride() const;
@@ -1445,13 +1126,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug, const QEvent *);
 /// Binding for C++ class [QTouchEvent](https://doc.qt.io/qt-6/qtouchevent.html).
 class /+ Q_GUI_EXPORT +/ QTouchEvent : QPointerEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QTouchEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     alias TouchPoint = QEventPoint; // source compat
 
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
@@ -1470,11 +1145,6 @@ public:
                              ref const(QList!(QEventPoint)) touchPoints = globalInitVar!(QList!(QEventPoint)));
     }));
 /+ #endif +/
-    ~this();
-
-    override QTouchEvent clone() const {
-        return cpp_new_copy!QTouchEvent(cast() this);
-    }
 
     pragma(inline, true) final QObject target() /*const*/ { return m_target; }
     pragma(inline, true) final QEventPoint.States touchPointStates() const { return m_touchPointStates; }
@@ -1506,19 +1176,8 @@ protected:
 /// Binding for C++ class [QScrollPrepareEvent](https://doc.qt.io/qt-6/qscrollprepareevent.html).
 class /+ Q_GUI_EXPORT +/ QScrollPrepareEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QScrollPrepareEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(ref const(QPointF) startPos);
-    ~this();
-
-    override QScrollPrepareEvent clone() const {
-        return cpp_new_copy!QScrollPrepareEvent(cast() this);
-    }
 
     final QPointF startPos() const { return m_startPos; }
 
@@ -1542,13 +1201,7 @@ private:
 /// Binding for C++ class [QScrollEvent](https://doc.qt.io/qt-6/qscrollevent.html).
 class /+ Q_GUI_EXPORT +/ QScrollEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QScrollEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     enum ScrollState
     {
         ScrollStarted,
@@ -1557,11 +1210,6 @@ public:
     }
 
     this(ref const(QPointF) contentPos, ref const(QPointF) overshoot, ScrollState scrollState);
-    ~this();
-
-    override QScrollEvent clone() const {
-        return cpp_new_copy!QScrollEvent(cast() this);
-    }
 
     final QPointF contentPos() const { return m_contentPos; }
     final QPointF overshootDistance() const { return m_overshoot; }
@@ -1576,19 +1224,8 @@ private:
 
 class /+ Q_GUI_EXPORT +/ QScreenOrientationChangeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QScreenOrientationChangeEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     this(QScreen screen, /+ Qt:: +/qt.core.namespace.ScreenOrientation orientation);
-    ~this();
-
-    override QScreenOrientationChangeEvent clone() const {
-        return cpp_new_copy!QScreenOrientationChangeEvent(cast() this);
-    }
 
     final QScreen screen() /*const*/ { return m_screen; }
     final /+ Qt:: +/qt.core.namespace.ScreenOrientation orientation() const { return m_orientation; }
@@ -1601,18 +1238,8 @@ private:
 
 class /+ Q_GUI_EXPORT +/ QApplicationStateChangeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QApplicationStateChangeEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(/+ Qt:: +/qt.core.namespace.ApplicationState state);
-
-    override QApplicationStateChangeEvent clone() const {
-        return cpp_new_copy!QApplicationStateChangeEvent(cast() this);
-    }
 
     final /+ Qt:: +/qt.core.namespace.ApplicationState applicationState() const { return m_applicationState; }
 
@@ -1634,5 +1261,6 @@ version (QT_NO_INPUTMETHOD)
 {
 class QInputMethodEvent;
 }
+
 
 

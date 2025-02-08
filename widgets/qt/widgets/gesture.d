@@ -31,8 +31,10 @@ version (QT_NO_GESTURES) {} else
 version (QT_NO_GESTURES) {} else
 {
 
-/+ Q_DECLARE_METATYPE(Qt::GestureState)
-Q_DECLARE_METATYPE(Qt::GestureType) +/
+// ### move to qnamespace.h
+/+ QT_DECL_METATYPE_EXTERN_TAGGED(Qt::GestureState, Qt__GestureState, Q_WIDGETS_EXPORT)
+// ### move to qnamespace.h
+QT_DECL_METATYPE_EXTERN_TAGGED(Qt::GestureType, Qt__GestureType, Q_WIDGETS_EXPORT) +/
 
 
 
@@ -208,7 +210,8 @@ static if (!defined!"QT_TYPESAFE_FLAGS")
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QPinchGesture::ChangeFlags)
 
-Q_DECLARE_METATYPE(QPinchGesture::ChangeFlags) +/
+QT_DECL_METATYPE_EXTERN_TAGGED(QPinchGesture::ChangeFlags,
+                               QPinchGesture__ChangeFlags, Q_WIDGETS_EXPORT) +/
 
 
 extern(C++, class) struct QSwipeGesturePrivate;
@@ -337,6 +340,8 @@ Q_WIDGETS_EXPORT QDebug operator<<(QDebug, const QGestureEvent *);
 #  endif
 
 
-Q_DECLARE_METATYPE(QGesture::GestureCancelPolicy) +/
+QT_DECL_METATYPE_EXTERN_TAGGED(QGesture::GestureCancelPolicy,
+                               QGesture__GestureCancelPolicy, Q_WIDGETS_EXPORT) +/
+
 }
 

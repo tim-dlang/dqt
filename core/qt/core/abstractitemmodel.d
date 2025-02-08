@@ -340,34 +340,34 @@ public:
     /+ virtual +/ /+ Qt:: +/qt.core.namespace.DropActions supportedDropActions() const;
     /+ virtual +/ /+ Qt:: +/qt.core.namespace.DropActions supportedDragActions() const;
 
-    /+ virtual +/ bool insertRows(int row, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);
-    /+ virtual +/ bool insertColumns(int column, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);
-    /+ virtual +/ bool removeRows(int row, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);
-    /+ virtual +/ bool removeColumns(int column, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);
-    /+ virtual +/ bool moveRows(ref const(QModelIndex) sourceParent, int sourceRow, int count,
+    /+ Q_REVISION(6, 4) +/ /+ virtual +/ @QInvokable bool insertRows(int row, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);
+    /+ Q_REVISION(6, 4) +/ /+ virtual +/ @QInvokable bool insertColumns(int column, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);
+    /+ Q_REVISION(6, 4) +/ /+ virtual +/ @QInvokable bool removeRows(int row, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);
+    /+ Q_REVISION(6, 4) +/ /+ virtual +/ @QInvokable bool removeColumns(int column, int count, ref const(QModelIndex) parent = globalInitVar!QModelIndex);
+    /+ Q_REVISION(6, 4) +/ /+ virtual +/ @QInvokable bool moveRows(ref const(QModelIndex) sourceParent, int sourceRow, int count,
                               ref const(QModelIndex) destinationParent, int destinationChild);
-    /+ virtual +/ bool moveColumns(ref const(QModelIndex) sourceParent, int sourceColumn, int count,
+    /+ Q_REVISION(6, 4) +/ /+ virtual +/ @QInvokable bool moveColumns(ref const(QModelIndex) sourceParent, int sourceColumn, int count,
                                  ref const(QModelIndex) destinationParent, int destinationChild);
 
-    pragma(inline, true) final bool insertRow(int arow, ref const(QModelIndex) aparent = globalInitVar!QModelIndex)
+    /+ Q_REVISION(6, 4) +/ pragma(inline, true) @QInvokable final bool insertRow(int arow, ref const(QModelIndex) aparent = globalInitVar!QModelIndex)
     { return insertRows(arow, 1, aparent); }
-    pragma(inline, true) final bool insertColumn(int acolumn, ref const(QModelIndex) aparent = globalInitVar!QModelIndex)
+    /+ Q_REVISION(6, 4) +/ pragma(inline, true) @QInvokable final bool insertColumn(int acolumn, ref const(QModelIndex) aparent = globalInitVar!QModelIndex)
     { return insertColumns(acolumn, 1, aparent); }
-    pragma(inline, true) final bool removeRow(int arow, ref const(QModelIndex) aparent = globalInitVar!QModelIndex)
+    /+ Q_REVISION(6, 4) +/ pragma(inline, true) @QInvokable final bool removeRow(int arow, ref const(QModelIndex) aparent = globalInitVar!QModelIndex)
     { return removeRows(arow, 1, aparent); }
-    pragma(inline, true) final bool removeColumn(int acolumn, ref const(QModelIndex) aparent = globalInitVar!QModelIndex)
+    /+ Q_REVISION(6, 4) +/ pragma(inline, true) @QInvokable final bool removeColumn(int acolumn, ref const(QModelIndex) aparent = globalInitVar!QModelIndex)
     { return removeColumns(acolumn, 1, aparent); }
-    pragma(inline, true) final bool moveRow(ref const(QModelIndex) sourceParent, int sourceRow,
+    /+ Q_REVISION(6, 4) +/ pragma(inline, true) @QInvokable final bool moveRow(ref const(QModelIndex) sourceParent, int sourceRow,
                             ref const(QModelIndex) destinationParent, int destinationChild)
     { return moveRows(sourceParent, sourceRow, 1, destinationParent, destinationChild); }
-    pragma(inline, true) final bool moveColumn(ref const(QModelIndex) sourceParent, int sourceColumn,
+    /+ Q_REVISION(6, 4) +/ pragma(inline, true) @QInvokable final bool moveColumn(ref const(QModelIndex) sourceParent, int sourceColumn,
                                ref const(QModelIndex) destinationParent, int destinationChild)
     { return moveColumns(sourceParent, sourceColumn, 1, destinationParent, destinationChild); }
 
     /+ virtual +/ @QInvokable void fetchMore(ref const(QModelIndex) parent);
     /+ virtual +/ @QInvokable bool canFetchMore(ref const(QModelIndex) parent) const;
     /+ virtual +/ @QInvokable /+ Qt:: +/qt.core.namespace.ItemFlags flags(ref const(QModelIndex) index) const;
-    /+ virtual +/ void sort(int column, /+ Qt:: +/qt.core.namespace.SortOrder order = /+ Qt:: +/qt.core.namespace.SortOrder.AscendingOrder);
+    /+ Q_REVISION(6, 4) +/ /+ virtual +/ @QInvokable void sort(int column, /+ Qt:: +/qt.core.namespace.SortOrder order = /+ Qt:: +/qt.core.namespace.SortOrder.AscendingOrder);
     /+ virtual +/ QModelIndex buddy(ref const(QModelIndex) index) const;
     /+ virtual +/ @QInvokable QModelIndexList match(ref const(QModelIndex) start, int role,
                                                   ref const(QVariant) value, int hits = 1,
@@ -423,10 +423,10 @@ alias CheckIndexOptions = QFlags!(CheckIndexOption);
     @QSignal final void modelReset(QPrivateSignal);
 
     @QSignal final void rowsAboutToBeMoved( ref const(QModelIndex) sourceParent, int sourceStart, int sourceEnd, ref const(QModelIndex) destinationParent, int destinationRow, QPrivateSignal);
-    @QSignal final void rowsMoved( ref const(QModelIndex) parent, int start, int end, ref const(QModelIndex) destination, int row, QPrivateSignal);
+    @QSignal final void rowsMoved( ref const(QModelIndex) sourceParent, int sourceStart, int sourceEnd, ref const(QModelIndex) destinationParent, int destinationRow, QPrivateSignal);
 
     @QSignal final void columnsAboutToBeMoved( ref const(QModelIndex) sourceParent, int sourceStart, int sourceEnd, ref const(QModelIndex) destinationParent, int destinationColumn, QPrivateSignal);
-    @QSignal final void columnsMoved( ref const(QModelIndex) parent, int start, int end, ref const(QModelIndex) destination, int column, QPrivateSignal);
+    @QSignal final void columnsMoved( ref const(QModelIndex) sourceParent, int sourceStart, int sourceEnd, ref const(QModelIndex) destinationParent, int destinationColumn, QPrivateSignal);
 
 public /+ Q_SLOTS +/:
     /+ virtual +/ @QSlot bool submit();

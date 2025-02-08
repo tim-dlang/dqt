@@ -47,8 +47,9 @@ version (QT_NO_GEOM_VARIANT) {} else
 
 /+ #ifndef QT_NO_DEBUG_STREAM
 #endif
-#ifndef QT_BOOTSTRAPPED
+#if !defined(QT_LEAN_HEADERS) || QT_LEAN_HEADERS < 1
 #endif
+
 
 
 #if QT_CONFIG(easingcurve)
@@ -163,7 +164,7 @@ class QRegularExpression;
     this(ref const(QByteArray) bytearray);
     this(ref const(QBitArray) bitarray);
     this(ref const(QString) string);
-    this(QLatin1String string);
+    this(QLatin1StringView string);
     this(ref const(QStringList) stringlist);
     this(QChar qchar);
     this(QDate date);
@@ -201,7 +202,15 @@ class QRegularExpression;
 #if QT_CONFIG(itemmodel) +/
     this(ref const(QModelIndex) modelIndex);
     this(ref const(QPersistentModelIndex) modelIndex);
-/+ #endif +/
+/+ #endif
+#if !defined(Q_CC_GHS) +/
+    // GHS has an ICE with this code; use the simplified version below
+    /+ template <typename T,
+              std::enable_if_t<std::disjunction_v<std::is_pointer<T>, std::is_member_pointer<T>>, bool> = false> +/
+    // this(T,)(T) /+ = delete +/;
+/+ #else
+    QVariant(const volatile void *) = delete;
+#endif +/
 
     /+ref QVariant operator =(ref const(QVariant) other);+/
     /+ inline QVariant(QVariant &&other) noexcept : d(other.d)
@@ -371,7 +380,7 @@ class QRegularExpression;
 
     /+ template<typename T>
 #ifndef Q_CLANG_QDOC +/
-    pragma(inline, true) extern(D) static QVariant fromValue(T)(ref const T value)/+ ->
+    pragma(inline, true) extern(D) static QVariant fromValue(T)(auto ref const T value)/+ ->
         std::enable_if_t<std::is_copy_constructible_v<T>, QVariant> +/
 /+ #else
     static inline QVariant fromValue(const T &value)

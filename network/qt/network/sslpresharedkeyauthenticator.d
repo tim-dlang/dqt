@@ -74,6 +74,6 @@ private:
 /+ Q_DECLARE_SHARED(QSslPreSharedKeyAuthenticator)
 
 
-Q_DECLARE_METATYPE(QSslPreSharedKeyAuthenticator)
-Q_DECLARE_METATYPE(QSslPreSharedKeyAuthenticator*) +/
+QT_DECL_METATYPE_EXTERN(QSslPreSharedKeyAuthenticator, Q_NETWORK_EXPORT)
+QT_DECL_METATYPE_EXTERN_TAGGED(QSslPreSharedKeyAuthenticator*, QSslPreSharedKeyAuthenticator_ptr, Q_NETWORK_EXPORT) +/
 

@@ -132,7 +132,7 @@ Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QPageLayout &pageLayout);
 #endif
 
 
-Q_DECLARE_METATYPE(QPageLayout)
-Q_DECLARE_METATYPE(QPageLayout::Unit)
-Q_DECLARE_METATYPE(QPageLayout::Orientation) +/
+QT_DECL_METATYPE_EXTERN(QPageLayout, Q_GUI_EXPORT)
+QT_DECL_METATYPE_EXTERN_TAGGED(QPageLayout::Unit, QPageLayout__Unit, Q_GUI_EXPORT)
+QT_DECL_METATYPE_EXTERN_TAGGED(QPageLayout::Orientation, QPageLayout__Orientation, Q_GUI_EXPORT) +/
 

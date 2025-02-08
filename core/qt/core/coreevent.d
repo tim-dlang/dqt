@@ -24,7 +24,55 @@ protected: \
     Class(const Class &) = default; \
     Class(Class &&) = delete; \
     Class &operator=(const Class &other) = default; \
-    Class &operator=(Class &&) = delete +/
+    Class &operator=(Class &&) = delete
+
+#define Q_DECL_EVENT_COMMON(Class) \
+    protected: \
+        Class(const Class &); \
+        Class(Class &&) = delete; \
+        Class &operator=(const Class &other) = default; \
+        Class &operator=(Class &&) = delete; \
+    public: \
+        Class* clone() const override; \
+        ~Class() override; \
+    private:
+
+#define Q_IMPL_EVENT_COMMON(Class) \
+    Class::Class(const Class &) = default; \
+    Class::~Class() = default; \
+    Class* Class::clone() const \
+    { \
+        auto c = new Class(*this); \
+        QEvent *e = c; \
+        /* check that covariant return is safe to add */ \
+        Q_ASSERT(reinterpret_cast<quintptr>(c) == reinterpret_cast<quintptr>(e)); \
+        return c; \
+    } +/
+
+enum Q_DECL_EVENT_COMMON = q{
+    protected:
+        this(const typeof(this) other)
+        {
+            super(other);
+            this.tupleof = (cast(typeof(this))other).tupleof;
+        }
+        //this(typeof(this) &&) = delete;
+        //Class &operator=(const typeof(this) &other) = default;
+        //Class &operator=(typeof(this) &&) = delete;
+    public:
+        override typeof(this) clone() const
+        {
+            import core.stdcpp.new_;
+            import std.traits;
+            auto c = cpp_new_copy!(Unqual!(typeof(this)))(cast() this);
+            QEvent e = c;
+            /* check that covariant return is safe to add */
+            assert(cast(quintptr)cast(void*)c == cast(quintptr)cast(void*)e);
+            return c;
+        }
+        ~this();
+    private:
+};
 
 extern(C++, class) struct QEventPrivate;
 /// Binding for C++ class [QEvent](https://doc.qt.io/qt-6/qevent.html).
@@ -275,7 +323,7 @@ public:
             StyleAnimationUpdate = 213,             // style animation target should be updated
             ApplicationStateChange = 214,
 
-            WindowChangeInternal = 215,             // internal for QQuickWidget
+            WindowChangeInternal = 215,             // internal for QQuickWidget and texture-based widgets
             ScreenChangeInternal = 216,
 
             PlatformSurface = 217,                  // Platform surface created or about to be destroyed
@@ -283,6 +331,9 @@ public:
             Pointer = 218,                          // Qt 5: QQuickPointerEvent; Qt 6: unused so far
 
             TabletTrackingChange = 219,             // tablet tracking state has changed
+
+            // GraphicsSceneLeave = 220,
+            WindowAboutToChangeInternal = 221,      // internal for QQuickWidget and texture-based widgets
 
             // 512 reserved for Qt Jambi's MetaCall event
             // 513 reserved for Qt Jambi's DeleteOnMainThread event
@@ -409,20 +460,9 @@ private:
 /// Binding for C++ class [QTimerEvent](https://doc.qt.io/qt-6/qtimerevent.html).
 class /+ Q_CORE_EXPORT +/ QTimerEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QTimerEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(int timerId);
-    ~this();
     final int timerId() const { return id; }
-
-    override QTimerEvent clone() const {
-        return cpp_new_copy!QTimerEvent(cast() this);
-    }
 
 protected:
     int id;
@@ -433,23 +473,13 @@ protected:
 /// Binding for C++ class [QChildEvent](https://doc.qt.io/qt-6/qchildevent.html).
 class /+ Q_CORE_EXPORT +/ QChildEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QChildEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.c = cast(QObject)other.c;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     this(Type type, QObject child);
-    ~this();
+
     final QObject child() const { return (cast(QChildEvent)this).c; }
     final bool added() const { return type() == Type.ChildAdded; }
     final bool polished() const { return type() == Type.ChildPolished; }
     final bool removed() const { return type() == Type.ChildRemoved; }
-
-    override QChildEvent clone() const {
-        return cpp_new_copy!QChildEvent(cast() this);
-    }
 
 protected:
     QObject c;
@@ -459,21 +489,10 @@ protected:
 /// Binding for C++ class [QDynamicPropertyChangeEvent](https://doc.qt.io/qt-6/qdynamicpropertychangeevent.html).
 class /+ Q_CORE_EXPORT +/ QDynamicPropertyChangeEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDynamicPropertyChangeEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.n = *cast(QByteArray*)&other.n;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this(ref const(QByteArray) name);
-    ~this();
 
     pragma(inline, true) final QByteArray propertyName() const { return *cast(QByteArray*)&n; }
-
-    override QDynamicPropertyChangeEvent clone() const {
-        return cpp_new_copy!QDynamicPropertyChangeEvent(cast() this);
-    }
 
 private:
     QByteArray n;
@@ -482,20 +501,9 @@ private:
 
 /+ class /+ Q_CORE_EXPORT +/ QDeferredDeleteEvent : QEvent
 {
-    /+ Q_EVENT_DISABLE_COPY(QDeferredDeleteEvent) +/protected:
-    this(const typeof(this) other)
-    {
-        super(other);
-        this.tupleof = (cast(typeof(this))other).tupleof;
-    }
-public:
+    mixin(Q_DECL_EVENT_COMMON);
     /+ explicit +/this();
-    ~this();
     final int loopLevel() const { return level; }
-
-    override QDeferredDeleteEvent clone() const {
-        return cpp_new_copy!QDeferredDeleteEvent(cast() this);
-    }
 
 private:
     int level;

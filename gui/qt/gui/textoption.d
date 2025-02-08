@@ -82,7 +82,7 @@ public:
     /+ref QTextOption operator =(ref const(QTextOption) o);+/
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
-    { align_ = cast(uint) (aalignment.toInt); }
+    { align_ = uint(aalignment.toInt()); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.Alignment alignment() const { return /+ Qt:: +/qt.core.namespace.Alignment(cast(QFlag) (align_)); }
 
     pragma(inline, true) void setTextDirection(/+ Qt:: +/qt.core.namespace.LayoutDirection aDirection) { this.direction = aDirection; }
@@ -108,7 +108,7 @@ public:
     }
     /+ Q_DECLARE_FLAGS(Flags, Flag) +/
 alias Flags = QFlags!(Flag);    pragma(inline, true) void setFlags(Flags aflags)
-{ f = cast(uint) (aflags); }
+{ f = uint(aflags.toInt()); }
 //    pragma(inline, true) Flags flags() const { return Flags(cast(QFlag) (f)); }
 
     pragma(inline, true) void setTabStopDistance(qreal atabStop)

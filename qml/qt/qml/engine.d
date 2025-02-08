@@ -84,7 +84,6 @@ static if (!defined!"QT_TYPESAFE_FLAGS")
 }
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QQmlImageProviderBase::Flags) +/
 extern(C++, class) struct QQmlEnginePrivate;
-extern(C++, class) struct QQmlImportsPrivate;
 extern(C++, class) struct QQmlExpression;
 extern(C++, class) struct QQmlType;
 /+ #if QT_CONFIG(qml_network)
@@ -119,9 +118,12 @@ public:
     /+ QT_DEPRECATED +/ final bool addNamedBundle(ref const(QString) , ref const(QString) ) { return false; }
 /+ #endif
 
-#if QT_CONFIG(library) +/
-    final bool importPlugin(ref const(QString) filePath, ref const(QString) uri, QList!(QQmlError)* errors);
+#if QT_CONFIG(library)
+#if QT_DEPRECATED_SINCE(6, 4) +/
+    /+ QT_DEPRECATED_VERSION_X_6_4("Import the module from QML instead") +/
+        final bool importPlugin(ref const(QString) filePath, ref const(QString) uri, QList!(QQmlError)* errors);
 /+ #endif
+#endif
 
 #if QT_CONFIG(qml_network) +/
     /+ void setNetworkAccessManagerFactory(QQmlNetworkAccessManagerFactory *); +/

@@ -51,7 +51,8 @@ public:
          CertificateErrorDomain,
          HttpErrorDomain,
          FtpErrorDomain,
-         DnsErrorDomain
+         DnsErrorDomain,
+         HttpStatusCodeDomain
     }
     /+ Q_ENUM(ErrorDomain) +/
 

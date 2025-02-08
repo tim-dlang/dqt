@@ -62,11 +62,9 @@ public:
     @disable this(this);
     this(ref const(QJSValue) other);
 
-/+ #ifdef Q_COMPILER_RVALUE_REFS +/
     /+ inline QJSValue(QJSValue && other) : d(other.d) { other.d = 0; } +/
     /+ inline QJSValue &operator=(QJSValue &&other)
-    { qSwap(d, other.d); return *this; } +/
-/+ #endif +/
+    { std::swap(d, other.d); return *this; } +/
 
     this(bool value);
     this(int value);

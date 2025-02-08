@@ -35,6 +35,11 @@ struct QBindingStatus
     QPropertyDelayedNotifications* groupUpdateData = null;
 }
 
+extern(C++, "QtPrivate") {
+struct QBindingStatusAccessToken;
+// /+ Q_AUTOTEST_EXPORT +/ QBindingStatus* getBindingStatus(QBindingStatusAccessToken);
+}
+
 
 struct QBindingStorageData;
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QBindingStorage
@@ -61,10 +66,13 @@ public:
     ~this();
 
     bool isEmpty() { return !d; }
+    bool isValid() const/+ noexcept+/ { return cast(bool) (bindingStatus); }
+
+    // const(QBindingStatus)* status(/+ QtPrivate:: +/QBindingStatusAccessToken) const;
 
     void registerDependency(const(QUntypedPropertyData)* data) const
     {
-        if (!bindingStatus.currentlyEvaluatingBinding)
+        if (!bindingStatus || !bindingStatus.currentlyEvaluatingBinding)
             return;
         registerDependency_helper(data);
     }
@@ -87,6 +95,7 @@ public:
         return bindingData_helper(data, create);
     }
 private:
+    void reinitAfterThreadMove();
     void clear();
     void registerDependency_helper(const(QUntypedPropertyData)* data) const;
     static if (defined!"QT_CORE_BUILD_REMOVED_API")

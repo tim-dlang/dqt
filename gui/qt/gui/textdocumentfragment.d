@@ -47,18 +47,30 @@ public:
     bool isEmpty() const;
 
     QString toPlainText() const;
+    QString toRawText() const;
+/+ #ifndef QT_NO_TEXTHTMLPARSER +/
     version (QT_NO_TEXTHTMLPARSER) {} else
     {
         QString toHtml() const;
     }
+/+ #endif // QT_NO_TEXTHTMLPARSER
+#if QT_CONFIG(textmarkdownwriter) +/
+    QString toMarkdown(QTextDocument.MarkdownFeatures features = QTextDocument.MarkdownFeature.MarkdownDialectGitHub) const;
+/+ #endif +/
 
     static QTextDocumentFragment fromPlainText(ref const(QString) plainText);
+/+ #ifndef QT_NO_TEXTHTMLPARSER +/
     version (QT_NO_TEXTHTMLPARSER) {} else
     {
         mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
         static QTextDocumentFragment fromHtml(ref const(QString) html, const(QTextDocument) resourceProvider = null);
         }));
     }
+/+ #endif // QT_NO_TEXTHTMLPARSER
+#if QT_CONFIG(textmarkdownreader) +/
+    static QTextDocumentFragment fromMarkdown(ref const(QString) markdown,
+                                                  QTextDocument.MarkdownFeatures features = QTextDocument.MarkdownFeature.MarkdownDialectGitHub);
+/+ #endif +/
 
 private:
     QTextDocumentFragmentPrivate* d;

@@ -158,6 +158,7 @@ public:
     static QList!(QByteArray) windowsIdToIanaIds(ref const(QByteArray) windowsId,
                                                     QLocale.Territory territory);
 
+/+ #if (defined(Q_OS_DARWIN) || defined(Q_QDOC)) && !defined(QT_NO_SYSTEMLOCALE) +/
     static if ((!versionIsSet!("QT_NO_SYSTEMLOCALE") && (versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS"))))
     {
         /+ static QTimeZone fromCFTimeZone(CFTimeZoneRef timeZone); +/
@@ -165,6 +166,18 @@ public:
         /+ static QTimeZone fromNSTimeZone(const NSTimeZone *timeZone); +/
         /+ NSTimeZone *toNSTimeZone() const Q_DECL_NS_RETURNS_AUTORELEASED; +/
     }
+/+ #endif
+
+#if __cpp_lib_chrono >= 201907L || defined(Q_QDOC)
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    static QTimeZone fromStdTimeZonePtr(const std::chrono::time_zone *timeZone)
+    {
+        if (!timeZone)
+            return QTimeZone();
+        const std::string_view timeZoneName = timeZone->name();
+        return QTimeZone(QByteArrayView(timeZoneName).toByteArray());
+    }
+#endif +/
 
 private:
     this(ref QTimeZonePrivate dd);
@@ -189,5 +202,19 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &ds, QTimeZone &tz);
 
 #ifndef QT_NO_DEBUG_STREAM
 Q_CORE_EXPORT QDebug operator<<(QDebug dbg, const QTimeZone &tz);
+#endif
+
+#if __cpp_lib_chrono >= 201907L
+// zoned_time
+template <typename> // QT_POST_CXX17_API_IN_EXPORTED_CLASS
+inline QDateTime QDateTime::fromStdZonedTime(const std::chrono::zoned_time<
+                                                std::chrono::milliseconds,
+                                                const std::chrono::time_zone *
+                                             > &time)
+{
+    const auto sysTime = time.get_sys_time();
+    const QTimeZone timeZone = QTimeZone::fromStdTimeZonePtr(time.get_time_zone());
+    return fromMSecsSinceEpoch(sysTime.time_since_epoch().count(), timeZone);
+}
 #endif +/
 

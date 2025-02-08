@@ -101,5 +101,5 @@ Q_NETWORK_EXPORT QDebug operator<<(QDebug, const QNetworkCookie &);
 #endif
 
 
-Q_DECLARE_METATYPE(QNetworkCookie) +/
+QT_DECL_METATYPE_EXTERN(QNetworkCookie, Q_NETWORK_EXPORT) +/
 

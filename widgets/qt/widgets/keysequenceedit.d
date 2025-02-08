@@ -30,7 +30,8 @@ class /+ Q_WIDGETS_EXPORT +/ QKeySequenceEdit : QWidget
 {
     mixin(Q_OBJECT);
     /+ Q_PROPERTY(QKeySequence keySequence READ keySequence WRITE setKeySequence
-               NOTIFY keySequenceChanged USER true) +/
+               NOTIFY keySequenceChanged USER true)
+    Q_PROPERTY(bool clearButtonEnabled READ isClearButtonEnabled WRITE setClearButtonEnabled) +/
 
 public:
     /+ explicit +/this(QWidget parent = null);
@@ -38,6 +39,9 @@ public:
     ~this();
 
     final QKeySequence keySequence() const;
+
+    final void setClearButtonEnabled(bool enable);
+    final bool isClearButtonEnabled() const;
 
 public /+ Q_SLOTS +/:
     @QSlot final void setKeySequence(ref const(QKeySequence) keySequence);
@@ -59,6 +63,7 @@ protected:
     override void keyPressEvent(QKeyEvent );
     override void keyReleaseEvent(QKeyEvent );
     override void timerEvent(QTimerEvent );
+    override void focusOutEvent(QFocusEvent );
 
 private:
     /+ Q_DISABLE_COPY(QKeySequenceEdit) +/

@@ -29,6 +29,7 @@ struct CGRect;
 #endif +/
 
 
+
 /// Binding for C++ class [QRect](https://doc.qt.io/qt-6/qrect.html).
 @Q_RELOCATABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRect
 {
@@ -323,6 +324,7 @@ public:
     {
         /+ [[nodiscard]] CGRect toCGRect() const noexcept; +/
     }
+    /+ [[nodiscard]] +/ pragma(inline, true) QRectF toRectF() const/+ noexcept+/ { return QRectF(this); }
 
 private:
     int x1 = 0;

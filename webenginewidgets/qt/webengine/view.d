@@ -21,6 +21,7 @@ import qt.core.scopedpointer;
 import qt.core.size;
 import qt.core.string;
 import qt.core.url;
+import qt.gui.action;
 import qt.gui.event;
 import qt.gui.icon;
 import qt.gui.pagelayout;
@@ -31,11 +32,14 @@ import qt.webengine.contextmenurequest;
 import qt.webengine.history;
 import qt.webengine.httprequest;
 import qt.webengine.page;
+import qt.webengine.profile;
 import qt.webengine.settings;
 import qt.widgets.menu;
 import qt.widgets.widget;
-version (QT_NO_ACTION) {} else
-    import qt.gui.action;
+
+extern(C++, "QtWebEngineWidgetUI") {
+extern(C++, class) struct AutofillPopupWidget;
+}
 
 extern(C++, class) struct QPrinter;
 extern(C++, class) struct QWebEngineViewAccessible;
@@ -55,6 +59,8 @@ class /+ QWEBENGINEWIDGETS_EXPORT +/ QWebEngineView : QWidget
 
 public:
     /+ explicit +/this(QWidget parent = null);
+    /+ explicit +/this(QWebEngineProfile profile, QWidget parent = null);
+    /+ explicit +/this(QWebEnginePage page, QWidget parent = null);
     /+ virtual +/~this();
 
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
@@ -81,10 +87,9 @@ public:
     final bool hasSelection() const;
     final QString selectedText() const;
 
-    version (QT_NO_ACTION) {} else
-    {
-        final QAction pageAction(QWebEnginePage.WebAction action) const;
-    }
+/+ #if QT_CONFIG(action) +/
+    final QAction pageAction(QWebEnginePage.WebAction action) const;
+/+ #endif +/
     final void triggerPageAction(QWebEnginePage.WebAction action, bool checked = false);
 
     final qreal zoomFactor() const;
@@ -153,8 +158,7 @@ private:
     /+ Q_DECLARE_PRIVATE(QWebEngineView) +/
     QScopedPointer!(QWebEngineViewPrivate) d_ptr;
 
-    /+ friend class QWebEnginePage; +/
-    /+ friend class QWebEnginePagePrivate; +/
+    /+ friend class QtWebEngineWidgetUI::AutofillPopupWidget; +/
 /+ #if QT_CONFIG(accessibility) +/
     /+ friend class QWebEngineViewAccessible; +/
 /+ #endif +/

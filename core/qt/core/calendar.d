@@ -13,6 +13,7 @@ module qt.core.calendar;
 extern(C++):
 
 import qt.config;
+import qt.core.anystringview;
 import qt.core.datetime;
 import qt.core.locale;
 import qt.core.metamacros;
@@ -146,10 +147,12 @@ public:
     }
  // Gregorian, optimised
     /+ explicit +/this(System system);
-    // ### Qt 7: remove
-    /+ explicit +/this(QLatin1String name);
-    // ### Qt 7: use QAnyStringView
-    /+ explicit +/this(QStringView name);
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        /+ explicit +/this(QLatin1StringView name);
+        /+ explicit +/this(QStringView name);
+    }
+    /+ explicit +/this(QAnyStringView name);
     /+ explicit +/this(SystemId id);
 
     // QCalendar is a trivially copyable value type.

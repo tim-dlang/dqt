@@ -24,7 +24,7 @@ extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLibraryInfo
 public:
     static const(char)* build()/+ noexcept+/;
 
-    static bool isDebugBuild();
+    static bool isDebugBuild()/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
 /+ #ifndef QT_BOOTSTRAPPED +/
     mixin(changeCppMangling(q{mangleChangeName("version")}, q{

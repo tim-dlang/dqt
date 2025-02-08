@@ -364,7 +364,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_headerDataChanged())
 #if QT_CONFIG(gestures) && QT_CONFIG(scroller)
     Q_PRIVATE_SLOT(d_func(), void _q_scrollerStateChanged())
-#endif +/
+#endif
+    Q_PRIVATE_SLOT(d_func(), void _q_delegateSizeHintChanged(const QModelIndex&)) +/
 
     /+ friend class ::tst_QAbstractItemView; +/
     /+ friend class ::tst_QTreeView; +/

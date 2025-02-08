@@ -132,6 +132,10 @@ public:
     {
         this.ucs = ch;
     }
+    this(char ch)/+ noexcept+/
+    {
+        this.ucs = ch;
+    }
 /+ #if defined(Q_OS_WIN) || defined(Q_CLANG_QDOC) +/
     /+ version (Cygwin) {} else
     version (Windows)
@@ -690,10 +694,19 @@ private:
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &, QChar);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QChar &);
-#endif
+#endif +/
+
+/+ extern(C++, "Qt") {
+/+ inline +/ 
+inlineextern(C++, "Literals") {
+/+ inline namespace StringLiterals {
+
+} +/ // StringLiterals
+} // Literals
+} +/ // Qt
 
 
-namespace std {
+/+ namespace std {
 template <>
 struct hash<QT_PREPEND_NAMESPACE(QChar)>
 {

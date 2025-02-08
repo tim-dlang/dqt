@@ -13,6 +13,7 @@ module qt.gui.color;
 extern(C++):
 
 import qt.config;
+import qt.core.anystringview;
 import qt.core.namespace;
 import qt.core.string;
 import qt.core.stringlist;
@@ -60,16 +61,24 @@ public:
     this(QRgb rgb)/+ noexcept+/;
     this(QRgba64 rgba64)/+ noexcept+/;
     pragma(inline, true) this(ref const(QString) aname)
-    { setNamedColor(aname); }
+    {
+        this = fromString(QAnyStringView(aname));
+    }
     /+ explicit +/ pragma(inline, true) this(QStringView aname)
-    { setNamedColor(aname); }
+    {
+        this = fromString(QAnyStringView(aname));
+    }
     pragma(inline, true) this(const(char)* aname)
     {
-        this(QLatin1String(aname));
+        this = fromString(QAnyStringView(aname));
     }
-    pragma(inline, true) this(QLatin1String aname)
-    { setNamedColor(aname); }
+    pragma(inline, true) this(QLatin1StringView aname)
+    {
+        this = fromString(QAnyStringView(aname));
+    }
     this(Spec spec)/+ noexcept+/;
+
+    static QColor fromString(QAnyStringView name)/+ noexcept+/;
 
     /+ref QColor operator =(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;+/
 
@@ -78,9 +87,14 @@ public:
 
     QString name(NameFormat format = NameFormat.HexRgb) const;
 
-    void setNamedColor(ref const(QString) name);
-    void setNamedColor(QStringView name);
-    void setNamedColor(QLatin1String name);
+/+ #if QT_DEPRECATED_SINCE(6, 6) +/
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use fromString() instead.") +/
+        void setNamedColor(ref const(QString) name);
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use fromString() instead.") +/
+        void setNamedColor(QStringView name);
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use fromString() instead.") +/
+        void setNamedColor(QLatin1StringView name);
+/+ #endif +/
 
     static QStringList colorNames();
 
@@ -208,15 +222,19 @@ public:
 
     /+auto opCast(T : QVariant)() const;+/
 
-    static bool isValidColor(ref const(QString) name);
-    static bool isValidColor(QStringView)/+ noexcept+/;
-    static bool isValidColor(QLatin1String)/+ noexcept+/;
+/+ #if QT_DEPRECATED_SINCE(6, 6) +/
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use isValidColorName() instead.") +/
+        static bool isValidColor(ref const(QString) name);
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use isValidColorName() instead.") +/
+        static bool isValidColor(QStringView)/+ noexcept+/;
+    /+ QT_DEPRECATED_VERSION_X_6_6("Use isValidColorName() instead.") +/
+        static bool isValidColor(QLatin1StringView)/+ noexcept+/;
+/+ #endif +/
+    static bool isValidColorName(QAnyStringView)/+ noexcept+/;
 
 private:
 
     void invalidate()/+ noexcept+/;
-    /+ template <typename String> +/
-    bool setColorFromString(String)(String name);
 
     static bool isRgbaValid(int r, int g, int b, int a = 255)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    {

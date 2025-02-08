@@ -133,6 +133,8 @@ public:
         /+ [[nodiscard]] CGSize toCGSize() const noexcept; +/
     }
 
+    /+ [[nodiscard]] +/ pragma(inline, true) QSizeF toSizeF() const/+ noexcept+/ { return QSizeF(this); }
+
 private:
     int wd = -1;
     int ht = -1;

@@ -21,9 +21,6 @@ import qt.helpers;
 
 /+ #ifndef QT_NO_QOBJECT +/
 
-/+ #if __has_include(<chrono>)
-#endif +/
-
 
 extern(C++, class) struct QTimerPrivate;
 /// Binding for C++ class [QTimer](https://doc.qt.io/qt-6/qtimer.html).
@@ -158,7 +155,6 @@ public /+ Q_SLOTS +/:
     @QSignal final void timeout(QPrivateSignal);
 
 public:
-/+ #if __has_include(<chrono>) || defined(Q_QDOC) +/
     /+ void setInterval(std::chrono::milliseconds value)
     {
         setInterval(int(value.count()));
@@ -188,7 +184,6 @@ public:
     {
         start(int(value.count()));
     } +/
-/+ #endif +/
 
 protected:
     override void timerEvent(QTimerEvent );
@@ -207,7 +202,6 @@ private:
                                    const(QObject) receiver, /+ QtPrivate:: +/dqtimported!q{qt.core.objectdefs_impl}.QSlotObjectBase* slotObj);
     }));
 
-/+ #if __has_include(<chrono>) +/
     /+ static Qt::TimerType defaultTypeFor(std::chrono::milliseconds interval)
     { return defaultTypeFor(int(interval.count())); } +/
 
@@ -217,7 +211,6 @@ private:
         singleShotImpl(int(interval.count()),
                        timerType, receiver, slotObj);
     } +/
-/+ #endif +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

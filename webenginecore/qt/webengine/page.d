@@ -27,6 +27,7 @@ import qt.core.string;
 import qt.core.stringlist;
 import qt.core.url;
 import qt.core.variant;
+import qt.gui.action;
 import qt.gui.color;
 import qt.gui.icon;
 import qt.gui.pagelayout;
@@ -38,6 +39,7 @@ import qt.std_function;
 import qt.webengine.certificateerror;
 import qt.webengine.clientcertificateselection;
 import qt.webengine.downloadrequest;
+import qt.webengine.filesystemaccessrequest;
 import qt.webengine.findtextresult;
 import qt.webengine.fullscreenrequest;
 import qt.webengine.history;
@@ -52,8 +54,6 @@ import qt.webengine.scriptcollection;
 import qt.webengine.settings;
 import qt.webengine.urlrequestinterceptor;
 import std.traits;
-version (QT_NO_ACTION) {} else
-    import qt.gui.action;
 
 extern(C++, class) struct QContextMenuBuilder;
 extern(C++, class) struct QWebChannel;
@@ -234,10 +234,9 @@ alias FindFlags = QFlags!(FindFlag);
 
     final QWebEngineProfile profile() const;
 
-    version (QT_NO_ACTION) {} else
-    {
-        final QAction action(WebAction action) const;
-    }
+/+ #if QT_CONFIG(action) +/
+    final QAction action(WebAction action) const;
+/+ #endif +/
     /+ virtual +/ void triggerAction(WebAction action, bool checked = false);
 
     final void replaceMisspelledWord(ref const(QString) replacement);
@@ -349,6 +348,7 @@ alias FindFlags = QFlags!(FindFlag);
     @QSignal final void fullScreenRequested(QWebEngineFullScreenRequest fullScreenRequest);
     @QSignal final void quotaRequested(QWebEngineQuotaRequest quotaRequest);
     @QSignal final void registerProtocolHandlerRequested(QWebEngineRegisterProtocolHandlerRequest request);
+    @QSignal final void fileSystemAccessRequested(QWebEngineFileSystemAccessRequest request);
     @QSignal final void selectClientCertificate(QWebEngineClientCertificateSelection clientCertSelection);
     @QSignal final void authenticationRequired(ref const(QUrl) requestUrl, QAuthenticator* authenticator);
     @QSignal final void proxyAuthenticationRequired(ref const(QUrl) requestUrl, QAuthenticator* authenticator, ref const(QString) proxyHost);
@@ -400,17 +400,16 @@ private:
     /+ Q_DISABLE_COPY(QWebEnginePage) +/
     /+ Q_DECLARE_PRIVATE(QWebEnginePage) +/
     QScopedPointer!(QWebEnginePagePrivate) d_ptr;
-/+ #ifndef QT_NO_ACTION
+/+ #if QT_CONFIG(action)
     Q_PRIVATE_SLOT(d_func(), void _q_webActionTriggered(bool checked))
 #endif +/
 
     /+ friend class QContextMenuBuilder; +/
     /+ friend class QWebEngineView; +/
     /+ friend class QWebEngineViewPrivate; +/
-    version (QT_NO_ACCESSIBILITY) {} else
-    {
-        /+ friend class QWebEngineViewAccessible; +/
-    }
+/+ #if QT_CONFIG(accessibility) +/
+    /+ friend class QWebEngineViewAccessible; +/
+/+ #endif +/ // QT_CONFIG(accessibility)
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator |(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QWebEnginePage.FindFlags.enum_type)(f1)|f2;}+/

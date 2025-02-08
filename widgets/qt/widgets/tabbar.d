@@ -158,11 +158,10 @@ public:
     final bool changeCurrentOnDrag() const;
     final void setChangeCurrentOnDrag(bool change);
 
-    version (QT_NO_ACCESSIBILITY) {} else
-    {
-        final QString accessibleTabName(int index) const;
-        final void setAccessibleTabName(int index, ref const(QString) name);
-    }
+/+ #if QT_CONFIG(accessibility) +/
+    final QString accessibleTabName(int index) const;
+    final void setAccessibleTabName(int index, ref const(QString) name);
+/+ #endif +/
 
 public /+ Q_SLOTS +/:
     @QSlot final void setCurrentIndex(int index);
@@ -198,10 +197,9 @@ protected:
     override void timerEvent(QTimerEvent event);
     /+ virtual +/ void initStyleOption(QStyleOptionTab* option, int tabIndex) const;
 
-    version (QT_NO_ACCESSIBILITY) {} else
-    {
-        /+ friend class QAccessibleTabBar; +/
-    }
+/+ #if QT_CONFIG(accessibility) +/
+    /+ friend class QAccessibleTabBar; +/
+/+ #endif +/
 private:
     /+ Q_DISABLE_COPY(QTabBar) +/
     /+ Q_DECLARE_PRIVATE(QTabBar) +/

@@ -26,8 +26,13 @@ struct /+ Q_QML_EXPORT +/ QQmlDebuggingEnabler
         WaitForClient
     }
 
+    static void enableDebugging(bool printWarning);
+
+/+ #if QT_DEPRECATED_SINCE(6, 4) +/
     @disable this();
-    this(bool printWarning/+ = true+/);
+    /+ QT_DEPRECATED_VERSION_X_6_4("Use QQmlTriviallyDestructibleDebuggingEnabler instead "
+                                    "or just call QQmlDebuggingEnabler::enableDebugging().") +/this(bool printWarning/+ = true+/);
+/+ #endif +/
 
     static QStringList debuggerServices();
     static QStringList inspectorServices();
@@ -45,15 +50,28 @@ struct /+ Q_QML_EXPORT +/ QQmlDebuggingEnabler
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
+// Unnamed namespace to signal the compiler that we
+// indeed want each TU to have its own QQmlDebuggingEnabler.
+/+ namespace { +/
+/*struct QQmlTriviallyDestructibleDebuggingEnabler {
+    @disable this();
+    this(bool printWarning/+ = true+/)
+    {
+        static assert(/+ std:: +/is_trivially_destructible_v!(QQmlTriviallyDestructibleDebuggingEnabler));
+        QQmlDebuggingEnabler.enableDebugging(printWarning);
+    }
+    mixin(CREATE_CONVENIENCE_WRAPPERS);
+}*/
 // Execute code in constructor before first QQmlEngine is instantiated
 static if (defined!"QT_QML_DEBUG_NO_WARNING")
 {
-extern(D) static __gshared auto qQmlEnableDebuggingHelper = QQmlDebuggingEnabler(false);
+//extern(D) static __gshared auto qQmlEnableDebuggingHelper = QQmlTriviallyDestructibleDebuggingEnabler(false);
 }
 static if (defined!"QT_QML_DEBUG" && !defined!"QT_QML_DEBUG_NO_WARNING")
 {
-extern(D) static __gshared auto qQmlEnableDebuggingHelper = QQmlDebuggingEnabler(true);
+//extern(D) static __gshared auto qQmlEnableDebuggingHelper = QQmlTriviallyDestructibleDebuggingEnabler(true);
 }
+/+ } +/ // unnamed namespace
 
 /+ #endif +/
 

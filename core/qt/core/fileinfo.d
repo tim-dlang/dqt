@@ -148,6 +148,7 @@ public:
     bool isSymLink() const;
     bool isSymbolicLink() const;
     bool isShortcut() const;
+    bool isAlias() const;
     bool isJunction() const;
     bool isRoot() const;
     bool isBundle() const;

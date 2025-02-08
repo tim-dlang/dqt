@@ -117,6 +117,14 @@ public:
     final void setWidget(int row, ItemRole role, QWidget widget);
     final void setLayout(int row, ItemRole role, QLayout layout);
 
+    final void setRowVisible(int row, bool on);
+    final void setRowVisible(QWidget widget, bool on);
+    final void setRowVisible(QLayout layout, bool on);
+
+    final bool isRowVisible(int row) const;
+    final bool isRowVisible(QWidget widget) const;
+    final bool isRowVisible(QLayout layout) const;
+
     final QLayoutItem itemAt(int row, ItemRole role) const;
     final void getItemPosition(int index, int* rowPtr, ItemRole* rolePtr) const;
     final void getWidgetPosition(QWidget widget, int* rowPtr, ItemRole* rolePtr) const;

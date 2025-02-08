@@ -17,9 +17,9 @@ import qt.config;
 import qt.core.bytearray;
 import qt.core.global;
 import qt.core.namespace;
+import qt.core.string;
 import qt.core.typeinfo;
 import qt.helpers;
-
 
 extern(C++, "QtPrivate") {
 
@@ -81,7 +81,14 @@ struct IsContainerCompatibleWithQByteArrayView<T, std::enable_if_t<
                 std::negation<std::is_array<T>>,
 
                 // Don't make an accidental copy constructor
-                std::negation<std::is_same<std::decay_t<T>, QByteArrayView>>>>> : std::true_type {}; +/
+                std::negation<std::is_same<std::decay_t<T>, QByteArrayView>>>>> : std::true_type {};
+
+// Used by QLatin1StringView too
+template <typename Char>
+static constexpr qsizetype lengthHelperPointer(const Char *data) noexcept
+{
+    return qsizetype(std::char_traits<Char>::length(data));
+} +/
 
 } // namespace QtPrivate
 
@@ -121,12 +128,6 @@ private:
     /+ using if_compatible_container =
             typename std::enable_if_t<QtPrivate::IsContainerCompatibleWithQByteArrayView<T>::value,
                                       bool>; +/
-
-    /+ template <typename Char> +/
-    /+ static constexpr qsizetype lengthHelperPointer(const Char *data) noexcept
-    {
-        return qsizetype(std::char_traits<Char>::length(data));
-    } +/
 
     /+ template <typename Container> +/
     static qsizetype lengthHelperContainer(Container)(ref const(Container) c)/+ noexcept+/
@@ -193,7 +194,7 @@ public:
     QByteArrayView(const QByteArray &data) noexcept;
 #else +/
     /+ template <typename ByteArray, if_compatible_qbytearray_like<ByteArray> = true> +/
-    this(ByteArray)(ref const(ByteArray) ba)/+ noexcept+/ if (is(ByteArray == QByteArray))
+    this(ByteArray)(auto ref const(ByteArray) ba)/+ noexcept+/ if (is(ByteArray == QByteArray) || is(ByteArray == QLatin1String))
     {
         this(ba.isNull() ? null : ba.data(), qsizetype(ba.size()));
     }

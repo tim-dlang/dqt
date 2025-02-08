@@ -87,5 +87,5 @@ private:
 /+ Q_DECLARE_SHARED(QStaticText)
 
 
-Q_DECLARE_METATYPE(QStaticText) +/
+QT_DECL_METATYPE_EXTERN(QStaticText, Q_GUI_EXPORT) +/
 

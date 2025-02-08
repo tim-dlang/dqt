@@ -26,7 +26,16 @@ import qt.helpers;
 #if defined(__cpp_lib_source_location)
 #define QT_SOURCE_LOCATION_NAMESPACE std
 #define QT_PROPERTY_COLLECT_BINDING_LOCATION
-#define QT_PROPERTY_DEFAULT_BINDING_LOCATION QPropertyBindingSourceLocation(std::source_location::current())
+#if defined(Q_CC_MSVC)
+/* MSVC runs into an issue with constexpr with source location (error C7595)
+   so use the factory function as a workaround */
+#  define QT_PROPERTY_DEFAULT_BINDING_LOCATION QPropertyBindingSourceLocation::fromStdSourceLocation(std::source_location::current())
+#else
+/* some versions of gcc in turn run into
+   expression ‘std::source_location::current()’ is not a constant expression
+   so don't use the workaround there */
+#  define QT_PROPERTY_DEFAULT_BINDING_LOCATION QPropertyBindingSourceLocation(std::source_location::current())
+#endif
 #endif
 #endif
 
@@ -94,18 +103,21 @@ struct /+ Q_CORE_EXPORT +/ QPropertyBindingSourceLocation
     quint32 line = 0;
     quint32 column = 0;
     /+ QPropertyBindingSourceLocation() = default; +/
-/+ #ifdef __cpp_lib_source_location +/
-    static if (defined!"__cpp_lib_source_location")
+/+ #ifdef __cpp_lib_source_location
+    constexpr QPropertyBindingSourceLocation(const std::source_location &cppLocation)
     {
-        this(ref UnknownType!q{/+ std:: +/source_location} cppLocation)
-        {
-            fileName = cppLocation.file_name();
-            functionName = cppLocation.function_name();
-            line = cppLocation.line();
-            column = cppLocation.column();
-        }
+        fileName = cppLocation.file_name();
+        functionName = cppLocation.function_name();
+        line = cppLocation.line();
+        column = cppLocation.column();
     }
-/+ #endif
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    static consteval QPropertyBindingSourceLocation
+    fromStdSourceLocation(const std::source_location &cppLocation)
+    {
+        return cppLocation;
+    }
+#endif
 #ifdef __cpp_lib_experimental_source_location +/
     /+ constexpr QPropertyBindingSourceLocation(const std::experimental::source_location &cppLocation)
     {

@@ -128,10 +128,22 @@ public:
     pragma(inline, true) final void setFont(int column, ref const(QFont) afont)
     { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.FontRole, afont); }
 
+/+ #if QT_VERSION < QT_VERSION_CHECK(7, 0, 0) +/
     pragma(inline, true) final int textAlignment(int column) const
         { return data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole).toInt(); }
-    pragma(inline, true) final void setTextAlignment(int column, int alignment)
+/+ #else
+    inline Qt::Alignment textAlignment(int column) const
+    { return qvariant_cast<Qt::Alignment>(data(column, Qt::TextAlignmentRole)); }
+#endif
+#if QT_DEPRECATED_SINCE(6, 4) +/
+    /+ QT_DEPRECATED_VERSION_X_6_4("Use the overload taking Qt::Alignment") +/
+        pragma(inline, true) final void setTextAlignment(int column, int alignment)
         { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole, alignment); }
+    pragma(inline, true) final void setTextAlignment(int column, /+ Qt:: +/qt.core.namespace.AlignmentFlag alignment)
+        { auto tmp = QVariant.fromValue(/+ Qt:: +/qt.core.namespace.Alignment(alignment)); setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole, tmp); }
+/+ #endif +/
+    pragma(inline, true) final void setTextAlignment(int column, /+ Qt:: +/qt.core.namespace.Alignment alignment)
+        { auto tmp = QVariant.fromValue(alignment); setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.TextAlignmentRole, tmp); }
 
     pragma(inline, true) final QBrush background(int column) const
         { return qvariant_cast!(QBrush)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.BackgroundRole)); }
@@ -144,7 +156,7 @@ public:
         { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.ForegroundRole, brush.style() != /+ Qt:: +/qt.core.namespace.BrushStyle.NoBrush ? QVariant.fromValue(brush) : QVariant()); }
 
     pragma(inline, true) final /+ Qt:: +/qt.core.namespace.CheckState checkState(int column) const
-        { return static_cast!(/+ Qt:: +/qt.core.namespace.CheckState)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.CheckStateRole).toInt()); }
+        { return qvariant_cast!(/+ Qt:: +/qt.core.namespace.CheckState)(data(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.CheckStateRole)); }
     pragma(inline, true) final void setCheckState(int column, /+ Qt:: +/qt.core.namespace.CheckState state)
         { setData(column, /+ Qt:: +/qt.core.namespace.ItemDataRole.CheckStateRole, cast(int)state); }
 
@@ -181,8 +193,8 @@ public:
         executePendingSort();
         return cast(QTreeWidgetItem)children.at(index);
     }
-    pragma(inline, true) final int childCount() const { return cast(int)children.count(); }
-    pragma(inline, true) final int columnCount() const { return cast(int)values.count(); }
+    pragma(inline, true) final int childCount() const { return cast(int)children.size(); }
+    pragma(inline, true) final int columnCount() const { return cast(int)values.size(); }
     pragma(inline, true) final int indexOfChild(QTreeWidgetItem achild) const
     { executePendingSort(); return cast(int)children.indexOf(achild); }
 

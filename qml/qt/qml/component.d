@@ -45,6 +45,7 @@ class /+ Q_QML_EXPORT +/ QQmlComponent : QObject
     QML_NAMED_ELEMENT(Component)
     QML_ADDED_IN_VERSION(2, 0)
     QML_ATTACHED(QQmlComponentAttached) +/
+pragma(inline, true) final void qt_qmlMarker_attached(){}    /+ Q_CLASSINFO("QML.OmitFromQmlTypes", "true") +/
 
 public:
     enum CompilationMode { PreferSynchronous, Asynchronous }
@@ -66,6 +67,8 @@ public:
     final bool isReady() const;
     final bool isError() const;
     final bool isLoading() const;
+
+    final bool isBound() const;
 
     final QList!(QQmlError) errors() const;
     @QInvokable final QString errorString() const;

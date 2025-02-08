@@ -13,13 +13,15 @@ module qt.core.versionnumber;
 extern(C++):
 
 import qt.config;
+import qt.core.anystringview;
 import qt.core.global;
 import qt.core.list;
 import qt.core.metatype;
 import qt.core.string;
-import qt.core.stringview;
 import qt.core.typeinfo;
 import qt.helpers;
+static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    import qt.core.stringview;
 
 /+ Q_CORE_EXPORT size_t qHash(const QVersionNumber &key, size_t seed = 0);
 
@@ -68,21 +70,19 @@ private:
 
 /+        this(ref const(QList!(int)) seg)
         {
-            import core.stdcpp.new_;
-
             if (dataFitsInline(seg.data(), seg.size()))
                 setInlineData(seg.data(), seg.size());
             else
-                pointer_segments = cpp_new!(QList!(int))(seg);
+                setListData(seg);
         }+/
+
+        /+ Q_CORE_EXPORT +/ void setListData(ref const(QList!(int)) seg);
 
         @disable this(this);
         /+this(ref const(SegmentStorage) other)
         {
-            import core.stdcpp.new_;
-
             if (other.isUsingPointer())
-                pointer_segments = cpp_new!(QList!(int))(*other.pointer_segments);
+                setListData(*other.pointer_segments);
             else
                 dummy = other.dummy;
         }+/
@@ -94,7 +94,7 @@ private:
             if (isUsingPointer() && other.isUsingPointer()) {
                 *pointer_segments = *other.pointer_segments;
             } else if (other.isUsingPointer()) {
-                pointer_segments = cpp_new!(QList!(int))(*other.pointer_segments);
+                setListData(*other.pointer_segments);
             } else {
                 if (isUsingPointer())
                     cpp_delete(pointer_segments);
@@ -121,16 +121,24 @@ private:
             if (dataFitsInline(std::as_const(seg).data(), seg.size()))
                 setInlineData(std::as_const(seg).data(), seg.size());
             else
-                pointer_segments = new QList<int>(std::move(seg));
+                setListData(std::move(seg));
         } +/
-        /+ SegmentStorage(std::initializer_list<int> args)
+
+        /+ Q_CORE_EXPORT void setListData(QList<int> &&seg); +/
+
+        /+ explicit SegmentStorage(std::initializer_list<int> args)
+            : SegmentStorage(args.begin(), args.end()) {} +/
+
+        /+ explicit +/this(const(int)* first, const(int)* last)
         {
-            if (dataFitsInline(std::data(args), int(args.size()))) {
-                setInlineData(std::data(args), int(args.size()));
+            if (dataFitsInline(first, last - first)) {
+                setInlineData(first, last - first);
             } else {
-                pointer_segments = new QList<int>(args);
+                setListData(first, last);
             }
-        } +/
+        }
+
+        /+ Q_CORE_EXPORT +/ void setListData(const(int)* first, const(int)* last);
 
         ~this() {
             import core.stdcpp.new_;
@@ -140,21 +148,18 @@ private:
         bool isUsingPointer() const/+ noexcept+/
         { return (inline_segments[InlineSegmentMarker] & 1) == 0; }
 
-        int size() const/+ noexcept+/
-        { return isUsingPointer() ? cast(int) pointer_segments.size() : (inline_segments[InlineSegmentMarker] >> 1); }
+        qsizetype size() const/+ noexcept+/
+        { return isUsingPointer() ? pointer_segments.size() : (inline_segments[InlineSegmentMarker] >> 1); }
 
-        void setInlineSize(int len)
-        { inline_segments[InlineSegmentMarker] = cast(qint8) (1 + 2 * len); }
-
-        void resize(int len)
+        void setInlineSize(qsizetype len)
         {
-            if (isUsingPointer())
-                pointer_segments.resize(len);
-            else
-                setInlineSize(len);
+            (mixin(Q_ASSERT(q{len <= QVersionNumber.InlineSegmentCount})));
+            inline_segments[InlineSegmentMarker] = cast(qint8) (1 + 2 * len);
         }
 
-        int at(int index) const
+        /+ Q_CORE_EXPORT +/ void resize(qsizetype len);
+
+        int at(qsizetype index) const
         {
             return isUsingPointer() ?
                         pointer_segments.at(index) :
@@ -172,33 +177,34 @@ private:
         }+/
 
     private:
-        static bool dataFitsInline(const(int)* data, int len)
+        static bool dataFitsInline(const(int)* data, qsizetype len)
         {
             if (len > InlineSegmentCount)
                 return false;
-            for (int i = 0; i < len; ++i)
+            for (qsizetype i = 0; i < len; ++i)
                 if (data[i] != cast(qint8) (data[i]))
                     return false;
             return true;
         }
-        void setInlineData(const(int)* data, int len)
+        void setInlineData(const(int)* data, qsizetype len)
         {
+            (mixin(Q_ASSERT(q{len <= QVersionNumber.InlineSegmentCount})));
             dummy = 1 + len * 2;
             static if (versionIsSet!("LittleEndian"))
             {
-                for (int i = 0; i < len; ++i)
+                for (qsizetype i = 0; i < len; ++i)
                     dummy |= quintptr(data[i] & 0xFF) << (8 * (i + 1));
             }
             else static if (versionIsSet!("BigEndian"))
             {
-                for (int i = 0; i < len; ++i)
+                for (qsizetype i = 0; i < len; ++i)
                     dummy |= quintptr(data[i] & 0xFF) << (8 * ((void*).sizeof - i - 1));
             }
             else
             {
                 // the code above is equivalent to:
                 setInlineSize(len);
-                for (int i = 0; i < len; ++i)
+                for (qsizetype i = 0; i < len; ++i)
                     inline_segments[InlineSegmentStartIdx + i] = data[i] & 0xFF;
             }
         }
@@ -224,6 +230,12 @@ public:
     /+ inline QVersionNumber(std::initializer_list<int> args)
         : m_segments(args)
     {} +/
+
+    /+ template <qsizetype N> +/
+    /+ explicit +/this(qsizetype N)(ref const(QVarLengthArray!(int, N)) sec)
+    {
+        this.m_segments = typeof(this.m_segments)(sec.begin(), sec.end());
+    }
 
 /+    /+ explicit +/pragma(inline, true) this(int maj)
     { m_segments.setSegments(1, maj); }
@@ -253,10 +265,10 @@ public:
 
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ QList!(int) segments() const;
 
-    /+ [[nodiscard]] +/ pragma(inline, true) int segmentAt(int index) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) int segmentAt(qsizetype index) const/+ noexcept+/
     { return (m_segments.size() > index) ? m_segments.at(index) : 0; }
 
-    /+ [[nodiscard]] +/ pragma(inline, true) int segmentCount() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype segmentCount() const/+ noexcept+/
     { return m_segments.size(); }
 
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ bool isPrefixOf(ref const(QVersionNumber) other) const/+ noexcept+/;
@@ -266,12 +278,39 @@ public:
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber commonPrefix(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2);
 
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ QString toString() const;
-    static if (QT_STRINGVIEW_LEVEL < 2)
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(QAnyStringView string, qsizetype* suffixIndex = null);
+
+/+ #if QT_DEPRECATED_SINCE(6, 4) && QT_POINTER_SIZE != 4 +/
+    static if (((configValue!"__SIZEOF_POINTER__" != 4 && defined!"__SIZEOF_POINTER__") || (!defined!"__SIZEOF_POINTER__" && (configValue!"Q_PROCESSOR_WORDSIZE" != 4 || versionIsSet!("D_LP64") || versionIsSet!("D_LP64")))))
     {
-        /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(ref const(QString) string, int* suffixIndex = null);
+        /+ Q_WEAK_OVERLOAD +/
+        /+ QT_DEPRECATED_VERSION_X_6_4("Use the 'qsizetype *suffixIndex' overload.") +/
+            /+ [[nodiscard]] +/ static QVersionNumber fromString(QAnyStringView string, int* suffixIndex)
+        {
+            /+ QT_WARNING_PUSH
+            // fromString() writes to *n unconditionally, but GCC can't know that
+            QT_WARNING_DISABLE_GCC("-Wmaybe-uninitialized") +/
+            qsizetype n;
+            auto r = fromString(string, &n);
+            if (suffixIndex) {
+                (mixin(Q_ASSERT(q{cast(int)(n) == n})));
+                *suffixIndex = cast(int)(n);
+            }
+            return cast(QVersionNumber) (r);
+            /+ QT_WARNING_POP +/
+        }
     }
-    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(QLatin1String string, int* suffixIndex = null);
-    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(QStringView string, int* suffixIndex = null);
+/+ #endif
+
+
+#if QT_CORE_REMOVED_SINCE(6, 4) +/
+    static if (defined!"QT_CORE_BUILD_REMOVED_API")
+    {
+        /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(ref const(QString) string, int* suffixIndex);
+        /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(QLatin1StringView string, int* suffixIndex);
+        /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber fromString(QStringView string, int* suffixIndex);
+    }
+/+ #endif +/
 
     /+ [[nodiscard]] friend bool operator> (const QVersionNumber &lhs, const QVersionNumber &rhs) noexcept
     { return compare(lhs, rhs) > 0; } +/
@@ -290,7 +329,6 @@ public:
 
     /+ [[nodiscard]] friend bool operator!=(const QVersionNumber &lhs, const QVersionNumber &rhs) noexcept
     { return compare(lhs, rhs) != 0; } +/
-
 
 private:
     version (QT_NO_DATASTREAM) {} else

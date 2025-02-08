@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.global;
+import qt.core.metatype;
 import qt.core.string;
 import qt.core.variant;
 import qt.helpers;
@@ -99,7 +100,7 @@ private:
         static double op(double lhs, double rhs) { return lhs * rhs; }
         static bool opOverflow(int lhs, int rhs, int* result)
         {
-            return cast(bool) (qMulOverflow(lhs, rhs, cast(Identity!(mixin((((configValue!"__has_builtin___builtin_add_overflow" && defined!"__has_builtin___builtin_add_overflow") || (!defined!"Q_INTRINSIC_MUL_OVERFLOW64" && (!versionIsSet!("__INTEGRITY") || defined!"__GNU__" || !versionIsSet!("AArch64")))))?q{T}:q{UnknownType!q{}}))*) (result)));
+            return cast(bool) (qMulOverflow(lhs, rhs, cast(T*) (result)));
         }
 
         /+ using StringNaNOperators::op; +/
@@ -154,11 +155,10 @@ public:
     {
         this.d = /+ std:: +/move(cast(_Tp && ) (string));
     }+/
-/+    /+ explicit +/this(ref const(QVariant) variant)/+ noexcept+/
-    {
-        import qt.core.metatype;
 
-        switch (variant.typeId()) {
+/+    /+ explicit +/this(const(QMetaType) type, const(void)* value)/+ noexcept+/
+    {
+        switch (type.id()) {
         case QMetaType.Type.UnknownType:
             d = QJSPrimitiveUndefined();
             break;
@@ -166,24 +166,29 @@ public:
             d = QJSPrimitiveNull();
             break;
         case QMetaType.Type.Bool:
-            d = cast(QJSPrimitiveValuePrivate) (variant.toBool());
+            d = *static_cast!(const(bool)*)(value);
             break;
         case QMetaType.Type.Int:
-            d = cast(QJSPrimitiveValuePrivate) (variant.toInt());
+            d = *static_cast!(const(int)*)(value);
             break;
         case QMetaType.Type.Double:
-            d = cast(QJSPrimitiveValuePrivate) (variant.toDouble());
+            d = *static_cast!(const(double)*)(value);
             break;
         case QMetaType.Type.QString:
-            d = variant.toString();
+            d = *static_cast!(const(QString)*)(value);
             break;
         default:
             // Unsupported. Remains undefined.
             break;
         }
-    }+/
+    }
 
-/+    bool toBoolean() const
+    /+ explicit +/this(ref const(QVariant) variant)/+ noexcept+/
+    {
+        this(variant.metaType(), variant.data());
+    }
+
+    bool toBoolean() const
     {
         import qt.core.compilerdetection;
         import qt.qml.jsnumbercoercion;
@@ -864,5 +869,46 @@ private:
 
     QJSPrimitiveValuePrivate d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
+}
+
+extern(C++, "QQmlPrivate") {
+    // TODO: Make this constexpr once std::isnan is constexpr.
+    /+ pragma(inline, true) double jsExponentiate(double base, double exponent)
+    {
+        import qt.qml.jsnumbercoercion;
+
+        immutable double qNaN = /+ std:: +/numeric_limits!(double).quiet_NaN();
+        immutable double inf = /+ std:: +/numeric_limits!(double).infinity();
+
+        if (qIsNull(exponent))
+            return 1.0;
+
+        if (/+ std:: +//+ isnan(exponent) +/__builtin_isnan(exponent))
+            return qNaN;
+
+        if (QJSNumberCoercion.equals(base, 1.0) || QJSNumberCoercion.equals(base, -1.0))
+            return /+ std:: +//+ isinf(exponent) +/__builtin_isinf_sign(exponent) ? qNaN : /+ std:: +/pow(base, exponent);
+
+        if (!qIsNull(base))
+            return /+ std:: +/pow(base, exponent);
+
+        if ( mixin(((versionIsSet!("Windows") && configValue!"_MSVCR_VER" < 140 && defined!"_MSVCR_VER" && !defined!"_UCRT" && !versionIsSet!("Cygwin"))) ? q{
+                /+ std:: +//+ copysign(1.0, base) +/_copysign(1.0,base)
+            } : q{
+        copysign(1.0,base)
+            }) > 0.0)
+            return exponent < 0.0 ? inf : /+ std:: +/pow(base, exponent);
+
+        if (exponent < 0.0)
+            return QJSNumberCoercion.equals(/+ std:: +/fmod(-exponent, 2.0), 1.0) ? -inf : inf;
+
+        return QJSNumberCoercion.equals(/+ std:: +/fmod(exponent, 2.0), 1.0)
+                ? mixin(((versionIsSet!("Windows") && configValue!"_MSVCR_VER" < 140 && defined!"_MSVCR_VER" && !defined!"_UCRT" && !versionIsSet!("Cygwin"))) ? q{
+                        /+ std:: +//+ copysign(0, -1.0) +/
+        _copysign(0,-1.0)
+                    } : q{
+        copysign(0,-1.0)
+                    })                : 0.0;
+    } +/
 }
 

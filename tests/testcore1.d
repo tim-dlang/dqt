@@ -392,8 +392,8 @@ unittest
     checkType!(QTimeZone.OffsetData, 0, 0, -1, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
     checkType!(QByteArray, 0, 1, QMetaType.Type.QByteArray, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
     checkType!(QItemSelectionRange, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QLine, 0, 1, QMetaType.Type.QLine, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QLineF, 0, 1, QMetaType.Type.QLineF, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QLine, 0, 1, QMetaType.Type.QLine, QMetaType.TypeFlag.RelocatableType)();
+    checkType!(QLineF, 0, 1, QMetaType.Type.QLineF, QMetaType.TypeFlag.RelocatableType)();
     checkType!(QLocale, 1, 1, QMetaType.Type.QLocale, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsGadget)();
     checkType!(QLocale*, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToGadget | QMetaType.TypeFlag.IsPointer)();
     checkType!(QModelIndex, 0, 1, QMetaType.Type.QModelIndex, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();

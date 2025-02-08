@@ -2068,6 +2068,11 @@ static if (!defined!"QT_TYPESAFE_FLAGS")
     }
     extern(D) immutable Initialization Uninitialized = Initialization.Uninitialized;
 
+    struct Disambiguated_t {
+        /+ explicit Disambiguated_t() = default; +/
+    }
+    // immutable Disambiguated_t Disambiguated Disambiguated_t();
+
     enum CoordinateSystem {
         DeviceCoordinates,
         LogicalCoordinates

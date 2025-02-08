@@ -280,6 +280,8 @@ public:
     void convertToColorSpace(ref const(QColorSpace) );
     void setColorSpace(ref const(QColorSpace) );
 
+    /+ QImage colorTransformed(ref const(QColorTransform) transform) const/+ &+/; +/
+    /+ QImage colorTransformed(const QColorTransform &transform) &&; +/
     void applyColorTransform(ref const(QColorTransform) transform);
 
     bool load(QIODevice device, const(char)* format);
@@ -348,6 +350,8 @@ protected:
     QImage convertToFormat_helper(Format format, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags) const;
     bool convertToFormat_inplace(Format format, /+ Qt:: +/qt.core.namespace.ImageConversionFlags flags);
     QImage smoothScaled(int w, int h) const;
+
+    void detachMetadata(bool invalidateCache = false);
 
 private:
     QImageData* d;

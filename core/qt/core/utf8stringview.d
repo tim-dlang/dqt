@@ -18,7 +18,8 @@ import qt.core.global;
 import qt.core.string;
 import qt.helpers;
 
-
+alias QUtf8StringView = QBasicUtf8StringView!(false);
+alias QUtf8StringView__1 = QBasicUtf8StringView!(true);
 extern(C++, "QtPrivate") {
 /+alias IsCompatibleChar8TypeHelper(Char) = /+ std:: +/
     disjunction!(
@@ -68,7 +69,7 @@ struct IsContainerCompatibleWithQUtf8StringView<T, std::enable_if_t<std::conjunc
         std::negation<std::is_same<std::decay_t<T>, QByteArray>>,
 
         // This has a compatible value_type, but explicitly a different encoding
-        std::negation<std::is_same<std::decay_t<T>, QLatin1String>>,
+        std::negation<std::is_same<std::decay_t<T>, QLatin1StringView>>,
 
         // Don't make an accidental copy constructor
         std::negation<std::disjunction<
@@ -366,23 +367,10 @@ private:
 
 /+ #ifdef Q_CLANG_QDOC
 #undef QBasicUtf8StringView
-#else +/
-/+ inline +/ extern(C++,"q_no_char8_t"){
-/+ template <bool UseChar8T>
+#else
+template <bool UseChar8T>
 Q_DECLARE_TYPEINFO_BODY(QBasicUtf8StringView<UseChar8T>, Q_PRIMITIVE_TYPE);
-
-// ### Qt 7: remove the non-char8_t version of QUtf8StringView
-QT_BEGIN_NO_CHAR8_T_NAMESPACE +/
-//alias QUtf8StringView = QBasicUtf8StringView!(false);
-}
-/+ QT_END_NO_CHAR8_T_NAMESPACE +/
-extern(C++,"q_has_char8_t"){
-
-/+ QT_BEGIN_HAS_CHAR8_T_NAMESPACE +/
-alias QUtf8StringView = QBasicUtf8StringView!(true);
-}
-/+ QT_END_HAS_CHAR8_T_NAMESPACE +/
-/+ #endif +/ // Q_CLANG_QDOC
+#endif +/ // Q_CLANG_QDOC
 
 /+ [[nodiscard]] +/ pragma(inline, true) /+ q_no_char8_t:: +/QUtf8StringView qToUtf8StringViewIgnoringNull(QStringLike, /+ std::enable_if_t<std::is_same_v<QStringLike, QByteArray>, bool> +/ /+ = true +/)(ref const(QStringLike) s)/+ noexcept+/
 { return /+ q_no_char8_t:: +/QUtf8StringView(s.data(), s.size()); }

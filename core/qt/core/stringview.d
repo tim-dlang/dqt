@@ -24,14 +24,7 @@ import qt.core.string;
 import qt.core.typeinfo;
 import qt.helpers;
 
-/*
-    Obsolete.
-*/
-/+ #ifndef QT_STRINGVIEW_LEVEL
-#  define QT_STRINGVIEW_LEVEL 1
-#endif
-
-#if defined(Q_OS_DARWIN) || defined(Q_QDOC)
+/+ #if defined(Q_OS_DARWIN) || defined(Q_QDOC)
 Q_FORWARD_DECLARE_CF_TYPE(CFString);
 Q_FORWARD_DECLARE_OBJC_CLASS(NSString);
 #endif +/
@@ -122,7 +115,7 @@ private:
 #if defined(__cpp_lib_is_constant_evaluated)
         if (std::is_constant_evaluated())
             return std::char_traits<Char>::length(str);
-#elif defined(Q_CC_GNU) && !defined(Q_CC_CLANG) && !defined(Q_CC_INTEL)
+#elif defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
         if (__builtin_constant_p(*str))
             return std::char_traits<Char>::length(str);
 #endif
@@ -217,8 +210,8 @@ public:
     { return QStringView(string.ptr, Size); }
 
     /+ [[nodiscard]] +/ pragma(inline, true) QString toString() const
-    { return (){ (mixin(Q_ASSERT(q{QStringView.size() == QStringView.length()})));
-    return QString(data(), length());
+    { return (){ (mixin(Q_ASSERT(q{QStringView.size() == QStringView.size()})));
+    return QString(data(), size());
     }(); } // defined in qstring.h
     static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
@@ -322,9 +315,9 @@ return QStringView(m_data, m_size - n);
         return /+ QtPrivate:: +/qt.core.stringalgorithms.compareStrings(this, other, cs);
     }
     //
-    // QStringView members that require QLatin1String:
+    // QStringView members that require QLatin1StringView:
     //
-    /+ [[nodiscard]] +/ pragma(inline, true) int compare(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) int compare(QLatin1StringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.compareStrings(this, s, cs);
@@ -337,12 +330,15 @@ return QStringView(m_data, m_size - n);
         return /+ QtPrivate:: +/qt.core.stringalgorithms.compareStrings(this, QStringView(&c, 1), cs);
     }
 
+    /+ [[nodiscard]] +/ pragma(inline, true) int localeAwareCompare(QStringView other) const
+    { return QString.localeAwareCompare(this, other); }
+
     /+ [[nodiscard]] +/ bool startsWith(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.startsWith(this, s, cs);
     }
-    /+ [[nodiscard]] +/ pragma(inline, true) bool startsWith(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) bool startsWith(QLatin1StringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.startsWith(this, s, cs);
@@ -360,7 +356,7 @@ return QStringView(m_data, m_size - n);
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.endsWith(this, s, cs);
     }
-    /+ [[nodiscard]] +/ pragma(inline, true) bool endsWith(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) bool endsWith(QLatin1StringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.endsWith(this, s, cs);
@@ -383,7 +379,7 @@ return QStringView(m_data, m_size - n);
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.findString(this, from, s, cs);
     }
-    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype indexOf(QLatin1String s, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype indexOf(QLatin1StringView s, qsizetype from = 0, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.findString(this, from, s, cs);
@@ -393,7 +389,7 @@ return QStringView(m_data, m_size - n);
     { return indexOf(QStringView(&c, 1), 0, cs) != qsizetype(-1); }
     /+ [[nodiscard]] +/ bool contains(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     { return indexOf(s, 0, cs) != qsizetype(-1); }
-    /+ [[nodiscard]] +/ pragma(inline, true) bool contains(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) bool contains(QLatin1StringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     { return indexOf(s, 0, cs) != qsizetype(-1); }
 
     /+ [[nodiscard]] +/ qsizetype count(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
@@ -402,6 +398,11 @@ return QStringView(m_data, m_size - n);
         return /+ QtPrivate:: +/qt.core.stringalgorithms.count(this, c, cs);
     }
     /+ [[nodiscard]] +/ qsizetype count(QStringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    {
+        import qt.core.stringalgorithms;
+        return /+ QtPrivate:: +/qt.core.stringalgorithms.count(this, s, cs);
+    }
+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype count(QLatin1StringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.count(this, s, cs);
@@ -421,12 +422,12 @@ return QStringView(m_data, m_size - n);
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, s, cs);
     }
-    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype lastIndexOf(QLatin1String s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype lastIndexOf(QLatin1StringView s, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, size(), s, cs);
     }
-    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype lastIndexOf(QLatin1String s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype lastIndexOf(QLatin1StringView s, qsizetype from, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
     {
         import qt.core.stringalgorithms;
         return /+ QtPrivate:: +/qt.core.stringalgorithms.lastIndexOf(this, from, s, cs);

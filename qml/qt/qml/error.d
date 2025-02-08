@@ -19,7 +19,7 @@ import qt.core.typeinfo;
 import qt.core.url;
 import qt.helpers;
 
-// ### Qt 6: should this be called QQmlMessage, since it can have a message type?
+// ### Qt 7: should this be called QQmlMessage, since it can have a message type?
 /+ class QDebug; +/
 extern(C++, class) struct QQmlErrorPrivate;
 /// Binding for C++ class [QQmlError](https://doc.qt.io/qt-6/qqmlerror.html).
@@ -38,8 +38,16 @@ public:
 
     @disable this(this);
     this(ref const(QQmlError) );
+    /+ QQmlError(QQmlError &&other) noexcept
+        : d(std::exchange(other.d, nullptr))
+    {} +/
+
     /+ref QQmlError operator =(ref const(QQmlError) );+/
+    /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QQmlError) +/
     ~this();
+
+    /+ void swap(QQmlError &other)
+    { qt_ptr_swap(d, other.d); } +/
 
     bool isValid() const;
 

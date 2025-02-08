@@ -203,11 +203,11 @@ alias SortFlags = QFlags!(SortFlag);
     {
         static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
         {
-            return QChar(QLatin1Char(';'));
+            return QChar(';');
         }
         else
         {
-            return QChar(QLatin1Char(':'));
+            return QChar(':');
         }
     }
 
@@ -215,11 +215,11 @@ alias SortFlags = QFlags!(SortFlag);
     {
         static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
         {
-            return QChar(QLatin1Char('\\'));
+            return QChar('\\');
         }
         else
         {
-            return QChar(QLatin1Char('/'));
+            return QChar('/');
         }
     }
 

@@ -54,6 +54,7 @@ public:
 /+ #ifndef Q_QDOC +/
         ResourceTypeLast = ResourceType.ResourceTypeNavigationPreloadSubFrame,
 /+ #endif +/
+        ResourceTypeWebSocket = 254,
         ResourceTypeUnknown = 255
     }
 
@@ -81,6 +82,7 @@ public:
     void setHttpHeader(ref const(QByteArray) name, ref const(QByteArray) value);
 
 private:
+    /+ friend class QtWebEngineCore::ContentBrowserClientQt; +/
     /+ friend class QtWebEngineCore::InterceptedRequest; +/
     /+ Q_DISABLE_COPY(QWebEngineUrlRequestInfo) +/
 @disable this(this);

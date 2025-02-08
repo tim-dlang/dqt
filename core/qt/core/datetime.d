@@ -47,6 +47,57 @@ public:
     }+/
     this(int y, int m, int d);
     this(int y, int m, int d, QCalendar cal);
+/+ #if __cpp_lib_chrono >= 201907L || defined(Q_QDOC)
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    Q_IMPLICIT QDate(std::chrono::year_month_day ymd)
+    {
+        if (!ymd.ok())
+            jd = nullJd();
+        else
+            *this = fromStdSysDays(ymd);
+    }
+
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    Q_IMPLICIT QDate(std::chrono::year_month_day_last ymdl)
+    {
+        if (!ymdl.ok())
+            jd = nullJd();
+        else
+            *this = fromStdSysDays(ymdl);
+    }
+
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    Q_IMPLICIT QDate(std::chrono::year_month_weekday ymw)
+    {
+        if (!ymw.ok())
+            jd = nullJd();
+        else
+            *this = fromStdSysDays(ymw);
+    }
+
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    Q_IMPLICIT QDate(std::chrono::year_month_weekday_last ymwl)
+    {
+        if (!ymwl.ok())
+            jd = nullJd();
+        else
+            *this = fromStdSysDays(ymwl);
+    }
+
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    static QDate fromStdSysDays(const std::chrono::sys_days &days)
+    {
+        const QDate epoch(unixEpochJd());
+        return epoch.addDays(days.time_since_epoch().count());
+    }
+
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    std::chrono::sys_days toStdSysDays() const
+    {
+        const QDate epoch(unixEpochJd());
+        return std::chrono::sys_days(std::chrono::days(epoch.daysTo(*this)));
+    }
+#endif +/
 
     bool isNull() const { return !isValid(); }
     bool isValid() const { return jd >= minJd() && jd <= maxJd(); }
@@ -88,6 +139,13 @@ public:
     void getDate(int* year, int* month, int* day) const;
 
     /+ [[nodiscard]] +/ QDate addDays(qint64 days) const;
+/+ #if __cpp_lib_chrono >= 201907L || defined(Q_QDOC)
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    [[nodiscard]] QDate addDuration(std::chrono::days days) const
+    {
+        return addDays(days.count());
+    }
+#endif +/
     // Gregorian-optimized:
     /+ [[nodiscard]] +/ QDate addMonths(int months) const;
     /+ [[nodiscard]] +/ QDate addYears(int years) const;
@@ -119,6 +177,7 @@ private:
     pragma(inline, true) static qint64 nullJd() { return qint64.min; }
     pragma(inline, true) static qint64 minJd() { return -784350574879L; }
     pragma(inline, true) static qint64 maxJd() { return  784354017364L; }
+    pragma(inline, true) static qint64 unixEpochJd() { return 2440588L; }
 
     qint64 jd = nullJd();
 
@@ -223,7 +282,17 @@ extern(C++, class) struct QDateTimePrivate;
 private:
     struct ShortData {
         size_t bitfieldData;
-/+ #if Q_BYTE_ORDER == Q_LITTLE_ENDIAN +/
+/+ #if QT_VERSION >= QT_VERSION_CHECK(7,0,0) || defined(QT_BOOTSTRAPPED)
+#  if Q_BYTE_ORDER == Q_LITTLE_ENDIAN
+        qint64 status : 8;
+#  endif
+        qint64 msecs : 56;
+
+#  if Q_BYTE_ORDER == Q_BIG_ENDIAN
+        qint64 status : 8;
+#  endif
+#else
+#  if Q_BYTE_ORDER == Q_LITTLE_ENDIAN +/
 /+        version (LittleEndian)
         {
             /+ quintptr status : 8; +/
@@ -237,10 +306,7 @@ private:
                 return value;
             }
         }
-/+ #endif
-#if QT_VERSION >= QT_VERSION_CHECK(7,0,0)
-        qint64 msecs : 56;
-#else +/
+/+ #  endif +/
         // note: this is only 24 bits on 32-bit systems...
         /+ qintptr msecs : sizeof(void *) * 8 - 8; +/
         qintptr msecs() const
@@ -253,9 +319,8 @@ private:
             return value;
         }
         }
-/+ #endif
 
-#if Q_BYTE_ORDER == Q_BIG_ENDIAN +/
+/+ #  if Q_BYTE_ORDER == Q_BIG_ENDIAN +/
         version (BigEndian)
         {
             /+ quintptr status : 8; +/
@@ -269,7 +334,8 @@ private:
                 return value;
             }
         }+/
-/+ #endif +/
+/+ #  endif
+#endif +/
     }
 
     union Data {
@@ -361,6 +427,10 @@ public:
     /+ [[nodiscard]] +/ QDateTime addYears(int years) const;
     /+ [[nodiscard]] +/ QDateTime addSecs(qint64 secs) const;
     /+ [[nodiscard]] +/ QDateTime addMSecs(qint64 msecs) const;
+    /+ [[nodiscard]] QDateTime addDuration(std::chrono::milliseconds msecs) const
+    {
+        return addMSecs(msecs.count());
+    } +/
 
     QDateTime toTimeSpec(/+ Qt:: +/qt.core.namespace.TimeSpec spec) const;
     pragma(inline, true) QDateTime toLocalTime() const { return toTimeSpec(/+ Qt:: +/qt.core.namespace.TimeSpec.LocalTime); }
@@ -403,6 +473,7 @@ public:
     static qint64 currentMSecsSinceEpoch()/+ noexcept+/;
     static qint64 currentSecsSinceEpoch()/+ noexcept+/;
 
+/+ #if defined(Q_OS_DARWIN) || defined(Q_QDOC) +/
     static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
         /+ static QDateTime fromCFDate(CFDateRef date); +/
@@ -410,6 +481,97 @@ public:
         /+ static QDateTime fromNSDate(const NSDate *date); +/
         /+ NSDate *toNSDate() const Q_DECL_NS_RETURNS_AUTORELEASED; +/
     }
+/+ #endif
+
+#if __cpp_lib_chrono >= 201907L || defined(Q_QDOC)
+#if __cpp_concepts >= 201907L || defined(Q_QDOC)
+    // Generic clock, as long as it's compatible with us (= system_clock)
+    template <typename Clock, typename Duration>
+    static QDateTime fromStdTimePoint(const std::chrono::time_point<Clock, Duration> &time)
+        requires
+            requires(const std::chrono::time_point<Clock, Duration> &t) {
+                // the clock can be converted to system_clock
+                std::chrono::clock_cast<std::chrono::system_clock>(t);
+                // the duration can be converted to milliseconds
+                requires std::is_convertible_v<Duration, std::chrono::milliseconds>;
+            }
+    {
+        const auto sysTime = std::chrono::clock_cast<std::chrono::system_clock>(time);
+        // clock_cast can change the duration, so convert it again to milliseconds
+        const auto timeInMSec = std::chrono::time_point_cast<std::chrono::milliseconds>(sysTime);
+        return fromMSecsSinceEpoch(timeInMSec.time_since_epoch().count(), Qt::UTC);
+    }
+#endif // __cpp_concepts
+
+    // local_time
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    static QDateTime fromStdTimePoint(const std::chrono::local_time<std::chrono::milliseconds> &time)
+    {
+        return fromStdLocalTime(time);
+    }
+
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    static QDateTime fromStdLocalTime(const std::chrono::local_time<std::chrono::milliseconds> &time)
+    {
+        QDateTime result(QDate(1970, 1, 1), QTime(0, 0, 0), Qt::LocalTime);
+        return result.addMSecs(time.time_since_epoch().count());
+    }
+
+#if QT_CONFIG(timezone)
+    // zoned_time. defined in qtimezone.h
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    static QDateTime fromStdZonedTime(const std::chrono::zoned_time<
+                                          std::chrono::milliseconds,
+                                          const std::chrono::time_zone *
+                                      > &time);
+#endif // QT_CONFIG(timezone)
+
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    std::chrono::sys_time<std::chrono::milliseconds> toStdSysMilliseconds() const
+    {
+        const std::chrono::milliseconds duration(toMSecsSinceEpoch());
+        return std::chrono::sys_time<std::chrono::milliseconds>(duration);
+    }
+
+    QT_POST_CXX17_API_IN_EXPORTED_CLASS
+    std::chrono::sys_seconds toStdSysSeconds() const
+    {
+        const std::chrono::seconds duration(toSecsSinceEpoch());
+        return std::chrono::sys_seconds(duration);
+    }
+#endif +/ // __cpp_lib_chrono >= 201907L
+
+    /+ friend std::chrono::milliseconds operator-(const QDateTime &lhs, const QDateTime &rhs)
+    {
+        return std::chrono::milliseconds(rhs.msecsTo(lhs));
+    } +/
+
+    /+ friend QDateTime operator+(const QDateTime &dateTime, std::chrono::milliseconds duration)
+    {
+        return dateTime.addMSecs(duration.count());
+    } +/
+
+    /+ friend QDateTime operator+(std::chrono::milliseconds duration, const QDateTime &dateTime)
+    {
+        return dateTime + duration;
+    } +/
+
+    /+ QDateTime &operator+=(std::chrono::milliseconds duration)
+    {
+        *this = addMSecs(duration.count());
+        return *this;
+    } +/
+
+    /+ friend QDateTime operator-(const QDateTime &dateTime, std::chrono::milliseconds duration)
+    {
+        return dateTime.addMSecs(-duration.count());
+    } +/
+
+    /+ QDateTime &operator-=(std::chrono::milliseconds duration)
+    {
+        *this = addMSecs(-duration.count());
+        return *this;
+    } +/
 
     // (1<<63) ms is 292277024.6 (average Gregorian) years, counted from the start of 1970, so
     // Last is floor(1970 + 292277024.6); no year 0, so First is floor(1970 - 1 - 292277024.6)
