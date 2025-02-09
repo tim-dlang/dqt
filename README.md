@@ -52,7 +52,7 @@ uses QWebEngine to show a simple web browser.
 
 ### Linux
 
-Install the libraries for Qt 6.2.3 using the package manager of the distribution
+Install the libraries for Qt 6.4.2 using the package manager of the distribution
 or the installer from https://www.qt.io/. It was tested with dmd v2.103.1.
 
 You can build and run the example programs using dub:
@@ -75,13 +75,13 @@ dmd -i -Icore -Igui -Iwidgets -Iexamples -Idxml/source -Jexamples/examplewidgets
 
 ### Windows
 
-Install Qt 6.2.3 for MSVC 2019 64-bit (and not MinGW) using
+Install Qt 6.4.2 for MSVC 2019 64-bit (and not MinGW) using
 the installer from https://www.qt.io/. It was tested with dmd v2.103.1.
 
 You can build and run the example programs using dub:
 ```
-@set DFLAGS="-L/LIBPATH:C:\Qt\6.2.3\msvc2019_64\lib"
-@set PATH=C:\Qt\6.2.3\msvc2019_64\bin;%PATH%
+@set DFLAGS="-L/LIBPATH:C:\Qt\6.4.2\msvc2019_64\lib"
+@set PATH=C:\Qt\6.4.2\msvc2019_64\bin;%PATH%
 dub run --compiler=dmd --arch=x86_64 :helloworld --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplewidgets --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplebrowser --build-mode=allAtOnce
@@ -90,13 +90,13 @@ dub run --compiler=dmd --arch=x86_64 :exampleqml --build-mode=allAtOnce
 
 Alternatively dmd can be used directly:
 ```
-@set PATH=C:\Qt\6.2.3\msvc2019_64\bin;%PATH%
+@set PATH=C:\Qt\6.4.2\msvc2019_64\bin;%PATH%
 dmd -i -m64 -Icore -Igui -Iwidgets ^
-    -L/LIBPATH:C:\Qt\6.2.3\msvc2019_64\lib ^
+    -L/LIBPATH:C:\Qt\6.4.2\msvc2019_64\lib ^
     Qt6Core.lib Qt6Gui.lib Qt6Widgets.lib ^
     -g -run examples\helloworld\main.d
 dmd -i -m64 -Icore -Igui -Iwidgets -Iexamples -Idxml/source -Jexamples/examplewidgets ^
-    -L/LIBPATH:C:\Qt\6.2.3\msvc2019_64\lib ^
+    -L/LIBPATH:C:\Qt\6.4.2\msvc2019_64\lib ^
     Qt6Core.lib Qt6Gui.lib Qt6Widgets.lib ^
     -g -run examples\examplewidgets\main.d
 ```
