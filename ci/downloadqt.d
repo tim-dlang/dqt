@@ -183,6 +183,7 @@ int main(string[] args)
         downloadArchive("addons.qtwebchannel.qtwebchannel");
         if (!qtArch.startsWith("android"))
             downloadArchive("addons.qtwebengine.qtwebengine");
+        downloadArchive("addons.qtmultimedia.qtmultimedia");
     }
 
     return anyFailure;

@@ -209,6 +209,7 @@ public:
     /+/+ explicit +/ auto opCast(T : const(T))() const/+ noexcept+/ { return d; }+/
     T* data() /*const*/ /+ noexcept+/ { return d; }
     T* get() /*const*/ /+ noexcept+/ { return d; }
+    const(T)* get() const /+ noexcept+/ { return d; }
     const(T)* constData() const/+ noexcept+/ { return d; }
 //    T* take()/+ noexcept+/ { return qExchange(d, cast(U && ) (null)); }
 

@@ -101,6 +101,26 @@
 			"lflags-osx": ["-framework", "QtWebEngineWidgets"],
 			"dependencies": {"dqt:widgets":"*", "dqt:webenginecore":"*"}
 		},
+		{
+			"name": "multimedia",
+			"targetType": "library",
+			"sourcePaths": ["multimedia"],
+			"importPaths": ["multimedia"],
+			"libs-linux": ["Qt6Multimedia"],
+			"libs-windows": ["Qt6Multimedia"],
+			"lflags-osx": ["-framework", "QtMultimedia"],
+			"dependencies": {"dqt:gui":"*"}
+		},
+		{
+			"name": "multimediawidgets",
+			"targetType": "library",
+			"sourcePaths": ["multimediawidgets"],
+			"importPaths": ["multimediawidgets"],
+			"libs-linux": ["Qt6MultimediaWidgets"],
+			"libs-windows": ["Qt6MultimediaWidgets"],
+			"lflags-osx": ["-framework", "QtMultimediaWidgets"],
+			"dependencies": {"dqt:widgets":"*", "dqt:multimedia":"*"}
+		},
 
 		{
 			"name": "helloworld",
@@ -133,6 +153,14 @@
 			"importPaths": ["examples/examplebrowser"],
 			"stringImportPaths": ["examples/examplebrowser"],
 			"dependencies": {"dqt:webenginewidgets":"*"}
+		},
+		{
+			"name": "mediaplayer",
+			"targetType": "executable",
+			"sourcePaths": ["examples/mediaplayer"],
+			"importPaths": ["examples/mediaplayer"],
+			"stringImportPaths": ["examples/mediaplayer"],
+			"dependencies": {"dqt:multimediawidgets":"*"}
 		}
 	]
 }

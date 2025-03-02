@@ -891,6 +891,7 @@ alias SectionFlags = QFlags!(SectionFlag);
     extern(D) pragma(inline, true) ref QString opOpAssign(string op)(QStringView v) if (op == "~") { return append(v); }
     extern(D) pragma(inline, true) ref QString opOpAssign(string op)(const QString s) if (op == "~") { return append(s); }
     extern(D) pragma(inline, true) ref QString opOpAssign(string op)(QLatin1StringView s) if (op == "~") { return append(s); }
+    extern(D) pragma(inline, true) ref QString opOpAssign(string op)(string s) if (op == "~") { auto tmp = QString(s); return append(tmp); }
 
     ref QString remove(qsizetype i, qsizetype len);
     ref QString remove(QChar c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive);

@@ -534,6 +534,9 @@ public:
         }
     }
 
+    extern(D) T[] toSlice() { return data[0 .. length]; }
+    extern(D) const(T)[] toConstSlice() const { return constData[0 .. length]; }
+
     ref const(T) at(qsizetype i) const/+ noexcept+/
     {
         (mixin(Q_ASSERT_X(q{size_t(i) < size_t(QList.d.size)},q{ "QList::at"},q{ "index out of range"})));

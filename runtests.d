@@ -176,9 +176,14 @@ int main(string[] args)
     moduleDependencies["quickcontrols2"] = ["quick"];
     moduleDependencies["webenginecore"] = ["gui", "network"];
     moduleDependencies["webenginewidgets"] = ["webenginecore", "widgets"];
+    moduleDependencies["multimedia"] = ["gui"];
+    moduleDependencies["multimediawidgets"] = ["multimedia", "widgets"];
 
     immutable allQtModules = [
-        "Core", "Gui", "Widgets", "Network", "Qml", "Quick", "QuickControls2", "WebEngineCore", "WebEngineWidgets"
+        "Core", "Gui", "Widgets", "Network",
+        "Qml", "Quick", "QuickControls2",
+        "WebEngineCore", "WebEngineWidgets",
+        "Multimedia", "MultimediaWidgets"
     ];
     string getCapitalizedModuleName(string m)
     {
@@ -233,6 +238,8 @@ int main(string[] args)
             ["-Iexamples"], true);
     tests ~= Test(buildPath("examples", "examplebrowser", "main.d"), ["webenginewidgets"],
             ["-Iexamples", "-J" ~ buildPath("examples", "examplebrowser")], true);
+    tests ~= Test(buildPath("examples", "mediaplayer", "main.d"), ["multimediawidgets"],
+            ["-Iexamples", "-J" ~ buildPath("examples", "mediaplayer")], true);
 
     foreach (ref test; tests)
         test.qtModules = dependencyClosure(test.qtModules, moduleDependencies);
@@ -251,6 +258,8 @@ int main(string[] args)
             string path;
             if (m.startsWith("WebEngine"))
                 path = buildPath(toLower(m), "qt", "webengine");
+            else if (m.startsWith("Multimedia"))
+                path = buildPath(toLower(m), "qt", "multimedia");
             else
                 path = buildPath(toLower(m), "qt", toLower(m));
             foreach (DirEntry e; dirEntries(path, "*.d", SpanMode.depth))
@@ -299,6 +308,8 @@ int main(string[] args)
         string path;
         if (m.startsWith("WebEngine"))
             path = buildPath(toLower(m), "qt", "webengine");
+        else if (m.startsWith("Multimedia"))
+            path = buildPath(toLower(m), "qt", "multimedia");
         else
             path = buildPath(toLower(m), "qt", toLower(m));
         foreach (DirEntry e; dirEntries(path, "*.d", SpanMode.depth))
