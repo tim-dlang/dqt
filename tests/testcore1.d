@@ -32,7 +32,7 @@ shared static this()
         registerAndroidJVM();
     }
 
-    app = new QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
+    app = cpp_new!QCoreApplication(Runtime.cArgs.argc, Runtime.cArgs.argv);
     assert(QCoreApplication.instance() is app);
 
     QVersionNumber runtimeVersion = QLibraryInfo.version_();
