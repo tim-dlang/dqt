@@ -151,9 +151,9 @@ int main(string[] args)
         if (qtPath.length == 0)
         {
             if (model == "64")
-                qtPath = "C:\\Qt\\6.2.3\\msvc2019_64";
+                qtPath = "C:\\Qt\\6.4.2\\msvc2019_64";
             else
-                qtPath = "C:\\Qt\\6.2.3\\msvc2019";
+                qtPath = "C:\\Qt\\6.4.2\\msvc2019";
         }
     }
 
@@ -178,12 +178,15 @@ int main(string[] args)
     moduleDependencies["webenginewidgets"] = ["webenginecore", "widgets"];
     moduleDependencies["multimedia"] = ["gui"];
     moduleDependencies["multimediawidgets"] = ["multimedia", "widgets"];
+    moduleDependencies["pdf"] = ["gui"];
+    moduleDependencies["pdfwidgets"] = ["pdf", "widgets"];
 
     immutable allQtModules = [
         "Core", "Gui", "Widgets", "Network",
         "Qml", "Quick", "QuickControls2",
         "WebEngineCore", "WebEngineWidgets",
-        "Multimedia", "MultimediaWidgets"
+        "Multimedia", "MultimediaWidgets",
+        "Pdf", "PdfWidgets"
     ];
     string getCapitalizedModuleName(string m)
     {
@@ -240,6 +243,8 @@ int main(string[] args)
             ["-Iexamples", "-J" ~ buildPath("examples", "examplebrowser")], true);
     tests ~= Test(buildPath("examples", "mediaplayer", "main.d"), ["multimediawidgets"],
             ["-Iexamples", "-J" ~ buildPath("examples", "mediaplayer")], true);
+    tests ~= Test(buildPath("examples", "pdfreader", "main.d"), ["pdfwidgets"],
+            ["-Iexamples", "-J" ~ buildPath("examples", "pdfreader")], true);
 
     foreach (ref test; tests)
         test.qtModules = dependencyClosure(test.qtModules, moduleDependencies);
@@ -260,6 +265,8 @@ int main(string[] args)
                 path = buildPath(toLower(m), "qt", "webengine");
             else if (m.startsWith("Multimedia"))
                 path = buildPath(toLower(m), "qt", "multimedia");
+            else if (m.startsWith("Pdf"))
+                path = buildPath(toLower(m), "qt", "pdf");
             else
                 path = buildPath(toLower(m), "qt", toLower(m));
             foreach (DirEntry e; dirEntries(path, "*.d", SpanMode.depth))
@@ -310,6 +317,8 @@ int main(string[] args)
             path = buildPath(toLower(m), "qt", "webengine");
         else if (m.startsWith("Multimedia"))
             path = buildPath(toLower(m), "qt", "multimedia");
+        else if (m.startsWith("Pdf"))
+            path = buildPath(toLower(m), "qt", "pdf");
         else
             path = buildPath(toLower(m), "qt", toLower(m));
         foreach (DirEntry e; dirEntries(path, "*.d", SpanMode.depth))
@@ -384,6 +393,8 @@ int main(string[] args)
         if (model.canFind("android") && test.name.canFind("webengine"))
             canTest = false;
         if (model.canFind("android") && test.name.canFind("examplebrowser"))
+            canTest = false;
+        if (model.canFind("android") && test.name.canFind("pdf"))
             canTest = false;
 
         if (!canTest)

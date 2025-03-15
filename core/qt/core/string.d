@@ -1294,6 +1294,10 @@ public:
     {
         return compare_helper(constData(), size(), s.constData, s.size()) == 0;
     }
+    extern(D) bool opEquals(const QString s) const
+    {
+        return compare_helper(constData(), size(), s.constData, s.size()) == 0;
+    }
 
     alias iterator = QChar*;
     alias const_iterator = const(QChar)*;

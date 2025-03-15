@@ -184,6 +184,8 @@ int main(string[] args)
         if (!qtArch.startsWith("android"))
             downloadArchive("addons.qtwebengine.qtwebengine");
         downloadArchive("addons.qtmultimedia.qtmultimedia");
+        if (!qtArch.startsWith("android"))
+            downloadArchive("addons.qtpdf.qtpdf");
     }
 
     return anyFailure;

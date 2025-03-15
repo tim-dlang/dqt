@@ -97,7 +97,7 @@ jobs:
           echo "deb-src http://deb.debian.org/debian bullseye-backports main contrib non-free" >> /etc/apt/sources.list
           apt-get -qq update
           apt-get -qq install -y gpg xz-utils 7zip
-          apt-get -qq install -y libc6-dev:i386 libstdc++6:i386 g++:i386 qt6-base-dev:i386 qt6-webengine-dev:i386 qt6-multimedia-dev:i386
+          apt-get -qq install -y libc6-dev:i386 libstdc++6:i386 g++:i386 qt6-base-dev:i386 qt6-webengine-dev:i386 qt6-multimedia-dev:i386 qt6-pdf-dev:i386
 
       - name: Install D compiler
         uses: dlang-community/setup-dlang@v1

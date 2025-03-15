@@ -121,6 +121,26 @@
 			"lflags-osx": ["-framework", "QtMultimediaWidgets"],
 			"dependencies": {"dqt:widgets":"*", "dqt:multimedia":"*"}
 		},
+		{
+			"name": "pdf",
+			"targetType": "library",
+			"sourcePaths": ["pdf"],
+			"importPaths": ["pdf"],
+			"libs-linux": ["Qt6Pdf"],
+			"libs-windows": ["Qt6Pdf"],
+			"lflags-osx": ["-framework", "QtPdf"],
+			"dependencies": {"dqt:gui":"*"}
+		},
+		{
+			"name": "pdfwidgets",
+			"targetType": "library",
+			"sourcePaths": ["pdfwidgets"],
+			"importPaths": ["pdfwidgets"],
+			"libs-linux": ["Qt6PdfWidgets"],
+			"libs-windows": ["Qt6PdfWidgets"],
+			"lflags-osx": ["-framework", "QtPdfWidgets"],
+			"dependencies": {"dqt:widgets":"*", "dqt:pdf":"*"}
+		},
 
 		{
 			"name": "helloworld",
@@ -161,6 +181,14 @@
 			"importPaths": ["examples/mediaplayer"],
 			"stringImportPaths": ["examples/mediaplayer"],
 			"dependencies": {"dqt:multimediawidgets":"*"}
+		},
+		{
+			"name": "pdfreader",
+			"targetType": "executable",
+			"sourcePaths": ["examples/pdfreader"],
+			"importPaths": ["examples/pdfreader"],
+			"stringImportPaths": ["examples/pdfreader"],
+			"dependencies": {"dqt:pdfwidgets":"*"}
 		}
 	]
 }

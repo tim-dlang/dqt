@@ -117,6 +117,8 @@ private struct UICodeWriter()
             return "qt.webengine.view";
         if (name == "QVideoWidget")
             return "qt.multimedia.videowidget";
+        if (name == "QPdfView")
+            return "qt.pdf.view";
 
         if (name.startsWith("Q"))
             return "qt.widgets." ~ std.uni.toLower(name[1..$]);
@@ -188,6 +190,8 @@ private struct UICodeWriter()
         string methodName = "set" ~ std.ascii.toUpper(name[0]) ~ name[1..$];
         if (name == "showGroupSeparator")
             methodName = "setGroupSeparatorShown";
+        if (name == "isWrapping")
+            methodName = "setWrapping";
         if (property.children[0].name == "rect")
         {
             if (isTopLevel)

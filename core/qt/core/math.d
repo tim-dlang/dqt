@@ -70,11 +70,7 @@ auto qFabs(T)(T v)
 
 auto qSin(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::sin; +/
     return sin(v);
@@ -82,11 +78,7 @@ auto qSin(T)(T v)
 
 auto qCos(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::cos; +/
     return cos(v);
@@ -94,11 +86,7 @@ auto qCos(T)(T v)
 
 auto qTan(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::tan; +/
     return tan(v);
@@ -106,11 +94,7 @@ auto qTan(T)(T v)
 
 auto qAcos(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::acos; +/
     return acos(v);
@@ -118,11 +102,7 @@ auto qAcos(T)(T v)
 
 auto qAsin(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::asin; +/
     return asin(v);
@@ -130,11 +110,7 @@ auto qAsin(T)(T v)
 
 auto qAtan(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::atan; +/
     return atan(v);
@@ -142,11 +118,7 @@ auto qAtan(T)(T v)
 
 auto qAtan2(T1, T2)(T1 y, T2 x)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::atan2; +/
     return atan2(y, x);
@@ -154,11 +126,7 @@ auto qAtan2(T1, T2)(T1 y, T2 x)
 
 auto qSqrt(T)(T v)
 {
-    version (Cygwin) {} else
-    version (Windows)
-        import libc.math;
-    version (NotWindowsOrCygwin)
-        import libc.mathcalls;
+    import core.stdc.math;
 
     /+ using std::sqrt; +/
     return sqrt(v);
