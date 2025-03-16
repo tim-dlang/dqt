@@ -130,15 +130,15 @@ public:
         }
 
     public:
-        alias difference_type__1 = qsizetype;
-        alias value_type__1 = T;
+        alias difference_type = qsizetype;
+        alias value_type = T;
         // libstdc++ shipped with gcc < 11 does not have a fix for defect LWG 3346
 /+ #if __cplusplus >= 202002L && (!defined(_GLIBCXX_RELEASE) || _GLIBCXX_RELEASE >= 11)
         using iterator_concept = std::contiguous_iterator_tag;
         using element_type = value_type;
 #endif +/
         /+ using iterator_category = std::random_access_iterator_tag; +/
-        alias pointer__1 = T*;
+        alias pointer = T*;
         /+ using reference = T &; +/
 
         /+ inline constexpr iterator() = default; +/
@@ -216,15 +216,15 @@ public:
         }
 
     public:
-        alias difference_type__1 = qsizetype;
-        alias value_type__1 = T;
+        alias difference_type = qsizetype;
+        alias value_type = T;
         // libstdc++ shipped with gcc < 11 does not have a fix for defect LWG 3346
 /+ #if __cplusplus >= 202002L && (!defined(_GLIBCXX_RELEASE) || _GLIBCXX_RELEASE >= 11)
         using iterator_concept = std::contiguous_iterator_tag;
         using element_type = const value_type;
 #endif +/
         /+ using iterator_category = std::random_access_iterator_tag; +/
-        alias pointer__1 = const(T)*;
+        alias pointer = const(T)*;
         /+ using reference = const T &; +/
 
         /+ inline constexpr const_iterator() = default; +/

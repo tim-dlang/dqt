@@ -41,7 +41,7 @@ enum /+ class +/ ReferrerPolicy {
     NoReferrerWhenDowngradeOriginWhenCrossOrigin,
     SameOrigin,
     StrictOrigin,
-    Last = ReferrerPolicy.StrictOrigin,
+    Last = StrictOrigin,
 }
 }
 

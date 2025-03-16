@@ -67,7 +67,7 @@ public:
         Wave,
         WMA,
         ALAC,
-        LastAudioCodec = AudioCodec.ALAC
+        LastAudioCodec = ALAC
     }
     /+ Q_ENUM(AudioCodec) +/
 
@@ -84,7 +84,7 @@ public:
         Theora,
         WMV,
         MotionJPEG,
-        LastVideoCodec = VideoCodec.MotionJPEG
+        LastVideoCodec = MotionJPEG
     }
     /+ Q_ENUM(VideoCodec) +/
 

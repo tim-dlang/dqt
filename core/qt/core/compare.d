@@ -28,7 +28,7 @@ alias CompareUnderlyingType = qint8;
 enum /+ class +/ Ordering : CompareUnderlyingType
 {
     Equal = 0,
-    Equivalent = Ordering.Equal,
+    Equivalent = Equal,
     Less = -1,
     Greater = 1
 }
