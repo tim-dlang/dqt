@@ -1299,7 +1299,7 @@ extern(C++, "QtPrivate") {
     private template RemovePointer(T)
     {
         static if (is(T == X*, X))
-            alias RemovePointer = typeof(*T.init);
+            alias RemovePointer = X;
         else
             alias RemovePointer = T;
     }

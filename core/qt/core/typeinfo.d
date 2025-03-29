@@ -37,17 +37,17 @@ template is_integral(T)
 
 template qIsTrivial(T)
 {
-    enum qIsTrivial = is(T==enum) || is_integral!T;
+    enum qIsTrivial = is(T==enum) || is_integral!T || is(T == R*, R) || is(T == class);
 }
 
 template qIsRelocatable(T)
 {
-    enum qIsRelocatable = is(T==enum) || is_integral!T;
+    enum qIsRelocatable = is(T==enum) || is_integral!T || is(T == R*, R) || is(T == class) || __traits(isPOD, T);
 }
 
 template QTypeInfo(T)
 {
-    static if (is(T == R*, R) || is(T == class))
+    static if ((is(T == R*, R) || is(T == class)) && !is(T == const))
     {
         enum isRelocatable = true;
         enum isComplex = false;
@@ -87,7 +87,7 @@ template QTypeInfo(T)
         enum isRelocatable = qIsRelocatable!T;
         enum isComplex = !qIsTrivial!T;
     }
-    else static if (getUDAs!(T, QTypeInfoFlags).length)
+    else static if (getUDAs!(T, QTypeInfoFlags).length && !is(T == const))
     {
         enum combinedFlags = (){
             QTypeInfoFlags r;
