@@ -14,6 +14,7 @@ extern(C++):
 
 import qt.config;
 import qt.core.bytearray;
+import qt.core.flags;
 import qt.core.object;
 import qt.core.objectdefs;
 import qt.core.point;
@@ -235,6 +236,7 @@ template MetaObjectImpl(T)
     extern(D):
 
     alias Overloads(string name) = __traits(getOverloads, T, name);
+    enum IsQEnumOrFlag(string name) = is(__traits(getMember, T, name) == enum) || is(__traits(getMember, T, name) : QFlags!X, X);
     //pragma(msg, staticMap!(Overloads, __traits(derivedMembers, T)));
     alias allFunctions = Filter!(NotIsConstructor, staticMap!(Overloads, __traits(derivedMembers, T)));
     alias allSignals = Filter!(IsQSignal, allFunctions);
@@ -242,6 +244,7 @@ template MetaObjectImpl(T)
     alias allInvokables = Filter!(IsQInvokable, allFunctions);
     alias allMethods = std.meta.AliasSeq!(allSignals, allSlots, allInvokables);
     alias allFields = T.tupleof;
+    alias allEnumsFlags = Filter!(IsQEnumOrFlag, __traits(derivedMembers, T));
 
     /*pragma(msg, allSignals);
     pragma(msg, allSlots);
@@ -588,6 +591,44 @@ template MetaObjectImpl(T)
             }
         }
 
+        size_t enumsStartIndex = 0;
+
+        if (allEnumsFlags.length)
+        {
+            enumsStartIndex = currentOutputIndex;
+            metaDataCode ~= "    // enums: name, alias, flags, count, data\n";
+            currentOutputIndex += 5 * allEnumsFlags.length;
+            string enumMembersCode = "    // enum data: key, value\n";
+            foreach (name; allEnumsFlags)
+            {
+                uint flags = 0x2;
+                static if (is(__traits(getMember, T, name) : QFlags!X, X))
+                {
+                    flags |= 0x1;
+                    alias E = X;
+                }
+                else
+                    alias E = __traits(getMember, T, name);
+
+                size_t nameId = addString(name);
+                size_t aliasId = addString(__traits(identifier, E));
+                alias enumMembers = __traits(derivedMembers, E);
+                metaDataCode ~= mixin(interpolateMixin(q{
+                       $(text(nameId)), $(text(aliasId)), $(text(flags)), $(text(enumMembers.length)), $(text(currentOutputIndex)), $("// " ~ name)
+                }));
+                foreach (name2; enumMembers)
+                {
+                    size_t nameId2 = addString(name2);
+                    uint value = cast(uint) __traits(getMember, E, name2);
+                    enumMembersCode ~= mixin(interpolateMixin(q{
+                           $(text(nameId2)), $(text(value)), $("// " ~ name)
+                    }));
+                    currentOutputIndex += 2;
+                }
+            }
+            metaDataCode ~= enumMembersCode;
+        }
+
         addString("");
 
         string concatenatedStringsCode = "\"";
@@ -630,7 +671,7 @@ template MetaObjectImpl(T)
                    0,    0, // classinfo
                    $(text(allMethods.length)),   $(text(methodsStartIndex)), // methods
                    $(text(allPropertyInfos.length)),    $(text(propertiesStartIndex)), // properties
-                   0,    0, // enums/sets
+                   $(text(allEnumsFlags.length)),    $(text(enumsStartIndex)), // enums/sets
                    0,    0, // constructors
                    0,       // flags
                    $(text(allSignals.length)),       // signalCount
