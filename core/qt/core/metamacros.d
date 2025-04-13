@@ -290,34 +290,10 @@ template MetaObjectImpl(T)
 
         string typeToMetaComplex(T2)()
         {
-            import qt.core.list: QList;
-            import qt.core.vector: QVector;
-            if (is(const(T2) == const(QList!int)))
-                return "QList<int>";
-            else static if (is(const(T2) == const(QVector!int)))
-                return "QVector<int>";
-            else static if (is(T2 == int*))
-                return "int*";
-            else static if (is(T2 == U*, U) && is(U == struct))
-            {
-                return typeToMetaComplex!U() ~ "*";
-            }
-            else static if (is(T2 == class))
-            {
-                static if (__traits(getLinkage, T2) == "D")
-                    return T2.mangleof ~ "*";
-                else
-                    return __traits(identifier, T2) ~ "*";
-            }
-            else static if (is(T2 == struct) || is(T2 == union) || is(T2 == enum))
-            {
-                static if (__traits(getLinkage, T2) == "D")
-                    return T2.mangleof;
-                else
-                    return __traits(identifier, T2);
-            }
-            else
-                static assert(false, "TODO: Type not yet supported ", T2.stringof);
+            string r = fullyQualifiedNameCpp!(T2, QualifiedNameCppFlags.ignoreConst | QualifiedNameCppFlags.replaceQFlags);
+            if (r.startsWith(__traits(identifier, T) ~ "::"))
+                r = r[__traits(identifier, T).length + 2 .. $];
+            return r;
         }
         string typeToMeta(T2)()
         {
@@ -338,7 +314,7 @@ template MetaObjectImpl(T)
             else static if (is(const(T2) == const(QPoint)))
                 return "QMetaType.Type.QPoint";
             else
-                return text("0x80000000 | ", addString(typeToMetaComplex!T2()));
+                return text("0x80000000 | ", addString(typeToMetaComplex!T2), " /* ", typeToMetaComplex!T2, " */");
         }
 
         struct PropertyInfo
@@ -369,7 +345,7 @@ template MetaObjectImpl(T)
         {
             if (typeName != "")
             {
-                assert(propertyInfo.type == "" || propertyInfo.type == typeName, "Conflicting types for property " ~ propertyInfo.name ~ ": " ~ propertyInfo.type ~ " != "~ typeName);
+                assert(propertyInfo.type == "" || propertyInfo.type == typeName, text("Conflicting types for property ", propertyInfo.name, ": ", propertyInfo.type, " != ", typeName));
                 propertyInfo.type = typeName;
             }
             if (propertyInfo.typeCode == "")
