@@ -27,6 +27,7 @@ import qt.core.flags;
 import qt.core.global;
 import qt.core.iterable;
 import qt.core.list;
+static import qt.core.namespacemetaobject;
 import qt.core.object;
 import qt.core.objectdefs;
 import qt.core.pair;
@@ -1013,12 +1014,35 @@ extern(C++, "QtPrivate")
         static constexpr const QMetaObject *metaObjectFunction(const QMetaTypeInterface *) { return value(); }
     };
 #endif +/
+    template ParentObjectOrQtNamespace(T)
+    {
+        static if (is(__traits(parent, T) == module) && __traits(getCppNamespaces, T).length == 1 && __traits(getCppNamespaces, T)[0] == "Qt")
+        {
+            alias ParentObjectOrQtNamespace = qt.core.namespacemetaobject;
+        }
+        else
+        {
+            alias ParentObjectOrQtNamespace = __traits(parent, T);
+        }
+    }
     template MetaObjectForType(T)
     {
         static if (is(const(T): const(QObject)))
         {
             static const(QMetaObject)* value() { return &T.staticMetaObject; }
             static const(QMetaObject)* metaObjectFunctionImpl(const(QMetaTypeInterface)*) { return &T.staticMetaObject; }
+            extern(D) static immutable metaObjectFunction = &metaObjectFunctionImpl;
+        }
+        else static if (is(T == enum) && __traits(hasMember, ParentObjectOrQtNamespace!T, "staticMetaObject"))
+        {
+            static const(QMetaObject)* value() { return &ParentObjectOrQtNamespace!T.staticMetaObject; }
+            static const(QMetaObject)* metaObjectFunctionImpl(const(QMetaTypeInterface)*) { return &ParentObjectOrQtNamespace!T.staticMetaObject; }
+            extern(D) static immutable metaObjectFunction = &metaObjectFunctionImpl;
+        }
+        else static if (is(T : QFlags!X, X) && __traits(hasMember, ParentObjectOrQtNamespace!X, "staticMetaObject"))
+        {
+            static const(QMetaObject)* value() { return &ParentObjectOrQtNamespace!X.staticMetaObject; }
+            static const(QMetaObject)* metaObjectFunctionImpl(const(QMetaTypeInterface)*) { return &ParentObjectOrQtNamespace!X.staticMetaObject; }
             extern(D) static immutable metaObjectFunction = &metaObjectFunctionImpl;
         }
         else
