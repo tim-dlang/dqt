@@ -1162,3 +1162,51 @@ unittest
 
     cpp_delete(o);
 }
+
+unittest
+{
+    import qt.core.locale;
+
+    QLocale.Language l = QLocale.Language.English;
+    QVariant v = QVariant.fromValue(l);
+    assert(v.typeName().fromStringz == "QLocale::Language");
+    assert(v.toString() == "English");
+    assert(v.toInt() == cast(int)l);
+    assert(v.value!(QLocale.Language)() == l);
+}
+
+unittest
+{
+    /+ Qt:: +/qt.core.namespace.Orientation o = /+ Qt:: +/qt.core.namespace.Orientation.Vertical;
+    QVariant v = QVariant.fromValue(o);
+    assert(v.typeName().fromStringz == "Qt::Orientation");
+    assert(v.toString() == "Vertical");
+    assert(v.toInt() == cast(int)o);
+    assert(v.value!(/+ Qt:: +/qt.core.namespace.Orientation)() == o);
+}
+
+unittest
+{
+    TestObject.CustomEnum e = TestObject.CustomEnum.d;
+    QVariant v = QVariant.fromValue(e);
+    assert(v.typeName().fromStringz == "TestObject::CustomEnum");
+    assert(v.toString() == "d");
+    assert(v.toInt() == cast(int)e);
+    assert(v.value!(TestObject.CustomEnum)() == e);
+}
+
+unittest
+{
+    /+ Qt:: +/qt.core.namespace.Alignment a = /+ Qt:: +/qt.core.namespace.Alignment.AlignLeft | /+ Qt:: +/qt.core.namespace.Alignment.AlignBottom;
+    QVariant v = QVariant.fromValue(a);
+    assert(v.typeName().fromStringz == "Qt::Alignment");
+    assert(v.value!(/+ Qt:: +/qt.core.namespace.Alignment)() == a);
+}
+
+unittest
+{
+    TestObject.CustomFlags f = TestObject.CustomFlags.b | TestObject.CustomFlags.c;
+    QVariant v = QVariant.fromValue(f);
+    assert(v.typeName().fromStringz == "TestObject::CustomFlags");
+    assert(v.value!(TestObject.CustomFlags)() == f);
+}

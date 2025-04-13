@@ -1693,8 +1693,14 @@ extern(C++, "QtPrivate")
                 return &T.staticMetaObject;
             else static if (IsPointerToGadgetHelper!T.IsGadgetOrDerivedFrom)
                 return &T.staticMetaObject;
-            /*else static if (IsQEnumHelper!T.Value)
-                return qt_getEnumMetaObject(T());*/
+            else static if (is(T == enum) && is(__traits(parent, T) == module) && __traits(getCppNamespaces, T).length == 1 && __traits(getCppNamespaces, T)[0] == "Qt")
+                return qt_getQtMetaObject();
+            else static if (is(T : QFlags!X, X) && is(__traits(parent, X) == module) && __traits(getCppNamespaces, X).length == 1 && __traits(getCppNamespaces, X)[0] == "Qt")
+                return qt_getQtMetaObject();
+            else static if (is(T == enum) && __traits(hasMember, __traits(parent, T), "staticMetaObject"))
+                return &__traits(parent, T).staticMetaObject;
+            else static if (is(T : QFlags!X2, X2) && __traits(hasMember, __traits(parent, X2), "staticMetaObject"))
+                return &__traits(parent, X2).staticMetaObject;
             else
                 return null;
         }
