@@ -1522,7 +1522,7 @@ struct QMetaTypeIdQObject(T)
             return newId;
         }
     }
-    else static if (is(T == enum) || is(T : QFlags!X, X) /*IsQEnumHelper!T.Value*/)
+    else static if (is(T == enum) || is(T : QFlags!X, X))
     {
         enum {
             Defined = 1
