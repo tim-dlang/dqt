@@ -3,6 +3,7 @@ module testcore1;
 
 import qt.config;
 import qt.core.coreapplication;
+import qt.core.flags;
 import qt.core.list;
 import qt.core.metatype;
 import qt.core.namespace;
@@ -82,6 +83,27 @@ public:
         m_string1 = QString.create;
     }
 
+    enum CustomEnum
+    {
+        a,
+        b,
+        c = 100,
+        d
+    }
+    /+ Q_ENUM(CustomEnum) +/
+
+    enum CustomFlag
+    {
+        a = 1,
+        b = 2,
+        c = 4,
+        d = 8,
+        e = 16
+    }
+    /+ Q_ENUM(CustomFlag) +/
+    /+ Q_DECLARE_FLAGS(CustomFlags, CustomFlag) +/
+    alias CustomFlags = QFlags!(CustomFlag);    /+ Q_FLAG(CustomFlags) +/
+
     QString lastStr;
 
     @QInvokable final void emitSignalVoid()
@@ -124,6 +146,14 @@ public:
     {
         /+ emit +/ signalCustomStruct1(s);
     }
+    @QInvokable final void emitSignalCustomEnum(CustomEnum e)
+    {
+        /+ emit +/ signalCustomEnum(e);
+    }
+    @QInvokable final void emitSignalCustomFlags(CustomFlags f)
+    {
+        /+ emit +/ signalCustomFlags(f);
+    }
 
 /+ signals +/public:
     @QSignal final void signalVoid() {mixin(Q_SIGNAL_IMPL_D);}
@@ -136,6 +166,8 @@ public:
     @QSignal final void signalPointerInt(int* p) {mixin(Q_SIGNAL_IMPL_D);}
     @QSignal final void signalObjects(QObject o1, TestObject o2) {mixin(Q_SIGNAL_IMPL_D);}
     @QSignal final void signalCustomStruct1(CustomStruct1 s) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalCustomEnum(CustomEnum e) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalCustomFlags(CustomFlags f) {mixin(Q_SIGNAL_IMPL_D);}
 
 public /+ slots +/:
     @QSlot final void onSignalVoid()
@@ -182,6 +214,14 @@ public /+ slots +/:
     @QSlot final void onSignalCustomStruct1(CustomStruct1 s)
     {
         lastStr = "CustomStruct1 " ~ QString.number(s.i);
+    }
+    @QSlot final void onSignalCustomEnum(CustomEnum e)
+    {
+        lastStr = cast(QString) ("CustomEnum ".ptr ~ QString.number(cast(int)e));
+    }
+    @QSlot final void onSignalCustomFlags(CustomFlags f)
+    {
+        lastStr = cast(QString) ("CustomFlags ".ptr ~ QString.number(cast(int)f));
     }
 
     private bool m_bool1 = false;
@@ -287,7 +327,7 @@ unittest
     assert(s.toConstWString == "QString::fromUcs4: abc äöüÄÖÜßẞ αβ ∃∀ ∨∧⊥¬ ≤≥≠ 𝕆🎵🎶"w);
 }
 
-void checkType(T, bool isDefined1, bool isDefined2, int id, int flags)()
+void checkType(T, bool isDefined1, bool isDefined2, int id, int flags, string expectedName)()
 {
     int realId = /+ QtPrivate:: +/qt.core.metatype.QMetaTypeIdHelper!(T).qt_metatype_id();
     /*string idName;
@@ -322,6 +362,15 @@ void checkType(T, bool isDefined1, bool isDefined2, int id, int flags)()
     }
     if (first)
         write("0");
+
+    write(", ");
+    if (realId >= 0)
+    {
+        QMetaType metaType = QMetaType(realId);
+        writef("\"%s\"", metaType.name().fromStringz);
+    }
+    else
+        write("\"\"");
     writeln(")();");*/
 
     enum bool relocatable = (flags & QMetaType.TypeFlag.RelocatableType) != 0;
@@ -344,6 +393,7 @@ void checkType(T, bool isDefined1, bool isDefined2, int id, int flags)()
         import std.conv;
         QMetaType metaType = QMetaType(realId);
         assert(metaType.id() == realId);
+        assert(metaType.name().fromStringz == expectedName, text(metaType.name().fromStringz, " ", expectedName));
         static if (!is(T == void))
             assert(metaType.sizeOf() == T.sizeof, text(T.stringof, " ", metaType.sizeOf(), " ", T.sizeof));
         if (sameRuntimeVersion && (flags & QMetaType.TypeFlag.IsConst) == 0)
@@ -360,6 +410,10 @@ void checkType(T, bool isDefined1, bool isDefined2, int id, int flags)()
             metaType.destroy(cast(void*) instance2);
         }
     }
+    else
+    {
+        assert(expectedName == "");
+    }
 }
 
 unittest
@@ -368,7 +422,6 @@ unittest
     import qt.core.abstractitemmodel;
     import qt.core.bytearray;
     import qt.core.bytearraylist;
-    import qt.core.flags;
     import qt.core.global;
     import qt.core.itemselectionmodel;
     import qt.core.line;
@@ -382,69 +435,71 @@ unittest
     import qt.core.timezone;
     import qt.core.url;
 
-    checkType!(float, 0, 1, QMetaType.Type.Float, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(double, 0, 1, QMetaType.Type.Double, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(qreal, 0, 1, QMetaType.Type.QReal, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(int, 0, 1, QMetaType.Type.Int, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(const(int), 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsConst)();
-    checkType!(uint, 0, 1, QMetaType.Type.UInt, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(int*, 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer)();
-    checkType!(const(int)*, 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst)();
-    checkType!(const(int*), 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst)();
-    checkType!(void*, 0, 1, QMetaType.Type.VoidStar, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer)();
-    checkType!(const(void)*, 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst)();
-    checkType!(void, 0, 1, QMetaType.Type.Void, 0)();
-    checkType!(char, 0, 1, QMetaType.Type.Char, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(ubyte, 0, 1, QMetaType.Type.UChar, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(wchar, 0, 1, QMetaType.Type.Char16, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(dchar, 0, 1, QMetaType.Type.Char32, QMetaType.TypeFlag.RelocatableType)();
-    //checkType!(wchar_t, 0, 0, -1, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QChar, 0, 1, QMetaType.Type.QChar, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QLocale.Country, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration)();
-    checkType!(/+ Qt:: +/qt.core.namespace.DayOfWeek, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration)();
-    checkType!(QTimeZone.OffsetData, 0, 0, -1, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QByteArray, 0, 1, QMetaType.Type.QByteArray, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QItemSelectionRange, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QLine, 0, 1, QMetaType.Type.QLine, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QLineF, 0, 1, QMetaType.Type.QLineF, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QLocale, 1, 1, QMetaType.Type.QLocale, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsGadget)();
-    checkType!(const(QLocale), 1, 1, QMetaType.Type.QLocale, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.IsGadget | QMetaType.TypeFlag.IsConst)();
-    checkType!(QLocale*, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToGadget | QMetaType.TypeFlag.IsPointer)();
-    checkType!(const(QLocale)*, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToGadget | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst)();
-    checkType!(QModelIndex, 0, 1, QMetaType.Type.QModelIndex, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QObject, 1, 1, QMetaType.Type.QObjectStar, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToQObject | QMetaType.TypeFlag.IsPointer)();
-    // checkType!(tail const(QObject), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToQObject | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst)();
-    checkType!(const(QObject), 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst)();
-    checkType!(/+ std:: +/pair!(double, QSize), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QPersistentModelIndex, 0, 1, QMetaType.Type.QPersistentModelIndex, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QPoint, 0, 1, QMetaType.Type.QPoint, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(const(QPoint), 0, 0, -1, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsConst)();
-    checkType!(QPointF, 0, 1, QMetaType.Type.QPointF, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QSize, 0, 1, QMetaType.Type.QSize, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QString, 0, 1, QMetaType.Type.QString, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QStringView, 0, 0, -1, QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QUrl, 0, 1, QMetaType.Type.QUrl, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QVariant, 0, 1, QMetaType.Type.QVariant, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QAbstractItemModel, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToQObject | QMetaType.TypeFlag.IsPointer)();
-    checkType!(QTimeZone.OffsetData, 0, 0, -1, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QList!(int), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QList!(void*), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QList!(QSize), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QList!(QLocale), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QVector!(int), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QVector!(void*), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QVector!(QSize), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QVector!(QLocale), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QStringList, 1, 1, QMetaType.Type.QStringList, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QVariantList, 1, 1, QMetaType.Type.QVariantList, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QByteArrayList, 1, 1, QMetaType.Type.QByteArrayList, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(/+ Qt:: +/qt.core.namespace.Edge, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration)();
-    checkType!(QFlags!(/+ Qt:: +/qt.core.namespace.Edge), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration)();
-    checkType!(QList!(/+ Qt:: +/qt.core.namespace.Edge), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
-    checkType!(QList!(QFlags!(/+ Qt:: +/qt.core.namespace.Edge)), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType)();
+    checkType!(float, 0, 1, QMetaType.Type.Float, QMetaType.TypeFlag.RelocatableType, "float")();
+    checkType!(double, 0, 1, QMetaType.Type.Double, QMetaType.TypeFlag.RelocatableType, "double")();
+    checkType!(qreal, 0, 1, QMetaType.Type.QReal, QMetaType.TypeFlag.RelocatableType, "double")();
+    checkType!(int, 0, 1, QMetaType.Type.Int, QMetaType.TypeFlag.RelocatableType, "int")();
+    checkType!(const(int), 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsConst, "")();
+    checkType!(uint, 0, 1, QMetaType.Type.UInt, QMetaType.TypeFlag.RelocatableType, "uint")();
+    checkType!(int*, 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer, "")();
+    checkType!(const(int)*, 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst, "")();
+    checkType!(const(int*), 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst, "")();
+    checkType!(void*, 0, 1, QMetaType.Type.VoidStar, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer, "void*")();
+    checkType!(const(void)*, 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst, "")();
+    checkType!(void, 0, 1, QMetaType.Type.Void, 0, "void")();
+    checkType!(char, 0, 1, QMetaType.Type.Char, QMetaType.TypeFlag.RelocatableType, "char")();
+    checkType!(ubyte, 0, 1, QMetaType.Type.UChar, QMetaType.TypeFlag.RelocatableType, "uchar")();
+    checkType!(wchar, 0, 1, QMetaType.Type.Char16, QMetaType.TypeFlag.RelocatableType, "char16_t")();
+    checkType!(dchar, 0, 1, QMetaType.Type.Char32, QMetaType.TypeFlag.RelocatableType, "char32_t")();
+    //checkType!(wchar_t, 0, 0, -1, QMetaType.TypeFlag.RelocatableType, "")();
+    checkType!(QChar, 0, 1, QMetaType.Type.QChar, QMetaType.TypeFlag.RelocatableType, "QChar")();
+    checkType!(QLocale.Country, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration, "QLocale::Country")();
+    checkType!(/+ Qt:: +/qt.core.namespace.DayOfWeek, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration, "Qt::DayOfWeek")();
+    checkType!(QTimeZone.OffsetData, 0, 0, -1, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "")();
+    checkType!(QByteArray, 0, 1, QMetaType.Type.QByteArray, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QByteArray")();
+    checkType!(QItemSelectionRange, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QItemSelectionRange")();
+    checkType!(QLine, 0, 1, QMetaType.Type.QLine, QMetaType.TypeFlag.RelocatableType, "QLine")();
+    checkType!(QLineF, 0, 1, QMetaType.Type.QLineF, QMetaType.TypeFlag.RelocatableType, "QLineF")();
+    checkType!(QLocale, 1, 1, QMetaType.Type.QLocale, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsGadget, "QLocale")();
+    checkType!(const(QLocale), 1, 1, QMetaType.Type.QLocale, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.IsGadget | QMetaType.TypeFlag.IsConst, "QLocale")();
+    checkType!(QLocale*, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToGadget | QMetaType.TypeFlag.IsPointer, "QLocale*")();
+    checkType!(const(QLocale)*, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToGadget | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst, "const QLocale*")();
+    checkType!(QModelIndex, 0, 1, QMetaType.Type.QModelIndex, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QModelIndex")();
+    checkType!(QObject, 1, 1, QMetaType.Type.QObjectStar, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToQObject | QMetaType.TypeFlag.IsPointer, "QObject*")();
+    // checkType!(tail const(QObject), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToQObject | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst, "const QObject*")();
+    checkType!(const(QObject), 0, 0, -1, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsPointer | QMetaType.TypeFlag.IsConst, "")();
+    checkType!(/+ std:: +/pair!(double, QSize), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "std::pair<double,QSize>")();
+    checkType!(QPersistentModelIndex, 0, 1, QMetaType.Type.QPersistentModelIndex, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QPersistentModelIndex")();
+    checkType!(QPoint, 0, 1, QMetaType.Type.QPoint, QMetaType.TypeFlag.RelocatableType, "QPoint")();
+    checkType!(const(QPoint), 0, 0, -1, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsConst, "")();
+    checkType!(QPointF, 0, 1, QMetaType.Type.QPointF, QMetaType.TypeFlag.RelocatableType, "QPointF")();
+    checkType!(QSize, 0, 1, QMetaType.Type.QSize, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QSize")();
+    checkType!(QString, 0, 1, QMetaType.Type.QString, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QString")();
+    checkType!(QStringView, 0, 0, -1, QMetaType.TypeFlag.RelocatableType, "")();
+    checkType!(QUrl, 0, 1, QMetaType.Type.QUrl, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QUrl")();
+    checkType!(QVariant, 0, 1, QMetaType.Type.QVariant, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QVariant")();
+    checkType!(QAbstractItemModel, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.PointerToQObject | QMetaType.TypeFlag.IsPointer, "QAbstractItemModel*")();
+    checkType!(QTimeZone.OffsetData, 0, 0, -1, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "")();
+    checkType!(QList!(int), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<int>")();
+    checkType!(QList!(void*), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<void*>")();
+    checkType!(QList!(QSize), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<QSize>")();
+    checkType!(QList!(QLocale), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<QLocale>")();
+    checkType!(QVector!(int), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<int>")();
+    checkType!(QVector!(void*), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<void*>")();
+    checkType!(QVector!(QSize), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<QSize>")();
+    checkType!(QVector!(QLocale), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<QLocale>")();
+    checkType!(QStringList, 1, 1, QMetaType.Type.QStringList, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QStringList")();
+    checkType!(QVariantList, 1, 1, QMetaType.Type.QVariantList, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QVariantList")();
+    checkType!(QByteArrayList, 1, 1, QMetaType.Type.QByteArrayList, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QByteArrayList")();
+    checkType!(/+ Qt:: +/qt.core.namespace.Edge, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration, "Qt::Edge")();
+    checkType!(QFlags!(/+ Qt:: +/qt.core.namespace.Edge), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration, "QFlags<Qt::Edge>")();
+    checkType!(QList!(/+ Qt:: +/qt.core.namespace.Edge), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<Qt::Edge>")();
+    checkType!(QList!(QFlags!(/+ Qt:: +/qt.core.namespace.Edge)), 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction | QMetaType.TypeFlag.RelocatableType, "QList<QFlags<Qt::Edge>>")();
+    checkType!(TestObject.CustomEnum, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration, "TestObject::CustomEnum")();
+    checkType!(TestObject.CustomFlags, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration, "QFlags<TestObject::CustomFlag>")();
 
     CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
-    checkType!(CustomStruct1, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction)();
+    checkType!(CustomStruct1, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction, "CustomStruct1")();
     assert(CustomStruct1.numConstructed == 0);
     assert(CustomStruct1.numCopied == 1);
     assert(CustomStruct1.numDestructed == 2);
@@ -460,7 +515,8 @@ unittest
     const(QMetaObject)* mo = &TestObject.staticMetaObject;
     assert(strcmp(mo.className(), "TestObject") == 0);
     //assert(mo->constructorCount() == 2);
-    assert(mo.methodCount() - mo.methodOffset() == 10 + 10 + 10 + 4 + 1);
+    const(int) numSignalSlotTests = 12;
+    assert(mo.methodCount() - mo.methodOffset() == numSignalSlotTests * 3 + 4 + 1);
 
     TestObject a = cpp_new!TestObject();
     assert(a.metaObject() == mo);
@@ -524,7 +580,17 @@ unittest
     assert(method.methodSignature().toConstCharArray() == "signalCustomStruct1(CustomStruct1)");
     assert(method.parameterCount() == 1);
 
-    method = mo.method(mo.methodOffset() + 34);
+    method = mo.method(mo.methodOffset() + 10);
+    assert(method.name().toConstCharArray() == "signalCustomEnum");
+    assert(method.methodSignature().toConstCharArray() == "signalCustomEnum(CustomEnum)");
+    assert(method.parameterCount() == 1);
+
+    method = mo.method(mo.methodOffset() + 11);
+    assert(method.name().toConstCharArray() == "signalCustomFlags");
+    assert(method.methodSignature().toConstCharArray() == "signalCustomFlags(CustomFlags)");
+    assert(method.parameterCount() == 1);
+
+    method = mo.method(mo.methodOffset() + numSignalSlotTests * 3 + 4);
     assert(method.name().toConstCharArray() == "toUpper");
     assert(method.methodSignature().toConstCharArray() == "toUpper(QString)");
     assert(method.parameterCount() == 1);
@@ -539,7 +605,7 @@ unittest
     assert(prop.isReadable());
     assert(!prop.isConstant());
     assert(prop.hasNotifySignal());
-    assert(prop.notifySignalIndex() == mo.methodOffset() + 10);
+    assert(prop.notifySignalIndex() == mo.methodOffset() + numSignalSlotTests);
     assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "bool1Changed");
 
     prop = mo.property(mo.propertyOffset() + 1);
@@ -549,7 +615,7 @@ unittest
     assert(prop.isReadable());
     assert(!prop.isConstant());
     assert(prop.hasNotifySignal());
-    assert(prop.notifySignalIndex() == mo.methodOffset() + 10);
+    assert(prop.notifySignalIndex() == mo.methodOffset() + numSignalSlotTests);
     assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "bool1Changed");
 
     prop = mo.property(mo.propertyOffset() + 2);
@@ -559,7 +625,7 @@ unittest
     assert(prop.isReadable());
     assert(!prop.isConstant());
     assert(prop.hasNotifySignal());
-    assert(prop.notifySignalIndex() == mo.methodOffset() + 11);
+    assert(prop.notifySignalIndex() == mo.methodOffset() + numSignalSlotTests + 1);
     assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "bool2Changed");
 
     prop = mo.property(mo.propertyOffset() + 3);
@@ -569,7 +635,7 @@ unittest
     assert(prop.isReadable());
     assert(!prop.isConstant());
     assert(prop.hasNotifySignal());
-    assert(prop.notifySignalIndex() == mo.methodOffset() + 12);
+    assert(prop.notifySignalIndex() == mo.methodOffset() + numSignalSlotTests + 2);
     assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "string1Changed");
 
     prop = mo.property(mo.propertyOffset() + 4);
@@ -587,7 +653,7 @@ unittest
     assert(prop.isReadable());
     assert(!prop.isConstant());
     assert(prop.hasNotifySignal());
-    assert(prop.notifySignalIndex() == mo.methodOffset() + 13);
+    assert(prop.notifySignalIndex() == mo.methodOffset() + numSignalSlotTests + 3);
     assert(mo.method(prop.notifySignalIndex()).name().toConstCharArray() == "customStruct1Changed");
 }
 
@@ -606,6 +672,8 @@ void connectByString(TestObject a, TestObject b)
     QObject.connect(a, (mixin(SIGNAL(q{signalPointerInt(int *)}))).ptr, b, (mixin(SLOT(q{onSignalPointerInt(int *)}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalObjects(QObject*,TestObject*)}))).ptr, b, (mixin(SLOT(q{onSignalObjects(QObject*,TestObject*)}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalCustomStruct1(CustomStruct1)}))).ptr, b, (mixin(SLOT(q{onSignalCustomStruct1(CustomStruct1)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalCustomEnum(CustomEnum)}))).ptr, b, (mixin(SLOT(q{onSignalCustomEnum(CustomEnum)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalCustomFlags(CustomFlags)}))).ptr, b, (mixin(SLOT(q{onSignalCustomFlags(CustomFlags)}))).ptr);
 }
 
 void connectByPointer(TestObject a, TestObject b, /+ Qt:: +/qt.core.namespace.ConnectionType type = /+ Qt:: +/qt.core.namespace.ConnectionType.AutoConnection)
@@ -624,6 +692,8 @@ void connectByPointer(TestObject a, TestObject b, /+ Qt:: +/qt.core.namespace.Co
     QObject.connect(a.signal!"signalPointerInt", b.slot!"onSignalPointerInt", type);
     QObject.connect(a.signal!"signalObjects", b.slot!"onSignalObjects", type);
     QObject.connect(a.signal!"signalCustomStruct1", b.slot!"onSignalCustomStruct1", type);
+    QObject.connect(a.signal!"signalCustomEnum", b.slot!"onSignalCustomEnum", type);
+    QObject.connect(a.signal!"signalCustomFlags", b.slot!"onSignalCustomFlags", type);
 }
 
 void testSignals(TestObject a, void delegate(string) check)
@@ -668,6 +738,10 @@ void testSignals(TestObject a, void delegate(string) check)
     check(format("objects obj1 QTimer 0x%x obj2 TestObject 0x%x", cast(ulong) cast(void*) o1, cast(ulong) cast(void*) o2));
     a.emitSignalCustomStruct1(CustomStruct1(50));
     check("CustomStruct1 50");
+    a.emitSignalCustomEnum(TestObject.CustomEnum.d);
+    check("CustomEnum 101");
+    a.emitSignalCustomFlags(TestObject.CustomFlags.b | TestObject.CustomFlags.c);
+    check("CustomFlags 6");
 }
 
 unittest

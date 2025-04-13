@@ -29,9 +29,11 @@ import qt.core.iterable;
 import qt.core.list;
 import qt.core.object;
 import qt.core.objectdefs;
+import qt.core.pair;
 import qt.core.typeinfo;
 import qt.core.variant;
 import qt.helpers;
+import std.algorithm;
 import std.traits;
 
 /+ #ifndef QT_NO_QOBJECT
@@ -1453,10 +1455,7 @@ struct QMetaTypeIdQObject(T)
             /+ Q_CONSTINIT +/ static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
             if (const int id = metatype_id.loadAcquire())
                 return id;
-            const char* cName = T.staticMetaObject.className();
-            QByteArray typeName;
-            typeName.reserve(strlen(cName) + 1);
-            typeName.append(cName).append('*');
+            QByteArray typeName = QByteArray(typenameHelper!T().ptr);
             const int newId = qRegisterNormalizedMetaType!(T)(typeName);
             metatype_id.storeRelease(newId);
             return newId;
@@ -1474,8 +1473,7 @@ struct QMetaTypeIdQObject(T)
             /+ Q_CONSTINIT +/ static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
             if (const int id = metatype_id.loadAcquire())
                 return id;
-            const char* cName = T.staticMetaObject.className();
-            QByteArray cNameB = QByteArray(cName);
+            QByteArray cNameB = QByteArray(typenameHelper!T().ptr);
             const int newId = qRegisterNormalizedMetaType!(T)(cNameB);
             metatype_id.storeRelease(newId);
             return newId;
@@ -1494,10 +1492,7 @@ struct QMetaTypeIdQObject(T)
             /+ Q_CONSTINIT +/ static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
             if (const int id = metatype_id.loadAcquire())
                 return id;
-            const char* cName = T.staticMetaObject.className();
-            QByteArray typeName;
-            typeName.reserve(strlen(cName) + 1);
-            typeName.append(cName).append('*');
+            QByteArray typeName = QByteArray(typenameHelper!T().ptr);
             const int newId = qRegisterNormalizedMetaType!(T)(typeName);
             metatype_id.storeRelease(newId);
             return newId;
@@ -1516,13 +1511,7 @@ struct QMetaTypeIdQObject(T)
             /+ Q_CONSTINIT +/ static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
             if (const int id = metatype_id.loadAcquire())
                 return id;
-            /*const char *eName = qt_getEnumName(T());
-            const char *cName = qt_getEnumMetaObject(T()).className();*/
-            const char *eName = __traits(identifier, T);
-            const char *cName = __traits(identifier, __traits(parent, T));
-            QByteArray typeName;
-            typeName.reserve(strlen(cName) + 2 + strlen(eName));
-            typeName.append(cName).append("::").append(eName);
+            QByteArray typeName = QByteArray(typenameHelper!T().ptr);
             const int newId = qRegisterNormalizedMetaType!(T)(typeName);
             metatype_id.storeRelease(newId);
             return newId;
@@ -1573,7 +1562,7 @@ struct QMetaTypeId(TYPE) if (getUDAs!(TYPE, Q_DECLARE_METATYPE).length > 0)
             metatype_id.storeRelease(id);
             return id;
         }*/
-        const int newId = qRegisterMetaType!(TYPE)(TYPE.stringof);
+        const int newId = qRegisterMetaType!(TYPE)(typenameHelper!TYPE().ptr);
         metatype_id.storeRelease(newId);
         return newId;
     }
@@ -1615,15 +1604,7 @@ struct QMetaTypeId(X : C!T, alias C, T) if (is(const(X) == const(C!T)) && __trai
         /+ Q_CONSTINIT +/ static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
         if (const int id = metatype_id.loadRelaxed())
             return id;
-        const char *tName = QMetaType.fromType!T().name();
-        assert(tName);
-        const size_t tNameLen = qstrlen(tName);
-        QByteArray typeName;
-        immutable containerName = __traits(identifier, C);
-        typeName.reserve(containerName.length + 1 + tNameLen + 1 + 1);
-        typeName.append(containerName.ptr, containerName.length)
-            .append('<').append(tName, tNameLen);
-        typeName.append('>');
+        QByteArray typeName = QByteArray(typenameHelper!X().ptr);
         const int newId = qRegisterNormalizedMetaType!(C!T)(typeName);
         metatype_id.storeRelease(newId);
         return newId;
@@ -1650,18 +1631,7 @@ struct QMetaTypeId(X : C!(T, U), alias C, T, U) if (is(const(X) == const(C!(T, U
         /+ Q_CONSTINIT +/ static QBasicAtomicInt metatype_id = QBasicAtomicInt(0);
         if (const int id = metatype_id.loadAcquire())
             return id;
-        const char *tName = QMetaType.fromType!T().name();
-        const char *uName = QMetaType.fromType!U().name();
-        assert(tName);
-        assert(uName);
-        const size_t tNameLen = qstrlen(tName);
-        const size_t uNameLen = qstrlen(uName);
-        QByteArray typeName;
-        immutable containerName = __traits(identifier, C);
-        typeName.reserve(containerName.length + 1 + tNameLen + 1 + uNameLen + 1 + 1);
-        typeName.append(containerName.ptr, containerName.length)
-            .append('<').append(tName, tNameLen).append(',').append(uName, uNameLen);
-        typeName.append('>');
+        QByteArray typeName = QByteArray(typenameHelper!T().ptr);
         const int newId = qRegisterNormalizedMetaType!(C!(T, U))(typeName);
         metatype_id.storeRelease(newId);
         return newId;
@@ -2291,46 +2261,182 @@ struct is_std_pair<std::pair<T1_, T2_>> : std::true_type {
     using T2 = T2_;
 }; +/
 
-extern(D) auto typenameHelper(T)()
+enum QualifiedNameCppFlags
 {
-    /+ if constexpr (is_std_pair<T>::value) {
-        using T1 = typename is_std_pair<T>::T1;
-        using T2 = typename is_std_pair<T>::T2;
-        std::remove_const_t<std::conditional_t<bool (QMetaTypeId2<T1>::IsBuiltIn), typename QMetaTypeId2<T1>::NameAsArrayType, decltype(typenameHelper<T1>())>> t1Name {};
-        std::remove_const_t<std::conditional_t<bool (QMetaTypeId2<T2>::IsBuiltIn), typename QMetaTypeId2<T2>::NameAsArrayType, decltype(typenameHelper<T2>())>> t2Name {};
-        if constexpr (bool (QMetaTypeId2<T1>::IsBuiltIn) ) {
-            t1Name = QMetaTypeId2<T1>::nameAsArray;
-        } else {
-            t1Name = typenameHelper<T1>();
+    none = 0,
+    ignoreHeadConst = 0x01,
+    ignoreTailConst = 0x02,
+    ignoreConst = ignoreHeadConst | ignoreTailConst,
+    replaceQFlags = 0x04,
+}
+
+// Same as fullyQualifiedName, but using C++ syntax
+extern(D) enum fullyQualifiedNameCpp(T, QualifiedNameCppFlags flags = QualifiedNameCppFlags.none) = fqnTypeCpp!(T, flags);
+extern(D) enum fullyQualifiedNameCpp(alias T, QualifiedNameCppFlags flags = QualifiedNameCppFlags.none) = fqnSymCpp!(T, flags);
+
+extern(D) private template isCppSymbol(alias T)
+{
+    static if (is(T == module) || is(T == package))
+        enum isCppSymbol = false;
+    else static if (is(T == enum))
+        enum isCppSymbol = __traits(getCppNamespaces, T).length > 0;
+    else
+        enum isCppSymbol = __traits(getLinkage, T) == "C++" || __traits(getLinkage, T) == "C";
+}
+
+extern(D) private template getCppNamespacesPrefix(alias T)
+{
+    static if (is(T : pair!(A, B), A, B))
+        enum getCppNamespacesPrefix = "std::";
+    else static if (!isCppSymbol!T)
+        enum getCppNamespacesPrefix = "";
+    else
+        enum getCppNamespacesPrefix = () {
+            string r;
+            foreach (n; __traits(getCppNamespaces, T))
+                r ~= n ~ "::";
+            return r;
+        }();
+}
+
+extern(D) private template fqnSymParentPrefixCpp(alias T, bool isCpp, QualifiedNameCppFlags flags)
+{
+    static if (isCpp && (is(__traits(parent, T) == module) || is(__traits(parent, T) == package)))
+        enum fqnSymParentPrefixCpp = null;
+    else static if (__traits(compiles, __traits(parent, T)) && !__traits(isSame, T, __traits(parent, T)))
+        enum fqnSymParentPrefixCpp = fqnSymCpp!(__traits(parent, T), flags) ~ "::";
+    else static if (is(T == module) || is(T == package))
+        enum fqnSymParentPrefixCpp = "D::";
+    else
+        enum fqnSymParentPrefixCpp = null;
+}
+
+extern(D) template findQFlagsAlias(T)
+{
+    static if (is(T : QFlags!X, X))
+    {
+        enum findQFlagsAlias = () {
+            string ret;
+            static foreach (name; __traits(allMembers, __traits(parent, X)))
+                static if (is(__traits(getMember, __traits(parent, X), name)) && is(T == __traits(getMember, __traits(parent, X), name)))
+                    ret = name;
+            return ret;
+        }();
+    }
+}
+
+extern(D) private template fqnSymCpp(alias T : X!A, QualifiedNameCppFlags flags, alias X, A...)
+{
+    template fqnTuple(T...)
+    {
+        static if (T.length == 0)
+            enum fqnTuple = "";
+        else static if (T.length == 1)
+        {
+            static if (isExpressionTuple!T)
+                enum fqnTuple = T[0].stringof;
+            else
+                enum fqnTuple = fullyQualifiedNameCpp!(T[0], flags);
         }
-        if constexpr (bool(QMetaTypeId2<T2>::IsBuiltIn)) {
-            t2Name = QMetaTypeId2<T2>::nameAsArray;
-        } else {
-            t2Name = typenameHelper<T2>();
+        else
+            enum fqnTuple = fqnTuple!(T[0]) ~ "," ~ fqnTuple!(T[1 .. $]);
+    }
+
+    static if (is(T : QFlags!Y, Y) && findQFlagsAlias!T.length && (flags & QualifiedNameCppFlags.replaceQFlags))
+    {
+        enum fqnSymCpp =
+            fqnSymParentPrefixCpp!(Y, isCppSymbol!Y, flags) ~
+            getCppNamespacesPrefix!Y ~
+            findQFlagsAlias!T;
+    }
+    else
+    {
+        enum fqnSymCpp =
+            fqnSymParentPrefixCpp!(X, isCppSymbol!T, flags) ~
+            getCppNamespacesPrefix!T ~
+            __traits(identifier, X) ~ "<" ~ fqnTuple!A ~ ">";
+    }
+}
+
+extern(D) private template fqnSymCpp(alias T, QualifiedNameCppFlags flags)
+{
+    static string adjustIdent(string s)
+    {
+        import std.algorithm.searching : findSplit, skipOver;
+
+        if (s.skipOver("package ") || s.skipOver("module "))
+            return s;
+        return s.findSplit("(")[0];
+    }
+    enum fqnSymCpp = fqnSymParentPrefixCpp!(T, isCppSymbol!T, flags) ~
+        getCppNamespacesPrefix!T ~
+        adjustIdent(__traits(identifier, T));
+}
+
+extern(D) private template fqnTypeCpp(T, QualifiedNameCppFlags flags)
+{
+    string addQualifiers(string typeString, bool addConst)
+    {
+        auto result = typeString;
+        if (addConst)
+        {
+            static if (is(T == U*, U))
+                result = result ~ " const";
+            else
+                result = "const " ~ result;
         }
-        constexpr auto nonTypeDependentLen = sizeof("std::pair<,>");
-        constexpr auto t1Len = t1Name.size() - 1;
-        constexpr auto t2Len = t2Name.size() - 1;
-        constexpr auto length = nonTypeDependentLen + t1Len + t2Len;
-        std::array<char, length + 1> result {};
-        constexpr auto prefix = "std::pair<";
-        int currentLength = 0;
-        for (; currentLength < int(sizeof("std::pair<") - 1); ++currentLength)
-            result[currentLength] = prefix[currentLength];
-        for (int i = 0; i < int(t1Len); ++currentLength, ++i)
-            result[currentLength] = t1Name[i];
-        result[currentLength++] = ',';
-        for (int i = 0; i < int(t2Len); ++currentLength, ++i)
-            result[currentLength] = t2Name[i];
-        result[currentLength++] = '>';
-        result[currentLength++] = '\0';
-        return result;
-    } else +/ {
-        immutable(char[T.stringof.length + 1]) result = T.stringof;
-        //QTypeNormalizer{ result.data()} .normalizeTypeFromSignature(begin, end);
-        // TODO: Use the same name as Qt.
         return result;
     }
+
+    // Convenience template to avoid copy-paste
+    template chain(string current)
+    {
+        enum chain = addQualifiers(current, is(T == const) && !(flags & QualifiedNameCppFlags.ignoreConst));
+    }
+
+    static if (isBasicType!T && !is(T == enum))
+    {
+        enum fqnTypeCpp = chain!((Unqual!T).stringof);
+    }
+    else static if (is(T == class))
+    {
+        enum fqnTypeCpp = chain!(
+            chain!(chain!(fqnSymCpp!(T, flags & ~QualifiedNameCppFlags.ignoreHeadConst)) ~ "*")
+        );
+    }
+    else static if (isAggregateType!T || is(T == enum))
+    {
+        enum fqnTypeCpp = chain!(fqnSymCpp!(T, flags));
+    }
+    else static if (isStaticArray!T)
+    {
+        import std.conv : to;
+        enum fqnTypeCpp = chain!(
+            fqnTypeCpp!(typeof(T.init[0]), flags) ~ "[" ~ to!string(T.length) ~ "]"
+        );
+    }
+    else static if (isArray!T)
+    {
+        enum fqnTypeCpp = chain!(
+            fqnTypeCpp!(typeof(T.init[0]), flags) ~ "[]"
+        );
+    }
+    else static if (is(T == U*, U))
+    {
+        enum fqnTypeCpp = chain!(
+            fqnTypeCpp!(U, flags & ~QualifiedNameCppFlags.ignoreHeadConst) ~ "*"
+        );
+    }
+    else
+        // In case something is forgotten
+        static assert(0, "Unrecognized type " ~ T.stringof ~ ", can't convert to fully qualified string for C++");
+}
+
+extern(D) auto typenameHelper(T)()
+{
+    static immutable(char[fullyQualifiedNameCpp!T.length + 1]) result = fullyQualifiedNameCpp!(T, QualifiedNameCppFlags.ignoreHeadConst);
+    //QTypeNormalizer{ result.data()} .normalizeTypeFromSignature(begin, end);
+    return result;
 }
 
 struct BuiltinMetaType(T)
