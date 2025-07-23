@@ -51,6 +51,8 @@ void dumpObject(ref Appender!string appender, QObject obj, string indent)
             continue;
         if (className == "QKeySequenceEdit" && propertyName.among("clearButtonEnabled", "maximumSequenceLength", "finishingKeyCombinations"))
             continue;
+        if (propertyName.among("accessibleIdentifier", "labelDrawingMode"))
+            continue;
         if (className.among("QTimeEdit", "QDateEdit", "QDateTimeEdit") && propertyName.among("timeZone"))
             continue;
         QVariant valueVar = obj.property(propertyName.ptr);
