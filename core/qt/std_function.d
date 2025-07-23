@@ -131,22 +131,25 @@ private:
     }
 }
 
-extern(C++, class) struct std_function(_Fty) if (isSomeFunction!_Fty)
+extern(C++, class) template std_function(_Fty) if (isSomeFunction!_Fty)
 {
-    _Func_class!(_Fty) base0;
-
-    extern(D) this(F2)(F2 callback) if (isSomeFunction!F2)
+    pragma(mangle, std_function, "function") struct std_function
     {
-        import core.lifetime : emplace, forward;
+        _Func_class!(_Fty) base0;
 
-        static assert(__traits(classInstanceSize, FuncImplD!(_Fty, F2)) <= _Space_size);
+        extern(D) this(F2)(F2 callback) if (isSomeFunction!F2)
+        {
+            import core.lifetime : emplace, forward;
 
-        void* data = &base0._Mystorage;
-        auto impl = emplace(*cast(FuncImplD!(_Fty, F2)*) &data, callback);
-        base0._Set(impl);
+            static assert(__traits(classInstanceSize, FuncImplD!(_Fty, F2)) <= _Space_size);
+
+            void* data = &base0._Mystorage;
+            auto impl = emplace(*cast(FuncImplD!(_Fty, F2)*) &data, callback);
+            base0._Set(impl);
+        }
+
+        @disable this(this);
     }
-
-    @disable this(this);
 }
 
 }
@@ -229,24 +232,27 @@ align (16):
     __func __f_;
 }
 
-extern(C++, class) struct std_function(F) if (isSomeFunction!F)
+extern(C++, class) template std_function(F) if (isSomeFunction!F)
 {
-    alias __func = __value_func!(F);
-
-    __func __f_;
-
-    extern(D) this(F2)(F2 callback) if (isSomeFunction!F2)
+    pragma(mangle, std_function, "function") struct std_function
     {
-        import core.lifetime : emplace, forward;
+        alias __func = __value_func!(F);
 
-        static assert(__traits(classInstanceSize, FuncImplD!(F, F2)) <= 3 * (void*).sizeof);
+        __func __f_;
 
-        void* data = __f_.__buf.ptr;
-        auto impl = emplace(*cast(FuncImplD!(F, F2)*) &data, callback);
-        __f_.__f_ = impl;
+        extern(D) this(F2)(F2 callback) if (isSomeFunction!F2)
+        {
+            import core.lifetime : emplace, forward;
+
+            static assert(__traits(classInstanceSize, FuncImplD!(F, F2)) <= 3 * (void*).sizeof);
+
+            void* data = __f_.__buf.ptr;
+            auto impl = emplace(*cast(FuncImplD!(F, F2)*) &data, callback);
+            __f_.__f_ = impl;
+        }
+
+        @disable this(this);
     }
-
-    @disable this(this);
 }
 
 }
@@ -289,65 +295,68 @@ extern(C++, class) struct _Function_base
     _Manager_type _M_manager;
 }
 
-extern(C++, class) struct std_function(F) if (isSomeFunction!F)
+extern(C++, class) template std_function(F) if (isSomeFunction!F)
 {
-    _Function_base base1;
-
-    this(ref const(std_function) __x)
+    pragma(mangle, std_function, "function") struct std_function
     {
-        if (__x.base1._M_manager)
+        _Function_base base1;
+
+        this(ref const(std_function) __x)
         {
-            __x.base1._M_manager(base1._M_functor, __x.base1._M_functor,
-                    _Manager_operation.__clone_functor);
-            _M_invoker = __x._M_invoker;
-            base1._M_manager = __x.base1._M_manager;
+            if (__x.base1._M_manager)
+            {
+                __x.base1._M_manager(base1._M_functor, __x.base1._M_functor,
+                        _Manager_operation.__clone_functor);
+                _M_invoker = __x._M_invoker;
+                base1._M_manager = __x.base1._M_manager;
+            }
         }
-    }
 
-    static bool manager_impl(ref _Any_data __dest, ref const _Any_data __source,
-            _Manager_operation __op)
-    {
-        switch (__op)
+        static bool manager_impl(ref _Any_data __dest, ref const _Any_data __source,
+                _Manager_operation __op)
         {
-        case _Manager_operation.__get_type_info:
-            break;
+            switch (__op)
+            {
+            case _Manager_operation.__get_type_info:
+                break;
 
-        case _Manager_operation.__get_functor_ptr:
-            break;
+            case _Manager_operation.__get_functor_ptr:
+                break;
 
-        case _Manager_operation.__clone_functor:
-            __dest._M_pod_data = __source._M_pod_data;
-            break;
+            case _Manager_operation.__clone_functor:
+                __dest._M_pod_data = __source._M_pod_data;
+                break;
 
-        case _Manager_operation.__destroy_functor:
-            __dest._M_pod_data[] = 0;
-            break;
-        default:
+            case _Manager_operation.__destroy_functor:
+                __dest._M_pod_data[] = 0;
+                break;
+            default:
+            }
+            return false;
         }
-        return false;
-    }
 
-    template invoke_impl(F2)
-    {
-        pragma(mangle, std_function.mangleof ~ "___" ~ F2.mangleof ~ "__invoke_impl")
-        static extern(C++) ReturnType!(F) invoke_impl(ref const(_Any_data) functor,
-                ref ParameterTypeTuple!(F) args)
+        template invoke_impl(F2)
         {
-            return (*(cast(F2*) &functor._M_pod_data))(args);
+            pragma(mangle, std_function.mangleof ~ "___" ~ F2.mangleof ~ "__invoke_impl")
+            static extern(C++) ReturnType!(F) invoke_impl(ref const(_Any_data) functor,
+                    ref ParameterTypeTuple!(F) args)
+            {
+                return (*(cast(F2*) &functor._M_pod_data))(args);
+            }
         }
-    }
 
-    extern(D) this(F2)(F2 callback) if (isSomeFunction!F2)
-    {
-        static assert(F2.sizeof <= base1._M_functor._M_pod_data.sizeof);
-        _M_invoker = &invoke_impl!F2;
-        base1._M_manager = &manager_impl;
-        *(cast(F2*) &base1._M_functor._M_pod_data) = callback;
-    }
+        extern(D) this(F2)(F2 callback) if (isSomeFunction!F2)
+        {
+            static assert(F2.sizeof <= base1._M_functor._M_pod_data.sizeof);
+            _M_invoker = &invoke_impl!F2;
+            base1._M_manager = &manager_impl;
+            *(cast(F2*) &base1._M_functor._M_pod_data) = callback;
+        }
 
-    alias _Invoker_type = ReturnType!(F) function(ref const(_Any_data),
-            ref ParameterTypeTuple!(F));
-    _Invoker_type _M_invoker;
+        alias _Invoker_type = ReturnType!(F) function(ref const(_Any_data),
+                ref ParameterTypeTuple!(F));
+        _Invoker_type _M_invoker;
+    }
 }
 
 }

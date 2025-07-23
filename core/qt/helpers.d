@@ -890,29 +890,6 @@ package FunctionManglingCpp mangleConstructorBaseObject(FunctionManglingCpp pars
     return parsed;
 }
 
-package FunctionManglingCpp mangleStdFunction(FunctionManglingCpp parsed)
-{
-    version (Windows)
-    {
-        foreach (ref p; parsed.parameters)
-        {
-            p = p.replace("?$std_function@",
-                          "?$function@");
-        }
-    }
-    else version (CppRuntime_Clang)
-    {
-        parsed.suffix = parsed.suffix.replace("St3__112std_function",
-                                              "St3__18function");
-    }
-    else
-    {
-        parsed.suffix = parsed.suffix.replace("St12std_function",
-                                              "St8function");
-    }
-    return parsed;
-}
-
 package FunctionManglingCpp mangleChangeName(FunctionManglingCpp parsed, string newName)
 {
     import std.algorithm;

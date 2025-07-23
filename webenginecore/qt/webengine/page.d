@@ -271,17 +271,13 @@ alias FindFlags = QFlags!(FindFlag);
     final QPointF scrollPosition() const;
     final QSizeF contentsSize() const;
 
-    mixin(changeCppMangling(q{mangleStdFunction}, q{
     final void runJavaScript(ref const(QString) scriptSource, ref const(std_function!(FunctionTypeOf!(void function(ref const(QVariant))))) resultCallback);
-    }));
     extern(D) final void runJavaScript(ref const(QString) scriptSource, void delegate(ref const(QVariant)) resultCallback)
     {
         auto callback = std_function!(FunctionTypeOf!(ExternCPPFunc!(void function(ref const(QVariant)))))(resultCallback);
         runJavaScript(scriptSource, callback);
     }
-    mixin(changeCppMangling(q{mangleStdFunction}, q{
     final void runJavaScript(ref const(QString) scriptSource, quint32 worldId, ref const(std_function!(FunctionTypeOf!(void function(ref const(QVariant))))) resultCallback/* = {}*/);
-    }));
     extern(D) final void runJavaScript(ref const(QString) scriptSource, quint32 worldId, void delegate(ref const(QVariant)) resultCallback)
     {
         auto callback = std_function!(FunctionTypeOf!(ExternCPPFunc!(void function(ref const(QVariant)))))(resultCallback);
