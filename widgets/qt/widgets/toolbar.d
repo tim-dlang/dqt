@@ -67,6 +67,7 @@ public:
     final void clear();
 
     /+ using QWidget::addAction; +/
+    alias addAction = QWidget.addAction;
     final QAction addAction(ref const(QString) text);
     final QAction addAction(ref const(QIcon) icon, ref const(QString) text);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
