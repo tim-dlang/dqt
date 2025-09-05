@@ -72,6 +72,7 @@ public:
     final void clear();
 
     /+ using QWidget::addAction; +/
+    alias addAction = QWidget.addAction;
     static if (defined!"QT_WIDGETS_BUILD_REMOVED_API")
     {
         final QAction addAction(ref const(QString) text);

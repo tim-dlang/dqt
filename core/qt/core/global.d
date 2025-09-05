@@ -12,14 +12,16 @@
 module qt.core.global;
 extern(C++):
 
+// Use AppleAny instead of Apple, so it works with different versions of DMD.
+// Predefined version Apple is introduced in https://github.com/dlang/dmd/pull/21471
 version (OSX)
-    version = Apple;
+    version = AppleAny;
 version (iOS)
-    version = Apple;
+    version = AppleAny;
 version (TVOS)
-    version = Apple;
+    version = AppleAny;
 version (WatchOS)
-    version = Apple;
+    version = AppleAny;
 
 import core.stdc.config;
 import qt.config;
@@ -831,7 +833,7 @@ pragma(inline, true) qint64 qRound64(float d)
 #define Q_FORWARD_DECLARE_MUTABLE_CG_TYPE(type) typedef struct type *type ## Ref;
 #endif +/
 
-version (Apple)
+version (AppleAny)
 {
 /+ #  define QT_DARWIN_PLATFORM_SDK_EQUAL_OR_ABOVE(macos, ios, tvos, watchos) \
     ((defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && macos != __MAC_NA && __MAC_OS_X_VERSION_MAX_ALLOWED >= macos) || \
