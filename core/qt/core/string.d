@@ -368,6 +368,12 @@ public:
         d.ref_.ref_();
     }
 
+    void opAssign(const QString s)
+    {
+        d = (cast(QString*) &s).d;
+        d.ref_.ref_();
+    }
+
     //
     // QString inline members
     //
