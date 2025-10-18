@@ -441,7 +441,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
     int static_metacall(Call, int, void** ) const;
     static int metacall(QObject , Call, int, void** );
 
-    static const(QMetaObject*) staticMetaObject(alias MO)()
+    extern(D) static const(QMetaObject*) staticMetaObject(alias MO)()
     {
         return &MO;
     }
@@ -482,7 +482,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
             }
             /+auto opCast(T : const(QMetaObject))() const
             { return cast(const(QMetaObject)) (direct); }+/
-            static SuperData link(alias MO)()
+            extern(D) static SuperData link(alias MO)()
             { return SuperData(QMetaObject.staticMetaObject!(MO)()); }
         }
     }
