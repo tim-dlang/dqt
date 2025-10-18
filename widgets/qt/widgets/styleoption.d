@@ -89,8 +89,8 @@ public:
 
     @disable this();
     this(int version_/+ = StyleOptionVersion.Version+/, int type = OptionType.SO_Default);
-    @disable this(this);
-    this(ref const(QStyleOption) other);
+    /*@disable this(this);
+    this(ref const(QStyleOption) other);*/
     ~this();
 
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
@@ -122,12 +122,12 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionFocusRect) other)
     {
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionFocusRect &operator=(const QStyleOptionFocusRect &) = default; +/
 
 protected:
@@ -166,12 +166,12 @@ alias FrameFeatures = QFlags!(FrameFeature);    FrameFeatures features;
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionFrame) other)
     {
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionFrame &operator=(const QStyleOptionFrame &) = default; +/
 
 protected:
@@ -235,12 +235,12 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     pragma(inline, true) this(ref const(QStyleOptionTabWidgetFrame) other)
     {
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionTabWidgetFrame &operator=(const QStyleOptionTabWidgetFrame &) = default; +/
 
 protected:
@@ -277,12 +277,12 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionTabBarBase) other)
     {
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionTabBarBase &operator=(const QStyleOptionTabBarBase &) = default; +/
 
 protected:
@@ -327,13 +327,13 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionHeader) other)
     {
         text = QString.create;
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionHeader &operator=(const QStyleOptionHeader &) = default; +/
 
 protected:
@@ -361,12 +361,12 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionHeaderV2) other)
     {
         this.base0 = QStyleOptionHeader(StyleOptionVersion.Version);
         this = other;
-    }
+    }*/
     /+ QStyleOptionHeaderV2 &operator=(const QStyleOptionHeaderV2 &) = default; +/
 
     /+ Qt::TextElideMode textElideMode:2; +/
@@ -435,13 +435,13 @@ alias ButtonFeatures = QFlags!(ButtonFeature);
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionButton) other)
     {
         text = QString.create;
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionButton &operator=(const QStyleOptionButton &) = default; +/
 
 protected:
@@ -518,13 +518,13 @@ alias TabFeatures = QFlags!(TabFeature);
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionTab) other)
     {
         text = QString.create(); 
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionTab &operator=(const QStyleOptionTab &) = default; +/
 
 protected:
@@ -591,12 +591,12 @@ alias ToolBarFeatures = QFlags!(ToolBarFeature);    ToolBarPosition positionOfLi
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionToolBar) other)
     {
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionToolBar &operator=(const QStyleOptionToolBar &) = default; +/
 
 protected:
@@ -661,13 +661,13 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionProgressBar) other)
     {
         text = QString.create();
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionProgressBar &operator=(const QStyleOptionProgressBar &) = default; +/
 
 protected:
@@ -710,14 +710,14 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionMenuItem) other)
     {
         text = QString.create;
         font = QFont.create;
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionMenuItem &operator=(const QStyleOptionMenuItem &) = default; +/
 
 protected:
@@ -751,13 +751,13 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionDockWidget) other)
     {
         title = QString.create();
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionDockWidget &operator=(const QStyleOptionDockWidget &) = default; +/
 
 protected:
@@ -821,7 +821,7 @@ alias ViewItemFeatures = QFlags!(ViewItemFeature);
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionViewItem) other)
     {
         font = QFont.create;
@@ -830,7 +830,7 @@ alias ViewItemFeatures = QFlags!(ViewItemFeature);
         backgroundBrush = QBrush.create;
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionViewItem &operator=(const QStyleOptionViewItem &) = default; +/
 
 protected:
@@ -895,13 +895,13 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionToolBox) other)
     {
         text = QString.create;
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionToolBox &operator=(const QStyleOptionToolBox &) = default; +/
 
 protected:
@@ -933,12 +933,12 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionRubberBand) other)
     {
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionRubberBand &operator=(const QStyleOptionRubberBand &) = default; +/
 
 protected:
@@ -963,12 +963,12 @@ public:
 
     @disable this();
     this(int version_/+ = StyleOptionVersion.Version+/, int type = OptionType.SO_Complex);
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionComplex) other)
     {
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionComplex &operator=(const QStyleOptionComplex &) = default; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
@@ -1008,12 +1008,12 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionSlider) other)
     {
         this.base0 = QStyleOptionComplex(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionSlider &operator=(const QStyleOptionSlider &) = default; +/
 
 protected:
@@ -1047,12 +1047,12 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionSpinBox) other)
     {
         this.base0 = QStyleOptionComplex(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionSpinBox &operator=(const QStyleOptionSpinBox &) = default; +/
 
 protected:
@@ -1094,14 +1094,14 @@ alias ToolButtonFeatures = QFlags!(ToolButtonFeature);
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionToolButton) other)
     {
         text = QString.create;
         font = QFont.create;
         this.base0 = QStyleOptionComplex(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionToolButton &operator=(const QStyleOptionToolButton &) = default; +/
 
 protected:
@@ -1163,13 +1163,13 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionComboBox) other)
     {
         currentText = QString.create;
         this.base0 = QStyleOptionComplex(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionComboBox &operator=(const QStyleOptionComboBox &) = default; +/
 
 protected:
@@ -1202,13 +1202,13 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionTitleBar) other)
     {
         text = QString.create;
         this.base0 = QStyleOptionComplex(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionTitleBar &operator=(const QStyleOptionTitleBar &) = default; +/
 
 protected:
@@ -1243,13 +1243,13 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionGroupBox) other)
     {
         text = QString.create;
         this.base0 = QStyleOptionComplex(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionGroupBox &operator=(const QStyleOptionGroupBox &) = default; +/
 protected:
     this(int version_);
@@ -1278,12 +1278,12 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionSizeGrip) other)
     {
         this.base0 = QStyleOptionComplex(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionSizeGrip &operator=(const QStyleOptionSizeGrip &) = default; +/
 protected:
     this(int version_);
@@ -1312,12 +1312,12 @@ public:
         return r;
     }
 
-    @disable this(this);
+    /*@disable this(this);
     this(ref const(QStyleOptionGraphicsItem) other)
     {
         this.base0 = QStyleOption(StyleOptionVersion.Version, StyleOptionType.Type);
         this = other;
-    }
+    }*/
     /+ QStyleOptionGraphicsItem &operator=(const QStyleOptionGraphicsItem &) = default; +/
     static qreal levelOfDetailFromTransform(ref const(QTransform) worldTransform);
 protected:

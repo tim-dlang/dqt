@@ -560,6 +560,11 @@ public:
         d = (cast(QString*) &s).d;
     }
 
+    void opAssign(const QString s)
+    {
+        d = (cast(QString*) &s).d;
+    }
+
     //
     // QString inline members
     //
