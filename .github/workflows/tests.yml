@@ -4,13 +4,15 @@ on:
   push:
     branches:
       - master
-      - test
+      - qt5
       - testqt6
+      - testqt5
   pull_request:
     branches:
       - master
-      - test
+      - qt5
       - testqt6
+      - testqt5
 
 jobs:
   main:
