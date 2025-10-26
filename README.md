@@ -1,9 +1,12 @@
 # DQt
 
-DQt contains experimental bindings for using a subset of [Qt](https://www.qt.io/)
+DQt contains bindings for using a subset of [Qt](https://www.qt.io/)
 with the [D Programming Language](https://dlang.org/). Qt is a library for writing
 cross-platform graphical user interfaces. Currently bindings exist for
-the Qt modules core, gui, widgets, qml and webenginewidgets.
+the Qt modules core, gui, widgets, qml, webenginewidgets, multimediawidgets,
+pdfwidgets and dependencies.
+
+![Screenshot of DQt example examplewidgets](docs/screenshot-examplewidgets.png)
 
 ## Features
 
@@ -25,7 +28,8 @@ the Qt modules core, gui, widgets, qml and webenginewidgets.
  QAbstractItemModel::roleNames returns QHash. This could be a problem
  if roleNames has to be used or overridden.
 * Qt uses many const reference parameters, which can be used with rvalues
- in C++, but not in D.
+ in C++, but not in D. Extra function overloads are created by a mixin
+ to make calling more convenient for these parameters.
 * The mangling for many declarations had to be manually set for different
  reasons. There could still be declarations with a wrong mangling, which
  would result in linking errors.
@@ -50,12 +54,16 @@ Branch qt5 contains bindings for major version 5.
 
 ## Building
 
-Three example programs show how to use DQt. The program helloworld is a
-minimal program showing a window with label and button. Example program
-examplewidgets uses many widgets from Qt and shows them in a window with
-different tabs. It uses UI files created with Qt Designer for the layout,
-which are imported at compile time. Example program examplebrowser
-uses QWebEngine to show a simple web browser.
+The following examples show how to use DQt:
+
+* examples/helloworld: Minimal program showing a window with label and button.
+* examples/examplewidgets: Example using many widgets from Qt and showing them
+ in a window with different tabs. It uses UI files created with Qt Designer for
+ the layout, which are imported at compile time.
+* examples/examplebrowser: Example using QtWebEngine to show a simple web browser.
+* examples/exampleqml: Example for using QML.
+* examples/mediaplayer: Example for showing a video with QtMultimediaWidgets.
+* examples/pdfreader: Example for showing a PDF document with QtPdf.
 
 ### Linux
 
@@ -68,6 +76,8 @@ dub run :helloworld
 dub run :examplewidgets
 dub run :examplebrowser
 dub run :exampleqml
+dub run :mediaplayer
+dub run :pdfreader
 ```
 
 Alternatively dmd can be used directly:
@@ -75,9 +85,6 @@ Alternatively dmd can be used directly:
 dmd -i -Icore -Igui -Iwidgets \
     -L-lQt6Core -L-lQt6Gui -L-lQt6Widgets -L-lstdc++ \
     -g -run examples/helloworld/main.d
-dmd -i -Icore -Igui -Iwidgets -Iexamples -Idxml/source -Jexamples/examplewidgets \
-    -L-lQt6Core -L-lQt6Gui -L-lQt6Widgets -L-lstdc++ \
-    -g -run examples/examplewidgets/main.d
 ```
 
 ### Windows
@@ -93,6 +100,8 @@ dub run --compiler=dmd --arch=x86_64 :helloworld --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplewidgets --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :examplebrowser --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :exampleqml --build-mode=allAtOnce
+dub run --compiler=dmd --arch=x86_64 :mediaplayer --build-mode=allAtOnce
+dub run --compiler=dmd --arch=x86_64 :pdfreader --build-mode=allAtOnce
 ```
 
 Alternatively dmd can be used directly:
@@ -102,11 +111,13 @@ dmd -i -m64 -Icore -Igui -Iwidgets ^
     -L/LIBPATH:C:\Qt\6.4.2\msvc2019_64\lib ^
     Qt6Core.lib Qt6Gui.lib Qt6Widgets.lib ^
     -g -run examples\helloworld\main.d
-dmd -i -m64 -Icore -Igui -Iwidgets -Iexamples -Idxml/source -Jexamples/examplewidgets ^
-    -L/LIBPATH:C:\Qt\6.4.2\msvc2019_64\lib ^
-    Qt6Core.lib Qt6Gui.lib Qt6Widgets.lib ^
-    -g -run examples\examplewidgets\main.d
 ```
+
+### Other platforms
+
+The library can also be built for OSX and Android, but is less tested
+for these platforms. Other platforms supported by Qt and a D compiler
+could also work.
 
 ## QObject
 
@@ -180,6 +191,11 @@ the .ui file. The member function setupUi initializes all members.
 As an alternative to UIStruct the function generateUICode can be used to
 generate D code for the layout, which can be used in a mixin.
 It is used by UIStruct internally.
+
+## Binding generator
+
+The bindings have been generated with [cppconv](https://github.com/tim-dlang/cppconv)
+with manual changes.
 
 ## Alternatives
 
