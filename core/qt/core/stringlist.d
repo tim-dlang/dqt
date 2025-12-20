@@ -207,8 +207,8 @@ public:
     }
 /+ #endif +/ // QT_CONFIG(regularexpression)
 
-    /+ using QList<QString>::indexOf; +/
-    /+ using QList<QString>::lastIndexOf; +/
+    //alias indexOf = QList!(QString).indexOf;
+    //alias lastIndexOf = QList!(QString).lastIndexOf;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

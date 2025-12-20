@@ -556,27 +556,27 @@ public:
 
 private:
     // force compile error, prevent QVariant(bool) to be called
-    pragma(inline, true) @disable this(void* ) /+ = delete +/;
+    pragma(inline, true) @disable this(void* );
     // QVariant::Type is marked as \obsolete, but we don't want to
     // provide a constructor from its intended replacement,
     // QMetaType::Type, instead, because the idea behind these
     // constructors is flawed in the first place. But we also don't
     // want QVariant(QMetaType::String) to compile and falsely be an
     // int variant, so delete this constructor:
-    @disable this(QMetaType.Type) /+ = delete +/;
+    @disable this(QMetaType.Type);
 
     // These constructors don't create QVariants of the type associcated
     // with the enum, as expected, but they would create a QVariant of
     // type int with the value of the enum value.
     // Use QVariant v = QColor(Qt::red) instead of QVariant v = Qt::red for
     // example.
-    @disable this(/+ Qt:: +/qt.core.namespace.GlobalColor) /+ = delete +/;
-    @disable this(/+ Qt:: +/qt.core.namespace.BrushStyle) /+ = delete +/;
-    @disable this(/+ Qt:: +/qt.core.namespace.PenStyle) /+ = delete +/;
-    @disable this(/+ Qt:: +/qt.core.namespace.CursorShape) /+ = delete +/;
+    @disable this(/+ Qt:: +/qt.core.namespace.GlobalColor);
+    @disable this(/+ Qt:: +/qt.core.namespace.BrushStyle);
+    @disable this(/+ Qt:: +/qt.core.namespace.PenStyle);
+    @disable this(/+ Qt:: +/qt.core.namespace.CursorShape);
 /+ #ifdef QT_NO_CAST_FROM_ASCII +/
     // force compile error when implicit conversion is not wanted
-    pragma(inline, true) @disable this(const(char)* ) /+ = delete +/;
+    pragma(inline, true) @disable this(const(char)* );
 /+ #endif +/
 public:
     alias DataPtr = Private;

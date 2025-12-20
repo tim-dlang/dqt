@@ -86,7 +86,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QEventLoopLocker) +/
 @disable this(this);
-/+this(ref const(QEventLoopLocker));+//+ref QEventLoopLocker operator =(ref const(QEventLoopLocker));+/    QEventLoopLockerPrivate* d_ptr;
+/+@disable this(ref const(QEventLoopLocker));+//+@disable ref QEventLoopLocker operator =(ref const(QEventLoopLocker));+/    QEventLoopLockerPrivate* d_ptr;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

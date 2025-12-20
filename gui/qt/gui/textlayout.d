@@ -203,7 +203,7 @@ private:
     }
     /+ Q_DISABLE_COPY(QTextLayout) +/
 @disable this(this);
-/+this(ref const(QTextLayout));+//+ref QTextLayout operator =(ref const(QTextLayout));+/
+/+@disable this(ref const(QTextLayout));+//+@disable ref QTextLayout operator =(ref const(QTextLayout));+/
     /+ friend class QPainter; +/
     /+ friend class QGraphicsSimpleTextItemPrivate; +/
     /+ friend class QGraphicsSimpleTextItem; +/

@@ -334,7 +334,7 @@ public:
 
     final void clear();
 
-    /+ using QObject::parent; +/
+    //alias parent = QObject.parent;
 
     override void sort(int column, /+ Qt:: +/qt.core.namespace.SortOrder order = /+ Qt:: +/qt.core.namespace.SortOrder.AscendingOrder);
 

@@ -55,7 +55,7 @@ alias IteratorFlags = QFlags!(IteratorFlag);
 private:
     /+ Q_DISABLE_COPY(QDirIterator) +/
 @disable this(this);
-/+this(ref const(QDirIterator));+//+ref QDirIterator operator =(ref const(QDirIterator));+/
+/+@disable this(ref const(QDirIterator));+//+@disable ref QDirIterator operator =(ref const(QDirIterator));+/
     QScopedPointer!(QDirIteratorPrivate) d;
     /+ friend class QDir; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);

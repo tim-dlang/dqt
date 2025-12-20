@@ -76,7 +76,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QCryptographicHash) +/
 @disable this(this);
-/+this(ref const(QCryptographicHash));+//+ref QCryptographicHash operator =(ref const(QCryptographicHash));+/    QCryptographicHashPrivate* d;
+/+@disable this(ref const(QCryptographicHash));+//+@disable ref QCryptographicHash operator =(ref const(QCryptographicHash));+/    QCryptographicHashPrivate* d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

@@ -48,8 +48,11 @@ public:
     /+ explicit +/this(QWidget parent = null);
     ~this();
 
-    /+ using QWidget::addAction; +/
+    version (QT_NO_ACTION) {} else
+    {
     alias addAction = QWidget.addAction;
+    }
+
     final QAction addAction(ref const(QString) text);
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     final QAction addAction(ref const(QString) text, const(QObject) receiver, const(char)* member);

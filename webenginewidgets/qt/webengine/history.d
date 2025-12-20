@@ -87,7 +87,7 @@ private:
 
     /+ Q_DISABLE_COPY(QWebEngineHistory) +/
 @disable this(this);
-/+this(ref const(QWebEngineHistory));+//+ref QWebEngineHistory operator =(ref const(QWebEngineHistory));+/    /+ Q_DECLARE_PRIVATE(QWebEngineHistory) +/
+/+@disable this(ref const(QWebEngineHistory));+//+@disable ref QWebEngineHistory operator =(ref const(QWebEngineHistory));+/    /+ Q_DECLARE_PRIVATE(QWebEngineHistory) +/
     QScopedPointer!(QWebEngineHistoryPrivate) d_ptr;
 
     /+ friend QWEBENGINEWIDGETS_EXPORT QDataStream& operator>>(QDataStream&, QWebEngineHistory&); +/

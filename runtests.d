@@ -382,7 +382,11 @@ int main(string[] args)
         }
 
         string resultDir = buildPath(resultsDir, dirName(test.name));
-        string executable = buildPath(resultDir, baseName(test.name, ".d") ~ exeExt);
+        string executable;
+        /*if (model.canFind("android"))
+            executable = buildPath(resultDir, "lib" ~ baseName(test.name, ".d") ~ archSuffix ~ ".so");
+        else*/
+        executable = buildPath(resultDir, baseName(test.name, ".d") ~ exeExt);
 
         string[] dmdArgs = [compiler];
         string[string] env;
@@ -421,6 +425,7 @@ int main(string[] args)
             else
                 dmdArgs ~= "-L-lQt5" ~ getCapitalizedModuleName(m) ~ archSuffix;
         }
+        //dmdArgs ~= "-shared";
         dmdArgs ~= "-od" ~ resultDir;
         dmdArgs ~= "-of" ~ executable;
         dmdArgs ~= test.extraArgs;

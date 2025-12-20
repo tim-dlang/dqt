@@ -188,7 +188,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QPictureIO) +/
 @disable this(this);
-/+this(ref const(QPictureIO));+//+ref QPictureIO operator =(ref const(QPictureIO));+/
+/+@disable this(ref const(QPictureIO));+//+@disable ref QPictureIO operator =(ref const(QPictureIO));+/
     //void init_();
 
     QPictureIOData* d;

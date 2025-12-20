@@ -174,7 +174,7 @@ protected:
 private:
     /+ Q_DISABLE_COPY(QScopedPointer) +/
 @disable this(this);
-/+this(ref const(QScopedPointer));+//+ref QScopedPointer operator =(ref const(QScopedPointer));+/}
+/+@disable this(ref const(QScopedPointer));+//+@disable ref QScopedPointer operator =(ref const(QScopedPointer));+/}
 
 /+pragma(inline, true) bool operator ==(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, ref const(QScopedPointer!(T, Cleanup)) rhs)/+ noexcept+/
 {
@@ -258,7 +258,7 @@ private:
 
     /+ Q_DISABLE_COPY(QScopedArrayPointer) +/
 @disable this(this);
-/+this(ref const(QScopedArrayPointer));+//+ref QScopedArrayPointer operator =(ref const(QScopedArrayPointer));+/}
+/+@disable this(ref const(QScopedArrayPointer));+//+@disable ref QScopedArrayPointer operator =(ref const(QScopedArrayPointer));+/}
 
 /+ template <typename T, typename Cleanup>
 inline void swap(QScopedArrayPointer<T, Cleanup> &lhs, QScopedArrayPointer<T, Cleanup> &rhs) noexcept

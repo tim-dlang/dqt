@@ -164,7 +164,10 @@ public:
     final QMargins textMargins() const;
 
 /+ #if QT_CONFIG(action) +/
-    /+ using QWidget::addAction; +/
+    version (QT_NO_ACTION) {} else
+    {
+    }
+/+ using QWidget::addAction; +/
     final void addAction(QAction action, ActionPosition position);
     final QAction addAction(ref const(QIcon) icon, ActionPosition position);
 /+ #endif +/

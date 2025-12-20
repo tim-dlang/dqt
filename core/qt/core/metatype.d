@@ -282,7 +282,7 @@ struct AbstractComparatorFunction
     }
     /+ Q_DISABLE_COPY(AbstractComparatorFunction) +/
 @disable this(this);
-/+this(ref const(AbstractComparatorFunction));+//+ref AbstractComparatorFunction operator =(ref const(AbstractComparatorFunction));+/    LessThan lessThan;
+/+@disable this(ref const(AbstractComparatorFunction));+//+@disable ref AbstractComparatorFunction operator =(ref const(AbstractComparatorFunction));+/    LessThan lessThan;
     Equals equals;
     Destroy destroy;
 }
@@ -352,7 +352,7 @@ struct AbstractConverterFunction
     }
     /+ Q_DISABLE_COPY(AbstractConverterFunction) +/
 @disable this(this);
-/+this(ref const(AbstractConverterFunction));+//+ref AbstractConverterFunction operator =(ref const(AbstractConverterFunction));+/    Converter convert;
+/+@disable this(ref const(AbstractConverterFunction));+//+@disable ref AbstractConverterFunction operator =(ref const(AbstractConverterFunction));+/    Converter convert;
 }
 
 /+ template<typename From, typename To>
@@ -973,7 +973,7 @@ struct VariantData
     const(uint) flags;
 private:
     // copy constructor allowed to be implicit to silence level 4 warning from MSVC
-    /+ref VariantData operator =(ref const(VariantData) ) /+ = delete +/;+/
+    /+@disable ref VariantData operator =(ref const(VariantData) );+/
 }
 
 struct IteratorOwnerCommon(const_iterator)

@@ -109,7 +109,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QWebEngineSettings) +/
 @disable this(this);
-/+this(ref const(QWebEngineSettings));+//+ref QWebEngineSettings operator =(ref const(QWebEngineSettings));+/    alias QWebEngineSettingsPrivate = /+ ::QtWebEngineCore:: +/WebEngineSettings;
+/+@disable this(ref const(QWebEngineSettings));+//+@disable ref QWebEngineSettings operator =(ref const(QWebEngineSettings));+/    alias QWebEngineSettingsPrivate = /+ ::QtWebEngineCore:: +/WebEngineSettings;
     /+ QWebEngineSettingsPrivate* d_func() { return d_ptr.data(); } +/
     /+ const QWebEngineSettingsPrivate* d_func() const { return d_ptr.data(); } +/
     QScopedPointer!(QWebEngineSettingsPrivate) d_ptr;

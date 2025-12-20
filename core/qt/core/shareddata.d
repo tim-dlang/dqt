@@ -42,7 +42,7 @@ public:
     }*/
 
     // using the assignment operator would lead to corruption in the ref-counting
-    /+ref QSharedData operator =(ref const(QSharedData) ) /+ = delete +/;+/
+    /+@disable ref QSharedData operator =(ref const(QSharedData) );+/
     /+ ~QSharedData() = default; +/
 }
 

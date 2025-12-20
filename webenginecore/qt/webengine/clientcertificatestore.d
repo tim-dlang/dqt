@@ -39,7 +39,7 @@ private:
     /+ friend class QtWebEngineCore::ProfileAdapter; +/
     /+ Q_DISABLE_COPY(QWebEngineClientCertificateStore) +/
 @disable this(this);
-/+this(ref const(QWebEngineClientCertificateStore));+//+ref QWebEngineClientCertificateStore operator =(ref const(QWebEngineClientCertificateStore));+/
+/+@disable this(ref const(QWebEngineClientCertificateStore));+//+@disable ref QWebEngineClientCertificateStore operator =(ref const(QWebEngineClientCertificateStore));+/
     this(/+ QtWebEngineCore:: +/ClientCertificateStoreData* storeData);
     ~this();
     /+ QtWebEngineCore:: +/ClientCertificateStoreData* m_storeData;
