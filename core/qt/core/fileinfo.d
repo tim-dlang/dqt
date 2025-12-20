@@ -52,7 +52,7 @@ public:
     this(ref const(QFileInfo) fileinfo);
     ~this();
 
-    /+ref QFileInfo operator =(ref const(QFileInfo) fileinfo);+/
+    ref QFileInfo opAssign(ref const(QFileInfo) fileinfo);
     /+ QFileInfo &operator=(QFileInfo &&other) noexcept { swap(other); return *this; } +/
 
     /+ void swap(QFileInfo &other) noexcept

@@ -72,7 +72,7 @@ public:
         : d(other.d) { other.d = const_cast<QRegionData*>(&shared_empty); } +/
     this(ref const(QBitmap) bitmap);
     ~this();
-    /+ref QRegion operator =(ref const(QRegion) );+/
+    ref QRegion opAssign(ref const(QRegion) );
     /+ inline QRegion &operator=(QRegion &&other) noexcept
     { qSwap(d, other.d); return *this; } +/
     /+ inline void swap(QRegion &other) noexcept { qSwap(d, other.d); } +/

@@ -253,7 +253,7 @@ extern(C++, "QtPrivate") {
     this(ref const(QPersistentModelIndex) modelIndex);
 /+ #endif +/
 
-    /+ref QVariant operator =(ref const(QVariant) other);+/
+    /+ref QVariant opAssign(ref const(QVariant) other);+/
     /+ inline QVariant(QVariant &&other) noexcept : d(other.d)
     { other.d = Private(); } +/
     /+ inline QVariant &operator=(QVariant &&other) noexcept
@@ -678,7 +678,7 @@ public:
         @disable this(this);
         this(ref const(const_iterator) other);
 
-        /+ref const_iterator operator =(ref const(const_iterator) other);+/
+        ref const_iterator opAssign(ref const(const_iterator) other);
 
         const(QVariant) opUnary(string op)() const if (op == "*");
         /+bool operator ==(ref const(const_iterator) o) const;+/
@@ -737,7 +737,7 @@ public:
         @disable this(this);
         this(ref const(const_iterator) other);
 
-        /+ref const_iterator operator =(ref const(const_iterator) other);+/
+        ref const_iterator opAssign(ref const(const_iterator) other);
 
         const(QVariant) key() const;
 

@@ -43,7 +43,7 @@ public:
     /+ explicit +/this(ref const(QTextCursor) range);
     @disable this(this);
     this(ref const(QTextDocumentFragment) rhs);
-    /+ref QTextDocumentFragment operator =(ref const(QTextDocumentFragment) rhs);+/
+    ref QTextDocumentFragment opAssign(ref const(QTextDocumentFragment) rhs);
     ~this();
 
     bool isEmpty() const;

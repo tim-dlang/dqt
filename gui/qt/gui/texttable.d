@@ -37,7 +37,7 @@ public:
         this.table = o.table;
         this.fragment = o.fragment;
     }
-    /+ref QTextTableCell operator =(ref const(QTextTableCell) o)
+    /+ref QTextTableCell opAssign(ref const(QTextTableCell) o)
     { table = o.table; fragment = o.fragment; return this; }+/
 
     void setFormat(ref const(QTextCharFormat) format);

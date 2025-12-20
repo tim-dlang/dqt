@@ -47,10 +47,10 @@ import qt.helpers;
         this.second = p.second;
     } +/
     /+ template <typename TT1, typename TT2> +/
-    /+ref QPair operator =(TT1,TT2)(ref const(QPair!(TT1, TT2)) p)
+    ref QPair opAssign(TT1,TT2)(ref const(QPair!(TT1, TT2)) p)
             /+ noexcept((std::is_nothrow_assignable<T1, TT1&>::value &&
                                   std::is_nothrow_assignable<T2, TT2&>::value)) +/
-    { first = p.first; second = p.second; return this; }+/
+    { first = p.first; second = p.second; return this; }
     /+ template <typename TT1, typename TT2> +/
     /+ QPair(QPair<TT1, TT2> &&p)
         noexcept((std::is_nothrow_constructible<T1, TT1>::value &&

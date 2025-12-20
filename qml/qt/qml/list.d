@@ -207,7 +207,7 @@ public:
     this(QObject , const(char)* property, QQmlEngine  /+ = nullptr +/);
     @disable this(this);
     this(ref const(QQmlListReference) );
-    /+ref QQmlListReference operator =(ref const(QQmlListReference) );+/
+    ref QQmlListReference opAssign(ref const(QQmlListReference) );
     ~this();
 
     bool isValid() const;

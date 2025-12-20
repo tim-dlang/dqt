@@ -80,10 +80,10 @@ alias SortFlags = QFlags!(SortFlag);
              SortFlags sort = SortFlags(SortFlag.Name | SortFlag.IgnoreCase), Filters filter = Filter.AllEntries);
     ~this();
 
-    /+ref QDir operator =(ref const(QDir) );+/
+    ref QDir opAssign(ref const(QDir) );
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
-    /+/+ QT_DEPRECATED_X("Use QDir::setPath() instead") +/
-        ref QDir operator =(ref const(QString) path);+/
+    /+ QT_DEPRECATED_X("Use QDir::setPath() instead") +/
+        ref QDir opAssign(ref const(QString) path);
 /+ #endif +/
     /+ QDir &operator=(QDir &&other) noexcept { swap(other); return *this; } +/
 

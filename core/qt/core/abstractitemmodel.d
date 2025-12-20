@@ -126,7 +126,7 @@ public:
     /+bool operator ==(ref const(QPersistentModelIndex) other) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QPersistentModelIndex) other) const
     { return !operator==(other); }+/
-    /+ref QPersistentModelIndex operator =(ref const(QPersistentModelIndex) other);+/
+    ref QPersistentModelIndex opAssign(ref const(QPersistentModelIndex) other);
     /+ inline QPersistentModelIndex(QPersistentModelIndex &&other) noexcept
         : d(other.d) { other.d = nullptr; } +/
     /+ inline QPersistentModelIndex &operator=(QPersistentModelIndex &&other) noexcept
@@ -134,7 +134,7 @@ public:
     /+ inline void swap(QPersistentModelIndex &other) noexcept { qSwap(d, other.d); } +/
     /+bool operator ==(ref const(QModelIndex) other) const;+/
     /+bool operator !=(ref const(QModelIndex) other) const;+/
-    /+ref QPersistentModelIndex operator =(ref const(QModelIndex) other);+/
+    ref QPersistentModelIndex opAssign(ref const(QModelIndex) other);
     /+auto opCast(T : const(QModelIndex))() const;+/
     int row() const;
     int column() const;

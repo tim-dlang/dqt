@@ -87,7 +87,7 @@ private:
     /+ friend class QtWebEngineCore::InterceptedRequest; +/
     /+ Q_DISABLE_COPY(QWebEngineUrlRequestInfo) +/
 @disable this(this);
-/+@disable this(ref const(QWebEngineUrlRequestInfo));+//+@disable ref QWebEngineUrlRequestInfo operator =(ref const(QWebEngineUrlRequestInfo));+/    /+ Q_DECLARE_PRIVATE(QWebEngineUrlRequestInfo) +/
+/+@disable this(ref const(QWebEngineUrlRequestInfo));+/@disable ref QWebEngineUrlRequestInfo opAssign(ref const(QWebEngineUrlRequestInfo));    /+ Q_DECLARE_PRIVATE(QWebEngineUrlRequestInfo) +/
 
     void resetChanged();
 

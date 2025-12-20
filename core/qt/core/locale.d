@@ -985,7 +985,7 @@ alias DataSizeFormats = QFlags!(DataSizeFormat);    /+ Q_FLAG(DataSizeFormats) +
     @disable this(this);
     this(ref const(QLocale) other);
     /+ QLocale &operator=(QLocale &&other) noexcept { swap(other); return *this; } +/
-    /+ref QLocale operator =(ref const(QLocale) other);+/
+    ref QLocale opAssign(ref const(QLocale) other);
     ~this();
 
     /+ void swap(QLocale &other) noexcept { qSwap(d, other.d); } +/

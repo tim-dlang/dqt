@@ -178,7 +178,7 @@ public:
         if (!d.ref_.deref())
             dealloc(d);
     }
-    /+pragma(inline, true) ref QList!(T) operator =(ref const(QList!(T)) l)
+    /+pragma(inline, true) ref QList!(T) opAssign(ref const(QList!(T)) l)
     {
         if (d != l.d) {
             auto tmp = QList!(T)(l);
@@ -508,7 +508,7 @@ public:
         {
             this.i = cast(Node*)o.i;
         }
-        /+pragma(inline, true) ref iterator operator =(ref const(iterator) o)/+ noexcept+/
+        /+pragma(inline, true) ref iterator opAssign(ref const(iterator) o)/+ noexcept+/
         { i = o.i; return this; }+/
 /+ #endif +/
         pragma(inline, true) ref T opUnary(string op)() const if (op == "*") { return (cast(Node*) i).t(); }
@@ -575,7 +575,7 @@ public:
         {
             this.i = cast(Node*)o.i;
         }
-        /+pragma(inline, true) ref const_iterator operator =(ref const(const_iterator) o)/+ noexcept+/
+        /+pragma(inline, true) ref const_iterator opAssign(ref const(const_iterator) o)/+ noexcept+/
         { i = o.i; return this; }+/
 /+ #endif
 #ifdef QT_STRICT_ITERATORS

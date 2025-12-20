@@ -44,7 +44,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QWebEngineScriptCollection) +/
 @disable this(this);
-/+@disable this(ref const(QWebEngineScriptCollection));+//+@disable ref QWebEngineScriptCollection operator =(ref const(QWebEngineScriptCollection));+/    /+ friend class QWebEnginePagePrivate; +/
+/+@disable this(ref const(QWebEngineScriptCollection));+/@disable ref QWebEngineScriptCollection opAssign(ref const(QWebEngineScriptCollection));    /+ friend class QWebEnginePagePrivate; +/
     /+ friend class QWebEngineProfilePrivate; +/
     this(QWebEngineScriptCollectionPrivate* );
 

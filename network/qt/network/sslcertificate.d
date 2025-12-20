@@ -71,7 +71,7 @@ public:
     this(ref const(QSslCertificate) other);
     ~this();
     /+ QSslCertificate &operator=(QSslCertificate &&other) noexcept { swap(other); return *this; } +/
-    /+ref QSslCertificate operator =(ref const(QSslCertificate) other);+/
+    ref QSslCertificate opAssign(ref const(QSslCertificate) other);
 
     /+ void swap(QSslCertificate &other) noexcept
     { qSwap(d, other.d); } +/

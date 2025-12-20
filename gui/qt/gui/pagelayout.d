@@ -66,7 +66,7 @@ public:
     @disable this(this);
     this(ref const(QPageLayout) other);
     /+ QPageLayout &operator=(QPageLayout &&other) noexcept { swap(other); return *this; } +/
-    /+ref QPageLayout operator =(ref const(QPageLayout) other);+/
+    ref QPageLayout opAssign(ref const(QPageLayout) other);
     ~this();
 
     /+ void swap(QPageLayout &other) noexcept { qSwap(d, other.d); } +/

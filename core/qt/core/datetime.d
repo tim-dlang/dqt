@@ -335,7 +335,7 @@ public:
     ~this();
 
     /+ QDateTime &operator=(QDateTime &&other) noexcept { swap(other); return *this; } +/
-    /+ref QDateTime operator =(ref const(QDateTime) other)/+ noexcept+/;+/
+    ref QDateTime opAssign(ref const(QDateTime) other)/+ noexcept+/;
 
     /+ void swap(QDateTime &other) noexcept { qSwap(d.d, other.d.d); } +/
 

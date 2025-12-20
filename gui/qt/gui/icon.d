@@ -48,7 +48,11 @@ public:
     /+ explicit +/this(ref const(QString) fileName); // file or resource name
     /+ explicit +/this(QIconEngine* engine);
     ~this();
-    /+ref QIcon operator =(ref const(QIcon) other);+/
+    ref QIcon opAssign(ref const(QIcon) other);
+    ref QIcon opAssign(QIcon other)
+    {
+        return opAssign(*cast(const(QIcon*))&other);
+    }
     /+ inline QIcon &operator=(QIcon &&other) noexcept
     { swap(other); return *this; } +/
     /+ inline void swap(QIcon &other) noexcept

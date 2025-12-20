@@ -81,7 +81,7 @@ public:
     T loadAcquire() const/+ noexcept+/{ return atomicLoad!(MemoryOrder.acq)(_q_value);  }
     void storeRelease(T newValue)/+ noexcept+/ { atomicStore!(MemoryOrder.rel)(_q_value, newValue); }
     /+auto opCast(T : T)() const/+ noexcept+/ { return loadAcquire(); }+/
-    /+T operator =(T newValue)/+ noexcept+/ { storeRelease(newValue); return newValue; }+/
+    T opAssign(T newValue)/+ noexcept+/ { storeRelease(newValue); return newValue; }
 
 //    static bool isReferenceCountingNative()/+ noexcept+/ { return Ops.isReferenceCountingNative(); }
 //    static bool isReferenceCountingWaitFree()/+ noexcept+/ { return Ops.isReferenceCountingWaitFree(); }

@@ -249,7 +249,11 @@ public:
     // dupicated from QFontInfo
     bool exactMatch() const;
 
-    /+ref QFont operator =(ref const(QFont) );+/
+    ref QFont opAssign(ref const(QFont) );
+    ref QFont opAssign(QFont other)
+    {
+        return opAssign(*cast(const(QFont*))&other);
+    }
     /+bool operator ==(ref const(QFont) ) const;+/
     /+bool operator !=(ref const(QFont) ) const;+/
     /+bool operator <(ref const(QFont) ) const;+/

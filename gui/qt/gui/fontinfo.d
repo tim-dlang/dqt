@@ -29,7 +29,7 @@ public:
     this(ref const(QFontInfo) );
     ~this();
 
-    /+ref QFontInfo operator =(ref const(QFontInfo) );+/
+    ref QFontInfo opAssign(ref const(QFontInfo) );
 
     /+ void swap(QFontInfo &other) { qSwap(d, other.d); } +/
 

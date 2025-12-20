@@ -46,7 +46,7 @@ public:
     this(ref const(QStringMatcher) other);
     ~this();
 
-    /+ref QStringMatcher operator =(ref const(QStringMatcher) other);+/
+    ref QStringMatcher opAssign(ref const(QStringMatcher) other);
 
     void setPattern(ref const(QString) pattern);
     void setCaseSensitivity(/+ Qt:: +/qt.core.namespace.CaseSensitivity cs);

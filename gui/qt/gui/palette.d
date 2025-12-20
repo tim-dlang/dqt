@@ -50,7 +50,7 @@ public:
     @disable this(this);
     this(ref const(QPalette) palette);
     ~this();
-    /+ref QPalette operator =(ref const(QPalette) palette);+/
+    ref QPalette opAssign(ref const(QPalette) palette);
     /+ QPalette(QPalette &&other) noexcept
         : d(other.d), data(other.data)
     { other.d = nullptr; } +/

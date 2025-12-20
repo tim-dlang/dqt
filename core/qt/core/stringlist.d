@@ -120,7 +120,7 @@ public:
         this.QList!(QString) = typeof(this.QList!(QString))(first, last);
     }
 
-    /+ref QStringList operator =(ref const(QList!(QString)) other)
+    /+ref QStringList opAssign(ref const(QList!(QString)) other)
     { QList!(QString).operator=(other); return this; }+/
     /+ QStringList &operator=(QList<QString> &&other) noexcept
     { QList<QString>::operator=(std::move(other)); return *this; } +/

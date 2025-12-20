@@ -53,11 +53,11 @@ public:
         base0.storeRelease(other.base0.loadAcquire());
     }
 
-    /+pragma(inline, true) ref QAtomicInteger operator =(ref const(QAtomicInteger) other)/+ noexcept+/
+    pragma(inline, true) ref QAtomicInteger opAssign(ref const(QAtomicInteger) other)/+ noexcept+/
     {
         this.storeRelease(other.loadAcquire());
         return this;
-    }+/
+    }
 
 /+ #ifdef Q_CLANG_QDOC
     T load() const;
@@ -176,11 +176,11 @@ public:
         this.storeRelease(other.loadAcquire());
     }
 
-    /+pragma(inline, true) ref QAtomicPointer!(T) operator =(ref const(QAtomicPointer!(T)) other)/+ noexcept+/
+    pragma(inline, true) ref QAtomicPointer!(T) opAssign(ref const(QAtomicPointer!(T)) other)/+ noexcept+/
     {
         this.storeRelease(other.loadAcquire());
         return this;
-    }+/
+    }
 
 /+ #ifdef Q_QDOC
     T *load() const;

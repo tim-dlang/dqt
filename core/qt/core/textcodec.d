@@ -92,7 +92,7 @@ alias ConversionFlags = QFlags!(ConversionFlag);
     private:
         /+ Q_DISABLE_COPY(ConverterState) +/
 @disable this(this);
-/+@disable this(ref const(ConverterState));+//+@disable ref ConverterState operator =(ref const(ConverterState));+/    }
+/+@disable this(ref const(ConverterState));+/@disable ref ConverterState opAssign(ref const(ConverterState));    }
 
     final QString toUnicode(const(char)* in_, int length, ConverterState* state = null) const
         { return convertToUnicode(in_, length, state); }
@@ -128,7 +128,7 @@ extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTextEncoder {
 private:
     /+ Q_DISABLE_COPY(QTextEncoder) +/
 @disable this(this);
-/+@disable this(ref const(QTextEncoder));+//+@disable ref QTextEncoder operator =(ref const(QTextEncoder));+/public:
+/+@disable this(ref const(QTextEncoder));+/@disable ref QTextEncoder opAssign(ref const(QTextEncoder));public:
     /+ explicit +/this(const(QTextCodec) codec)
     {
         this.c = codec;
@@ -156,7 +156,7 @@ extern(C++, class) struct /+ Q_CORE_EXPORT +/ QTextDecoder {
 private:
     /+ Q_DISABLE_COPY(QTextDecoder) +/
 @disable this(this);
-/+@disable this(ref const(QTextDecoder));+//+@disable ref QTextDecoder operator =(ref const(QTextDecoder));+/public:
+/+@disable this(ref const(QTextDecoder));+/@disable ref QTextDecoder opAssign(ref const(QTextDecoder));public:
     /+ explicit +/this(const(QTextCodec) codec)
     {
         this.c = codec;

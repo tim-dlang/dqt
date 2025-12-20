@@ -52,7 +52,7 @@ public:
 
     ~this();
 
-    /+ref QPen operator =(ref const(QPen) pen)/+ noexcept+/;+/
+    ref QPen opAssign(ref const(QPen) pen)/+ noexcept+/;
     /+ QPen(QPen &&other) noexcept
         : d(other.d) { other.d = nullptr; } +/
     /+ QPen &operator=(QPen &&other) noexcept

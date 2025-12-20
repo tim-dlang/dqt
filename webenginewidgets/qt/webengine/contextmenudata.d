@@ -43,7 +43,7 @@ public:
 
     @disable this(this);
     this(ref const(QWebEngineContextMenuData) other);
-    /+ref QWebEngineContextMenuData operator =(ref const(QWebEngineContextMenuData) other);+/
+    ref QWebEngineContextMenuData opAssign(ref const(QWebEngineContextMenuData) other);
     ~this();
 
     enum MediaType {
@@ -104,7 +104,7 @@ alias EditFlags = QFlags!(EditFlag);    /+ Q_FLAG(EditFlags) +/
 private:
     void reset();
     alias QWebEngineContextDataPrivate = /+ QtWebEngineCore:: +/WebEngineContextMenuData;
-    /+ref QWebEngineContextMenuData operator =(ref const(QWebEngineContextDataPrivate) priv);+/
+    ref QWebEngineContextMenuData opAssign(ref const(QWebEngineContextDataPrivate) priv);
     const(QWebEngineContextDataPrivate)* d;
 
     /+ friend class QWebEnginePagePrivate; +/

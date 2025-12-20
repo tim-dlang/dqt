@@ -53,7 +53,7 @@ public:
     this(ref const(QSslKey) other);
     /+ QSslKey(QSslKey &&other) noexcept; +/
     /+ QSslKey &operator=(QSslKey &&other) noexcept; +/
-    /+ref QSslKey operator =(ref const(QSslKey) other);+/
+    ref QSslKey opAssign(ref const(QSslKey) other);
     ~this();
 
     /+ void swap(QSslKey &other) noexcept { qSwap(d, other.d); } +/

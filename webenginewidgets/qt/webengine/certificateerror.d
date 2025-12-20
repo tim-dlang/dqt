@@ -57,7 +57,7 @@ public:
 
     @disable this(this);
     this(ref const(QWebEngineCertificateError) other);
-    /+ref QWebEngineCertificateError operator =(ref const(QWebEngineCertificateError) other);+/
+    ref QWebEngineCertificateError opAssign(ref const(QWebEngineCertificateError) other);
 
     void defer();
     bool deferred() const;

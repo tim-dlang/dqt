@@ -158,7 +158,7 @@ public:
     ~this();
     }));
 
-    /+ref QImage operator =(ref const(QImage) );+/
+    ref QImage opAssign(ref const(QImage) );
     /+ inline QImage &operator=(QImage &&other) noexcept
     { qSwap(d, other.d); return *this; } +/
     /+ inline void swap(QImage &other) noexcept

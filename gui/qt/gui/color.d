@@ -87,10 +87,14 @@ public:
     /+ QColor(QColor &&other) noexcept : cspec(other.cspec), ct(other.ct) {} +/
     /+ QColor &operator=(QColor &&other) noexcept
     { cspec = other.cspec; ct = other.ct; return *this; } +/
-    /+ref QColor operator =(ref const(QColor) )/+ noexcept+/;+/
+    ref QColor opAssign(ref const(QColor) )/+ noexcept+/;
+    ref QColor opAssign(QColor other)
+    {
+        return opAssign(*cast(const(QColor*))&other);
+    }
 /+ #endif +/ // Qt < 6
 
-    /+ref QColor operator =(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;+/
+    ref QColor opAssign(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;
 
     pragma(inline, true) bool isValid() const/+ noexcept+/
     { return cspec != Spec.Invalid; }

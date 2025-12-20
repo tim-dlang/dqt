@@ -221,7 +221,7 @@ public:
     @disable this(this);
     this(ref const(QPageSize) other);
     /+ QPageSize &operator=(QPageSize &&other) noexcept { swap(other); return *this; } +/
-    /+ref QPageSize operator =(ref const(QPageSize) other);+/
+    ref QPageSize opAssign(ref const(QPageSize) other);
     ~this();
 
 

@@ -1049,7 +1049,7 @@ alias InfoFlags = QFlags!(InfoFlag);/+ #endif +/
         { qSwap(d, other.d); return *this; } +/
         ~this();
 
-        /+ref TouchPoint operator =(ref const(TouchPoint) other)
+        /+ref TouchPoint opAssign(ref const(TouchPoint) other)
         { if ( d != other.d ) { auto copy = TouchPoint(other); swap(copy); } return this; }+/
 
         /+ void swap(TouchPoint &other) noexcept

@@ -73,7 +73,7 @@ public:
     QT_ASCII_CAST_WARN QJSValue(const char *str);
 #endif +/
 
-    /+ref QJSValue operator =(ref const(QJSValue) other);+/
+    ref QJSValue opAssign(ref const(QJSValue) other);
 
     bool isBool() const;
     bool isNumber() const;

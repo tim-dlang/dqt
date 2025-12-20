@@ -38,7 +38,7 @@ public:
 
     @disable this(this);
     this(ref const(QQmlError) );
-    /+ref QQmlError operator =(ref const(QQmlError) );+/
+    ref QQmlError opAssign(ref const(QQmlError) );
     ~this();
 
     bool isValid() const;

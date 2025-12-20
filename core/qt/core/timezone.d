@@ -100,7 +100,7 @@ public:
     this(ref const(QTimeZone) other);
     ~this();
 
-    /+ref QTimeZone operator =(ref const(QTimeZone) other);+/
+    ref QTimeZone opAssign(ref const(QTimeZone) other);
     /+ QTimeZone &operator=(QTimeZone &&other) noexcept { swap(other); return *this; } +/
 
     /+ void swap(QTimeZone &other) noexcept

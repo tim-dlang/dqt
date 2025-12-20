@@ -767,7 +767,7 @@ alias PixmapFragmentHints = QFlags!(PixmapFragmentHint);
 private:
     /+ Q_DISABLE_COPY(QPainter) +/
 @disable this(this);
-/+@disable this(ref const(QPainter));+//+@disable ref QPainter operator =(ref const(QPainter));+/
+/+@disable this(ref const(QPainter));+/@disable ref QPainter opAssign(ref const(QPainter));
     QScopedPointer!(QPainterPrivate) d_ptr;
 
     /+ friend class QWidget; +/

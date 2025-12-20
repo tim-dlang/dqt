@@ -56,7 +56,7 @@ public:
     this(ref const(QFontMetrics) );
     ~this();
 
-    /+ref QFontMetrics operator =(ref const(QFontMetrics) );+/
+    ref QFontMetrics opAssign(ref const(QFontMetrics) );
     /+ inline QFontMetrics &operator=(QFontMetrics &&other) noexcept
     { qSwap(d, other.d); return *this; } +/
 
@@ -155,8 +155,8 @@ public:
     this(ref const(QFontMetricsF) );
     ~this();
 
-    /+ref QFontMetricsF operator =(ref const(QFontMetricsF) );+/
-    /+ref QFontMetricsF operator =(ref const(QFontMetrics) );+/
+    ref QFontMetricsF opAssign(ref const(QFontMetricsF) );
+    ref QFontMetricsF opAssign(ref const(QFontMetrics) );
     /+ inline QFontMetricsF &operator=(QFontMetricsF &&other) noexcept
     { qSwap(d, other.d); return *this; } +/
 

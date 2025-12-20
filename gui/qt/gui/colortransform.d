@@ -37,7 +37,7 @@ public:
     /+ QColorTransform(QColorTransform &&colorTransform) noexcept
             : d{qExchange(colorTransform.d, nullptr)}
     { } +/
-    /+ref QColorTransform operator =(ref const(QColorTransform) other)/+ noexcept+/
+    /+ref QColorTransform opAssign(ref const(QColorTransform) other)/+ noexcept+/
     {
         QColorTransform(other).swap(this);
         return this;

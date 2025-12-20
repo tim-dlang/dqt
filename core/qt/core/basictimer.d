@@ -31,8 +31,8 @@ public:
     // Just here to preserve BC, we can't remove them yet
     @disable this(this);
     /+ QT_DEPRECATED_X("copy-construction is unsupported; use move-construction instead") +/this(ref const(QBasicTimer) );
-    /+/+ QT_DEPRECATED_X("copy-assignment is unsupported; use move-assignment instead") +/
-        ref QBasicTimer operator =(ref const(QBasicTimer) );+/
+    /+ QT_DEPRECATED_X("copy-assignment is unsupported; use move-assignment instead") +/
+        ref QBasicTimer opAssign(ref const(QBasicTimer) );
 /+ #endif +/
 
 public:

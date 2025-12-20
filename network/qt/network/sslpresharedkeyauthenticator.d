@@ -41,7 +41,7 @@ public:
     /+ Q_NETWORK_EXPORT +/~this();
     @disable this(this);
     /+ Q_NETWORK_EXPORT +/this(ref const(QSslPreSharedKeyAuthenticator) authenticator);
-    /+/+ Q_NETWORK_EXPORT +/ ref QSslPreSharedKeyAuthenticator operator =(ref const(QSslPreSharedKeyAuthenticator) authenticator);+/
+    /+ Q_NETWORK_EXPORT +/ ref QSslPreSharedKeyAuthenticator opAssign(ref const(QSslPreSharedKeyAuthenticator) authenticator);
 
     /+ QSslPreSharedKeyAuthenticator &operator=(QSslPreSharedKeyAuthenticator &&other) noexcept { swap(other); return *this; } +/
 

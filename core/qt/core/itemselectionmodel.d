@@ -41,8 +41,8 @@ public:
         : tl(std::move(other.tl)), br(std::move(other.br)) {} +/
     /+ QItemSelectionRange &operator=(QItemSelectionRange &&other) noexcept
     { tl = std::move(other.tl); br = std::move(other.br); return *this; } +/
-    /+ref QItemSelectionRange operator =(ref const(QItemSelectionRange) other)
-    { tl = other.tl; br = other.br; return this; }+/
+    ref QItemSelectionRange opAssign(ref const(QItemSelectionRange) other)
+    { tl = other.tl; br = other.br; return this; }
 /+ #endif +/ // Qt < 6
     this(ref const(QModelIndex) topL, ref const(QModelIndex) bottomR)
     {

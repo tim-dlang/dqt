@@ -64,7 +64,7 @@ public:
 
     @disable this(this);
     this(ref const(QQmlProperty) );
-    /+ref QQmlProperty operator =(ref const(QQmlProperty) );+/
+    ref QQmlProperty opAssign(ref const(QQmlProperty) );
 
     /+bool operator ==(ref const(QQmlProperty) ) const;+/
 

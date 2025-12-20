@@ -40,7 +40,7 @@ public:
     // ### Qt 6: remove; the compiler-generated ones are fine!
     /+ QMatrix &operator=(QMatrix &&other) noexcept // = default
     { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(QMatrix)); return *this; } +/
-    /+ref QMatrix operator =(ref const(QMatrix) )/+ noexcept+/;+/ // = default
+    /+ref QMatrix opAssign(ref const(QMatrix) )/+ noexcept+/;+/ // = default
     /+ QMatrix(QMatrix &&other) noexcept // = default
     { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(QMatrix)); } +/
     @disable this(this);

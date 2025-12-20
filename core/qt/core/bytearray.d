@@ -184,8 +184,8 @@ alias Base64Options = QFlags!(Base64Option);
     }
     pragma(inline, true) ~this() { if (!d.ref_.deref()) Data.deallocate(d); }
 
-    /+ref QByteArray operator =(ref const(QByteArray) )/+ noexcept+/;+/
-    /+ref QByteArray operator =(const(char)* str);+/
+    ref QByteArray opAssign(ref const(QByteArray) )/+ noexcept+/;
+    ref QByteArray opAssign(const(char)* str);
     /+ inline QByteArray(QByteArray && other) noexcept : d(other.d) { other.d = Data::sharedNull(); } +/
     /+ inline QByteArray &operator=(QByteArray &&other) noexcept
     { qSwap(d, other.d); return *this; } +/
@@ -667,7 +667,7 @@ public:
         }
         return cast(char) (0);
     }+/
-    /+pragma(inline, true) ref QByteRef operator =(char c)
+    /+pragma(inline, true) ref QByteRef opAssign(char c)
     {
         using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_UNLIKELY +/(i >= a.d.size)) {
@@ -686,8 +686,8 @@ public:
         }
         a.d.data()[i] = c;
         return this;
-    }+/
-    /+pragma(inline, true) ref QByteRef operator =(ref const(QByteRef) c)
+    }
+    pragma(inline, true) ref QByteRef opAssign(ref const(QByteRef) c)
     {
         return operator=(cast(char) (c));
     }+/

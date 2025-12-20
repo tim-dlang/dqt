@@ -59,7 +59,7 @@ public:
     // ### Qt 6: remove; the compiler-generated ones are fine!
     /+ QTransform &operator=(QTransform &&other) noexcept // = default
     { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(QTransform)); return *this; } +/
-    /+ref QTransform operator =(ref const(QTransform) )/+ noexcept+/;+/ // = default
+    /+ref QTransform opAssign(ref const(QTransform) )/+ noexcept+/;+/ // = default
     /+ QTransform(QTransform &&other) noexcept // = default
         : affine(Qt::Uninitialized)
     { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(QTransform)); } +/

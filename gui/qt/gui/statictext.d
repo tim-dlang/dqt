@@ -49,7 +49,7 @@ public:
     @disable this(this);
     this(ref const(QStaticText) other);
     /+ QStaticText &operator=(QStaticText &&other) noexcept { swap(other); return *this; } +/
-    /+ref QStaticText operator =(ref const(QStaticText) );+/
+    ref QStaticText opAssign(ref const(QStaticText) );
     ~this();
 
     /+ void swap(QStaticText &other) noexcept { qSwap(data, other.data); } +/

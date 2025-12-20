@@ -56,7 +56,7 @@ public:
         this.base0 = QPixmap(other.base0);
     }
     // QBitmap(QBitmap &&other) : QPixmap(std::move(other)) {} // QPixmap doesn't, yet, have a move ctor
-    /+ref QBitmap operator =(ref const(QBitmap) other) { QPixmap.operator=(other); return this; }+/
+    /+ref QBitmap opAssign(ref const(QBitmap) other) { QPixmap.operator=(other); return this; }+/
     /+ QBitmap &operator=(QBitmap &&other) noexcept { QPixmap::operator=(std::move(other)); return *this; } +/
     extern(D) ~this()
     {
@@ -64,7 +64,7 @@ public:
     }
 /+ #endif +/
 
-    /+ref QBitmap operator =(ref const(QPixmap) );+/
+    ref QBitmap opAssign(ref const(QPixmap) );
     /+ inline void swap(QBitmap &other) { QPixmap::swap(other); } +/ // prevent QBitmap<->QPixmap swaps
     /+auto opCast(T : QVariant)() const;+/
 

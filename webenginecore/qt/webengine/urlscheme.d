@@ -68,7 +68,7 @@ alias Flags = QFlags!(Flag);    /+ Q_FLAG(Flags) +/
 
     @disable this(this);
     this(ref const(QWebEngineUrlScheme) that);
-    /+ref QWebEngineUrlScheme operator =(ref const(QWebEngineUrlScheme) that);+/
+    ref QWebEngineUrlScheme opAssign(ref const(QWebEngineUrlScheme) that);
 
     /+ QWebEngineUrlScheme(QWebEngineUrlScheme &&that); +/
     /+ QWebEngineUrlScheme &operator=(QWebEngineUrlScheme &&that); +/

@@ -50,7 +50,7 @@ public:
     }
     /+ QPolygon(QPolygon &&other) noexcept : QVector<QPoint>(std::move(other)) {} +/
     /+ QPolygon &operator=(QPolygon &&other) noexcept { swap(other); return *this; } +/
-    /+ref QPolygon operator =(ref const(QPolygon) other) { QVector!(QPoint).operator=(other); return this; }+/
+    /+ref QPolygon opAssign(ref const(QPolygon) other) { QVector!(QPoint).operator=(other); return this; }+/
     /+ void swap(QPolygon &other) noexcept { QVector<QPoint>::swap(other); } +/ // prevent QVector<QPoint><->QPolygon swaps
 
     /+auto opCast(T : QVariant)() const;+/
@@ -133,7 +133,7 @@ public:
     }+/
     /+ QPolygonF(QPolygonF &&other) noexcept : QVector<QPointF>(std::move(other)) {} +/
     /+ QPolygonF &operator=(QPolygonF &&other) noexcept { swap(other); return *this; } +/
-    /+ref QPolygonF operator =(ref const(QPolygonF) other) { QVector!(QPointF).operator=(other); return this; }+/
+    /+ref QPolygonF opAssign(ref const(QPolygonF) other) { QVector!(QPointF).operator=(other); return this; }+/
     /+ inline void swap(QPolygonF &other) { QVector<QPointF>::swap(other); } +/ // prevent QVector<QPointF><->QPolygonF swaps
 
     /+auto opCast(T : QVariant)() const;+/

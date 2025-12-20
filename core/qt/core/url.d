@@ -167,7 +167,7 @@ public:
 
     @disable this(this);
     this(ref const(QUrl) copy);
-    /+ref QUrl operator =(ref const(QUrl) copy);+/
+    ref QUrl opAssign(ref const(QUrl) copy);
     version (QT_NO_URL_CAST_FROM_STRING)
     {
         /+ explicit +/this(ref const(QString) url, ParsingMode mode = ParsingMode.TolerantMode);

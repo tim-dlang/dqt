@@ -96,7 +96,7 @@ public:
 
     //void init_(const(QWidget) w);
     // pragma(inline, true) void initFrom(const(QWidget) w) { init_(w); }
-    /+ref QStyleOption operator =(ref const(QStyleOption) other);+/
+    ref QStyleOption opAssign(ref const(QStyleOption) other);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

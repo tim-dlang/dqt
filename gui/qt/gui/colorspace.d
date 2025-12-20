@@ -72,7 +72,7 @@ public:
 
     @disable this(this);
     this(ref const(QColorSpace) colorSpace);
-    /+ref QColorSpace operator =(ref const(QColorSpace) colorSpace);+/
+    ref QColorSpace opAssign(ref const(QColorSpace) colorSpace);
 
     /+ QColorSpace(QColorSpace &&colorSpace) noexcept
             : d_ptr(qExchange(colorSpace.d_ptr, nullptr))

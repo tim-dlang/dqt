@@ -42,7 +42,7 @@ public:
     }*/
 
     // using the assignment operator would lead to corruption in the ref-counting
-    /+@disable ref QSharedData operator =(ref const(QSharedData) );+/
+    @disable ref QSharedData opAssign(ref const(QSharedData) );
     /+ ~QSharedData() = default; +/
 }
 
@@ -93,7 +93,7 @@ public:
         else
             assert(0);
     }
-    /+pragma(inline, true) ref QSharedDataPointer!(T)  operator =(ref const(QSharedDataPointer!(T)) o) {
+    pragma(inline, true) ref QSharedDataPointer!(T)  opAssign()(ref const(QSharedDataPointer!(T)) o) {
         import core.stdcpp.new_;
 
         if (o.d != d) {
@@ -105,8 +105,8 @@ public:
                 cpp_delete(old);
         }
         return this;
-    }+/
-    /+pragma(inline, true) ref QSharedDataPointer operator =(T* o) {
+    }
+    pragma(inline, true) ref QSharedDataPointer opAssign()(T* o) {
         import core.stdcpp.new_;
 
         if (o != d) {
@@ -118,7 +118,7 @@ public:
                 cpp_delete(old);
         }
         return this;
-    }+/
+    }
     /+ QSharedDataPointer(QSharedDataPointer &&o) noexcept : d(o.d) { o.d = nullptr; } +/
     /+ inline QSharedDataPointer<T> &operator=(QSharedDataPointer<T> &&other) noexcept
     {
@@ -249,7 +249,7 @@ public:
             d.ref_.ref_();
     }+/
 
-    /+pragma(inline, true) ref QExplicitlySharedDataPointer!(T)  operator =(ref const(QExplicitlySharedDataPointer!(T)) o) {
+    pragma(inline, true) ref QExplicitlySharedDataPointer!(T)  opAssign()(ref const(QExplicitlySharedDataPointer!(T)) o) {
         import core.stdcpp.new_;
 
         if (o.d != d) {
@@ -261,8 +261,8 @@ public:
                 cpp_delete(old);
         }
         return this;
-    }+/
-    /+pragma(inline, true) ref QExplicitlySharedDataPointer operator =(T* o) {
+    }
+    pragma(inline, true) ref QExplicitlySharedDataPointer opAssign()(T* o) {
         import core.stdcpp.new_;
 
         if (o != d) {
@@ -274,7 +274,7 @@ public:
                 cpp_delete(old);
         }
         return this;
-    }+/
+    }
     /+ inline QExplicitlySharedDataPointer(QExplicitlySharedDataPointer &&o) noexcept : d(o.d) { o.d = nullptr; } +/
     /+ inline QExplicitlySharedDataPointer<T> &operator=(QExplicitlySharedDataPointer<T> &&other) noexcept
     {

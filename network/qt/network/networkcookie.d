@@ -40,7 +40,7 @@ public:
     this(ref const(QNetworkCookie) other);
     ~this();
     /+ QNetworkCookie &operator=(QNetworkCookie &&other) noexcept { swap(other); return *this; } +/
-    /+ref QNetworkCookie operator =(ref const(QNetworkCookie) other);+/
+    ref QNetworkCookie opAssign(ref const(QNetworkCookie) other);
 
     /+ void swap(QNetworkCookie &other) noexcept { qSwap(d, other.d); } +/
 

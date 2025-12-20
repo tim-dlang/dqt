@@ -382,9 +382,9 @@ public:
         this.d = fromLatin1_helper(aLatin1.latin1(), aLatin1.size());
     }
     pragma(inline, true) ~this() { if (!d.ref_.deref()) Data.deallocate(d); }
-    /+ref QString operator =(QChar c);+/
-    /+ref QString operator =(ref const(QString) )/+ noexcept+/;+/
-    /+ref QString operator =(QLatin1String latin1);+/
+    ref QString opAssign(QChar c);
+    /+ref QString opAssign(ref const(QString) )/+ noexcept+/;+/
+    ref QString opAssign(QLatin1String latin1);
     /+ inline QString(QString && other) noexcept : d(other.d) { other.d = Data::sharedNull(); } +/
     /+ inline QString &operator=(QString &&other) noexcept
     { qSwap(d, other.d); return *this; } +/
@@ -1235,7 +1235,7 @@ public:
     {
         this.d = Data.sharedNull();
     }
-    /+pragma(inline, true) ref QString operator =(ref const(Null) ) { this = QString(); return this; }+/
+    /+pragma(inline, true) ref QString opAssign(ref const(Null) ) { this = QString(); return this; }+/
 /+ #endif +/
     pragma(inline, true) bool isNull() const { return d == Data.sharedNull(); }
 
@@ -1285,8 +1285,8 @@ private:
     extern(D) ref QString opOpAssign(string op)(ref const(QByteArray) s) if (op == "~");
     //this(const(char)* ch);
     //this(ref const(QByteArray) a);
-    /+ref QString operator =(const(char)*  ch);+/
-    /+ref QString operator =(ref const(QByteArray) a);+/
+    //ref QString opAssign(const(char)*  ch);
+    //ref QString opAssign(ref const(QByteArray) a);
 /+ #endif +/
 
     version (Windows)
@@ -1418,7 +1418,7 @@ public:
         }
         return QChar();
     }
-    /+pragma(inline, true) ref QCharRef operator =(QChar c)
+    /+pragma(inline, true) ref QCharRef opAssign(QChar c)
     {
         using namespace /+ QtPrivate:: +/DeprecatedRefClassBehavior;
         if (/+ Q_UNLIKELY +/(i >= s.d.size)) {
@@ -1446,11 +1446,11 @@ public:
     inline QT_ASCII_CAST_WARN QCharRef &operator=(uchar c)
     { return operator=(QChar::fromLatin1(c)); }
 #endif +/
-    /+pragma(inline, true) ref QCharRef operator =(ref const(QCharRef) c) { return operator=(QChar(c)); }+/
-    /+pragma(inline, true) ref QCharRef operator =(ushort rc) { return operator=(QChar(rc)); }+/
-    /+pragma(inline, true) ref QCharRef operator =(short rc) { return operator=(QChar(rc)); }+/
-    /+pragma(inline, true) ref QCharRef operator =(uint rc) { return operator=(QChar(rc)); }+/
-    /+pragma(inline, true) ref QCharRef operator =(int rc) { return operator=(QChar(rc)); }+/
+    /+pragma(inline, true) ref QCharRef opAssign(ref const(QCharRef) c) { return operator=(QChar(c)); }
+    pragma(inline, true) ref QCharRef opAssign(ushort rc) { return operator=(QChar(rc)); }
+    pragma(inline, true) ref QCharRef opAssign(short rc) { return operator=(QChar(rc)); }
+    pragma(inline, true) ref QCharRef opAssign(uint rc) { return operator=(QChar(rc)); }
+    pragma(inline, true) ref QCharRef opAssign(int rc) { return operator=(QChar(rc)); }+/
 
     // each function...
     /+pragma(inline, true) bool isNull() const { return this.toQChar.isNull(); }
@@ -1787,11 +1787,11 @@ public:
     }
     /+ QStringRef(QStringRef &&other) noexcept : m_string(other.m_string), m_position(other.m_position), m_size(other.m_size) {} +/
     /+ QStringRef &operator=(QStringRef &&other) noexcept { return *this = other; } +/
-    /+ref QStringRef operator =(ref const(QStringRef) other)/+ noexcept+/
+    ref QStringRef opAssign(ref const(QStringRef) other)/+ noexcept+/
     {
         m_string = other.m_string; m_position = other.m_position;
         m_size = other.m_size; return this;
-    }+/
+    }
     pragma(inline, true) ~this(){}
 /+ #endif +/ // Qt < 6.0.0
 
@@ -1903,8 +1903,8 @@ public:
         bool endsWith(ref const(QStringRef) c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const;
     }
 
-    /+pragma(inline, true) ref QStringRef operator =(const(QString)* aString)
-    { m_string = aString; m_position = 0; m_size = aString?aString.size():0; return this; }+/
+    pragma(inline, true) ref QStringRef opAssign(const(QString)* aString)
+    { m_string = aString; m_position = 0; m_size = aString?aString.size():0; return this; }
 
     pragma(inline, true) const(QChar)* unicode() const
     {

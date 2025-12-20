@@ -131,7 +131,7 @@ public:
         }
     }
     pragma(inline, true) ~this() { if (!d.base0.ref_.deref()) freeData(d); }
-    /+ref QVector!(T) operator =(ref const(QVector!(T)) v)
+    /+ref QVector!(T) opAssign(ref const(QVector!(T)) v)
     {
         if (v.d != d) {
             auto tmp = QVector!(T)(v);

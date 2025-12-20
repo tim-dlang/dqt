@@ -45,7 +45,7 @@ public:
         return *this;
     } +/
 /+ #endif +/
-    /+ref QWebEngineHttpRequest operator =(ref const(QWebEngineHttpRequest) other);+/
+    ref QWebEngineHttpRequest opAssign(ref const(QWebEngineHttpRequest) other);
 
     //static QWebEngineHttpRequest postRequest(ref const(QUrl) url, ref const(QMap!(QString, QString)) postData);
     /+ void swap(QWebEngineHttpRequest &other) Q_DECL_NOTHROW { qSwap(d, other.d); } +/

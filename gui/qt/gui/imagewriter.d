@@ -109,7 +109,7 @@ public:pragma(inline, true) static QString tr(const(char)* sourceText, const(cha
 private:
     /+ Q_DISABLE_COPY(QImageWriter) +/
 @disable this(this);
-/+@disable this(ref const(QImageWriter));+//+@disable ref QImageWriter operator =(ref const(QImageWriter));+/    QImageWriterPrivate* d;
+/+@disable this(ref const(QImageWriter));+/@disable ref QImageWriter opAssign(ref const(QImageWriter));    QImageWriterPrivate* d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 
