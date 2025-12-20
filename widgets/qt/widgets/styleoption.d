@@ -96,7 +96,7 @@ public:
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     void initFrom(const(QWidget) w);
     }));
-    /+ref QStyleOption operator =(ref const(QStyleOption) other);+/
+    ref QStyleOption opAssign(ref const(QStyleOption) other);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

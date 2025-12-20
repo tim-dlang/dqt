@@ -93,20 +93,20 @@ public:
     // the implicitly-generated one overwrites it.
     /+ template <typename U,
               std::enable_if_t<std::is_convertible_v<U *, T *>, bool> = false> +/
-    /+ref QTaggedPointer operator =(U,)(U* other)/+ noexcept+/
+    ref QTaggedPointer opAssign(U,)(U* other)/+ noexcept+/
     {
         T* otherT = other;
         d = reinterpret_cast!(quintptr)(otherT) | (d & tagMask());
         return this;
-    }+/
+    }
 
     /+ template <typename U,
               std::enable_if_t<std::is_null_pointer_v<U>, bool> = false> +/
-    /+ref QTaggedPointer operator =(U,)(U)/+ noexcept+/
+    ref QTaggedPointer opAssign(U,)(U)/+ noexcept+/
     {
         d = reinterpret_cast!(quintptr)(static_cast!(T*)(null)) | (d & tagMask());
         return this;
-    }+/
+    }
 /+ #endif +/
 
     static Tag maximumTag()/+ noexcept+/

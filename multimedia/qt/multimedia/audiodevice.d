@@ -58,7 +58,7 @@ public:
     /+ void swap(QAudioDevice &other) noexcept
     { d.swap(other.d); } +/
 
-    /+ref QAudioDevice operator =(ref const(QAudioDevice) other);+/
+    ref QAudioDevice opAssign(ref const(QAudioDevice) other);
 
     /+bool operator ==(ref const(QAudioDevice) other) const;+/
     /+bool operator !=(ref const(QAudioDevice) other) const;+/

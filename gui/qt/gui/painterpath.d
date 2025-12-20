@@ -76,7 +76,7 @@ public:
     /+ explicit +/this(ref const(QPointF) startPoint);
     @disable this(this);
     this(ref const(QPainterPath) other);
-    /+ref QPainterPath operator =(ref const(QPainterPath) other);+/
+    ref QPainterPath opAssign(ref const(QPainterPath) other);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPainterPath) +/
     ~this();
 
@@ -297,7 +297,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QPainterPathStroker) +/
 @disable this(this);
-/+@disable this(ref const(QPainterPathStroker));+//+@disable ref QPainterPathStroker operator =(ref const(QPainterPathStroker));+/
+/+@disable this(ref const(QPainterPathStroker));+/@disable ref QPainterPathStroker opAssign(ref const(QPainterPathStroker));
     /+ friend class QX11PaintEngine; +/
 
     QScopedPointer!(QPainterPathStrokerPrivate) d_ptr;

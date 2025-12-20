@@ -76,7 +76,7 @@ public:
 
     @disable this(this);
     this(ref const(QColorSpace) colorSpace)/+ noexcept+/;
-    /+ref QColorSpace operator =(ref const(QColorSpace) colorSpace)/+ noexcept+/
+    /+ref QColorSpace opAssign(ref const(QColorSpace) colorSpace)/+ noexcept+/
     {
         auto copy = QColorSpace(colorSpace);
         swap(copy);

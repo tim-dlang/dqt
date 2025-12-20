@@ -79,7 +79,7 @@ public:
 
     ~this();
 
-    /+ref QFileInfo operator =(ref const(QFileInfo) fileinfo);+/
+    ref QFileInfo opAssign(ref const(QFileInfo) fileinfo);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QFileInfo) +/
 
     /+ void swap(QFileInfo &other) noexcept

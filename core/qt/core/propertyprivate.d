@@ -89,12 +89,12 @@ public:
 
     //void reset(T* ptr = null)/+ noexcept+/;
 
-    /+ref QPropertyBindingPrivatePtr operator =(ref const(QPropertyBindingPrivatePtr) o)/+ noexcept+/
+    /+ref QPropertyBindingPrivatePtr opAssign(ref const(QPropertyBindingPrivatePtr) o)/+ noexcept+/
     {
         reset(o.d);
         return this;
-    }+/
-    /+ref QPropertyBindingPrivatePtr operator =(T* o)/+ noexcept+/
+    }
+    ref QPropertyBindingPrivatePtr opAssign(T* o)/+ noexcept+/
     {
         reset(o);
         return this;
@@ -255,7 +255,7 @@ private:
 
     /+ Q_DISABLE_COPY(QPropertyBindingData) +/
 @disable this(this);
-/+@disable this(ref const(QPropertyBindingData));+//+@disable ref QPropertyBindingData operator =(ref const(QPropertyBindingData));+/public:
+/+@disable this(ref const(QPropertyBindingData));+/@disable ref QPropertyBindingData opAssign(ref const(QPropertyBindingData));public:
     /+ QPropertyBindingData() = default; +/
     /+ QPropertyBindingData(QPropertyBindingData &&other); +/
     /+ QPropertyBindingData &operator=(QPropertyBindingData &&other) = delete; +/
@@ -340,17 +340,17 @@ public:
         this.d = reinterpret_cast!(quintptr*)(ptr);
     }
 
-    /+ref QTagPreservingPointerToPointer!(T, Tag) operator =(T** ptr)
+    ref QTagPreservingPointerToPointer!(T, Tag) opAssign(T** ptr)
     {
         d = reinterpret_cast!(quintptr*)(ptr);
         return this;
-    }+/
+    }
 
-    /+ref QTagPreservingPointerToPointer!(T, Tag) operator =(QTaggedPointer!(T, Tag)* ptr)
+    ref QTagPreservingPointerToPointer!(T, Tag) opAssign(QTaggedPointer!(T, Tag)* ptr)
     {
         d = reinterpret_cast!(quintptr*)(ptr);
         return this;
-    }+/
+    }
 
     void clear()
     {

@@ -291,7 +291,7 @@ alias PageBreakFlags = QFlags!(PageBreakFlag);
 
     //@disable this(this);
     //this(ref const(QTextFormat) rhs);
-    /+ref QTextFormat operator =(ref const(QTextFormat) rhs);+/
+    //ref QTextFormat opAssign(ref const(QTextFormat) rhs);
     ~this();
 
     /+ void swap(QTextFormat &other)

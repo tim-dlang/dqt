@@ -104,7 +104,7 @@ public:
     ~this();
     @disable this(this);
     this(ref const(QMediaFormat) other)/+ noexcept+/;
-    /+ref QMediaFormat operator =(ref const(QMediaFormat) other)/+ noexcept+/;+/
+    ref QMediaFormat opAssign(ref const(QMediaFormat) other)/+ noexcept+/;
 
     /+ QMediaFormat(QMediaFormat &&other) noexcept = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QMediaFormat) +/

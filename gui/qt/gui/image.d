@@ -143,7 +143,7 @@ public:
     ~this();
     }));
 
-    /+ref QImage operator =(ref const(QImage) );+/
+    ref QImage opAssign(ref const(QImage) );
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QImage) +/
     /+ void swap(QImage &other) noexcept
     { qt_ptr_swap(d, other.d); } +/

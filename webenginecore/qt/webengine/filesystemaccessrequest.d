@@ -38,7 +38,7 @@ extern(C++, class) struct FileSystemAccessPermissionRequestManagerQt;
 public:
     @disable this(this);
     this(ref const(QWebEngineFileSystemAccessRequest) other);
-    /+ref QWebEngineFileSystemAccessRequest operator =(ref const(QWebEngineFileSystemAccessRequest) other);+/
+    ref QWebEngineFileSystemAccessRequest opAssign(ref const(QWebEngineFileSystemAccessRequest) other);
     /+ QWebEngineFileSystemAccessRequest(QWebEngineFileSystemAccessRequest &&other) noexcept = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QWebEngineFileSystemAccessRequest) +/
     ~this();

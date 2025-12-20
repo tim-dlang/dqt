@@ -77,7 +77,7 @@ public:
         return QArrayDataPointer( null, const_cast!(T*)(rawData), length) ;
     }
 
-    /+ref QArrayDataPointer operator =(ref const(QArrayDataPointer) other)/+ noexcept+/
+    /+ref QArrayDataPointer opAssign(ref const(QArrayDataPointer) other)/+ noexcept+/
     {
         auto tmp = QArrayDataPointer(other);
         this.swap(tmp);

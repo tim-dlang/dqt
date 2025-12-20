@@ -86,7 +86,7 @@ public:
     this(ref const(QMediaTimeRange) range)/+ noexcept+/;
     ~this();
 
-    /+ref QMediaTimeRange operator =(ref const(QMediaTimeRange))/+ noexcept+/;+/
+    ref QMediaTimeRange opAssign(ref const(QMediaTimeRange))/+ noexcept+/;
 
     /+ QMediaTimeRange(QMediaTimeRange &&other) noexcept = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QMediaTimeRange) +/
@@ -94,7 +94,7 @@ public:
     { d.swap(other.d); } +/
     void detach();
 
-    /+ref QMediaTimeRange operator =(ref const(Interval));+/
+    ref QMediaTimeRange opAssign(ref const(Interval));
 
     qint64 earliestTime() const;
     qint64 latestTime() const;

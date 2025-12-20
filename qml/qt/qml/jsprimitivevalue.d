@@ -756,7 +756,7 @@ private:
                 new (&m_string) QString(std::move(other.m_string));
         } +/
 
-        /+ref QJSPrimitiveValuePrivate operator =(ref const(QJSPrimitiveValuePrivate) other)/+ noexcept+/
+        /+ref QJSPrimitiveValuePrivate opAssign(ref const(QJSPrimitiveValuePrivate) other)/+ noexcept+/
         {
             import core.lifetime;
 

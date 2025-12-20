@@ -72,7 +72,7 @@ public:
 
     @disable this(this);
     this(ref const(QQmlProperty) );
-    /+ref QQmlProperty operator =(ref const(QQmlProperty) );+/
+    ref QQmlProperty opAssign(ref const(QQmlProperty) );
 
     /+ QQmlProperty(QQmlProperty &&other) noexcept : d(std::exchange(other.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QQmlProperty) +/

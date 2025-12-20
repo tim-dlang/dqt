@@ -68,7 +68,7 @@ alias PatternOptions = QFlags!(PatternOption);
     this(ref const(QRegularExpression) re);
     /+ QRegularExpression(QRegularExpression &&re) = default; +/
     ~this();
-    /+ref QRegularExpression operator =(ref const(QRegularExpression) re);+/
+    ref QRegularExpression opAssign(ref const(QRegularExpression) re);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QRegularExpression) +/
 
     /+ void swap(QRegularExpression &other) noexcept { d.swap(other.d); } +/
@@ -252,7 +252,7 @@ public:
     @disable this(this);
     this(ref const(QRegularExpressionMatch) match);
     /+ QRegularExpressionMatch(QRegularExpressionMatch &&match) = default; +/
-    /+ref QRegularExpressionMatch operator =(ref const(QRegularExpressionMatch) match);+/
+    ref QRegularExpressionMatch opAssign(ref const(QRegularExpressionMatch) match);
     /+ QRegularExpressionMatch &operator=(QRegularExpressionMatch &&match) noexcept
     { d.swap(match.d); return *this; } +/
     /+ void swap(QRegularExpressionMatch &other) noexcept { d.swap(other.d); } +/
@@ -338,7 +338,7 @@ public:
     @disable this(this);
     this(ref const(QRegularExpressionMatchIterator) iterator);
     /+ QRegularExpressionMatchIterator(QRegularExpressionMatchIterator &&iterator) = default; +/
-    /+ref QRegularExpressionMatchIterator operator =(ref const(QRegularExpressionMatchIterator) iterator);+/
+    ref QRegularExpressionMatchIterator opAssign(ref const(QRegularExpressionMatchIterator) iterator);
     /+ QRegularExpressionMatchIterator &operator=(QRegularExpressionMatchIterator &&iterator) noexcept
     { d.swap(iterator.d); return *this; } +/
     /+ void swap(QRegularExpressionMatchIterator &other) noexcept { d.swap(other.d); } +/

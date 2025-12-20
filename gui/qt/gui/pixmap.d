@@ -70,7 +70,7 @@ public:
     ~this();
     }));
 
-    /+ref QPixmap operator =(ref const(QPixmap) );+/
+    ref QPixmap opAssign(ref const(QPixmap) );
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QPixmap) +/
     /+ inline void swap(QPixmap &other) noexcept
     { data.swap(other.data); } +/

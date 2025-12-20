@@ -92,7 +92,7 @@ public:
 
     ~this();
     /+ QSslError &operator=(QSslError &&other) noexcept { swap(other); return *this; } +/
-    /+ref QSslError operator =(ref const(QSslError) other);+/
+    ref QSslError opAssign(ref const(QSslError) other);
     /+bool operator ==(ref const(QSslError) other) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QSslError) other) const
     { return !(this == other); }+/

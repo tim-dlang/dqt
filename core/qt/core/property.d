@@ -157,7 +157,7 @@ public:
 
     @disable this(this);
     this(ref const(QPropertyBindingError) other);
-    /+ref QPropertyBindingError operator =(ref const(QPropertyBindingError) other);+/
+    ref QPropertyBindingError opAssign(ref const(QPropertyBindingError) other);
     /+ QPropertyBindingError(QPropertyBindingError &&other); +/
     /+ QPropertyBindingError &operator=(QPropertyBindingError &&other); +/
     ~this();
@@ -197,7 +197,7 @@ public:
     /+ QUntypedPropertyBinding(QUntypedPropertyBinding &&other); +/
     @disable this(this);
     this(ref const(QUntypedPropertyBinding) other);
-    /+ref QUntypedPropertyBinding operator =(ref const(QUntypedPropertyBinding) other);+/
+    ref QUntypedPropertyBinding opAssign(ref const(QUntypedPropertyBinding) other);
     /+ QUntypedPropertyBinding &operator=(QUntypedPropertyBinding &&other); +/
     ~this();
 
@@ -311,7 +311,7 @@ private:
 
     @disable this(this);
     /+@disable this(ref const(QPropertyObserver) );+/
-    /+@disable ref QPropertyObserver operator =(ref const(QPropertyObserver) );+/
+    @disable ref QPropertyObserver opAssign(ref const(QPropertyObserver) );
 
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
@@ -476,17 +476,17 @@ public:
         notify();
     }
 
-    /+ref QProperty!(T) operator =(rvalue_ref newValue)
+    ref QProperty!(T) opAssign(rvalue_ref newValue)
     {
         setValue(/+ std:: +/move(newValue));
         return this;
-    }+/
+    }
 
-    /+ref QProperty!(T) operator =(parameter_type newValue)
+    ref QProperty!(T) opAssign(parameter_type newValue)
     {
         setValue(newValue);
         return this;
-    }+/
+    }
 
     QPropertyBinding!(T) setBinding(ref const(QPropertyBinding!(T)) newBinding)
     {
@@ -557,7 +557,7 @@ private:
 
     /+ Q_DISABLE_COPY_MOVE(QProperty) +/
 @disable this(this);
-/+@disable this(ref const(QProperty));+//+@disable ref QProperty operator =(ref const(QProperty));+/}
+/+@disable this(ref const(QProperty));+/@disable ref QProperty opAssign(ref const(QProperty));}
 
 extern(C++, "Qt") {
 /+    QPropertyBinding!(PropertyType) makePropertyBinding(PropertyType)(ref const(QProperty!(PropertyType)) otherProperty,
@@ -895,7 +895,7 @@ extern(C++, class) struct QPropertyAlias(T)
 private:
     /+ Q_DISABLE_COPY_MOVE(QPropertyAlias) +/
 @disable this(this);
-/+@disable this(ref const(QPropertyAlias));+//+@disable ref QPropertyAlias operator =(ref const(QPropertyAlias));+/    const(/+ QtPrivate:: +/QBindableInterface)* iface = null;
+/+@disable this(ref const(QPropertyAlias));+/@disable ref QPropertyAlias opAssign(ref const(QPropertyAlias));    const(/+ QtPrivate:: +/QBindableInterface)* iface = null;
 
 public:
 /+    this(QProperty!(T)* property)
@@ -951,11 +951,11 @@ public:
             iface.setter(p, &newValue);
     }+/
 
-    /+ref QPropertyAlias!(T) operator =(ref const(T) newValue)
+    ref QPropertyAlias!(T) opAssign(ref const(T) newValue)
     {
         setValue(newValue);
         return this;
-    }+/
+    }
 
     /+QPropertyBinding!(T) setBinding(ref const(QPropertyBinding!(T)) newBinding)
     {
@@ -1142,17 +1142,17 @@ public:
         notify(cast(const(qt.core.propertyprivate.QPropertyBindingData)*) (bd));
     }
 
-    /+ref QObjectBindableProperty operator =(rvalue_ref newValue)
+    ref QObjectBindableProperty opAssign(rvalue_ref newValue)
     {
         setValue(/+ std:: +/move(newValue));
         return this;
-    }+/
+    }
 
-    /+ref QObjectBindableProperty operator =(parameter_type newValue)
+    ref QObjectBindableProperty opAssign(parameter_type newValue)
     {
         setValue(newValue);
         return this;
-    }+/
+    }
 
     QPropertyBinding!(T) setBinding(ref const(QPropertyBinding!(T)) newBinding)
     {

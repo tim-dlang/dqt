@@ -79,7 +79,7 @@ public:
 
     @disable this(this);
     this(ref const(QTextOption) o);
-    /+ref QTextOption operator =(ref const(QTextOption) o);+/
+    ref QTextOption opAssign(ref const(QTextOption) o);
 
     pragma(inline, true) void setAlignment(/+ Qt:: +/qt.core.namespace.Alignment aalignment)
     { align_ = uint(aalignment.toInt()); }

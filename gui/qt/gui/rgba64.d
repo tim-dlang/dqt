@@ -164,11 +164,11 @@ public:
         return rgba;
     }+/
 
-    /+ref QRgba64 operator =(quint64 _rgba)/+ noexcept+/
+    ref QRgba64 opAssign(quint64 _rgba)/+ noexcept+/
     {
         rgba = _rgba;
         return this;
-    }+/
+    }
 
 private:
     /+ Q_ALWAYS_INLINE +/ pragma(inline, true) static quint64 alphaMask() { return 0xffffuL << Shifts.AlphaShift; }

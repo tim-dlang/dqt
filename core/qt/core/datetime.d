@@ -386,7 +386,7 @@ public:
     ~this();
 
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QDateTime) +/
-    /+ref QDateTime operator =(ref const(QDateTime) other)/+ noexcept+/;+/
+    ref QDateTime opAssign(ref const(QDateTime) other)/+ noexcept+/;
 
     /+ void swap(QDateTime &other) noexcept { d.swap(other.d); } +/
 

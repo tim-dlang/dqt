@@ -84,7 +84,7 @@ public:
     { d.swap(other.d); } +/
 
 
-    /+ref QVideoFrame operator =(ref const(QVideoFrame) other);+/
+    ref QVideoFrame opAssign(ref const(QVideoFrame) other);
     /+bool operator ==(ref const(QVideoFrame) other) const;+/
     /+bool operator !=(ref const(QVideoFrame) other) const;+/
 

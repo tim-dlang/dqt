@@ -38,7 +38,7 @@ public:
     @disable this(this);
     this(ref const(QSslCertificateExtension) other);
     /+ QSslCertificateExtension &operator=(QSslCertificateExtension &&other) noexcept { swap(other); return *this; } +/
-    /+ref QSslCertificateExtension operator =(ref const(QSslCertificateExtension) other);+/
+    ref QSslCertificateExtension opAssign(ref const(QSslCertificateExtension) other);
     ~this();
 
     /+ void swap(QSslCertificateExtension &other) noexcept { d.swap(other.d); } +/

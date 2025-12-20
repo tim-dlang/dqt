@@ -217,7 +217,7 @@ public:
     @disable this(this);
     this(ref const(QPageSize) other);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPageSize) +/
-    /+ref QPageSize operator =(ref const(QPageSize) other);+/
+    ref QPageSize opAssign(ref const(QPageSize) other);
     ~this();
 
 

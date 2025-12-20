@@ -96,8 +96,8 @@ alias Base64Options = QFlags!(Base64Option);
     }+/
     pragma(inline, true) ~this() {}
 
-    /+ref QByteArray operator =(ref const(QByteArray) )/+ noexcept+/;+/
-    /+ref QByteArray operator =(const(char)* str);+/
+    ref QByteArray opAssign(ref const(QByteArray) )/+ noexcept+/;
+    ref QByteArray opAssign(const(char)* str);
     /+ inline QByteArray(QByteArray && other) noexcept
         = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QByteArray) +/

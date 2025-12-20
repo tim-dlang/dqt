@@ -75,7 +75,7 @@ public:
         : d(qExchange(other.d, const_cast<QRegionData*>(&shared_empty))) {} +/
     this(ref const(QBitmap) bitmap);
     ~this();
-    /+ref QRegion operator =(ref const(QRegion) );+/
+    ref QRegion opAssign(ref const(QRegion) );
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QRegion) +/
     /+ void swap(QRegion &other) noexcept { qt_ptr_swap(d, other.d); } +/
     bool isEmpty() const;

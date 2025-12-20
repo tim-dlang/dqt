@@ -38,7 +38,7 @@ public:
     @disable this(this);
     /+ Q_GUI_EXPORT +/this(ref const(QColorTransform) colorTransform)/+ noexcept+/;
     /+ QColorTransform(QColorTransform &&colorTransform) = default; +/
-    /+ref QColorTransform operator =(ref const(QColorTransform) other)/+ noexcept+/
+    /+ref QColorTransform opAssign(ref const(QColorTransform) other)/+ noexcept+/
     {
         QColorTransform(other).swap(this);
         return this;

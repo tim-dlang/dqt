@@ -212,7 +212,7 @@ class QRegularExpression;
     QVariant(const volatile void *) = delete;
 #endif +/
 
-    /+ref QVariant operator =(ref const(QVariant) other);+/
+    /+ref QVariant opAssign(ref const(QVariant) other);+/
     /+ inline QVariant(QVariant &&other) noexcept : d(other.d)
     { other.d = Private(); } +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QVariant) +/
@@ -722,8 +722,8 @@ public:
     /+ ~QVariantRef() = default; +/
 
     /+auto opCast(T : QVariant)() const;+/
-    /+ref QVariantRef operator =(ref const(QVariant) value);+/
-    /+ref QVariantRef operator =(ref const(QVariantRef) value) { return operator=(QVariant(value)); }+/
+    ref QVariantRef opAssign(ref const(QVariant) value);
+    ref QVariantRef opAssign(ref const(QVariantRef) value) { return operator=(QVariant(value)); }
     /+ QVariantRef &operator=(QVariantRef &&value) { return operator=(QVariant(value)); } +/
 
     /+ friend void swap(QVariantRef a, QVariantRef b)

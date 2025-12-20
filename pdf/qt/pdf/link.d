@@ -58,7 +58,7 @@ public:
     }
 
     /+ Q_PDF_EXPORT +/~this();
-    /+/+ Q_PDF_EXPORT +/ ref QPdfLink operator =(ref const(QPdfLink) other);+/
+    /+ Q_PDF_EXPORT +/ ref QPdfLink opAssign(ref const(QPdfLink) other);
 
     @disable this(this);
     /+ Q_PDF_EXPORT +/this(ref const(QPdfLink) other)/+ noexcept+/;

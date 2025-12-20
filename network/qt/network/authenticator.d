@@ -37,7 +37,7 @@ public:
 
     @disable this(this);
     this(ref const(QAuthenticator) other);
-    /+ref QAuthenticator operator =(ref const(QAuthenticator) other);+/
+    ref QAuthenticator opAssign(ref const(QAuthenticator) other);
 
     /+bool operator ==(ref const(QAuthenticator) other) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QAuthenticator) other) const { return !operator==(other); }+/

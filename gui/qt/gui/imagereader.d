@@ -130,7 +130,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QImageReader) +/
 @disable this(this);
-/+@disable this(ref const(QImageReader));+//+@disable ref QImageReader operator =(ref const(QImageReader));+/    QImageReaderPrivate* d;
+/+@disable this(ref const(QImageReader));+/@disable ref QImageReader opAssign(ref const(QImageReader));    QImageReaderPrivate* d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

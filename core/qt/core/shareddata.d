@@ -40,7 +40,7 @@ public:
     }
 
     // using the assignment operator would lead to corruption in the ref-counting
-    /+@disable ref QSharedData operator =(ref const(QSharedData) );+/
+    @disable ref QSharedData opAssign(ref const(QSharedData) );
     /+ ~QSharedData() = default; +/
 }
 
@@ -117,29 +117,29 @@ public:
             assert(0);
     }
 
-/+    void reset(T* ptr = null)/+ noexcept+/
+    void reset()(T* ptr = null)/+ noexcept+/
     {
         import core.stdcpp.new_;
 
         if (ptr != d) {
             if (ptr)
                 ptr.ref_.ref_();
-            T* old = qExchange(d, cast(U && ) (ptr));
+            T* old = qExchange(d, ptr);
             if (old && !old.ref_.deref())
                 cpp_delete(old);
         }
-    }+/
+    }
 
-    /+ref QSharedDataPointer operator =(ref const(QSharedDataPointer) o)/+ noexcept+/
+    ref QSharedDataPointer opAssign()(ref const(QSharedDataPointer) o)/+ noexcept+/
     {
         reset(o.d);
         return this;
-    }+/
-    /+pragma(inline, true) ref QSharedDataPointer operator =(T* o)/+ noexcept+/
+    }
+    pragma(inline, true) ref QSharedDataPointer opAssign()(T* o)/+ noexcept+/
     {
         reset(o);
         return this;
-    }+/
+    }
     /+ QSharedDataPointer(QSharedDataPointer &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QSharedDataPointer) +/
 
@@ -269,29 +269,29 @@ public:
     if (d) d.ref_.ref_();
 } +/
 
-/+    void reset(T* ptr = null)/+ noexcept+/
+    void reset()(T* ptr = null)/+ noexcept+/
     {
         import core.stdcpp.new_;
 
         if (ptr != d) {
             if (ptr)
                 ptr.ref_.ref_();
-            T* old = qExchange(d, cast(U && ) (ptr));
+            T* old = qExchange(d, ptr);
             if (old && !old.ref_.deref())
                 cpp_delete(old);
         }
-    }+/
+    }
 
-    /+ref QExplicitlySharedDataPointer operator =(ref const(QExplicitlySharedDataPointer) o)/+ noexcept+/
+    ref QExplicitlySharedDataPointer opAssign()(ref const(QExplicitlySharedDataPointer) o)/+ noexcept+/
     {
         reset(o.d);
         return this;
-    }+/
-    /+ref QExplicitlySharedDataPointer operator =(T* o)/+ noexcept+/
+    }
+    ref QExplicitlySharedDataPointer opAssign()(T* o)/+ noexcept+/
     {
         reset(o);
         return this;
-    }+/
+    }
     /+ QExplicitlySharedDataPointer(QExplicitlySharedDataPointer &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QExplicitlySharedDataPointer) +/
 

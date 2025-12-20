@@ -26,7 +26,7 @@ private:
     int id;
     /+ Q_DISABLE_COPY(QBasicTimer) +/
 @disable this(this);
-/+@disable this(ref const(QBasicTimer));+//+@disable ref QBasicTimer operator =(ref const(QBasicTimer));+/
+/+@disable this(ref const(QBasicTimer));+/@disable ref QBasicTimer opAssign(ref const(QBasicTimer));
 public:
     @disable this();
     /+this()/+ noexcept+/

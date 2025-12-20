@@ -31,7 +31,7 @@ extern(C++, class) struct /+ Q_WEBENGINECORE_EXPORT +/ QWebEngineFullScreenReque
 public:
     @disable this(this);
     this(ref const(QWebEngineFullScreenRequest) other);
-    /+ref QWebEngineFullScreenRequest operator =(ref const(QWebEngineFullScreenRequest) other);+/
+    ref QWebEngineFullScreenRequest opAssign(ref const(QWebEngineFullScreenRequest) other);
     /+ QWebEngineFullScreenRequest(QWebEngineFullScreenRequest &&other); +/
     /+ QWebEngineFullScreenRequest &operator=(QWebEngineFullScreenRequest &&other); +/
     ~this();

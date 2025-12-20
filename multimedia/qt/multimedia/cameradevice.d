@@ -44,7 +44,7 @@ public:
 
     @disable this(this);
     this(ref const(QCameraFormat) other)/+ noexcept+/;
-    /+ref QCameraFormat operator =(ref const(QCameraFormat) other)/+ noexcept+/;+/
+    ref QCameraFormat opAssign(ref const(QCameraFormat) other)/+ noexcept+/;
     ~this();
 
     QVideoFrameFormat.PixelFormat pixelFormat() const/+ noexcept+/;
@@ -88,7 +88,7 @@ public:
 
     @disable this(this);
     this(ref const(QCameraDevice) other);
-    /+ref QCameraDevice operator =(ref const(QCameraDevice) other);+/
+    ref QCameraDevice opAssign(ref const(QCameraDevice) other);
     ~this();
 
     /+bool operator ==(ref const(QCameraDevice) other) const;+/

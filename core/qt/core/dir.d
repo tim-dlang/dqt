@@ -97,7 +97,7 @@ alias SortFlags = QFlags!(SortFlag);
 #endif +/ // QT_CONFIG(cxx17_filesystem)
     ~this();
 
-    /+ref QDir operator =(ref const(QDir) );+/
+    ref QDir opAssign(ref const(QDir) );
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QDir) +/
 
     /+ void swap(QDir &other) noexcept

@@ -133,7 +133,7 @@ public:
     this(int numFrames, ref const(QAudioFormat) format, qint64 startTime = -1); // Initialized to empty
     ~this();
 
-    /+ref QAudioBuffer operator =(ref const(QAudioBuffer) other);+/
+    ref QAudioBuffer opAssign(ref const(QAudioBuffer) other);
 
     /+ QAudioBuffer(QAudioBuffer &&other) noexcept = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QAudioBuffer) +/

@@ -61,7 +61,7 @@ alias IteratorFlags = QFlags!(IteratorFlag);
     /+ explicit +/this(QTreeWidgetItem item, IteratorFlags flags = IteratorFlag.All);
     ~this();
 
-    /+ref QTreeWidgetItemIterator operator =(ref const(QTreeWidgetItemIterator) it);+/
+    ref QTreeWidgetItemIterator opAssign(ref const(QTreeWidgetItemIterator) it);
 
     ref QTreeWidgetItemIterator opUnary(string op)() if (op == "++");
     /+pragma(inline, true) const(QTreeWidgetItemIterator) operator ++(int)

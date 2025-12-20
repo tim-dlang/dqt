@@ -80,7 +80,7 @@ public:
 
     static QColor fromString(QAnyStringView name)/+ noexcept+/;
 
-    /+ref QColor operator =(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;+/
+    ref QColor opAssign(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;
 
     pragma(inline, true) bool isValid() const/+ noexcept+/
     { return cspec != Spec.Invalid; }

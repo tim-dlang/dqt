@@ -54,7 +54,7 @@ public:
     }));
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/
-    /+/+ QT_DEPRECATED_VERSION_X_6_0("Use fromPixmap instead.") +/ ref QBitmap operator =(ref const(QPixmap) );+/
+    /+ QT_DEPRECATED_VERSION_X_6_0("Use fromPixmap instead.") +/ ref QBitmap opAssign(ref const(QPixmap) );
 /+ #endif +/
     /+ inline void swap(QBitmap &other) { QPixmap::swap(other); } +/ // prevent QBitmap<->QPixmap swaps
     /+auto opCast(T : QVariant)() const;+/

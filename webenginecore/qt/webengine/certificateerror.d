@@ -41,7 +41,7 @@ extern(C++, class) struct CertificateErrorController;
 public:
     @disable this(this);
     this(ref const(QWebEngineCertificateError) other);
-    /+ref QWebEngineCertificateError operator =(ref const(QWebEngineCertificateError) other);+/
+    ref QWebEngineCertificateError opAssign(ref const(QWebEngineCertificateError) other);
     ~this();
 
     // Keep this identical to NET_ERROR in net_error_list.h, or add mapping layer.

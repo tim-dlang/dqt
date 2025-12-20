@@ -41,7 +41,7 @@ public:
     @disable this(this);
     this(ref const(QWebEngineHistoryItem) other);
     /+ QWebEngineHistoryItem(QWebEngineHistoryItem &&other); +/
-    /+ref QWebEngineHistoryItem operator =(ref const(QWebEngineHistoryItem) other);+/
+    ref QWebEngineHistoryItem opAssign(ref const(QWebEngineHistoryItem) other);
     /+ QWebEngineHistoryItem &operator=(QWebEngineHistoryItem &&other); +/
     ~this();
 

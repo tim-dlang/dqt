@@ -41,7 +41,7 @@ public:
     //@disable this(this);
     //this(ref const(QTextCursor) cursor);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QTextCursor) +/
-    /+ref QTextCursor operator =(ref const(QTextCursor) other);+/
+    ref QTextCursor opAssign(ref const(QTextCursor) other);
     ~this();
 
     /+ void swap(QTextCursor &other) noexcept { d.swap(other.d); } +/

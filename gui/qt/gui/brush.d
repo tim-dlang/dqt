@@ -63,7 +63,11 @@ public:
     this(ref const(QGradient) gradient);
 
     ~this();
-    /+ref QBrush operator =(ref const(QBrush) brush);+/
+    ref QBrush opAssign(ref const(QBrush) brush);
+    ref QBrush opAssign(QBrush other)
+    {
+        return opAssign(*cast(const(QBrush*))&other);
+    }
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QBrush) +/
     /+ inline void swap(QBrush &other) noexcept
     { d.swap(other.d); } +/

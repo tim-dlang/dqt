@@ -35,7 +35,7 @@ public:
     @disable this();
     /+pragma(inline, true) this()/+ noexcept+/ {}+/
     /+ explicit +/this(qsizetype size, bool val = false);
-    /+pragma(inline, true) ref QBitArray operator =(ref const(QBitArray) other) { d = other.d; return this; }+/
+    /+pragma(inline, true) ref QBitArray opAssign(ref const(QBitArray) other) { d = other.d; return this; }+/
     /+ inline QBitArray(QBitArray &&other) noexcept : d(std::move(other.d)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QBitArray) +/
 
@@ -119,8 +119,8 @@ private:
 public:
     /+pragma(inline, true) auto opCast(T : bool)() const { return a.testBit(i); }+/
     /+pragma(inline, true) bool operator !() const { return !a.testBit(i); }+/
-    /+ref QBitRef operator =(ref const(QBitRef) val) { a.setBit(i, val); return this; }+/
-    /+ref QBitRef operator =(bool val) { a.setBit(i, val); return this; }+/
+    /+ref QBitRef opAssign(ref const(QBitRef) val) { a.setBit(i, val); return this; }+/
+    ref QBitRef opAssign(bool val) { a.setBit(i, val); return this; }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

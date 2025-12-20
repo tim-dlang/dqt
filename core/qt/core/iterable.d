@@ -180,7 +180,7 @@ protected:
         return *this;
     } +/
 
-    /+ref QBaseIterator operator =(ref const(QBaseIterator) other)
+    ref QBaseIterator opAssign(ref const(QBaseIterator) other)
     {
         if (&this != &other) {
             clearIterator();
@@ -188,7 +188,7 @@ protected:
             initIterator(other.m_iterator);
         }
         return this;
-    }+/
+    }
 
     QIterable!(Container)* mutableIterable() const
     {

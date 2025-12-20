@@ -42,7 +42,7 @@ public:
         : d(std::exchange(other.d, nullptr))
     {} +/
 
-    /+ref QQmlError operator =(ref const(QQmlError) );+/
+    ref QQmlError opAssign(ref const(QQmlError) );
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QQmlError) +/
     ~this();
 

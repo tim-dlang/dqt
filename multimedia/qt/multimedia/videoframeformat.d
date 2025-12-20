@@ -147,7 +147,7 @@ public:
 
     void detach();
 
-    /+ref QVideoFrameFormat operator =(ref const(QVideoFrameFormat) format);+/
+    ref QVideoFrameFormat opAssign(ref const(QVideoFrameFormat) format);
 
     /+bool operator ==(ref const(QVideoFrameFormat) format) const;+/
     /+bool operator !=(ref const(QVideoFrameFormat) format) const;+/

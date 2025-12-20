@@ -578,9 +578,9 @@ public:
     } +/
 /+ #endif +/
     pragma(inline, true) ~this() {}
-    /+ref QString operator =(QChar c);+/
-    /+ref QString operator =(ref const(QString) )/+ noexcept+/;+/
-    /+ref QString operator =(QLatin1StringView latin1);+/
+    ref QString opAssign(QChar c);
+    /+ref QString opAssign(ref const(QString) )/+ noexcept+/;+/
+    ref QString opAssign(QLatin1StringView latin1);
     /+ inline QString(QString &&other) noexcept
         = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QString) +/
@@ -1411,8 +1411,8 @@ private:
     extern(D) ref QString opOpAssign(string op)(ref const(QByteArray) s) if (op == "~");
     //this(const(char)* ch);
     //this(ref const(QByteArray) a);
-    /+ref QString operator =(const(char)*  ch);+/
-    /+ref QString operator =(ref const(QByteArray) a);+/
+    //ref QString opAssign(const(char)*  ch);
+    //ref QString opAssign(ref const(QByteArray) a);
 /+ #endif +/
 
     DataPointer d;

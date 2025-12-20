@@ -32,7 +32,7 @@ public:
     this(ref const(QWebEngineClientCertificateSelection) );
     ~this();
 
-    /+ref QWebEngineClientCertificateSelection operator =(ref const(QWebEngineClientCertificateSelection) );+/
+    ref QWebEngineClientCertificateSelection opAssign(ref const(QWebEngineClientCertificateSelection) );
 
     QUrl host() const;
 

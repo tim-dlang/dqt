@@ -99,7 +99,7 @@ public:
     this(ref const(QTimeZone) other);
     ~this();
 
-    /+ref QTimeZone operator =(ref const(QTimeZone) other);+/
+    ref QTimeZone opAssign(ref const(QTimeZone) other);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QTimeZone) +/
 
     /+ void swap(QTimeZone &other) noexcept

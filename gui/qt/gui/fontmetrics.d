@@ -43,7 +43,7 @@ public:
     this(ref const(QFontMetrics) );
     ~this();
 
-    /+ref QFontMetrics operator =(ref const(QFontMetrics) );+/
+    ref QFontMetrics opAssign(ref const(QFontMetrics) );
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QFontMetrics) +/
 
     /+ void swap(QFontMetrics &other) noexcept
@@ -120,8 +120,8 @@ public:
     this(ref const(QFontMetricsF) );
     ~this();
 
-    /+ref QFontMetricsF operator =(ref const(QFontMetricsF) );+/
-    /+ref QFontMetricsF operator =(ref const(QFontMetrics) );+/
+    ref QFontMetricsF opAssign(ref const(QFontMetricsF) );
+    ref QFontMetricsF opAssign(ref const(QFontMetrics) );
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QFontMetricsF) +/
 
     /+ void swap(QFontMetricsF &other) noexcept { d.swap(other.d); } +/

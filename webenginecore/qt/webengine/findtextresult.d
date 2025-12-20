@@ -48,7 +48,7 @@ public:
 
     @disable this(this);
     this(ref const(QWebEngineFindTextResult) other);
-    /+ref QWebEngineFindTextResult operator =(ref const(QWebEngineFindTextResult) other);+/
+    ref QWebEngineFindTextResult opAssign(ref const(QWebEngineFindTextResult) other);
     ~this();
 
 private:

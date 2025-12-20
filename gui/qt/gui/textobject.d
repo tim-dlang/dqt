@@ -195,7 +195,7 @@ public:
         this.p = cast(QTextDocumentPrivate*)o.p;
         this.n = o.n;
     }
-    /+pragma(inline, true) ref QTextBlock operator =(ref const(QTextBlock) o) { p = o.p; n = o.n; return this; }+/
+    /+pragma(inline, true) ref QTextBlock opAssign(ref const(QTextBlock) o) { p = o.p; n = o.n; return this; }+/
 
     bool isValid() const;
 
@@ -321,7 +321,7 @@ public:
         this.n = o.n;
         this.ne = o.ne;
     }
-    /+pragma(inline, true) ref QTextFragment operator =(ref const(QTextFragment) o) { p = o.p; n = o.n; ne = o.ne; return this; }+/
+    pragma(inline, true) ref QTextFragment opAssign(ref const(QTextFragment) o) { p = o.p; n = o.n; ne = o.ne; return this; }
 
     pragma(inline, true) bool isValid() const { return p && n; }
 

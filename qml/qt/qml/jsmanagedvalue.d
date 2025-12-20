@@ -37,7 +37,7 @@ extern(C++, class) struct /+ Q_QML_EXPORT +/ QJSManagedValue
 private:
     /+ Q_DISABLE_COPY(QJSManagedValue) +/
 @disable this(this);
-/+@disable this(ref const(QJSManagedValue));+//+@disable ref QJSManagedValue operator =(ref const(QJSManagedValue));+/public:
+/+@disable this(ref const(QJSManagedValue));+/@disable ref QJSManagedValue opAssign(ref const(QJSManagedValue));public:
     enum Type {
         Undefined,
         Boolean,

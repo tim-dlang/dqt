@@ -58,7 +58,7 @@ public:
 
     @disable this(this);
     this(ref const(QWebEngineLoadingInfo) other);
-    /+ref QWebEngineLoadingInfo operator =(ref const(QWebEngineLoadingInfo) other);+/
+    ref QWebEngineLoadingInfo opAssign(ref const(QWebEngineLoadingInfo) other);
     /+ QWebEngineLoadingInfo(QWebEngineLoadingInfo &&other); +/
     /+ QWebEngineLoadingInfo &operator=(QWebEngineLoadingInfo &&other); +/
     ~this();

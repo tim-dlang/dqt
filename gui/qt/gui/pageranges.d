@@ -41,7 +41,7 @@ public:
 
     @disable this(this);
     this(ref const(QPageRanges) other)/+ noexcept+/;
-    /+ref QPageRanges operator =(ref const(QPageRanges) other)/+ noexcept+/;+/
+    ref QPageRanges opAssign(ref const(QPageRanges) other)/+ noexcept+/;
 
     /+ QPageRanges(QPageRanges &&other) noexcept = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPageRanges) +/

@@ -212,7 +212,7 @@ protected:
 private:
     /+ Q_DISABLE_COPY_MOVE(QScopedPointer) +/
 @disable this(this);
-/+@disable this(ref const(QScopedPointer));+//+@disable ref QScopedPointer operator =(ref const(QScopedPointer));+/}
+/+@disable this(ref const(QScopedPointer));+/@disable ref QScopedPointer opAssign(ref const(QScopedPointer));}
 
 /// Binding for C++ class [QScopedArrayPointer](https://doc.qt.io/qt-6/qscopedarraypointer.html).
 extern(C++, class) struct /+ [[nodiscard]] +/ QScopedArrayPointer(T, Cleanup )
@@ -267,7 +267,7 @@ private:
 
     /+ Q_DISABLE_COPY_MOVE(QScopedArrayPointer) +/
 @disable this(this);
-/+@disable this(ref const(QScopedArrayPointer));+//+@disable ref QScopedArrayPointer operator =(ref const(QScopedArrayPointer));+/}
+/+@disable this(ref const(QScopedArrayPointer));+/@disable ref QScopedArrayPointer opAssign(ref const(QScopedArrayPointer));}
 
 /+ #if QT_DEPRECATED_SINCE(6, 2)
 template <typename T, typename Cleanup>

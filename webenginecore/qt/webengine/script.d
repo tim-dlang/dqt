@@ -70,7 +70,7 @@ public:
     this(ref const(QWebEngineScript) other);
     ~this();
 
-    /+ref QWebEngineScript operator =(ref const(QWebEngineScript) other);+/
+    ref QWebEngineScript opAssign(ref const(QWebEngineScript) other);
 
     QString name() const;
     void setName(ref const(QString) );

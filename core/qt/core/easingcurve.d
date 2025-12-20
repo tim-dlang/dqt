@@ -52,7 +52,7 @@ public:
     this(ref const(QEasingCurve) other);
     ~this();
 
-    /+ref QEasingCurve operator =(ref const(QEasingCurve) other)
+    /+ref QEasingCurve opAssign(ref const(QEasingCurve) other)
     { if ( &this != &other ) { auto copy = QEasingCurve(other); swap(copy); } return this; }+/
     /+ QEasingCurve(QEasingCurve &&other) noexcept : d_ptr(other.d_ptr) { other.d_ptr = nullptr; } +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QEasingCurve) +/

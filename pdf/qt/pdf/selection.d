@@ -44,7 +44,7 @@ public:
     /+ Q_PDF_EXPORT +/~this();
     @disable this(this);
     /+ Q_PDF_EXPORT +/this(ref const(QPdfSelection) other);
-    /+/+ Q_PDF_EXPORT +/ ref QPdfSelection operator =(ref const(QPdfSelection) other);+/
+    /+ Q_PDF_EXPORT +/ ref QPdfSelection opAssign(ref const(QPdfSelection) other);
 
     /+ Q_PDF_EXPORT QPdfSelection(QPdfSelection &&other) noexcept; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QPdfSelection) +/

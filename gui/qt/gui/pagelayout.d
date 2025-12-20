@@ -65,7 +65,7 @@ public:
     @disable this(this);
     this(ref const(QPageLayout) other);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPageLayout) +/
-    /+ref QPageLayout operator =(ref const(QPageLayout) other);+/
+    ref QPageLayout opAssign(ref const(QPageLayout) other);
     ~this();
 
     /+ void swap(QPageLayout &other) noexcept { d.swap(other.d); } +/

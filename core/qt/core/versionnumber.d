@@ -87,7 +87,7 @@ private:
                 dummy = other.dummy;
         }+/
 
-        /+ref SegmentStorage operator =(ref const(SegmentStorage) other)
+        /+ref SegmentStorage opAssign(ref const(SegmentStorage) other)
         {
             import core.stdcpp.new_;
 

@@ -52,7 +52,7 @@ public:
 
     ~this();
 
-    /+ref QPen operator =(ref const(QPen) pen)/+ noexcept+/;+/
+    ref QPen opAssign(ref const(QPen) pen)/+ noexcept+/;
     /+ QPen(QPen &&other) noexcept
         : d(qExchange(other.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPen) +/

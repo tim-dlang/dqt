@@ -342,7 +342,7 @@ public:
         this.d = other.d;
         if (d) ref_();
     }
-    /+ref QSharedPointer operator =(ref const(QSharedPointer) other)/+ noexcept+/
+    /+ref QSharedPointer opAssign(ref const(QSharedPointer) other)/+ noexcept+/
     {
         auto copy = QSharedPointer(other);
         swap(copy);
@@ -382,12 +382,12 @@ public:
     }+/
 
     /+ template <class X, IfCompatible<X> = true> +/
-    /+pragma(inline, true) ref QSharedPointer operator =(X,)(ref const(QSharedPointer!(X)) other)
+    pragma(inline, true) ref QSharedPointer opAssign(X,)(ref const(QSharedPointer!(X)) other)
     {
         auto copy = QSharedPointer(other);
         swap(copy);
         return this;
-    }+/
+    }
 
     /+ template <class X, IfCompatible<X> = true> +/
     /+pragma(inline, true) this(X,)(ref const(QWeakPointer!(X)) other)
@@ -398,8 +398,8 @@ public:
     }+/
 
     /+ template <class X, IfCompatible<X> = true> +/
-    /+pragma(inline, true) ref QSharedPointer!(T) operator =(X,)(ref const(QWeakPointer!(X)) other)
-    { internalSet(other.d, other.value); return this; }+/
+    pragma(inline, true) ref QSharedPointer!(T) opAssign(X,)(ref const(QWeakPointer!(X)) other)
+    { internalSet(other.d, other.value); return this; }
 
     /*pragma(inline, true) void swap(ref QSharedPointer other) /+noexcept+/
     { this.internalSwap(other); }*/

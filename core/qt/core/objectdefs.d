@@ -182,7 +182,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
         ~this();
 
         this(ref const(Connection) other);
-        /+ref Connection operator =(ref const(Connection) other);+/
+        ref Connection opAssign(ref const(Connection) other);
     /+ #ifdef Q_QDOC
         operator bool() const;
     #else +/

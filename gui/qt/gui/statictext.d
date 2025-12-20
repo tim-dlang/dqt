@@ -49,7 +49,7 @@ public:
     @disable this(this);
     this(ref const(QStaticText) other);
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QStaticText) +/
-    /+ref QStaticText operator =(ref const(QStaticText) );+/
+    ref QStaticText opAssign(ref const(QStaticText) );
     ~this();
 
     /+ void swap(QStaticText &other) noexcept { data.swap(other.data); } +/

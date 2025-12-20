@@ -241,14 +241,14 @@ public:
     /+bool operator ==(ref const(QPersistentModelIndex) other) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QPersistentModelIndex) other) const
     { return !operator==(other); }+/
-    /+ref QPersistentModelIndex operator =(ref const(QPersistentModelIndex) other);+/
+    ref QPersistentModelIndex opAssign(ref const(QPersistentModelIndex) other);
     /+ inline QPersistentModelIndex(QPersistentModelIndex &&other) noexcept
         : d(qExchange(other.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPersistentModelIndex) +/
     /+ void swap(QPersistentModelIndex &other) noexcept { qt_ptr_swap(d, other.d); } +/
     /+bool operator ==(ref const(QModelIndex) other) const;+/
     /+bool operator !=(ref const(QModelIndex) other) const;+/
-    /+ref QPersistentModelIndex operator =(ref const(QModelIndex) other);+/
+    ref QPersistentModelIndex opAssign(ref const(QModelIndex) other);
     /+auto opCast(T : QModelIndex)() const;+/
     int row() const;
     int column() const;
