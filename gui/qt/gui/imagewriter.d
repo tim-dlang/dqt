@@ -95,7 +95,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QImageWriter) +/
 @disable this(this);
-/+this(ref const(QImageWriter));+//+ref QImageWriter operator =(ref const(QImageWriter));+/    QImageWriterPrivate* d;
+/+@disable this(ref const(QImageWriter));+//+@disable ref QImageWriter operator =(ref const(QImageWriter));+/    QImageWriterPrivate* d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

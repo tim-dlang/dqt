@@ -137,7 +137,7 @@ public:
 private:
     /+ friend class QJSValuePrivate; +/
     // force compile error, prevent QJSValue(bool) to be called
-    @disable this(void* ) /+ = delete +/;
+    @disable this(void* );
 
     quint64 d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);

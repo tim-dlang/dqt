@@ -129,7 +129,7 @@ extern(C++, "QtSharedPointer") {
         // Normally, only subclasses of ExternalRefCountData are allocated
         // One exception exists in getAndRef; that uses the global operator new
         // to prevent a mismatch with the custom operator delete
-        /+pragma(inline, true) void* operator new(/+ std:: +/size_t) /+ = delete +/;+/
+        /+pragma(inline, true) @disable void* operator new(/+ std:: +/size_t);+/
         // placement new
         /+pragma(inline, true) void* operator new(/+ std:: +/size_t, void* ptr)/+ noexcept+/ { return ptr; }+/
         /+pragma(inline, true) void operator delete(void* ptr) { UnresolvedMergeConflict!(q{.operator delete},q{.operator delete})(ptr); }+/

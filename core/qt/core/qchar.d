@@ -681,8 +681,8 @@ private:
     static bool /+ QT_FASTCALL +/ isLetterOrNumber_helper(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
 /+ #ifdef QT_NO_CAST_FROM_ASCII +/
-    //this(char c) /+ = delete +/;
-    //this(uchar c) /+ = delete +/;
+    //@disable this(char c);
+    //@disable this(uchar c);
 /+ #endif +/
 
     wchar ucs = 0;

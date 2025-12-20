@@ -255,7 +255,7 @@ private:
 
     /+ Q_DISABLE_COPY(QPropertyBindingData) +/
 @disable this(this);
-/+this(ref const(QPropertyBindingData));+//+ref QPropertyBindingData operator =(ref const(QPropertyBindingData));+/public:
+/+@disable this(ref const(QPropertyBindingData));+//+@disable ref QPropertyBindingData operator =(ref const(QPropertyBindingData));+/public:
     /+ QPropertyBindingData() = default; +/
     /+ QPropertyBindingData(QPropertyBindingData &&other); +/
     /+ QPropertyBindingData &operator=(QPropertyBindingData &&other) = delete; +/

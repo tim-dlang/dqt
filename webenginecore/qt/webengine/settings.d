@@ -112,7 +112,7 @@ private:
     void setParentSettings(QWebEngineSettings* parentSettings);
     /+ Q_DISABLE_COPY(QWebEngineSettings) +/
 @disable this(this);
-/+this(ref const(QWebEngineSettings));+//+ref QWebEngineSettings operator =(ref const(QWebEngineSettings));+/    alias QWebEngineSettingsPrivate = /+ ::QtWebEngineCore:: +/WebEngineSettings;
+/+@disable this(ref const(QWebEngineSettings));+//+@disable ref QWebEngineSettings operator =(ref const(QWebEngineSettings));+/    alias QWebEngineSettingsPrivate = /+ ::QtWebEngineCore:: +/WebEngineSettings;
     QScopedPointer!(QWebEngineSettingsPrivate) d_ptr;
     /+ friend class QWebEnginePagePrivate; +/
     /+ friend class QWebEngineProfilePrivate; +/

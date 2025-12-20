@@ -297,7 +297,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QPainterPathStroker) +/
 @disable this(this);
-/+this(ref const(QPainterPathStroker));+//+ref QPainterPathStroker operator =(ref const(QPainterPathStroker));+/
+/+@disable this(ref const(QPainterPathStroker));+//+@disable ref QPainterPathStroker operator =(ref const(QPainterPathStroker));+/
     /+ friend class QX11PaintEngine; +/
 
     QScopedPointer!(QPainterPathStrokerPrivate) d_ptr;

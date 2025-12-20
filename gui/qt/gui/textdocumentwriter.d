@@ -59,7 +59,7 @@ public:
 private:
     /+ Q_DISABLE_COPY(QTextDocumentWriter) +/
 @disable this(this);
-/+this(ref const(QTextDocumentWriter));+//+ref QTextDocumentWriter operator =(ref const(QTextDocumentWriter));+/    QTextDocumentWriterPrivate* d;
+/+@disable this(ref const(QTextDocumentWriter));+//+@disable ref QTextDocumentWriter operator =(ref const(QTextDocumentWriter));+/    QTextDocumentWriterPrivate* d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

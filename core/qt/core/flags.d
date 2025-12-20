@@ -171,12 +171,12 @@ public:
     pragma(inline, true) QFlags opBinary(string op)(Enum other) const/+ noexcept+/ if (op == "&") { return QFlags(QFlag(i & Int(other))); }
     pragma(inline, true) QFlags opUnary(string op)() const/+ noexcept+/ if (op == "~") { return QFlags(QFlag(~i)); }
 
-    pragma(inline, true) void opBinary(string op)(QFlags other) const/+ noexcept+/ if (op == "+") /+ = delete +/;
-    pragma(inline, true) void opBinary(string op)(Enum other) const/+ noexcept+/ if (op == "+") /+ = delete +/;
-    pragma(inline, true) void opBinary(string op)(int other) const/+ noexcept+/ if (op == "+") /+ = delete +/;
-    pragma(inline, true) void opBinary(string op)(QFlags other) const/+ noexcept+/ if (op == "-") /+ = delete +/;
-    pragma(inline, true) void opBinary(string op)(Enum other) const/+ noexcept+/ if (op == "-") /+ = delete +/;
-    pragma(inline, true) void opBinary(string op)(int other) const/+ noexcept+/ if (op == "-") /+ = delete +/;
+    pragma(inline, true) @disable void opBinary(string op)(QFlags other) const/+ noexcept+/ if (op == "+");
+    pragma(inline, true) @disable void opBinary(string op)(Enum other) const/+ noexcept+/ if (op == "+");
+    pragma(inline, true) @disable void opBinary(string op)(int other) const/+ noexcept+/ if (op == "+");
+    pragma(inline, true) @disable void opBinary(string op)(QFlags other) const/+ noexcept+/ if (op == "-");
+    pragma(inline, true) @disable void opBinary(string op)(Enum other) const/+ noexcept+/ if (op == "-");
+    pragma(inline, true) @disable void opBinary(string op)(int other) const/+ noexcept+/ if (op == "-");
 
     pragma(inline, true) bool testFlag(Enum flag) const/+ noexcept+/ { return testFlags(QFlags(flag)); }
     pragma(inline, true) bool testFlags(QFlags flags) const/+ noexcept+/ { return flags.i ? ((i & flags.i) == flags.i) : i == Int(0); }

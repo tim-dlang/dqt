@@ -392,7 +392,7 @@ mixin(!defined!"__cpp_rtti" ? q{obj__1} : q{obj__2})); };
     private:
         /+ Q_DISABLE_COPY_MOVE(QSlotObjectBase) +/
 @disable this(this);
-/+this(ref const(QSlotObjectBase));+//+ref QSlotObjectBase operator =(ref const(QSlotObjectBase));+/    }
+/+@disable this(ref const(QSlotObjectBase));+//+@disable ref QSlotObjectBase operator =(ref const(QSlotObjectBase));+/    }
 
     // implementation of QSlotObjectBase for which the slot is a pointer to member function of a QObject
     // Args and R are the List of arguments and the return type of the signal to which the slot is connected.

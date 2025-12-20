@@ -310,8 +310,8 @@ protected:
 private:
 
     @disable this(this);
-    /+this(ref const(QPropertyObserver) ) /+ = delete +/;+/
-    /+ref QPropertyObserver operator =(ref const(QPropertyObserver) ) /+ = delete +/;+/
+    /+@disable this(ref const(QPropertyObserver) );+/
+    /+@disable ref QPropertyObserver operator =(ref const(QPropertyObserver) );+/
 
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
@@ -557,7 +557,7 @@ private:
 
     /+ Q_DISABLE_COPY_MOVE(QProperty) +/
 @disable this(this);
-/+this(ref const(QProperty));+//+ref QProperty operator =(ref const(QProperty));+/}
+/+@disable this(ref const(QProperty));+//+@disable ref QProperty operator =(ref const(QProperty));+/}
 
 extern(C++, "Qt") {
 /+    QPropertyBinding!(PropertyType) makePropertyBinding(PropertyType)(ref const(QProperty!(PropertyType)) otherProperty,
@@ -895,7 +895,7 @@ extern(C++, class) struct QPropertyAlias(T)
 private:
     /+ Q_DISABLE_COPY_MOVE(QPropertyAlias) +/
 @disable this(this);
-/+this(ref const(QPropertyAlias));+//+ref QPropertyAlias operator =(ref const(QPropertyAlias));+/    const(/+ QtPrivate:: +/QBindableInterface)* iface = null;
+/+@disable this(ref const(QPropertyAlias));+//+@disable ref QPropertyAlias operator =(ref const(QPropertyAlias));+/    const(/+ QtPrivate:: +/QBindableInterface)* iface = null;
 
 public:
 /+    this(QProperty!(T)* property)

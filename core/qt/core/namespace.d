@@ -2467,7 +2467,7 @@ public:
         return lhs.combination != rhs.combination;
     } +/
 
-    /+bool operator <(QKeyCombination) const /+ = delete +/;+/
+    /+@disable bool operator <(QKeyCombination) const;+/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

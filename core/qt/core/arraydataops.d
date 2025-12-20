@@ -406,7 +406,7 @@ public:
         }
         /+ Q_DISABLE_COPY(Inserter) +/
 @disable this(this);
-/+this(ref const(Inserter));+//+ref Inserter operator =(ref const(Inserter));+/
+/+@disable this(ref const(Inserter));+//+@disable ref Inserter operator =(ref const(Inserter));+/
         void setup()(qsizetype pos, qsizetype n)
         {
             end = begin + size;
@@ -724,7 +724,7 @@ public:
         }
         /+ Q_DISABLE_COPY(Inserter) +/
 @disable this(this);
-/+this(ref const(Inserter));+//+ref Inserter operator =(ref const(Inserter));+/
+/+@disable this(ref const(Inserter));+//+@disable ref Inserter operator =(ref const(Inserter));+/
         T* displace()(qsizetype pos, qsizetype n)
         {
             import core.stdc.string;
