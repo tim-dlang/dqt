@@ -57,6 +57,16 @@ jobs:
             container: debian:12
             model: 32
 
+          - platform: linuxarm64
+            os: ubuntu-24.04-arm
+            model: 64
+            qt_version: 6.7.3
+            qt_arch: gcc_arm64
+            qt_arch_url: linux_gcc_arm64
+            qt_platform: linux_arm64/desktop
+            dc: ldc-1.38.0
+            runtest_args: --skip-webengine --skip-pdf
+
           - platform: android_armv7
             os: ubuntu-24.04
             model: triple=armv7a--linux-android30
@@ -70,6 +80,7 @@ jobs:
             android_arch3: arm
             ldc_android_arch: armv7a
             ndk_clang: armv7a-linux-androideabi30-clang
+            runtest_args: --skip-webengine --skip-pdf
 
           - platform: android_arm64
             os: ubuntu-24.04
@@ -85,6 +96,7 @@ jobs:
             android_bits_suffix: 64
             ldc_android_arch: aarch64
             ndk_clang: aarch64-linux-android30-clang
+            runtest_args: --skip-webengine --skip-pdf
 
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
@@ -165,7 +177,7 @@ jobs:
           echo "C:\msys64\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install Linux packages
-        if: ${{ matrix.os == 'ubuntu-24.04' && matrix.platform != 'debian32' }}
+        if: ${{ (matrix.os == 'ubuntu-24.04' || matrix.os == 'ubuntu-24.04-arm') && matrix.platform != 'debian32' }}
         run: |
           sudo apt-get update
           sudo apt-get install -y libegl1 libpulse0
@@ -186,7 +198,7 @@ jobs:
       - name: 'Build & Test'
         timeout-minutes: 5
         run: |
-          ${{ env.DC }} -run runtests.d --github --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=qt-lib/${{ matrix.qt_version }}/${{ matrix.qt_arch }} --arch-suffix=${{ matrix.qt_arch_suffix }} --dxml-path=dxml/source
+          ${{ env.DC }} -run runtests.d --github --compiler=${{ env.DC }} -m${{ matrix.model }} --qt-path=qt-lib/${{ matrix.qt_version }}/${{ matrix.qt_arch }} --arch-suffix=${{ matrix.qt_arch_suffix }} --dxml-path=dxml/source ${{ matrix.runtest_args }}
 
 #      - name: Upload test results
 #        uses: actions/upload-artifact@v4

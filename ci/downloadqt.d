@@ -70,6 +70,13 @@ int main(string[] args)
         return 1;
     }
 
+    int[] versionParts = qtVersion.split(".").map!(s => s.to!int).array;
+    if (versionParts.length != 3)
+    {
+        stderr.writeln("Invalid version ", qtVersion);
+        return 1;
+    }
+
     string qtArch2;
     if (qtArch.startsWith("android_") && qtVersion.startsWith("6."))
         qtArch2 = qtArch[7 .. $];
@@ -79,6 +86,8 @@ int main(string[] args)
 
     string urlPrefix = text("https://download.qt.io/online/qtsdkrepository/",
             qtPlatform, "/qt", qtVersion[0], "_", qtVersion.replace(".", ""), qtArch2, "/");
+    if (versionParts[0] * 100 + versionParts[2] >= 608)
+        urlPrefix ~= text("qt", qtVersion[0], "_", qtVersion.replace(".", ""), "/");
     string packageNamePrefix = text("qt.qt", qtVersion[0], ".", qtVersion.replace(".", ""), ".");
     string updatesFile = text("Qt-Updates-", qtPlatform.replace("/", "-"), "-", qtVersion, qtArch2, ".xml");
 
@@ -98,6 +107,7 @@ int main(string[] args)
     }
 
     Archive[string] archives;
+    string[string] archiveExtractPath;
 
     foreach (ref c; root.children)
     {
@@ -108,9 +118,12 @@ int main(string[] args)
         string[] archiveNames;
         foreach (ref c2; c.children)
         {
-            string textContent;
-            if (c2.children.length)
-                textContent = c2.children[0].text;
+            string textContent()
+            {
+                if (c2.children.length)
+                    return c2.children[0].text;
+                return "";
+            }
 
             if (c2.name == "Name")
                 name = textContent;
@@ -118,6 +131,30 @@ int main(string[] args)
                 version_ = textContent;
             else if (c2.name == "DownloadableArchives")
                 archiveNames = textContent.split(",").map!(s => s.strip).array;
+            else if (c2.name == "Operations")
+            {
+                foreach (ref o; c2.children)
+                {
+                    if (o.name == "Operation")
+                    {
+                        string[string] attributes;
+                        foreach (attr; o.attributes)
+                        {
+                            attributes[attr.name] = attr.value;
+                        }
+                        string[] arguments;
+                        foreach (ref a; o.children)
+                        {
+                            if (a.name == "Argument")
+                                arguments ~= a.children[0].text;
+                        }
+                        if (attributes["name"] == "Extract" && arguments.length == 2 && arguments[0].startsWith("@TargetDir@/"))
+                        {
+                            archiveExtractPath[arguments[1]] = arguments[0]["@TargetDir@/".length .. $] ~ "/";
+                        }
+                    }
+                }
+            }
         }
 
         string name2 = name;
@@ -154,14 +191,43 @@ int main(string[] args)
         Archive archive = archives[shortName];
         downloadFile(urlPrefix ~ archive.packageName ~ "/" ~ archive.version_ ~ archive.archiveName,
                 archive.version_ ~ archive.archiveName);
+        string archivePrefix = qtVersion ~ "/" ~ qtArch ~ "/";
+        string extractPrefix = archiveExtractPath.get(archive.archiveName, "");
+        if (extractPrefix.length > archivePrefix.length)
+            enforce(extractPrefix.startsWith(archivePrefix));
+        else
+            enforce(archivePrefix.startsWith(extractPrefix));
+        string[] extractPaths;
+        bool extractFull;
+        foreach (d; [
+            "lib",
+            "bin",
+            "plugins/platforms",
+            "libexec",
+            "resources"])
+        {
+            if (extractPrefix.length <= archivePrefix.length)
+                extractPaths ~= archivePrefix[extractPrefix.length .. $] ~ d;
+            else if ((d ~ "/").startsWith(extractPrefix[archivePrefix.length .. $]))
+            {
+                if (d[extractPrefix.length - archivePrefix.length - 1 .. $].length)
+                    extractPaths ~= d[extractPrefix.length - archivePrefix.length - 1 .. $];
+                else
+                    extractFull = true;
+            }
+        }
+        if (!extractFull && extractPaths.length == 0)
+        {
+            writeln("Missing path in ", shortName);
+            anyFailure = true;
+            return;
+        }
+        if (extractFull)
+            extractPaths = [];
         runCommand([
             "7z", "x", archive.version_ ~ archive.archiveName,
-            qtVersion ~ "/" ~ qtArch ~ "/lib",
-            qtVersion ~ "/" ~ qtArch ~ "/bin",
-            qtVersion ~ "/" ~ qtArch ~ "/plugins/platforms",
-            qtVersion ~ "/" ~ qtArch ~ "/libexec",
-            qtVersion ~ "/" ~ qtArch ~ "/resources",
-            "-oqt-lib"
+            ] ~ extractPaths ~ [
+            "-oqt-lib/" ~ extractPrefix
         ]);
     }
 
@@ -181,10 +247,10 @@ int main(string[] args)
     {
         downloadArchive("addons.qtpositioning.qtpositioning");
         downloadArchive("addons.qtwebchannel.qtwebchannel");
-        if (!qtArch.startsWith("android"))
+        if (!qtArch.startsWith("android") && qtArch != "gcc_arm64")
             downloadArchive("addons.qtwebengine.qtwebengine");
         downloadArchive("addons.qtmultimedia.qtmultimedia");
-        if (!qtArch.startsWith("android"))
+        if (!qtArch.startsWith("android") && qtArch != "gcc_arm64")
             downloadArchive("addons.qtpdf.qtpdf");
     }
 

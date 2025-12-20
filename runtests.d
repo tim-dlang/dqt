@@ -108,6 +108,8 @@ int main(string[] args)
     string archSuffix;
     bool verbose;
     bool github;
+    bool skipWebEngine;
+    bool skipPdf;
 
     for (size_t i = 1; i < args.length; i++)
     {
@@ -138,6 +140,14 @@ int main(string[] args)
         else if (args[i] == "--github")
         {
             github = true;
+        }
+        else if (args[i] == "--skip-webengine")
+        {
+            skipWebEngine = true;
+        }
+        else if (args[i] == "--skip-pdf")
+        {
+            skipPdf = true;
         }
         else
         {
@@ -390,11 +400,11 @@ int main(string[] args)
                 anyFailure = true;
             }
 
-        if (model.canFind("android") && test.name.canFind("webengine"))
+        if (skipWebEngine && test.name.canFind("webengine"))
             canTest = false;
-        if (model.canFind("android") && test.name.canFind("examplebrowser"))
+        if (skipWebEngine && test.name.canFind("examplebrowser"))
             canTest = false;
-        if (model.canFind("android") && test.name.canFind("pdf"))
+        if (skipPdf && test.name.canFind("pdf"))
             canTest = false;
 
         if (!canTest)

@@ -86,15 +86,16 @@ public:
     {
         this.d = null;
     }+/
-    ~this() {
-        import core.stdcpp.new_;
-        static if (__traits(compiles, (*d).sizeof))
-        {
+    static if (__traits(compiles, (*d).sizeof))
+    {
+        ~this() {
             import core.stdcpp.new_;
             if (d && !d.ref_.deref()) cpp_delete(d);
         }
-        else
-            assert(false);
+    }
+    else
+    {
+        @disable ~this();
     }
 
 /+    /+ explicit +/this(T* data)/+ noexcept+/
@@ -219,14 +220,16 @@ public:
     {
         this.d = null;
     }+/
-    ~this() {
-        static if (__traits(compiles, (*d).sizeof))
-        {
+    static if (__traits(compiles, (*d).sizeof))
+    {
+        ~this() {
             import core.stdcpp.new_;
             if (d && !d.ref_.deref()) cpp_delete(d);
         }
-        else
-            assert(false);
+    }
+    else
+    {
+        @disable ~this();
     }
 
     /+ /+ explicit +/this(T* data)/+ noexcept+/
