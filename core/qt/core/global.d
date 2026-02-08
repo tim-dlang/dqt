@@ -1048,7 +1048,7 @@ QT_WARNING_DISABLE_MSVC(4530) /* C++ exception handler used, but unwind semantic
 /+pragma(inline, true) bool qt_is_permutation(ForwardIterator1, ForwardIterator2)(ForwardIterator1 first1, ForwardIterator1 last1,
                               ForwardIterator2 first2, ForwardIterator2 last2)
 {
-    return /+ QT_3ARG_ALG(is_permutation, first1, last1, first2, last2) +/[&first1,&last1,&first2,&last2](){return is_permutation(first1,last1,first2);}();
+    return /+ QT_3ARG_ALG(is_permutation, first1, last1, first2, last2) +/(){return is_permutation(first1,last1,first2);}();
 }+/
 /+ #undef QT_3ARG_ALG +/
 
@@ -1147,7 +1147,7 @@ for (auto _container_ = QtPrivate::qMakeForeachContainer(container); \
 #endif +/
 
 pragma(inline, true) T* qGetPtrHelper(T)(T* ptr) { return ptr; }
-//pragma(inline, true) auto qGetPtrHelper(Ptr)()/+ (Ptr &ptr) -> decltype(ptr.operator->()) +/ { return ptr.operator->(); }
+//pragma(inline, true) auto qGetPtrHelper(Ptr)(ref Ptr ptr) /+ -> decltype(ptr.operator->()) +/ { return ptr.operator->(); }
 
 // The body must be a statement:
 /+ #define Q_CAST_IGNORE_ALIGN(body) QT_WARNING_PUSH QT_WARNING_DISABLE_GCC("-Wcast-align") body QT_WARNING_POP +/

@@ -150,7 +150,7 @@ private:
             for (int i = 0; i < length; ++i)
                 stash.append(i == idx ? v : list.at(list, i));
             list.clear(list);
-            for (T *item : qAsConst(stash))
+            foreach (T* item; qAsConst(stash))
                 list.append(list, item);
         } else {
             stash.reserve(length - idx - 1);
@@ -183,7 +183,7 @@ private:
         for (int i = 0; i < length; ++i)
             stash.append(list.at(list, i));
         list.clear(list);
-        for (T *item : qAsConst(stash))
+        foreach (T* item; qAsConst(stash))
             list.append(list, item);
     } +/
 }
