@@ -2,7 +2,6 @@ module examplewidgets.tabtreewidget;
 
 import qt.config;
 import qt.core.point;
-import qt.core.string;
 import qt.helpers;
 import qt.widgets.ui;
 import qt.widgets.widget;

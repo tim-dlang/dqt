@@ -63,7 +63,7 @@ public:
             QString name = QString(lang[0]);
             QAction action = actionGroupLanguage.addAction(name);
             action.setCheckable(true);
-            action.setData(QString(lang[1]));
+            action.setData(lang[1]);
         }
         ui.menuLanguage.addActions(actionGroupLanguage.actions());
         actionGroupLanguage.actions()[0].setChecked(true);

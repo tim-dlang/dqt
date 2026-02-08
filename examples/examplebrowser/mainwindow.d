@@ -55,10 +55,10 @@ public:
         connect(ui.lineEditAddress.signal!"returnPressed", this.slot!"on_pushButtonGo_clicked");
 
         connect(ui.webEngineView.signal!"loadStarted", this, () {
-            ui.labelState.setText(QString("Loading"));
+            ui.labelState.setText("Loading");
             ui.listWidgetRequests.clear();
             ui.labelIcon.setPixmap(QPixmap(0, 0));
-            ui.labelTitle.setText(QString(""));
+            ui.labelTitle.setText("");
             updateView();
         });
         connect(ui.webEngineView.signal!"loadProgress", this, (int progress) {
@@ -66,7 +66,7 @@ public:
         });
         connect(ui.webEngineView.signal!"loadFinished", this, (bool ok) {
             ui.progressBar.setValue(ok ? 100 : 0);
-            ui.labelState.setText(QString(ok ? "Finished" : "Error"));
+            ui.labelState.setText(ok ? "Finished" : "Error");
             updateView();
         });
         connect(ui.webEngineView.signal!"urlChanged", this, (ref const QUrl url) {
@@ -92,7 +92,7 @@ public:
         ui.splitter.setStretchFactor(0, 10);
         ui.splitter.setStretchFactor(1, 1);
 
-        ui.lineEditAddress.setText(QString("https://dlang.org"));
+        ui.lineEditAddress.setText("https://dlang.org");
         on_pushButtonGo_clicked();
     }
     ~this()
@@ -148,7 +148,7 @@ private /+ slots +/:
         text ~= "Current CPU Architecture: " ~ QSysInfo.currentCpuArchitecture() ~ "\n";
         text ~= QString("\n");
         text ~= "User Agent: " ~ ui.webEngineView.page().profile().httpUserAgent();
-        QMessageBox.information(this, QString("System Info"), text);
+        QMessageBox.information(this, "System Info", text);
     }
 
 private:
