@@ -180,7 +180,7 @@ public:
 
     final QVariant data() const;
     final void setData(ref const(QVariant) var);
-    final void setData(T)(T value)
+    extern(D) final void setData(T)(T value)
     {
         static if (is(const(T) == const(QVariant)))
             QVariant v = value;

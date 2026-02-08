@@ -60,7 +60,7 @@ protected:
 
         if (selected == pdfAction)
         {
-            QString filename = QFileDialog.getSaveFileName(this, globalInitVar!QString, globalInitVar!QString, QString("*.pdf"));
+            QString filename = QFileDialog.getSaveFileName(this, globalInitVar!QString, globalInitVar!QString, "*.pdf");
             if (!filename.isEmpty())
             {
                 scope writer = new QPdfWriter(filename);

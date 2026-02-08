@@ -29,8 +29,6 @@ public:
 
     @QSlot final void reset()
     {
-        import qt.core.variant;
-
         setBool1(false);
         setProperty("bool2", false);
         setString1("string1");
