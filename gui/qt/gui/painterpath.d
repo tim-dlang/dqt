@@ -222,7 +222,7 @@ private:
 
 //    pragma(inline, true) void ensureData() { if (!d_ptr) ensureData_helper(); }
     void ensureData_helper();
-    void detach();
+    //void detach();
     void setDirty(bool);
     void computeBoundingRect() const;
     void computeControlPointRect() const;

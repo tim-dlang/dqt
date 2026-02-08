@@ -183,7 +183,7 @@ private:
     static bool forwardEvent(QObject receiver, QEvent event, QEvent originatingEvent = null);
 /+ #endif
 #if QT_CONFIG(library) +/
-    static QStringList libraryPathsLocked();
+    //static QStringList libraryPathsLocked();
 /+ #endif +/
 
     mixin(mangleWindows("?self@QCoreApplication@@0PEAV1@EA", exportOnWindows ~ q{
