@@ -326,7 +326,7 @@ private:
 public:
 /*    this(Functor handler)
     {
-        this.base0 = QPropertyObserver([](QPropertyObserver *self, QUntypedPropertyData *) {
+        this.base0 = QPropertyObserver(/+ [] +/(QPropertyObserver* self, QUntypedPropertyData* ) {
                       auto This = static_cast!(QPropertyChangeHandler!(Functor)*)(self);
                       This.m_handler();
                   });
@@ -336,7 +336,7 @@ public:
     /+ template<typename Property, typename = typename Property::InheritsQUntypedPropertyData> +/
     /+ this(Property,)(ref const(Property) property, Functor handler)
     {
-        this.base0 = QPropertyObserver([](QPropertyObserver *self, QUntypedPropertyData *) {
+        this.base0 = QPropertyObserver(/+ [] +/(QPropertyObserver* self, QUntypedPropertyData* ) {
                       auto This = static_cast!(QPropertyChangeHandler!(Functor)*)(self);
                       This.m_handler();
                   });
@@ -358,7 +358,7 @@ public:
     /+ template<typename Functor> +/
     this(Functor)(Functor handler)
     {
-        this.base0 = QPropertyObserver([](QPropertyObserver *self, QUntypedPropertyData *) {
+        this.base0 = QPropertyObserver(/+ [] +/(QPropertyObserver* self, QUntypedPropertyData* ) {
                     auto This = static_cast!(QPropertyNotifier*)(self);
                     This.m_handler();
                 });
@@ -368,7 +368,7 @@ public:
     /+ template<typename Functor, typename Property, typename = typename Property::InheritsQUntypedPropertyData> +/
     this(Functor,Property,)(ref const(Property) property, Functor handler)
     {
-        this.base0 = QPropertyObserver([](QPropertyObserver *self, QUntypedPropertyData *) {
+        this.base0 = QPropertyObserver(/+ [] +/(QPropertyObserver* self, QUntypedPropertyData* ) {
                     auto This = static_cast!(QPropertyNotifier*)(self);
                     This.m_handler();
                 });
@@ -564,7 +564,7 @@ extern(C++, "Qt") {
                                                            ref const(QPropertyBindingSourceLocation) location /+ =
                                                            QT_PROPERTY_DEFAULT_BINDING_LOCATION +/)
     {
-        return makePropertyBinding([&otherProperty]() -> PropertyType { return otherProperty; }, location);
+        return /+ Qt:: +/makePropertyBinding(/+ [&otherProperty] +/() /+ -> PropertyType +/ { return otherProperty; }, location);
     }+/
 }
 
@@ -601,16 +601,16 @@ public:
     // interface for computed properties. Those do not have a binding()/setBinding() method, but one can
     // install observers on them.
 /+    extern(D) static immutable QBindableInterface iface = {
-        [](const QUntypedPropertyData *d, void *value) -> void
+        /+ [] +/(const(QUntypedPropertyData)* d, void* value) /+ -> void +/
         { *static_cast!(T*)(value) = static_cast!(const(Property)*)(d).value(); },
         null,
         null,
         null,
-        [](const QUntypedPropertyData *d, const QPropertyBindingSourceLocation &location) -> QUntypedPropertyBinding
-        { return /+ Qt:: +/makePropertyBinding([d]() -> T { return static_cast!(const(Property)*)(d).value(); }, location); },
-        [](const QUntypedPropertyData *d, QPropertyObserver *observer) -> void
+        /+ [] +/(const(QUntypedPropertyData)* d, ref const(QPropertyBindingSourceLocation) location) /+ -> QUntypedPropertyBinding +/
+        { return /+ Qt:: +/makePropertyBinding(/+ [d] +/() /+ -> T +/ { return static_cast!(const(Property)*)(d).value(); }, location); },
+        /+ [] +/(const(QUntypedPropertyData)* d, QPropertyObserver* observer) /+ -> void +/
         { observer.setSource(static_cast!(const(Property)*)(d).bindingData()); },
-        []() { return QMetaType.fromType!(T)(); }}
+        /+ [] +/() { return QMetaType.fromType!(T)(); }}
     ;+/
 }
 
@@ -964,7 +964,7 @@ public:
 
     bool setBinding(ref const(QUntypedPropertyBinding) newBinding)
     {
-        return cast(bool) (QBindable!(T)(aliasedProperty(), iface).setBinding(newBinding));
+        return QBindable!(T)(aliasedProperty(), iface).setBinding(newBinding);
     }
 
 /+ #ifndef Q_CLANG_QDOC +/

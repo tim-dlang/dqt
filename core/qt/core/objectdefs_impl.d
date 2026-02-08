@@ -121,13 +121,11 @@ extern(C++, "QtPrivate") {
         import qt.core.global;
 
         // ensure all three compile
-        /+ [[maybe_unused]] +/ auto staticcast = [](QObject *obj) { return static_cast!(Obj*)(
-mixin(!defined!"__cpp_rtti" ? q{obj__1} : q{obj__2})); };
-        /+ [[maybe_unused]] +/ auto qobjcast = [](QObject *obj) { return Obj.staticMetaObject.cast_(
-mixin(!defined!"__cpp_rtti" ? q{obj__1} : q{obj__2})); };
+        /+ [[maybe_unused]] +/ auto staticcast = /+ [] +/(QObject obj) { return static_cast!(Obj*)(obj); };
+        /+ [[maybe_unused]] +/ auto qobjcast = /+ [] +/(QObject obj) { return Obj.staticMetaObject.cast_(obj); };
         static if (defined!"__cpp_rtti")
         {
-            /+ [[maybe_unused]] +/ auto dyncast = [](QObject *obj) { return dynamic_cast!(Obj*)(obj__2); };
+            /+ [[maybe_unused]] +/ auto dyncast = /+ [] +/(QObject obj) { return dynamic_cast!(Obj*)(obj); };
             auto cast_ = dyncast;
         }
         else

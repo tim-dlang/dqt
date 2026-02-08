@@ -1286,7 +1286,7 @@ constexpr std::underlying_type_t<Enum> qToUnderlying(Enum e) noexcept
 #endif +/
 
 pragma(inline, true) T* qGetPtrHelper(T)(T* ptr)/+ noexcept+/ { return ptr; }
-pragma(inline, true) auto qGetPtrHelper(Ptr)()/+ (Ptr &ptr) noexcept -> decltype(ptr.get()) +/
+pragma(inline, true) auto qGetPtrHelper(Ptr)(ref Ptr ptr)/+ noexcept+/ /+ -> decltype(ptr.get()) +/
 { static assert(noexcept(ptr.get()), "Smart d pointers for Q_DECLARE_PRIVATE must have noexcept get()"); return ptr.get(); }
 
 // The body must be a statement:

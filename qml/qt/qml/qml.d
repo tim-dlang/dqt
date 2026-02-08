@@ -734,8 +734,8 @@ static if (false)
 /+ int qmlRegisterSingletonInstance(const char *uri, int versionMajor, int versionMinor, const char *typeName, QObject *cppObject) +/
 }
 /+ #else +/
-pragma(inline, true) auto qmlRegisterSingletonInstance(T)()/+ (const char *uri, int versionMajor, int versionMinor,
-                                         const char *typeName, T *cppObject) -> typename std::enable_if<std::is_base_of<QObject, T>::value, int>::type +/
+pragma(inline, true) auto qmlRegisterSingletonInstance(T)(const(char)* uri, int versionMajor, int versionMinor,
+                                         const(char)* typeName, T* cppObject) /+ -> typename std::enable_if<std::is_base_of<QObject, T>::value, int>::type +/
 /+ #endif +/
 {
     import qt.core.pointer;

@@ -276,11 +276,11 @@ public:
     //
 /+    /+ [[nodiscard]] +/ QChar front() const
     {
-        return visit([] (auto that) { return QAnyStringView.toQChar(that.front()); });
+        return visit(/+ [] +/ (auto that) { return QAnyStringView.toQChar(that.front()); });
     } // NOT noexcept!
     /+ [[nodiscard]] +/ QChar back() const
     {
-        return visit([] (auto that) { return QAnyStringView.toQChar(that.back()); });
+        return visit(/+ [] +/ (auto that) { return QAnyStringView.toQChar(that.back()); });
     } +/ // NOT noexcept!
     /+ [[nodiscard]] +/ bool empty() const/+ noexcept+/ { return size() == 0; }
     /+ [[nodiscard]] +/ qsizetype size_bytes() const/+ noexcept+/

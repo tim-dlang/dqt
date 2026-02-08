@@ -100,7 +100,7 @@ public:
 
         if (time == (/+ std:: +/numeric_limits!(cpp_ulong).max)())
             return wait(QDeadlineTimer(QDeadlineTimer.ForeverConstant.Forever));
-        return wait(QDeadlineTimer(cast(Identity!(mixin((true)?q{duration!(Rep, Period)}:q{qint64}))) (time)));
+        return wait(QDeadlineTimer(cast(Identity!(mixin((versionIsSet!("Android"))?q{qint64}:q{duration!(Rep, Period)}))) (time)));
     }+/
 
     static void sleep(cpp_ulong );

@@ -599,7 +599,7 @@ public:
 
         const(QMetaType) fromType = QMetaType.fromType!(From)();
         const(QMetaType) toType = QMetaType.fromType!(To)();
-        auto view = [function](void *from, void *to) -> bool {
+        auto view = /+ [function] +/(void* from, void* to) /+ -> bool +/ {
             From* f = static_cast!(From*)(from);
             To* t = static_cast!(To*)(to);
             *t = (f->*function_)();
@@ -656,7 +656,7 @@ public:
 
         const(QMetaType) fromType = QMetaType.fromType!(From)();
         const(QMetaType) toType = QMetaType.fromType!(To)();
-        auto view = [function = /+ std:: +/move(function_)](void *from, void *to) -> bool {
+        auto view = /+ [function = std::move(function)] +/(void* from, void* to) /+ -> bool +/ {
             From* f = static_cast!(From*)(from);
             To* t = static_cast!(To*)(to);
             *t = function_(*f);
@@ -670,7 +670,7 @@ private:
     /+ static bool registerConverterImpl(From,To)(ConverterFunction converter, QMetaType fromType, QMetaType toType)
     {
         if (registerConverterFunction(/+ std:: +/move(converter), fromType, toType)) {
-            extern(D) static __gshared const unregister = qScopeGuard([=] {
+            extern(D) static __gshared const unregister = qScopeGuard(/+ [=] +/() {
                 unregisterConverterFunction(fromType, toType);
             });
             return true;
@@ -683,7 +683,7 @@ private:
     /+ static bool registerMutableViewImpl(From,To)(MutableViewFunction view, QMetaType fromType, QMetaType toType)
     {
         if (registerMutableViewFunction(/+ std:: +/move(view), fromType, toType)) {
-            extern(D) static __gshared const unregister = qScopeGuard([=] {
+            extern(D) static __gshared const unregister = qScopeGuard(/+ [=] +/() {
                unregisterMutableViewFunction(fromType, toType);
             });
             return true;
@@ -881,8 +881,8 @@ extern(C++, "QtPrivate")
     /+struct is_complete_helper(T, ODR_VIOLATION_PREVENTER)
     {
         /+ template<typename U> +/
-        static auto check(U)()/+ (U *) -> std::integral_constant<bool, sizeof(U) != 0> +/;
-        static auto check()/+ (...) -> std::false_type +/;
+        static auto check(U)(U* ) /+ -> std::integral_constant<bool, sizeof(U) != 0> +/;
+        static auto check(...) /+ -> std::false_type +/;
         alias type = /+ decltype(check(static_cast<T *>(nullptr))) +/false_type;
     }+/
     } // namespace detail

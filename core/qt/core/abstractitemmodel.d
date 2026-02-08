@@ -128,7 +128,7 @@ public:
     {
         static if (defined!"__cpp_lib_constexpr_algorithms")
         {
-            auto result = /+ std:: +/find_if(begin(), end(), [role](const QModelRoleData &roleData) {
+            auto result = /+ std:: +/find_if(begin(), end(), /+ [role] +/(ref const(QModelRoleData) roleData) {
                 return roleData.role() == role;
             });
         }
