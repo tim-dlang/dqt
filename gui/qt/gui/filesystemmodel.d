@@ -76,7 +76,7 @@ alias Options = QFlags!(Option);
     override QModelIndex index(int row, int column, ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     final QModelIndex index(ref const(QString) path, int column = 0) const;
     override QModelIndex parent(ref const(QModelIndex) child) const;
-    /+ using QObject::parent; +/
+    //alias parent = QObject.parent;
     override QModelIndex sibling(int row, int column, ref const(QModelIndex) idx) const;
     override bool hasChildren(ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override bool canFetchMore(ref const(QModelIndex) parent) const;

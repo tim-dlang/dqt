@@ -127,7 +127,7 @@ alias StandardButtons = QFlags!(StandardButton);    /+ Q_FLAG(StandardButtons) +
     final QPushButton addButton(StandardButton button);
     final void removeButton(QAbstractButton button);
 
-    /+ using QDialog::open; +/
+    alias open = QDialog.open;
     final void open(QObject receiver, const(char)* member);
 
     final QList!(QAbstractButton) buttons() const;

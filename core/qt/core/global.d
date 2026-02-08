@@ -1066,7 +1066,7 @@ struct Promoted(T, U,
 }
 }
 
-alias Promoted(T, U) = /+ detail:: +/Promoted!(T, U).type;
+alias Promoted(T, U) = /+ detail:: +/.Promoted!(T, U).type;
 
 }
 
@@ -1189,7 +1189,6 @@ extern(C++, "SwapExceptionTester") { // insulate users from the "using std::swap
 void qSwap(T)(ref T value1, ref T value2)
     /+ noexcept(noexcept(QtPrivate::SwapExceptionTester::checkSwap(value1))) +/
 {
-    /+ using std::swap; +/
     import std.algorithm;
     swap(value1, value2);
 }

@@ -62,7 +62,7 @@ alias FontDialogOptions = QFlags!(FontDialogOption);
     final void setOptions(FontDialogOptions options);
     final FontDialogOptions options() const;
 
-    /+ using QDialog::open; +/
+    alias open = QDialog.open;
     final void open(QObject receiver, const(char)* member);
 
     override void setVisible(bool visible);

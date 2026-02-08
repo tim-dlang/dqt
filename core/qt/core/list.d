@@ -62,9 +62,9 @@ struct QListSpecialMethods(T)
 protected:
     /+ ~QListSpecialMethods() = default; +/
 public:
-    /+ using QListSpecialMethodsBase<T>::indexOf; +/
-    /+ using QListSpecialMethodsBase<T>::lastIndexOf; +/
-    /+ using QListSpecialMethodsBase<T>::contains; +/
+    alias indexOf = QListSpecialMethodsBase!(T).indexOf;
+    alias lastIndexOf = QListSpecialMethodsBase!(T).lastIndexOf;
+    alias contains = QListSpecialMethodsBase!(T).contains;
 } +/
 /+ template <> struct QListSpecialMethods<QByteArray>;
 template <> struct QListSpecialMethods<QString>;
@@ -713,9 +713,9 @@ public:
     }
 
 /+ #ifndef Q_QDOC +/
-    /+ using QListSpecialMethods<T>::contains; +/
-    /+ using QListSpecialMethods<T>::indexOf; +/
-    /+ using QListSpecialMethods<T>::lastIndexOf; +/
+    //alias contains = QListSpecialMethods!(T).contains;
+    //alias indexOf = QListSpecialMethods!(T).indexOf;
+    //alias lastIndexOf = QListSpecialMethods!(T).lastIndexOf;
 /+ #else
     template <typename AT>
     qsizetype indexOf(const AT &t, qsizetype from = 0) const noexcept;

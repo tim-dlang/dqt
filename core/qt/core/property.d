@@ -843,7 +843,7 @@ public:
         return static_cast!(QPropertyBinding!(T) && /+ && +/)(QUntypedBindable.takeBinding());
     }
 
-    /+ using QUntypedBindable::setBinding; +/
+    alias setBinding = QUntypedBindable.setBinding;
     QPropertyBinding!(T) setBinding(ref const(QPropertyBinding!(T)) binding)
     {
         (mixin(Q_ASSERT(q{!QUntypedBindable.iface || binding.isNull() || binding.valueMetaType() == QUntypedBindable.metaType()})));

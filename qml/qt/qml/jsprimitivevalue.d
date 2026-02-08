@@ -91,7 +91,7 @@ private:
             return cast(bool) (qSubOverflow(lhs, rhs, cast(T*) (result)));
         }
 
-        /+ using StringNaNOperators::op; +/
+        alias op = StringNaNOperators.op;
     }
 
     struct MulOperators {
@@ -103,7 +103,7 @@ private:
             return cast(bool) (qMulOverflow(lhs, rhs, cast(T*) (result)));
         }
 
-        /+ using StringNaNOperators::op; +/
+        alias op = StringNaNOperators.op;
     }
 
     struct DivOperators {
@@ -115,7 +115,7 @@ private:
             return true;
         }
 
-        /+ using StringNaNOperators::op; +/
+        alias op = StringNaNOperators.op;
     }+/
 
 public:

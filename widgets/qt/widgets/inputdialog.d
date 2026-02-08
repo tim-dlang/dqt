@@ -128,7 +128,7 @@ alias InputDialogOptions = QFlags!(InputDialogOption);
     final void setCancelButtonText(ref const(QString) text);
     final QString cancelButtonText() const;
 
-    /+ using QDialog::open; +/
+    alias open = QDialog.open;
     final void open(QObject receiver, const(char)* member);
 
     override QSize minimumSizeHint() const;

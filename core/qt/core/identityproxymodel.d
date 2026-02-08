@@ -41,7 +41,7 @@ public:
     override QModelIndex mapFromSource(ref const(QModelIndex) sourceIndex) const;
     override QModelIndex mapToSource(ref const(QModelIndex) proxyIndex) const;
     override QModelIndex parent(ref const(QModelIndex) child) const;
-    /+ using QObject::parent; +/
+    //alias parent = QObject.parent;
     override int rowCount(ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override QVariant headerData(int section, /+ Qt:: +/qt.core.namespace.Orientation orientation, int role = /+ Qt:: +/qt.core.namespace.ItemDataRole.DisplayRole) const;
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{

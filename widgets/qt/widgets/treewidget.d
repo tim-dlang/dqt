@@ -303,7 +303,7 @@ public:
     final void editItem(QTreeWidgetItem item, int column = 0);
     final void openPersistentEditor(QTreeWidgetItem item, int column = 0);
     final void closePersistentEditor(QTreeWidgetItem item, int column = 0);
-    /+ using QAbstractItemView::isPersistentEditorOpen; +/
+    alias isPersistentEditorOpen = QAbstractItemView.isPersistentEditorOpen;
     final bool isPersistentEditorOpen(QTreeWidgetItem item, int column = 0) const;
 
     final QWidget itemWidget(QTreeWidgetItem item, int column) const;

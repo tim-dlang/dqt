@@ -377,7 +377,7 @@ public:
 
     /+ virtual +/ QHash!(int,QByteArray) roleNames() const;
 
-    /+ using QObject::parent; +/
+    //alias parent = QObject.parent;
 
     enum LayoutChangeHint
     {
@@ -525,7 +525,7 @@ public:
 
     override /+ Qt:: +/qt.core.namespace.ItemFlags flags(ref const(QModelIndex) index) const;
 
-    /+ using QObject::parent; +/
+    //alias parent = QObject.parent;
 
 protected:
     mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{
@@ -563,7 +563,7 @@ public:
 
     override /+ Qt:: +/qt.core.namespace.ItemFlags flags(ref const(QModelIndex) index) const;
 
-    /+ using QObject::parent; +/
+    //alias parent = QObject.parent;
 
 protected:
     mixin(changeItaniumMangling(q{mangleConstructorBaseObject}, q{

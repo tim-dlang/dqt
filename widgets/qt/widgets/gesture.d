@@ -301,10 +301,10 @@ public:
     final QList!(QGesture) activeGestures() const;
     final QList!(QGesture) canceledGestures() const;
 
-    /+ using QEvent::setAccepted; +/
-    /+ using QEvent::isAccepted; +/
-    /+ using QEvent::accept; +/
-    /+ using QEvent::ignore; +/
+    alias setAccepted = QEvent.setAccepted;
+    alias isAccepted = QEvent.isAccepted;
+    alias accept = QEvent.accept;
+    alias ignore = QEvent.ignore;
 
     final void setAccepted(QGesture , bool);
     final void accept(QGesture );

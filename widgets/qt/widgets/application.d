@@ -64,7 +64,7 @@ public:
     static void setStyle(QStyle);
     static QStyle setStyle(ref const(QString));
 
-    /+ using QGuiApplication::palette; +/
+    alias palette = QGuiApplication.palette;
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static QPalette palette(const(QWidget) );
     }));

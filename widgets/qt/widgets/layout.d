@@ -67,7 +67,7 @@ public:
 
     final bool setAlignment(QWidget w, /+ Qt:: +/qt.core.namespace.Alignment alignment);
     final bool setAlignment(QLayout l, /+ Qt:: +/qt.core.namespace.Alignment alignment);
-    /+ using QLayoutItem::setAlignment; +/
+    alias setAlignment = QLayoutItem.setAlignment;
 
     final void setSizeConstraint(SizeConstraint);
     final SizeConstraint sizeConstraint() const;

@@ -12,11 +12,6 @@
 module qt.core.math;
 extern(C++):
 
-version (Windows) {} else
-    version = NotWindowsOrCygwin;
-version (Cygwin)
-    version = NotWindowsOrCygwin;
-
 import qt.config;
 import qt.core.global;
 import qt.helpers;
@@ -48,7 +43,6 @@ int qCeil(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::ceil; +/
     return cast(int) (ceil(v));
 }
 
@@ -56,7 +50,6 @@ int qFloor(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::floor; +/
     return cast(int) (floor(v));
 }
 
@@ -64,23 +57,18 @@ auto qFabs(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::fabs; +/
     return fabs(v);
 }
 
 auto qSin(T)(T v)
 {
     import core.stdc.math;
-
-    /+ using std::sin; +/
     return sin(v);
 }
 
 auto qCos(T)(T v)
 {
     import core.stdc.math;
-
-    /+ using std::cos; +/
     return cos(v);
 }
 
@@ -88,7 +76,6 @@ auto qTan(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::tan; +/
     return tan(v);
 }
 
@@ -96,7 +83,6 @@ auto qAcos(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::acos; +/
     return acos(v);
 }
 
@@ -104,7 +90,6 @@ auto qAsin(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::asin; +/
     return asin(v);
 }
 
@@ -112,7 +97,6 @@ auto qAtan(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::atan; +/
     return atan(v);
 }
 
@@ -120,7 +104,6 @@ auto qAtan2(T1, T2)(T1 y, T2 x)
 {
     import core.stdc.math;
 
-    /+ using std::atan2; +/
     return atan2(y, x);
 }
 
@@ -128,7 +111,6 @@ auto qSqrt(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::sqrt; +/
     return sqrt(v);
 }
 
@@ -202,7 +184,6 @@ auto qLn(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::log; +/
     return log(v);
 }
 
@@ -210,7 +191,6 @@ auto qExp(T)(T v)
 {
     import core.stdc.math;
 
-    /+ using std::exp; +/
     return exp(v);
 }
 
@@ -218,7 +198,6 @@ auto qPow(T1, T2)(T1 x, T2 y)
 {
     import core.stdc.math;
 
-    /+ using std::pow; +/
     return pow(x, y);
 }
 

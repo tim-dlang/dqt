@@ -24,6 +24,7 @@ import qt.core.variant;
 import qt.gui.action;
 import qt.gui.event;
 import qt.gui.icon;
+import qt.gui.keysequence;
 import qt.helpers;
 import qt.widgets.completer;
 import qt.widgets.styleoption;
@@ -160,7 +161,11 @@ public:
     final QMargins textMargins() const;
 
 /+ #if QT_CONFIG(action) +/
-    /+ using QWidget::addAction; +/
+    version (QT_NO_ACTION) {} else
+    {
+    alias addAction = QWidget.addAction;
+    }
+
     final void addAction(QAction action, ActionPosition position);
     final QAction addAction(ref const(QIcon) icon, ActionPosition position);
 /+ #endif +/

@@ -61,7 +61,7 @@ alias ColorDialogOptions = QFlags!(ColorDialogOption);
     final void setOptions(ColorDialogOptions options);
     final ColorDialogOptions options() const;
 
-    /+ using QDialog::open; +/
+    alias open = QDialog.open;
     final void open(QObject receiver, const(char)* member);
 
     override void setVisible(bool visible);

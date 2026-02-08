@@ -56,8 +56,11 @@ public:
     /+ explicit +/this(ref const(QString) title, QWidget parent = null);
     ~this();
 
-    /+ using QWidget::addAction; +/
+    version (QT_NO_ACTION) {} else
+    {
     alias addAction = QWidget.addAction;
+    }
+
 /+ #if QT_WIDGETS_REMOVED_SINCE(6, 3) +/
     static if (defined!"QT_WIDGETS_BUILD_REMOVED_API")
     {

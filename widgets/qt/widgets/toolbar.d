@@ -21,14 +21,13 @@ import qt.core.size;
 import qt.core.string;
 import qt.gui.action;
 import qt.gui.event;
+import qt.gui.icon;
+import qt.gui.keysequence;
 import qt.helpers;
 import qt.widgets.styleoption;
 import qt.widgets.widget;
 static if (defined!"QT_WIDGETS_BUILD_REMOVED_API")
-{
     import qt.core.object;
-    import qt.gui.icon;
-}
 
 /+ QT_REQUIRE_CONFIG(toolbar); +/
 
@@ -71,8 +70,11 @@ public:
 
     final void clear();
 
-    /+ using QWidget::addAction; +/
+    version (QT_NO_ACTION) {} else
+    {
     alias addAction = QWidget.addAction;
+    }
+
     static if (defined!"QT_WIDGETS_BUILD_REMOVED_API")
     {
         final QAction addAction(ref const(QString) text);
