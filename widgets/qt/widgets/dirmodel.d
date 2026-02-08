@@ -113,7 +113,7 @@ public:
     final QIcon fileIcon(ref const(QModelIndex) index) const;
     final QFileInfo fileInfo(ref const(QModelIndex) index) const;
 
-    /+ using QObject::parent; +/
+    //alias parent = QObject.parent;
 
 public /+ Q_SLOTS +/:
     @QSlot final void refresh(ref const(QModelIndex) parent = globalInitVar!QModelIndex);

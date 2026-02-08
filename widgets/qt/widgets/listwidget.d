@@ -253,7 +253,7 @@ public:
     final void editItem(QListWidgetItem item);
     final void openPersistentEditor(QListWidgetItem item);
     final void closePersistentEditor(QListWidgetItem item);
-    /+ using QAbstractItemView::isPersistentEditorOpen; +/
+    alias isPersistentEditorOpen = QAbstractItemView.isPersistentEditorOpen;
     final bool isPersistentEditorOpen(QListWidgetItem item) const;
 
     final QWidget itemWidget(QListWidgetItem item) const;

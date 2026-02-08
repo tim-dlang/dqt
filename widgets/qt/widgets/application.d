@@ -82,7 +82,7 @@ public:
     QT_DEPRECATED static inline void setGraphicsSystem(const QString &) {}
 #endif +/
 
-    /+ using QGuiApplication::palette; +/
+    alias palette = QGuiApplication.palette;
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static QPalette palette(const(QWidget) );
     }));

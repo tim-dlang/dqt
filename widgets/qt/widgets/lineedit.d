@@ -166,8 +166,9 @@ public:
 /+ #if QT_CONFIG(action) +/
     version (QT_NO_ACTION) {} else
     {
+    alias addAction = QWidget.addAction;
     }
-/+ using QWidget::addAction; +/
+
     final void addAction(QAction action, ActionPosition position);
     final QAction addAction(ref const(QIcon) icon, ActionPosition position);
 /+ #endif +/

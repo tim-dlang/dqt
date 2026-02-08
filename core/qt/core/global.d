@@ -981,7 +981,7 @@ extern(C++, "SwapExceptionTester") { // insulate users from the "using std::swap
 pragma(inline, true) void qSwap(T)(ref T value1, ref T value2)
     /+ noexcept(noexcept(QtPrivate::SwapExceptionTester::checkSwap(value1))) +/
 {
-    /+ using std::swap; +/
+    alias swap = /+ std:: +/.swap;
     swap(value1, value2);
 }
 

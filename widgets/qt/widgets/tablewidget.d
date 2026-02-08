@@ -277,7 +277,7 @@ public:
     final void editItem(QTableWidgetItem item);
     final void openPersistentEditor(QTableWidgetItem item);
     final void closePersistentEditor(QTableWidgetItem item);
-    /+ using QAbstractItemView::isPersistentEditorOpen; +/
+    alias isPersistentEditorOpen = QAbstractItemView.isPersistentEditorOpen;
     final bool isPersistentEditorOpen(QTableWidgetItem item) const;
 
     final QWidget cellWidget(int row, int column) const;

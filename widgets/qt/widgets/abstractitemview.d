@@ -213,7 +213,7 @@ alias EditTriggers = QFlags!(EditTrigger);    /+ Q_FLAG(EditTriggers) +/
 
     /+ virtual +/ override QVariant inputMethodQuery(/+ Qt:: +/qt.core.namespace.InputMethodQuery query) const;
 
-    /+ using QAbstractScrollArea::update; +/
+    alias update = QAbstractScrollArea.update;
 
 public /+ Q_SLOTS +/:
     /+ virtual +/ @QSlot void reset();

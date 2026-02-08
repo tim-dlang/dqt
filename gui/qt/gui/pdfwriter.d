@@ -72,7 +72,7 @@ public:
     bool setPageMargins(const QMarginsF &margins, QPageLayout::Unit units);
     QPageLayout pageLayout() const;
 #else +/
-    /+ using QPagedPaintDevice::setPageSize; +/
+    //alias setPageSize = QPagedPaintDevice.setPageSize;
 /+ #endif
 
 #if QT_DEPRECATED_SINCE(5, 14) +/

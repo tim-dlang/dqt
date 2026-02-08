@@ -129,7 +129,7 @@ protected:
     final void invalidateFilter();
 
 public:
-    /+ using QObject::parent; +/
+    //alias parent = QObject.parent;
 
     override QModelIndex index(int row, int column, ref const(QModelIndex) parent = globalInitVar!QModelIndex) const;
     override QModelIndex parent(ref const(QModelIndex) child) const;
