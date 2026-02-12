@@ -370,7 +370,7 @@ extern(C++, "QtPrivate") {
     pragma(inline, true) T value(T)() const
     { return qvariant_cast!T(this); }
 
-    extern(D) static QVariant fromValue(T)(ref const T value)
+    extern(D) static QVariant fromValue(T)(auto ref const T value)
     {
         import std.traits;
         static if (isSomeString!T)
