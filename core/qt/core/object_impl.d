@@ -15,6 +15,7 @@ extern(C++):
 import qt.config;
 import qt.core.metatype;
 import qt.helpers;
+import std.traits;
 
 /+ #ifndef Q_QDOC +/
 
@@ -41,18 +42,32 @@ extern(C++, "QtPrivate") {
         cannot be used in queued connection.
     */
 
-    enum TypesAreDeclaredMetaType() = true;
-    enum TypesAreDeclaredMetaType(Arg0, Args...) = QMetaTypeId2!Arg0.Defined && TypesAreDeclaredMetaType!Args;
+    extern(D) enum TypesAreDeclaredMetaType(immutable(bool)[] areRef, Args...) = () {
+        bool r = true;
+        static foreach (i; 0 .. Args.length)
+        {
+            static if (areRef[i] && is(Args[i] == const))
+                r = r && QMetaTypeId2!(Unqual!(Args[i])).Defined;
+            else
+                r = r && QMetaTypeId2!(Args[i]).Defined;
+        }
+        return r;
+    } ();
 
-    template ConnectionTypes(Args...)
+    extern(D) template ConnectionTypes(immutable(bool)[] areRef, Args...)
     {
-        static if (Args.length && TypesAreDeclaredMetaType!Args)
+        static if (Args.length && TypesAreDeclaredMetaType!(areRef, Args))
         {
             static __gshared int[Args.length + 1] t;
             extern(D) shared static this()
             {
                 static foreach (i; 0 .. Args.length)
-                    t[i] = QMetaTypeIdHelper!(Args[i]).qt_metatype_id();
+                {
+                    static if (areRef[i] && is(Args[i] == const))
+                        t[i] = QMetaTypeIdHelper!(Unqual!(Args[i])).qt_metatype_id();
+                    else
+                        t[i] = QMetaTypeIdHelper!(Args[i]).qt_metatype_id();
+                }
             }
             const(int*) types()
             {

@@ -221,6 +221,22 @@ template parametersSame(Params...)
     }
 }
 
+extern(D) template parametersAreRef(alias F)
+{
+    enum immutable(bool)[] parametersAreRef = () {
+        immutable(bool)[] r;
+        static foreach (i; 0 .. Parameters!(F).length)
+        {{
+            bool isRef;
+            foreach (sc; __traits(getParameterStorageClasses, F, i))
+                if (sc == "ref")
+                    isRef = true;
+            r ~= isRef;
+        }}
+        return r;
+    }();
+}
+
 /// Binding for C++ class [QObject](https://doc.qt.io/qt-6/qobject.html).
 class /+ Q_CORE_EXPORT +/ QObject
 {
@@ -666,7 +682,7 @@ public:
         if (type == ConnectionType.QueuedConnection || type == ConnectionType.BlockingQueuedConnection)
         {
             import qt.core.object_impl;
-            types = ConnectionTypes!(Parameters!(Signal.Members[0])).types();
+            types = ConnectionTypes!(parametersAreRef!(Signal.Members[0]), Parameters!(Signal.Members[0])).types();
         }
 
         auto slotObj = cpp_new!(DQtStaticSlotObject!(Dg, UsedParams))(dg);
@@ -773,7 +789,7 @@ public:
         if (type == ConnectionType.QueuedConnection || type == ConnectionType.BlockingQueuedConnection)
         {
             import qt.core.object_impl;
-            types = ConnectionTypes!(Parameters!(Signal.Members[overloadIndices[0]])).types();
+            types = ConnectionTypes!(parametersAreRef!(Signal.Members[overloadIndices[0]]), Parameters!(Signal.Members[overloadIndices[0]])).types();
         }
 
         auto slotObj = cpp_new!(DQtMemberSlotObject!(typeof(Slot.obj), Slot.Members[overloadIndices[1]], UsedParams))(0);

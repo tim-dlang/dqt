@@ -160,6 +160,10 @@ public:
     {
         /+ emit +/ signalCustomStruct1(s);
     }
+    @QInvokable final void emitSignalCustomStruct1ConstRef(ref const(CustomStruct1) s)
+    {
+        /+ emit +/ signalCustomStruct1ConstRef(s);
+    }
     @QInvokable final void emitSignalCustomEnum(CustomEnum e)
     {
         /+ emit +/ signalCustomEnum(e);
@@ -180,6 +184,7 @@ public:
     @QSignal final void signalPointerInt(int* p) {mixin(Q_SIGNAL_IMPL_D);}
     @QSignal final void signalObjects(QObject o1, TestObject o2) {mixin(Q_SIGNAL_IMPL_D);}
     @QSignal final void signalCustomStruct1(CustomStruct1 s) {mixin(Q_SIGNAL_IMPL_D);}
+    @QSignal final void signalCustomStruct1ConstRef(ref const(CustomStruct1) s) {mixin(Q_SIGNAL_IMPL_D);}
     @QSignal final void signalCustomEnum(CustomEnum e) {mixin(Q_SIGNAL_IMPL_D);}
     @QSignal final void signalCustomFlags(CustomFlags f) {mixin(Q_SIGNAL_IMPL_D);}
 
@@ -228,6 +233,10 @@ public /+ slots +/:
     @QSlot final void onSignalCustomStruct1(CustomStruct1 s)
     {
         lastStr = QString("CustomStruct1 " ~ s.s);
+    }
+    @QSlot final void onSignalCustomStruct1ConstRef(ref const(CustomStruct1) s)
+    {
+        lastStr = QString("const ref CustomStruct1 " ~ s.s);
     }
     @QSlot final void onSignalCustomEnum(CustomEnum e)
     {
@@ -532,7 +541,7 @@ unittest
     const(QMetaObject)* mo = &TestObject.staticMetaObject;
     assert(strcmp(mo.className(), "TestObject") == 0);
     //assert(mo->constructorCount() == 2);
-    const(int) numSignalSlotTests = 12;
+    const(int) numSignalSlotTests = 13;
     assert(mo.methodCount() - mo.methodOffset() == numSignalSlotTests * 3 + 4 + 1);
 
     TestObject a = cpp_new!TestObject();
@@ -598,11 +607,16 @@ unittest
     assert(method.parameterCount() == 1);
 
     method = mo.method(mo.methodOffset() + 10);
+    assert(method.name().toConstCharArray() == "signalCustomStruct1ConstRef");
+    assert(method.methodSignature().toConstCharArray() == "signalCustomStruct1ConstRef(CustomStruct1)");
+    assert(method.parameterCount() == 1);
+
+    method = mo.method(mo.methodOffset() + 11);
     assert(method.name().toConstCharArray() == "signalCustomEnum");
     assert(method.methodSignature().toConstCharArray() == "signalCustomEnum(CustomEnum)");
     assert(method.parameterCount() == 1);
 
-    method = mo.method(mo.methodOffset() + 11);
+    method = mo.method(mo.methodOffset() + 12);
     assert(method.name().toConstCharArray() == "signalCustomFlags");
     assert(method.methodSignature().toConstCharArray() == "signalCustomFlags(CustomFlags)");
     assert(method.parameterCount() == 1);
@@ -742,6 +756,7 @@ void connectByString(TestObject a, TestObject b)
     QObject.connect(a, (mixin(SIGNAL(q{signalPointerInt(int *)}))).ptr, b, (mixin(SLOT(q{onSignalPointerInt(int *)}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalObjects(QObject*,TestObject*)}))).ptr, b, (mixin(SLOT(q{onSignalObjects(QObject*,TestObject*)}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalCustomStruct1(CustomStruct1)}))).ptr, b, (mixin(SLOT(q{onSignalCustomStruct1(CustomStruct1)}))).ptr);
+    QObject.connect(a, (mixin(SIGNAL(q{signalCustomStruct1ConstRef(CustomStruct1)}))).ptr, b, (mixin(SLOT(q{onSignalCustomStruct1ConstRef(CustomStruct1)}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalCustomEnum(CustomEnum)}))).ptr, b, (mixin(SLOT(q{onSignalCustomEnum(CustomEnum)}))).ptr);
     QObject.connect(a, (mixin(SIGNAL(q{signalCustomFlags(CustomFlags)}))).ptr, b, (mixin(SLOT(q{onSignalCustomFlags(CustomFlags)}))).ptr);
 }
@@ -762,6 +777,7 @@ void connectByPointer(TestObject a, TestObject b, /+ Qt:: +/qt.core.namespace.Co
     QObject.connect(a.signal!"signalPointerInt", b.slot!"onSignalPointerInt", type);
     QObject.connect(a.signal!"signalObjects", b.slot!"onSignalObjects", type);
     QObject.connect(a.signal!"signalCustomStruct1", b.slot!"onSignalCustomStruct1", type);
+    QObject.connect(a.signal!"signalCustomStruct1ConstRef", b.slot!"onSignalCustomStruct1ConstRef", type);
     QObject.connect(a.signal!"signalCustomEnum", b.slot!"onSignalCustomEnum", type);
     QObject.connect(a.signal!"signalCustomFlags", b.slot!"onSignalCustomFlags", type);
 }
@@ -809,6 +825,8 @@ void testSignals(TestObject a, void delegate(string) check)
     check(format("objects obj1 QTimer 0x%x obj2 TestObject 0x%x", cast(ulong) cast(void*) o1, cast(ulong) cast(void*) o2));
     a.emitSignalCustomStruct1(CustomStruct1("signal1"));
     check("CustomStruct1 signal1");
+    a.emitSignalCustomStruct1(CustomStruct1("signalconstref1"));
+    check("CustomStruct1 signalconstref1");
     a.emitSignalCustomEnum(TestObject.CustomEnum.d);
     check("CustomEnum 101");
     a.emitSignalCustomFlags(TestObject.CustomFlags.b | TestObject.CustomFlags.c);
@@ -831,7 +849,13 @@ unittest
             "copy 2 -> 3 signal1",
             "destruct 3 signal1",
             "destruct 2 signal1",
-            "destruct 1 signal1"]);
+            "destruct 1 signal1",
+            "construct 4 signalconstref1",
+            "copy 4 -> 5 signalconstref1",
+            "copy 5 -> 6 signalconstref1",
+            "destruct 6 signalconstref1",
+            "destruct 5 signalconstref1",
+            "destruct 4 signalconstref1"]);
 
     cpp_delete(a);
     cpp_delete(b);
@@ -853,7 +877,13 @@ unittest
             "copy 2 -> 3 signal1",
             "destruct 3 signal1",
             "destruct 2 signal1",
-            "destruct 1 signal1"]);
+            "destruct 1 signal1",
+            "construct 4 signalconstref1",
+            "copy 4 -> 5 signalconstref1",
+            "copy 5 -> 6 signalconstref1",
+            "destruct 6 signalconstref1",
+            "destruct 5 signalconstref1",
+            "destruct 4 signalconstref1"]);
 
     cpp_delete(a);
     cpp_delete(b);
@@ -893,16 +923,24 @@ unittest
             "copy 1 -> 2 signal1",
             "copy 2 -> 3 signal1",
             "destruct 2 signal1",
-            "destruct 1 signal1"]);
+            "destruct 1 signal1",
+            "construct 4 signalconstref1",
+            "copy 4 -> 5 signalconstref1",
+            "copy 5 -> 6 signalconstref1",
+            "destruct 5 signalconstref1",
+            "destruct 4 signalconstref1"]);
     CustomStruct1.log = [];
 
     eventLoop.exec();
 
     assert(receivedValues == expectedValues);
     assert(CustomStruct1.log == [
-            "copy 3 -> 4 signal1",
-            "destruct 4 signal1",
-            "destruct 3 signal1"]);
+            "copy 3 -> 7 signal1",
+            "destruct 7 signal1",
+            "destruct 3 signal1",
+            "copy 6 -> 8 signalconstref1",
+            "destruct 8 signalconstref1",
+            "destruct 6 signalconstref1"]);
 
     cpp_delete(a);
     cpp_delete(b);
@@ -950,7 +988,12 @@ unittest
             "copy 1 -> 2 signal1",
             "copy 2 -> 3 signal1",
             "destruct 2 signal1",
-            "destruct 1 signal1"]);
+            "destruct 1 signal1",
+            "construct 4 signalconstref1",
+            "copy 4 -> 5 signalconstref1",
+            "copy 5 -> 6 signalconstref1",
+            "destruct 5 signalconstref1",
+            "destruct 4 signalconstref1"]);
     CustomStruct1.log = [];
 
     thread.start();
@@ -958,9 +1001,12 @@ unittest
 
     assert(receivedValues == expectedValues);
     assert(CustomStruct1.log == [
-            "copy 3 -> 4 signal1",
-            "destruct 4 signal1",
-            "destruct 3 signal1"]);
+            "copy 3 -> 7 signal1",
+            "destruct 7 signal1",
+            "destruct 3 signal1",
+            "copy 6 -> 8 signalconstref1",
+            "destruct 8 signalconstref1",
+            "destruct 6 signalconstref1"]);
 
     cpp_delete(a);
     cpp_delete(b);
