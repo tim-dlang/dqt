@@ -13,6 +13,7 @@ import qt.core.typeinfo;
 import qt.core.variant;
 import qt.core.vector;
 import qt.helpers;
+import std.conv;
 import std.stdio;
 import std.string;
 
@@ -46,28 +47,41 @@ shared static this()
 
 @Q_DECLARE_METATYPE extern(C++) struct CustomStruct1
 {
-    int i = 0;
+    string s;
+    int id = 0;
     static __gshared int numConstructed;
-    static __gshared int numCopied;
-    static __gshared int numDestructed;
+    extern(D) static __gshared string[] log;
 
-    this(int i)
+    extern(D) this(string s)
     {
-        this.i = i;
+        this.s = s;
 
-        numConstructed++;
+        id = ++numConstructed;
+        log ~= text("construct ", id, " ", s);
     }
     @disable this(this);
     this(ref const(CustomStruct1) other)
     {
-        this.i =  other.i;
+        this.s = other.s;
 
-        numCopied++;
+        id = ++numConstructed;
+        log ~= text("copy ", other.id, " -> ", id, " ", s);
     }
     ~this()
     {
-        i = -1;
-        numDestructed++;
+        log ~= text("destruct ", id, " ", s);
+        s = "destroyed";
+    }
+    ref CustomStruct1 opAssign()(auto ref const(CustomStruct1) other)
+    {
+        if (!id) {
+            id = ++numConstructed;
+            log ~= text("assign first ", id, " = ", other.id, " ", other.s);
+        } else {
+            log ~= text("assign ", id, " = ", other.id, " ", other.s);
+        }
+        s = other.s;
+        return this;
     }
 }
 /+ Q_DECLARE_METATYPE(CustomStruct1); +/
@@ -213,7 +227,7 @@ public /+ slots +/:
     }
     @QSlot final void onSignalCustomStruct1(CustomStruct1 s)
     {
-        lastStr = "CustomStruct1 " ~ QString.number(s.i);
+        lastStr = QString("CustomStruct1 " ~ s.s);
     }
     @QSlot final void onSignalCustomEnum(CustomEnum e)
     {
@@ -284,11 +298,13 @@ public /+ slots +/:
     {
         final CustomStruct1 customStruct1() const
         {
+            CustomStruct1.log ~= text("TestObject get customStruct1 ", m_customStruct1.id, " ", m_customStruct1.s);
             return m_customStruct1;
         }
         final void setCustomStruct1(ref const(CustomStruct1) customStruct1)
         {
-            if (m_customStruct1.i != customStruct1.i)
+            CustomStruct1.log ~= text("TestObject set customStruct1 ", m_customStruct1.id, " ", m_customStruct1.s, " -> ", customStruct1.id, " ", customStruct1.s);
+            if (m_customStruct1.s != customStruct1.s)
             {
                 m_customStruct1 = customStruct1;
                 /+ emit +/ customStruct1Changed();
@@ -390,7 +406,6 @@ void checkType(T, bool isDefined1, bool isDefined2, int id, int flags, string ex
 
     if (id >= 0)
     {
-        import std.conv;
         QMetaType metaType = QMetaType(realId);
         assert(metaType.id() == realId);
         assert(metaType.name().fromStringz == expectedName, text(metaType.name().fromStringz, " ", expectedName));
@@ -498,11 +513,13 @@ unittest
     checkType!(TestObject.CustomEnum, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration | QMetaType.TypeFlag.IsUnsignedEnumeration, "TestObject::CustomEnum")();
     checkType!(TestObject.CustomFlags, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.RelocatableType | QMetaType.TypeFlag.IsEnumeration, "QFlags<TestObject::CustomFlag>")();
 
-    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
+    CustomStruct1.numConstructed = 0;
+    CustomStruct1.log = [];
     checkType!(CustomStruct1, 1, 1, QMetaType.Type.User, QMetaType.TypeFlag.NeedsConstruction | QMetaType.TypeFlag.NeedsDestruction, "CustomStruct1")();
-    assert(CustomStruct1.numConstructed == 0);
-    assert(CustomStruct1.numCopied == 1);
-    assert(CustomStruct1.numDestructed == 2);
+    assert(CustomStruct1.log == [
+               "copy 0 -> 1 ",
+               "destruct 0 ",
+               "destruct 1 "]);
 }
 
 unittest
@@ -756,7 +773,8 @@ void testSignals(TestObject a, void delegate(string) check)
     import qt.core.timer;
     import qt.core.vector;
 
-    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
+    CustomStruct1.numConstructed = 0;
+    CustomStruct1.log = [];
     a.emitSignalVoid();
     check("void");
     a.emitSignalInt(5);
@@ -789,8 +807,8 @@ void testSignals(TestObject a, void delegate(string) check)
     o2.setObjectName("obj2");
     a.emitSignalObjects(o1, o2);
     check(format("objects obj1 QTimer 0x%x obj2 TestObject 0x%x", cast(ulong) cast(void*) o1, cast(ulong) cast(void*) o2));
-    a.emitSignalCustomStruct1(CustomStruct1(50));
-    check("CustomStruct1 50");
+    a.emitSignalCustomStruct1(CustomStruct1("signal1"));
+    check("CustomStruct1 signal1");
     a.emitSignalCustomEnum(TestObject.CustomEnum.d);
     check("CustomEnum 101");
     a.emitSignalCustomFlags(TestObject.CustomFlags.b | TestObject.CustomFlags.c);
@@ -807,9 +825,13 @@ unittest
     testSignals(a, (string expected) {
         assert(b.lastStr == expected);
     });
-    assert(CustomStruct1.numConstructed == 1);
-    assert(CustomStruct1.numCopied == 2);
-    assert(CustomStruct1.numDestructed == 3);
+    assert(CustomStruct1.log == [
+            "construct 1 signal1",
+            "copy 1 -> 2 signal1",
+            "copy 2 -> 3 signal1",
+            "destruct 3 signal1",
+            "destruct 2 signal1",
+            "destruct 1 signal1"]);
 
     cpp_delete(a);
     cpp_delete(b);
@@ -825,9 +847,13 @@ unittest
     testSignals(a, (string expected) {
         assert(b.lastStr == expected);
     });
-    assert(CustomStruct1.numConstructed == 1);
-    assert(CustomStruct1.numCopied == 2);
-    assert(CustomStruct1.numDestructed == 3);
+    assert(CustomStruct1.log == [
+            "construct 1 signal1",
+            "copy 1 -> 2 signal1",
+            "copy 2 -> 3 signal1",
+            "destruct 3 signal1",
+            "destruct 2 signal1",
+            "destruct 1 signal1"]);
 
     cpp_delete(a);
     cpp_delete(b);
@@ -837,8 +863,6 @@ unittest
 {
     import core.stdcpp.new_;
     import qt.core.eventloop;
-    import qt.core.stringlist;
-    import std.conv;
 
     scope eventLoop = new QEventLoop;
     TestObject a = cpp_new!TestObject();
@@ -864,16 +888,21 @@ unittest
     dummy2.emitSignalVoid();
 
     assert(receivedValues.length == 0);
-    assert(CustomStruct1.numConstructed == 1);
-    assert(CustomStruct1.numCopied == 2);
-    assert(CustomStruct1.numDestructed == 2);
+    assert(CustomStruct1.log == [
+            "construct 1 signal1",
+            "copy 1 -> 2 signal1",
+            "copy 2 -> 3 signal1",
+            "destruct 2 signal1",
+            "destruct 1 signal1"]);
+    CustomStruct1.log = [];
 
     eventLoop.exec();
 
     assert(receivedValues == expectedValues);
-    assert(CustomStruct1.numConstructed == 1);
-    assert(CustomStruct1.numCopied == 3);
-    assert(CustomStruct1.numDestructed == 4);
+    assert(CustomStruct1.log == [
+            "copy 3 -> 4 signal1",
+            "destruct 4 signal1",
+            "destruct 3 signal1"]);
 
     cpp_delete(a);
     cpp_delete(b);
@@ -881,10 +910,11 @@ unittest
 
 unittest
 {
+    import core.memory;
     import core.stdcpp.new_;
-    import qt.core.stringlist;
     import qt.core.thread;
-    import std.conv;
+
+    GC.disable(); // Disable GC, because this test uses a separate thread, which is not tracked by the GC
 
     QThread thread = cpp_new!QThread;
     TestObject a = cpp_new!TestObject();
@@ -915,20 +945,27 @@ unittest
     dummy2.emitSignalVoid();
 
     assert(receivedValues.length == 0);
-    assert(CustomStruct1.numConstructed == 1);
-    assert(CustomStruct1.numCopied == 2);
-    assert(CustomStruct1.numDestructed == 2);
+    assert(CustomStruct1.log == [
+            "construct 1 signal1",
+            "copy 1 -> 2 signal1",
+            "copy 2 -> 3 signal1",
+            "destruct 2 signal1",
+            "destruct 1 signal1"]);
+    CustomStruct1.log = [];
 
     thread.start();
     thread.wait();
 
     assert(receivedValues == expectedValues);
-    assert(CustomStruct1.numConstructed == 1);
-    assert(CustomStruct1.numCopied == 3);
-    assert(CustomStruct1.numDestructed == 4);
+    assert(CustomStruct1.log == [
+            "copy 3 -> 4 signal1",
+            "destruct 4 signal1",
+            "destruct 3 signal1"]);
 
     cpp_delete(a);
     cpp_delete(b);
+
+    GC.enable();
 }
 
 void compareVariant(ref const(QVariant) v, const(char)* expected)
@@ -1092,8 +1129,8 @@ unittest
 unittest
 {
     import core.stdcpp.new_;
-    import qt.core.stringlist;
 
+    CustomStruct1.numConstructed = 0;
     TestObject o = cpp_new!TestObject();
 
     string[] changes;
@@ -1147,23 +1184,35 @@ unittest
 
     assert(o.property("pointerSize").value!uint() == (void*).sizeof);
 
-    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
-    o.setProperty("customStruct1", CustomStruct1(5));
-    assert(CustomStruct1.numConstructed == 1);
-    assert(CustomStruct1.numCopied == 2 + 1); // Currently one more copy than in C++.
-    assert(CustomStruct1.numDestructed == 3 + 1);
+    CustomStruct1.log = [];
+    o.setProperty("customStruct1", CustomStruct1("properties1"));
+    assert(CustomStruct1.log == [
+            "construct 1 properties1",
+            "copy 1 -> 2 properties1",
+            "copy 2 -> 3 properties1",
+            "TestObject set customStruct1 0  -> 3 properties1",
+            "assign first 4 = 3 properties1",
+            "destruct 3 properties1",
+            "destruct 2 properties1",
+            "destruct 1 properties1"]);
+    CustomStruct1.log = [];
 
-    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
-    assert(o.customStruct1().i == 5);
-    assert(CustomStruct1.numConstructed == 0);
-    assert(CustomStruct1.numCopied == 1);
-    assert(CustomStruct1.numDestructed == 1);
+    assert(o.customStruct1().s == "properties1");
+    assert(CustomStruct1.log == [
+            "TestObject get customStruct1 4 properties1",
+            "copy 4 -> 5 properties1",
+            "destruct 5 properties1"]);
+    CustomStruct1.log = [];
 
-    CustomStruct1.numConstructed = CustomStruct1.numCopied = CustomStruct1.numDestructed = 0;
-    assert(o.property("customStruct1").value!CustomStruct1().i == 5);
-    assert(CustomStruct1.numConstructed == 0);
-    assert(CustomStruct1.numCopied == 2);
-    assert(CustomStruct1.numDestructed == 3);
+    assert(o.property("customStruct1").value!CustomStruct1().s == "properties1");
+    assert(CustomStruct1.log == [
+            "TestObject get customStruct1 4 properties1",
+            "copy 4 -> 6 properties1",
+            "assign first 7 = 6 properties1",
+            "destruct 6 properties1",
+            "copy 7 -> 8 properties1",
+            "destruct 8 properties1",
+            "destruct 7 properties1"]);
 
     cpp_delete(o);
 }
