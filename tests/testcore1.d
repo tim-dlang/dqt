@@ -1044,6 +1044,42 @@ unittest
 
 unittest
 {
+    CustomStruct1.numConstructed = 0;
+    CustomStruct1.log = [];
+
+    QVariant v = QVariant.fromValue(CustomStruct1("variant1"));
+    assert(CustomStruct1.log == [
+            "construct 1 variant1",
+            "copy 1 -> 2 variant1",
+            "destruct 1 variant1"]);
+    CustomStruct1.log = [];
+
+    assert(v.value!CustomStruct1().s == "variant1");
+    assert(CustomStruct1.log == [
+            "copy 2 -> 3 variant1",
+            "destruct 3 variant1"]);
+    CustomStruct1.log = [];
+
+    v.clear();
+    assert(CustomStruct1.log == [
+            "destruct 2 variant1"]);
+    CustomStruct1.log = [];
+
+    v = QVariant(QMetaType.fromType!(CustomStruct1)(), null);
+    *cast(CustomStruct1*) v.data() = CustomStruct1("variant2");
+    assert(CustomStruct1.log == [
+            "construct 4 variant2",
+            "assign first 5 = 4 variant2",
+            "destruct 4 variant2"]);
+    CustomStruct1.log = [];
+
+    v.clear();
+    assert(CustomStruct1.log == [
+            "destruct 5 variant2"]);
+}
+
+unittest
+{
     import qt.core.objectdefs;
 
     size_t changeCount = 0;
