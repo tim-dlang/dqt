@@ -14,10 +14,13 @@ extern(C++):
 
 import qt.config;
 import qt.core.coreevent;
+import qt.core.metamacros;
 import qt.core.namespace;
 import qt.core.object;
+import qt.core.objectdefs_impl;
 import qt.core.property;
 import qt.helpers;
+import std.traits;
 
 /+ #ifndef QT_NO_QOBJECT +/
 
@@ -100,6 +103,37 @@ public:
         singleShotImpl(interval, timerType, receiver,
                        new QtPrivate::QSlotObject<Func1, typename SlotType::Arguments, void>(slot));
     } +/
+
+    /++
+        Creates a single-shot timer that calls a slot after a delay.
+
+        Params:
+            msec      = Delay in milliseconds.
+            timerType = Type of timer.
+            receiver  = Slot to be called.
+    +/
+    static extern(D) void singleShot(Slot)(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType, Slot receiver) if (is(Slot: DQtMember!P, P...))
+    {
+        import core.stdcpp.new_;
+
+        static assert(Slot.Members.length == 1, "QTimer.singleShot only implemented for one slot."); // TODO: Select best slot if multiple are available
+        alias Slot0 = Slot.Members[0];
+        static assert(Parameters!(Slot0).length == 0, "The slot must not have any arguments."); // TODO: allow default arguments
+
+        auto slot = getMemberFunctionAddress!(Slot0);
+
+        alias UsedParams = Parameters!(Slot0);
+
+        auto slotObj = cpp_new!(DQtMemberSlotObject!(typeof(Slot.obj), Slot0, UsedParams))(0);
+
+        singleShotImpl(msec, timerType, receiver.obj, &slotObj.base);
+    }
+    /// ditto
+    static extern(D) void singleShot(Slot)(int msec, Slot receiver) if (is(Slot: DQtMember!P, P...))
+    {
+        singleShot(msec, defaultTypeFor(msec), receiver);
+    }
+
     // singleShot to a functor or function pointer (without context)
     /+ template <typename Duration, typename Func1> +/
     /+ static inline typename std::enable_if<!QtPrivate::FunctionPointer<Func1>::IsPointerToMemberFunction &&
@@ -136,6 +170,45 @@ public:
                        new QtPrivate::QFunctorSlotObject<Func1, 0,
                             typename QtPrivate::List_Left<void, 0>::Value, void>(std::move(slot)));
     } +/
+
+    /++
+        Creates a single-shot timer that calls a delegate after a delay.
+
+        Params:
+            msec      = Delay in milliseconds.
+            timerType = Type of timer.
+            context   = Context object. Timer is stopped if context is destroyed.
+            dg        = Delegate to be called.
+    +/
+    static extern(D) void singleShot(Dg)(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType, const(QObject) context, Dg dg) if (is(Dg == delegate))
+    {
+        import core.stdcpp.new_;
+
+        static assert(Parameters!(Dg).length == 0, "The delegate must not have any arguments."); // TODO: allow default arguments
+
+        alias UsedParams = Parameters!(Dg);
+
+        const(int)* types = null;
+
+        auto slotObj = cpp_new!(DQtStaticSlotObject!(Dg, UsedParams))(dg);
+
+        singleShotImpl(msec, timerType, context, &slotObj.base);
+    }
+    /// ditto
+    static extern(D) void singleShot(Dg)(int msec, Dg dg) if (is(Dg == delegate))
+    {
+        singleShot(msec, defaultTypeFor(msec), null, dg);
+    }
+    /// ditto
+    static extern(D) void singleShot(Dg)(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType, Dg dg) if (is(Dg == delegate))
+    {
+        singleShot(msec, timerType, null, dg);
+    }
+    /// ditto
+    static extern(D) void singleShot(Dg)(int msec, const(QObject) context, Dg dg) if (is(Dg == delegate))
+    {
+        singleShot(msec, defaultTypeFor(msec), context, dg);
+    }
 
     /+ template <typename ... Args> +/
     /+ QMetaObject::Connection callOnTimeout(Args && ...args)
