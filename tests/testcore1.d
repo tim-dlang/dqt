@@ -1377,3 +1377,19 @@ unittest
     assert(v.toInt() == cast(int)f);
     assert(v.value!(TestObject.CustomFlags)() == f);
 }
+
+unittest
+{
+    import qt.core.locale;
+
+    auto locale = QLocale(QLocale.Language.C);
+    assert(locale.toString(12345.25, 'g', 8) == "12345.25");
+    locale.setNumberOptions(QLocale.NumberOption.DefaultNumberOptions);
+    assert(locale.toString(12345.25, 'g', 8) == "12,345.25");
+    locale.setNumberOptions(QLocale.NumberOption.OmitGroupSeparator);
+    assert(locale.toString(12345.25, 'g', 8) == "12345.25");
+    locale.setNumberOptions(QLocale.NumberOption.IncludeTrailingZeroesAfterDot);
+    assert(locale.toString(12345.25, 'g', 8) == "12,345.250");
+    locale.setNumberOptions(QLocale.NumberOption.IncludeTrailingZeroesAfterDot | QLocale.NumberOption.OmitGroupSeparator);
+    assert(locale.toString(12345.25, 'g', 8) == "12345.250");
+}

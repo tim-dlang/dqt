@@ -88,7 +88,7 @@ public:
 
 
 /// Binding for C++ class [QFlags](https://doc.qt.io/qt-6/qflags.html).
-extern(C++, class) struct QFlags(Enum)
+@SimulateImplicitConstructor extern(C++, class) struct QFlags(Enum)
 {
 private:
     static assert((Enum.sizeof <= int.sizeof),
@@ -113,7 +113,7 @@ public:
     {
         this.i = 0;
     }+/
-    pragma(inline, true) this(Enum flags)/+ noexcept+/
+    @SimulateImplicitConstructor pragma(inline, true) this(Enum flags)/+ noexcept+/
     {
         this.i = Int(flags);
     }

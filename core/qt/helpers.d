@@ -1237,7 +1237,7 @@ private template anyParamNeedsWrapper(F, size_t i = 0)
         enum anyParamNeedsWrapper = false;
     else static if (isParamConstStructRef!(F, i))
         enum anyParamNeedsWrapper = true;
-    else static if (is(FunctionParameters2!F == struct) && hasUDASimulateImplicitConstructor!(FunctionParameters2!F[i]))
+    else static if (is(FunctionParameters2!F[i] == struct) && hasUDASimulateImplicitConstructor!(FunctionParameters2!F[i]))
         enum anyParamNeedsWrapper = true;
     else
         enum anyParamNeedsWrapper = anyParamNeedsWrapper!(F, i + 1);
