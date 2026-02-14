@@ -1357,3 +1357,35 @@ unittest
     locale.setNumberOptions(QLocale.NumberOption.IncludeTrailingZeroesAfterDot | QLocale.NumberOption.OmitGroupSeparator);
     assert(locale.toString(12345.25, 'g', 8) == "12345.250");
 }
+
+unittest
+{
+    import core.stdcpp.new_;
+    import qt.core.eventloop;
+    import qt.core.timer;
+
+    auto eventLoop = cpp_new!QEventLoop();
+    auto test = cpp_new!TestObject();
+    uint seen = 0;
+    QTimer.singleShot(50, eventLoop, () {
+        seen |= 1;
+        eventLoop.quit();
+    });
+    QTimer.singleShot(5, () {
+        seen |= 2;
+    });
+    QTimer.singleShot(1000, eventLoop, () {
+        seen |= 8; // Should not be called, because eventLoop is quit before.
+    });
+    QTimer.singleShot(10, test.slot!"onSignalVoid");
+    QTimer.singleShot(15, test.slot!"emitSignalVoid");
+    QObject.connect(test.signal!"signalVoid", () {
+        seen |= 4;
+    });
+    eventLoop.exec();
+    assert(seen == 7);
+    assert(test.lastStr == "void");
+
+    cpp_delete(eventLoop);
+    cpp_delete(test);
+}
