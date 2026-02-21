@@ -132,8 +132,8 @@ public:
         {
             this.id = UnresolvedMergeConflict!(q{~size_t(0)},q{~size_t(0)});
         }+/
-        size_t index() const/+ noexcept+/ { return id; }
-        bool isValid() const/+ noexcept+/ { return (~id) != 0; }
+        size_t index() const nothrow { return id; }
+        bool isValid() const nothrow { return (~id) != 0; }
     }
 
     @disable this();

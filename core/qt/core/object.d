@@ -73,121 +73,121 @@ public:
 
     /+ uint isWidget : 1; +/
     uint bitfieldData_isWidget;
-    final bool isWidget() const
+    final bool isWidget() const nothrow
     {
         return (bitfieldData_isWidget >> 0) & 0x1;
     }
-    final bool isWidget(bool value)
+    final bool isWidget(bool value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x1) | ((value & 0x1) << 0);
         return value;
     }
     /+ uint blockSig : 1; +/
-    final bool blockSig() const
+    final bool blockSig() const nothrow
     {
         return (bitfieldData_isWidget >> 1) & 0x1;
     }
-    final bool blockSig(bool value)
+    final bool blockSig(bool value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x2) | ((value & 0x1) << 1);
         return value;
     }
     /+ uint wasDeleted : 1; +/
-    final uint wasDeleted() const
+    final uint wasDeleted() const nothrow
     {
         return (bitfieldData_isWidget >> 2) & 0x1;
     }
-    final uint wasDeleted(uint value)
+    final uint wasDeleted(uint value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x4) | ((value & 0x1) << 2);
         return value;
     }
     /+ uint isDeletingChildren : 1; +/
-    final uint isDeletingChildren() const
+    final uint isDeletingChildren() const nothrow
     {
         return (bitfieldData_isWidget >> 3) & 0x1;
     }
-    final uint isDeletingChildren(uint value)
+    final uint isDeletingChildren(uint value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x8) | ((value & 0x1) << 3);
         return value;
     }
     /+ uint sendChildEvents : 1; +/
-    final uint sendChildEvents() const
+    final uint sendChildEvents() const nothrow
     {
         return (bitfieldData_isWidget >> 4) & 0x1;
     }
-    final uint sendChildEvents(uint value)
+    final uint sendChildEvents(uint value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x10) | ((value & 0x1) << 4);
         return value;
     }
     /+ uint receiveChildEvents : 1; +/
-    final uint receiveChildEvents() const
+    final uint receiveChildEvents() const nothrow
     {
         return (bitfieldData_isWidget >> 5) & 0x1;
     }
-    final uint receiveChildEvents(uint value)
+    final uint receiveChildEvents(uint value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x20) | ((value & 0x1) << 5);
         return value;
     }
     /+ uint isWindow : 1; +/ // for QWindow
-    final bool isWindow() const
+    final bool isWindow() const nothrow
     {
         return (bitfieldData_isWidget >> 6) & 0x1;
     }
-    final bool isWindow(bool value)
+    final bool isWindow(bool value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x40) | ((value & 0x1) << 6);
         return value;
     }
     /+ uint deleteLaterCalled : 1; +/
-    final bool deleteLaterCalled() const
+    final bool deleteLaterCalled() const nothrow
     {
         return (bitfieldData_isWidget >> 7) & 0x1;
     }
-    final bool deleteLaterCalled(bool value)
+    final bool deleteLaterCalled(bool value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x80) | ((value & 0x1) << 7);
         return value;
     }
     /+ uint isQuickItem : 1; +/
-    final bool isQuickItem() const
+    final bool isQuickItem() const nothrow
     {
         return (bitfieldData_isWidget >> 8) & 0x1;
     }
-    final bool isQuickItem(bool value)
+    final bool isQuickItem(bool value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x100) | ((value & 0x1) << 8);
         return value;
     }
     /+ uint willBeWidget : 1; +/ // for handling widget-specific bits in QObject's ctor
-    final bool willBeWidget() const
+    final bool willBeWidget() const nothrow
     {
         return (bitfieldData_isWidget >> 9) & 0x1;
     }
-    final bool willBeWidget(bool value)
+    final bool willBeWidget(bool value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x200) | ((value & 0x1) << 9);
         return value;
     }
     /+ uint wasWidget : 1; +/ // for properly cleaning up in QObject's dtor
-    final bool wasWidget() const
+    final bool wasWidget() const nothrow
     {
         return (bitfieldData_isWidget >> 10) & 0x1;
     }
-    final bool wasWidget(bool value)
+    final bool wasWidget(bool value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0x400) | ((value & 0x1) << 10);
         return value;
     }
     /+ uint unused : 21; +/
-    final uint unused() const
+    final uint unused() const nothrow
     {
         return (bitfieldData_isWidget >> 11) & 0x1fffff;
     }
-    final uint unused(uint value)
+    final uint unused(uint value) nothrow
     {
         bitfieldData_isWidget = (bitfieldData_isWidget & ~0xfffff800) | ((value & 0x1fffff) << 11);
         return value;
@@ -350,8 +350,8 @@ public:
     pragma(inline, true) final bool isWindowType() const { return d_ptr.isWindow; }
     pragma(inline, true) final bool isQuickItemType() const { return d_ptr.isQuickItem; }
 
-    pragma(inline, true) final bool signalsBlocked() const/+ noexcept+/ { return d_ptr.blockSig; }
-    final bool blockSignals(bool b)/+ noexcept+/;
+    pragma(inline, true) final bool signalsBlocked() const nothrow { return d_ptr.blockSig; }
+    final bool blockSignals(bool b) nothrow;
 
     final QThread thread() const;
     final void moveToThread(QThread thread);
@@ -893,7 +893,7 @@ private:
                                             const char *amember, Qt::ConnectionType atype) const
 { return connect(asender, asignal, this, amember, atype); }
 
-pragma(inline, true) const(QMetaObject)* qt_getQtMetaObject()/+ noexcept+/
+pragma(inline, true) const(QMetaObject)* qt_getQtMetaObject() nothrow
 { return &QObject.staticQtMetaObject; }
 
 version (QT_NO_USERDATA) {} else

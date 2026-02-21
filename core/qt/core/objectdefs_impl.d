@@ -379,8 +379,8 @@ extern(C++, "QtPrivate") {
             this.m_impl = fn;
         }
 
-//        pragma(inline, true) int ref_()/+ noexcept+/ { return m_ref.ref_(); }
-/*        pragma(inline, true) void destroyIfLastRef()/+ noexcept+/
+//        pragma(inline, true) int ref_() nothrow { return m_ref.ref_(); }
+/*        pragma(inline, true) void destroyIfLastRef() nothrow
         { if (!m_ref.deref()) m_impl(Operation.Destroy, &this, null, null, null); }
 */
         pragma(inline, true) bool compare(void** a) { bool ret = false; m_impl(Operation.Compare, &this, null, a, &ret); return ret; }

@@ -84,30 +84,30 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_updateModel()) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator |(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/{return QFlags!(QFontComboBox.FontFilters.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator |(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator &(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/{return QFlags!(QFontComboBox.FontFilters.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator &(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator ^(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/{return QFlags!(QFontComboBox.FontFilters.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator ^(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QFontComboBox.FontFilters.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFontComboBox.FontFilters.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QFontComboBox.FontFilters.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator |(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)nothrow{return QFlags!(QFontComboBox.FontFilters.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator |(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator &(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)nothrow{return QFlags!(QFontComboBox.FontFilters.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator &(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator ^(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)nothrow{return QFlags!(QFontComboBox.FontFilters.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QFontComboBox.FontFilters.enum_type) operator ^(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QFontComboBox.FontFilters.enum_type f1, QFontComboBox.FontFilters.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QFontComboBox.FontFilters.enum_type f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QFontComboBox.FontFilters.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFontComboBox.FontFilters.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QFontComboBox.FontFilters.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFontComboBox.FontFilters.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QFontComboBox.FontFilters.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QFontComboBox.FontFilters operator ~(QFontComboBox.FontFilters.enum_type e)/+noexcept+/{return~QFontComboBox.FontFilters(e);}+/
-/+pragma(inline, true) void operator |(QFontComboBox.FontFilters.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFontComboBox.FontFilters operator ~(QFontComboBox.FontFilters.enum_type e)nothrow{return~QFontComboBox.FontFilters(e);}+/
+/+pragma(inline, true) void operator |(QFontComboBox.FontFilters.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QFontComboBox.FontFilters.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QFontComboBox.FontFilters.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QFontComboBox::FontFilters) +/

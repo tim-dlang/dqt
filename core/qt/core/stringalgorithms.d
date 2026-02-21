@@ -32,58 +32,58 @@ import qt.helpers;
 
 extern(C++, "QtPrivate") {
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype qustrlen(const(wchar)* str)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ const(wchar)* qustrchr(QStringView str, wchar ch)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype qustrlen(const(wchar)* str) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ const(wchar)* qustrchr(QStringView str, wchar ch) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QStringView   lhs, QStringView   rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QStringView   lhs, QLatin1StringView rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QStringView   lhs, QBasicUtf8StringView!(false) rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QLatin1StringView lhs, QStringView   rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QLatin1StringView lhs, QLatin1StringView rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QLatin1StringView lhs, QBasicUtf8StringView!(false) rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QBasicUtf8StringView!(false) lhs, QStringView   rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QBasicUtf8StringView!(false) lhs, QLatin1StringView rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QBasicUtf8StringView!(false) lhs, QBasicUtf8StringView!(false) rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QStringView   lhs, QStringView   rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QStringView   lhs, QLatin1StringView rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QStringView   lhs, QBasicUtf8StringView!(false) rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QLatin1StringView lhs, QStringView   rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QLatin1StringView lhs, QLatin1StringView rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QLatin1StringView lhs, QBasicUtf8StringView!(false) rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QBasicUtf8StringView!(false) lhs, QStringView   rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QBasicUtf8StringView!(false) lhs, QLatin1StringView rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ int compareStrings(QBasicUtf8StringView!(false) lhs, QBasicUtf8StringView!(false) rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QStringView   lhs, QStringView   rhs)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QStringView   lhs, QLatin1StringView rhs)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QStringView   lhs, QBasicUtf8StringView!(false) rhs)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QLatin1StringView lhs, QStringView   rhs)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QLatin1StringView lhs, QLatin1StringView rhs)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QLatin1StringView lhs, QBasicUtf8StringView!(false) rhs)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QBasicUtf8StringView!(false) lhs, QStringView   rhs)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QBasicUtf8StringView!(false) lhs, QLatin1StringView rhs)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QBasicUtf8StringView!(false) lhs, QBasicUtf8StringView!(false) rhs)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QStringView   lhs, QStringView   rhs) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QStringView   lhs, QLatin1StringView rhs) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QStringView   lhs, QBasicUtf8StringView!(false) rhs) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QLatin1StringView lhs, QStringView   rhs) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QLatin1StringView lhs, QLatin1StringView rhs) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QLatin1StringView lhs, QBasicUtf8StringView!(false) rhs) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QBasicUtf8StringView!(false) lhs, QStringView   rhs) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QBasicUtf8StringView!(false) lhs, QLatin1StringView rhs) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool equalStrings(QBasicUtf8StringView!(false) lhs, QBasicUtf8StringView!(false) rhs) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QStringView   haystack, QStringView   needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QStringView   haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QLatin1StringView haystack, QStringView   needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QLatin1StringView haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QStringView   haystack, QStringView   needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QStringView   haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QLatin1StringView haystack, QStringView   needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool startsWith(QLatin1StringView haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool endsWith(QStringView   haystack, QStringView   needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool endsWith(QStringView   haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool endsWith(QLatin1StringView haystack, QStringView   needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool endsWith(QLatin1StringView haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool endsWith(QStringView   haystack, QStringView   needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool endsWith(QStringView   haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool endsWith(QLatin1StringView haystack, QStringView   needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool endsWith(QLatin1StringView haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype findString(QStringView haystack, qsizetype from, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype findString(QStringView haystack, qsizetype from, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype findString(QLatin1StringView haystack, qsizetype from, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype findString(QLatin1StringView haystack, qsizetype from, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype findString(QStringView haystack, qsizetype from, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype findString(QStringView haystack, qsizetype from, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype findString(QLatin1StringView haystack, qsizetype from, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype findString(QLatin1StringView haystack, qsizetype from, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype lastIndexOf(QStringView haystack, qsizetype from, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype lastIndexOf(QStringView haystack, qsizetype from, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype lastIndexOf(QLatin1StringView haystack, qsizetype from, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype lastIndexOf(QLatin1StringView haystack, qsizetype from, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype lastIndexOf(QStringView haystack, qsizetype from, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype lastIndexOf(QStringView haystack, qsizetype from, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype lastIndexOf(QLatin1StringView haystack, qsizetype from, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype lastIndexOf(QLatin1StringView haystack, qsizetype from, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ QStringView   trimmed(QStringView   s)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ QLatin1StringView trimmed(QLatin1StringView s)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ QStringView   trimmed(QStringView   s) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ QLatin1StringView trimmed(QLatin1StringView s) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QStringView haystack, QChar needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QStringView haystack, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QStringView haystack, QChar needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QStringView haystack, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QStringView haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive);
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QLatin1StringView haystack, QLatin1StringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive);
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QLatin1StringView haystack, QStringView needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive);
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QLatin1StringView haystack, QChar needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ qsizetype count(QLatin1StringView haystack, QChar needle, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
 
 /+ #if QT_CONFIG(regularexpression) +/
 // ### Qt 7: unify these overloads;
@@ -123,13 +123,13 @@ extern(C++, "QtPrivate") {
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ QByteArray convertToLocal8Bit(QStringView str);
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ QList!(uint) convertToUcs4(QStringView str); // ### Qt 7 char32_t
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isRightToLeft(QStringView string)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isRightToLeft(QStringView string) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isAscii(QLatin1StringView s)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isAscii(QStringView   s)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isAscii(QLatin1StringView s) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isAscii(QStringView   s) nothrow;
 /+ [[nodiscard]] constexpr inline                   bool isLatin1(QLatin1StringView s) noexcept; +/
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isLatin1(QStringView   s)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isValidUtf16(QStringView s)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isLatin1(QStringView   s) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isValidUtf16(QStringView s) nothrow;
 
 } // namespace QtPRivate
 

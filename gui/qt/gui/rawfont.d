@@ -156,30 +156,30 @@ private:
     QExplicitlySharedDataPointer!(QRawFontPrivate) d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator |(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/{return QFlags!(QRawFont.LayoutFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator |(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator &(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/{return QFlags!(QRawFont.LayoutFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator &(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator ^(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/{return QFlags!(QRawFont.LayoutFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator ^(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QRawFont.LayoutFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QRawFont.LayoutFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QRawFont.LayoutFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator |(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)nothrow{return QFlags!(QRawFont.LayoutFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator |(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator &(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)nothrow{return QFlags!(QRawFont.LayoutFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator &(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator ^(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)nothrow{return QFlags!(QRawFont.LayoutFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QRawFont.LayoutFlags.enum_type) operator ^(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QRawFont.LayoutFlags.enum_type f1, QRawFont.LayoutFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QRawFont.LayoutFlags.enum_type f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QRawFont.LayoutFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QRawFont.LayoutFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QRawFont.LayoutFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QRawFont.LayoutFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QRawFont.LayoutFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QRawFont.LayoutFlags operator ~(QRawFont.LayoutFlags.enum_type e)/+noexcept+/{return~QRawFont.LayoutFlags(e);}+/
-/+pragma(inline, true) void operator |(QRawFont.LayoutFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QRawFont.LayoutFlags operator ~(QRawFont.LayoutFlags.enum_type e)nothrow{return~QRawFont.LayoutFlags(e);}+/
+/+pragma(inline, true) void operator |(QRawFont.LayoutFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QRawFont.LayoutFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QRawFont.LayoutFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_SHARED(QRawFont)

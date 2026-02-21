@@ -23,34 +23,34 @@ extern(C++, "QtPrivate")
 extern(C++, class) struct RefCount
 {
 public:
-    extern(D) pragma(inline, true) bool ref_(string filename = __FILE__, size_t line = __LINE__)/+ noexcept+/ {
+    extern(D) pragma(inline, true) bool ref_(string filename = __FILE__, size_t line = __LINE__) nothrow {
         int count = atomic.loadRelaxed();
         if (count != -1) // !isStatic
             atomic.ref_();
         return true;
     }
 
-    extern(D) pragma(inline, true) bool deref(string filename = __FILE__, size_t line = __LINE__)/+ noexcept+/ {
+    extern(D) pragma(inline, true) bool deref(string filename = __FILE__, size_t line = __LINE__) nothrow {
         int count = atomic.loadRelaxed();
         if (count == -1) // isStatic
             return true;
         return atomic.deref();
     }
 
-/+    bool isStatic() const/+ noexcept+/
+/+    bool isStatic() const nothrow
     {
         // Persistent object, never deleted
         return atomic.loadRelaxed() == -1;
     }+/
 
-    bool isShared() const/+ noexcept+/
+    bool isShared() const nothrow
     {
         int count = atomic.loadRelaxed();
         return (count != 1) && (count != 0);
     }
 
-//    void initializeOwned()/+ noexcept+/ { atomic.storeRelaxed(1); }
-//    void initializeUnsharable()/+ noexcept+/ { atomic.storeRelaxed(0); }
+//    void initializeOwned() nothrow { atomic.storeRelaxed(1); }
+//    void initializeUnsharable() nothrow { atomic.storeRelaxed(0); }
 
     QBasicAtomicInt atomic;
 }

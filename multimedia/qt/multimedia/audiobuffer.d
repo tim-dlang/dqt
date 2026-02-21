@@ -119,7 +119,7 @@ extern(C++, class) struct QAudioBufferPrivate;
 public:
     @disable this();
     pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-    void rawConstructor()/+ noexcept+/;
+    void rawConstructor() nothrow;
     static typeof(this) create()
     {
         typeof(this) r = typeof(this).init;
@@ -128,7 +128,7 @@ public:
     }
 
     @disable this(this);
-    this(ref const(QAudioBuffer) other)/+ noexcept+/;
+    this(ref const(QAudioBuffer) other) nothrow;
     this(ref const(QByteArray) data, ref const(QAudioFormat) format, qint64 startTime = -1);
     this(int numFrames, ref const(QAudioFormat) format, qint64 startTime = -1); // Initialized to empty
     ~this();
@@ -140,18 +140,18 @@ public:
     /+ void swap(QAudioBuffer &other) noexcept
     { d.swap(other.d); } +/
 
-    bool isValid() const/+ noexcept+/ { return d.get() !is null; }
+    bool isValid() const nothrow { return d.get() !is null; }
 
     void detach();
 
-    QAudioFormat format() const/+ noexcept+/;
+    QAudioFormat format() const nothrow;
 
-    qsizetype frameCount() const/+ noexcept+/;
-    qsizetype sampleCount() const/+ noexcept+/;
-    qsizetype byteCount() const/+ noexcept+/;
+    qsizetype frameCount() const nothrow;
+    qsizetype sampleCount() const nothrow;
+    qsizetype byteCount() const nothrow;
 
-    qint64 duration() const/+ noexcept+/;
-    qint64 startTime() const/+ noexcept+/;
+    qint64 duration() const nothrow;
+    qint64 startTime() const nothrow;
 
     // Structures for easier access to data
     alias U8M = QAudioFrameMono!(QAudioFormat.SampleFormat.UInt8);
@@ -174,8 +174,8 @@ public:
         return static_cast!(T*)(data());
     }
 private:
-    const(void)* constData() const/+ noexcept+/;
-    const(void)* data() const/+ noexcept+/;
+    const(void)* constData() const nothrow;
+    const(void)* data() const nothrow;
     void* data();
 
     QExplicitlySharedDataPointer!(QAudioBufferPrivate) d;

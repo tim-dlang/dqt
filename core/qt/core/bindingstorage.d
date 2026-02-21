@@ -66,7 +66,7 @@ public:
     ~this();
 
     bool isEmpty() { return !d; }
-    bool isValid() const/+ noexcept+/ { return cast(bool) (bindingStatus); }
+    bool isValid() const nothrow { return cast(bool) (bindingStatus); }
 
     // const(QBindingStatus)* status(/+ QtPrivate:: +/QBindingStatusAccessToken) const;
 

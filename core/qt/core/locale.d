@@ -1090,21 +1090,21 @@ alias LanguageCodeTypes = QFlags!(LanguageCodeType);
     static if (defined!"QT_CORE_BUILD_REMOVED_API")
     {
         static QString languageToCode(Language language);
-        static Language codeToLanguage(QStringView languageCode)/+ noexcept+/;
+        static Language codeToLanguage(QStringView languageCode) nothrow;
     }
     static QString languageToCode(Language language, LanguageCodeTypes codeTypes = LanguageCodeType.AnyLanguageCode);
     static Language codeToLanguage(QStringView languageCode,
-                                       LanguageCodeTypes codeTypes = LanguageCodeType.AnyLanguageCode)/+ noexcept+/;
+                                       LanguageCodeTypes codeTypes = LanguageCodeType.AnyLanguageCode) nothrow;
     static QString territoryToCode(Territory territory);
-    static Territory codeToTerritory(QStringView territoryCode)/+ noexcept+/;
+    static Territory codeToTerritory(QStringView territoryCode) nothrow;
 /+ #if QT_DEPRECATED_SINCE(6, 6) +/
     /+ QT_DEPRECATED_VERSION_X_6_6("Use territoryToCode(Territory) instead") +/
         static QString countryToCode(Country country);
     /+ QT_DEPRECATED_VERSION_X_6_6("Use codeToTerritory(QStringView) instead") +/
-        static Country codeToCountry(QStringView countryCode)/+ noexcept+/;
+        static Country codeToCountry(QStringView countryCode) nothrow;
 /+ #endif +/
     static QString scriptToCode(Script script);
-    static Script codeToScript(QStringView scriptCode)/+ noexcept+/;
+    static Script codeToScript(QStringView scriptCode) nothrow;
 
     static QString languageToString(Language language);
     static QString territoryToString(Territory territory);
@@ -1150,57 +1150,57 @@ private:
     QSharedDataPointer!(QLocalePrivate) d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/{return QFlags!(QLocale.NumberOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator &(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/{return QFlags!(QLocale.NumberOptions.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator &(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator ^(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/{return QFlags!(QLocale.NumberOptions.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator ^(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)nothrow{return QFlags!(QLocale.NumberOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator &(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)nothrow{return QFlags!(QLocale.NumberOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator &(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator ^(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)nothrow{return QFlags!(QLocale.NumberOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator ^(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QLocale.NumberOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QLocale.NumberOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QLocale.NumberOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QLocale.NumberOptions.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QLocale.NumberOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QLocale.NumberOptions.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QLocale.NumberOptions operator ~(QLocale.NumberOptions.enum_type e)/+noexcept+/{return~QLocale.NumberOptions(e);}+/
-/+pragma(inline, true) void operator |(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QLocale.NumberOptions operator ~(QLocale.NumberOptions.enum_type e)nothrow{return~QLocale.NumberOptions(e);}+/
+/+pragma(inline, true) void operator |(QLocale.NumberOptions.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QLocale.NumberOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 /+ Q_DECLARE_SHARED(QLocale)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QLocale::NumberOptions) +/
-/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator |(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/{return QFlags!(QLocale.LanguageCodeTypes.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator |(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator &(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/{return QFlags!(QLocale.LanguageCodeTypes.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator &(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator ^(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/{return QFlags!(QLocale.LanguageCodeTypes.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator ^(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QLocale.LanguageCodeTypes.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QLocale.LanguageCodeTypes.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QLocale.LanguageCodeTypes.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator |(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)nothrow{return QFlags!(QLocale.LanguageCodeTypes.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator |(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator &(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)nothrow{return QFlags!(QLocale.LanguageCodeTypes.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator &(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator ^(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)nothrow{return QFlags!(QLocale.LanguageCodeTypes.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.LanguageCodeTypes.enum_type) operator ^(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QLocale.LanguageCodeTypes.enum_type f1, QLocale.LanguageCodeTypes.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QLocale.LanguageCodeTypes.enum_type f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QLocale.LanguageCodeTypes.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QLocale.LanguageCodeTypes.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QLocale.LanguageCodeTypes.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QLocale.LanguageCodeTypes.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QLocale.LanguageCodeTypes.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QLocale.LanguageCodeTypes operator ~(QLocale.LanguageCodeTypes.enum_type e)/+noexcept+/{return~QLocale.LanguageCodeTypes(e);}+/
-/+pragma(inline, true) void operator |(QLocale.LanguageCodeTypes.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QLocale.LanguageCodeTypes operator ~(QLocale.LanguageCodeTypes.enum_type e)nothrow{return~QLocale.LanguageCodeTypes(e);}+/
+/+pragma(inline, true) void operator |(QLocale.LanguageCodeTypes.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QLocale.LanguageCodeTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QLocale.LanguageCodeTypes.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QLocale::LanguageCodeTypes)
 #if QT_CORE_INLINE_IMPL_SINCE(6, 4)

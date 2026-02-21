@@ -178,30 +178,30 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator &(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator &(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator ^(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator ^(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator &(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator &(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator ^(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator ^(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionFrame.FrameFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionFrame.FrameFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QStyleOptionFrame.FrameFeatures operator ~(QStyleOptionFrame.FrameFeatures.enum_type e)/+noexcept+/{return~QStyleOptionFrame.FrameFeatures(e);}+/
-/+pragma(inline, true) void operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QStyleOptionFrame.FrameFeatures operator ~(QStyleOptionFrame.FrameFeatures.enum_type e)nothrow{return~QStyleOptionFrame.FrameFeatures(e);}+/
+/+pragma(inline, true) void operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionFrame::FrameFeatures)
@@ -371,31 +371,31 @@ public:
 
     /+ Qt::TextElideMode textElideMode:2; +/
     uint bitfieldData_textElideMode;
-    qt.core.namespace.TextElideMode textElideMode() const
+    qt.core.namespace.TextElideMode textElideMode() const nothrow
     {
         return cast(qt.core.namespace.TextElideMode)((bitfieldData_textElideMode >> 0) & 0x3);
     }
-    qt.core.namespace.TextElideMode textElideMode(qt.core.namespace.TextElideMode value)
+    qt.core.namespace.TextElideMode textElideMode(qt.core.namespace.TextElideMode value) nothrow
     {
         bitfieldData_textElideMode = (bitfieldData_textElideMode & ~0x3) | ((value & 0x3) << 0);
         return value;
     }
     /+ bool isSectionDragTarget:1; +/
-    bool isSectionDragTarget() const
+    bool isSectionDragTarget() const nothrow
     {
         return (bitfieldData_textElideMode >> 2) & 0x1;
     }
-    bool isSectionDragTarget(bool value)
+    bool isSectionDragTarget(bool value) nothrow
     {
         bitfieldData_textElideMode = (bitfieldData_textElideMode & ~0x4) | ((value & 0x1) << 2);
         return value;
     }
     /+ int unused:29; +/
-    int unused() const
+    int unused() const nothrow
     {
         return (bitfieldData_textElideMode >> 3) & 0x1fffffff;
     }
-    int unused(int value)
+    int unused(int value) nothrow
     {
         bitfieldData_textElideMode = (bitfieldData_textElideMode & ~0xfffffff8) | ((value & 0x1fffffff) << 3);
         return value;
@@ -448,30 +448,30 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator &(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator &(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator ^(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator ^(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator &(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator &(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator ^(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator ^(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionButton.ButtonFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionButton.ButtonFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QStyleOptionButton.ButtonFeatures operator ~(QStyleOptionButton.ButtonFeatures.enum_type e)/+noexcept+/{return~QStyleOptionButton.ButtonFeatures(e);}+/
-/+pragma(inline, true) void operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QStyleOptionButton.ButtonFeatures operator ~(QStyleOptionButton.ButtonFeatures.enum_type e)nothrow{return~QStyleOptionButton.ButtonFeatures(e);}+/
+/+pragma(inline, true) void operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionButton::ButtonFeatures)
@@ -531,30 +531,30 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator &(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator &(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator ^(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator ^(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)nothrow{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator &(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)nothrow{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator &(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator ^(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)nothrow{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator ^(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionTab.CornerWidgets.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionTab.CornerWidgets.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QStyleOptionTab.CornerWidgets operator ~(QStyleOptionTab.CornerWidgets.enum_type e)/+noexcept+/{return~QStyleOptionTab.CornerWidgets(e);}+/
-/+pragma(inline, true) void operator |(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QStyleOptionTab.CornerWidgets operator ~(QStyleOptionTab.CornerWidgets.enum_type e)nothrow{return~QStyleOptionTab.CornerWidgets(e);}+/
+/+pragma(inline, true) void operator |(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionTab::CornerWidgets) +/
@@ -603,30 +603,30 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator &(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator &(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator ^(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator ^(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator &(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator &(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator ^(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator ^(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QStyleOptionToolBar.ToolBarFeatures operator ~(QStyleOptionToolBar.ToolBarFeatures.enum_type e)/+noexcept+/{return~QStyleOptionToolBar.ToolBarFeatures(e);}+/
-/+pragma(inline, true) void operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QStyleOptionToolBar.ToolBarFeatures operator ~(QStyleOptionToolBar.ToolBarFeatures.enum_type e)nothrow{return~QStyleOptionToolBar.ToolBarFeatures(e);}+/
+/+pragma(inline, true) void operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionToolBar::ToolBarFeatures) +/
@@ -837,30 +837,30 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator &(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator &(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator ^(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator ^(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator &(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator &(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator ^(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator ^(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QStyleOptionViewItem.ViewItemFeatures operator ~(QStyleOptionViewItem.ViewItemFeatures.enum_type e)/+noexcept+/{return~QStyleOptionViewItem.ViewItemFeatures(e);}+/
-/+pragma(inline, true) void operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QStyleOptionViewItem.ViewItemFeatures operator ~(QStyleOptionViewItem.ViewItemFeatures.enum_type e)nothrow{return~QStyleOptionViewItem.ViewItemFeatures(e);}+/
+/+pragma(inline, true) void operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionViewItem::ViewItemFeatures) +/
@@ -1108,30 +1108,30 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator &(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator &(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator ^(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator ^(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator &(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator &(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator ^(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator ^(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QStyleOptionToolButton.ToolButtonFeatures operator ~(QStyleOptionToolButton.ToolButtonFeatures.enum_type e)/+noexcept+/{return~QStyleOptionToolButton.ToolButtonFeatures(e);}+/
-/+pragma(inline, true) void operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QStyleOptionToolButton.ToolButtonFeatures operator ~(QStyleOptionToolButton.ToolButtonFeatures.enum_type e)nothrow{return~QStyleOptionToolButton.ToolButtonFeatures(e);}+/
+/+pragma(inline, true) void operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionToolButton::ToolButtonFeatures) +/

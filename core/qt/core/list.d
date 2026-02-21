@@ -24,8 +24,8 @@ import qt.helpers;
 import std.traits;
 
 /+ extern(C++, "QtPrivate") {
-   qsizetype indexOf(V, U)(ref const(QList!(V)) list, ref const(U) u, qsizetype from)/+ noexcept+/;
-   qsizetype lastIndexOf(V, U)(ref const(QList!(V)) list, ref const(U) u, qsizetype from)/+ noexcept+/;
+   qsizetype indexOf(V, U)(ref const(QList!(V)) list, ref const(U) u, qsizetype from) nothrow;
+   qsizetype lastIndexOf(V, U)(ref const(QList!(V)) list, ref const(U) u, qsizetype from) nothrow;
 } +/
 
 /+ struct QListSpecialMethodsBase(T)
@@ -39,18 +39,18 @@ protected:
 
 public:
     /+ template <typename AT = T> +/
-    qsizetype indexOf(AT)(ref const(AT) t, qsizetype from = 0) const/+ noexcept+/
+    qsizetype indexOf(AT)(ref const(AT) t, qsizetype from = 0) const nothrow
     {
         return /+ QtPrivate:: +/.indexOf(*self(), t, from);
     }
     /+ template <typename AT = T> +/
-    qsizetype lastIndexOf(AT)(ref const(AT) t, qsizetype from = -1) const/+ noexcept+/
+    qsizetype lastIndexOf(AT)(ref const(AT) t, qsizetype from = -1) const nothrow
     {
         return /+ QtPrivate:: +/.lastIndexOf(*self(), t, from);
     }
 
     /+ template <typename AT = T> +/
-    bool contains(AT)(ref const(AT) t) const/+ noexcept+/
+    bool contains(AT)(ref const(AT) t) const nothrow
     {
         return self().indexOf(t) != -1;
     }
@@ -320,7 +320,7 @@ private:
         return i.i < d.end() && i.i >= d.begin();
     }
 public:
-    this(DataPointer dd)/+ noexcept+/
+    this(DataPointer dd) /*nothrow*/
     {
         this.d = dd;
     }
@@ -449,11 +449,11 @@ public:
     bool operator>=(const QList &other) const;
 #endif +/ // Q_CLANG_QDOC
 
-    qsizetype size() const/+ noexcept+/ { return d.size; }
-    qsizetype count() const/+ noexcept+/ { return size(); }
-    qsizetype length() const/+ noexcept+/ { return size(); }
+    qsizetype size() const nothrow { return d.size; }
+    qsizetype count() const nothrow { return size(); }
+    qsizetype length() const nothrow { return size(); }
 
-    pragma(inline, true) bool isEmpty() const/+ noexcept+/ { return d.size == 0; }
+    pragma(inline, true) bool isEmpty() const nothrow { return d.size == 0; }
 
     void resize()(qsizetype size)
     {
@@ -515,13 +515,13 @@ public:
     }+/
 
     void detach()() { d.detach(); }
-    bool isDetached() const/+ noexcept+/ { return !d.isShared(); }
+    bool isDetached() const nothrow { return !d.isShared(); }
 
     pragma(inline, true) bool isSharedWith(ref const(QList!(T)) other) const { return d == other.d; }
 
     pointer data()() { detach(); return d.data(); }
-    const_pointer data() const/+ noexcept+/ { return d.data(); }
-    const_pointer constData() const/+ noexcept+/ { return d.data(); }
+    const_pointer data() const nothrow { return d.data(); }
+    const_pointer constData() const nothrow { return d.data(); }
     void clear() {
         if (!size())
             return;
@@ -537,7 +537,7 @@ public:
     extern(D) T[] toSlice() { return data[0 .. length]; }
     extern(D) const(T)[] toConstSlice() const { return constData[0 .. length]; }
 
-    ref const(T) at(qsizetype i) const/+ noexcept+/
+    ref const(T) at(qsizetype i) const nothrow
     {
         (mixin(Q_ASSERT_X(q{size_t(i) < size_t(QList.d.size)},q{ "QList::at"},q{ "index out of range"})));
         return data()[i];
@@ -548,7 +548,7 @@ public:
         detach();
         return data()[i];
     }
-    ref const(T) opIndex(qsizetype i) const/+ noexcept+/ { return at(i); }
+    ref const(T) opIndex(qsizetype i) const nothrow { return at(i); }
     void append()(parameter_type t) { emplaceBack(t); }
     /*pragma(inline, true) void append(const_iterator i1, const_iterator i2)
     {
@@ -675,13 +675,13 @@ public:
         d.detach();
         d.erase(d.begin() + i, n);
     }+/
-/+    pragma(inline, true) void removeFirst()/+ noexcept+/
+/+    pragma(inline, true) void removeFirst() nothrow
     {
         (mixin(Q_ASSERT(q{!QList.isEmpty()})));
         d.detach();
         d.eraseFirst();
     }
-    pragma(inline, true) void removeLast()/+ noexcept+/
+    pragma(inline, true) void removeLast() nothrow
     {
         (mixin(Q_ASSERT(q{!QList.isEmpty()})));
         d.detach();
@@ -726,7 +726,7 @@ public:
 #endif +/
 
     /+ template <typename AT = T> +/
-    qsizetype count(AT)(ref const(AT) t) const/+ noexcept+/
+    qsizetype count(AT)(ref const(AT) t) const nothrow
     {
         return qsizetype(/+ std:: +/count(data(), data() + size(), t));
     }
@@ -775,12 +775,12 @@ public:
     iterator begin()() { detach(); return iterator(d.begin()); }
     iterator end()() { detach(); return iterator(d.end()); }
 
-    const_iterator begin() const/+ noexcept+/ { return const_iterator(d.constBegin()); }
-    const_iterator end() const/+ noexcept+/ { return const_iterator(d.constEnd()); }
-    const_iterator cbegin() const/+ noexcept+/ { return const_iterator(d.constBegin()); }
-    const_iterator cend() const/+ noexcept+/ { return const_iterator(d.constEnd()); }
-    const_iterator constBegin() const/+ noexcept+/ { return const_iterator(d.constBegin()); }
-    const_iterator constEnd() const/+ noexcept+/ { return const_iterator(d.constEnd()); }
+    const_iterator begin() const nothrow { return const_iterator(d.constBegin()); }
+    const_iterator end() const nothrow { return const_iterator(d.constEnd()); }
+    const_iterator cbegin() const nothrow { return const_iterator(d.constBegin()); }
+    const_iterator cend() const nothrow { return const_iterator(d.constEnd()); }
+    const_iterator constBegin() const nothrow { return const_iterator(d.constBegin()); }
+    const_iterator constEnd() const nothrow { return const_iterator(d.constEnd()); }
     /+ reverse_iterator rbegin() { return reverse_iterator(end()); } +/
     /+ reverse_iterator rend() { return reverse_iterator(begin()); } +/
     /+ const_reverse_iterator rbegin() const noexcept { return const_reverse_iterator(end()); } +/
@@ -827,11 +827,11 @@ public:
 
     // more Qt
     pragma(inline, true) ref T first()() { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *begin(); }
-    pragma(inline, true) ref const(T) first()() const/+ noexcept+/ { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *begin(); }
-    pragma(inline, true) ref const(T) constFirst()() const/+ noexcept+/ { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *begin(); }
+    pragma(inline, true) ref const(T) first()() const nothrow { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *begin(); }
+    pragma(inline, true) ref const(T) constFirst()() const nothrow { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *begin(); }
 //    pragma(inline, true) ref T last() { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *(end()-1); }
-//    pragma(inline, true) ref const(T) last() const/+ noexcept+/ { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *(end()-1); }
-//    pragma(inline, true) ref const(T) constLast() const/+ noexcept+/ { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *(end()-1); }
+//    pragma(inline, true) ref const(T) last() const nothrow { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *(end()-1); }
+//    pragma(inline, true) ref const(T) constLast() const nothrow { (mixin(Q_ASSERT(q{!QList.isEmpty()}))); return *(end()-1); }
 //    pragma(inline, true) bool startsWith(parameter_type t) const { return !isEmpty() && first() == t; }
 //    pragma(inline, true) bool endsWith(parameter_type t) const { return !isEmpty() && last() == t; }
 /+    pragma(inline, true) QList!(T) mid(qsizetype pos, qsizetype len = -1) const
@@ -904,18 +904,18 @@ public:
     //void push_back(rvalue_ref t) { append(/+ std:: +/move(t)); }
     //void push_front(rvalue_ref t) { prepend(/+ std:: +/move(t)); }
 //    pragma(inline, true) void push_front(parameter_type t) { prepend(t); }
-//    void pop_back()/+ noexcept+/ { removeLast(); }
-//    void pop_front()/+ noexcept+/ { removeFirst(); }
+//    void pop_back() nothrow { removeLast(); }
+//    void pop_front() nothrow { removeFirst(); }
 
     /+ template <typename ...Args> +/
     // reference emplace_back(Args)(Args && /+ && +/ args) { return emplaceBack(/+ std:: +/forward!(Args)(args)...); }
 
-    pragma(inline, true) bool empty() const/+ noexcept+/
+    pragma(inline, true) bool empty() const nothrow
     { return d.size == 0; }
 //    pragma(inline, true) ref T front() { return first(); }
-//    pragma(inline, true) ref const(T) front() const/+ noexcept+/ { return first(); }
+//    pragma(inline, true) ref const(T) front() const nothrow { return first(); }
 //    pragma(inline, true) ref T back() { return last(); }
-//    pragma(inline, true) ref const(T) back() const/+ noexcept+/ { return last(); }
+//    pragma(inline, true) ref const(T) back() const nothrow { return last(); }
 //    void shrink_to_fit() { squeeze(); }
 
     // comfort
@@ -939,31 +939,31 @@ public:
     { append(/+ std:: +/move(t)); return this; }+/
 
     // Consider deprecating in 6.4 or later
-//    static QList!(T) fromList(ref const(QList!(T)) list)/+ noexcept+/ { return list; }
-//    QList!(T) toList() const/+ noexcept+/ { return this; }
+//    static QList!(T) fromList(ref const(QList!(T)) list) nothrow { return list; }
+//    QList!(T) toList() const nothrow { return this; }
 
-//    pragma(inline, true) static QList!(T) fromVector(ref const(QList!(T)) vector)/+ noexcept+/ { return vector; }
-//    pragma(inline, true) QList!(T) toVector() const/+ noexcept+/ { return this; }
+//    pragma(inline, true) static QList!(T) fromVector(ref const(QList!(T)) vector) nothrow { return vector; }
+//    pragma(inline, true) QList!(T) toVector() const nothrow { return this; }
 
     /+ template<qsizetype N> +/
-    /+ static QList!(T) fromReadOnlyData(qsizetype N)(ref const(T)[N] t)/+ noexcept+/
+    /+ static QList!(T) fromReadOnlyData(qsizetype N)(ref const(T)[N] t) nothrow
     {
         return QList!(T)({ null, const_cast!(T*)(t), N} );
     } +/
 
     /+ template <typename AT = T> +/
-    qsizetype indexOf(AT)(ref const(AT) t, qsizetype from = 0) const/+ noexcept+/
+    qsizetype indexOf(AT)(ref const(AT) t, qsizetype from = 0) const nothrow
     {
         return /+ QtPrivate:: +/.indexOf(this, t, from);
     }
     /+ template <typename AT = T> +/
-    qsizetype lastIndexOf(AT)(ref const(AT) t, qsizetype from = -1) const/+ noexcept+/
+    qsizetype lastIndexOf(AT)(ref const(AT) t, qsizetype from = -1) const nothrow
     {
         return /+ QtPrivate:: +/.lastIndexOf(this, t, from);
     }
 
     /+ template <typename AT = T> +/
-    bool contains(AT)(ref const(AT) t) const/+ noexcept+/
+    bool contains(AT)(ref const(AT) t) const nothrow
     {
         return this.indexOf(t) != -1;
     }
@@ -992,7 +992,7 @@ inline void QList<T>::append(QList<T> &&other)
 
 
 extern(C++, "QtPrivate") {
-qsizetype indexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype from)/+ noexcept+/
+qsizetype indexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype from) nothrow
 {
     if (from < 0)
         from = qMax(from + vector.size(), qsizetype(0));
@@ -1006,7 +1006,7 @@ qsizetype indexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype f
     return -1;
 }
 
-qsizetype lastIndexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype from)/+ noexcept+/
+qsizetype lastIndexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype from) nothrow
 {
     if (from < 0)
         from += vector.d.size;

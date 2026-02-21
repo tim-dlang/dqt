@@ -209,30 +209,30 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_modelDestroyed()) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator &(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator &(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator ^(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator ^(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)nothrow{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator &(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)nothrow{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator &(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator ^(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)nothrow{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator ^(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QItemSelectionModel.SelectionFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QItemSelectionModel.SelectionFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QItemSelectionModel.SelectionFlags operator ~(QItemSelectionModel.SelectionFlags.enum_type e)/+noexcept+/{return~QItemSelectionModel.SelectionFlags(e);}+/
-/+pragma(inline, true) void operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QItemSelectionModel.SelectionFlags operator ~(QItemSelectionModel.SelectionFlags.enum_type e)nothrow{return~QItemSelectionModel.SelectionFlags(e);}+/
+/+pragma(inline, true) void operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QItemSelectionModel::SelectionFlags) +/

@@ -40,7 +40,7 @@ class /+ Q_CORE_EXPORT +/ QThread : QObject
 public:
     /+ static Qt::HANDLE currentThreadId() noexcept Q_DECL_PURE_FUNCTION; +/
     static QThread currentThread();
-    static int idealThreadCount()/+ noexcept+/;
+    static int idealThreadCount() nothrow;
     static void yieldCurrentThread();
 
     /+ explicit +/this(QObject parent = null);
@@ -126,7 +126,7 @@ private:
 /+ #if QT_CONFIG(cxx11_future) +/
     /+ [[nodiscard]] static QThread *createThreadImpl(std::future<void> &&future); +/
 /+ #endif +/
-    static /+ Qt:: +/qt.core.namespace.HANDLE currentThreadIdImpl()/+ noexcept /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
+    static /+ Qt:: +/qt.core.namespace.HANDLE currentThreadIdImpl() nothrow/+ /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
 
     /+ friend class QCoreApplication; +/
     /+ friend class QThreadData; +/

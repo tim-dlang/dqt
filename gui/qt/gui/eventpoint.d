@@ -77,12 +77,12 @@ alias States = QFlags!(State);    /+ Q_FLAG(States) +/
     }));
     this(int pointId, State state, ref const(QPointF) scenePosition, ref const(QPointF) globalPosition);
     @disable this(this);
-    this(ref const(QEventPoint) other)/+ noexcept+/;
-    ref QEventPoint opAssign(ref const(QEventPoint) other)/+ noexcept+/;
+    this(ref const(QEventPoint) other) nothrow;
+    ref QEventPoint opAssign(ref const(QEventPoint) other) nothrow;
     /+ QEventPoint(QEventPoint && other) noexcept = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QEventPoint) +/
-    /+bool operator ==(ref const(QEventPoint) other) const/+ noexcept+/;+/
-    /+bool operator !=(ref const(QEventPoint) other) const/+ noexcept+/ { return !operator==(other); }+/
+    /+bool operator ==(ref const(QEventPoint) other) const nothrow;+/
+    /+bool operator !=(ref const(QEventPoint) other) const nothrow { return !operator==(other); }+/
     ~this();
     /+ inline void swap(QEventPoint &other) noexcept
     { d.swap(other.d); } +/

@@ -103,8 +103,8 @@ public:
     this(FileFormat format/+ = FileFormat.UnspecifiedFormat+/);
     ~this();
     @disable this(this);
-    this(ref const(QMediaFormat) other)/+ noexcept+/;
-    ref QMediaFormat opAssign(ref const(QMediaFormat) other)/+ noexcept+/;
+    this(ref const(QMediaFormat) other) nothrow;
+    ref QMediaFormat opAssign(ref const(QMediaFormat) other) nothrow;
 
     /+ QMediaFormat(QMediaFormat &&other) noexcept = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QMediaFormat) +/

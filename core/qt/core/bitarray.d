@@ -33,7 +33,7 @@ private:
 
 public:
     @disable this();
-    /+pragma(inline, true) this()/+ noexcept+/ {}+/
+    /+pragma(inline, true) this() nothrow {}+/
     /+ explicit +/this(qsizetype size, bool val = false);
     /+pragma(inline, true) ref QBitArray opAssign(ref const(QBitArray) other) { d = other.d; return this; }+/
     /+ inline QBitArray(QBitArray &&other) noexcept : d(std::move(other.d)) {} +/
@@ -92,7 +92,7 @@ public:
     const(char)* bits() const { return isEmpty() ? null : d.constData() + 1; }
     static QBitArray fromBits(const(char)* data, qsizetype len);
 
-    quint32 toUInt32(QSysInfo.Endian endianness, bool* ok = null) const/+ noexcept+/;
+    quint32 toUInt32(QSysInfo.Endian endianness, bool* ok = null) const nothrow;
 
 public:
     alias DataPtr = QByteArray.DataPointer;

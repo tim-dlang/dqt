@@ -268,7 +268,7 @@ private:
     pragma(inline, true) final int startTimer(int){ return -1;}
     pragma(inline, true) final void killTimer(int){}
 
-    static /+ Qt:: +/qt.core.namespace.TimerType defaultTypeFor(int msecs)/+ noexcept+/
+    static /+ Qt:: +/qt.core.namespace.TimerType defaultTypeFor(int msecs) nothrow
     { return msecs >= 2000 ? /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer : /+ Qt:: +/qt.core.namespace.TimerType.PreciseTimer; }
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static void singleShotImpl(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType,

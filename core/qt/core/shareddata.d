@@ -29,12 +29,12 @@ public:
     /+ mutable +/ QAtomicInt ref_/* = 0*/;
 
     @disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.ref_ = 0;
     }+/
     @disable this(this);
-    this(ref const(QSharedData) )/+ noexcept+/
+    this(ref const(QSharedData) ) nothrow
     {
         this.ref_ = 0;
     }
@@ -72,17 +72,17 @@ public:
     ref T opUnary(string op)() if (op == "*") { detach(); return *d; }
     ref const(T) opUnary(string op)() const if (op == "*") { return *d; }
     /+T* operator ->() { detach(); return d; }+/
-    /+const(T)* operator ->() const/+ noexcept+/ { return d; }+/
+    /+const(T)* operator ->() const nothrow { return d; }+/
     /+auto opCast(T : T)() { detach(); return d; }+/
-    /+auto opCast(T : const(T))() const/+ noexcept+/ { return d; }+/
+    /+auto opCast(T : const(T))() const nothrow { return d; }+/
     T* data()() { detach(); return d; }
     T* get()() { detach(); return d; }
-    const(T)* data() const/+ noexcept+/ { return d; }
-    const(T)* get() const/+ noexcept+/ { return d; }
-    const(T)* constData() const/+ noexcept+/ { return d; }
-//    T* take()/+ noexcept+/ { return qExchange(d, cast(U && ) (null)); }
+    const(T)* data() const nothrow { return d; }
+    const(T)* get() const nothrow { return d; }
+    const(T)* constData() const nothrow { return d; }
+//    T* take() nothrow { return qExchange(d, cast(U && ) (null)); }
 
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.d = null;
     }+/
@@ -98,17 +98,17 @@ public:
         @disable ~this();
     }
 
-/+    /+ explicit +/this(T* data)/+ noexcept+/
+/+    /+ explicit +/this(T* data) nothrow
     {
         this.d = data;
         if (d) d.ref_.ref_();
     }+/
-    this(T* data, QAdoptSharedDataTag)/+ noexcept+/
+    this(T* data, QAdoptSharedDataTag) nothrow
     {
         this.d = data;
     }
     @disable this(this);
-    this(ref const(QSharedDataPointer) o)/+ noexcept+/
+    this(ref const(QSharedDataPointer) o) nothrow
     {
         static if (__traits(compiles, d.ref_))
         {
@@ -118,7 +118,7 @@ public:
             assert(0);
     }
 
-    void reset()(T* ptr = null)/+ noexcept+/
+    void reset()(T* ptr = null) nothrow
     {
         import core.stdcpp.new_;
 
@@ -131,12 +131,12 @@ public:
         }
     }
 
-    ref QSharedDataPointer opAssign()(ref const(QSharedDataPointer) o)/+ noexcept+/
+    ref QSharedDataPointer opAssign()(ref const(QSharedDataPointer) o) nothrow
     {
         reset(o.d);
         return this;
     }
-    pragma(inline, true) ref QSharedDataPointer opAssign()(T* o)/+ noexcept+/
+    pragma(inline, true) ref QSharedDataPointer opAssign()(T* o) nothrow
     {
         reset(o);
         return this;
@@ -144,8 +144,8 @@ public:
     /+ QSharedDataPointer(QSharedDataPointer &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QSharedDataPointer) +/
 
-    /+auto opCast(T : bool) () const/+ noexcept+/ { return d !is null; }+/
-    /+bool operator !() const/+ noexcept+/ { return d is null; }+/
+    /+auto opCast(T : bool) () const nothrow { return d !is null; }+/
+    /+bool operator !() const nothrow { return d is null; }+/
 
     /+ void swap(QSharedDataPointer &other) noexcept
     { qt_ptr_swap(d, other.d); } +/
@@ -204,19 +204,19 @@ public:
     alias pointer = T*;
 
     ref T opUnary(string op)() const if (op == "*") { return *d; }
-    /+T* operator ->()/+ noexcept+/ { return d; }+/
-    /+T* operator ->() const/+ noexcept+/ { return d; }+/
+    /+T* operator ->() nothrow { return d; }+/
+    /+T* operator ->() const nothrow { return d; }+/
     /+/+ explicit +/ auto opCast(T : T)() { return d; }+/
-    /+/+ explicit +/ auto opCast(T : const(T))() const/+ noexcept+/ { return d; }+/
-    T* data() /*const*/ /+ noexcept+/ { return d; }
-    T* get() /*const*/ /+ noexcept+/ { return d; }
-    const(T)* get() const /+ noexcept+/ { return d; }
-    const(T)* constData() const/+ noexcept+/ { return d; }
-//    T* take()/+ noexcept+/ { return qExchange(d, cast(U && ) (null)); }
+    /+/+ explicit +/ auto opCast(T : const(T))() const nothrow { return d; }+/
+    T* data() /*const*/  nothrow { return d; }
+    T* get() /*const*/  nothrow { return d; }
+    const(T)* get() const  nothrow { return d; }
+    const(T)* constData() const nothrow { return d; }
+//    T* take() nothrow { return qExchange(d, cast(U && ) (null)); }
 
     void detach()() { if (d && d.ref_.loadRelaxed() != 1) detach_helper(); }
 
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.d = null;
     }+/
@@ -232,17 +232,17 @@ public:
         @disable ~this();
     }
 
-    /+ /+ explicit +/this(T* data)/+ noexcept+/
+    /+ /+ explicit +/this(T* data) nothrow
     {
         this.d = data;
         if (d) d.ref_.ref_();
     }+/
-    this(T* data, QAdoptSharedDataTag)/+ noexcept+/
+    this(T* data, QAdoptSharedDataTag) nothrow
     {
         this.d = data;
     }
     @disable this(this);
-    /+this(ref const(QExplicitlySharedDataPointer) o)/+ noexcept+/
+    /+this(ref const(QExplicitlySharedDataPointer) o) nothrow
     {
         static if (__traits(compiles, (*d).sizeof))
         {
@@ -255,7 +255,7 @@ public:
 
     /+ template<typename X> +/
     /+ @disable this(this);
-    this(X)(ref const(QExplicitlySharedDataPointer!(X)) o)/+ noexcept+//+ #ifdef QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST +/
+    this(X)(ref const(QExplicitlySharedDataPointer!(X)) o) nothrow/+ #ifdef QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST +/
 /+ #endif +/
 {
     static if (defined!"QT_ENABLE_QEXPLICITLYSHAREDDATAPOINTER_STATICCAST")
@@ -272,7 +272,7 @@ public:
     if (d) d.ref_.ref_();
 } +/
 
-    void reset()(T* ptr = null)/+ noexcept+/
+    void reset()(T* ptr = null) nothrow
     {
         import core.stdcpp.new_;
 
@@ -285,12 +285,12 @@ public:
         }
     }
 
-    ref QExplicitlySharedDataPointer opAssign()(ref const(QExplicitlySharedDataPointer) o)/+ noexcept+/
+    ref QExplicitlySharedDataPointer opAssign()(ref const(QExplicitlySharedDataPointer) o) nothrow
     {
         reset(o.d);
         return this;
     }
-    ref QExplicitlySharedDataPointer opAssign()(T* o)/+ noexcept+/
+    ref QExplicitlySharedDataPointer opAssign()(T* o) nothrow
     {
         reset(o);
         return this;
@@ -298,8 +298,8 @@ public:
     /+ QExplicitlySharedDataPointer(QExplicitlySharedDataPointer &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QExplicitlySharedDataPointer) +/
 
-    /+auto opCast(T : bool) () const/+ noexcept+/ { return d !is null; }+/
-    /+bool operator !() const/+ noexcept+/ { return d is null; }+/
+    /+auto opCast(T : bool) () const nothrow { return d !is null; }+/
+    /+bool operator !() const nothrow { return d is null; }+/
 
     /+ void swap(QExplicitlySharedDataPointer &other) noexcept
     { qt_ptr_swap(d, other.d); } +/

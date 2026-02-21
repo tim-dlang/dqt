@@ -59,30 +59,30 @@ public /+ Q_SLOTS +/:
     @QSlot final void quit();
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator |(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/{return QFlags!(QEventLoop.ProcessEventsFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator |(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator &(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/{return QFlags!(QEventLoop.ProcessEventsFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator &(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator ^(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/{return QFlags!(QEventLoop.ProcessEventsFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator ^(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QEventLoop.ProcessEventsFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator |(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)nothrow{return QFlags!(QEventLoop.ProcessEventsFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator |(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator &(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)nothrow{return QFlags!(QEventLoop.ProcessEventsFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator &(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator ^(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)nothrow{return QFlags!(QEventLoop.ProcessEventsFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QEventLoop.ProcessEventsFlags.enum_type) operator ^(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QEventLoop.ProcessEventsFlags.enum_type f1, QEventLoop.ProcessEventsFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QEventLoop.ProcessEventsFlags.enum_type f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QEventLoop.ProcessEventsFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QEventLoop.ProcessEventsFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QEventLoop.ProcessEventsFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QEventLoop.ProcessEventsFlags operator ~(QEventLoop.ProcessEventsFlags.enum_type e)/+noexcept+/{return~QEventLoop.ProcessEventsFlags(e);}+/
-/+pragma(inline, true) void operator |(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QEventLoop.ProcessEventsFlags operator ~(QEventLoop.ProcessEventsFlags.enum_type e)nothrow{return~QEventLoop.ProcessEventsFlags(e);}+/
+/+pragma(inline, true) void operator |(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QEventLoop.ProcessEventsFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QEventLoop::ProcessEventsFlags) +/

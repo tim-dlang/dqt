@@ -82,18 +82,18 @@ public:
     { return p1.m_order != p2.m_order; } +/
 
 private:
-    /+ explicit +/this(/+ QtPrivate:: +/Ordering order)/+ noexcept+/
+    /+ explicit +/this(/+ QtPrivate:: +/Ordering order) nothrow
     {
         this.m_order = static_cast!(/+ QtPrivate:: +/CompareUnderlyingType)(order);
     }
-    /+ explicit +/this(/+ QtPrivate:: +/Uncomparable order)/+ noexcept+/
+    /+ explicit +/this(/+ QtPrivate:: +/Uncomparable order) nothrow
     {
         this.m_order = static_cast!(/+ QtPrivate:: +/CompareUnderlyingType)(order);
     }
 
     // instead of the exposition only is_ordered member in [cmp.partialord],
     // use a private function
-    bool isOrdered()/+ noexcept+/
+    bool isOrdered() nothrow
     { return m_order != static_cast!(/+ QtPrivate:: +/CompareUnderlyingType)(/+ QtPrivate:: +/Uncomparable.Unordered); }
 
     /+ QtPrivate:: +/CompareUnderlyingType m_order;

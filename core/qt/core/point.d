@@ -27,62 +27,62 @@ struct CGPoint;
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QPoint
 {
 public:
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.xp = 0;
         this.yp = 0;
     }+/
-    pragma(inline, true) this(int xpos, int ypos)/+ noexcept+/
+    pragma(inline, true) this(int xpos, int ypos) nothrow
     {
         this.xp = xpos;
         this.yp = ypos;
     }
 
-    pragma(inline, true) bool isNull() const/+ noexcept+/
+    pragma(inline, true) bool isNull() const nothrow
     {
         return xp == 0 && yp == 0;
     }
 
-    pragma(inline, true) int x() const/+ noexcept+/
+    pragma(inline, true) int x() const nothrow
     {
         return xp;
     }
-    pragma(inline, true) int y() const/+ noexcept+/
+    pragma(inline, true) int y() const nothrow
     {
         return yp;
     }
-    pragma(inline, true) void setX(int xpos)/+ noexcept+/
+    pragma(inline, true) void setX(int xpos) nothrow
     {
         xp = xpos;
     }
-    pragma(inline, true) void setY(int ypos)/+ noexcept+/
+    pragma(inline, true) void setY(int ypos) nothrow
     {
         yp = ypos;
     }
 
-    pragma(inline, true) int manhattanLength() const
+    pragma(inline, true) int manhattanLength() const nothrow
     {
         return qAbs(x()) + qAbs(y());
     }
 
-    QPoint transposed() const/+ noexcept+/ { return QPoint(yp, xp); }
+    QPoint transposed() const nothrow { return QPoint(yp, xp); }
 
-    pragma(inline, true) ref int rx()/+ noexcept+/ return
+    pragma(inline, true) ref int rx() nothrow return
     {
         return xp;
     }
-    pragma(inline, true) ref int ry()/+ noexcept+/ return
+    pragma(inline, true) ref int ry() nothrow return
     {
         return yp;
     }
 
-    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if (op == "+")
+    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) nothrow if (op == "+")
     {
         xp += p.xp;
         yp += p.yp;
         return this;
     }
-    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if (op == "-")
+    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) nothrow if (op == "-")
     {
         xp -= p.xp;
         yp -= p.yp;
@@ -149,13 +149,13 @@ public:
     {
         /+ [[nodiscard]] Q_CORE_EXPORT CGPoint toCGPoint() const noexcept; +/
     }
-    /+ [[nodiscard]] +/ pragma(inline, true) QPointF toPointF() const/+ noexcept+/ { return QPointF(this); }
+    /+ [[nodiscard]] +/ pragma(inline, true) QPointF toPointF() const nothrow { return QPointF(this); }
 
 
-    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if (op == "+")
+    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const nothrow if (op == "+")
     { return QPoint(xp+p2.xp, yp+p2.yp); }
 
-    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if (op == "-")
+    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const nothrow if (op == "-")
     { return QPoint(xp-p2.xp, yp-p2.yp); }
 
 
@@ -205,67 +205,67 @@ Q_CORE_EXPORT size_t qHash(QPoint key, size_t seed = 0) noexcept; +/
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QPointF
 {
 public:
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.xp = 0;
         this.yp = 0;
     }+/
-    pragma(inline, true) this(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) this(ref const(QPoint) p) nothrow
     {
         this.xp = p.x();
         this.yp = p.y();
     }
-    pragma(inline, true) this(qreal xpos, qreal ypos)/+ noexcept+/
+    pragma(inline, true) this(qreal xpos, qreal ypos) nothrow
     {
         this.xp = xpos;
         this.yp = ypos;
     }
 
-    pragma(inline, true) qreal manhattanLength() const
+    pragma(inline, true) qreal manhattanLength() const nothrow
     {
         return qAbs(x()) + qAbs(y());
     }
 
-    pragma(inline, true) bool isNull() const/+ noexcept+/
+    pragma(inline, true) bool isNull() const nothrow
     {
         return qIsNull(xp) && qIsNull(yp);
     }
 
-    pragma(inline, true) qreal x() const/+ noexcept+/
+    pragma(inline, true) qreal x() const nothrow
     {
         return xp;
     }
-    pragma(inline, true) qreal y() const/+ noexcept+/
+    pragma(inline, true) qreal y() const nothrow
     {
         return yp;
     }
-    pragma(inline, true) void setX(qreal xpos)/+ noexcept+/
+    pragma(inline, true) void setX(qreal xpos) nothrow
     {
         xp = xpos;
     }
-    pragma(inline, true) void setY(qreal ypos)/+ noexcept+/
+    pragma(inline, true) void setY(qreal ypos) nothrow
     {
         yp = ypos;
     }
 
-    QPointF transposed() const/+ noexcept+/ { return QPointF(yp, xp); }
+    QPointF transposed() const nothrow { return QPointF(yp, xp); }
 
-    pragma(inline, true) ref qreal rx() return /+ noexcept+/
+    pragma(inline, true) ref qreal rx() nothrow return
     {
         return xp;
     }
-    pragma(inline, true) ref qreal ry() return /+ noexcept+/
+    pragma(inline, true) ref qreal ry() nothrow return
     {
         return yp;
     }
 
-    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if (op == "+")
+    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) nothrow if (op == "+")
     {
         xp += p.xp;
         yp += p.yp;
         return this;
     }
-    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if (op == "-")
+    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) nothrow if (op == "-")
     {
         xp -= p.xp;
         yp -= p.yp;
@@ -285,7 +285,7 @@ public:
         return this;
     }+/
 
-    pragma(inline, true) static qreal dotProduct(ref const(QPointF) p1, ref const(QPointF) p2)
+    pragma(inline, true) static qreal dotProduct(ref const(QPointF) p1, ref const(QPointF) p2) nothrow
     {
         return p1.xp * p2.xp + p1.yp * p2.yp;
     }
@@ -321,7 +321,7 @@ public:
         return QPointF(p.xp / divisor, p.yp / divisor);
     } +/
 
-    pragma(inline, true) QPoint toPoint() const
+    pragma(inline, true) QPoint toPoint() const nothrow
     {
         return QPoint(qRound(xp), qRound(yp));
     }
@@ -332,10 +332,10 @@ public:
         /+ [[nodiscard]] Q_CORE_EXPORT CGPoint toCGPoint() const noexcept; +/
     }
 
-    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const if (op == "+")
+    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const nothrow if (op == "+")
     { return QPointF(xp+p2.xp, yp+p2.yp); }
 
-    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const if (op == "-")
+    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF) p2) const nothrow if (op == "-")
     { return QPointF(xp-p2.xp, yp-p2.yp); }
 
 private:

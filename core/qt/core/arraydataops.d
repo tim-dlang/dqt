@@ -35,7 +35,7 @@ protected:
 public:
     alias parameter_type = QArrayDataPointer!(T).parameter_type;
 
-    void appendInitialize()(ref QArrayDataPointer!T this_, qsizetype newSize)/+ noexcept+/
+    void appendInitialize()(ref QArrayDataPointer!T this_, qsizetype newSize) nothrow
     {
         (mixin(Q_ASSERT(q{this_.isMutable()})));
         (mixin(Q_ASSERT(q{!this_.isShared()})));
@@ -49,7 +49,7 @@ public:
             *where++ = T.init;
     }
 
-    void copyAppend()(ref QArrayDataPointer!T this_, const(T)* b, const(T)* e)/+ noexcept+/
+    void copyAppend()(ref QArrayDataPointer!T this_, const(T)* b, const(T)* e) nothrow
     {
         import core.stdc.string;
 
@@ -65,7 +65,7 @@ public:
         this_.size += (e - b);
     }
 
-    void copyAppend()(ref QArrayDataPointer!T this_, qsizetype n, parameter_type t)/+ noexcept+/
+    void copyAppend()(ref QArrayDataPointer!T this_, qsizetype n, parameter_type t) nothrow
     {
         (mixin(Q_ASSERT(q{!this_.isShared() || n == 0})));
         (mixin(Q_ASSERT(q{this_.freeSpaceAtEnd() >= n})));
@@ -78,12 +78,12 @@ public:
             *where++ = t;
     }
 
-    void moveAppend()(ref QArrayDataPointer!T this_, T* b, T* e)/+ noexcept+/
+    void moveAppend()(ref QArrayDataPointer!T this_, T* b, T* e) nothrow
     {
         copyAppend(this_, b, e);
     }
 
-    void truncate()(ref QArrayDataPointer!T this_, size_t newSize)/+ noexcept+/
+    void truncate()(ref QArrayDataPointer!T this_, size_t newSize) nothrow
     {
         (mixin(Q_ASSERT(q{this_.isMutable()})));
         (mixin(Q_ASSERT(q{!this_.isShared()})));
@@ -92,7 +92,7 @@ public:
         this_.size = qsizetype(newSize);
     }
 
-    void destroyAll()(ref QArrayDataPointer!T this_)/+ noexcept+/ // Call from destructors, ONLY!
+    void destroyAll()(ref QArrayDataPointer!T this_) nothrow // Call from destructors, ONLY!
     {
         (mixin(Q_ASSERT(q{this_.d})));
         (mixin(Q_ASSERT(q{this_.d.ref__.loadRelaxed() == 0})));
@@ -211,7 +211,7 @@ public:
         this_.size -= n;
     }
 
-    void eraseFirst()(ref QArrayDataPointer!T this_)/+ noexcept+/
+    void eraseFirst()(ref QArrayDataPointer!T this_) nothrow
     {
         (mixin(Q_ASSERT(q{this_.isMutable()})));
         (mixin(Q_ASSERT(q{this_.size})));
@@ -219,14 +219,14 @@ public:
         --this_.size;
     }
 
-    void eraseLast()(ref QArrayDataPointer!T this_)/+ noexcept+/
+    void eraseLast()(ref QArrayDataPointer!T this_) nothrow
     {
         (mixin(Q_ASSERT(q{this_.isMutable()})));
         (mixin(Q_ASSERT(q{this_.size})));
         --this_.size;
     }
 
-    void assign()(ref QArrayDataPointer!T this_, T* b, T* e, parameter_type t)/+ noexcept+/
+    void assign()(ref QArrayDataPointer!T this_, T* b, T* e, parameter_type t) nothrow
     {
         import core.stdc.string;
 
@@ -637,7 +637,7 @@ public:
             destroy(*it);
     }
 
-    void eraseFirst()(ref QArrayDataPointer!T this_)/+ noexcept+/
+    void eraseFirst()(ref QArrayDataPointer!T this_) nothrow
     {
         (mixin(Q_ASSERT(q{this_.isMutable()})));
         (mixin(Q_ASSERT(q{this_.size})));
@@ -646,7 +646,7 @@ public:
         --this_.size;
     }
 
-    void eraseLast()(ref QArrayDataPointer!T this_)/+ noexcept+/
+    void eraseLast()(ref QArrayDataPointer!T this_) nothrow
     {
         (mixin(Q_ASSERT(q{this_.isMutable()})));
         (mixin(Q_ASSERT(q{this_.size})));

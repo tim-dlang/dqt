@@ -113,7 +113,7 @@ public:
 
     @disable this();
     pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-    ref typeof(this) rawConstructor()/+ noexcept+/;
+    ref typeof(this) rawConstructor() nothrow;
     static typeof(this) create()
     {
         typeof(this) r = typeof(this).init;
@@ -317,9 +317,9 @@ public:
     QString text(ref const(QString) key = globalInitVar!QString) const;
     void setText(ref const(QString) key, ref const(QString) value);
 
-    QPixelFormat pixelFormat() const/+ noexcept+/;
-    static QPixelFormat toPixelFormat(Format format)/+ noexcept+/;
-    static Format toImageFormat(QPixelFormat format)/+ noexcept+/;
+    QPixelFormat pixelFormat() const nothrow;
+    static QPixelFormat toPixelFormat(Format format) nothrow;
+    static Format toImageFormat(QPixelFormat format) nothrow;
 
     // Platform specific conversion functions
 /+ #if defined(Q_OS_DARWIN) || defined(Q_QDOC) +/

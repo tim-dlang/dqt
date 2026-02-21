@@ -63,7 +63,7 @@ private:
 //    static assert(/+ QtPrivate:: +/qt.core.utf8stringview.IsContainerCompatibleWithQUtf8StringView!(QAnyStringView).value == false);
 
     /+ template<typename Char> +/
-    static bool isAsciiOnlyCharsAtCompileTime(Char)(Char* str, qsizetype sz)/+ noexcept+/
+    static bool isAsciiOnlyCharsAtCompileTime(Char)(Char* str, qsizetype sz) nothrow
     {
         // do not perform check if not at compile time
 /+ #if !(defined(__cpp_lib_is_constant_evaluated) || defined(Q_CC_GNU))
@@ -99,7 +99,7 @@ private:
     }
 
     /+ template<typename Char> +/
-    static /+ std:: +/size_t encodeType(Char)(const(Char)* str, qsizetype sz)/+ noexcept+/
+    static /+ std:: +/size_t encodeType(Char)(const(Char)* str, qsizetype sz) nothrow
     {
         // Utf16 if 16 bit, Latin1 if ASCII, else Utf8
         (mixin(Q_ASSERT(q{sz >= 0})));
@@ -110,7 +110,7 @@ private:
     }
 
     /+ template <typename Char> +/
-    static qsizetype lengthHelperPointer(Char)(const Char* str)/+ noexcept+/
+    static qsizetype lengthHelperPointer(Char)(const Char* str) nothrow
     {
 /+ #if defined(Q_CC_GNU) && !defined(Q_CC_CLANG)
         if (__builtin_constant_p(*str)) {
@@ -128,36 +128,36 @@ private:
     }
 
     /+ template <typename Container> +/
-    static qsizetype lengthHelperContainer(Container)(ref const(Container) c)/+ noexcept+/
+    static qsizetype lengthHelperContainer(Container)(ref const(Container) c) nothrow
     {
         return qsizetype(c.size());
     }
 
     /+ template <typename Char, size_t N> +/
-    /+ static qsizetype lengthHelperContainer(Char,size_t N)(ref const(Char)[N] str)/+ noexcept+/
+    /+ static qsizetype lengthHelperContainer(Char,size_t N)(ref const(Char)[N] str) nothrow
     {
         const it = /+ std:: +/char_traits!(Char).find(str.ptr, N, Char(0));
         const end = it ? it : /+ std:: +/next(str, N);
         return qsizetype(/+ std:: +/distance(str, end));
     } +/
 
-    static QChar toQChar(char ch)/+ noexcept+/ { return toQChar(QLatin1Char(ch)); } // we don't handle UTF-8 multibytes
-    static QChar toQChar(QChar ch)/+ noexcept+/ { return ch; }
-    static QChar toQChar(QLatin1Char ch)/+ noexcept+/ { return QChar(ch); }
+    static QChar toQChar(char ch) nothrow { return toQChar(QLatin1Char(ch)); } // we don't handle UTF-8 multibytes
+    static QChar toQChar(QChar ch) nothrow { return ch; }
+    static QChar toQChar(QLatin1Char ch) nothrow { return QChar(ch); }
 
-/+    /+ explicit +/ this(const(void)* d, qsizetype n, /+ std:: +/size_t sizeAndType)/+ noexcept+/
+/+    /+ explicit +/ this(const(void)* d, qsizetype n, /+ std:: +/size_t sizeAndType) nothrow
     {
         this.m_data = typeof(this.m_data)({d});
         this.m_size = {/+ std:: +/size_t(n) | (sizeAndType & TypeMask)};
     }+/
 public:
     @disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.m_data = typeof(this.m_data)({null});
         this.m_size = {0};
     }+/
-    this(typeof(null))/+ noexcept+/
+    this(typeof(null)) nothrow
     {
         //this();
     }
@@ -184,22 +184,22 @@ public:
 #else +/
 
     /+ template <typename Pointer, if_compatible_pointer<Pointer> = true> +/
-    this(Pointer,)(ref const(Pointer) str)/+ noexcept+/ if (if_compatible_pointer!Pointer)
+    this(Pointer,)(ref const(Pointer) str) nothrow if (if_compatible_pointer!Pointer)
     {
         this = QAnyStringView(str, str ? lengthHelperPointer(str) : 0);
     }
 /+ #endif +/
 
     // defined in qstring.h
-    /+pragma(inline, true) this(ref const(QByteArray) str)/+ noexcept+/
+    /+pragma(inline, true) this(ref const(QByteArray) str) nothrow
     {
         this(QAnyStringView(str.isNull() ? null : str.data(), str.size()));
     }+/ // TODO: Should we have this at all? Remove?
-    pragma(inline, true) this(ref const(QString) str)/+ noexcept+/
+    pragma(inline, true) this(ref const(QString) str) nothrow
     {
         this(str.isNull() ? null : str.data(), str.size());
     }
-    pragma(inline, true) this(QLatin1StringView str)/+ noexcept+/
+    pragma(inline, true) this(QLatin1StringView str) nothrow
     {
         this.m_data = typeof(this.m_data)(str.data());
         this.m_size = size_t(str.size()) | Tag.Latin1;
@@ -211,17 +211,17 @@ public:
                           typename QConcatenable<QStringBuilder<A, B>>::ConvertTo &&capacity = {}); +/
 
     /+ template <typename Container, if_compatible_container<Container> = true> +/
-    /*this(Container,)(ref const(Container) c)/+ noexcept+/
+    /*this(Container,)(ref const(Container) c) nothrow
     {
         this(/+ std:: +/data(c), lengthHelperContainer(c));
     }*/
 
     /+ template <typename Char, if_compatible_char<Char> = true> +/
-    this(Char,)(ref const(Char) c)/+ noexcept+/ if (if_compatible_char!Char)
+    this(Char,)(ref const(Char) c) nothrow if (if_compatible_char!Char)
     {
         this(&c, 1);
     }
-    this(ref const(QChar) c)/+ noexcept+/
+    this(ref const(QChar) c) nothrow
     {
         this(&c, 1);
     }
@@ -231,19 +231,19 @@ public:
     /+ constexpr QAnyStringView(Char c, Container &&capacity = {})
         : QAnyStringView(capacity = QChar::fromUcs4(c)) {} +/
 
-    this(QStringView v)/+ noexcept+/
+    this(QStringView v) nothrow
     {
         this(v.data(), lengthHelperContainer(v));
     }
 
     /+ template <bool UseChar8T> +/
-    this(bool UseChar8T)(QBasicUtf8StringView!(UseChar8T) v)/+ noexcept+/
+    this(bool UseChar8T)(QBasicUtf8StringView!(UseChar8T) v) nothrow
     {
         this(v.data(), lengthHelperContainer(v));
     }
 
     /+ template <typename Char, size_t Size, if_compatible_char<Char> = true> +/
-    /+ [[nodiscard]] +/ static QAnyStringView fromArray(Char,size_t Size,)(ref const(Char)[Size] string)/+ noexcept+/ if (if_compatible_char!Char)
+    /+ [[nodiscard]] +/ static QAnyStringView fromArray(Char,size_t Size,)(ref const(Char)[Size] string) nothrow if (if_compatible_char!Char)
     { return QAnyStringView(string, Size); }
 
     // defined in qstring.h:
@@ -256,11 +256,11 @@ public:
         return /+ QtPrivate:: +/qt.core.stringalgorithms.convertToQString(this);
     } // defined in qstring.h
 
-    /+ [[nodiscard]] +/ qsizetype size() const/+ noexcept+/ { return qsizetype(m_size & SizeMask); }
-    /+ [[nodiscard]] +/ const(void)* data() const/+ noexcept+/ { return m_data; }
+    /+ [[nodiscard]] +/ qsizetype size() const nothrow { return qsizetype(m_size & SizeMask); }
+    /+ [[nodiscard]] +/ const(void)* data() const nothrow { return m_data; }
 
-    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static int compare(QAnyStringView lhs, QAnyStringView rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive)/+ noexcept+/;
-    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static bool equal(QAnyStringView lhs, QAnyStringView rhs)/+ noexcept+/;
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static int compare(QAnyStringView lhs, QAnyStringView rhs, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) nothrow;
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static bool equal(QAnyStringView lhs, QAnyStringView rhs) nothrow;
 
     extern(D) static immutable bool detects_US_ASCII_at_compile_time =
 /+ #ifdef __cpp_lib_is_constant_evaluated +/
@@ -282,16 +282,16 @@ public:
     {
         return visit(/+ [] +/ (auto that) { return QAnyStringView.toQChar(that.back()); });
     } +/ // NOT noexcept!
-    /+ [[nodiscard]] +/ bool empty() const/+ noexcept+/ { return size() == 0; }
-    /+ [[nodiscard]] +/ qsizetype size_bytes() const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool empty() const nothrow { return size() == 0; }
+    /+ [[nodiscard]] +/ qsizetype size_bytes() const nothrow
     { return size() * charSize(); }
 
     //
     // Qt compatibility API:
     //
-    /+ [[nodiscard]] +/ bool isNull() const/+ noexcept+/ { return !m_data; }
-    /+ [[nodiscard]] +/ bool isEmpty() const/+ noexcept+/ { return empty(); }
-    /+ [[nodiscard]] +/ qsizetype length() const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool isNull() const nothrow { return !m_data; }
+    /+ [[nodiscard]] +/ bool isEmpty() const nothrow { return empty(); }
+    /+ [[nodiscard]] +/ qsizetype length() const nothrow
     { return size(); }
 
 private:
@@ -336,10 +336,10 @@ private:
         Utf16    = TwoByteCodePointFlag,
         Unused   = TypeMask,
     }
-    /+ [[nodiscard]] +/ Tag tag() const/+ noexcept+/ { return cast(Tag)(m_size & TypeMask); }
-    /+ [[nodiscard]] +/ bool isUtf16() const/+ noexcept+/ { return tag() == Tag.Utf16; }
-    /+ [[nodiscard]] +/ bool isUtf8() const/+ noexcept+/ { return tag() == Tag.Utf8; }
-    /+ [[nodiscard]] +/ bool isLatin1() const/+ noexcept+/ { return tag() == Tag.Latin1; }
+    /+ [[nodiscard]] +/ Tag tag() const nothrow { return cast(Tag)(m_size & TypeMask); }
+    /+ [[nodiscard]] +/ bool isUtf16() const nothrow { return tag() == Tag.Utf16; }
+    /+ [[nodiscard]] +/ bool isUtf8() const nothrow { return tag() == Tag.Utf8; }
+    /+ [[nodiscard]] +/ bool isLatin1() const nothrow { return tag() == Tag.Latin1; }
     /+ [[nodiscard]] +/ QStringView asStringView() const
     { return (){ (mixin(Q_ASSERT(q{QAnyStringView.isUtf16()})));
 return QStringView(m_data_utf16, size());
@@ -353,7 +353,7 @@ return /+ q_no_char8_t:: +/qt.core.utf8stringview.QUtf8StringView(m_data_utf8, s
         (mixin(Q_ASSERT(q{QAnyStringView.isLatin1()})));
         return QLatin1StringView(m_data_utf8, size());
     }
-    /+ [[nodiscard]] +/ size_t charSize() const/+ noexcept+/ { return isUtf16() ? 2 : 1; }
+    /+ [[nodiscard]] +/ size_t charSize() const nothrow { return isUtf16() ? 2 : 1; }
     /+ Q_ALWAYS_INLINE +/ pragma(inline, true) void verify(qsizetype pos, qsizetype n = 0) const
     {
         (mixin(Q_ASSERT(q{pos >= 0})));
@@ -375,6 +375,6 @@ return /+ q_no_char8_t:: +/qt.core.utf8stringview.QUtf8StringView(m_data_utf8, s
 /+ [[nodiscard]] +/ pragma(inline, true) QAnyStringView qToAnyStringViewIgnoringNull(QStringLike, /+ std::enable_if_t<std::disjunction_v<
         std::is_same<QStringLike, QString>,
         std::is_same<QStringLike, QByteArray>
-    >, bool> +/ /+ = true +/)(ref const(QStringLike) s)/+ noexcept+/
+    >, bool> +/ /+ = true +/)(ref const(QStringLike) s) nothrow
 { return QAnyStringView(s.data(), s.size()); }
 

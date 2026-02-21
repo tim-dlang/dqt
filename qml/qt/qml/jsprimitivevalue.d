@@ -131,32 +131,32 @@ public:
     Type type() const { return Type(d.type()); }
 
     /+ Q_IMPLICIT +/ /+ constexpr QJSPrimitiveValue() noexcept = default; +/
-    /+ Q_IMPLICIT +/ this(QJSPrimitiveUndefined undefined)/+ noexcept+/
+    /+ Q_IMPLICIT +/ this(QJSPrimitiveUndefined undefined) nothrow
     {
         this.d = undefined;
     }
-    /+ Q_IMPLICIT +/ this(QJSPrimitiveNull null_)/+ noexcept+/
+    /+ Q_IMPLICIT +/ this(QJSPrimitiveNull null_) nothrow
     {
         this.d = null_;
     }
-    /+ Q_IMPLICIT +/ this(bool value)/+ noexcept+/
+    /+ Q_IMPLICIT +/ this(bool value) nothrow
     {
         this.d = value;
     }
-    /+ Q_IMPLICIT +/ this(int value)/+ noexcept+/
+    /+ Q_IMPLICIT +/ this(int value) nothrow
     {
         this.d = value;
     }
-    /+ Q_IMPLICIT +/ this(double value)/+ noexcept+/
+    /+ Q_IMPLICIT +/ this(double value) nothrow
     {
         this.d = value;
     }
-/+    /+ Q_IMPLICIT +/ this(QString string)/+ noexcept+/
+/+    /+ Q_IMPLICIT +/ this(QString string) nothrow
     {
         this.d = /+ std:: +/move(cast(_Tp && ) (string));
     }+/
 
-/+    /+ explicit +/this(const(QMetaType) type, const(void)* value)/+ noexcept+/
+/+    /+ explicit +/this(const(QMetaType) type, const(void)* value) nothrow
     {
         switch (type.id()) {
         case QMetaType.Type.UnknownType:
@@ -183,7 +183,7 @@ public:
         }
     }
 
-    /+ explicit +/this(ref const(QVariant) variant)/+ noexcept+/
+    /+ explicit +/this(ref const(QVariant) variant) nothrow
     {
         this(variant.metaType(), variant.data());
     }
@@ -709,36 +709,36 @@ private:
     {
         // Can't be default because QString has a non-trivial ctor.
         @disable this();
-        /+this()/+ noexcept+/ {}+/
+        /+this() nothrow {}+/
 
-        /+ Q_IMPLICIT +/ this(QJSPrimitiveUndefined)/+ noexcept+/  {}
-        /+ Q_IMPLICIT +/ this(QJSPrimitiveNull)/+ noexcept+/
+        /+ Q_IMPLICIT +/ this(QJSPrimitiveUndefined) nothrow  {}
+        /+ Q_IMPLICIT +/ this(QJSPrimitiveNull) nothrow
         {
             this.m_type = Type.Null;
         }
-        /+ Q_IMPLICIT +/ this(bool b)/+ noexcept+/
+        /+ Q_IMPLICIT +/ this(bool b) nothrow
         {
             this.m_bool = b;
             this.m_type = Type.Boolean;
         }
-        /+ Q_IMPLICIT +/ this(int i)/+ noexcept+/
+        /+ Q_IMPLICIT +/ this(int i) nothrow
         {
             this.m_int = i;
             this.m_type = Type.Integer;
         }
-        /+ Q_IMPLICIT +/ this(double d)/+ noexcept+/
+        /+ Q_IMPLICIT +/ this(double d) nothrow
         {
             this.m_double = d;
             this.m_type = Type.Double;
         }
-        /+ /+ Q_IMPLICIT +/ this(QString s)/+ noexcept+/
+        /+ /+ Q_IMPLICIT +/ this(QString s) nothrow
         {
             this.m_string = /+ std:: +/move(cast(_Tp && ) (s));
             this.m_type = Type.String;
         }+/
 
         @disable this(this);
-/+        this(ref const(QJSPrimitiveValuePrivate) other)/+ noexcept+/
+/+        this(ref const(QJSPrimitiveValuePrivate) other) nothrow
         {
             import core.lifetime;
             this.m_type = other.m_type;
@@ -756,7 +756,7 @@ private:
                 new (&m_string) QString(std::move(other.m_string));
         } +/
 
-        /+ref QJSPrimitiveValuePrivate opAssign(ref const(QJSPrimitiveValuePrivate) other)/+ noexcept+/
+        /+ref QJSPrimitiveValuePrivate opAssign(ref const(QJSPrimitiveValuePrivate) other) nothrow
         {
             import core.lifetime;
 
@@ -804,14 +804,14 @@ private:
                 destroy!false(m_string);
         }
 
-        Type type() const/+ noexcept+/ { return m_type; }
-        bool getBool() const/+ noexcept+/ { return m_bool; }
-        int getInt() const/+ noexcept+/ { return m_int; }
-        double getDouble() const/+ noexcept+/ { return m_double; }
-        const(QString) getString() const/+ noexcept+/ { return m_string; }
+        Type type() const nothrow { return m_type; }
+        bool getBool() const nothrow { return m_bool; }
+        int getInt() const nothrow { return m_int; }
+        double getDouble() const nothrow { return m_double; }
+        const(QString) getString() const nothrow { return m_string; }
 
         /+ template<typename T> +/
-        T get(T)() const/+ noexcept+/ {
+        T get(T)() const nothrow {
             import qt.core.compilerdetection;
 
             static if (/+ std:: +/is_same_v!(T, QJSPrimitiveUndefined))
@@ -832,7 +832,7 @@ private:
         }
 
     private:
-        /+bool assignSimple(ref const(QJSPrimitiveValuePrivate) other)/+ noexcept+/
+        /+bool assignSimple(ref const(QJSPrimitiveValuePrivate) other) nothrow
         {
             import qt.core.compilerdetection;
 

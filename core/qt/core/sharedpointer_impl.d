@@ -131,7 +131,7 @@ extern(C++, "QtSharedPointer") {
         // to prevent a mismatch with the custom operator delete
         /+pragma(inline, true) @disable void* operator new(/+ std:: +/size_t);+/
         // placement new
-        /+pragma(inline, true) void* operator new(/+ std:: +/size_t, void* ptr)/+ noexcept+/ { return ptr; }+/
+        /+pragma(inline, true) void* operator new(/+ std:: +/size_t, void* ptr) nothrow { return ptr; }+/
         /+pragma(inline, true) void operator delete(void* ptr) { UnresolvedMergeConflict!(q{.operator delete},q{.operator delete})(ptr); }+/
         /+pragma(inline, true) void operator delete(void* , void* ) { }+/
     }
@@ -290,17 +290,17 @@ public:
     /+ typedef const value_type &const_reference; +/
     alias difference_type = qptrdiff;
 
-    //T* data() const/+ noexcept+/ { return value; }
-    //T* get() const/+ noexcept+/ { return value; }
-    //bool isNull() const/+ noexcept+/ { return !data(); }
-    /+/+ explicit +/ auto opCast(T : bool)() const/+ noexcept+/ { return !isNull(); }+/
-    /+bool operator !() const/+ noexcept+/ { return isNull(); }+/
+    //T* data() const nothrow { return value; }
+    //T* get() const nothrow { return value; }
+    //bool isNull() const nothrow { return !data(); }
+    /+/+ explicit +/ auto opCast(T : bool)() const nothrow { return !isNull(); }+/
+    /+bool operator !() const nothrow { return isNull(); }+/
     ref T opUnary(string op)() const if (op == "*") { return *data(); }
-    /+T* operator ->() const/+ noexcept+/ { return data(); }+/
+    /+T* operator ->() const nothrow { return data(); }+/
 
     ~this() { deref(); }
 
-    this(typeof(null))/+ noexcept+/
+    this(typeof(null)) nothrow
     {
         this.value = null;
         this.d = null;
@@ -336,13 +336,13 @@ public:
     }*/
 
     @disable this(this);
-    this(ref /*const*/ QSharedPointer other)/+ noexcept+/
+    this(ref /*const*/ QSharedPointer other) nothrow
     {
         this.value = other.value;
         this.d = other.d;
         if (d) ref_();
     }
-    /+ref QSharedPointer opAssign(ref const(QSharedPointer) other)/+ noexcept+/
+    /+ref QSharedPointer opAssign(ref const(QSharedPointer) other) nothrow
     {
         auto copy = QSharedPointer(other);
         swap(copy);
@@ -374,7 +374,7 @@ public:
 
     /+ template <class X, IfCompatible<X> = true> +/
     /+ @disable this(this);
-    this(X,)(ref const(QSharedPointer!(X)) other)/+ noexcept+/
+    this(X,)(ref const(QSharedPointer!(X)) other) nothrow
     {
         this.value = other.value;
         this.d = other.d;
@@ -401,7 +401,7 @@ public:
     pragma(inline, true) ref QSharedPointer!(T) opAssign(X,)(ref const(QWeakPointer!(X)) other)
     { internalSet(other.d, other.value); return this; }
 
-    /*pragma(inline, true) void swap(ref QSharedPointer other) /+noexcept+/
+    /*pragma(inline, true) void swap(ref QSharedPointer other) nothrow
     { this.internalSwap(other); }*/
 
     /*pragma(inline, true) void reset() { clear(); }
@@ -492,9 +492,9 @@ public:
 private:
     /+ explicit +/this(/+ Qt:: +/qt.core.namespace.Initialization) {}
 
-    void deref()/+ noexcept+/
+    void deref() /*nothrow*/
     { deref(d); }
-    static void deref(Data* dd)/+ noexcept+/
+    static void deref(Data* dd) /*nothrow*/
     {
         import core.stdcpp.new_;
 
@@ -536,7 +536,7 @@ private:
         enableSharedFromThis(ptr);
     }*/
 
-    /*void internalSwap(ref QSharedPointer other)/+ noexcept+/
+    /*void internalSwap(ref QSharedPointer other) nothrow
     {
         auto tmp = other.d; qt_ptr_swap(d, tmp);
         auto tmp__1 = other.value; qt_ptr_swap(this.value, tmp__1);
@@ -545,7 +545,7 @@ private:
     /+ template <class X> +/ /+ friend class QSharedPointer; +/
     /+ template <class X> +/ /+ friend class QWeakPointer; +/
     /+ template <class X, class Y> +/ /+ friend QSharedPointer<X> QtSharedPointer::copyAndSetPointer(X * ptr, const QSharedPointer<Y> &src); +/
-    void ref_() /*const*/ /+ noexcept+/ { d.weakref.ref_(); d.strongref.ref_(); }
+    void ref_() /*const*/  nothrow { d.weakref.ref_(); d.strongref.ref_(); }
 
     /*pragma(inline, true) void internalSet(Data* o, T* actual)
     {
@@ -754,7 +754,7 @@ private:
 extern(C++, "QtPrivate") {
 struct EnableInternalData {
     /+ template <typename T> +/
-    static T* internalData(T)(ref const(QWeakPointer!(T)) p)/+ noexcept+/ { return p.internalData(); }
+    static T* internalData(T)(ref const(QWeakPointer!(T)) p) nothrow { return p.internalData(); }
 }
 // hack to delay name lookup to instantiation time by making
 // EnableInternalData a dependent name:

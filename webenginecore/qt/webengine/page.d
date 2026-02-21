@@ -408,30 +408,30 @@ private:
 /+ #endif +/ // QT_CONFIG(accessibility)
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator |(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QWebEnginePage.FindFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator |(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator &(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QWebEnginePage.FindFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator &(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator ^(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QWebEnginePage.FindFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator ^(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QWebEnginePage.FindFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QWebEnginePage.FindFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QWebEnginePage.FindFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QWebEnginePage.FindFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator |(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)nothrow{return QFlags!(QWebEnginePage.FindFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator |(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator &(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)nothrow{return QFlags!(QWebEnginePage.FindFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator &(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator ^(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)nothrow{return QFlags!(QWebEnginePage.FindFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QWebEnginePage.FindFlags.enum_type) operator ^(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QWebEnginePage.FindFlags.enum_type f1, QWebEnginePage.FindFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QWebEnginePage.FindFlags.enum_type f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QWebEnginePage.FindFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QWebEnginePage.FindFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QWebEnginePage.FindFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QWebEnginePage.FindFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QWebEnginePage.FindFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QWebEnginePage.FindFlags operator ~(QWebEnginePage.FindFlags.enum_type e)/+noexcept+/{return~QWebEnginePage.FindFlags(e);}+/
-/+pragma(inline, true) void operator |(QWebEnginePage.FindFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QWebEnginePage.FindFlags operator ~(QWebEnginePage.FindFlags.enum_type e)nothrow{return~QWebEnginePage.FindFlags(e);}+/
+/+pragma(inline, true) void operator |(QWebEnginePage.FindFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QWebEnginePage.FindFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QWebEnginePage.FindFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QWebEnginePage::FindFlags)

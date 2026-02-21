@@ -44,24 +44,24 @@ public:
     }
     /+ Q_DECLARE_FLAGS(RenderFlags, RenderFlag) +/
 alias RenderFlags = QFlags!(RenderFlag);
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.m_renderFlags = 0;
         this.m_rotation = 0;
         this.m_reserved = 0;
     }+/
 
-    Rotation rotation() const/+ noexcept+/ { return static_cast!(Rotation)(m_rotation); }
-    void setRotation(Rotation r)/+ noexcept+/ { m_rotation = quint32(r); }
+    Rotation rotation() const nothrow { return static_cast!(Rotation)(m_rotation); }
+    void setRotation(Rotation r) nothrow { m_rotation = quint32(r); }
 
-    RenderFlags renderFlags() const/+ noexcept+/ { return RenderFlags(cast(RenderFlag) m_renderFlags); }
-    void setRenderFlags(RenderFlags r)/+ noexcept+/ { m_renderFlags = quint32(r.toInt()); }
+    RenderFlags renderFlags() const nothrow { return RenderFlags(cast(RenderFlag) m_renderFlags); }
+    void setRenderFlags(RenderFlags r) nothrow { m_renderFlags = quint32(r.toInt()); }
 
-    QRect scaledClipRect() const/+ noexcept+/ { return m_clipRect; }
-    void setScaledClipRect(ref const(QRect) r)/+ noexcept+/ { m_clipRect = r; }
+    QRect scaledClipRect() const nothrow { return m_clipRect; }
+    void setScaledClipRect(ref const(QRect) r) nothrow { m_clipRect = r; }
 
-    QSize scaledSize() const/+ noexcept+/ { return m_scaledSize; }
-    void setScaledSize(ref const(QSize) s)/+ noexcept+/ { m_scaledSize = s; }
+    QSize scaledSize() const nothrow { return m_scaledSize; }
+    void setScaledSize(ref const(QSize) s) nothrow { m_scaledSize = s; }
 
 private:
     /+ friend constexpr inline bool operator==(const QPdfDocumentRenderOptions &lhs, const QPdfDocumentRenderOptions &rhs) noexcept; +/
@@ -71,31 +71,31 @@ private:
 
     /+ quint32 m_renderFlags : 8; +/
     uint bitfieldData_m_renderFlags;
-    quint32 m_renderFlags() const
+    quint32 m_renderFlags() const nothrow
     {
         return (bitfieldData_m_renderFlags >> 0) & 0xff;
     }
-    quint32 m_renderFlags(quint32 value)
+    quint32 m_renderFlags(quint32 value) nothrow
     {
         bitfieldData_m_renderFlags = (bitfieldData_m_renderFlags & ~0xff) | ((value & 0xff) << 0);
         return value;
     }
     /+ quint32 m_rotation    : 3; +/
-    quint32 m_rotation() const
+    quint32 m_rotation() const nothrow
     {
         return (bitfieldData_m_renderFlags >> 8) & 0x7;
     }
-    quint32 m_rotation(quint32 value)
+    quint32 m_rotation(quint32 value) nothrow
     {
         bitfieldData_m_renderFlags = (bitfieldData_m_renderFlags & ~0x700) | ((value & 0x7) << 8);
         return value;
     }
     /+ quint32 m_reserved    : 21; +/
-    quint32 m_reserved() const
+    quint32 m_reserved() const nothrow
     {
         return (bitfieldData_m_renderFlags >> 11) & 0x1fffff;
     }
-    quint32 m_reserved(quint32 value)
+    quint32 m_reserved(quint32 value) nothrow
     {
         bitfieldData_m_renderFlags = (bitfieldData_m_renderFlags & ~0xfffff800) | ((value & 0x1fffff) << 11);
         return value;
@@ -103,42 +103,42 @@ private:
     quint32 m_reserved2 = 0;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator |(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator |(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator &(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator &(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator ^(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator ^(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator |(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)nothrow{return QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator |(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator &(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)nothrow{return QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator &(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator ^(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)nothrow{return QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) operator ^(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QPdfDocumentRenderOptions.RenderFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QPdfDocumentRenderOptions.RenderFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QPdfDocumentRenderOptions.RenderFlags operator ~(QPdfDocumentRenderOptions.RenderFlags.enum_type e)/+noexcept+/{return~QPdfDocumentRenderOptions.RenderFlags(e);}+/
-/+pragma(inline, true) void operator |(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QPdfDocumentRenderOptions.RenderFlags operator ~(QPdfDocumentRenderOptions.RenderFlags.enum_type e)nothrow{return~QPdfDocumentRenderOptions.RenderFlags(e);}+/
+/+pragma(inline, true) void operator |(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QPdfDocumentRenderOptions.RenderFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_TYPEINFO(QPdfDocumentRenderOptions, Q_PRIMITIVE_TYPE);
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPdfDocumentRenderOptions::RenderFlags) +/
-/+pragma(inline, true) bool operator ==(ref const(QPdfDocumentRenderOptions) lhs, ref const(QPdfDocumentRenderOptions) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(ref const(QPdfDocumentRenderOptions) lhs, ref const(QPdfDocumentRenderOptions) rhs) nothrow
 {
     return lhs.m_clipRect == rhs.m_clipRect && lhs.m_scaledSize == rhs.m_scaledSize &&
             lhs.m_renderFlags == rhs.m_renderFlags && lhs.m_rotation == rhs.m_rotation &&
             lhs.m_reserved == rhs.m_reserved && lhs.m_reserved2 == rhs.m_reserved2; // fix -Wunused-private-field
 }+/
 
-/+pragma(inline, true) bool operator !=(ref const(QPdfDocumentRenderOptions) lhs, ref const(QPdfDocumentRenderOptions) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(ref const(QPdfDocumentRenderOptions) lhs, ref const(QPdfDocumentRenderOptions) rhs) nothrow
 {
     return !operator==(lhs, rhs);
 }+/

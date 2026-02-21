@@ -90,24 +90,24 @@ public:
         return cast(ChannelConfig) (/+ QtPrivate:: +/.channelConfig(channels));
     }
 
-    bool isValid() const/+ noexcept+/
+    bool isValid() const nothrow
     {
         return m_sampleRate > 0 && m_channelCount > 0 && m_sampleFormat != SampleFormat.Unknown;
     }
 
-    void setSampleRate(int sampleRate)/+ noexcept+/ { m_sampleRate = sampleRate; }
-    int sampleRate() const/+ noexcept+/ { return m_sampleRate; }
+    void setSampleRate(int sampleRate) nothrow { m_sampleRate = sampleRate; }
+    int sampleRate() const nothrow { return m_sampleRate; }
 
-    /+ Q_MULTIMEDIA_EXPORT +/ void setChannelConfig(ChannelConfig config)/+ noexcept+/;
-    ChannelConfig channelConfig() const/+ noexcept+/ { return m_channelConfig; }
+    /+ Q_MULTIMEDIA_EXPORT +/ void setChannelConfig(ChannelConfig config) nothrow;
+    ChannelConfig channelConfig() const nothrow { return m_channelConfig; }
 
-    void setChannelCount(int channelCount)/+ noexcept+/ { m_channelConfig = ChannelConfig.ChannelConfigUnknown; m_channelCount = cast(short) (channelCount); }
-    int channelCount() const/+ noexcept+/ { return m_channelCount; }
+    void setChannelCount(int channelCount) nothrow { m_channelConfig = ChannelConfig.ChannelConfigUnknown; m_channelCount = cast(short) (channelCount); }
+    int channelCount() const nothrow { return m_channelCount; }
 
-    /+ Q_MULTIMEDIA_EXPORT +/ int channelOffset(AudioChannelPosition channel) const/+ noexcept+/;
+    /+ Q_MULTIMEDIA_EXPORT +/ int channelOffset(AudioChannelPosition channel) const nothrow;
 
-    void setSampleFormat(SampleFormat f)/+ noexcept+/ { m_sampleFormat = f; }
-    SampleFormat sampleFormat() const/+ noexcept+/ { return m_sampleFormat; }
+    void setSampleFormat(SampleFormat f) nothrow { m_sampleFormat = f; }
+    SampleFormat sampleFormat() const nothrow { return m_sampleFormat; }
 
     // Helper functions
     /+ Q_MULTIMEDIA_EXPORT +/ qint32 bytesForDuration(qint64 microseconds) const;
@@ -120,7 +120,7 @@ public:
     /+ Q_MULTIMEDIA_EXPORT +/ qint64 durationForFrames(qint32 frameCount) const;
 
     int bytesPerFrame() const { return bytesPerSample()*channelCount(); }
-    int bytesPerSample() const/+ noexcept+/
+    int bytesPerSample() const nothrow
     {
         switch (m_sampleFormat) {
         case SampleFormat.Unknown:

@@ -130,12 +130,12 @@ private:
                                       bool>; +/
 
     /+ template <typename Container> +/
-    static qsizetype lengthHelperContainer(Container)(ref const(Container) c)/+ noexcept+/
+    static qsizetype lengthHelperContainer(Container)(ref const(Container) c) nothrow
     {
         return qsizetype(/+ std:: +/size(c));
     }
 
-    /+static qsizetype lengthHelperCharArray(const(char)* data, size_t size)/+ noexcept+/
+    /+static qsizetype lengthHelperCharArray(const(char)* data, size_t size) nothrow
     {
         const it = /+ std:: +/char_traits!(char).find(cast(const(char_traits.char_type)*) (data), size, '\0');
         const end = it ? it : /+ std:: +/next(data, size);
@@ -143,19 +143,19 @@ private:
     }+/
 
     /+ template <typename Byte> +/
-    static const(storage_type)* castHelper(Byte)(const(Byte)* data)/+ noexcept+/
+    static const(storage_type)* castHelper(Byte)(const(Byte)* data) nothrow
     { return reinterpret_cast!(const(storage_type)*)(data); }
-    static const(storage_type)* castHelper(const(storage_type)* data)/+ noexcept+/
+    static const(storage_type)* castHelper(const(storage_type)* data) nothrow
     { return data; }
 
 public:
     //@disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.m_size = 0;
         this.m_data = null;
     }+/
-    this(typeof(null))/+ noexcept+/
+    this(typeof(null)) nothrow
     {
         //this();
     }
@@ -182,7 +182,7 @@ public:
     constexpr QByteArrayView(const Byte *data) noexcept;
 #else +/
     /+ template <typename Pointer, if_compatible_pointer<Pointer> = true> +/
-    this(Pointer)(ref const(Pointer) data)/+ noexcept+/ if (is(Pointer: const(char)*))
+    this(Pointer)(ref const(Pointer) data) nothrow if (is(Pointer: const(char)*))
     {
         import core.stdc.string: strlen;
         this(
@@ -194,19 +194,19 @@ public:
     QByteArrayView(const QByteArray &data) noexcept;
 #else +/
     /+ template <typename ByteArray, if_compatible_qbytearray_like<ByteArray> = true> +/
-    this(ByteArray)(auto ref const(ByteArray) ba)/+ noexcept+/ if (is(ByteArray == QByteArray) || is(ByteArray == QLatin1String))
+    this(ByteArray)(auto ref const(ByteArray) ba) nothrow if (is(ByteArray == QByteArray) || is(ByteArray == QLatin1String))
     {
         this(ba.isNull() ? null : ba.data(), qsizetype(ba.size()));
     }
 /+ #endif +/
 
     /+ template <typename Container, if_compatible_container<Container> = true> +/
-    /+this(Container,)(ref const(Container) c)/+ noexcept+/
+    /+this(Container,)(ref const(Container) c) nothrow
     {
         this(/+ std:: +/data(c), lengthHelperContainer(c));
     }+/
     /+ template <size_t Size> +/
-    /+this(size_t Size)(ref const(char)[Size] data)/+ noexcept+/
+    /+this(size_t Size)(ref const(char)[Size] data) nothrow
     {
         this(data, lengthHelperCharArray(data.ptr, Size));
     }+/
@@ -216,7 +216,7 @@ public:
 #else +/
     /+ template <typename Byte, size_t Size, if_compatible_byte<Byte> = true>
 #endif +/
-    /+ [[nodiscard]] +/ static QByteArrayView fromArray(Byte,size_t Size,)(ref const(Byte)[Size] data)/+ noexcept+/
+    /+ [[nodiscard]] +/ static QByteArrayView fromArray(Byte,size_t Size,)(ref const(Byte)[Size] data) nothrow
     { return QByteArrayView(data.ptr, Size); }
     //
     // QByteArrayView members that require QByteArray:
@@ -226,9 +226,9 @@ public:
         return QByteArray(data(), size());
     } // defined in qbytearray.h
 
-    /+ [[nodiscard]] +/ qsizetype size() const/+ noexcept+/ { return m_size; }
-    /+ [[nodiscard]] +/ const_pointer data() const/+ noexcept+/ { return m_data; }
-    /+ [[nodiscard]] +/ const_pointer constData() const/+ noexcept+/ { return data(); }
+    /+ [[nodiscard]] +/ qsizetype size() const nothrow { return m_size; }
+    /+ [[nodiscard]] +/ const_pointer data() const nothrow { return m_data; }
+    /+ [[nodiscard]] +/ const_pointer constData() const nothrow { return data(); }
 
     /+ [[nodiscard]] +/ char opIndex(qsizetype n) const
     { (mixin(Q_ASSERT(q{n >= 0}))); (mixin(Q_ASSERT(q{n < QByteArrayView.size()}))); return m_data[n]; }
@@ -255,7 +255,7 @@ public:
     { (mixin(Q_ASSERT(q{n >= 0}))); (mixin(Q_ASSERT(q{n <= QByteArrayView.size()}))); m_size -= n; }
 
     // Defined in qbytearray.cpp:
-    /+ [[nodiscard]] +/ QByteArrayView trimmed() const/+ noexcept+/
+    /+ [[nodiscard]] +/ QByteArrayView trimmed() const nothrow
     {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.trimmed(this);
@@ -319,63 +319,63 @@ public:
         return r.value_or(0.0);
     }
 
-    /+ [[nodiscard]] +/ bool startsWith(QByteArrayView other) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool startsWith(QByteArrayView other) const /*nothrow*/
     {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.startsWith(this, other);
     }
-    /+ [[nodiscard]] +/ bool startsWith(char c) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool startsWith(char c) const /*nothrow*/
     { return !empty() && front() == c; }
 
-    /+ [[nodiscard]] +/ bool endsWith(QByteArrayView other) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool endsWith(QByteArrayView other) const /*nothrow*/
     {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.endsWith(this, other);
     }
-    /+ [[nodiscard]] +/ bool endsWith(char c) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool endsWith(char c) const /*nothrow*/
     { return !empty() && back() == c; }
 
-    /+ [[nodiscard]] +/ qsizetype indexOf(QByteArrayView a, qsizetype from = 0) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype indexOf(QByteArrayView a, qsizetype from = 0) const /*nothrow*/
     {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.findByteArray(this, from, a);
     }
-    /+ [[nodiscard]] +/ qsizetype indexOf(char ch, qsizetype from = 0) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype indexOf(char ch, qsizetype from = 0) const /*nothrow*/
     {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.findByteArray(this, from, QByteArrayView(&ch, 1));
     }
 
-    /+ [[nodiscard]] +/ bool contains(QByteArrayView a) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool contains(QByteArrayView a) const /*nothrow*/
     { return indexOf(a) != qsizetype(-1); }
-    /+ [[nodiscard]] +/ bool contains(char c) const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool contains(char c) const /*nothrow*/
     { return indexOf(c) != qsizetype(-1); }
 
-    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QByteArrayView a) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QByteArrayView a) const /*nothrow*/
     { return lastIndexOf(a, size()); }
-    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QByteArrayView a, qsizetype from) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(QByteArrayView a, qsizetype from) const /*nothrow*/
     {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.lastIndexOf(this, from, a);
     }
-    /+ [[nodiscard]] +/ qsizetype lastIndexOf(char ch, qsizetype from = -1) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype lastIndexOf(char ch, qsizetype from = -1) const /*nothrow*/
     {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.lastIndexOf(this, from, QByteArrayView(&ch, 1));
     }
 
-    /+ [[nodiscard]] +/ qsizetype count(QByteArrayView a) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype count(QByteArrayView a) const nothrow
     {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.count(this, a);
     }
-    /+ [[nodiscard]] +/ qsizetype count(char ch) const/+ noexcept+/
+    /+ [[nodiscard]] +/ qsizetype count(char ch) const nothrow
     {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.count(this, QByteArrayView(&ch, 1));
     }
 
-    pragma(inline, true) int compare(QByteArrayView a, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    pragma(inline, true) int compare(QByteArrayView a, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const /*nothrow*/
     {
         import qt.core.bytearrayalgorithms;
 
@@ -383,7 +383,7 @@ public:
                                          qstrnicmp(data(), size(), a.data(), a.size());
     }
 
-    /+ [[nodiscard]] +/ pragma(inline, true) bool isValidUtf8() const/+ noexcept+/ {
+    /+ [[nodiscard]] +/ pragma(inline, true) bool isValidUtf8() const nothrow {
         import qt.core.bytearrayalgorithms;
         return /+ QtPrivate:: +/qt.core.bytearrayalgorithms.isValidUtf8(this);
     }
@@ -391,25 +391,25 @@ public:
     //
     // STL compatibility API:
     //
-    /+ [[nodiscard]] +/ const_iterator begin()   const/+ noexcept+/ { return data(); }
-    /+ [[nodiscard]] +/ const_iterator end()     const/+ noexcept+/ { return data() + size(); }
-    /+ [[nodiscard]] +/ const_iterator cbegin()  const/+ noexcept+/ { return begin(); }
-    /+ [[nodiscard]] +/ const_iterator cend()    const/+ noexcept+/ { return end(); }
+    /+ [[nodiscard]] +/ const_iterator begin()   const nothrow { return data(); }
+    /+ [[nodiscard]] +/ const_iterator end()     const nothrow { return data() + size(); }
+    /+ [[nodiscard]] +/ const_iterator cbegin()  const nothrow { return begin(); }
+    /+ [[nodiscard]] +/ const_iterator cend()    const nothrow { return end(); }
     /+ [[nodiscard]] constexpr const_reverse_iterator rbegin()  const noexcept { return const_reverse_iterator(end()); } +/
     /+ [[nodiscard]] constexpr const_reverse_iterator rend()    const noexcept { return const_reverse_iterator(begin()); } +/
     /+ [[nodiscard]] constexpr const_reverse_iterator crbegin() const noexcept { return rbegin(); } +/
     /+ [[nodiscard]] constexpr const_reverse_iterator crend()   const noexcept { return rend(); } +/
 
-    /+ [[nodiscard]] +/ bool empty() const/+ noexcept+/ { return size() == 0; }
+    /+ [[nodiscard]] +/ bool empty() const nothrow { return size() == 0; }
     /+ [[nodiscard]] +/ char front() const { (mixin(Q_ASSERT(q{!QByteArrayView.empty()}))); return m_data[0]; }
     /+ [[nodiscard]] +/ char back()  const { (mixin(Q_ASSERT(q{!QByteArrayView.empty()}))); return m_data[m_size - 1]; }
 
     //
     // Qt compatibility API:
     //
-    /+ [[nodiscard]] +/ bool isNull() const/+ noexcept+/ { return !m_data; }
-    /+ [[nodiscard]] +/ bool isEmpty() const/+ noexcept+/ { return empty(); }
-    /+ [[nodiscard]] +/ qsizetype length() const/+ noexcept+/
+    /+ [[nodiscard]] +/ bool isNull() const nothrow { return !m_data; }
+    /+ [[nodiscard]] +/ bool isEmpty() const nothrow { return empty(); }
+    /+ [[nodiscard]] +/ qsizetype length() const nothrow
     { return size(); }
     /+ [[nodiscard]] +/ char first() const { return front(); }
     /+ [[nodiscard]] +/ char last()  const { return back(); }
@@ -446,7 +446,7 @@ private:
 /+ Q_DECLARE_TYPEINFO(QByteArrayView, Q_PRIMITIVE_TYPE); +/
 
 /+ [[nodiscard]] +/ pragma(inline, true) QByteArrayView qToByteArrayViewIgnoringNull(QByteArrayLike,
-         /+ std::enable_if_t<std::is_same_v<QByteArrayLike, QByteArray>, bool> +/ /+ = true +/)(ref const(QByteArrayLike) b)/+ noexcept+/
+         /+ std::enable_if_t<std::is_same_v<QByteArrayLike, QByteArray>, bool> +/ /+ = true +/)(ref const(QByteArrayLike) b) nothrow
 { return QByteArrayView(b.data(), b.size()); }
 
 /+ #if QT_DEPRECATED_SINCE(6, 0) +/

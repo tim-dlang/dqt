@@ -43,13 +43,13 @@ public:
     enum Spec { Invalid, Rgb, Hsv, Cmyk, Hsl, ExtendedRgb }
     enum NameFormat { HexRgb, HexArgb }
 
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.cspec = Spec.Invalid;
         this.ct = typeof(this.ct)(ushort.max, 0, 0, 0, 0);
     }+/
-    @SimulateImplicitConstructor this(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;
-    this(int r, int g, int b, int a = 255)/+ noexcept+/
+    @SimulateImplicitConstructor this(/+ Qt:: +/qt.core.namespace.GlobalColor color) nothrow;
+    this(int r, int g, int b, int a = 255) nothrow
     {
         this.cspec = isRgbaValid(r, g, b, a) ? Spec.Rgb : Spec.Invalid;
         this.ct = CT(CT.generated_qcolor_0(cast(ushort) (cspec == Spec.Rgb ? a * 0x0101 : 0),
@@ -58,8 +58,8 @@ public:
                      cast(ushort) (cspec == Spec.Rgb ? b * 0x0101 : 0),
                      0));
     }
-    this(QRgb rgb)/+ noexcept+/;
-    this(QRgba64 rgba64)/+ noexcept+/;
+    this(QRgb rgb) nothrow;
+    this(QRgba64 rgba64) nothrow;
     pragma(inline, true) this(ref const(QString) aname)
     {
         this = fromString(QAnyStringView(aname));
@@ -76,13 +76,13 @@ public:
     {
         this = fromString(QAnyStringView(aname));
     }
-    this(Spec spec)/+ noexcept+/;
+    this(Spec spec) nothrow;
 
-    static QColor fromString(QAnyStringView name)/+ noexcept+/;
+    static QColor fromString(QAnyStringView name) nothrow;
 
-    ref QColor opAssign(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;
+    ref QColor opAssign(/+ Qt:: +/qt.core.namespace.GlobalColor color) nothrow;
 
-    pragma(inline, true) bool isValid() const/+ noexcept+/
+    pragma(inline, true) bool isValid() const nothrow
     { return cspec != Spec.Invalid; }
 
     QString name(NameFormat format = NameFormat.HexRgb) const;
@@ -98,25 +98,25 @@ public:
 
     static QStringList colorNames();
 
-    pragma(inline, true) Spec spec() const/+ noexcept+/
+    pragma(inline, true) Spec spec() const nothrow
     { return cspec; }
 
-    int alpha() const/+ noexcept+/;
+    int alpha() const nothrow;
     void setAlpha(int alpha);
 
-    float alphaF() const/+ noexcept+/;
+    float alphaF() const nothrow;
     void setAlphaF(float alpha);
 
-    int red() const/+ noexcept+/;
-    int green() const/+ noexcept+/;
-    int blue() const/+ noexcept+/;
+    int red() const nothrow;
+    int green() const nothrow;
+    int blue() const nothrow;
     void setRed(int red);
     void setGreen(int green);
     void setBlue(int blue);
 
-    float redF() const/+ noexcept+/;
-    float greenF() const/+ noexcept+/;
-    float blueF() const/+ noexcept+/;
+    float redF() const nothrow;
+    float greenF() const nothrow;
+    float blueF() const nothrow;
     void setRedF(float red);
     void setGreenF(float green);
     void setBlueF(float blue);
@@ -127,26 +127,26 @@ public:
     void getRgbF(float* r, float* g, float* b, float* a = null) const;
     void setRgbF(float r, float g, float b, float a = 1.0);
 
-    QRgba64 rgba64() const/+ noexcept+/;
-    void setRgba64(QRgba64 rgba)/+ noexcept+/;
+    QRgba64 rgba64() const nothrow;
+    void setRgba64(QRgba64 rgba) nothrow;
 
-    QRgb rgba() const/+ noexcept+/;
-    void setRgba(QRgb rgba)/+ noexcept+/;
+    QRgb rgba() const nothrow;
+    void setRgba(QRgb rgba) nothrow;
 
-    QRgb rgb() const/+ noexcept+/;
-    void setRgb(QRgb rgb)/+ noexcept+/;
+    QRgb rgb() const nothrow;
+    void setRgb(QRgb rgb) nothrow;
 
-    int hue() const/+ noexcept+/; // 0 <= hue < 360
-    int saturation() const/+ noexcept+/;
-    int hsvHue() const/+ noexcept+/; // 0 <= hue < 360
-    int hsvSaturation() const/+ noexcept+/;
-    int value() const/+ noexcept+/;
+    int hue() const nothrow; // 0 <= hue < 360
+    int saturation() const nothrow;
+    int hsvHue() const nothrow; // 0 <= hue < 360
+    int hsvSaturation() const nothrow;
+    int value() const nothrow;
 
-    float hueF() const/+ noexcept+/; // 0.0 <= hueF < 360.0
-    float saturationF() const/+ noexcept+/;
-    float hsvHueF() const/+ noexcept+/; // 0.0 <= hueF < 360.0
-    float hsvSaturationF() const/+ noexcept+/;
-    float valueF() const/+ noexcept+/;
+    float hueF() const nothrow; // 0.0 <= hueF < 360.0
+    float saturationF() const nothrow;
+    float hsvHueF() const nothrow; // 0.0 <= hueF < 360.0
+    float hsvSaturationF() const nothrow;
+    float valueF() const nothrow;
 
     void getHsv(int* h, int* s, int* v, int* a = null) const;
     void setHsv(int h, int s, int v, int a = 255);
@@ -154,15 +154,15 @@ public:
     void getHsvF(float* h, float* s, float* v, float* a = null) const;
     void setHsvF(float h, float s, float v, float a = 1.0);
 
-    int cyan() const/+ noexcept+/;
-    int magenta() const/+ noexcept+/;
-    int yellow() const/+ noexcept+/;
-    int black() const/+ noexcept+/;
+    int cyan() const nothrow;
+    int magenta() const nothrow;
+    int yellow() const nothrow;
+    int black() const nothrow;
 
-    float cyanF() const/+ noexcept+/;
-    float magentaF() const/+ noexcept+/;
-    float yellowF() const/+ noexcept+/;
-    float blackF() const/+ noexcept+/;
+    float cyanF() const nothrow;
+    float magentaF() const nothrow;
+    float yellowF() const nothrow;
+    float blackF() const nothrow;
 
     void getCmyk(int* c, int* m, int* y, int* k, int* a = null) const;
     void setCmyk(int c, int m, int y, int k, int a = 255);
@@ -170,13 +170,13 @@ public:
     void getCmykF(float* c, float* m, float* y, float* k, float* a = null) const;
     void setCmykF(float c, float m, float y, float k, float a = 1.0);
 
-    int hslHue() const/+ noexcept+/; // 0 <= hue < 360
-    int hslSaturation() const/+ noexcept+/;
-    int lightness() const/+ noexcept+/;
+    int hslHue() const nothrow; // 0 <= hue < 360
+    int hslSaturation() const nothrow;
+    int lightness() const nothrow;
 
-    float hslHueF() const/+ noexcept+/; // 0.0 <= hueF < 360.0
-    float hslSaturationF() const/+ noexcept+/;
-    float lightnessF() const/+ noexcept+/;
+    float hslHueF() const nothrow; // 0.0 <= hueF < 360.0
+    float hslSaturationF() const nothrow;
+    float lightnessF() const nothrow;
 
     void getHsl(int* h, int* s, int* l, int* a = null) const;
     void setHsl(int h, int s, int l, int a = 255);
@@ -184,22 +184,22 @@ public:
     void getHslF(float* h, float* s, float* l, float* a = null) const;
     void setHslF(float h, float s, float l, float a = 1.0);
 
-    QColor toRgb() const/+ noexcept+/;
-    QColor toHsv() const/+ noexcept+/;
-    QColor toCmyk() const/+ noexcept+/;
-    QColor toHsl() const/+ noexcept+/;
-    QColor toExtendedRgb() const/+ noexcept+/;
+    QColor toRgb() const nothrow;
+    QColor toHsv() const nothrow;
+    QColor toCmyk() const nothrow;
+    QColor toHsl() const nothrow;
+    QColor toExtendedRgb() const nothrow;
 
-    /+ [[nodiscard]] +/ QColor convertTo(Spec colorSpec) const/+ noexcept+/;
+    /+ [[nodiscard]] +/ QColor convertTo(Spec colorSpec) const nothrow;
 
-    static QColor fromRgb(QRgb rgb)/+ noexcept+/;
-    static QColor fromRgba(QRgb rgba)/+ noexcept+/;
+    static QColor fromRgb(QRgb rgb) nothrow;
+    static QColor fromRgba(QRgb rgba) nothrow;
 
     static QColor fromRgb(int r, int g, int b, int a = 255);
     static QColor fromRgbF(float r, float g, float b, float a = 1.0);
 
-    static QColor fromRgba64(ushort r, ushort g, ushort b, ushort a = ushort.max)/+ noexcept+/;
-    static QColor fromRgba64(QRgba64 rgba)/+ noexcept+/;
+    static QColor fromRgba64(ushort r, ushort g, ushort b, ushort a = ushort.max) nothrow;
+    static QColor fromRgba64(QRgba64 rgba) nothrow;
 
     static QColor fromHsv(int h, int s, int v, int a = 255);
     static QColor fromHsvF(float h, float s, float v, float a = 1.0);
@@ -210,15 +210,15 @@ public:
     static QColor fromHsl(int h, int s, int l, int a = 255);
     static QColor fromHslF(float h, float s, float l, float a = 1.0);
 
-    /+ [[nodiscard]] +/ QColor lighter(int f = 150) const/+ noexcept+/;
-    /+ [[nodiscard]] +/ QColor darker(int f = 200) const/+ noexcept+/;
+    /+ [[nodiscard]] +/ QColor lighter(int f = 150) const nothrow;
+    /+ [[nodiscard]] +/ QColor darker(int f = 200) const nothrow;
 
-    bool opEquals(ref const(QColor) c) const/+ noexcept+/;
-    bool opEquals(const(QColor) c) const/+ noexcept+/
+    bool opEquals(ref const(QColor) c) const nothrow;
+    bool opEquals(const(QColor) c) const nothrow
     {
         return opEquals(c);
     }
-    /+bool operator !=(ref const(QColor) c) const/+ noexcept+/;+/
+    /+bool operator !=(ref const(QColor) c) const nothrow;+/
 
     /+auto opCast(T : QVariant)() const;+/
 
@@ -226,17 +226,17 @@ public:
     /+ QT_DEPRECATED_VERSION_X_6_6("Use isValidColorName() instead.") +/
         static bool isValidColor(ref const(QString) name);
     /+ QT_DEPRECATED_VERSION_X_6_6("Use isValidColorName() instead.") +/
-        static bool isValidColor(QStringView)/+ noexcept+/;
+        static bool isValidColor(QStringView) nothrow;
     /+ QT_DEPRECATED_VERSION_X_6_6("Use isValidColorName() instead.") +/
-        static bool isValidColor(QLatin1StringView)/+ noexcept+/;
+        static bool isValidColor(QLatin1StringView) nothrow;
 /+ #endif +/
-    static bool isValidColorName(QAnyStringView)/+ noexcept+/;
+    static bool isValidColorName(QAnyStringView) nothrow;
 
 private:
 
-    void invalidate()/+ noexcept+/;
+    void invalidate() nothrow;
 
-    static bool isRgbaValid(int r, int g, int b, int a = 255)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    static bool isRgbaValid(int r, int g, int b, int a = 255) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    {
         return uint(r) <= 255 && uint(g) <= 255 && uint(b) <= 255 && uint(a) <= 255;
     }

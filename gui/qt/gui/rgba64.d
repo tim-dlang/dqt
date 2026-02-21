@@ -164,7 +164,7 @@ public:
         return rgba;
     }+/
 
-    ref QRgba64 opAssign(quint64 _rgba)/+ noexcept+/
+    ref QRgba64 opAssign(quint64 _rgba) nothrow
     {
         rgba = _rgba;
         return this;

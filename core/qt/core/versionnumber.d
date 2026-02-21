@@ -63,7 +63,7 @@ private:
 
         // set the InlineSegmentMarker and set length to zero
         //@disable this();
-        /+this()/+ noexcept+/
+        /+this() nothrow
         {
             this.dummy = 1;
         }+/
@@ -145,10 +145,10 @@ private:
             if (isUsingPointer()) cpp_delete(pointer_segments);
         }
 
-        bool isUsingPointer() const/+ noexcept+/
+        bool isUsingPointer() const nothrow
         { return (inline_segments[InlineSegmentMarker] & 1) == 0; }
 
-        qsizetype size() const/+ noexcept+/
+        qsizetype size() const nothrow
         { return isUsingPointer() ? pointer_segments.size() : (inline_segments[InlineSegmentMarker] >> 1); }
 
         void setInlineSize(qsizetype len)
@@ -214,7 +214,7 @@ private:
 
 public:
     //@disable this();
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.m_segments = typeof(this.m_segments)();
     }+/
@@ -246,34 +246,34 @@ public:
     /+ explicit +/pragma(inline, true) this(int maj, int min, int mic)
     { m_segments.setSegments(3, maj, min, mic); }+/
 
-    /+ [[nodiscard]] +/ pragma(inline, true) bool isNull() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) bool isNull() const nothrow
     { return segmentCount() == 0; }
 
-    /+ [[nodiscard]] +/ pragma(inline, true) bool isNormalized() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) bool isNormalized() const /*nothrow*/
     { return isNull() || segmentAt(segmentCount() - 1) != 0; }
 
-    /+ [[nodiscard]] +/ pragma(inline, true) int majorVersion() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) int majorVersion() const /*nothrow*/
     { return segmentAt(0); }
 
-    /+ [[nodiscard]] +/ pragma(inline, true) int minorVersion() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) int minorVersion() const /*nothrow*/
     { return segmentAt(1); }
 
-    /+ [[nodiscard]] +/ pragma(inline, true) int microVersion() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) int microVersion() const /*nothrow*/
     { return segmentAt(2); }
 
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ QVersionNumber normalized() const;
 
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ QList!(int) segments() const;
 
-    /+ [[nodiscard]] +/ pragma(inline, true) int segmentAt(qsizetype index) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) int segmentAt(qsizetype index) const /*nothrow*/
     { return (m_segments.size() > index) ? m_segments.at(index) : 0; }
 
-    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype segmentCount() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) qsizetype segmentCount() const nothrow
     { return m_segments.size(); }
 
-    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ bool isPrefixOf(ref const(QVersionNumber) other) const/+ noexcept+/;
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ bool isPrefixOf(ref const(QVersionNumber) other) const nothrow;
 
-    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static int compare(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2)/+ noexcept+/;
+    /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static int compare(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2) nothrow;
 
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static QVersionNumber commonPrefix(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2);
 

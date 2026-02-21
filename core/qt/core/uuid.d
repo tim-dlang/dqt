@@ -83,7 +83,7 @@ public:
     }
 
     @disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.data1 = 0;
         this.data2 = 0;
@@ -92,7 +92,7 @@ public:
     }+/
 
     this(uint l, ushort w1, ushort w2, uchar b1, uchar b2, uchar b3,
-                               uchar b4, uchar b5, uchar b6, uchar b7, uchar b8)/+ noexcept+/
+                               uchar b4, uchar b5, uchar b6, uchar b7, uchar b8) nothrow
     {
         this.data1 = l;
         this.data2 = w1;
@@ -100,16 +100,16 @@ public:
         this.data4 = [b1, b2, b3, b4, b5, b6, b7, b8];
     }
 
-    /+ explicit +/this(QAnyStringView string)/+ noexcept+/
+    /+ explicit +/this(QAnyStringView string) nothrow
     {
         this = fromString(string);
     }
-    static QUuid fromString(QAnyStringView string)/+ noexcept+/;
+    static QUuid fromString(QAnyStringView string) nothrow;
     static if (defined!"QT_CORE_BUILD_REMOVED_API")
     {
         /+ explicit +/this(ref const(QString) );
-        static QUuid fromString(QStringView string)/+ noexcept+/;
-        static QUuid fromString(QLatin1StringView string)/+ noexcept+/;
+        static QUuid fromString(QStringView string) nothrow;
+        static QUuid fromString(QLatin1StringView string) nothrow;
         /+ explicit +/this(const(char)* );
         /+ explicit +/this(ref const(QByteArray) );
     }
@@ -120,10 +120,10 @@ public:
     {
         static QUuid fromRfc4122(ref const(QByteArray) );
     }
-    static QUuid fromRfc4122(QByteArrayView)/+ noexcept+/;
-    bool isNull() const/+ noexcept+/;
+    static QUuid fromRfc4122(QByteArrayView) nothrow;
+    bool isNull() const nothrow;
 
-    /+bool operator ==(ref const(QUuid) orig) const/+ noexcept+/
+    /+bool operator ==(ref const(QUuid) orig) const nothrow
     {
         if (data1 != orig.data1 || data2 != orig.data2 ||
              data3 != orig.data3)
@@ -136,20 +136,20 @@ public:
         return true;
     }+/
 
-    /+bool operator !=(ref const(QUuid) orig) const/+ noexcept+/
+    /+bool operator !=(ref const(QUuid) orig) const nothrow
     {
         return !(this == orig);
     }+/
 
-    /+bool operator <(ref const(QUuid) other) const/+ noexcept+/;+/
-    /+bool operator >(ref const(QUuid) other) const/+ noexcept+/;+/
+    /+bool operator <(ref const(QUuid) other) const nothrow;+/
+    /+bool operator >(ref const(QUuid) other) const nothrow;+/
 
     version (Cygwin) {} else
     version (Windows)
     {
         // On Windows we have a type GUID that is used by the platform API, so we
         // provide convenience operators to cast from and to this type.
-        this(ref const(GUID) guid)/+ noexcept+/
+        this(ref const(GUID) guid) nothrow
         {
             this.data1 = guid.Data1;
             this.data2 = guid.Data2;
@@ -158,24 +158,24 @@ public:
                             guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]];
         }
 
-        /+ref QUuid operator =(ref const(GUID) guid)/+ noexcept+/
+        /+ref QUuid operator =(ref const(GUID) guid) nothrow
         {
             this = QUuid(guid);
             return this;
         }+/
 
-        /+auto opCast(T : GUID)() const/+ noexcept+/
+        /+auto opCast(T : GUID)() const nothrow
         {
             GUID guid = _GUID( data1, data2, data3, [ data4[0], data4[1], data4[2], data4[3], data4[4], data4[5], data4[6], data4[7]] ) ;
             return guid;
         }+/
 
-        /+bool operator ==(ref const(GUID) guid) const/+ noexcept+/
+        /+bool operator ==(ref const(GUID) guid) const nothrow
         {
             return this == QUuid(guid);
         }+/
 
-        /+bool operator !=(ref const(GUID) guid) const/+ noexcept+/
+        /+bool operator !=(ref const(GUID) guid) const nothrow
         {
             return !(this == guid);
         }+/
@@ -197,8 +197,8 @@ public:
         auto tmp = baseData.toUtf8(); return QUuid.createUuidV5(ns, tmp);
     }
 
-    Variant variant() const/+ noexcept+/;
-    //Version version_() const/+ noexcept+/;
+    Variant variant() const nothrow;
+    //Version version_() const nothrow;
 
     static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
@@ -228,8 +228,8 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QUuid &);
 
 Q_CORE_EXPORT size_t qHash(const QUuid &uuid, size_t seed = 0) noexcept; +/
 
-/+pragma(inline, true) bool operator <=(ref const(QUuid) lhs, ref const(QUuid) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator <=(ref const(QUuid) lhs, ref const(QUuid) rhs) nothrow
 { return !(rhs < lhs); }+/
-/+pragma(inline, true) bool operator >=(ref const(QUuid) lhs, ref const(QUuid) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator >=(ref const(QUuid) lhs, ref const(QUuid) rhs) nothrow
 { return !(lhs < rhs); }+/
 

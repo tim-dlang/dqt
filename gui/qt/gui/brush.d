@@ -30,7 +30,7 @@ import qt.helpers;
 
 struct QBrushDataPointerDeleter
 {
-    /+void operator ()(QBrushData* d) const/+ noexcept+/;+/
+    /+void operator ()(QBrushData* d) const nothrow;+/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 

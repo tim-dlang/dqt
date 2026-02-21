@@ -84,10 +84,10 @@ public:
     alias const_iterator = const(QRect)*;
     /+ typedef std::reverse_iterator<const_iterator> const_reverse_iterator; +/
 
-    const_iterator begin()  const/+ noexcept+/;
-    const_iterator cbegin() const/+ noexcept+/ { return begin(); }
-    const_iterator end()    const/+ noexcept+/;
-    const_iterator cend()   const/+ noexcept+/ { return end(); }
+    const_iterator begin()  const nothrow;
+    const_iterator cbegin() const nothrow { return begin(); }
+    const_iterator end()    const nothrow;
+    const_iterator cend()   const nothrow { return end(); }
     /+ const_reverse_iterator rbegin()  const noexcept { return const_reverse_iterator(end()); } +/
     /+ const_reverse_iterator crbegin() const noexcept { return rbegin(); } +/
     /+ const_reverse_iterator rend()    const noexcept { return const_reverse_iterator(begin()); } +/
@@ -111,9 +111,9 @@ public:
     bool intersects(ref const(QRegion) r) const;
     bool intersects(ref const(QRect) r) const;
 
-    QRect boundingRect() const/+ noexcept+/;
+    QRect boundingRect() const nothrow;
     void setRects(const(QRect)* rect, int num);
-    int rectCount() const/+ noexcept+/;
+    int rectCount() const nothrow;
 
     QRegion opBinary(string op)(ref const(QRegion) r) const if (op == "|");
     QRegion opBinary(string op)(ref const(QRegion) r) const if (op == "+");

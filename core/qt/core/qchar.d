@@ -28,12 +28,12 @@ import qt.helpers;
 struct QLatin1Char
 {
 public:
-    /+ explicit +/pragma(inline, true) this(char c)/+ noexcept+/
+    /+ explicit +/pragma(inline, true) this(char c) nothrow
     {
         this.ch = c;
     }
-    pragma(inline, true) char toLatin1() const/+ noexcept+/ { return ch; }
-    pragma(inline, true) wchar unicode() const/+ noexcept+/ { return wchar(uchar(ch)); }
+    pragma(inline, true) char toLatin1() const nothrow { return ch; }
+    pragma(inline, true) wchar unicode() const nothrow { return wchar(uchar(ch)); }
 
     /+ friend constexpr inline bool operator==(QLatin1Char lhs, QLatin1Char rhs) noexcept { return lhs.ch == rhs.ch; } +/
     /+ friend constexpr inline bool operator!=(QLatin1Char lhs, QLatin1Char rhs) noexcept { return lhs.ch != rhs.ch; } +/
@@ -94,45 +94,45 @@ public:
 #define QCHAR_MAYBE_IMPLICIT explicit
 #endif +/
 
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.ucs = 0;
     }+/
-    this(ushort rc)/+ noexcept+/
+    this(ushort rc) nothrow
     {
         this.ucs = rc;
     }
-    /+ QCHAR_MAYBE_IMPLICIT +/this(uchar c, uchar r)/+ noexcept+/
+    /+ QCHAR_MAYBE_IMPLICIT +/this(uchar c, uchar r) nothrow
     {
         this.ucs = cast(wchar) ((r << 8) | c);
     }
-    this(short rc)/+ noexcept+/
+    this(short rc) nothrow
     {
         this.ucs = wchar(rc);
     }
-    /+ QCHAR_MAYBE_IMPLICIT +/this(uint rc)/+ noexcept+/
+    /+ QCHAR_MAYBE_IMPLICIT +/this(uint rc) nothrow
     {
         this.ucs = ((){ (mixin(Q_ASSERT(q{rc <= 0xffff})));
         return cast(wchar) (rc);
         }());
     }
-    /+ QCHAR_MAYBE_IMPLICIT +/this(int rc)/+ noexcept+/
+    /+ QCHAR_MAYBE_IMPLICIT +/this(int rc) nothrow
     {
         this(uint(rc));
     }
-    this(SpecialCharacter s)/+ noexcept+/
+    this(SpecialCharacter s) nothrow
     {
         this.ucs = cast(wchar) (s);
     }
-    this(QLatin1Char ch)/+ noexcept+/
+    this(QLatin1Char ch) nothrow
     {
         this.ucs = ch.unicode();
     }
-    this(wchar ch)/+ noexcept+/
+    this(wchar ch) nothrow
     {
         this.ucs = ch;
     }
-    this(char ch)/+ noexcept+/
+    this(char ch) nothrow
     {
         this.ucs = ch;
     }
@@ -140,7 +140,7 @@ public:
     /+ version (Cygwin) {} else
     version (Windows)
     {
-        this(wchar_t ch)/+ noexcept+/
+        this(wchar_t ch) nothrow
         {
             this.ucs = cast(wchar) (ch);
         }
@@ -157,18 +157,18 @@ public:
 
 #undef QCHAR_MAYBE_IMPLICIT +/
 
-    static QChar fromUcs2(wchar c)/+ noexcept+/ { return QChar(c); }
-    pragma(inline, true) static auto fromUcs4()(dchar c)/+ noexcept+/
-    /+/+ [[nodiscard]] +/ pragma(inline, true) static auto fromUcs4(dchar c)/+ noexcept+/+/
+    static QChar fromUcs2(wchar c) nothrow { return QChar(c); }
+    pragma(inline, true) static auto fromUcs4()(dchar c) nothrow
+    /+/+ [[nodiscard]] +/ pragma(inline, true) static auto fromUcs4(dchar c) nothrow+/
     {
         import qt.core.stringview;
 
         struct R {
             wchar[2] chars;
-            /+/+ [[nodiscard]] +/ auto opCast(T : QStringView)() const/+ noexcept+/ { return QStringView(begin(), end()); }+/
-            /+ [[nodiscard]] +/ qsizetype size() const/+ noexcept+/ { return chars[1] ? 2 : 1; }
-            /+ [[nodiscard]] +/ const(wchar)* begin() const/+ noexcept+/ return { return chars.ptr; }
-            /+ [[nodiscard]] +/ const(wchar)* end() const/+ noexcept+/ return { return begin() + size(); }
+            /+/+ [[nodiscard]] +/ auto opCast(T : QStringView)() const nothrow { return QStringView(begin(), end()); }+/
+            /+ [[nodiscard]] +/ qsizetype size() const nothrow { return chars[1] ? 2 : 1; }
+            /+ [[nodiscard]] +/ const(wchar)* begin() const nothrow return { return chars.ptr; }
+            /+ [[nodiscard]] +/ const(wchar)* end() const nothrow return { return begin() + size(); }
         }
         return requiresSurrogates(c) ? R([QChar.highSurrogate(c),
                                           QChar.lowSurrogate(c)]) :
@@ -505,150 +505,150 @@ public:
         Unicode_14_0
     }
 
-/+    pragma(inline, true) Category category() const/+ noexcept+/ { return QChar.category(ucs); }
-    pragma(inline, true) Direction direction() const/+ noexcept+/ { return QChar.direction(ucs); }
-    pragma(inline, true) JoiningType joiningType() const/+ noexcept+/ { return QChar.joiningType(ucs); }
-    pragma(inline, true) ubyte  combiningClass() const/+ noexcept+/ { return QChar.combiningClass(ucs); }
+/+    pragma(inline, true) Category category() const nothrow { return QChar.category(ucs); }
+    pragma(inline, true) Direction direction() const nothrow { return QChar.direction(ucs); }
+    pragma(inline, true) JoiningType joiningType() const nothrow { return QChar.joiningType(ucs); }
+    pragma(inline, true) ubyte  combiningClass() const nothrow { return QChar.combiningClass(ucs); }
 
-    pragma(inline, true) QChar mirroredChar() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.mirroredChar(ucs))); }
-    pragma(inline, true) bool hasMirrored() const/+ noexcept+/ { return QChar.hasMirrored(ucs); }
+    pragma(inline, true) QChar mirroredChar() const nothrow { return QChar(cast(uchar) (QChar.mirroredChar(ucs))); }
+    pragma(inline, true) bool hasMirrored() const nothrow { return QChar.hasMirrored(ucs); }
 
     QString decomposition() const;
-    pragma(inline, true) Decomposition decompositionTag() const/+ noexcept+/ { return QChar.decompositionTag(ucs); }
+    pragma(inline, true) Decomposition decompositionTag() const nothrow { return QChar.decompositionTag(ucs); }
 
-    pragma(inline, true) int digitValue() const/+ noexcept+/ { return QChar.digitValue(ucs); }
-    pragma(inline, true) QChar toLower() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.toLower(ucs))); }
-    pragma(inline, true) QChar toUpper() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.toUpper(ucs))); }
-    pragma(inline, true) QChar toTitleCase() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.toTitleCase(ucs))); }
-    pragma(inline, true) QChar toCaseFolded() const/+ noexcept+/ { return QChar(cast(uchar) (QChar.toCaseFolded(ucs))); }
+    pragma(inline, true) int digitValue() const nothrow { return QChar.digitValue(ucs); }
+    pragma(inline, true) QChar toLower() const nothrow { return QChar(cast(uchar) (QChar.toLower(ucs))); }
+    pragma(inline, true) QChar toUpper() const nothrow { return QChar(cast(uchar) (QChar.toUpper(ucs))); }
+    pragma(inline, true) QChar toTitleCase() const nothrow { return QChar(cast(uchar) (QChar.toTitleCase(ucs))); }
+    pragma(inline, true) QChar toCaseFolded() const nothrow { return QChar(cast(uchar) (QChar.toCaseFolded(ucs))); }
 
-    pragma(inline, true) Script script() const/+ noexcept+/ { return QChar.script(ucs); }
+    pragma(inline, true) Script script() const nothrow { return QChar.script(ucs); }
 
-    pragma(inline, true) UnicodeVersion unicodeVersion() const/+ noexcept+/ { return QChar.unicodeVersion(ucs); }+/
+    pragma(inline, true) UnicodeVersion unicodeVersion() const nothrow { return QChar.unicodeVersion(ucs); }+/
 
-    pragma(inline, true) char toLatin1() const/+ noexcept+/ { return ucs > 0xff ? '\0' : cast(char) (ucs); }
-    pragma(inline, true) wchar unicode() const/+ noexcept+/ { return ucs; }
-    pragma(inline, true) ref wchar unicode() return /+ noexcept+/ { return ucs; }
+    pragma(inline, true) char toLatin1() const nothrow { return ucs > 0xff ? '\0' : cast(char) (ucs); }
+    pragma(inline, true) wchar unicode() const nothrow { return ucs; }
+    pragma(inline, true) ref wchar unicode() return  nothrow { return ucs; }
 
-    //static QChar fromLatin1(char c)/+ noexcept+/ { return QLatin1Char(c); }
+    //static QChar fromLatin1(char c) nothrow { return QLatin1Char(c); }
 
-    pragma(inline, true) bool isNull() const/+ noexcept+/ { return ucs == 0; }
+    pragma(inline, true) bool isNull() const nothrow { return ucs == 0; }
 
-    pragma(inline, true) bool isPrint() const/+ noexcept+/ { return QChar.isPrint(ucs); }
-    pragma(inline, true) bool isSpace() const/+ noexcept+/ { return QChar.isSpace(ucs); }
-    pragma(inline, true) bool isMark() const/+ noexcept+/ { return QChar.isMark(ucs); }
-    pragma(inline, true) bool isPunct() const/+ noexcept+/ { return QChar.isPunct(ucs); }
-    pragma(inline, true) bool isSymbol() const/+ noexcept+/ { return QChar.isSymbol(ucs); }
-    pragma(inline, true) bool isLetter() const/+ noexcept+/ { return QChar.isLetter(ucs); }
-    pragma(inline, true) bool isNumber() const/+ noexcept+/ { return QChar.isNumber(ucs); }
-    pragma(inline, true) bool isLetterOrNumber() const/+ noexcept+/ { return QChar.isLetterOrNumber(ucs); }
-    pragma(inline, true) bool isDigit() const/+ noexcept+/ { return QChar.isDigit(ucs); }
-    pragma(inline, true) bool isLower() const/+ noexcept+/ { return QChar.isLower(ucs); }
-    pragma(inline, true) bool isUpper() const/+ noexcept+/ { return QChar.isUpper(ucs); }
-    pragma(inline, true) bool isTitleCase() const/+ noexcept+/ { return QChar.isTitleCase(ucs); }
+    pragma(inline, true) bool isPrint() const nothrow { return QChar.isPrint(ucs); }
+    pragma(inline, true) bool isSpace() const nothrow { return QChar.isSpace(ucs); }
+    pragma(inline, true) bool isMark() const nothrow { return QChar.isMark(ucs); }
+    pragma(inline, true) bool isPunct() const nothrow { return QChar.isPunct(ucs); }
+    pragma(inline, true) bool isSymbol() const nothrow { return QChar.isSymbol(ucs); }
+    pragma(inline, true) bool isLetter() const nothrow { return QChar.isLetter(ucs); }
+    pragma(inline, true) bool isNumber() const nothrow { return QChar.isNumber(ucs); }
+    pragma(inline, true) bool isLetterOrNumber() const nothrow { return QChar.isLetterOrNumber(ucs); }
+    pragma(inline, true) bool isDigit() const nothrow { return QChar.isDigit(ucs); }
+    pragma(inline, true) bool isLower() const nothrow { return QChar.isLower(ucs); }
+    pragma(inline, true) bool isUpper() const nothrow { return QChar.isUpper(ucs); }
+    pragma(inline, true) bool isTitleCase() const nothrow { return QChar.isTitleCase(ucs); }
 
-    pragma(inline, true) bool isNonCharacter() const/+ noexcept+/ { return QChar.isNonCharacter(ucs); }
-    pragma(inline, true) bool isHighSurrogate() const/+ noexcept+/ { return QChar.isHighSurrogate(ucs); }
-    pragma(inline, true) bool isLowSurrogate() const/+ noexcept+/ { return QChar.isLowSurrogate(ucs); }
-    pragma(inline, true) bool isSurrogate() const/+ noexcept+/ { return QChar.isSurrogate(ucs); }
+    pragma(inline, true) bool isNonCharacter() const nothrow { return QChar.isNonCharacter(ucs); }
+    pragma(inline, true) bool isHighSurrogate() const nothrow { return QChar.isHighSurrogate(ucs); }
+    pragma(inline, true) bool isLowSurrogate() const nothrow { return QChar.isLowSurrogate(ucs); }
+    pragma(inline, true) bool isSurrogate() const nothrow { return QChar.isSurrogate(ucs); }
 
-    pragma(inline, true) uchar cell() const/+ noexcept+/ { return cast(uchar)(ucs & 0xff); }
-    pragma(inline, true) uchar row() const/+ noexcept+/ { return cast(uchar)((ucs>>8)&0xff); }
-    pragma(inline, true) void setCell(uchar acell)/+ noexcept+/ { ucs = cast(wchar) ((ucs & 0xff00) + acell); }
-    pragma(inline, true) void setRow(uchar arow)/+ noexcept+/ { ucs = cast(wchar) ((wchar(arow)<<8) + (ucs&0xff)); }
+    pragma(inline, true) uchar cell() const nothrow { return cast(uchar)(ucs & 0xff); }
+    pragma(inline, true) uchar row() const nothrow { return cast(uchar)((ucs>>8)&0xff); }
+    pragma(inline, true) void setCell(uchar acell) nothrow { ucs = cast(wchar) ((ucs & 0xff00) + acell); }
+    pragma(inline, true) void setRow(uchar arow) nothrow { ucs = cast(wchar) ((wchar(arow)<<8) + (ucs&0xff)); }
 
-    pragma(inline, true) static bool isNonCharacter(dchar ucs4)/+ noexcept+/
+    pragma(inline, true) static bool isNonCharacter(dchar ucs4) nothrow
     {
         return ucs4 >= 0xfdd0 && (ucs4 <= 0xfdef || (ucs4 & 0xfffe) == 0xfffe);
     }
-    pragma(inline, true) static bool isHighSurrogate(dchar ucs4)/+ noexcept+/
+    pragma(inline, true) static bool isHighSurrogate(dchar ucs4) nothrow
     {
         return (ucs4 & 0xfffffc00) == 0xd800; // 0xd800 + up to 1023 (0x3ff)
     }
-    pragma(inline, true) static bool isLowSurrogate(dchar ucs4)/+ noexcept+/
+    pragma(inline, true) static bool isLowSurrogate(dchar ucs4) nothrow
     {
         return (ucs4 & 0xfffffc00) == 0xdc00; // 0xdc00 + up to 1023 (0x3ff)
     }
-    pragma(inline, true) static bool isSurrogate(dchar ucs4)/+ noexcept+/
+    pragma(inline, true) static bool isSurrogate(dchar ucs4) nothrow
     {
         return (ucs4 - 0xd800u < 2048u);
     }
-    pragma(inline, true) static bool requiresSurrogates(dchar ucs4)/+ noexcept+/
+    pragma(inline, true) static bool requiresSurrogates(dchar ucs4) nothrow
     {
         return (ucs4 >= 0x10000);
     }
-    pragma(inline, true) static dchar surrogateToUcs4(wchar high, wchar low)/+ noexcept+/
+    pragma(inline, true) static dchar surrogateToUcs4(wchar high, wchar low) nothrow
     {
         // 0x010000 through 0x10ffff, provided params are actual high, low surrogates.
         // 0x010000 + ((high - 0xd800) << 10) + (low - 0xdc00), optimized:
         return cast(dchar) ((dchar(high)<<10) + low - 0x35fdc00);
     }
-    pragma(inline, true) static dchar surrogateToUcs4(QChar high, QChar low)/+ noexcept+/
+    pragma(inline, true) static dchar surrogateToUcs4(QChar high, QChar low) nothrow
     {
         return surrogateToUcs4(high.ucs, low.ucs);
     }
-    pragma(inline, true) static wchar highSurrogate(dchar ucs4)/+ noexcept+/
+    pragma(inline, true) static wchar highSurrogate(dchar ucs4) nothrow
     {
         return cast(wchar) ((ucs4>>10) + 0xd7c0);
     }
-    pragma(inline, true) static wchar lowSurrogate(dchar ucs4)/+ noexcept+/
+    pragma(inline, true) static wchar lowSurrogate(dchar ucs4) nothrow
     {
         return cast(wchar) (ucs4%0x400 + 0xdc00);
     }
 
-    static Category /+ QT_FASTCALL +/ category(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static Direction /+ QT_FASTCALL +/ direction(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static JoiningType /+ QT_FASTCALL +/ joiningType(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static ubyte  /+ QT_FASTCALL +/ combiningClass(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static Category /+ QT_FASTCALL +/ category(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static Direction /+ QT_FASTCALL +/ direction(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static JoiningType /+ QT_FASTCALL +/ joiningType(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static ubyte  /+ QT_FASTCALL +/ combiningClass(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
-    static dchar /+ QT_FASTCALL +/ mirroredChar(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static bool /+ QT_FASTCALL +/ hasMirrored(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static dchar /+ QT_FASTCALL +/ mirroredChar(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static bool /+ QT_FASTCALL +/ hasMirrored(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
     static QString /+ QT_FASTCALL +/ decomposition(dchar ucs4);
-    static Decomposition /+ QT_FASTCALL +/ decompositionTag(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static Decomposition /+ QT_FASTCALL +/ decompositionTag(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
-    static int /+ QT_FASTCALL +/ digitValue(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static dchar /+ QT_FASTCALL +/ toLower(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static dchar /+ QT_FASTCALL +/ toUpper(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static dchar /+ QT_FASTCALL +/ toTitleCase(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static dchar /+ QT_FASTCALL +/ toCaseFolded(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static int /+ QT_FASTCALL +/ digitValue(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static dchar /+ QT_FASTCALL +/ toLower(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static dchar /+ QT_FASTCALL +/ toUpper(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static dchar /+ QT_FASTCALL +/ toTitleCase(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static dchar /+ QT_FASTCALL +/ toCaseFolded(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
-    static Script /+ QT_FASTCALL +/ script(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static Script /+ QT_FASTCALL +/ script(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
-    static UnicodeVersion /+ QT_FASTCALL +/ unicodeVersion(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static UnicodeVersion /+ QT_FASTCALL +/ unicodeVersion(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
-    static UnicodeVersion /+ QT_FASTCALL +/ currentUnicodeVersion()/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static UnicodeVersion /+ QT_FASTCALL +/ currentUnicodeVersion() nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
-    static bool /+ QT_FASTCALL +/ isPrint(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    pragma(inline, true) static bool isSpace(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    static bool /+ QT_FASTCALL +/ isPrint(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    pragma(inline, true) static bool isSpace(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    {
         // note that [0x09..0x0d] + 0x85 are exceptional Cc-s and must be handled explicitly
         return ucs4 == 0x20 || (ucs4 <= 0x0d && ucs4 >= 0x09)
                 || (ucs4 > 127 && (ucs4 == 0x85 || ucs4 == 0xa0 || QChar.isSpace_helper(ucs4)));
     }
-    static bool /+ QT_FASTCALL +/ isMark(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static bool /+ QT_FASTCALL +/ isPunct(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static bool /+ QT_FASTCALL +/ isSymbol(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    pragma(inline, true) static bool isLetter(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    static bool /+ QT_FASTCALL +/ isMark(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static bool /+ QT_FASTCALL +/ isPunct(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static bool /+ QT_FASTCALL +/ isSymbol(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    pragma(inline, true) static bool isLetter(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    {
         return (ucs4 >= 'A' && ucs4 <= 'z' && (ucs4 >= 'a' || ucs4 <= 'Z'))
                 || (ucs4 > 127 && QChar.isLetter_helper(ucs4));
     }
-    pragma(inline, true) static bool isNumber(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    pragma(inline, true) static bool isNumber(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    { return (ucs4 <= '9' && ucs4 >= '0') || (ucs4 > 127 && QChar.isNumber_helper(ucs4)); }
-    pragma(inline, true) static bool isLetterOrNumber(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    pragma(inline, true) static bool isLetterOrNumber(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    {
         return (ucs4 >= 'A' && ucs4 <= 'z' && (ucs4 >= 'a' || ucs4 <= 'Z'))
                 || (ucs4 >= '0' && ucs4 <= '9')
                 || (ucs4 > 127 && QChar.isLetterOrNumber_helper(ucs4));
     }
-    pragma(inline, true) static bool isDigit(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    pragma(inline, true) static bool isDigit(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    { return (ucs4 <= '9' && ucs4 >= '0') || (ucs4 > 127 && QChar.category(ucs4) == Category.Number_DecimalDigit); }
-    pragma(inline, true) static bool isLower(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    pragma(inline, true) static bool isLower(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    { return (ucs4 <= 'z' && ucs4 >= 'a') || (ucs4 > 127 && QChar.category(ucs4) == Category.Letter_Lowercase); }
-    pragma(inline, true) static bool isUpper(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    pragma(inline, true) static bool isUpper(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    { return (ucs4 <= 'Z' && ucs4 >= 'A') || (ucs4 > 127 && QChar.category(ucs4) == Category.Letter_Uppercase); }
-    pragma(inline, true) static bool isTitleCase(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    pragma(inline, true) static bool isTitleCase(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    { return ucs4 > 127 && QChar.category(ucs4) == Category.Letter_Titlecase; }
 
     /+ friend constexpr inline bool operator==(QChar c1, QChar c2) noexcept { return c1.ucs == c2.ucs; } +/
@@ -675,10 +675,10 @@ public:
     /+ friend constexpr inline bool operator<=(std::nullptr_t, QChar rhs) noexcept { return !operator< (rhs, nullptr); } +/
 
 private:
-    static bool /+ QT_FASTCALL +/ isSpace_helper(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static bool /+ QT_FASTCALL +/ isLetter_helper(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static bool /+ QT_FASTCALL +/ isNumber_helper(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
-    static bool /+ QT_FASTCALL +/ isLetterOrNumber_helper(dchar ucs4)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static bool /+ QT_FASTCALL +/ isSpace_helper(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static bool /+ QT_FASTCALL +/ isLetter_helper(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static bool /+ QT_FASTCALL +/ isNumber_helper(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static bool /+ QT_FASTCALL +/ isLetterOrNumber_helper(dchar ucs4) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
 /+ #ifdef QT_NO_CAST_FROM_ASCII +/
     //@disable this(char c);

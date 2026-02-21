@@ -357,11 +357,11 @@ public:
     pragma(inline, true) final void accept() { m_accept = true; }
     pragma(inline, true) final void ignore() { m_accept = false; }
 
-    pragma(inline, true) final bool isInputEvent() const/+ noexcept+/ { return (m_inputEvent) != 0; }
-    pragma(inline, true) final bool isPointerEvent() const/+ noexcept+/ { return (m_pointerEvent) != 0; }
-    pragma(inline, true) final bool isSinglePointEvent() const/+ noexcept+/ { return (m_singlePointEvent) != 0; }
+    pragma(inline, true) final bool isInputEvent() const nothrow { return (m_inputEvent) != 0; }
+    pragma(inline, true) final bool isPointerEvent() const nothrow { return (m_pointerEvent) != 0; }
+    pragma(inline, true) final bool isSinglePointEvent() const nothrow { return (m_singlePointEvent) != 0; }
 
-    static int registerEventType(int hint = -1)/+ noexcept+/;
+    static int registerEventType(int hint = -1) nothrow;
 
     /+ virtual +/ QEvent clone() const;
 
@@ -404,41 +404,41 @@ private:
     bool m_unused = false;
     /+ quint16 m_reserved : 13; +/
     ushort bitfieldData_m_reserved;
-    final quint16 m_reserved() const
+    final quint16 m_reserved() const nothrow
     {
         return (bitfieldData_m_reserved >> 0) & 0x1fff;
     }
-    final quint16 m_reserved(quint16 value)
+    final quint16 m_reserved(quint16 value) nothrow
     {
         bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x1fff) | ((value & 0x1fff) << 0);
         return value;
     }
     /+ quint16 m_inputEvent : 1; +/
-    final quint16 m_inputEvent() const
+    final quint16 m_inputEvent() const nothrow
     {
         return (bitfieldData_m_reserved >> 13) & 0x1;
     }
-    final quint16 m_inputEvent(quint16 value)
+    final quint16 m_inputEvent(quint16 value) nothrow
     {
         bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x2000) | ((value & 0x1) << 13);
         return value;
     }
     /+ quint16 m_pointerEvent : 1; +/
-    final quint16 m_pointerEvent() const
+    final quint16 m_pointerEvent() const nothrow
     {
         return (bitfieldData_m_reserved >> 14) & 0x1;
     }
-    final quint16 m_pointerEvent(quint16 value)
+    final quint16 m_pointerEvent(quint16 value) nothrow
     {
         bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x4000) | ((value & 0x1) << 14);
         return value;
     }
     /+ quint16 m_singlePointEvent : 1; +/
-    final quint16 m_singlePointEvent() const
+    final quint16 m_singlePointEvent() const nothrow
     {
         return (bitfieldData_m_reserved >> 15) & 0x1;
     }
-    final quint16 m_singlePointEvent(quint16 value)
+    final quint16 m_singlePointEvent(quint16 value) nothrow
     {
         bitfieldData_m_reserved = (bitfieldData_m_reserved & ~0x8000) | ((value & 0x1) << 15);
         return value;

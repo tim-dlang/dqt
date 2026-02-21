@@ -311,58 +311,58 @@ public:
 // Test for https://issues.dlang.org/show_bug.cgi?id=24292
 static assert(!__traits(isPOD, QUrl));
 
-/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator &(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator &(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator ^(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator ^(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QUrl.ComponentFormattingOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)nothrow{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator |(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator &(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)nothrow{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator &(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator ^(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)nothrow{return QFlags!(QUrl.ComponentFormattingOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.ComponentFormattingOptions.enum_type) operator ^(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QUrl.ComponentFormattingOptions.enum_type f1, QUrl.ComponentFormattingOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QUrl.ComponentFormattingOptions.enum_type f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QUrl.ComponentFormattingOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QUrl.ComponentFormattingOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QUrl.ComponentFormattingOptions.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QUrl.ComponentFormattingOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QUrl.ComponentFormattingOptions.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QUrl.ComponentFormattingOptions operator ~(QUrl.ComponentFormattingOptions.enum_type e)/+noexcept+/{return~QUrl.ComponentFormattingOptions(e);}+/
-/+pragma(inline, true) void operator |(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QUrl.ComponentFormattingOptions operator ~(QUrl.ComponentFormattingOptions.enum_type e)nothrow{return~QUrl.ComponentFormattingOptions(e);}+/
+/+pragma(inline, true) void operator |(QUrl.ComponentFormattingOptions.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QUrl.ComponentFormattingOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QUrl.ComponentFormattingOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_SHARED(QUrl)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::ComponentFormattingOptions) +/
-/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator |(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.AceProcessingOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator |(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator &(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.AceProcessingOptions.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator &(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator ^(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/{return QFlags!(QUrl.AceProcessingOptions.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator ^(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QUrl.AceProcessingOptions.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QUrl.AceProcessingOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QUrl.AceProcessingOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator |(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)nothrow{return QFlags!(QUrl.AceProcessingOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator |(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator &(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)nothrow{return QFlags!(QUrl.AceProcessingOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator &(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator ^(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)nothrow{return QFlags!(QUrl.AceProcessingOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QUrl.AceProcessingOptions.enum_type) operator ^(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QUrl.AceProcessingOptions.enum_type f1, QUrl.AceProcessingOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QUrl.AceProcessingOptions.enum_type f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QUrl.AceProcessingOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QUrl.AceProcessingOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QUrl.AceProcessingOptions.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QUrl.AceProcessingOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QUrl.AceProcessingOptions.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QUrl.AceProcessingOptions operator ~(QUrl.AceProcessingOptions.enum_type e)/+noexcept+/{return~QUrl.AceProcessingOptions(e);}+/
-/+pragma(inline, true) void operator |(QUrl.AceProcessingOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QUrl.AceProcessingOptions operator ~(QUrl.AceProcessingOptions.enum_type e)nothrow{return~QUrl.AceProcessingOptions(e);}+/
+/+pragma(inline, true) void operator |(QUrl.AceProcessingOptions.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QUrl.AceProcessingOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QUrl.AceProcessingOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 //Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::FormattingOptions)
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QUrl::AceProcessingOptions)

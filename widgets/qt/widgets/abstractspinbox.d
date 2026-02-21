@@ -160,29 +160,29 @@ private:
     /+ friend class QAccessibleAbstractSpinBox; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator |(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/{return QFlags!(QAbstractSpinBox.StepEnabled.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator |(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator &(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/{return QFlags!(QAbstractSpinBox.StepEnabled.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator &(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator ^(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/{return QFlags!(QAbstractSpinBox.StepEnabled.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator ^(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QAbstractSpinBox.StepEnabled.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator |(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)nothrow{return QFlags!(QAbstractSpinBox.StepEnabled.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator |(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator &(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)nothrow{return QFlags!(QAbstractSpinBox.StepEnabled.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator &(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator ^(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)nothrow{return QFlags!(QAbstractSpinBox.StepEnabled.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractSpinBox.StepEnabled.enum_type) operator ^(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QAbstractSpinBox.StepEnabled.enum_type f1, QAbstractSpinBox.StepEnabled.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QAbstractSpinBox.StepEnabled.enum_type f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QAbstractSpinBox.StepEnabled.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QAbstractSpinBox.StepEnabled.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QAbstractSpinBox.StepEnabled.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QAbstractSpinBox.StepEnabled operator ~(QAbstractSpinBox.StepEnabled.enum_type e)/+noexcept+/{return~QAbstractSpinBox.StepEnabled(e);}+/
-/+pragma(inline, true) void operator |(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QAbstractSpinBox.StepEnabled operator ~(QAbstractSpinBox.StepEnabled.enum_type e)nothrow{return~QAbstractSpinBox.StepEnabled(e);}+/
+/+pragma(inline, true) void operator |(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QAbstractSpinBox.StepEnabled.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractSpinBox::StepEnabled) +/

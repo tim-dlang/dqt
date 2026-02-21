@@ -139,7 +139,7 @@ class QRegularExpression;
 //        LastType = 0xffffffff // need this so that gcc >= 3.4 allocates 32 bits for Type
     }
 /+ #endif +/
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.d = typeof(this.d)();
     }+/
@@ -479,44 +479,44 @@ public:
         }generated_qvariant_0 data;
         quintptr bitfield = 1 << 1;
         /+ quintptr is_shared : 1; +/
-        quintptr is_shared() const
+        quintptr is_shared() const nothrow
         {
             return (bitfield >> 0) & 0x1;
         }
-        quintptr is_shared(quintptr value)
+        quintptr is_shared(quintptr value) nothrow
         {
             bitfield = (bitfield & ~0x1) | ((value & 0x1) << 0);
             return value;
         }
         /+ quintptr is_null : 1; +/
-        quintptr is_null() const
+        quintptr is_null() const nothrow
         {
             return (bitfield >> 1) & 0x1;
         }
-        quintptr is_null(quintptr value)
+        quintptr is_null(quintptr value) nothrow
         {
             bitfield = (bitfield & ~0x2) | ((value & 0x1) << 1);
             return value;
         }
         /+ quintptr packedType : sizeof(QMetaType) * 8 - 2; +/
-        quintptr packedType() const
+        quintptr packedType() const nothrow
         {
             return (bitfield >> 2) & 0x1;
         }
-        quintptr packedType(quintptr value)
+        quintptr packedType(quintptr value) nothrow
         {
             bitfield = (bitfield & ~0x4) | ((value & 0x1) << 2);
             return value;
         }
 
         //@disable this();
-        /+this()/+ noexcept+/
+        /+this() nothrow
         {
             this.is_shared = false;
             this.is_null = true;
             this.packedType = 0;
         }+/
-        /+ explicit +/this(QMetaType type)/+ noexcept+/
+        /+ explicit +/this(QMetaType type) nothrow
         {
             this.is_shared = false;
             this.is_null = false;
@@ -525,7 +525,7 @@ public:
             (mixin(Q_ASSERT(q{(mt & 0x3) == 0})));
             packedType = mt >> 2;
         }
-        /+ explicit +/this(int type)/+ noexcept+/
+        /+ explicit +/this(int type) /*nothrow*/
         {
             this(QMetaType(type));
         }

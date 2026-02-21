@@ -40,20 +40,20 @@ private:
     QVariant m_data;
 
 public:
-    /+ explicit +/this(int role)/+ noexcept+/
+    /+ explicit +/this(int role) nothrow
     {
         this.m_role = role;
     }
 
-    int role() const/+ noexcept+/ { return m_role; }
-    ref QVariant data()/+ noexcept+/ return { return m_data; }
-    ref const(QVariant) data() const/+ noexcept+/ return { return m_data; }
+    int role() const nothrow { return m_role; }
+    ref QVariant data() nothrow return { return m_data; }
+    ref const(QVariant) data() const nothrow return { return m_data; }
 
     /+ template <typename T> +/
     /+ constexpr void setData(T &&value) noexcept(noexcept(m_data.setValue(std::forward<T>(value))))
     { m_data.setValue(std::forward<T>(value)); } +/
 
-    void clearData()/+ noexcept+/ { m_data.clear(); }
+    void clearData() /*nothrow*/ { m_data.clear(); }
 }
 
 /+ Q_DECLARE_TYPEINFO(QModelRoleData, Q_RELOCATABLE_TYPE); +/
@@ -96,9 +96,9 @@ private:
 
 public:
     @disable this();
-    /+this()/+ noexcept+/ {}+/
+    /+this() nothrow {}+/
 
-    this(ref QModelRoleData modelRoleData)/+ noexcept+/
+    this(ref QModelRoleData modelRoleData) nothrow
     {
         this.m_modelRoleData = &modelRoleData;
         this.m_len = 1;
@@ -117,11 +117,11 @@ public:
         this.m_len = qsizetype(/+ std:: +/size(c));
     }
 
-    qsizetype size() const/+ noexcept+/ { return m_len; }
-    qsizetype length() const/+ noexcept+/ { return m_len; }
-    QModelRoleData* data() /*const*/ /+ noexcept+/ { return m_modelRoleData; }
-    QModelRoleData* begin() /*const*/ /+ noexcept+/ { return m_modelRoleData; }
-    QModelRoleData* end() /*const*/ /+ noexcept+/ { return m_modelRoleData + m_len; }
+    qsizetype size() const nothrow { return m_len; }
+    qsizetype length() const nothrow { return m_len; }
+    QModelRoleData* data() /*const*/ nothrow { return m_modelRoleData; }
+    QModelRoleData* begin() /*const*/ nothrow { return m_modelRoleData; }
+    QModelRoleData* end() /*const*/ nothrow { return m_modelRoleData + m_len; }
     ref QModelRoleData opIndex(qsizetype index) /*const*/ { return m_modelRoleData[index]; }
 
 /+    QVariant* dataForRole(int role) const
@@ -158,7 +158,7 @@ return &result.data();
 private:
     /+ friend class QAbstractItemModel; +/
 public:
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.r = -1;
         this.c = -1;
@@ -166,11 +166,11 @@ public:
         this.m = null;
     }+/
     // compiler-generated copy/move ctors/assignment operators are fine!
-    pragma(inline, true) int row() const/+ noexcept+/ { return r; }
-    pragma(inline, true) int column() const/+ noexcept+/ { return c; }
-    pragma(inline, true) quintptr internalId() const/+ noexcept+/ { return i; }
-    pragma(inline, true) void* internalPointer() const/+ noexcept+/ { return reinterpret_cast!(void*)(i); }
-    pragma(inline, true) const(void)* constInternalPointer() const/+ noexcept+/ { return reinterpret_cast!(const(void)*)(i); }
+    pragma(inline, true) int row() const nothrow { return r; }
+    pragma(inline, true) int column() const nothrow { return c; }
+    pragma(inline, true) quintptr internalId() const nothrow { return i; }
+    pragma(inline, true) void* internalPointer() const nothrow { return reinterpret_cast!(void*)(i); }
+    pragma(inline, true) const(void)* constInternalPointer() const nothrow { return reinterpret_cast!(const(void)*)(i); }
     pragma(inline, true) QModelIndex parent() const
     { return m ? m.parent(this) : QModelIndex(); }
     pragma(inline, true) QModelIndex sibling(int arow, int acolumn) const
@@ -185,13 +185,13 @@ public:
     { if (m) m.multiData(this, roleDataSpan); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.ItemFlags flags() const
     { return m ? m.flags(this) : /+ Qt:: +/qt.core.namespace.ItemFlags(); }
-    pragma(inline, true) const(QAbstractItemModel) model() const/+ noexcept+/ { return m; }
-    pragma(inline, true) bool isValid() const/+ noexcept+/ { return (r >= 0) && (c >= 0) && (m !is null); }
-    /+pragma(inline, true) bool operator ==(ref const(QModelIndex) other) const/+ noexcept+/
+    pragma(inline, true) const(QAbstractItemModel) model() const nothrow { return m; }
+    pragma(inline, true) bool isValid() const nothrow { return (r >= 0) && (c >= 0) && (m !is null); }
+    /+pragma(inline, true) bool operator ==(ref const(QModelIndex) other) const nothrow
         { return (other.r == r) && (other.i == i) && (other.c == c) && (other.m == m); }+/
-    /+pragma(inline, true) bool operator !=(ref const(QModelIndex) other) const/+ noexcept+/
+    /+pragma(inline, true) bool operator !=(ref const(QModelIndex) other) const nothrow
         { return !(this == other); }+/
-    /+pragma(inline, true) bool operator <(ref const(QModelIndex) other) const/+ noexcept+/
+    /+pragma(inline, true) bool operator <(ref const(QModelIndex) other) const nothrow
         {
             return  r <  other.r
                 || (r == other.r && (c <  other.c
@@ -199,14 +199,14 @@ public:
                                                   || (i == other.i && /+ std:: +/less!(const(QAbstractItemModel))()(m, other.m))))));
         }+/
 private:
-    pragma(inline, true) this(int arow, int acolumn, const(void)* ptr, const(QAbstractItemModel) amodel)/+ noexcept+/
+    pragma(inline, true) this(int arow, int acolumn, const(void)* ptr, const(QAbstractItemModel) amodel) nothrow
     {
         this.r = arow;
         this.c = acolumn;
         this.i = reinterpret_cast!(quintptr)(ptr);
         this.m = *cast(QAbstractItemModel*)&amodel;
     }
-    pragma(inline, true) this(int arow, int acolumn, quintptr id, const(QAbstractItemModel) amodel)/+ noexcept+/
+    pragma(inline, true) this(int arow, int acolumn, quintptr id, const(QAbstractItemModel) amodel) nothrow
     {
         this.r = arow;
         this.c = acolumn;
@@ -478,30 +478,30 @@ private:
     /+ Q_DISABLE_COPY(QAbstractItemModel) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator &(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator &(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator ^(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator ^(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)nothrow{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator &(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)nothrow{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator &(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator ^(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)nothrow{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator ^(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QAbstractItemModel.CheckIndexOptions operator ~(QAbstractItemModel.CheckIndexOptions.enum_type e)/+noexcept+/{return~QAbstractItemModel.CheckIndexOptions(e);}+/
-/+pragma(inline, true) void operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QAbstractItemModel.CheckIndexOptions operator ~(QAbstractItemModel.CheckIndexOptions.enum_type e)nothrow{return~QAbstractItemModel.CheckIndexOptions(e);}+/
+/+pragma(inline, true) void operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemModel::CheckIndexOptions) +/

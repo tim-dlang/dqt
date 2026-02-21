@@ -865,56 +865,56 @@ private:
     final void setProxy(QStyle style);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/{return QFlags!(QStyle.State.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator &(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/{return QFlags!(QStyle.State.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator &(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator ^(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/{return QFlags!(QStyle.State.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator ^(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QStyle.State.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyle.State.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QStyle.State.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyle.State.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QStyle.State.enum_type f2)nothrow{return QFlags!(QStyle.State.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator &(QStyle.State.enum_type f1, QStyle.State.enum_type f2)nothrow{return QFlags!(QStyle.State.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator &(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator ^(QStyle.State.enum_type f1, QStyle.State.enum_type f2)nothrow{return QFlags!(QStyle.State.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator ^(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QStyle.State.enum_type f1, QStyle.State.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyle.State.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyle.State.enum_type f1, QStyle.State.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyle.State.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QStyle.State.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyle.State.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QStyle.State.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyle.State.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QStyle.State operator ~(QStyle.State.enum_type e)/+noexcept+/{return~QStyle.State(e);}+/
-/+pragma(inline, true) void operator |(QStyle.State.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QStyle.State operator ~(QStyle.State.enum_type e)nothrow{return~QStyle.State(e);}+/
+/+pragma(inline, true) void operator |(QStyle.State.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyle.State.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyle.State.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyle::State) +/
-/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/{return QFlags!(QStyle.SubControls.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator &(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/{return QFlags!(QStyle.SubControls.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator &(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator ^(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/{return QFlags!(QStyle.SubControls.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator ^(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QStyle.SubControls.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QStyle.SubControls.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QStyle.SubControls.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QStyle.SubControls.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)nothrow{return QFlags!(QStyle.SubControls.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator &(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)nothrow{return QFlags!(QStyle.SubControls.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator &(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator ^(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)nothrow{return QFlags!(QStyle.SubControls.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator ^(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QStyle.SubControls.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QStyle.SubControls.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QStyle.SubControls.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QStyle.SubControls.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QStyle.SubControls.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QStyle.SubControls.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QStyle.SubControls operator ~(QStyle.SubControls.enum_type e)/+noexcept+/{return~QStyle.SubControls(e);}+/
-/+pragma(inline, true) void operator |(QStyle.SubControls.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QStyle.SubControls operator ~(QStyle.SubControls.enum_type e)nothrow{return~QStyle.SubControls(e);}+/
+/+pragma(inline, true) void operator |(QStyle.SubControls.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyle.SubControls.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyle.SubControls.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyle::SubControls) +/

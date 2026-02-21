@@ -42,27 +42,27 @@ version (QT_NO_VECTOR2D) {} else
 @Q_PRIMITIVE_TYPE extern(C++, class) struct QVector2D
 {
 public:
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.v = [0.0f, 0.0f];
     }+/
-    /+ explicit +/this(/+ Qt:: +/qt.core.namespace.Initialization)/+ noexcept+/ {}
-    pragma(inline, true) this(float xpos, float ypos)/+ noexcept+/
+    /+ explicit +/this(/+ Qt:: +/qt.core.namespace.Initialization) nothrow {}
+    pragma(inline, true) this(float xpos, float ypos) nothrow
     {
         this.v = [xpos, ypos];
     }
-    /+ explicit +/pragma(inline, true) this(QPoint point)/+ noexcept+/
+    /+ explicit +/pragma(inline, true) this(QPoint point) nothrow
     {
         this.v = [float(point.x()), float(point.y())];
     }
-    /+ explicit +/pragma(inline, true) this(QPointF point)/+ noexcept+/
+    /+ explicit +/pragma(inline, true) this(QPointF point) nothrow
     {
         this.v = [float(point.x()), float(point.y())];
     }
 /+ #ifndef QT_NO_VECTOR3D +/
     version (QT_NO_VECTOR3D) {} else
     {
-/*        /+ explicit +/pragma(inline, true) this(QVector3D vector)/+ noexcept+/
+/*        /+ explicit +/pragma(inline, true) this(QVector3D vector) nothrow
         {
             this.v = [vector[0], vector[1]];
         }*/
@@ -71,25 +71,25 @@ public:
 #ifndef QT_NO_VECTOR4D +/
     version (QT_NO_VECTOR4D) {} else
     {
-/*        /+ explicit +/pragma(inline, true) this(QVector4D vector)/+ noexcept+/
+/*        /+ explicit +/pragma(inline, true) this(QVector4D vector) nothrow
         {
             this.v = [vector[0], vector[1]];
         }*/
     }
 /+ #endif +/
 
-    pragma(inline, true) bool isNull() const/+ noexcept+/
+    pragma(inline, true) bool isNull() const nothrow
     {
         import qt.core.global;
 
         return qIsNull(v[0]) && qIsNull(v[1]);
     }
 
-    pragma(inline, true) float x() const/+ noexcept+/ { return v[0]; }
-    pragma(inline, true) float y() const/+ noexcept+/ { return v[1]; }
+    pragma(inline, true) float x() const nothrow { return v[0]; }
+    pragma(inline, true) float y() const nothrow { return v[1]; }
 
-    pragma(inline, true) void setX(float aX)/+ noexcept+/ { v[0] = aX; }
-    pragma(inline, true) void setY(float aY)/+ noexcept+/ { v[1] = aY; }
+    pragma(inline, true) void setX(float aX) nothrow { v[0] = aX; }
+    pragma(inline, true) void setY(float aY) nothrow { v[1] = aY; }
 
     /+pragma(inline, true) ref float operator [](int i)
     {
@@ -106,16 +106,16 @@ public:
         return v[i];
     }+/
 
-    /+ /+ [[nodiscard]] +/ pragma(inline, true) float length() const/+ noexcept+/
+    /+ /+ [[nodiscard]] +/ pragma(inline, true) float length() const nothrow
     {
         return qHypot(v[0], v[1]);
     } +/
-    /+ [[nodiscard]] +/ pragma(inline, true) float lengthSquared() const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) float lengthSquared() const nothrow
     {
         return v[0] * v[0] + v[1] * v[1];
     }
 
-    /+ /+ [[nodiscard]] +/ pragma(inline, true) QVector2D normalized() const/+ noexcept+/
+    /+ /+ [[nodiscard]] +/ pragma(inline, true) QVector2D normalized() const nothrow
     {
         import qt.core.global;
 
@@ -123,7 +123,7 @@ public:
         return qFuzzyIsNull(len - 1.0f) ? this : qFuzzyIsNull(len) ? QVector2D()
             : QVector2D(v[0] / len, v[1] / len);
     }
-    pragma(inline, true) void normalize()/+ noexcept+/
+    pragma(inline, true) void normalize() nothrow
     {
         import qt.core.global;
 
@@ -135,11 +135,11 @@ public:
         v[1] /= len;
     } +/
 
-    /+ /+ [[nodiscard]] +/ pragma(inline, true) float distanceToPoint(QVector2D point) const/+ noexcept+/
+    /+ /+ [[nodiscard]] +/ pragma(inline, true) float distanceToPoint(QVector2D point) const nothrow
     {
         return (this - point).length();
     }
-    /+ [[nodiscard]] +/ pragma(inline, true) float distanceToLine(QVector2D point, QVector2D direction) const/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) float distanceToLine(QVector2D point, QVector2D direction) const nothrow
     {
         if (direction.isNull())
             return (this - point).length();
@@ -147,25 +147,25 @@ public:
         return (this - p).length();
     } +/
 
-    /+pragma(inline, true) ref QVector2D operator +=(QVector2D vector)/+ noexcept+/
+    /+pragma(inline, true) ref QVector2D operator +=(QVector2D vector) nothrow
     {
         v[0] += vector.v[0];
         v[1] += vector.v[1];
         return this;
     }+/
-    /+pragma(inline, true) ref QVector2D operator -=(QVector2D vector)/+ noexcept+/
+    /+pragma(inline, true) ref QVector2D operator -=(QVector2D vector) nothrow
     {
         v[0] -= vector.v[0];
         v[1] -= vector.v[1];
         return this;
     }+/
-    /+pragma(inline, true) ref QVector2D operator *=(float factor)/+ noexcept+/
+    /+pragma(inline, true) ref QVector2D operator *=(float factor) nothrow
     {
         v[0] *= factor;
         v[1] *= factor;
         return this;
     }+/
-    /+pragma(inline, true) ref QVector2D operator *=(QVector2D vector)/+ noexcept+/
+    /+pragma(inline, true) ref QVector2D operator *=(QVector2D vector) nothrow
     {
         v[0] *= vector.v[0];
         v[1] *= vector.v[1];
@@ -191,7 +191,7 @@ public:
         return this;
     }+/
 
-    /+ [[nodiscard]] +/ pragma(inline, true) static float dotProduct(QVector2D v1, QVector2D v2)/+ noexcept+/
+    /+ [[nodiscard]] +/ pragma(inline, true) static float dotProduct(QVector2D v1, QVector2D v2) nothrow
     {
         return v1.v[0] * v2.v[0] + v1.v[1] * v2.v[1];
     }
@@ -257,7 +257,7 @@ QT_WARNING_DISABLE_FLOAT_COMPARE +/
 /+ #ifndef QT_NO_VECTOR3D +/
     version (QT_NO_VECTOR3D) {} else
     {
-        pragma(inline, true) QVector3D toVector3D() const/+ noexcept+/
+        pragma(inline, true) QVector3D toVector3D() const nothrow
         {
             return QVector3D(v[0], v[1], 0.0f);
         }
@@ -266,20 +266,20 @@ QT_WARNING_DISABLE_FLOAT_COMPARE +/
 #ifndef QT_NO_VECTOR4D +/
     version (QT_NO_VECTOR4D) {} else
     {
-        pragma(inline, true) QVector4D toVector4D() const/+ noexcept+/
+        pragma(inline, true) QVector4D toVector4D() const nothrow
         {
             return QVector4D(v[0], v[1], 0.0f, 0.0f);
         }
     }
 /+ #endif +/
 
-    pragma(inline, true) QPoint toPoint() const/+ noexcept+/
+    pragma(inline, true) QPoint toPoint() const nothrow
     {
         import qt.core.global;
 
         return QPoint(qRound(v[0]), qRound(v[1]));
     }
-    pragma(inline, true) QPointF toPointF() const/+ noexcept+/
+    pragma(inline, true) QPointF toPointF() const nothrow
     {
         import qt.core.global;
 

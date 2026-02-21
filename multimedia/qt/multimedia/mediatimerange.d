@@ -30,22 +30,22 @@ public:
     @Q_DECLARE_METATYPE extern(C++, struct) struct Interval
     {
         /+ constexpr Interval() noexcept = default; +/
-        /+ explicit +/ this(qint64 start, qint64 end)/+ noexcept+/
+        /+ explicit +/ this(qint64 start, qint64 end) nothrow
         {
             this.s = start;
             this.e = end;
         }
 
-        qint64 start() const/+ noexcept+/ { return s; }
-        qint64 end() const/+ noexcept+/ { return e; }
+        qint64 start() const nothrow { return s; }
+        qint64 end() const nothrow { return e; }
 
-        bool contains(qint64 time) const/+ noexcept+/
+        bool contains(qint64 time) const nothrow
         {
             return isNormal() ? (s <= time && time <= e)
                 : (e <= time && time <= s);
         }
 
-        bool isNormal() const/+ noexcept+/ { return s <= e; }
+        bool isNormal() const nothrow { return s <= e; }
         Interval normalized() const
         {
             return s > e ? Interval(e, s) : this;
@@ -83,10 +83,10 @@ public:
     /+ explicit +/this(qint64 start, qint64 end);
     this(ref const(Interval));
     @disable this(this);
-    this(ref const(QMediaTimeRange) range)/+ noexcept+/;
+    this(ref const(QMediaTimeRange) range) nothrow;
     ~this();
 
-    ref QMediaTimeRange opAssign(ref const(QMediaTimeRange))/+ noexcept+/;
+    ref QMediaTimeRange opAssign(ref const(QMediaTimeRange)) nothrow;
 
     /+ QMediaTimeRange(QMediaTimeRange &&other) noexcept = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QMediaTimeRange) +/

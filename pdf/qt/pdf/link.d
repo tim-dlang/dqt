@@ -61,7 +61,7 @@ public:
     /+ Q_PDF_EXPORT +/ ref QPdfLink opAssign(ref const(QPdfLink) other);
 
     @disable this(this);
-    /+ Q_PDF_EXPORT +/this(ref const(QPdfLink) other)/+ noexcept+/;
+    /+ Q_PDF_EXPORT +/this(ref const(QPdfLink) other) nothrow;
     /+ Q_PDF_EXPORT QPdfLink(QPdfLink &&other) noexcept; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QPdfLink) +/
 

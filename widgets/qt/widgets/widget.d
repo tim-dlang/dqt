@@ -79,111 +79,111 @@ public:
     /+ Qt:: +/qt.core.namespace.WindowFlags window_flags;
     /+ uint window_state : 4; +/
     uint bitfieldData_window_state;
-    uint window_state() const
+    uint window_state() const nothrow
     {
         return (bitfieldData_window_state >> 0) & 0xf;
     }
-    uint window_state(uint value)
+    uint window_state(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0xf) | ((value & 0xf) << 0);
         return value;
     }
     /+ uint focus_policy : 4; +/
-    uint focus_policy() const
+    uint focus_policy() const nothrow
     {
         return (bitfieldData_window_state >> 4) & 0xf;
     }
-    uint focus_policy(uint value)
+    uint focus_policy(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0xf0) | ((value & 0xf) << 4);
         return value;
     }
     /+ uint sizehint_forced :1; +/
-    uint sizehint_forced() const
+    uint sizehint_forced() const nothrow
     {
         return (bitfieldData_window_state >> 8) & 0x1;
     }
-    uint sizehint_forced(uint value)
+    uint sizehint_forced(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x100) | ((value & 0x1) << 8);
         return value;
     }
     /+ uint is_closing :1; +/
-    uint is_closing() const
+    uint is_closing() const nothrow
     {
         return (bitfieldData_window_state >> 9) & 0x1;
     }
-    uint is_closing(uint value)
+    uint is_closing(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x200) | ((value & 0x1) << 9);
         return value;
     }
     /+ uint in_show : 1; +/
-    uint in_show() const
+    uint in_show() const nothrow
     {
         return (bitfieldData_window_state >> 10) & 0x1;
     }
-    uint in_show(uint value)
+    uint in_show(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x400) | ((value & 0x1) << 10);
         return value;
     }
     /+ uint in_set_window_state : 1; +/
-    uint in_set_window_state() const
+    uint in_set_window_state() const nothrow
     {
         return (bitfieldData_window_state >> 11) & 0x1;
     }
-    uint in_set_window_state(uint value)
+    uint in_set_window_state(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x800) | ((value & 0x1) << 11);
         return value;
     }
     /+ mutable uint fstrut_dirty : 1; +/
-    uint fstrut_dirty() const
+    uint fstrut_dirty() const nothrow
     {
         return (bitfieldData_window_state >> 12) & 0x1;
     }
-    uint fstrut_dirty(uint value)
+    uint fstrut_dirty(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x1000) | ((value & 0x1) << 12);
         return value;
     }
     /+ uint context_menu_policy : 3; +/
-    uint context_menu_policy() const
+    uint context_menu_policy() const nothrow
     {
         return (bitfieldData_window_state >> 13) & 0x7;
     }
-    uint context_menu_policy(uint value)
+    uint context_menu_policy(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0xe000) | ((value & 0x7) << 13);
         return value;
     }
     /+ uint window_modality : 2; +/
-    uint window_modality() const
+    uint window_modality() const nothrow
     {
         return (bitfieldData_window_state >> 16) & 0x3;
     }
-    uint window_modality(uint value)
+    uint window_modality(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x30000) | ((value & 0x3) << 16);
         return value;
     }
     /+ uint in_destructor : 1; +/
-    uint in_destructor() const
+    uint in_destructor() const nothrow
     {
         return (bitfieldData_window_state >> 18) & 0x1;
     }
-    uint in_destructor(uint value)
+    uint in_destructor(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0x40000) | ((value & 0x1) << 18);
         return value;
     }
     /+ uint unused : 13; +/
-    uint unused() const
+    uint unused() const nothrow
     {
         return (bitfieldData_window_state >> 19) & 0x1fff;
     }
-    uint unused(uint value)
+    uint unused(uint value) nothrow
     {
         bitfieldData_window_state = (bitfieldData_window_state & ~0xfff80000) | ((value & 0x1fff) << 19);
         return value;
@@ -969,30 +969,30 @@ private:
     QWidgetData* data;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator |(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QWidget.RenderFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator |(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator &(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QWidget.RenderFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator &(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator ^(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/{return QFlags!(QWidget.RenderFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator ^(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QWidget.RenderFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QWidget.RenderFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator |(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)nothrow{return QFlags!(QWidget.RenderFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator |(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator &(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)nothrow{return QFlags!(QWidget.RenderFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator &(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator ^(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)nothrow{return QFlags!(QWidget.RenderFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QWidget.RenderFlags.enum_type) operator ^(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QWidget.RenderFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, QWidget.RenderFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, QFlags!(QWidget.RenderFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QWidget.RenderFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QWidget.RenderFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QWidget.RenderFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QWidget.RenderFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QWidget.RenderFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QWidget.RenderFlags operator ~(QWidget.RenderFlags.enum_type e)/+noexcept+/{return~QWidget.RenderFlags(e);}+/
-/+pragma(inline, true) void operator |(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QWidget.RenderFlags operator ~(QWidget.RenderFlags.enum_type e)nothrow{return~QWidget.RenderFlags(e);}+/
+/+pragma(inline, true) void operator |(QWidget.RenderFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QWidget.RenderFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QWidget.RenderFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QWidget::RenderFlags)

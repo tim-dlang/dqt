@@ -74,30 +74,30 @@ private:
     /+ std:: +/ /*shared_ptr!(*/ /+ QtWebEngineCore:: +/FileSystemAccessPermissionRequestController* d_ptr;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator |(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)/+noexcept+/{return QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator |(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator &(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)/+noexcept+/{return QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator &(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator ^(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)/+noexcept+/{return QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator ^(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator |(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)nothrow{return QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator |(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator &(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)nothrow{return QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator &(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator ^(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)nothrow{return QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) operator ^(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QWebEngineFileSystemAccessRequest.AccessFlags operator ~(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type e)/+noexcept+/{return~QWebEngineFileSystemAccessRequest.AccessFlags(e);}+/
-/+pragma(inline, true) void operator |(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QWebEngineFileSystemAccessRequest.AccessFlags operator ~(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type e)nothrow{return~QWebEngineFileSystemAccessRequest.AccessFlags(e);}+/
+/+pragma(inline, true) void operator |(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QWebEngineFileSystemAccessRequest.AccessFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_SHARED(QWebEngineFileSystemAccessRequest)

@@ -779,30 +779,30 @@ package:
 }
 
 /+ #undef QT_DEFINE_METATYPE_ID +/
-/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator |(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)/+noexcept+/{return QFlags!(QMetaType.TypeFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator |(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator &(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)/+noexcept+/{return QFlags!(QMetaType.TypeFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator &(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator ^(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)/+noexcept+/{return QFlags!(QMetaType.TypeFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator ^(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QMetaType.TypeFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QMetaType.TypeFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QMetaType.TypeFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QMetaType.TypeFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator |(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)nothrow{return QFlags!(QMetaType.TypeFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator |(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator &(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)nothrow{return QFlags!(QMetaType.TypeFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator &(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator ^(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)nothrow{return QFlags!(QMetaType.TypeFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QMetaType.TypeFlags.enum_type) operator ^(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QMetaType.TypeFlags.enum_type f1, QMetaType.TypeFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QMetaType.TypeFlags.enum_type f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QMetaType.TypeFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QMetaType.TypeFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QMetaType.TypeFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QMetaType.TypeFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QMetaType.TypeFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QMetaType.TypeFlags operator ~(QMetaType.TypeFlags.enum_type e)/+noexcept+/{return~QMetaType.TypeFlags(e);}+/
-/+pragma(inline, true) void operator |(QMetaType.TypeFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QMetaType.TypeFlags operator ~(QMetaType.TypeFlags.enum_type e)nothrow{return~QMetaType.TypeFlags(e);}+/
+/+pragma(inline, true) void operator |(QMetaType.TypeFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QMetaType.TypeFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QMetaType.TypeFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QMetaType::TypeFlags)

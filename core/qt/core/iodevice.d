@@ -154,30 +154,30 @@ private:
     /+ Q_DISABLE_COPY(QIODevice) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/{return QFlags!(QIODevice.OpenMode.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator &(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/{return QFlags!(QIODevice.OpenMode.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator &(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator ^(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/{return QFlags!(QIODevice.OpenMode.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator ^(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QIODevice.OpenMode.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QIODevice.OpenMode.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)nothrow{return QFlags!(QIODevice.OpenMode.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator &(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)nothrow{return QFlags!(QIODevice.OpenMode.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator &(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator ^(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)nothrow{return QFlags!(QIODevice.OpenMode.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator ^(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QIODevice.OpenMode.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QIODevice.OpenMode.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QIODevice.OpenMode.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QIODevice.OpenMode.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QIODevice.OpenMode.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QIODevice.OpenMode.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIODevice.OpenMode operator ~(QIODevice.OpenMode.enum_type e)/+noexcept+/{return~QIODevice.OpenMode(e);}+/
-/+pragma(inline, true) void operator |(QIODevice.OpenMode.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QIODevice.OpenMode operator ~(QIODevice.OpenMode.enum_type e)nothrow{return~QIODevice.OpenMode(e);}+/
+/+pragma(inline, true) void operator |(QIODevice.OpenMode.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QIODevice.OpenMode.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QIODevice.OpenMode.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QIODevice::OpenMode)

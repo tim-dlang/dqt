@@ -36,9 +36,9 @@ public:
     /+ QColorTransform() noexcept = default; +/
     /+ Q_GUI_EXPORT +/~this();
     @disable this(this);
-    /+ Q_GUI_EXPORT +/this(ref const(QColorTransform) colorTransform)/+ noexcept+/;
+    /+ Q_GUI_EXPORT +/this(ref const(QColorTransform) colorTransform) nothrow;
     /+ QColorTransform(QColorTransform &&colorTransform) = default; +/
-    /+ref QColorTransform opAssign(ref const(QColorTransform) other)/+ noexcept+/
+    /+ref QColorTransform opAssign(ref const(QColorTransform) other) nothrow
     {
         QColorTransform(other).swap(this);
         return this;
@@ -46,7 +46,7 @@ public:
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QColorTransform) +/
 
     /+ void swap(QColorTransform &other) noexcept { d.swap(other.d); } +/
-    /+ Q_GUI_EXPORT +/ bool isIdentity() const/+ noexcept+/;
+    /+ Q_GUI_EXPORT +/ bool isIdentity() const nothrow;
 
     /+ Q_GUI_EXPORT +/ QRgb map(QRgb argb) const;
     /+ Q_GUI_EXPORT +/ QRgba64 map(QRgba64 rgba64) const;

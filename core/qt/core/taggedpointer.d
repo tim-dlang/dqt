@@ -49,15 +49,15 @@ public:
     static quintptr pointerMask() { return ~tagMask(); }
 
     @disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.d = 0;
     }+/
-    this(typeof(null))/+ noexcept+/
+    this(typeof(null)) nothrow
     {
     }
 
-    /+ explicit +/this(T* pointer, Tag tag = Tag())/+ noexcept+/
+    /+ explicit +/this(T* pointer, Tag tag = Tag()) nothrow
     {
         this.d = cast(quintptr)(pointer) | quintptr(tag);
 
@@ -68,18 +68,18 @@ public:
             "QTaggedPointer<T, Tag>::setTag"},q{ "Tag is larger than allowed by number of available tag bits"})));
     }
 
-    ref Type opUnary(string op)() const/+ noexcept+/ if (op == "*")
+    ref Type opUnary(string op)() const nothrow if (op == "*")
     {
         (mixin(Q_ASSERT(q{data()})));
         return *data();
     }
 
-    /+Type* operator ->() const/+ noexcept+/
+    /+Type* operator ->() const nothrow
     {
         return data();
     }+/
 
-    /+/+ explicit +/ auto opCast(T : bool)() const/+ noexcept+/
+    /+/+ explicit +/ auto opCast(T : bool)() const nothrow
     {
         return !isNull();
     }+/
@@ -93,7 +93,7 @@ public:
     // the implicitly-generated one overwrites it.
     /+ template <typename U,
               std::enable_if_t<std::is_convertible_v<U *, T *>, bool> = false> +/
-    ref QTaggedPointer opAssign(U,)(U* other)/+ noexcept+/
+    ref QTaggedPointer opAssign(U,)(U* other) nothrow
     {
         T* otherT = other;
         d = reinterpret_cast!(quintptr)(otherT) | (d & tagMask());
@@ -102,14 +102,14 @@ public:
 
     /+ template <typename U,
               std::enable_if_t<std::is_null_pointer_v<U>, bool> = false> +/
-    ref QTaggedPointer opAssign(U,)(U)/+ noexcept+/
+    ref QTaggedPointer opAssign(U,)(U) nothrow
     {
         d = reinterpret_cast!(quintptr)(static_cast!(T*)(null)) | (d & tagMask());
         return this;
     }
 /+ #endif +/
 
-    static Tag maximumTag()/+ noexcept+/
+    static Tag maximumTag() nothrow
     {
         return cast(TagType)(cast(/+ typename +/ /+ QtPrivate:: +/TagInfo!(T).TagType)(tagMask()));
     }
@@ -122,17 +122,17 @@ public:
         d = (d & pointerMask()) | static_cast!(quintptr)(tag);
     }
 
-    Tag tag() const/+ noexcept+/
+    Tag tag() const nothrow
     {
         return cast(TagType)(cast(/+ typename +/ /+ QtPrivate:: +/TagInfo!(T).TagType)(d & tagMask()));
     }
 
-    T* data() const/+ noexcept+/
+    T* data() const nothrow
     {
         return reinterpret_cast!(T*)(d & pointerMask());
     }
 
-    bool isNull() const/+ noexcept+/
+    bool isNull() const nothrow
     {
         return !data();
     }

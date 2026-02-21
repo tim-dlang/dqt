@@ -48,11 +48,11 @@ public:
     this(ref const(QBrush) brush, qreal width, /+ Qt:: +/qt.core.namespace.PenStyle s = /+ Qt:: +/qt.core.namespace.PenStyle.SolidLine,
              /+ Qt:: +/qt.core.namespace.PenCapStyle c = /+ Qt:: +/qt.core.namespace.PenCapStyle.SquareCap, /+ Qt:: +/qt.core.namespace.PenJoinStyle j = /+ Qt:: +/qt.core.namespace.PenJoinStyle.BevelJoin);
     @disable this(this);
-    this(ref const(QPen) pen)/+ noexcept+/;
+    this(ref const(QPen) pen) nothrow;
 
     ~this();
 
-    ref QPen opAssign(ref const(QPen) pen)/+ noexcept+/;
+    ref QPen opAssign(ref const(QPen) pen) nothrow;
     /+ QPen(QPen &&other) noexcept
         : d(qExchange(other.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPen) +/

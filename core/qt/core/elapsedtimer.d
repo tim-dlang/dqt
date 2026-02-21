@@ -36,21 +36,21 @@ public:
         this.t2 = 0x8000000000000000L;
     }+/
 
-    static ClockType clockType()/+ noexcept+/;
-    static bool isMonotonic()/+ noexcept+/;
+    static ClockType clockType() nothrow;
+    static bool isMonotonic() nothrow;
 
-    void start()/+ noexcept+/;
-    qint64 restart()/+ noexcept+/;
-    void invalidate()/+ noexcept+/;
-    bool isValid() const/+ noexcept+/;
+    void start() nothrow;
+    qint64 restart() nothrow;
+    void invalidate() nothrow;
+    bool isValid() const nothrow;
 
-    qint64 nsecsElapsed() const/+ noexcept+/;
-    qint64 elapsed() const/+ noexcept+/;
-    bool hasExpired(qint64 timeout) const/+ noexcept+/;
+    qint64 nsecsElapsed() const nothrow;
+    qint64 elapsed() const nothrow;
+    bool hasExpired(qint64 timeout) const nothrow;
 
-    qint64 msecsSinceReference() const/+ noexcept+/;
-    qint64 msecsTo(ref const(QElapsedTimer) other) const/+ noexcept+/;
-    qint64 secsTo(ref const(QElapsedTimer) other) const/+ noexcept+/;
+    qint64 msecsSinceReference() const nothrow;
+    qint64 msecsTo(ref const(QElapsedTimer) other) const nothrow;
+    qint64 secsTo(ref const(QElapsedTimer) other) const nothrow;
 
     /+ friend bool operator==(const QElapsedTimer &lhs, const QElapsedTimer &rhs) noexcept
     { return lhs.t1 == rhs.t1 && lhs.t2 == rhs.t2; } +/

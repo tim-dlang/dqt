@@ -771,8 +771,8 @@ alias qsizetype = QIntegerForSizeof!(/+ std:: +/size_t).Signed;
    Utility macros and inline functions
 */
 
-pragma(inline, true) T qAbs(T)(ref const(T) t) { return t >= 0 ? t : -t; }
-pragma(inline, true) T qAbs(T)(const(T) t) { return t >= 0 ? t : -t; }
+pragma(inline, true) T qAbs(T)(ref const(T) t) nothrow { return t >= 0 ? t : -t; }
+pragma(inline, true) T qAbs(T)(const(T) t) nothrow { return t >= 0 ? t : -t; }
 
 // gcc < 10 doesn't have __has_builtin
 /*version (AArch64)
@@ -791,25 +791,25 @@ pragma(inline, true) qint64 qRound64(float f)
 static if (defined!"__SSE2__")
 {
 // SSE has binary operations directly on floating point making copysign fast
-pragma(inline, true) int qRound(double d)
+pragma(inline, true) int qRound(double d) nothrow
 { return cast(int) (d + __builtin_copysign(0.5, d)); }
-pragma(inline, true) int qRound(float f)
+pragma(inline, true) int qRound(float f) nothrow
 { return cast(int) (f + __builtin_copysignf(0.5f, f)); }
-pragma(inline, true) qint64 qRound64(double d)
+pragma(inline, true) qint64 qRound64(double d) nothrow
 { return cast(qint64) (d + __builtin_copysign(0.5, d)); }
-pragma(inline, true) qint64 qRound64(float f)
+pragma(inline, true) qint64 qRound64(float f) nothrow
 { return cast(qint64) (f + __builtin_copysignf(0.5f, f)); }
 }
 static if (!defined!"__SSE2__"/* && !versionIsSet!("AArch64")*/)
 {
-pragma(inline, true) int qRound(double d)
+pragma(inline, true) int qRound(double d) nothrow
 { return d >= 0.0 ? cast(int) (d + 0.5) : cast(int) (d - 0.5); }
-pragma(inline, true) int qRound(float d)
+pragma(inline, true) int qRound(float d) nothrow
 { return d >= 0.0f ? cast(int) (d + 0.5f) : cast(int) (d - 0.5f); }
 
-pragma(inline, true) qint64 qRound64(double d)
+pragma(inline, true) qint64 qRound64(double d) nothrow
 { return d >= 0.0 ? cast(qint64) (d + 0.5) : cast(qint64) (d - 0.5); }
-pragma(inline, true) qint64 qRound64(float d)
+pragma(inline, true) qint64 qRound64(float d) nothrow
 { return d >= 0.0f ? cast(qint64) (d + 0.5f) : cast(qint64) (d - 0.5f); }
 }
 
@@ -941,7 +941,7 @@ pragma(inline, true) void qt_noop() {}
 #  endif
 #endif +/
 
-/+ Q_NORETURN +/ /+ Q_DECL_COLD_FUNCTION +/ /+ Q_CORE_EXPORT +/ void qTerminate()/+ noexcept+/;
+/+ Q_NORETURN +/ /+ Q_DECL_COLD_FUNCTION +/ /+ Q_CORE_EXPORT +/ void qTerminate() nothrow;
 /+ #ifdef QT_NO_EXCEPTIONS
 #  define QT_TRY if (true)
 #  define QT_CATCH(A) else
@@ -960,7 +960,7 @@ pragma(inline, true) void qt_noop() {}
 #  endif
 #endif +/
 
-/+ Q_CORE_EXPORT +/ /+ Q_DECL_CONST_FUNCTION +/ bool qSharedBuild()/+ noexcept+/;
+/+ Q_CORE_EXPORT +/ /+ Q_DECL_CONST_FUNCTION +/ bool qSharedBuild() nothrow;
 
 /+ #ifndef Q_OUTOFLINE_TEMPLATE
 #  define Q_OUTOFLINE_TEMPLATE
@@ -1002,7 +1002,7 @@ pragma(inline, true) void qt_noop() {}
 /+ Q_NORETURN +/
 /+ #endif
 Q_DECL_COLD_FUNCTION +/
-/+ Q_CORE_EXPORT +/ void qt_assert(const(char)* assertion, const(char)* file, int line)/+ noexcept+/;
+/+ Q_CORE_EXPORT +/ void qt_assert(const(char)* assertion, const(char)* file, int line) nothrow;
 
 /+ #if !defined(Q_ASSERT)
 #  if defined(QT_NO_DEBUG) && !defined(QT_FORCE_ASSERTS)
@@ -1016,7 +1016,7 @@ Q_DECL_COLD_FUNCTION +/
 /+ Q_NORETURN +/
 /+ #endif
 Q_DECL_COLD_FUNCTION +/
-/+ Q_CORE_EXPORT +/ void qt_assert_x(const(char)* where, const(char)* what, const(char)* file, int line)/+ noexcept+/;
+/+ Q_CORE_EXPORT +/ void qt_assert_x(const(char)* where, const(char)* what, const(char)* file, int line) nothrow;
 
 /+ #if !defined(Q_ASSERT_X)
 #  if defined(QT_NO_DEBUG) && !defined(QT_FORCE_ASSERTS)
@@ -1026,7 +1026,7 @@ Q_DECL_COLD_FUNCTION +/
 #  endif
 #endif +/
 
-/+ Q_NORETURN +/ /+ Q_CORE_EXPORT +/ void qt_check_pointer(const(char)* , int)/+ noexcept+/;
+/+ Q_NORETURN +/ /+ Q_CORE_EXPORT +/ void qt_check_pointer(const(char)* , int) nothrow;
 /+ Q_NORETURN +/ /+ Q_DECL_COLD_FUNCTION +/
 /+ Q_CORE_EXPORT +/ void qBadAlloc();
 
@@ -1070,16 +1070,16 @@ alias Promoted(T, U) = /+ detail:: +/.Promoted!(T, U).type;
 
 }
 
-pragma(inline, true) ref const(T) qMin(T)(ref const(T) a, ref const(T) b) { return (a < b) ? a : b; }
-pragma(inline, true) const(T)  qMin(T)(const(T) a, const(T) b) { return (a < b) ? a : b; }
-pragma(inline, true) ref const(T) qMax(T)(ref const(T) a, ref const(T) b) { return (a < b) ? b : a; }
-pragma(inline, true) const(T)  qMax(T)(const(T) a, const(T) b) { return (a < b) ? b : a; }
-pragma(inline, true) ref const(T) qBound(T)(ref const(T) min, ref const(T) val, ref const(T) max)
+pragma(inline, true) ref const(T) qMin(T)(ref const(T) a, ref const(T) b) nothrow { return (a < b) ? a : b; }
+pragma(inline, true) const(T)  qMin(T)(const(T) a, const(T) b) nothrow { return (a < b) ? a : b; }
+pragma(inline, true) ref const(T) qMax(T)(ref const(T) a, ref const(T) b) nothrow { return (a < b) ? b : a; }
+pragma(inline, true) const(T)  qMax(T)(const(T) a, const(T) b) nothrow { return (a < b) ? b : a; }
+pragma(inline, true) ref const(T) qBound(T)(ref const(T) min, ref const(T) val, ref const(T) max) nothrow
 {
     (mixin(Q_ASSERT(q{!(max < min)})));
     return qMax(min, qMin(max, val));
 }
-pragma(inline, true) const(T) qBound(T)(const(T) min, const(T) val, const(T) max)
+pragma(inline, true) const(T) qBound(T)(const(T) min, const(T) val, const(T) max) nothrow
 {
     (mixin(Q_ASSERT(q{!(max < min)})));
     return qMax(min, qMin(max, val));
@@ -1116,22 +1116,22 @@ pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(U
     return qMax(min, qMin(max, val));
 }+/
 
-/+ [[nodiscard]] +/ bool qFuzzyCompare(double p1, double p2)
+/+ [[nodiscard]] +/ bool qFuzzyCompare(double p1, double p2) nothrow
 {
     return (qAbs(p1 - p2) * 1000000000000. <= qMin(qAbs(p1), qAbs(p2)));
 }
 
-/+ [[nodiscard]] +/ bool qFuzzyCompare(float p1, float p2)
+/+ [[nodiscard]] +/ bool qFuzzyCompare(float p1, float p2) nothrow
 {
     return (qAbs(p1 - p2) * 100000.0f <= qMin(qAbs(p1), qAbs(p2)));
 }
 
-/+ [[nodiscard]] +/ bool qFuzzyIsNull(double d)
+/+ [[nodiscard]] +/ bool qFuzzyIsNull(double d) nothrow
 {
     return qAbs(d) <= 0.000000000001;
 }
 
-/+ [[nodiscard]] +/ bool qFuzzyIsNull(float f)
+/+ [[nodiscard]] +/ bool qFuzzyIsNull(float f) nothrow
 {
     return qAbs(f) <= 0.00001f;
 }
@@ -1139,12 +1139,12 @@ pragma(inline, true) /+ QTypeTraits:: +/Promoted!(T, U) qBound(T, U)(ref const(U
 /+ QT_WARNING_PUSH
 QT_WARNING_DISABLE_FLOAT_COMPARE +/
 
-/+ [[nodiscard]] +/ bool qIsNull(double d)/+ noexcept+/
+/+ [[nodiscard]] +/ bool qIsNull(double d) nothrow
 {
     return d == 0.0;
 }
 
-/+ [[nodiscard]] +/ bool qIsNull(float f)/+ noexcept+/
+/+ [[nodiscard]] +/ bool qIsNull(float f) nothrow
 {
     return f == 0.0f;
 }
@@ -1241,7 +1241,7 @@ QT_WARNING_DISABLE_MSVC(4530) /* C++ exception handler used, but unwind semantic
 #endif +/
 
 // this adds const to non-const objects (like std::as_const)
-ref /+ std:: +/add_const!(T).type qAsConst(T)(ref T t)/+ noexcept+/ { return t; }
+ref /+ std:: +/add_const!(T).type qAsConst(T)(ref T t) nothrow { return t; }
 // prevent rvalue arguments:
 /+ template <typename T>
 void qAsConst(const T &&) = delete;
@@ -1284,8 +1284,8 @@ constexpr std::underlying_type_t<Enum> qToUnderlying(Enum e) noexcept
 # define Q_CONSTINIT
 #endif +/
 
-pragma(inline, true) T* qGetPtrHelper(T)(T* ptr)/+ noexcept+/ { return ptr; }
-pragma(inline, true) auto qGetPtrHelper(Ptr)(ref Ptr ptr)/+ noexcept+/ /+ -> decltype(ptr.get()) +/
+pragma(inline, true) T* qGetPtrHelper(T)(T* ptr) nothrow { return ptr; }
+pragma(inline, true) auto qGetPtrHelper(Ptr)(ref Ptr ptr) nothrow /+ -> decltype(ptr.get()) +/
 { static assert(noexcept(ptr.get()), "Smart d pointers for Q_DECLARE_PRIVATE must have noexcept get()"); return ptr.get(); }
 
 // The body must be a statement:
@@ -1404,9 +1404,9 @@ template <typename... Args> constexpr inline QNonConstOverload<Args...> qNonCons
 /+ Q_CORE_EXPORT +/ bool qputenv(const(char)* varName, ref const(QByteArray) value);
 /+ Q_CORE_EXPORT +/ bool qunsetenv(const(char)* varName);
 
-/+ Q_CORE_EXPORT +/ bool qEnvironmentVariableIsEmpty(const(char)* varName)/+ noexcept+/;
-/+ Q_CORE_EXPORT +/ bool qEnvironmentVariableIsSet(const(char)* varName)/+ noexcept+/;
-/+ Q_CORE_EXPORT +/ int  qEnvironmentVariableIntValue(const(char)* varName, bool* ok=null)/+ noexcept+/;
+/+ Q_CORE_EXPORT +/ bool qEnvironmentVariableIsEmpty(const(char)* varName) nothrow;
+/+ Q_CORE_EXPORT +/ bool qEnvironmentVariableIsSet(const(char)* varName) nothrow;
+/+ Q_CORE_EXPORT +/ int  qEnvironmentVariableIntValue(const(char)* varName, bool* ok=null) nothrow;
 
 pragma(inline, true) int qIntCast(double f) { return cast(int) (f); }
 pragma(inline, true) int qIntCast(float f) { return cast(int) (f); }

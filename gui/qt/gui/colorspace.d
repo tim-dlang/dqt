@@ -75,8 +75,8 @@ public:
     ~this();
 
     @disable this(this);
-    this(ref const(QColorSpace) colorSpace)/+ noexcept+/;
-    /+ref QColorSpace opAssign(ref const(QColorSpace) colorSpace)/+ noexcept+/
+    this(ref const(QColorSpace) colorSpace) nothrow;
+    /+ref QColorSpace opAssign(ref const(QColorSpace) colorSpace) nothrow
     {
         auto copy = QColorSpace(colorSpace);
         swap(copy);
@@ -89,11 +89,11 @@ public:
     /+ void swap(QColorSpace &colorSpace) noexcept
     { d_ptr.swap(colorSpace.d_ptr); } +/
 
-    Primaries primaries() const/+ noexcept+/;
-    TransferFunction transferFunction() const/+ noexcept+/;
-    float gamma() const/+ noexcept+/;
+    Primaries primaries() const nothrow;
+    TransferFunction transferFunction() const nothrow;
+    float gamma() const nothrow;
 
-    QString description() const/+ noexcept+/;
+    QString description() const nothrow;
     void setDescription(ref const(QString) description);
 
     void setTransferFunction(TransferFunction transferFunction, float gamma = 0.0f);
@@ -112,7 +112,7 @@ public:
                           ref const(QPointF) greenPoint, ref const(QPointF) bluePoint);
 
     void detach();
-    bool isValid() const/+ noexcept+/;
+    bool isValid() const nothrow;
 
     /+ friend inline bool operator==(const QColorSpace &colorSpace1, const QColorSpace &colorSpace2)
     { return colorSpace1.equals(colorSpace2); } +/

@@ -22,13 +22,13 @@ import qt.helpers;
 extern(C++, class) struct /+ Q_CORE_EXPORT +/ QLibraryInfo
 {
 public:
-    static const(char)* build()/+ noexcept+/;
+    static const(char)* build() nothrow;
 
-    static bool isDebugBuild()/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static bool isDebugBuild() nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
 
 /+ #ifndef QT_BOOTSTRAPPED +/
     mixin(changeCppMangling(q{mangleChangeName("version")}, q{
-    static QVersionNumber version_()/+ noexcept /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
+    static QVersionNumber version_() nothrow/+ /+ Q_DECL_CONST_FUNCTION +/__attribute__((const))+/;
     }));
 /+ #endif +/
 

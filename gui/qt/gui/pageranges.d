@@ -40,8 +40,8 @@ public:
     ~this();
 
     @disable this(this);
-    this(ref const(QPageRanges) other)/+ noexcept+/;
-    ref QPageRanges opAssign(ref const(QPageRanges) other)/+ noexcept+/;
+    this(ref const(QPageRanges) other) nothrow;
+    ref QPageRanges opAssign(ref const(QPageRanges) other) nothrow;
 
     /+ QPageRanges(QPageRanges &&other) noexcept = default; +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_PURE_SWAP(QPageRanges) +/
@@ -56,7 +56,7 @@ public:
     struct Range {
         int from = -1;
         int to = -1;
-        bool contains(int pageNumber) const/+ noexcept+/
+        bool contains(int pageNumber) const nothrow
         { return from <= pageNumber && to >= pageNumber; }
         /+ friend bool operator==(Range lhs, Range rhs) noexcept
         { return lhs.from == rhs.from && lhs.to == rhs.to; } +/
@@ -82,7 +82,7 @@ public:
     void detach();
 
 private:
-    bool isEqual(ref const(QPageRanges) other) const/+ noexcept+/;
+    bool isEqual(ref const(QPageRanges) other) const nothrow;
 
     QExplicitlySharedDataPointer!(QPageRangesPrivate) d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);

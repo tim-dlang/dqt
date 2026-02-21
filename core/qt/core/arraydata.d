@@ -42,30 +42,30 @@ alias ArrayOptions = QFlags!(ArrayOption);
     ArrayOptions flags;
     qsizetype alloc;
 
-    qsizetype allocatedCapacity()/+ noexcept+/
+    qsizetype allocatedCapacity() nothrow
     {
         return alloc;
     }
 
-    qsizetype constAllocatedCapacity() const/+ noexcept+/
+    qsizetype constAllocatedCapacity() const nothrow
     {
         return alloc;
     }
 
     /// Returns true if sharing took place
-    bool ref_()/+ noexcept+/
+    bool ref_() nothrow
     {
         ref__.ref_();
         return true;
     }
 
     /// Returns false if deallocation is necessary
-    bool deref()/+ noexcept+/
+    bool deref() nothrow
     {
         return ref__.deref();
     }
 
-    bool isShared() const/+ noexcept+/
+    bool isShared() const nothrow
     {
         return ref__.loadRelaxed() != 1;
     }
@@ -73,12 +73,12 @@ alias ArrayOptions = QFlags!(ArrayOption);
     // Returns true if a detach is necessary before modifying the data
     // This method is intentionally not const: if you want to know whether
     // detaching is necessary, you should be in a non-const function already
-    bool needsDetach() const/+ noexcept+/
+    bool needsDetach() const nothrow
     {
         return ref__.loadRelaxed() > 1;
     }
 
-    qsizetype detachCapacity(qsizetype newSize) const/+ noexcept+/
+    qsizetype detachCapacity(qsizetype newSize) const nothrow
     {
         if (flags & ArrayOption.CapacityReserved && newSize < constAllocatedCapacity())
             return constAllocatedCapacity();
@@ -90,36 +90,36 @@ alias ArrayOptions = QFlags!(ArrayOption);
         /+ __attribute__((__malloc__)) +/
     /+ #endif +/
         /+ Q_CORE_EXPORT +/ static void* allocate(QArrayData** pdata, qsizetype objectSize, qsizetype alignment,
-                qsizetype capacity, AllocationOption option = AllocationOption.KeepSize)/+ noexcept+/;
+                qsizetype capacity, AllocationOption option = AllocationOption.KeepSize) /*nothrow*/;
     /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ static qt.core.pair.QPair!(QArrayData*, void*) reallocateUnaligned(QArrayData* data, void* dataPointer,
-                qsizetype objectSize, qsizetype newCapacity, AllocationOption option)/+ noexcept+/;
+                qsizetype objectSize, qsizetype newCapacity, AllocationOption option) /*nothrow*/;
     /+ Q_CORE_EXPORT +/ static void deallocate(QArrayData* data, qsizetype objectSize,
-                qsizetype alignment)/+ noexcept+/;
+                qsizetype alignment) /*nothrow*/;
 }
-/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator |(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator |(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator &(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator &(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator ^(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator ^(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QArrayData.ArrayOptions.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator |(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)nothrow{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator |(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator &(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)nothrow{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator &(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator ^(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)nothrow{return QFlags!(QArrayData.ArrayOptions.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QArrayData.ArrayOptions.enum_type) operator ^(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, QArrayData.ArrayOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QArrayData.ArrayOptions.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QArrayData.ArrayOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QArrayData.ArrayOptions.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QArrayData.ArrayOptions.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QArrayData.ArrayOptions.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QArrayData.ArrayOptions operator ~(QArrayData.ArrayOptions.enum_type e)/+noexcept+/{return~QArrayData.ArrayOptions(e);}+/
-/+pragma(inline, true) void operator |(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QArrayData.ArrayOptions operator ~(QArrayData.ArrayOptions.enum_type e)nothrow{return~QArrayData.ArrayOptions(e);}+/
+/+pragma(inline, true) void operator |(QArrayData.ArrayOptions.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QArrayData.ArrayOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QArrayData.ArrayOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QArrayData::ArrayOptions) +/
@@ -151,13 +151,13 @@ struct QTypedArrayData(T)
         return qMakePair(static_cast!(QTypedArrayData*)(pair.first), static_cast!(T*)(pair.second));
     }
 
-    static void deallocate(QArrayData* data)/+ noexcept+/
+    static void deallocate(QArrayData* data) /*nothrow*/
     {
         static assert(QTypedArrayData.sizeof == QArrayData.sizeof);
         QArrayData.deallocate(data, T.sizeof, AlignmentDummy.alignof);
     }
 
-    static T* dataStart(QArrayData* data, qsizetype alignment)/+ noexcept+/
+    static T* dataStart(QArrayData* data, qsizetype alignment) nothrow
     {
         // Alignment is a power of two
         (mixin(Q_ASSERT(q{alignment >= qsizetype(QArrayData.alignof) && !(alignment & (alignment - 1))})));

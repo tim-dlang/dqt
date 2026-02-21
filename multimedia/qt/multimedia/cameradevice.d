@@ -34,7 +34,7 @@ extern(C++, class) struct /+ Q_MULTIMEDIA_EXPORT +/ QCameraFormat
 public:
     @disable this();
     pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-    void rawConstructor()/+ noexcept+/;
+    void rawConstructor() nothrow;
     static typeof(this) create()
     {
         typeof(this) r = typeof(this).init;
@@ -43,16 +43,16 @@ public:
     }
 
     @disable this(this);
-    this(ref const(QCameraFormat) other)/+ noexcept+/;
-    ref QCameraFormat opAssign(ref const(QCameraFormat) other)/+ noexcept+/;
+    this(ref const(QCameraFormat) other) nothrow;
+    ref QCameraFormat opAssign(ref const(QCameraFormat) other) nothrow;
     ~this();
 
-    QVideoFrameFormat.PixelFormat pixelFormat() const/+ noexcept+/;
-    QSize resolution() const/+ noexcept+/;
-    float minFrameRate() const/+ noexcept+/;
-    float maxFrameRate() const/+ noexcept+/;
+    QVideoFrameFormat.PixelFormat pixelFormat() const nothrow;
+    QSize resolution() const nothrow;
+    float minFrameRate() const nothrow;
+    float maxFrameRate() const nothrow;
 
-    bool isNull() const/+ noexcept+/ { return !d.get; }
+    bool isNull() const nothrow { return !d.get; }
 
     /+bool operator ==(ref const(QCameraFormat) other) const;+/
     /+pragma(inline, true) bool operator !=(ref const(QCameraFormat) other) const

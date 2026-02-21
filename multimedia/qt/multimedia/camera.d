@@ -268,30 +268,30 @@ private:
     /+ friend class QCameraDevice; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator |(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)/+noexcept+/{return QFlags!(QCamera.Features.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator |(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator &(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)/+noexcept+/{return QFlags!(QCamera.Features.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator &(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator ^(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)/+noexcept+/{return QFlags!(QCamera.Features.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator ^(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QCamera.Features.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QCamera.Features.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QCamera.Features.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QCamera.Features.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QCamera.Features.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QCamera.Features.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator |(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)nothrow{return QFlags!(QCamera.Features.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator |(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator &(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)nothrow{return QFlags!(QCamera.Features.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator &(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator ^(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)nothrow{return QFlags!(QCamera.Features.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QCamera.Features.enum_type) operator ^(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QCamera.Features.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QCamera.Features.enum_type f1, QCamera.Features.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QCamera.Features.enum_type f1, QFlags!(QCamera.Features.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QCamera.Features.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QCamera.Features.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QCamera.Features.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QCamera.Features.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QCamera.Features.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QCamera.Features operator ~(QCamera.Features.enum_type e)/+noexcept+/{return~QCamera.Features(e);}+/
-/+pragma(inline, true) void operator |(QCamera.Features.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QCamera.Features operator ~(QCamera.Features.enum_type e)nothrow{return~QCamera.Features(e);}+/
+/+pragma(inline, true) void operator |(QCamera.Features.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QCamera.Features.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QCamera.Features.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QCamera::Features)

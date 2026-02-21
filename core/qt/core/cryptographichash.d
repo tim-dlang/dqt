@@ -74,7 +74,7 @@ public:
     /+ explicit +/this(Algorithm method);
     ~this();
 
-    void reset()/+ noexcept+/;
+    void reset() nothrow;
 
 /+ #if QT_DEPRECATED_SINCE(6, 4) +/
     /+ QT_DEPRECATED_VERSION_X_6_4("Use the QByteArrayView overload instead") +/
@@ -86,11 +86,11 @@ public:
         void addData(ref const(QByteArray) data);
     }
 /+ #endif +/
-    void addData(QByteArrayView data)/+ noexcept+/;
+    void addData(QByteArrayView data) nothrow;
     bool addData(QIODevice device);
 
     QByteArray result() const;
-    QByteArrayView resultView() const/+ noexcept+/;
+    QByteArrayView resultView() const nothrow;
 
     static if (defined!"QT_CORE_BUILD_REMOVED_API")
     {

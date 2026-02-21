@@ -503,30 +503,30 @@ private:
     /+ Q_DECLARE_PRIVATE(QQuickItem) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator |(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)/+noexcept+/{return QFlags!(QQuickItem.Flags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator |(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator &(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)/+noexcept+/{return QFlags!(QQuickItem.Flags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator &(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator ^(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)/+noexcept+/{return QFlags!(QQuickItem.Flags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator ^(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QQuickItem.Flags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QQuickItem.Flags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QQuickItem.Flags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QQuickItem.Flags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QQuickItem.Flags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator |(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)nothrow{return QFlags!(QQuickItem.Flags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator |(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator &(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)nothrow{return QFlags!(QQuickItem.Flags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator &(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator ^(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)nothrow{return QFlags!(QQuickItem.Flags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QQuickItem.Flags.enum_type) operator ^(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QQuickItem.Flags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QQuickItem.Flags.enum_type f1, QQuickItem.Flags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QQuickItem.Flags.enum_type f1, QFlags!(QQuickItem.Flags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QQuickItem.Flags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QQuickItem.Flags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QQuickItem.Flags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QQuickItem.Flags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QQuickItem.Flags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QQuickItem.Flags operator ~(QQuickItem.Flags.enum_type e)/+noexcept+/{return~QQuickItem.Flags(e);}+/
-/+pragma(inline, true) void operator |(QQuickItem.Flags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QQuickItem.Flags operator ~(QQuickItem.Flags.enum_type e)nothrow{return~QQuickItem.Flags(e);}+/
+/+pragma(inline, true) void operator |(QQuickItem.Flags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QQuickItem.Flags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QQuickItem.Flags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QQuickItem::Flags)

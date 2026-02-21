@@ -56,17 +56,17 @@ extern(C++, class) struct QPropertyBindingPrivatePtr
 public:
     alias T = /+ QtPrivate:: +/RefCounted;
     ref T opUnary(string op)() const if (op == "*") { return *d; }
-    /+T* operator ->()/+ noexcept+/ { return d; }+/
-    /+T* operator ->() const/+ noexcept+/ { return d; }+/
+    /+T* operator ->() nothrow { return d; }+/
+    /+T* operator ->() const nothrow { return d; }+/
     /+/+ explicit +/ auto opCast(T : T)() { return d; }+/
-    /+/+ explicit +/ auto opCast(T : const(T))() const/+ noexcept+/ { return d; }+/
-    T* data() /*const*/ /+ noexcept+/ { return d; }
-    T* get() /*const*/ /+ noexcept+/ { return d; }
-    const(T)* constData() const/+ noexcept+/ { return d; }
-    T* take()/+ noexcept+/ { T* x = d; d = null; return x; }
+    /+/+ explicit +/ auto opCast(T : const(T))() const nothrow { return d; }+/
+    T* data() /*const*/  nothrow { return d; }
+    T* get() /*const*/  nothrow { return d; }
+    const(T)* constData() const nothrow { return d; }
+    T* take() nothrow { T* x = d; d = null; return x; }
 
     @disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.d = null;
     }+/
@@ -77,7 +77,7 @@ public:
     }
     /+ Q_CORE_EXPORT +/ void destroyAndFreeMemory();
 
-    /+ explicit +/this(T* data)/+ noexcept+/
+    /+ explicit +/this(T* data) /*nothrow*/
     {
         this.d = data;
         if (d) d.addRef();
@@ -87,14 +87,14 @@ public:
         if (d) d.addRef();
     }
 
-    //void reset(T* ptr = null)/+ noexcept+/;
+    //void reset(T* ptr = null) nothrow;
 
-    /+ref QPropertyBindingPrivatePtr opAssign(ref const(QPropertyBindingPrivatePtr) o)/+ noexcept+/
+    /+ref QPropertyBindingPrivatePtr opAssign(ref const(QPropertyBindingPrivatePtr) o) nothrow
     {
         reset(o.d);
         return this;
     }
-    ref QPropertyBindingPrivatePtr opAssign(T* o)/+ noexcept+/
+    ref QPropertyBindingPrivatePtr opAssign(T* o) nothrow
     {
         reset(o);
         return this;
@@ -102,8 +102,8 @@ public:
     /+ QPropertyBindingPrivatePtr(QPropertyBindingPrivatePtr &&o) noexcept : d(qExchange(o.d, nullptr)) {} +/
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QPropertyBindingPrivatePtr) +/
 
-    /+auto opCast(T : bool) () const/+ noexcept+/ { return d !is null; }+/
-    /+bool operator !() const/+ noexcept+/ { return d is null; }+/
+    /+auto opCast(T : bool) () const nothrow { return d !is null; }+/
+    /+bool operator !() const nothrow { return d is null; }+/
 
     /+ void swap(QPropertyBindingPrivatePtr &other) noexcept
     { qt_ptr_swap(d, other.d); } +/

@@ -34,7 +34,7 @@ extern(C++, class) struct QPointingDevicePrivate;
     /+ Q_PROPERTY(qint64 numericId READ numericId CONSTANT) +/
 public:
     /+/+ Q_ALWAYS_INLINE +/
-        pragma(inline, true) this()/+ noexcept+/
+        pragma(inline, true) this() nothrow
         {
             this.m_numericId = -1;
         }+/
@@ -43,8 +43,8 @@ public:
 
     static QPointingDeviceUniqueId fromNumericId(qint64 id);
 
-    /+ Q_ALWAYS_INLINE +/ pragma(inline, true) bool isValid() const/+ noexcept+/ { return m_numericId != -1; }
-    qint64 numericId() const/+ noexcept+/;
+    /+ Q_ALWAYS_INLINE +/ pragma(inline, true) bool isValid() const nothrow { return m_numericId != -1; }
+    qint64 numericId() const nothrow;
 
 private:
     /+ friend bool operator==(QPointingDeviceUniqueId lhs, QPointingDeviceUniqueId rhs) noexcept
@@ -138,30 +138,30 @@ protected:
     /+ Q_DISABLE_COPY_MOVE(QPointingDevice) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator |(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/{return QFlags!(QPointingDevice.PointerTypes.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator |(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator &(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/{return QFlags!(QPointingDevice.PointerTypes.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator &(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator ^(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/{return QFlags!(QPointingDevice.PointerTypes.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator ^(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QPointingDevice.PointerTypes.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QPointingDevice.PointerTypes.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QPointingDevice.PointerTypes.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator |(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)nothrow{return QFlags!(QPointingDevice.PointerTypes.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator |(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator &(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)nothrow{return QFlags!(QPointingDevice.PointerTypes.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator &(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator ^(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)nothrow{return QFlags!(QPointingDevice.PointerTypes.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QPointingDevice.PointerTypes.enum_type) operator ^(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QPointingDevice.PointerTypes.enum_type f1, QPointingDevice.PointerTypes.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QPointingDevice.PointerTypes.enum_type f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QPointingDevice.PointerTypes.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QPointingDevice.PointerTypes.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QPointingDevice.PointerTypes.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QPointingDevice.PointerTypes.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QPointingDevice.PointerTypes.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QPointingDevice.PointerTypes operator ~(QPointingDevice.PointerTypes.enum_type e)/+noexcept+/{return~QPointingDevice.PointerTypes(e);}+/
-/+pragma(inline, true) void operator |(QPointingDevice.PointerTypes.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QPointingDevice.PointerTypes operator ~(QPointingDevice.PointerTypes.enum_type e)nothrow{return~QPointingDevice.PointerTypes(e);}+/
+/+pragma(inline, true) void operator |(QPointingDevice.PointerTypes.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QPointingDevice.PointerTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QPointingDevice.PointerTypes.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QPointingDevice::PointerTypes)

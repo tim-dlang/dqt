@@ -222,7 +222,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 
 } +/ //namespace QAlgorithmsPrivate
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint32 v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint32 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::popcount(v);
@@ -237,7 +237,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #endif +/
 }
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint8 v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint8 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::popcount(v);
@@ -249,7 +249,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #endif +/
 }
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint16 v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint16 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::popcount(v);
@@ -262,7 +262,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #endif +/
 }
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint64 v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint64 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::popcount(v);
@@ -279,7 +279,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #endif +/
 }
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(cpp_ulong   v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(cpp_ulong   v) nothrow
 {
     return qPopulationCount(static_cast!(quint64)(v));
 }
@@ -290,7 +290,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #undef QT_POPCOUNT_CONSTEXPR +/
 
 extern(C++, "QtPrivate") {
-pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint32 v)/+ noexcept+/
+pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint32 v) nothrow
 {
     // see http://graphics.stanford.edu/~seander/bithacks.html#ZerosOnRightParallel
     uint  c = 32; // c will be the number of zero bits on the right
@@ -304,14 +304,14 @@ pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint32 v)/+ noexcept+
     return c;
 }
 
-pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint64 v)/+ noexcept+/
+pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint64 v) nothrow
 {
     quint32 x = static_cast!(quint32)(v);
     return x ? qConstexprCountTrailingZeroBits(x)
              : 32 + qConstexprCountTrailingZeroBits(static_cast!(quint32)(v >> 32));
 }
 
-pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint8 v)/+ noexcept+/
+pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint8 v) nothrow
 {
     uint  c = 8; // c will be the number of zero bits on the right
     v &= cast(quint8) (-signed(v));
@@ -322,7 +322,7 @@ pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint8 v)/+ noexcept+/
     return c;
 }
 
-pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint16 v)/+ noexcept+/
+pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint16 v) nothrow
 {
     uint  c = 16; // c will be the number of zero bits on the right
     v &= cast(quint16) (-signed(v));
@@ -335,13 +335,13 @@ pragma(inline, true) uint qConstexprCountTrailingZeroBits(quint16 v)/+ noexcept+
 }
 
 // Disabled as a workaround for https://issues.dlang.org/show_bug.cgi?id=22813
-/*pragma(inline, true) uint qConstexprCountTrailingZeroBits(cpp_ulong  v)/+ noexcept+/
+/*pragma(inline, true) uint qConstexprCountTrailingZeroBits(cpp_ulong  v) nothrow
 {
     return qConstexprCountTrailingZeroBits(QIntegerForSizeof!(cpp_long).Unsigned(v));
 }*/
 }
 
-pragma(inline, true) uint qCountTrailingZeroBits(quint32 v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(quint32 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::countr_zero(v);
@@ -352,7 +352,7 @@ pragma(inline, true) uint qCountTrailingZeroBits(quint32 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountTrailingZeroBits(quint8 v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(quint8 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::countr_zero(v);
@@ -363,7 +363,7 @@ pragma(inline, true) uint qCountTrailingZeroBits(quint8 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountTrailingZeroBits(quint16 v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(quint16 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::countr_zero(v);
@@ -374,7 +374,7 @@ pragma(inline, true) uint qCountTrailingZeroBits(quint16 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountTrailingZeroBits(quint64 v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(quint64 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::countr_zero(v);
@@ -385,12 +385,12 @@ pragma(inline, true) uint qCountTrailingZeroBits(quint64 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountTrailingZeroBits(cpp_ulong  v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(cpp_ulong  v) nothrow
 {
     return qCountTrailingZeroBits(QIntegerForSizeof!(cpp_long).Unsigned(v));
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(quint32 v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(quint32 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::countl_zero(v);
@@ -407,7 +407,7 @@ pragma(inline, true) uint qCountLeadingZeroBits(quint32 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(quint8 v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(quint8 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::countl_zero(v);
@@ -421,7 +421,7 @@ pragma(inline, true) uint qCountLeadingZeroBits(quint8 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(quint16 v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(quint16 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::countl_zero(v);
@@ -436,7 +436,7 @@ pragma(inline, true) uint qCountLeadingZeroBits(quint16 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(quint64 v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(quint64 v) nothrow
 {
 /+ #if defined(__cpp_lib_bitops) && __cpp_lib_bitops >= 201907L
     return std::countl_zero(v);
@@ -453,7 +453,7 @@ pragma(inline, true) uint qCountLeadingZeroBits(quint64 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(cpp_ulong  v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(cpp_ulong  v) nothrow
 {
     return qCountLeadingZeroBits(QIntegerForSizeof!(cpp_long).Unsigned(v));
 }

@@ -91,7 +91,7 @@ private:
     }
 
 public:
-    /+ explicit +/this(P p/+ = null+/)/+ noexcept+/
+    /+ explicit +/this(P p/+ = null+/) nothrow
     {
         this.d = p;
     }
@@ -111,12 +111,12 @@ public:
         return *d;
     }
 
-    /+P operator ->() const/+ noexcept+/
+    /+P operator ->() const nothrow
     {
         return d;
     }+/
 
-    /+bool operator !() const/+ noexcept+/
+    /+bool operator !() const nothrow
     {
         return !d;
     }+/
@@ -126,19 +126,19 @@ public:
         return !isNull();
     }+/
 
-    P data() const/+ noexcept+/
+    P data() const nothrow
     {
         return cast(P)d;
     }
     
     alias data this;
 
-    P get() const/+ noexcept+/
+    P get() const nothrow
     {
         return cast(P)d;
     }
 
-    bool isNull() const/+ noexcept+/
+    bool isNull() const nothrow
     {
         return !d;
     }
@@ -153,7 +153,7 @@ public:
 
 /+ #if QT_DEPRECATED_SINCE(6, 1) +/
     /+ QT_DEPRECATED_VERSION_X_6_1("Use std::unique_ptr instead, and call release().") +/
-/+        T* take()/+ noexcept+/
+/+        T* take() nothrow
     {
         T* oldD = qExchange(d, cast(U && ) (null));
         return oldD;

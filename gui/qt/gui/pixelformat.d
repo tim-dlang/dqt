@@ -70,7 +70,7 @@ private:
     static assert(uint(FieldWidth.TotalFieldWidthByWidths) == uint(Field.TotalFieldWidthByOffsets));
     static assert(uint(FieldWidth.TotalFieldWidthByWidths) == 8 * quint64.sizeof);
 
-    pragma(inline, true) uchar get(Field offset, FieldWidth width) const/+ noexcept+/
+    pragma(inline, true) uchar get(Field offset, FieldWidth width) const nothrow
     { return cast(uchar) ((data >> uint(offset)) & ((1uL << uint(width)) - 1uL)); }
     pragma(inline, true) static quint64 set(Field offset, FieldWidth width, uchar value)
     { return (quint64(value) & ((1uL << uint(width)) - 1uL)) << uint(offset); }
@@ -136,7 +136,7 @@ public:
     }
 
     @disable this();
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.data = 0;
     }+/
@@ -152,7 +152,7 @@ public:
                                                AlphaPremultiplied premult,
                                                TypeInterpretation typeInterp,
                                                ByteOrder b_order = ByteOrder.CurrentSystemEndian,
-                                               uchar s_enum = 0)/+ noexcept+/
+                                               uchar s_enum = 0) nothrow
     {
         this.data = set(Field.ModelField, FieldWidth.ModelFieldWidth, cast(uchar) (mdl)) |
                    set(Field.FirstField, FieldWidth.FirstFieldWidth, firstSize) |
@@ -170,45 +170,45 @@ public:
                    set(Field.UnusedField, FieldWidth.UnusedFieldWidth, 0);
     }+/
 
-    pragma(inline, true) ColorModel colorModel() const/+  noexcept+/ { return cast(ColorModel) (get(Field.ModelField, FieldWidth.ModelFieldWidth)); }
-    pragma(inline, true) uchar channelCount() const/+ noexcept+/ { return cast(uchar) ((get(Field.FirstField, FieldWidth.FirstFieldWidth) > 0) +
+    pragma(inline, true) ColorModel colorModel() const  nothrow { return cast(ColorModel) (get(Field.ModelField, FieldWidth.ModelFieldWidth)); }
+    pragma(inline, true) uchar channelCount() const nothrow { return cast(uchar) ((get(Field.FirstField, FieldWidth.FirstFieldWidth) > 0) +
                                                                                  (get(Field.SecondField, FieldWidth.SecondFieldWidth) > 0) +
                                                                                  (get(Field.ThirdField, FieldWidth.ThirdFieldWidth) > 0) +
                                                                                  (get(Field.FourthField, FieldWidth.FourthFieldWidth) > 0) +
                                                                                  (get(Field.FifthField, FieldWidth.FifthFieldWidth) > 0) +
                                                                                  (get(Field.AlphaField, FieldWidth.AlphaFieldWidth) > 0)); }
 
-    pragma(inline, true) uchar redSize() const/+ noexcept+/ { return get(Field.FirstField, FieldWidth.FirstFieldWidth); }
-    pragma(inline, true) uchar greenSize() const/+ noexcept+/ { return get(Field.SecondField, FieldWidth.SecondFieldWidth); }
-    pragma(inline, true) uchar blueSize() const/+ noexcept+/ { return get(Field.ThirdField, FieldWidth.ThirdFieldWidth); }
+    pragma(inline, true) uchar redSize() const nothrow { return get(Field.FirstField, FieldWidth.FirstFieldWidth); }
+    pragma(inline, true) uchar greenSize() const nothrow { return get(Field.SecondField, FieldWidth.SecondFieldWidth); }
+    pragma(inline, true) uchar blueSize() const nothrow { return get(Field.ThirdField, FieldWidth.ThirdFieldWidth); }
 
-    pragma(inline, true) uchar cyanSize() const/+ noexcept+/ { return get(Field.FirstField, FieldWidth.FirstFieldWidth); }
-    pragma(inline, true) uchar magentaSize() const/+ noexcept+/ { return get(Field.SecondField, FieldWidth.SecondFieldWidth); }
-    pragma(inline, true) uchar yellowSize() const/+ noexcept+/ { return get(Field.ThirdField, FieldWidth.ThirdFieldWidth); }
-    pragma(inline, true) uchar blackSize() const/+ noexcept+/ { return get(Field.FourthField, FieldWidth.FourthFieldWidth); }
+    pragma(inline, true) uchar cyanSize() const nothrow { return get(Field.FirstField, FieldWidth.FirstFieldWidth); }
+    pragma(inline, true) uchar magentaSize() const nothrow { return get(Field.SecondField, FieldWidth.SecondFieldWidth); }
+    pragma(inline, true) uchar yellowSize() const nothrow { return get(Field.ThirdField, FieldWidth.ThirdFieldWidth); }
+    pragma(inline, true) uchar blackSize() const nothrow { return get(Field.FourthField, FieldWidth.FourthFieldWidth); }
 
-    pragma(inline, true) uchar hueSize() const/+ noexcept+/ { return get(Field.FirstField, FieldWidth.FirstFieldWidth); }
-    pragma(inline, true) uchar saturationSize() const/+ noexcept+/ { return get(Field.SecondField, FieldWidth.SecondFieldWidth); }
-    pragma(inline, true) uchar lightnessSize() const/+ noexcept+/ { return get(Field.ThirdField, FieldWidth.ThirdFieldWidth); }
-    pragma(inline, true) uchar brightnessSize() const/+ noexcept+/ { return get(Field.ThirdField, FieldWidth.ThirdFieldWidth); }
+    pragma(inline, true) uchar hueSize() const nothrow { return get(Field.FirstField, FieldWidth.FirstFieldWidth); }
+    pragma(inline, true) uchar saturationSize() const nothrow { return get(Field.SecondField, FieldWidth.SecondFieldWidth); }
+    pragma(inline, true) uchar lightnessSize() const nothrow { return get(Field.ThirdField, FieldWidth.ThirdFieldWidth); }
+    pragma(inline, true) uchar brightnessSize() const nothrow { return get(Field.ThirdField, FieldWidth.ThirdFieldWidth); }
 
-    pragma(inline, true) uchar alphaSize() const/+ noexcept+/ { return get(Field.AlphaField, FieldWidth.AlphaFieldWidth); }
+    pragma(inline, true) uchar alphaSize() const nothrow { return get(Field.AlphaField, FieldWidth.AlphaFieldWidth); }
 
-    pragma(inline, true) uchar bitsPerPixel() const/+ noexcept+/ { return cast(uchar) (get(Field.FirstField, FieldWidth.FirstFieldWidth) +
+    pragma(inline, true) uchar bitsPerPixel() const nothrow { return cast(uchar) (get(Field.FirstField, FieldWidth.FirstFieldWidth) +
                                                                                  get(Field.SecondField, FieldWidth.SecondFieldWidth) +
                                                                                  get(Field.ThirdField, FieldWidth.ThirdFieldWidth) +
                                                                                  get(Field.FourthField, FieldWidth.FourthFieldWidth) +
                                                                                  get(Field.FifthField, FieldWidth.FifthFieldWidth) +
                                                                                  get(Field.AlphaField, FieldWidth.AlphaFieldWidth)); }
 
-    pragma(inline, true) AlphaUsage alphaUsage() const/+ noexcept+/ { return cast(AlphaUsage) (get(Field.AlphaUsageField, FieldWidth.AlphaUsageFieldWidth)); }
-    pragma(inline, true) AlphaPosition alphaPosition() const/+ noexcept+/ { return cast(AlphaPosition) (get(Field.AlphaPositionField, FieldWidth.AlphaPositionFieldWidth)); }
-    pragma(inline, true) AlphaPremultiplied premultiplied() const/+ noexcept+/ { return cast(AlphaPremultiplied) (get(Field.PremulField, FieldWidth.PremulFieldWidth)); }
-    pragma(inline, true) TypeInterpretation typeInterpretation() const/+ noexcept+/ { return cast(TypeInterpretation) (get(Field.TypeInterpretationField, FieldWidth.TypeInterpretationFieldWidth)); }
-    pragma(inline, true) ByteOrder byteOrder() const/+ noexcept+/ { return cast(ByteOrder) (get(Field.ByteOrderField, FieldWidth.ByteOrderFieldWidth)); }
+    pragma(inline, true) AlphaUsage alphaUsage() const nothrow { return cast(AlphaUsage) (get(Field.AlphaUsageField, FieldWidth.AlphaUsageFieldWidth)); }
+    pragma(inline, true) AlphaPosition alphaPosition() const nothrow { return cast(AlphaPosition) (get(Field.AlphaPositionField, FieldWidth.AlphaPositionFieldWidth)); }
+    pragma(inline, true) AlphaPremultiplied premultiplied() const nothrow { return cast(AlphaPremultiplied) (get(Field.PremulField, FieldWidth.PremulFieldWidth)); }
+    pragma(inline, true) TypeInterpretation typeInterpretation() const nothrow { return cast(TypeInterpretation) (get(Field.TypeInterpretationField, FieldWidth.TypeInterpretationFieldWidth)); }
+    pragma(inline, true) ByteOrder byteOrder() const nothrow { return cast(ByteOrder) (get(Field.ByteOrderField, FieldWidth.ByteOrderFieldWidth)); }
 
-    pragma(inline, true) YUVLayout yuvLayout() const/+ noexcept+/ { return cast(YUVLayout) (get(Field.SubEnumField, FieldWidth.SubEnumFieldWidth)); }
-    pragma(inline, true) uchar subEnum() const/+ noexcept+/ { return get(Field.SubEnumField, FieldWidth.SubEnumFieldWidth); }
+    pragma(inline, true) YUVLayout yuvLayout() const nothrow { return cast(YUVLayout) (get(Field.SubEnumField, FieldWidth.SubEnumFieldWidth)); }
+    pragma(inline, true) uchar subEnum() const nothrow { return get(Field.SubEnumField, FieldWidth.SubEnumFieldWidth); }
 
 private:
     pragma(inline, true) static ByteOrder resolveByteOrder(ByteOrder bo)
@@ -247,7 +247,7 @@ extern(C++, "QtPrivate") {
                                                QPixelFormat.AlphaUsage usage,
                                                QPixelFormat.AlphaPosition position,
                                                QPixelFormat.AlphaPremultiplied pmul=QPixelFormat.AlphaPremultiplied.NotPremultiplied,
-                                               QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
+                                               QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger) nothrow
 {
     return QPixelFormat(QPixelFormat.ColorModel.RGB,
                         red,
@@ -263,7 +263,7 @@ extern(C++, "QtPrivate") {
 }
 
 pragma(inline, true) QPixelFormat qPixelFormatGrayscale(uchar channelSize,
-                                                    QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
+                                                    QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger) nothrow
 {
     return QPixelFormat(QPixelFormat.ColorModel.Grayscale,
                         channelSize,
@@ -279,7 +279,7 @@ pragma(inline, true) QPixelFormat qPixelFormatGrayscale(uchar channelSize,
 }
 
 pragma(inline, true) QPixelFormat qPixelFormatAlpha(uchar channelSize,
-                                                QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
+                                                QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger) nothrow
 {
     return QPixelFormat(QPixelFormat.ColorModel.Alpha,
                         0,
@@ -298,7 +298,7 @@ pragma(inline, true) QPixelFormat qPixelFormatCmyk(uchar channelSize,
                                                uchar alfa=0,
                                                QPixelFormat.AlphaUsage usage=QPixelFormat.AlphaUsage.IgnoresAlpha,
                                                QPixelFormat.AlphaPosition position=QPixelFormat.AlphaPosition.AtBeginning,
-                                               QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger)/+ noexcept+/
+                                               QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.UnsignedInteger) nothrow
 {
     return QPixelFormat(QPixelFormat.ColorModel.CMYK,
                         channelSize,
@@ -317,7 +317,7 @@ pragma(inline, true) QPixelFormat qPixelFormatHsl(uchar channelSize,
                                               uchar alfa=0,
                                               QPixelFormat.AlphaUsage usage=QPixelFormat.AlphaUsage.IgnoresAlpha,
                                               QPixelFormat.AlphaPosition position=QPixelFormat.AlphaPosition.AtBeginning,
-                                              QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.FloatingPoint)/+ noexcept+/
+                                              QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.FloatingPoint) nothrow
 {
     return QPixelFormat(QPixelFormat.ColorModel.HSL,
                         channelSize,
@@ -336,7 +336,7 @@ pragma(inline, true) QPixelFormat qPixelFormatHsv(uchar channelSize,
                                               uchar alfa=0,
                                               QPixelFormat.AlphaUsage usage=QPixelFormat.AlphaUsage.IgnoresAlpha,
                                               QPixelFormat.AlphaPosition position=QPixelFormat.AlphaPosition.AtBeginning,
-                                              QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.FloatingPoint)/+ noexcept+/
+                                              QPixelFormat.TypeInterpretation typeInt=QPixelFormat.TypeInterpretation.FloatingPoint) nothrow
 {
     return QPixelFormat(QPixelFormat.ColorModel.HSV,
                         channelSize,

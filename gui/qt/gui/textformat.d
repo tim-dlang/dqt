@@ -391,30 +391,30 @@ private:
 }
 
 /+ Q_DECLARE_SHARED(QTextFormat) +/
-/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator |(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator |(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator &(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator &(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator ^(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator ^(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QTextFormat.PageBreakFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator |(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)nothrow{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator |(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator &(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)nothrow{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator &(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator ^(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)nothrow{return QFlags!(QTextFormat.PageBreakFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QTextFormat.PageBreakFlags.enum_type) operator ^(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, QTextFormat.PageBreakFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QTextFormat.PageBreakFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QTextFormat.PageBreakFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QTextFormat.PageBreakFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QTextFormat.PageBreakFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QTextFormat.PageBreakFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QTextFormat.PageBreakFlags operator ~(QTextFormat.PageBreakFlags.enum_type e)/+noexcept+/{return~QTextFormat.PageBreakFlags(e);}+/
-/+pragma(inline, true) void operator |(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QTextFormat.PageBreakFlags operator ~(QTextFormat.PageBreakFlags.enum_type e)nothrow{return~QTextFormat.PageBreakFlags(e);}+/
+/+pragma(inline, true) void operator |(QTextFormat.PageBreakFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QTextFormat.PageBreakFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QTextFormat.PageBreakFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextFormat::PageBreakFlags) +/

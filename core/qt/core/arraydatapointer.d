@@ -37,14 +37,14 @@ public:
 //    alias parameter_type = /+ std:: +/conditional!(pass_parameter_by_value, T, ref const(T)).type;
     alias parameter_type = T; // TODO: ref
 
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.d = null;
         this.ptr = null;
         this.size = 0;
     }+/
 
-    /*this(ref const(QArrayDataPointer) other)/+ noexcept+/
+    /*this(ref const(QArrayDataPointer) other) nothrow
     {
         this.d = other.d;
         this.ptr = other.ptr;
@@ -57,27 +57,27 @@ public:
         ref_();
     }
 
-    this(Data* header, T* adata, qsizetype n = 0)/+ noexcept+/
+    this(Data* header, T* adata, qsizetype n = 0) nothrow
     {
         this.d = header;
         this.ptr = adata;
         this.size = n;
     }
 
-    /+ explicit +/this(qt.core.pair.QPair!(QTypedArrayData!(T)*, T*) adata, qsizetype n = 0)/+ noexcept+/
+    /+ explicit +/this(qt.core.pair.QPair!(QTypedArrayData!(T)*, T*) adata, qsizetype n = 0) nothrow
     {
         this.d = adata.first;
         this.ptr = adata.second;
         this.size = n;
     }
 
-    static QArrayDataPointer fromRawData(const(T)* rawData, qsizetype length)/+ noexcept+/
+    static QArrayDataPointer fromRawData(const(T)* rawData, qsizetype length) nothrow
     {
         (mixin(Q_ASSERT(q{rawData || !length})));
         return QArrayDataPointer( null, const_cast!(T*)(rawData), length) ;
     }
 
-    /+ref QArrayDataPointer opAssign(ref const(QArrayDataPointer) other)/+ noexcept+/
+    /+ref QArrayDataPointer opAssign(ref const(QArrayDataPointer) other) nothrow
     {
         auto tmp = QArrayDataPointer(other);
         this.swap(tmp);
@@ -94,22 +94,22 @@ public:
 
     /+ QT_MOVE_ASSIGNMENT_OPERATOR_IMPL_VIA_MOVE_AND_SWAP(QArrayDataPointer) +/
 
-    /*ref DataOps opUnary(string op)()/+ noexcept+/ if (op == "*")
+    /*ref DataOps opUnary(string op)() nothrow if (op == "*")
     {
         return *static_cast!(DataOps*)(&this);
     }*/
 
-    /+DataOps* operator ->()/+ noexcept+/
+    /+DataOps* operator ->() nothrow
     {
         return static_cast!(DataOps*)(&this);
     }+/
 
-    /*ref const(DataOps) opUnary(string op)() const/+ noexcept+/ if (op == "*")
+    /*ref const(DataOps) opUnary(string op)() const nothrow if (op == "*")
     {
         return *static_cast!(const(DataOps)*)(&this);
     }*/
 
-    /+const(DataOps)* operator ->() const/+ noexcept+/
+    /+const(DataOps)* operator ->() const nothrow
     {
         return static_cast!(const(DataOps)*)(&this);
     }+/
@@ -122,22 +122,22 @@ public:
         }
     }
 
-    bool isNull() const/+ noexcept+/
+    bool isNull() const nothrow
     {
         return !ptr;
     }
 
-    T* data()/+ noexcept+/ { return ptr; }
-    const(T)* data() const/+ noexcept+/ { return ptr; }
+    T* data() nothrow { return ptr; }
+    const(T)* data() const nothrow { return ptr; }
 
-    T* begin()/+ noexcept+/ { return data(); }
-    T* end()/+ noexcept+/ { return data() + size; }
-    const(T)* begin() const/+ noexcept+/ { return data(); }
-    const(T)* end() const/+ noexcept+/ { return data() + size; }
-    const(T)* constBegin() const/+ noexcept+/ { return data(); }
-    const(T)* constEnd() const/+ noexcept+/ { return data() + size; }
+    T* begin() nothrow { return data(); }
+    T* end() nothrow { return data() + size; }
+    const(T)* begin() const nothrow { return data(); }
+    const(T)* end() const nothrow { return data() + size; }
+    const(T)* constBegin() const nothrow { return data(); }
+    const(T)* constEnd() const nothrow { return data() + size; }
 
-    void swap(ref QArrayDataPointer other) /+ noexcept +/
+    void swap(ref QArrayDataPointer other) nothrow
     {
         import std.algorithm;
         std.algorithm.swap(d, other.d);
@@ -345,30 +345,30 @@ public:
     }
 
     // forwards from QArrayData
-    qsizetype allocatedCapacity()/+ noexcept+/ { return d ? d.allocatedCapacity() : 0; }
-    qsizetype constAllocatedCapacity() const/+ noexcept+/ { return d ? d.constAllocatedCapacity() : 0; }
-    void ref_()/+ noexcept+/ { if (d) d.ref_(); }
-    bool deref()/+ noexcept+/ { return !d || d.deref(); }
-    bool isMutable() const/+ noexcept+/ { return cast(bool) (d); }
-    bool isShared() const/+ noexcept+/ { return !d || d.isShared(); }
-    bool isSharedWith(ref const(QArrayDataPointer) other) const/+ noexcept+/ { return d && d == other.d; }
-    bool needsDetach() const/+ noexcept+/ { return !d || d.needsDetach(); }
-    qsizetype detachCapacity(qsizetype newSize) const/+ noexcept+/ { return d ? d.detachCapacity(newSize) : newSize; }
-    const(Data.ArrayOptions) flags() const/+ noexcept+/ { return d ? d.flags : Data.ArrayOptions.ArrayOptionDefault; }
-    void setFlag(Data.ArrayOptions f)/+ noexcept+/ { assert(d); d.flags |= f; }
-    void clearFlag(Data.ArrayOptions f)/+ noexcept+/ { if (d) d.flags &= ~f; }
+    qsizetype allocatedCapacity() nothrow { return d ? d.allocatedCapacity() : 0; }
+    qsizetype constAllocatedCapacity() const nothrow { return d ? d.constAllocatedCapacity() : 0; }
+    void ref_() nothrow { if (d) d.ref_(); }
+    bool deref() nothrow { return !d || d.deref(); }
+    bool isMutable() const nothrow { return cast(bool) (d); }
+    bool isShared() const nothrow { return !d || d.isShared(); }
+    bool isSharedWith(ref const(QArrayDataPointer) other) const nothrow { return d && d == other.d; }
+    bool needsDetach() const nothrow { return !d || d.needsDetach(); }
+    qsizetype detachCapacity(qsizetype newSize) const nothrow { return d ? d.detachCapacity(newSize) : newSize; }
+    const(Data.ArrayOptions) flags() const nothrow { return d ? d.flags : Data.ArrayOptions.ArrayOptionDefault; }
+    void setFlag(Data.ArrayOptions f) nothrow { assert(d); d.flags |= f; }
+    void clearFlag(Data.ArrayOptions f) nothrow { if (d) d.flags &= ~f; }
 
-    Data* d_ptr()/+ noexcept+/ { return d; }
-    void setBegin(T* begin)/+ noexcept+/ { ptr = begin; }
+    Data* d_ptr() nothrow { return d; }
+    void setBegin(T* begin) nothrow { ptr = begin; }
 
-    qsizetype freeSpaceAtBegin() const/+ noexcept+/
+    qsizetype freeSpaceAtBegin() const nothrow
     {
         if (d is null)
             return 0;
         return this.ptr - Data.dataStart(cast(QArrayData*)d, Data.AlignmentDummy.alignof);
     }
 
-    qsizetype freeSpaceAtEnd() const/+ noexcept+/
+    qsizetype freeSpaceAtEnd() const nothrow
     {
         if (d is null)
             return 0;

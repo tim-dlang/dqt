@@ -37,7 +37,7 @@ public:
     enum Mode { Normal, Disabled, Active, Selected }
     enum State { On, Off }
 
-    /+this()/+ noexcept+/;+/
+    /+this() nothrow;+/
 
     this(ref const(QPixmap) pixmap);
     @disable this(this);

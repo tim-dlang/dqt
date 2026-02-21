@@ -62,30 +62,30 @@ private:
     /+ friend class QDir; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator |(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)/+noexcept+/{return QFlags!(QDirIterator.IteratorFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator |(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator &(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)/+noexcept+/{return QFlags!(QDirIterator.IteratorFlags.enum_type)(f1)&f2;}+/
-/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator &(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)/+noexcept+/{return f2&f1;}+/
-/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator ^(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)/+noexcept+/{return QFlags!(QDirIterator.IteratorFlags.enum_type)(f1)^f2;}+/
-/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator ^(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)/+noexcept+/{return f2^f1;}+/
-/+pragma(inline, true) void operator +(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(int f1, QDirIterator.IteratorFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator +(QDirIterator.IteratorFlags.enum_type f1, int f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(int f1, QDirIterator.IteratorFlags.enum_type f2)/+noexcept+/;+/
-/+pragma(inline, true) void operator -(QDirIterator.IteratorFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator |(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)nothrow{return QFlags!(QDirIterator.IteratorFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator |(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator &(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)nothrow{return QFlags!(QDirIterator.IteratorFlags.enum_type)(f1)&f2;}+/
+/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator &(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)nothrow{return f2&f1;}+/
+/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator ^(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)nothrow{return QFlags!(QDirIterator.IteratorFlags.enum_type)(f1)^f2;}+/
+/+pragma(inline, true) QFlags!(QDirIterator.IteratorFlags.enum_type) operator ^(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)nothrow{return f2^f1;}+/
+/+pragma(inline, true) void operator +(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(QDirIterator.IteratorFlags.enum_type f1, QDirIterator.IteratorFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QDirIterator.IteratorFlags.enum_type f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QFlags!(QDirIterator.IteratorFlags.enum_type) f2)nothrow;+/
+/+pragma(inline, true) void operator +(int f1, QDirIterator.IteratorFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator +(QDirIterator.IteratorFlags.enum_type f1, int f2)nothrow;+/
+/+pragma(inline, true) void operator -(int f1, QDirIterator.IteratorFlags.enum_type f2)nothrow;+/
+/+pragma(inline, true) void operator -(QDirIterator.IteratorFlags.enum_type f1, int f2)nothrow;+/
 static if (defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QDirIterator.IteratorFlags operator ~(QDirIterator.IteratorFlags.enum_type e)/+noexcept+/{return~QDirIterator.IteratorFlags(e);}+/
-/+pragma(inline, true) void operator |(QDirIterator.IteratorFlags.enum_type f1, int f2)/+noexcept+/;+/
+/+pragma(inline, true) QDirIterator.IteratorFlags operator ~(QDirIterator.IteratorFlags.enum_type e)nothrow{return~QDirIterator.IteratorFlags(e);}+/
+/+pragma(inline, true) void operator |(QDirIterator.IteratorFlags.enum_type f1, int f2)nothrow;+/
 }
 static if (!defined!"QT_TYPESAFE_FLAGS")
 {
-/+pragma(inline, true) QIncompatibleFlag operator |(QDirIterator.IteratorFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QDirIterator.IteratorFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 }
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QDirIterator::IteratorFlags) +/

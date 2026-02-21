@@ -28,25 +28,25 @@ import std.traits;
 extern(C++, "QtPrivate") {
 
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/
-bool startsWith(QByteArrayView haystack, QByteArrayView needle)/+ noexcept+/;
+bool startsWith(QByteArrayView haystack, QByteArrayView needle) nothrow;
 
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/
-bool endsWith(QByteArrayView haystack, QByteArrayView needle)/+ noexcept+/;
+bool endsWith(QByteArrayView haystack, QByteArrayView needle) nothrow;
 
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/
-qsizetype findByteArray(QByteArrayView haystack, qsizetype from, QByteArrayView needle)/+ noexcept+/;
+qsizetype findByteArray(QByteArrayView haystack, qsizetype from, QByteArrayView needle) nothrow;
 
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/
-qsizetype lastIndexOf(QByteArrayView haystack, qsizetype from, QByteArrayView needle)/+ noexcept+/;
+qsizetype lastIndexOf(QByteArrayView haystack, qsizetype from, QByteArrayView needle) nothrow;
 
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/
-qsizetype count(QByteArrayView haystack, QByteArrayView needle)/+ noexcept+/;
+qsizetype count(QByteArrayView haystack, QByteArrayView needle) nothrow;
 
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ int compareMemory(QByteArrayView lhs, QByteArrayView rhs);
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ QByteArrayView trimmed(QByteArrayView s)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ QByteArrayView trimmed(QByteArrayView s) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isValidUtf8(QByteArrayView s)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ bool isValidUtf8(QByteArrayView s) nothrow;
 
 extern(C++, class) struct ParsedNumber(T)
 {
@@ -54,21 +54,21 @@ private:
     T m_value;
     /+ quint32 m_error : 1; +/
     uint bitfieldData_m_error = 1;
-    quint32 m_error() const
+    quint32 m_error() const nothrow
     {
         return (bitfieldData_m_error >> 0) & 0x1;
     }
-    quint32 m_error(quint32 value)
+    quint32 m_error(quint32 value) nothrow
     {
         bitfieldData_m_error = (bitfieldData_m_error & ~0x1) | ((value & 0x1) << 0);
         return value;
     }
     /+ quint32 m_reserved : 31; +/
-    quint32 m_reserved() const
+    quint32 m_reserved() const nothrow
     {
         return (bitfieldData_m_error >> 1) & 0x7fffffff;
     }
-    quint32 m_reserved(quint32 value)
+    quint32 m_reserved(quint32 value) nothrow
     {
         bitfieldData_m_error = (bitfieldData_m_error & ~0xfffffffe) | ((value & 0x7fffffff) << 1);
         return value;
@@ -76,7 +76,7 @@ private:
     void* m_reserved2 = null;
 public:
     @disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.m_value = typeof(this.m_value)();
         this.m_error = true;
@@ -90,18 +90,18 @@ public:
     }
 
     // minimal optional-like API:
-    /+ explicit +/ auto opCast(T : bool)() const/+ noexcept+/ { return !m_error; }
+    /+ explicit +/ auto opCast(T : bool)() const nothrow { return !m_error; }
     ref T opUnary(string op)() if (op == "*") { (mixin(Q_ASSERT(q{*this}))); return m_value; }
     ref const(T) opUnary(string op)() const if (op == "*") { (mixin(Q_ASSERT(q{*this}))); return m_value; }
-    /+T* operator ->()/+ noexcept+/ { return this ? &m_value : null; }+/
-    /+const(T)* operator ->() const/+ noexcept+/ { return this ? &m_value : null; }+/
+    /+T* operator ->() nothrow { return this ? &m_value : null; }+/
+    /+const(T)* operator ->() const nothrow { return this ? &m_value : null; }+/
     /+ template <typename U> +/ // not = T, as that'd allow calls that are incompatible with std::optional
     /+ T value_or(U &&u) const { return *this ? m_value : T(std::forward<U>(u)); } +/
     T value_or(U)(U u) const { return *this ? m_value : T(u); }
 }
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ ParsedNumber!(double) toDouble(QByteArrayView a)/+ noexcept+/;
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ ParsedNumber!(float) toFloat(QByteArrayView a)/+ noexcept+/;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ ParsedNumber!(double) toDouble(QByteArrayView a) nothrow;
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ ParsedNumber!(float) toFloat(QByteArrayView a) nothrow;
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ ParsedNumber!(qlonglong) toSignedInteger(QByteArrayView data, int base);
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ ParsedNumber!(qulonglong) toUnsignedInteger(QByteArrayView data, int base);
 
@@ -131,7 +131,7 @@ pragma(inline, true) T toIntegral(T, ByteArrayView,
 
 /+ Q_CORE_EXPORT +/ char* qstrdup(const(char)* );
 
-pragma(inline, true) size_t qstrlen(const(char)* str)
+pragma(inline, true) size_t qstrlen(const(char)* str) nothrow
 {
     import core.stdc.string;
 
@@ -145,7 +145,7 @@ pragma(inline, true) size_t qstrlen(const(char)* str)
     /+ QT_WARNING_POP +/
 }
 
-pragma(inline, true) size_t qstrnlen(const(char)* str, size_t maxlen)
+pragma(inline, true) size_t qstrnlen(const(char)* str, size_t maxlen) nothrow
 {
     import core.stdc.string;
 
