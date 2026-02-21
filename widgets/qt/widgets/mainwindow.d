@@ -203,8 +203,8 @@ private:
     /+ Q_DISABLE_COPY(QMainWindow) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator |(QMainWindow.DockOptions.enum_type f1, QMainWindow.DockOptions.enum_type f2)/+noexcept+/{return QFlags!(QMainWindow.DockOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator |(QMainWindow.DockOptions.enum_type f1, QFlags!(QMainWindow.DockOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QMainWindow.DockOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator |(QMainWindow.DockOptions.enum_type f1, QMainWindow.DockOptions.enum_type f2)nothrow{return QFlags!(QMainWindow.DockOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QMainWindow.DockOptions.enum_type) operator |(QMainWindow.DockOptions.enum_type f1, QFlags!(QMainWindow.DockOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QMainWindow.DockOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QMainWindow::DockOptions) +/

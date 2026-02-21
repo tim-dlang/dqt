@@ -40,13 +40,13 @@ Q_FORWARD_DECLARE_OBJC_CLASS(NSData);
 
 /+ Q_CORE_EXPORT +/ char* qstrdup(const(char)* );
 
-pragma(inline, true) uint qstrlen(const(char)* str)
+pragma(inline, true) uint qstrlen(const(char)* str) nothrow
 {
     import core.stdc.string;
     return str ? cast(uint) (strlen(str)) : 0;
 }
 
-pragma(inline, true) uint qstrnlen(const(char)* str, uint maxlen)
+pragma(inline, true) uint qstrnlen(const(char)* str, uint maxlen) nothrow
 {
     uint length = 0;
     if (str) {
@@ -154,7 +154,7 @@ alias Base64Options = QFlags!(Base64Option);
     version (Windows)
     {
         @disable this();
-        pragma(inline, true) void rawConstructor()/+ noexcept+/
+        pragma(inline, true) void rawConstructor() nothrow
         {
             this.d = Data.sharedNull();
         }
@@ -177,14 +177,14 @@ alias Base64Options = QFlags!(Base64Option);
     this(int size, char c);
     this(int size, /+ Qt:: +/qt.core.namespace.Initialization);
     @disable this(this);
-    pragma(inline, true) this(ref const(QByteArray) a)/+ noexcept+/
+    pragma(inline, true) this(ref const(QByteArray) a) nothrow
     {
         this.d = cast(Data*)a.d;
         d.ref_.ref_();
     }
     pragma(inline, true) ~this() { if (!d.ref_.deref()) Data.deallocate(d); }
 
-    ref QByteArray opAssign(ref const(QByteArray) )/+ noexcept+/;
+    ref QByteArray opAssign(ref const(QByteArray) ) nothrow;
     ref QByteArray opAssign(const(char)* str);
     /+ inline QByteArray(QByteArray && other) noexcept : d(other.d) { other.d = Data::sharedNull(); } +/
     /+ inline QByteArray &operator=(QByteArray &&other) noexcept
@@ -193,9 +193,9 @@ alias Base64Options = QFlags!(Base64Option);
     /+ inline void swap(QByteArray &other) noexcept
     { qSwap(d, other.d); } +/
 
-    pragma(inline, true) int size() const
+    pragma(inline, true) int size() const nothrow
     { return d.size; }
-    pragma(inline, true) bool isEmpty() const
+    pragma(inline, true) bool isEmpty() const nothrow
     { return d.size == 0; }
     void resize(int size);
 
@@ -231,16 +231,16 @@ alias Base64Options = QFlags!(Base64Option);
     }
     pragma(inline, true) char* data()
     { detach(); return cast(char*) (d.data()); }
-    pragma(inline, true) const(char)* data() const
+    pragma(inline, true) const(char)* data() const nothrow
     { return cast(const(char)*) (d.data()); }
-    pragma(inline, true) const(char)* constData() const
+    pragma(inline, true) const(char)* constData() const nothrow
     { return cast(const(char)*) (d.data()); }
 
-    extern(D) const(ubyte)[] toConstUByteArray() const
+    extern(D) const(ubyte)[] toConstUByteArray() const nothrow
     {
         return (cast(const(ubyte)*) constData())[0..length];
     }
-    extern(D) const(char)[] toConstCharArray() const
+    extern(D) const(char)[] toConstCharArray() const nothrow
     {
         return (cast(const(char)*) constData())[0..length];
     }
@@ -284,12 +284,12 @@ alias Base64Options = QFlags!(Base64Option);
     int count(const(char)* a) const;
     int count(ref const(QByteArray) a) const;
 
-    pragma(inline, true) int compare(const(char)* c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    pragma(inline, true) int compare(const(char)* c, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const /*nothrow*/
     {
         return cs == /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive ? qstrcmp(this, c) :
                                          qstrnicmp(data(), size(), c, -1);
     }
-    pragma(inline, true) int compare(ref const(QByteArray) a, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const/+ noexcept+/
+    pragma(inline, true) int compare(ref const(QByteArray) a, /+ Qt:: +/qt.core.namespace.CaseSensitivity cs = /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive) const /*nothrow*/
     {
         return cs == /+ Qt:: +/qt.core.namespace.CaseSensitivity.CaseSensitive ? qstrcmp(this, a) :
                                          qstrnicmp(data(), size(), a.data(), a.size());
@@ -479,11 +479,11 @@ alias Base64Options = QFlags!(Base64Option);
             qSwap(decodingStatus, other.decodingStatus);
         } +/
 
-        /+/+ explicit +/ auto opCast(T : bool)() const/+ noexcept+/ { return decodingStatus == QByteArray.Base64DecodingStatus.Ok; }+/
+        /+/+ explicit +/ auto opCast(T : bool)() const nothrow { return decodingStatus == QByteArray.Base64DecodingStatus.Ok; }+/
 
     /+ #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(Q_QDOC) +/
-        ref QByteArray opUnary(string op)()/+ & noexcept+/ if (op == "*") { return decoded; }
-        ref const(QByteArray) opUnary(string op)() const/+ & noexcept+/ if (op == "*") { return decoded; }
+        ref QByteArray opUnary(string op)()/+ & +/nothrow if (op == "*") { return decoded; }
+        ref const(QByteArray) opUnary(string op)() const/+ & +/nothrow if (op == "*") { return decoded; }
         /+ QByteArray &&operator*() && noexcept { return std::move(decoded); } +/
     /+ #else
         QByteArray &operator*() noexcept { return decoded; }
@@ -565,8 +565,8 @@ alias Base64Options = QFlags!(Base64Option);
     /+ static inline QByteArray fromStdString(const std::string &s); +/
     /+ inline std::string toStdString() const; +/
 
-    pragma(inline, true) int count() const { return d.size; }
-    int length() const { return d.size; }
+    pragma(inline, true) int count() const nothrow { return d.size; }
+    int length() const nothrow { return d.size; }
     bool isNull() const;
 
     pragma(inline, true) this(QByteArrayDataPtr dd)
@@ -617,9 +617,9 @@ public:
     pragma(inline, true) ref DataPtr data_ptr() return { return d; }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QByteArray.Base64Options.enum_type) operator |(QByteArray.Base64Options.enum_type f1, QByteArray.Base64Options.enum_type f2)/+noexcept+/{return QFlags!(QByteArray.Base64Options.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QByteArray.Base64Options.enum_type) operator |(QByteArray.Base64Options.enum_type f1, QFlags!(QByteArray.Base64Options.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QByteArray.Base64Options.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QByteArray.Base64Options.enum_type) operator |(QByteArray.Base64Options.enum_type f1, QByteArray.Base64Options.enum_type f2)nothrow{return QFlags!(QByteArray.Base64Options.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QByteArray.Base64Options.enum_type) operator |(QByteArray.Base64Options.enum_type f1, QFlags!(QByteArray.Base64Options.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QByteArray.Base64Options.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QByteArray::Base64Options)#ifndef QT_NO_CAST_FROM_BYTEARRAY
 #endif +/
@@ -705,44 +705,44 @@ public:
     { return a.d.data()[i] <= c; }+/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) bool operator ==(ref const(QByteArray) a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(ref const(QByteArray) a1, ref const(QByteArray) a2) nothrow
 {
     import core.stdc.string;
     return (a1.size() == a2.size()) && (memcmp(a1.constData(), a2.constData(), a1.size())==0);
 }+/
-/+pragma(inline, true) bool operator ==(ref const(QByteArray) a1, const(char)* a2)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(ref const(QByteArray) a1, const(char)* a2) nothrow
 { return a2 ? qstrcmp(a1,a2) == 0 : a1.isEmpty(); }+/
-/+pragma(inline, true) bool operator ==(const(char)* a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(const(char)* a1, ref const(QByteArray) a2) nothrow
 { return a1 ? qstrcmp(a1,a2) == 0 : a2.isEmpty(); }+/
-/+pragma(inline, true) bool operator !=(ref const(QByteArray) a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(ref const(QByteArray) a1, ref const(QByteArray) a2) nothrow
 { return !(a1==a2); }+/
-/+pragma(inline, true) bool operator !=(ref const(QByteArray) a1, const(char)* a2)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(ref const(QByteArray) a1, const(char)* a2) nothrow
 { return a2 ? qstrcmp(a1,a2) != 0 : !a1.isEmpty(); }+/
-/+pragma(inline, true) bool operator !=(const(char)* a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(const(char)* a1, ref const(QByteArray) a2) nothrow
 { return a1 ? qstrcmp(a1,a2) != 0 : !a2.isEmpty(); }+/
-/+pragma(inline, true) bool operator <(ref const(QByteArray) a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator <(ref const(QByteArray) a1, ref const(QByteArray) a2) nothrow
 { return qstrcmp(a1, a2) < 0; }+/
- /+pragma(inline, true) bool operator <(ref const(QByteArray) a1, const(char)* a2)/+ noexcept+/
+ /+pragma(inline, true) bool operator <(ref const(QByteArray) a1, const(char)* a2) nothrow
 { return qstrcmp(a1, a2) < 0; }+/
-/+pragma(inline, true) bool operator <(const(char)* a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator <(const(char)* a1, ref const(QByteArray) a2) nothrow
 { return qstrcmp(a1, a2) < 0; }+/
-/+pragma(inline, true) bool operator <=(ref const(QByteArray) a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator <=(ref const(QByteArray) a1, ref const(QByteArray) a2) nothrow
 { return qstrcmp(a1, a2) <= 0; }+/
-/+pragma(inline, true) bool operator <=(ref const(QByteArray) a1, const(char)* a2)/+ noexcept+/
+/+pragma(inline, true) bool operator <=(ref const(QByteArray) a1, const(char)* a2) nothrow
 { return qstrcmp(a1, a2) <= 0; }+/
-/+pragma(inline, true) bool operator <=(const(char)* a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator <=(const(char)* a1, ref const(QByteArray) a2) nothrow
 { return qstrcmp(a1, a2) <= 0; }+/
-/+pragma(inline, true) bool operator >(ref const(QByteArray) a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator >(ref const(QByteArray) a1, ref const(QByteArray) a2) nothrow
 { return qstrcmp(a1, a2) > 0; }+/
-/+pragma(inline, true) bool operator >(ref const(QByteArray) a1, const(char)* a2)/+ noexcept+/
+/+pragma(inline, true) bool operator >(ref const(QByteArray) a1, const(char)* a2) nothrow
 { return qstrcmp(a1, a2) > 0; }+/
-/+pragma(inline, true) bool operator >(const(char)* a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator >(const(char)* a1, ref const(QByteArray) a2) nothrow
 { return qstrcmp(a1, a2) > 0; }+/
-/+pragma(inline, true) bool operator >=(ref const(QByteArray) a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator >=(ref const(QByteArray) a1, ref const(QByteArray) a2) nothrow
 { return qstrcmp(a1, a2) >= 0; }+/
-/+pragma(inline, true) bool operator >=(ref const(QByteArray) a1, const(char)* a2)/+ noexcept+/
+/+pragma(inline, true) bool operator >=(ref const(QByteArray) a1, const(char)* a2) nothrow
 { return qstrcmp(a1, a2) >= 0; }+/
-/+pragma(inline, true) bool operator >=(const(char)* a1, ref const(QByteArray) a2)/+ noexcept+/
+/+pragma(inline, true) bool operator >=(const(char)* a1, ref const(QByteArray) a2) nothrow
 { return qstrcmp(a1, a2) >= 0; }+/
 version (QT_USE_QSTRINGBUILDER) {} else
 {
@@ -784,7 +784,7 @@ pragma(inline, true) QByteArray qUncompress(ref const(QByteArray) data)
 
 Q_DECLARE_SHARED(QByteArray::FromBase64Result) +/
 
-/+pragma(inline, true) bool operator ==(ref const(QByteArray.FromBase64Result) lhs, ref const(QByteArray.FromBase64Result) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(ref const(QByteArray.FromBase64Result) lhs, ref const(QByteArray.FromBase64Result) rhs) nothrow
 {
     if (lhs.decodingStatus != rhs.decodingStatus)
         return false;
@@ -795,7 +795,7 @@ Q_DECLARE_SHARED(QByteArray::FromBase64Result) +/
     return true;
 }+/
 
-/+pragma(inline, true) bool operator !=(ref const(QByteArray.FromBase64Result) lhs, ref const(QByteArray.FromBase64Result) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(ref const(QByteArray.FromBase64Result) lhs, ref const(QByteArray.FromBase64Result) rhs) nothrow
 {
     return !operator==(lhs, rhs);
 }+/

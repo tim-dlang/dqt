@@ -32,37 +32,37 @@ public:
         this.xp = 0;
         this.yp = 0;
     }+/
-    pragma(inline, true) this(int xpos, int ypos)
+    pragma(inline, true) this(int xpos, int ypos) nothrow
     {
         this.xp = xpos;
         this.yp = ypos;
     }
 
-    pragma(inline, true) bool isNull() const
+    pragma(inline, true) bool isNull() const nothrow
     { return xp == 0 && yp == 0; }
 
-    pragma(inline, true) int x() const
+    pragma(inline, true) int x() const nothrow
     { return xp; }
-    pragma(inline, true) int y() const
+    pragma(inline, true) int y() const nothrow
     { return yp; }
-    pragma(inline, true) void setX(int xpos)
+    pragma(inline, true) void setX(int xpos) nothrow
     { xp = xpos; }
-    pragma(inline, true) void setY(int ypos)
+    pragma(inline, true) void setY(int ypos) nothrow
     { yp = ypos; }
 
-    pragma(inline, true) int manhattanLength() const
+    pragma(inline, true) int manhattanLength() const nothrow
     { return qAbs(x())+qAbs(y()); }
 
-    QPoint transposed() const/+ noexcept+/ { return QPoint(yp, xp); }
+    QPoint transposed() const nothrow { return QPoint(yp, xp); }
 
-    pragma(inline, true) ref int rx() return
+    pragma(inline, true) ref int rx() nothrow return
     { return xp; }
-    pragma(inline, true) ref int ry() return
+    pragma(inline, true) ref int ry() nothrow return
     { return yp; }
 
-    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if (op == "+")
+    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) nothrow if (op == "+")
     { xp+=p.xp; yp+=p.yp; return this; }
-    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) if (op == "-")
+    pragma(inline, true) ref QPoint opOpAssign(string op)(ref const(QPoint) p) nothrow if (op == "-")
     { xp-=p.xp; yp-=p.yp; return this; }
 
     /+pragma(inline, true) ref QPoint operator *=(float factor)
@@ -79,14 +79,14 @@ public:
         return this;
     }+/
 
-    pragma(inline, true) static int dotProduct(ref const(QPoint) p1, ref const(QPoint) p2)
+    pragma(inline, true) static int dotProduct(ref const(QPoint) p1, ref const(QPoint) p2) nothrow
     { return p1.xp * p2.xp + p1.yp * p2.yp; }
 
     /+ friend inline bool operator==(const QPoint &, const QPoint &); +/
     /+ friend inline bool operator!=(const QPoint &, const QPoint &); +/
     /+ friend inline const QPoint operator+(const QPoint &, const QPoint &); +/
 
-    /+ Q_DECL_CONSTEXPR +/ pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint)  p2) const if (op == "+")
+    /+ Q_DECL_CONSTEXPR +/ pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint)  p2) const nothrow if (op == "+")
     { return QPoint(this.xp+p2.xp, this.yp+p2.yp); }
 
     /+ friend inline const QPoint operator-(const QPoint &, const QPoint &); +/
@@ -107,7 +107,7 @@ public:
 
 
 
-    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const if (op == "-")
+    pragma(inline, true) const(QPoint) opBinary(string op)(const(QPoint) p2) const nothrow if (op == "-")
     { return QPoint(xp-p2.xp, yp-p2.yp); }
 
 
@@ -185,62 +185,62 @@ public:
         this.xp = 0;
         this.yp = 0;
     }+/
-    pragma(inline, true) this(ref const(QPoint) p)
+    pragma(inline, true) this(ref const(QPoint) p) nothrow
     {
         this.xp = p.x();
         this.yp = p.y();
     }
-    pragma(inline, true) this(qreal xpos, qreal ypos)
+    pragma(inline, true) this(qreal xpos, qreal ypos) nothrow
     {
         this.xp = xpos;
         this.yp = ypos;
     }
 
-    pragma(inline, true) qreal manhattanLength() const
+    pragma(inline, true) qreal manhattanLength() const nothrow
     {
         return qAbs(x())+qAbs(y());
     }
 
-    pragma(inline, true) bool isNull() const
+    pragma(inline, true) bool isNull() const nothrow
     {
         return qIsNull(xp) && qIsNull(yp);
     }
 
-    pragma(inline, true) qreal x() const
+    pragma(inline, true) qreal x() const nothrow
     {
         return xp;
     }
-    pragma(inline, true) qreal y() const
+    pragma(inline, true) qreal y() const nothrow
     {
         return yp;
     }
-    pragma(inline, true) void setX(qreal xpos)
+    pragma(inline, true) void setX(qreal xpos) nothrow
     {
         xp = xpos;
     }
-    pragma(inline, true) void setY(qreal ypos)
+    pragma(inline, true) void setY(qreal ypos) nothrow
     {
         yp = ypos;
     }
 
-    QPointF transposed() const/+ noexcept+/ { return QPointF(yp, xp); }
+    QPointF transposed() const nothrow { return QPointF(yp, xp); }
 
-    pragma(inline, true) ref qreal rx() return
+    pragma(inline, true) ref qreal rx() nothrow return
     {
         return xp;
     }
-    pragma(inline, true) ref qreal ry() return
+    pragma(inline, true) ref qreal ry() nothrow return
     {
         return yp;
     }
 
-    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if (op == "+")
+    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) nothrow if (op == "+")
     {
         xp+=p.xp;
         yp+=p.yp;
         return this;
     }
-    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) if (op == "-")
+    pragma(inline, true) ref QPointF opOpAssign(string op)(ref const(QPointF) p) nothrow if (op == "-")
     {
         xp-=p.xp; yp-=p.yp; return this;
     }
@@ -255,14 +255,14 @@ public:
         return this;
     }+/
 
-    pragma(inline, true) static qreal dotProduct(ref const(QPointF) p1, ref const(QPointF) p2)
+    pragma(inline, true) static qreal dotProduct(ref const(QPointF) p1, ref const(QPointF) p2) nothrow
     { return p1.xp * p2.xp + p1.yp * p2.yp; }
 
     /+ friend inline bool operator==(const QPointF &, const QPointF &); +/
     /+ friend inline bool operator!=(const QPointF &, const QPointF &); +/
     /+ friend inline const QPointF operator+(const QPointF &, const QPointF &); +/
 
-    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF)  p2) const if (op == "+")
+    pragma(inline, true) const(QPointF) opBinary(string op)(const(QPointF)  p2) const nothrow if (op == "+")
     {
         return QPointF(this.xp+p2.xp, this.yp+p2.yp);
     }
@@ -274,7 +274,7 @@ public:
     /+ friend inline const QPointF operator-(const QPointF &); +/
     /+ friend inline const QPointF operator/(const QPointF &, qreal); +/
 
-    pragma(inline, true) QPoint toPoint() const
+    pragma(inline, true) QPoint toPoint() const nothrow
     {
         return QPoint(qRound(xp), qRound(yp));
     }

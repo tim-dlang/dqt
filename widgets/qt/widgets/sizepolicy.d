@@ -85,7 +85,7 @@ public:
 alias ControlTypes = QFlags!(ControlType);    /+ Q_FLAG(ControlTypes) +/
 
     @disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.data = 0;
     }+/
@@ -96,7 +96,7 @@ alias ControlTypes = QFlags!(ControlType);    /+ Q_FLAG(ControlTypes) +/
                type == DefaultType ? 0 : toControlTypeFieldValue(type), 0, 0, 0}
     {}
 #else +/
-    this(Policy horizontal, Policy vertical, ControlType type = ControlType.DefaultType)/+ noexcept+/
+    this(Policy horizontal, Policy vertical, ControlType type = ControlType.DefaultType) nothrow
     {
         this.data = 0;
 
@@ -105,45 +105,45 @@ alias ControlTypes = QFlags!(ControlType);    /+ Q_FLAG(ControlTypes) +/
         setControlType(type);
     }
 /+ #endif +/ // uniform-init
-    Policy horizontalPolicy() const/+ noexcept+/ { return static_cast!(Policy)(bits.horPolicy); }
-    Policy verticalPolicy() const/+ noexcept+/ { return static_cast!(Policy)(bits.verPolicy); }
-    ControlType controlType() const/+ noexcept+/;
+    Policy horizontalPolicy() const nothrow { return static_cast!(Policy)(bits.horPolicy); }
+    Policy verticalPolicy() const nothrow { return static_cast!(Policy)(bits.verPolicy); }
+    ControlType controlType() const nothrow;
 
-    void setHorizontalPolicy(Policy d)/+ noexcept+/ { bits.horPolicy = d; }
-    void setVerticalPolicy(Policy d)/+ noexcept+/ { bits.verPolicy = d; }
-    void setControlType(ControlType type)/+ noexcept+/;
+    void setHorizontalPolicy(Policy d) nothrow { bits.horPolicy = d; }
+    void setVerticalPolicy(Policy d) nothrow { bits.verPolicy = d; }
+    void setControlType(ControlType type) nothrow;
 
-    /+ Qt:: +/qt.core.namespace.Orientations expandingDirections() const/+ noexcept+/ {
+    /+ Qt:: +/qt.core.namespace.Orientations expandingDirections() const nothrow {
         return ( (verticalPolicy()   & PolicyFlag.ExpandFlag) ? /+ Qt:: +/qt.core.namespace.Orientations.Vertical   : /+ Qt:: +/qt.core.namespace.Orientations() )
              | ( (horizontalPolicy() & PolicyFlag.ExpandFlag) ? /+ Qt:: +/qt.core.namespace.Orientations.Horizontal : /+ Qt:: +/qt.core.namespace.Orientations() ) ;
     }
 
-    void setHeightForWidth(bool b)/+ noexcept+/ { bits.hfw = b;  }
-    bool hasHeightForWidth() const/+ noexcept+/ { return !!bits.hfw; }
-    void setWidthForHeight(bool b)/+ noexcept+/ { bits.wfh = b;  }
-    bool hasWidthForHeight() const/+ noexcept+/ { return !!bits.wfh; }
+    void setHeightForWidth(bool b) nothrow { bits.hfw = b;  }
+    bool hasHeightForWidth() const nothrow { return !!bits.hfw; }
+    void setWidthForHeight(bool b) nothrow { bits.wfh = b;  }
+    bool hasWidthForHeight() const nothrow { return !!bits.wfh; }
 
-    /+bool operator ==(ref const(QSizePolicy) s) const/+ noexcept+/ { return data == s.data; }+/
-    /+bool operator !=(ref const(QSizePolicy) s) const/+ noexcept+/ { return data != s.data; }+/
+    /+bool operator ==(ref const(QSizePolicy) s) const nothrow { return data == s.data; }+/
+    /+bool operator !=(ref const(QSizePolicy) s) const nothrow { return data != s.data; }+/
 
     /+ friend Q_DECL_CONST_FUNCTION uint qHash(QSizePolicy key, uint seed) noexcept { return qHash(key.data, seed); } +/
 
     /+auto opCast(T : QVariant)() const;+/
 
-    int horizontalStretch() const/+ noexcept+/ { return static_cast!(int)(bits.horStretch); }
-    int verticalStretch() const/+ noexcept+/ { return static_cast!(int)(bits.verStretch); }
+    int horizontalStretch() const nothrow { return static_cast!(int)(bits.horStretch); }
+    int verticalStretch() const nothrow { return static_cast!(int)(bits.verStretch); }
     void setHorizontalStretch(int stretchFactor) { bits.horStretch = static_cast!(quint32)(qBound(0, stretchFactor, 255)); }
     void setVerticalStretch(int stretchFactor) { bits.verStretch = static_cast!(quint32)(qBound(0, stretchFactor, 255)); }
 
-//    bool retainSizeWhenHidden() const/+ noexcept+/ { return bits.retainSizeWhenHidden; }
-//    void setRetainSizeWhenHidden(bool retainSize)/+ noexcept+/ { bits.retainSizeWhenHidden = retainSize; }
+//    bool retainSizeWhenHidden() const nothrow { return bits.retainSizeWhenHidden; }
+//    void setRetainSizeWhenHidden(bool retainSize) nothrow { bits.retainSizeWhenHidden = retainSize; }
 
-//    void transpose()/+ noexcept+/ { this = transposed(); }
+//    void transpose() nothrow { this = transposed(); }
     /+ Q_REQUIRED_RESULT +/
     /+ #ifndef Q_QDOC
         QT_SIZEPOLICY_CONSTEXPR_AND_UNIFORM_INIT
     #endif +/
-/+        QSizePolicy transposed() const/+ noexcept+/
+/+        QSizePolicy transposed() const nothrow
     {
         return QSizePolicy(bits.transposed());
     }+/
@@ -154,19 +154,19 @@ private:
         /+ friend Q_WIDGETS_EXPORT QDataStream &operator<<(QDataStream &, const QSizePolicy &); +/
         /+ friend Q_WIDGETS_EXPORT QDataStream &operator>>(QDataStream &, QSizePolicy &); +/
     }
-    this(int i)/+ noexcept+/
+    this(int i) nothrow
     {
         this.data = i;
     }
     /+
     struct Bits;
     +/
-    /+/+ explicit +/this(Bits b)/+ noexcept+/
+    /+/+ explicit +/this(Bits b) nothrow
     {
         this.bits = b;
     }+/
 
-/+    static quint32 toControlTypeFieldValue(ControlType type)/+ noexcept+/
+/+    static quint32 toControlTypeFieldValue(ControlType type) nothrow
     {
         /*
           The control type is a flag type, with values 0x1, 0x2, 0x4, 0x8, 0x10,
@@ -188,88 +188,88 @@ private:
     struct Bits {
         /+ quint32 horStretch : 8; +/
         uint bitfieldData_horStretch;
-        quint32 horStretch() const
+        quint32 horStretch() const nothrow
         {
             return (bitfieldData_horStretch >> 0) & 0xff;
         }
-        quint32 horStretch(quint32 value)
+        quint32 horStretch(quint32 value) nothrow
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xff) | ((value & 0xff) << 0);
             return value;
         }
         /+ quint32 verStretch : 8; +/
-        quint32 verStretch() const
+        quint32 verStretch() const nothrow
         {
             return (bitfieldData_horStretch >> 8) & 0xff;
         }
-        quint32 verStretch(quint32 value)
+        quint32 verStretch(quint32 value) nothrow
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xff00) | ((value & 0xff) << 8);
             return value;
         }
         /+ quint32 horPolicy : 4; +/
-        quint32 horPolicy() const
+        quint32 horPolicy() const nothrow
         {
             return (bitfieldData_horStretch >> 16) & 0xf;
         }
-        quint32 horPolicy(quint32 value)
+        quint32 horPolicy(quint32 value) nothrow
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xf0000) | ((value & 0xf) << 16);
             return value;
         }
         /+ quint32 verPolicy : 4; +/
-        quint32 verPolicy() const
+        quint32 verPolicy() const nothrow
         {
             return (bitfieldData_horStretch >> 20) & 0xf;
         }
-        quint32 verPolicy(quint32 value)
+        quint32 verPolicy(quint32 value) nothrow
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0xf00000) | ((value & 0xf) << 20);
             return value;
         }
         /+ quint32 ctype : 5; +/
-        quint32 ctype() const
+        quint32 ctype() const nothrow
         {
             return (bitfieldData_horStretch >> 24) & 0x1f;
         }
-        quint32 ctype(quint32 value)
+        quint32 ctype(quint32 value) nothrow
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x1f000000) | ((value & 0x1f) << 24);
             return value;
         }
         /+ quint32 hfw : 1; +/
-        quint32 hfw() const
+        quint32 hfw() const nothrow
         {
             return (bitfieldData_horStretch >> 29) & 0x1;
         }
-        quint32 hfw(quint32 value)
+        quint32 hfw(quint32 value) nothrow
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x20000000) | ((value & 0x1) << 29);
             return value;
         }
         /+ quint32 wfh : 1; +/
-        quint32 wfh() const
+        quint32 wfh() const nothrow
         {
             return (bitfieldData_horStretch >> 30) & 0x1;
         }
-        quint32 wfh(quint32 value)
+        quint32 wfh(quint32 value) nothrow
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x40000000) | ((value & 0x1) << 30);
             return value;
         }
         /+ quint32 retainSizeWhenHidden : 1; +/
-        quint32 retainSizeWhenHidden() const
+        quint32 retainSizeWhenHidden() const nothrow
         {
             return (bitfieldData_horStretch >> 31) & 0x1;
         }
-        quint32 retainSizeWhenHidden(quint32 value)
+        quint32 retainSizeWhenHidden(quint32 value) nothrow
         {
             bitfieldData_horStretch = (bitfieldData_horStretch & ~0x80000000) | ((value & 0x1) << 31);
             return value;
         }
 
         /+ QT_SIZEPOLICY_CONSTEXPR_AND_UNIFORM_INIT +/
-/+        Bits transposed() const/+ noexcept+/
+/+        Bits transposed() const nothrow
         {
             return Bits(verStretch, // \ swap
                     horStretch, // /
@@ -293,9 +293,9 @@ Q_DECLARE_TYPEINFO(QSizePolicy, Q_PRIMITIVE_TYPE);
 #else
 Q_DECLARE_TYPEINFO(QSizePolicy, Q_RELOCATABLE_TYPE);
 #endif +/
-/+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator |(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)/+noexcept+/{return QFlags!(QSizePolicy.ControlTypes.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator |(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QSizePolicy.ControlTypes.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator |(QSizePolicy.ControlTypes.enum_type f1, QSizePolicy.ControlTypes.enum_type f2)nothrow{return QFlags!(QSizePolicy.ControlTypes.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QSizePolicy.ControlTypes.enum_type) operator |(QSizePolicy.ControlTypes.enum_type f1, QFlags!(QSizePolicy.ControlTypes.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QSizePolicy.ControlTypes.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QSizePolicy::ControlTypes)
 #ifndef QT_NO_DATASTREAM

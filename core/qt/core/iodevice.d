@@ -161,9 +161,9 @@ private:
     /+ Q_DISABLE_COPY(QIODevice) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)/+noexcept+/{return QFlags!(QIODevice.OpenMode.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QIODevice.OpenMode.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QIODevice.OpenMode.enum_type f2)nothrow{return QFlags!(QIODevice.OpenMode.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QIODevice.OpenMode.enum_type) operator |(QIODevice.OpenMode.enum_type f1, QFlags!(QIODevice.OpenMode.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QIODevice.OpenMode.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QIODevice::OpenMode)
 #if !defined(QT_NO_DEBUG_STREAM)

@@ -344,8 +344,8 @@ private:
     /+ friend class QWidgetTextControl; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator |(QTextEdit.AutoFormatting.enum_type f1, QTextEdit.AutoFormatting.enum_type f2)/+noexcept+/{return QFlags!(QTextEdit.AutoFormatting.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator |(QTextEdit.AutoFormatting.enum_type f1, QFlags!(QTextEdit.AutoFormatting.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QTextEdit.AutoFormatting.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator |(QTextEdit.AutoFormatting.enum_type f1, QTextEdit.AutoFormatting.enum_type f2)nothrow{return QFlags!(QTextEdit.AutoFormatting.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QTextEdit.AutoFormatting.enum_type) operator |(QTextEdit.AutoFormatting.enum_type f1, QFlags!(QTextEdit.AutoFormatting.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QTextEdit.AutoFormatting.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextEdit::AutoFormatting) +/

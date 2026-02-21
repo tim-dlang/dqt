@@ -256,11 +256,11 @@ private:
 /+        version (LittleEndian)
         {
             /+ quintptr status : 8; +/
-            quintptr status() const
+            quintptr status() const nothrow
             {
                 return (bitfieldData_status >> 0) & 0xff;
             }
-            quintptr status(quintptr value)
+            quintptr status(quintptr value) nothrow
             {
                 bitfieldData_status = (bitfieldData_status & ~0xff) | ((value & 0xff) << 0);
                 return value;
@@ -268,11 +268,11 @@ private:
         }
         // note: this is only 24 bits on 32-bit systems...
         /+ qintptr msecs : sizeof(void *) * 8 - 8; +/
-        qintptr msecs() const
+        qintptr msecs() const nothrow
         {
             return (bitfieldData_msecs >> 0) & 0x1;
         }
-        qintptr msecs(qintptr value)
+        qintptr msecs(qintptr value) nothrow
         {
             bitfieldData_status = (bitfieldData_status & ~0x100) | ((value & 0x1) << 8);
             return value;
@@ -281,11 +281,11 @@ private:
         version (BigEndian)
         {
             /+ quintptr status : 8; +/
-            quintptr status() const
+            quintptr status() const nothrow
             {
                 return (bitfieldData_msecs >> 65) & 0xff;
             }
-            quintptr status(quintptr value)
+            quintptr status(quintptr value) nothrow
             {
                 bitfieldData_msecs = (bitfieldData_msecs & ~0x1fe) | ((value & 0xff) << 65);
                 return value;
@@ -330,12 +330,12 @@ public:
     this(ref const(QDate) date, ref const(QTime) time, ref const(QTimeZone) timeZone);
 /+ #endif +/ // timezone
     //@disable this(this);
-    //this(ref const(QDateTime) other)/+ noexcept+/;
+    //this(ref const(QDateTime) other) nothrow;
     /+ QDateTime(QDateTime &&other) noexcept; +/
     ~this();
 
     /+ QDateTime &operator=(QDateTime &&other) noexcept { swap(other); return *this; } +/
-    ref QDateTime opAssign(ref const(QDateTime) other)/+ noexcept+/;
+    ref QDateTime opAssign(ref const(QDateTime) other) nothrow;
 
     /+ void swap(QDateTime &other) noexcept { qSwap(d.d, other.d.d); } +/
 
@@ -434,8 +434,8 @@ public:
     static QDateTime fromSecsSinceEpoch(qint64 secs, ref const(QTimeZone) timeZone);
 /+ #endif +/
 
-    static qint64 currentMSecsSinceEpoch()/+ noexcept+/;
-    static qint64 currentSecsSinceEpoch()/+ noexcept+/;
+    static qint64 currentMSecsSinceEpoch() nothrow;
+    static qint64 currentSecsSinceEpoch() nothrow;
 
     static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {

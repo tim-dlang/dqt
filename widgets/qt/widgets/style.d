@@ -878,14 +878,14 @@ private:
     final void setProxy(QStyle style);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QStyle.State.enum_type f2)/+noexcept+/{return QFlags!(QStyle.State.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyle.State.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QStyle.State.enum_type f2)nothrow{return QFlags!(QStyle.State.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.State.enum_type) operator |(QStyle.State.enum_type f1, QFlags!(QStyle.State.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyle.State.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyle::State) +/
-/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)/+noexcept+/{return QFlags!(QStyle.SubControls.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyle.SubControls.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QStyle.SubControls.enum_type f2)nothrow{return QFlags!(QStyle.SubControls.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyle.SubControls.enum_type) operator |(QStyle.SubControls.enum_type f1, QFlags!(QStyle.SubControls.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyle.SubControls.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyle::SubControls)
 #if !defined(QT_NO_DEBUG_STREAM)
 // ### Qt 6: Remove in favor of template<class T> QDebug operator<<(QDebug, const QFlags<T> &).

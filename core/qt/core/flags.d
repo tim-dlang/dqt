@@ -29,12 +29,12 @@ version (D_LP64) {} else
 private:
     int i;
 public:
-    pragma(inline, true) this(int value)/+ noexcept+/
+    pragma(inline, true) this(int value) nothrow
     {
         this.i = value;
     }
-    pragma(inline, true) auto opCast(T : int)() const/+ noexcept+/ { return i; }
-    pragma(inline, true) int toInt() const/+ noexcept+/ { return i; }
+    pragma(inline, true) auto opCast(T : int)() const nothrow { return i; }
+    pragma(inline, true) int toInt() const nothrow { return i; }
     alias toInt this;
 
 /+ #if !defined(Q_CC_MSVC)
@@ -44,29 +44,29 @@ public:
 #  if !defined(__LP64__) && !defined(Q_CLANG_QDOC) +/
     version (D_LP64) {} else
     {
-        pragma(inline, true) this(cpp_long value)/+ noexcept+/
+        pragma(inline, true) this(cpp_long value) nothrow
         {
             this.i = cast(int) (value);
         }
-        pragma(inline, true) this(cpp_ulong value)/+ noexcept+/
+        pragma(inline, true) this(cpp_ulong value) nothrow
         {
             this.i = cast(int) (long(value));
         }
     }
 /+ #  endif +/
-    pragma(inline, true) this(uint value)/+ noexcept+/
+    pragma(inline, true) this(uint value) nothrow
     {
         this.i = int(value);
     }
-    pragma(inline, true) this(short value)/+ noexcept+/
+    pragma(inline, true) this(short value) nothrow
     {
         this.i = int(value);
     }
-    pragma(inline, true) this(ushort value)/+ noexcept+/
+    pragma(inline, true) this(ushort value) nothrow
     {
         this.i = int(uint(value));
     }
-    /+pragma(inline, true) auto opCast(T : uint)() const/+ noexcept+/ { return uint(i); }+/
+    /+pragma(inline, true) auto opCast(T : uint)() const nothrow { return uint(i); }+/
 /+ #endif +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
@@ -77,11 +77,11 @@ public:
 private:
     int i;
 public:
-    /+ explicit +/pragma(inline, true) this(int value)/+ noexcept+/
+    /+ explicit +/pragma(inline, true) this(int value) nothrow
     {
         this.i = value;
     }
-    /+pragma(inline, true) auto opCast(T : int)() const/+ noexcept+/ { return i; }+/
+    /+pragma(inline, true) auto opCast(T : int)() const nothrow { return i; }+/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
 /+ Q_DECLARE_TYPEINFO(QIncompatibleFlag, Q_PRIMITIVE_TYPE);
@@ -121,21 +121,21 @@ public:
     inline QFlags(const QFlags &other);
     inline QFlags &operator=(const QFlags &other);
 #endif +/
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.i = 0;
     }+/
-    @SimulateImplicitConstructor pragma(inline, true) this(Enum flags)/+ noexcept+/
+    @SimulateImplicitConstructor pragma(inline, true) this(Enum flags) nothrow
     {
         this.i = Int(flags);
     }
 /+ #if QT_DEPRECATED_SINCE(5,15) +/
-    /+ QT_DEPRECATED_X("Use default constructor instead") +/ pragma(inline, true) this(Zero)/+ noexcept+/
+    /+ QT_DEPRECATED_X("Use default constructor instead") +/ pragma(inline, true) this(Zero) nothrow
     {
         this.i = 0;
     }
 /+ #endif +/
-    pragma(inline, true) this(QFlag flag)/+ noexcept+/
+    pragma(inline, true) this(QFlag flag) nothrow
     {
         this.i = flag;
     }
@@ -146,31 +146,31 @@ public:
     /+ inline QFlags(std::initializer_list<Enum> flags) noexcept
         : i(initializer_list_helper(flags.begin(), flags.end())) {} +/
 
-    pragma(inline, true) ref QFlags opOpAssign(string op)(int mask)/+ noexcept+/ if (op == "&") { i &= mask; return this; }
-    pragma(inline, true) ref QFlags opOpAssign(string op)(uint mask)/+ noexcept+/ if (op == "&") { i &= mask; return this; }
-    pragma(inline, true) ref QFlags opOpAssign(string op)(Enum mask)/+ noexcept+/ if (op == "&") { i &= Int(mask); return this; }
-    pragma(inline, true) ref QFlags opOpAssign(string op)(QFlags other)/+ noexcept+/ if (op == "|") { i |= other.i; return this; }
-    pragma(inline, true) ref QFlags opOpAssign(string op)(Enum other)/+ noexcept+/ if (op == "|") { i |= Int(other); return this; }
-    /+pragma(inline, true) ref QFlags operator ^=(QFlags other)/+ noexcept+/ { i ^= other.i; return this; }+/
-    /+pragma(inline, true) ref QFlags operator ^=(Enum other)/+ noexcept+/ { i ^= Int(other); return this; }+/
+    pragma(inline, true) ref QFlags opOpAssign(string op)(int mask) nothrow if (op == "&") { i &= mask; return this; }
+    pragma(inline, true) ref QFlags opOpAssign(string op)(uint mask) nothrow if (op == "&") { i &= mask; return this; }
+    pragma(inline, true) ref QFlags opOpAssign(string op)(Enum mask) nothrow if (op == "&") { i &= Int(mask); return this; }
+    pragma(inline, true) ref QFlags opOpAssign(string op)(QFlags other) nothrow if (op == "|") { i |= other.i; return this; }
+    pragma(inline, true) ref QFlags opOpAssign(string op)(Enum other) nothrow if (op == "|") { i |= Int(other); return this; }
+    /+pragma(inline, true) ref QFlags operator ^=(QFlags other) nothrow { i ^= other.i; return this; }+/
+    /+pragma(inline, true) ref QFlags operator ^=(Enum other) nothrow { i ^= Int(other); return this; }+/
 
-    pragma(inline, true) auto opCast(T : Int)() const/+ noexcept+/ { return i; }
-    pragma(inline, true) Int toInt() const/+ noexcept+/ { return i; }
+    pragma(inline, true) auto opCast(T : Int)() const nothrow { return i; }
+    pragma(inline, true) Int toInt() const nothrow { return i; }
     alias toInt this;
 
-    pragma(inline, true) QFlags opBinary(string op)(QFlags other) const/+ noexcept+/ if (op == "|") { return QFlags(QFlag(i | other.i)); }
-    pragma(inline, true) QFlags opBinary(string op)(Enum other) const/+ noexcept+/ if (op == "|") { return QFlags(QFlag(i | Int(other))); }
-    /+pragma(inline, true) QFlags operator ^(QFlags other) const/+ noexcept+/ { return QFlags(QFlag(i ^ other.i)); }+/
-    /+pragma(inline, true) QFlags operator ^(Enum other) const/+ noexcept+/ { return QFlags(QFlag(i ^ Int(other))); }+/
-    pragma(inline, true) QFlags opBinary(string op)(int mask) const/+ noexcept+/ if (op == "&") { return QFlags(QFlag(i & mask)); }
-    pragma(inline, true) QFlags opBinary(string op)(uint mask) const/+ noexcept+/ if (op == "&") { return QFlags(QFlag(i & mask)); }
-    pragma(inline, true) QFlags opBinary(string op)(Enum other) const/+ noexcept+/ if (op == "&") { return QFlags(QFlag(i & Int(other))); }
+    pragma(inline, true) QFlags opBinary(string op)(QFlags other) const nothrow if (op == "|") { return QFlags(QFlag(i | other.i)); }
+    pragma(inline, true) QFlags opBinary(string op)(Enum other) const nothrow if (op == "|") { return QFlags(QFlag(i | Int(other))); }
+    /+pragma(inline, true) QFlags operator ^(QFlags other) const nothrow { return QFlags(QFlag(i ^ other.i)); }+/
+    /+pragma(inline, true) QFlags operator ^(Enum other) const nothrow { return QFlags(QFlag(i ^ Int(other))); }+/
+    pragma(inline, true) QFlags opBinary(string op)(int mask) const nothrow if (op == "&") { return QFlags(QFlag(i & mask)); }
+    pragma(inline, true) QFlags opBinary(string op)(uint mask) const nothrow if (op == "&") { return QFlags(QFlag(i & mask)); }
+    pragma(inline, true) QFlags opBinary(string op)(Enum other) const nothrow if (op == "&") { return QFlags(QFlag(i & Int(other))); }
     QFlags opBinary(string op)(QFlags other) const if (op == "&") { return QFlags(QFlag(i & other.i)); }
-    /+pragma(inline, true) QFlags operator ~() const/+ noexcept+/ { return QFlags(QFlag(~i)); }+/
+    /+pragma(inline, true) QFlags operator ~() const nothrow { return QFlags(QFlag(~i)); }+/
 
-    /+pragma(inline, true) bool operator !() const/+ noexcept+/ { return !i; }+/
+    /+pragma(inline, true) bool operator !() const nothrow { return !i; }+/
 
-    pragma(inline, true) bool testFlag(Enum flag) const/+ noexcept+/ { return (i & Int(flag)) == Int(flag) && (Int(flag) != 0 || i == Int(flag) ); }
+    pragma(inline, true) bool testFlag(Enum flag) const nothrow { return (i & Int(flag)) == Int(flag) && (Int(flag) != 0 || i == Int(flag) ); }
     /+ inline QFlags &setFlag(Enum flag, bool on = true) noexcept
     {
         return on ? (*this |= flag) : (*this &= ~Int(flag));

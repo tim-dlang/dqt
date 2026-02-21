@@ -41,13 +41,13 @@ public:
     enum Spec { Invalid, Rgb, Hsv, Cmyk, Hsl, ExtendedRgb }
     enum NameFormat { HexRgb, HexArgb }
 
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.cspec = Spec.Invalid;
         this.ct = typeof(this.ct)(ushort.max, 0, 0, 0, 0);
     }+/
-    @SimulateImplicitConstructor this(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;
-    this(int r, int g, int b, int a = 255)/+ noexcept+/
+    @SimulateImplicitConstructor this(/+ Qt:: +/qt.core.namespace.GlobalColor color) nothrow;
+    this(int r, int g, int b, int a = 255) nothrow
     {
         this.cspec = isRgbaValid(r, g, b, a) ? Spec.Rgb : Spec.Invalid;
         this.ct = CT(CT.generated_qcolor_0(cast(ushort) (cspec == Spec.Rgb ? a * 0x0101 : 0),
@@ -56,15 +56,15 @@ public:
                      cast(ushort) (cspec == Spec.Rgb ? b * 0x0101 : 0),
                      0));
     }
-    this(QRgb rgb)/+ noexcept+/;
-    this(QRgba64 rgba64)/+ noexcept+/;
+    this(QRgb rgb) nothrow;
+    this(QRgba64 rgba64) nothrow;
     static if (QT_STRINGVIEW_LEVEL < 2)
     {
         pragma(inline, true) this(ref const(QString) aname)
         { setNamedColor(aname); }
     }
 
-    ~this(){} // Makes sure, that QColor as return type is passed as a hidden pointer parameter.
+    ~this()nothrow{} // Makes sure, that QColor as return type is passed as a hidden pointer parameter.
 
     /+ explicit +/ pragma(inline, true) this(QStringView aname)
     { setNamedColor(aname); }
@@ -74,12 +74,12 @@ public:
     }
     pragma(inline, true) this(QLatin1String aname)
     { setNamedColor(aname); }
-    this(Spec spec)/+ noexcept+/;
+    this(Spec spec) nothrow;
 
 /+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0) +/
     // ### Qt 6: remove all of these, the trivial ones are fine.
     /+@disable this(this);
-    this(ref const(QColor) color)/+ noexcept+/
+    this(ref const(QColor) color) nothrow
     {
         this.cspec = color.cspec;
         this.ct = color.ct;
@@ -87,16 +87,16 @@ public:
     /+ QColor(QColor &&other) noexcept : cspec(other.cspec), ct(other.ct) {} +/
     /+ QColor &operator=(QColor &&other) noexcept
     { cspec = other.cspec; ct = other.ct; return *this; } +/
-    ref QColor opAssign(ref const(QColor) )/+ noexcept+/;
+    ref QColor opAssign(ref const(QColor) ) nothrow;
     ref QColor opAssign(QColor other)
     {
         return opAssign(*cast(const(QColor*))&other);
     }
 /+ #endif +/ // Qt < 6
 
-    ref QColor opAssign(/+ Qt:: +/qt.core.namespace.GlobalColor color)/+ noexcept+/;
+    ref QColor opAssign(/+ Qt:: +/qt.core.namespace.GlobalColor color) nothrow;
 
-    pragma(inline, true) bool isValid() const/+ noexcept+/
+    pragma(inline, true) bool isValid() const nothrow
     { return cspec != Spec.Invalid; }
 
     // ### Qt 6: merge overloads
@@ -112,25 +112,25 @@ public:
 
     static QStringList colorNames();
 
-    pragma(inline, true) Spec spec() const/+ noexcept+/
+    pragma(inline, true) Spec spec() const nothrow
     { return cspec; }
 
-    int alpha() const/+ noexcept+/;
+    int alpha() const nothrow;
     void setAlpha(int alpha);
 
-    qreal alphaF() const/+ noexcept+/;
+    qreal alphaF() const nothrow;
     void setAlphaF(qreal alpha);
 
-    int red() const/+ noexcept+/;
-    int green() const/+ noexcept+/;
-    int blue() const/+ noexcept+/;
+    int red() const nothrow;
+    int green() const nothrow;
+    int blue() const nothrow;
     void setRed(int red);
     void setGreen(int green);
     void setBlue(int blue);
 
-    qreal redF() const/+ noexcept+/;
-    qreal greenF() const/+ noexcept+/;
-    qreal blueF() const/+ noexcept+/;
+    qreal redF() const nothrow;
+    qreal greenF() const nothrow;
+    qreal blueF() const nothrow;
     void setRedF(qreal red);
     void setGreenF(qreal green);
     void setBlueF(qreal blue);
@@ -141,26 +141,26 @@ public:
     void getRgbF(qreal* r, qreal* g, qreal* b, qreal* a = null) const;
     void setRgbF(qreal r, qreal g, qreal b, qreal a = 1.0);
 
-    QRgba64 rgba64() const/+ noexcept+/;
-    void setRgba64(QRgba64 rgba)/+ noexcept+/;
+    QRgba64 rgba64() const nothrow;
+    void setRgba64(QRgba64 rgba) nothrow;
 
-    QRgb rgba() const/+ noexcept+/;
-    void setRgba(QRgb rgba)/+ noexcept+/;
+    QRgb rgba() const nothrow;
+    void setRgba(QRgb rgba) nothrow;
 
-    QRgb rgb() const/+ noexcept+/;
-    void setRgb(QRgb rgb)/+ noexcept+/;
+    QRgb rgb() const nothrow;
+    void setRgb(QRgb rgb) nothrow;
 
-    int hue() const/+ noexcept+/; // 0 <= hue < 360
-    int saturation() const/+ noexcept+/;
-    int hsvHue() const/+ noexcept+/; // 0 <= hue < 360
-    int hsvSaturation() const/+ noexcept+/;
-    int value() const/+ noexcept+/;
+    int hue() const nothrow; // 0 <= hue < 360
+    int saturation() const nothrow;
+    int hsvHue() const nothrow; // 0 <= hue < 360
+    int hsvSaturation() const nothrow;
+    int value() const nothrow;
 
-    qreal hueF() const/+ noexcept+/; // 0.0 <= hueF < 360.0
-    qreal saturationF() const/+ noexcept+/;
-    qreal hsvHueF() const/+ noexcept+/; // 0.0 <= hueF < 360.0
-    qreal hsvSaturationF() const/+ noexcept+/;
-    qreal valueF() const/+ noexcept+/;
+    qreal hueF() const nothrow; // 0.0 <= hueF < 360.0
+    qreal saturationF() const nothrow;
+    qreal hsvHueF() const nothrow; // 0.0 <= hueF < 360.0
+    qreal hsvSaturationF() const nothrow;
+    qreal valueF() const nothrow;
 
     void getHsv(int* h, int* s, int* v, int* a = null) const;
     void setHsv(int h, int s, int v, int a = 255);
@@ -168,15 +168,15 @@ public:
     void getHsvF(qreal* h, qreal* s, qreal* v, qreal* a = null) const;
     void setHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
 
-    int cyan() const/+ noexcept+/;
-    int magenta() const/+ noexcept+/;
-    int yellow() const/+ noexcept+/;
-    int black() const/+ noexcept+/;
+    int cyan() const nothrow;
+    int magenta() const nothrow;
+    int yellow() const nothrow;
+    int black() const nothrow;
 
-    qreal cyanF() const/+ noexcept+/;
-    qreal magentaF() const/+ noexcept+/;
-    qreal yellowF() const/+ noexcept+/;
-    qreal blackF() const/+ noexcept+/;
+    qreal cyanF() const nothrow;
+    qreal magentaF() const nothrow;
+    qreal yellowF() const nothrow;
+    qreal blackF() const nothrow;
 
     void getCmyk(int* c, int* m, int* y, int* k, int* a = null); // ### Qt 6: remove
     void getCmyk(int* c, int* m, int* y, int* k, int* a = null) const;
@@ -186,13 +186,13 @@ public:
     void getCmykF(qreal* c, qreal* m, qreal* y, qreal* k, qreal* a = null) const;
     void setCmykF(qreal c, qreal m, qreal y, qreal k, qreal a = 1.0);
 
-    int hslHue() const/+ noexcept+/; // 0 <= hue < 360
-    int hslSaturation() const/+ noexcept+/;
-    int lightness() const/+ noexcept+/;
+    int hslHue() const nothrow; // 0 <= hue < 360
+    int hslSaturation() const nothrow;
+    int lightness() const nothrow;
 
-    qreal hslHueF() const/+ noexcept+/; // 0.0 <= hueF < 360.0
-    qreal hslSaturationF() const/+ noexcept+/;
-    qreal lightnessF() const/+ noexcept+/;
+    qreal hslHueF() const nothrow; // 0.0 <= hueF < 360.0
+    qreal hslSaturationF() const nothrow;
+    qreal lightnessF() const nothrow;
 
     void getHsl(int* h, int* s, int* l, int* a = null) const;
     void setHsl(int h, int s, int l, int a = 255);
@@ -200,22 +200,22 @@ public:
     void getHslF(qreal* h, qreal* s, qreal* l, qreal* a = null) const;
     void setHslF(qreal h, qreal s, qreal l, qreal a = 1.0);
 
-    QColor toRgb() const/+ noexcept+/;
-    QColor toHsv() const/+ noexcept+/;
-    QColor toCmyk() const/+ noexcept+/;
-    QColor toHsl() const/+ noexcept+/;
-    QColor toExtendedRgb() const/+ noexcept+/;
+    QColor toRgb() const nothrow;
+    QColor toHsv() const nothrow;
+    QColor toCmyk() const nothrow;
+    QColor toHsl() const nothrow;
+    QColor toExtendedRgb() const nothrow;
 
-    /+ Q_REQUIRED_RESULT +/ QColor convertTo(Spec colorSpec) const/+ noexcept+/;
+    /+ Q_REQUIRED_RESULT +/ QColor convertTo(Spec colorSpec) const nothrow;
 
-    static QColor fromRgb(QRgb rgb)/+ noexcept+/;
-    static QColor fromRgba(QRgb rgba)/+ noexcept+/;
+    static QColor fromRgb(QRgb rgb) nothrow;
+    static QColor fromRgba(QRgb rgba) nothrow;
 
     static QColor fromRgb(int r, int g, int b, int a = 255);
     static QColor fromRgbF(qreal r, qreal g, qreal b, qreal a = 1.0);
 
-    static QColor fromRgba64(ushort r, ushort g, ushort b, ushort a = ushort.max)/+ noexcept+/;
-    static QColor fromRgba64(QRgba64 rgba)/+ noexcept+/;
+    static QColor fromRgba64(ushort r, ushort g, ushort b, ushort a = ushort.max) nothrow;
+    static QColor fromRgba64(QRgba64 rgba) nothrow;
 
     static QColor fromHsv(int h, int s, int v, int a = 255);
     static QColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);
@@ -228,19 +228,19 @@ public:
 
 /+ #if QT_DEPRECATED_SINCE(5, 13) +/
     /+ QT_DEPRECATED_X("Use QColor::lighter() instead") +/
-        /+ Q_REQUIRED_RESULT +/ QColor light(int f = 150) const/+ noexcept+/;
+        /+ Q_REQUIRED_RESULT +/ QColor light(int f = 150) const nothrow;
     /+ QT_DEPRECATED_X("Use QColor::darker() instead") +/
-        /+ Q_REQUIRED_RESULT +/ QColor dark(int f = 200) const/+ noexcept+/;
+        /+ Q_REQUIRED_RESULT +/ QColor dark(int f = 200) const nothrow;
 /+ #endif +/
-    /+ Q_REQUIRED_RESULT +/ QColor lighter(int f = 150) const/+ noexcept+/;
-    /+ Q_REQUIRED_RESULT +/ QColor darker(int f = 200) const/+ noexcept+/;
+    /+ Q_REQUIRED_RESULT +/ QColor lighter(int f = 150) const nothrow;
+    /+ Q_REQUIRED_RESULT +/ QColor darker(int f = 200) const nothrow;
 
-    bool opEquals(ref const(QColor) c) const/+ noexcept+/;
-    bool opEquals(const(QColor) c) const/+ noexcept+/
+    bool opEquals(ref const(QColor) c) const nothrow;
+    bool opEquals(const(QColor) c) const nothrow
     {
         return opEquals(c);
     }
-    /+bool operator !=(ref const(QColor) c) const/+ noexcept+/;+/
+    /+bool operator !=(ref const(QColor) c) const nothrow;+/
 
     /+auto opCast(T : QVariant)() const;+/
 
@@ -248,16 +248,16 @@ public:
     {
         static bool isValidColor(ref const(QString) name);
     }
-    static bool isValidColor(QStringView)/+ noexcept+/;
-    static bool isValidColor(QLatin1String)/+ noexcept+/;
+    static bool isValidColor(QStringView) nothrow;
+    static bool isValidColor(QLatin1String) nothrow;
 
 private:
 
-    void invalidate()/+ noexcept+/;
+    void invalidate() nothrow;
     /+ template <typename String> +/
     bool setColorFromString(String)(String name);
 
-    static bool isRgbaValid(int r, int g, int b, int a = 255)/+ noexcept /+ Q_DECL_CONST_FUNCTION +/
+    static bool isRgbaValid(int r, int g, int b, int a = 255) nothrow/+ /+ Q_DECL_CONST_FUNCTION +/
     __attribute__((const))+/    {
         return uint(r) <= 255 && uint(g) <= 255 && uint(b) <= 255 && uint(a) <= 255;
     }

@@ -38,14 +38,14 @@ public:
 /+ #ifdef QT_BASIC_ATOMIC_HAS_CONSTRUCTORS
     constexpr QAtomicInteger(T value = 0) noexcept : QBasicAtomicInteger<T>(value) {}
 #else +/
-    pragma(inline, true) this(T value/+ = 0+/)/+ noexcept+/
+    pragma(inline, true) this(T value/+ = 0+/) nothrow
     {
         this._q_value = value;
     }
 /+ #endif +/
 
     @disable this(this);
-    pragma(inline, true) this(ref const(QAtomicInteger) other)/+ noexcept+/
+    pragma(inline, true) this(ref const(QAtomicInteger) other) nothrow
 /+ #ifdef QT_BASIC_ATOMIC_HAS_CONSTRUCTORS
         : QBasicAtomicInteger<T>()
 #endif +/
@@ -53,7 +53,7 @@ public:
         base0.storeRelease(other.base0.loadAcquire());
     }
 
-    pragma(inline, true) ref QAtomicInteger opAssign(ref const(QAtomicInteger) other)/+ noexcept+/
+    pragma(inline, true) ref QAtomicInteger opAssign(ref const(QAtomicInteger) other) nothrow
     {
         this.storeRelease(other.loadAcquire());
         return this;
@@ -144,7 +144,7 @@ public:
 /+ #ifdef QT_BASIC_ATOMIC_HAS_CONSTRUCTORS
     constexpr
 #endif +/
-    this(int value/+ = 0+/)/+ noexcept+/
+    this(int value/+ = 0+/) nothrow
     {
         this.base0 = typeof(this.base0)(value);
     }
@@ -162,13 +162,13 @@ public:
     constexpr QAtomicPointer(T *value = nullptr) noexcept : QBasicAtomicPointer<T>(value) {}
 #else +/
     @disable this();
-    pragma(inline, true) this(T* value/+ = null+/)/+ noexcept+/
+    pragma(inline, true) this(T* value/+ = null+/) nothrow
     {
         this.storeRelaxed(value);
     }
 /+ #endif +/
     @disable this(this);
-    pragma(inline, true) this(ref const(QAtomicPointer!(T)) other)/+ noexcept+/
+    pragma(inline, true) this(ref const(QAtomicPointer!(T)) other) nothrow
 /+ #ifdef QT_BASIC_ATOMIC_HAS_CONSTRUCTORS
         : QBasicAtomicPointer<T>()
 #endif +/
@@ -176,7 +176,7 @@ public:
         this.storeRelease(other.loadAcquire());
     }
 
-    pragma(inline, true) ref QAtomicPointer!(T) opAssign(ref const(QAtomicPointer!(T)) other)/+ noexcept+/
+    pragma(inline, true) ref QAtomicPointer!(T) opAssign(ref const(QAtomicPointer!(T)) other) nothrow
     {
         this.storeRelease(other.loadAcquire());
         return this;

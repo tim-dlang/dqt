@@ -267,7 +267,7 @@ private:
     pragma(inline, true) final int startTimer(int){ return -1;}
     pragma(inline, true) final void killTimer(int){}
 
-    static /+ Qt:: +/qt.core.namespace.TimerType defaultTypeFor(int msecs)/+ noexcept+/
+    static /+ Qt:: +/qt.core.namespace.TimerType defaultTypeFor(int msecs) nothrow
     { return msecs >= 2000 ? /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer : /+ Qt:: +/qt.core.namespace.TimerType.PreciseTimer; }
     mixin(changeWindowsMangling(q{mangleClassesTailConst}, q{
     static void singleShotImpl(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType,
@@ -289,31 +289,31 @@ private:
     int id; int inter; int del;
     /+ uint single : 1; +/
     ubyte bitfieldData_single;
-    final uint single() const
+    final uint single() const nothrow
     {
         return (bitfieldData_single >> 0) & 0x1;
     }
-    final uint single(uint value)
+    final uint single(uint value) nothrow
     {
         bitfieldData_single = (bitfieldData_single & ~0x1) | ((value & 0x1) << 0);
         return value;
     }
     /+ uint nulltimer : 1; +/
-    final uint nulltimer() const
+    final uint nulltimer() const nothrow
     {
         return (bitfieldData_single >> 1) & 0x1;
     }
-    final uint nulltimer(uint value)
+    final uint nulltimer(uint value) nothrow
     {
         bitfieldData_single = (bitfieldData_single & ~0x2) | ((value & 0x1) << 1);
         return value;
     }
     /+ uint type : 2; +/
-    final uint type() const
+    final uint type() const nothrow
     {
         return (bitfieldData_single >> 2) & 0x3;
     }
-    final uint type(uint value)
+    final uint type(uint value) nothrow
     {
         bitfieldData_single = (bitfieldData_single & ~0xc) | ((value & 0x3) << 2);
         return value;

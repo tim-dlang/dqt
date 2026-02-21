@@ -45,7 +45,7 @@ public:
     version (Windows)
     {
         @disable this();
-        pragma(inline, true) void rawConstructor()/+ noexcept+/
+        pragma(inline, true) void rawConstructor() nothrow
         {
             this.d = Data.sharedNull();
         }
@@ -154,7 +154,7 @@ public:
         /+ QtPrivate:: +/qt.core.containertools_impl.reserveIfForwardIterator(&this, first, last);
         /+ std:: +/copy(first, last, /+ std:: +/back_inserter(this));
     }
-    /+ explicit +/this(QArrayDataPointerRef!(T) ref_)/+ noexcept+/
+    /+ explicit +/this(QArrayDataPointerRef!(T) ref_) nothrow
     {
         this.d = ref_.ptr;
     }
@@ -469,9 +469,9 @@ public:
     /+ typedef std::reverse_iterator<const_iterator> const_reverse_iterator; +/
 /+ #if !defined(QT_STRICT_ITERATORS) || defined(Q_CLANG_QDOC) +/
     pragma(inline, true) iterator begin() { detach(); return iterator(d.begin()); }
-    pragma(inline, true) const_iterator begin() const/+ noexcept+/ { return d.constBegin(); }
-    pragma(inline, true) const_iterator cbegin() const/+ noexcept+/ { return d.constBegin(); }
-    pragma(inline, true) const_iterator constBegin() const/+ noexcept+/ { return d.constBegin(); }
+    pragma(inline, true) const_iterator begin() const nothrow { return d.constBegin(); }
+    pragma(inline, true) const_iterator cbegin() const nothrow { return d.constBegin(); }
+    pragma(inline, true) const_iterator constBegin() const nothrow { return d.constBegin(); }
     pragma(inline, true) iterator end() { detach(); return iterator(d.end()); }
 
     auto opSlice()const
@@ -497,9 +497,9 @@ public:
         return R(this_.begin(), this_.end());
     }
 
-    pragma(inline, true) const_iterator end() const/+ noexcept+/ { return d.constEnd(); }
-    pragma(inline, true) const_iterator cend() const/+ noexcept+/ { return d.constEnd(); }
-    pragma(inline, true) const_iterator constEnd() const/+ noexcept+/ { return d.constEnd(); }
+    pragma(inline, true) const_iterator end() const nothrow { return d.constEnd(); }
+    pragma(inline, true) const_iterator cend() const nothrow { return d.constEnd(); }
+    pragma(inline, true) const_iterator constEnd() const nothrow { return d.constEnd(); }
 /+ #else
     inline iterator begin(iterator = iterator()) { detach(); return d->begin(); }
     inline const_iterator begin(const_iterator = const_iterator()) const noexcept { return d->constBegin(); }

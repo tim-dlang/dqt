@@ -159,15 +159,15 @@ private:
     QExplicitlySharedDataPointer!(QRegularExpressionPrivate) d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator |(QRegularExpression.PatternOptions.enum_type f1, QRegularExpression.PatternOptions.enum_type f2)/+noexcept+/{return QFlags!(QRegularExpression.PatternOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator |(QRegularExpression.PatternOptions.enum_type f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QRegularExpression.PatternOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator |(QRegularExpression.PatternOptions.enum_type f1, QRegularExpression.PatternOptions.enum_type f2)nothrow{return QFlags!(QRegularExpression.PatternOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QRegularExpression.PatternOptions.enum_type) operator |(QRegularExpression.PatternOptions.enum_type f1, QFlags!(QRegularExpression.PatternOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QRegularExpression.PatternOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_SHARED(QRegularExpression)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QRegularExpression::PatternOptions) +/
-/+pragma(inline, true) QFlags!(QRegularExpression.MatchOptions.enum_type) operator |(QRegularExpression.MatchOptions.enum_type f1, QRegularExpression.MatchOptions.enum_type f2)/+noexcept+/{return QFlags!(QRegularExpression.MatchOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QRegularExpression.MatchOptions.enum_type) operator |(QRegularExpression.MatchOptions.enum_type f1, QFlags!(QRegularExpression.MatchOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QRegularExpression.MatchOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QRegularExpression.MatchOptions.enum_type) operator |(QRegularExpression.MatchOptions.enum_type f1, QRegularExpression.MatchOptions.enum_type f2)nothrow{return QFlags!(QRegularExpression.MatchOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QRegularExpression.MatchOptions.enum_type) operator |(QRegularExpression.MatchOptions.enum_type f1, QFlags!(QRegularExpression.MatchOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QRegularExpression.MatchOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QRegularExpression::MatchOptions)
 #ifndef QT_NO_DATASTREAM
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &out, const QRegularExpression &re);

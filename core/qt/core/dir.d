@@ -164,7 +164,7 @@ alias SortFlags = QFlags!(SortFlag);
 
     static QFileInfoList drives();
 
-    pragma(inline, true) static QChar listSeparator()/+ noexcept+/
+    pragma(inline, true) static QChar listSeparator() nothrow
     {
         static if ((versionIsSet!("Windows") && !versionIsSet!("Cygwin")))
         {
@@ -213,15 +213,15 @@ private:
 
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator |(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)/+noexcept+/{return QFlags!(QDir.Filters.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator |(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QDir.Filters.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator |(QDir.Filters.enum_type f1, QDir.Filters.enum_type f2)nothrow{return QFlags!(QDir.Filters.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QDir.Filters.enum_type) operator |(QDir.Filters.enum_type f1, QFlags!(QDir.Filters.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QDir.Filters.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_SHARED(QDir)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::Filters) +/
-/+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator |(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)/+noexcept+/{return QFlags!(QDir.SortFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator |(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QDir.SortFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator |(QDir.SortFlags.enum_type f1, QDir.SortFlags.enum_type f2)nothrow{return QFlags!(QDir.SortFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QDir.SortFlags.enum_type) operator |(QDir.SortFlags.enum_type f1, QFlags!(QDir.SortFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QDir.SortFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::SortFlags)
 #ifndef QT_NO_DEBUG_STREAM
 class QDebug;

@@ -110,12 +110,12 @@ private:
     /+ friend class QWebEnginePagePrivate; +/
     /+ friend class QWebEnginePage; +/
 }
-/+pragma(inline, true) QFlags!(QWebEngineContextMenuData.MediaFlags.enum_type) operator |(QWebEngineContextMenuData.MediaFlags.enum_type f1, QWebEngineContextMenuData.MediaFlags.enum_type f2)/+noexcept+/{return QFlags!(QWebEngineContextMenuData.MediaFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QWebEngineContextMenuData.MediaFlags.enum_type) operator |(QWebEngineContextMenuData.MediaFlags.enum_type f1, QFlags!(QWebEngineContextMenuData.MediaFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QWebEngineContextMenuData.MediaFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QWebEngineContextMenuData.MediaFlags.enum_type) operator |(QWebEngineContextMenuData.MediaFlags.enum_type f1, QWebEngineContextMenuData.MediaFlags.enum_type f2)nothrow{return QFlags!(QWebEngineContextMenuData.MediaFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QWebEngineContextMenuData.MediaFlags.enum_type) operator |(QWebEngineContextMenuData.MediaFlags.enum_type f1, QFlags!(QWebEngineContextMenuData.MediaFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QWebEngineContextMenuData.MediaFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QWebEngineContextMenuData::MediaFlags) +/
-/+pragma(inline, true) QFlags!(QWebEngineContextMenuData.EditFlags.enum_type) operator |(QWebEngineContextMenuData.EditFlags.enum_type f1, QWebEngineContextMenuData.EditFlags.enum_type f2)/+noexcept+/{return QFlags!(QWebEngineContextMenuData.EditFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QWebEngineContextMenuData.EditFlags.enum_type) operator |(QWebEngineContextMenuData.EditFlags.enum_type f1, QFlags!(QWebEngineContextMenuData.EditFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QWebEngineContextMenuData.EditFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QWebEngineContextMenuData.EditFlags.enum_type) operator |(QWebEngineContextMenuData.EditFlags.enum_type f1, QWebEngineContextMenuData.EditFlags.enum_type f2)nothrow{return QFlags!(QWebEngineContextMenuData.EditFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QWebEngineContextMenuData.EditFlags.enum_type) operator |(QWebEngineContextMenuData.EditFlags.enum_type f1, QFlags!(QWebEngineContextMenuData.EditFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QWebEngineContextMenuData.EditFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QWebEngineContextMenuData::EditFlags) +/

@@ -27,17 +27,17 @@ extern(C++, class) struct QColorTransformPrivate;
 {
 public:
     @disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.d = null;
     }+/
     /+ Q_GUI_EXPORT +/~this();
     @disable this(this);
-    /+ Q_GUI_EXPORT +/this(ref const(QColorTransform) colorTransform)/+ noexcept+/;
+    /+ Q_GUI_EXPORT +/this(ref const(QColorTransform) colorTransform) nothrow;
     /+ QColorTransform(QColorTransform &&colorTransform) noexcept
             : d{qExchange(colorTransform.d, nullptr)}
     { } +/
-    /+ref QColorTransform opAssign(ref const(QColorTransform) other)/+ noexcept+/
+    /+ref QColorTransform opAssign(ref const(QColorTransform) other) nothrow
     {
         QColorTransform(other).swap(this);
         return this;

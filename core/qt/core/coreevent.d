@@ -294,7 +294,7 @@ public:
     pragma(inline, true) final void accept() { m_accept = true; }
     pragma(inline, true) final void ignore() { m_accept = false; }
 
-    static int registerEventType(int hint = -1)/+ noexcept+/;
+    static int registerEventType(int hint = -1) nothrow;
 
 protected:
     QEventPrivate* d;
@@ -303,41 +303,41 @@ protected:
 private:
     /+ ushort posted : 1; +/
     ushort bitfieldData_posted;
-    final ushort posted() const
+    final ushort posted() const nothrow
     {
         return (bitfieldData_posted >> 0) & 0x1;
     }
-    final ushort posted(ushort value)
+    final ushort posted(ushort value) nothrow
     {
         bitfieldData_posted = (bitfieldData_posted & ~0x1) | ((value & 0x1) << 0);
         return value;
     }
     /+ ushort spont : 1; +/
-    final ushort spont() const
+    final ushort spont() const nothrow
     {
         return (bitfieldData_posted >> 1) & 0x1;
     }
-    final ushort spont(ushort value)
+    final ushort spont(ushort value) nothrow
     {
         bitfieldData_posted = (bitfieldData_posted & ~0x2) | ((value & 0x1) << 1);
         return value;
     }
     /+ ushort m_accept : 1; +/
-    final ushort m_accept() const
+    final ushort m_accept() const nothrow
     {
         return (bitfieldData_posted >> 2) & 0x1;
     }
-    final ushort m_accept(ushort value)
+    final ushort m_accept(ushort value) nothrow
     {
         bitfieldData_posted = (bitfieldData_posted & ~0x4) | ((value & 0x1) << 2);
         return value;
     }
     /+ ushort reserved : 13; +/
-    final ushort reserved() const
+    final ushort reserved() const nothrow
     {
         return (bitfieldData_posted >> 3) & 0x1fff;
     }
-    final ushort reserved(ushort value)
+    final ushort reserved(ushort value) nothrow
     {
         bitfieldData_posted = (bitfieldData_posted & ~0xfff8) | ((value & 0x1fff) << 3);
         return value;

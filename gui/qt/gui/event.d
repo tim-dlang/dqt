@@ -249,51 +249,51 @@ protected:
     /+ Qt:: +/qt.core.namespace.MouseButtons mouseState = /+ Qt:: +/qt.core.namespace.MouseButton.NoButton;
     /+ uint _unused_ : 2; +/ // Kept for binary compatibility
     uint bitfieldData__unused_;
-    final uint _unused_() const
+    final uint _unused_() const nothrow
     {
         return (bitfieldData__unused_ >> 0) & 0x3;
     }
-    final uint _unused_(uint value)
+    final uint _unused_(uint value) nothrow
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0x3) | ((value & 0x3) << 0);
         return value;
     }
     /+ uint src: 2; +/
-    final uint src() const
+    final uint src() const nothrow
     {
         return (bitfieldData__unused_ >> 2) & 0x3;
     }
-    final uint src(uint value)
+    final uint src(uint value) nothrow
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0xc) | ((value & 0x3) << 2);
         return value;
     }
     /+ bool invertedScrolling : 1; +/
-    final bool invertedScrolling() const
+    final bool invertedScrolling() const nothrow
     {
         return (bitfieldData__unused_ >> 4) & 0x1;
     }
-    final bool invertedScrolling(bool value)
+    final bool invertedScrolling(bool value) nothrow
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0x10) | ((value & 0x1) << 4);
         return value;
     }
     /+ uint ph : 3; +/
-    final uint ph() const
+    final uint ph() const nothrow
     {
         return (bitfieldData__unused_ >> 5) & 0x7;
     }
-    final uint ph(uint value)
+    final uint ph(uint value) nothrow
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0xe0) | ((value & 0x7) << 5);
         return value;
     }
     /+ int reserved : 24; +/
-    final int reserved() const
+    final int reserved() const nothrow
     {
         return (bitfieldData__unused_ >> 8) & 0xffffff;
     }
-    final int reserved(int value)
+    final int reserved(int value) nothrow
     {
         bitfieldData__unused_ = (bitfieldData__unused_ & ~0xffffff00) | ((value & 0xffffff) << 8);
         return value;
@@ -466,11 +466,11 @@ protected:
     ushort c;
     /+ ushort autor:1; +/
     ubyte bitfieldData_autor;
-    final ushort autor() const
+    final ushort autor() const nothrow
     {
         return (bitfieldData_autor >> 0) & 0x1;
     }
-    final ushort autor(ushort value)
+    final ushort autor(ushort value) nothrow
     {
         bitfieldData_autor = (bitfieldData_autor & ~0x1) | ((value & 0x1) << 0);
         return value;
@@ -648,11 +648,11 @@ protected:
     QPoint gp;
     /+ uint reas : 8; +/
     ubyte bitfieldData_reas;
-    final uint reas() const
+    final uint reas() const nothrow
     {
         return (bitfieldData_reas >> 0) & 0xff;
     }
-    final uint reas(uint value)
+    final uint reas(uint value) nothrow
     {
         bitfieldData_reas = (bitfieldData_reas & ~0xff) | ((value & 0xff) << 0);
         return value;
@@ -916,11 +916,11 @@ public:
 private:
     /+ uint tog : 1; +/
     ubyte bitfieldData_tog;
-    final uint tog() const
+    final uint tog() const nothrow
     {
         return (bitfieldData_tog >> 0) & 0x1;
     }
-    final uint tog(uint value)
+    final uint tog(uint value) nothrow
     {
         bitfieldData_tog = (bitfieldData_tog & ~0x1) | ((value & 0x1) << 0);
         return value;
@@ -983,7 +983,7 @@ version (QT_NO_SHORTCUT) {} else
 public:
     @disable this();
     /+/+ Q_ALWAYS_INLINE +/
-        pragma(inline, true) this()/+ noexcept+/
+        pragma(inline, true) this() nothrow
         {
             this.m_numericId = -1;
         }+/
@@ -992,8 +992,8 @@ public:
 
     static QPointingDeviceUniqueId fromNumericId(qint64 id);
 
-    /+ Q_ALWAYS_INLINE +/ pragma(inline, true) bool isValid() const/+ noexcept+/ { return m_numericId != -1; }
-    qint64 numericId() const/+ noexcept+/;
+    /+ Q_ALWAYS_INLINE +/ pragma(inline, true) bool isValid() const nothrow { return m_numericId != -1; }
+    qint64 numericId() const nothrow;
 
 private:
     // TODO: for TUIO 2, or any other type of complex token ID, an internal
@@ -1012,8 +1012,8 @@ template <> class QList<QPointingDeviceUniqueId> {}; // to prevent instantiation
 #pragma qt_sync_resume_processing
 #endif +/
 
-/+/+ Q_GUI_EXPORT +/ bool operator ==(QPointingDeviceUniqueId lhs, QPointingDeviceUniqueId rhs)/+ noexcept+/;+/
-/+pragma(inline, true) bool operator !=(QPointingDeviceUniqueId lhs, QPointingDeviceUniqueId rhs)/+ noexcept+/
+/+/+ Q_GUI_EXPORT +/ bool operator ==(QPointingDeviceUniqueId lhs, QPointingDeviceUniqueId rhs) nothrow;+/
+/+pragma(inline, true) bool operator !=(QPointingDeviceUniqueId lhs, QPointingDeviceUniqueId rhs) nothrow
 { return !operator==(lhs, rhs); }+/
 /+ Q_GUI_EXPORT uint qHash(QPointingDeviceUniqueId key, uint seed = 0) noexcept; +/
 
@@ -1181,9 +1181,9 @@ protected:
     }
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type) operator |(QTouchEvent.TouchPoint.InfoFlags.enum_type f1, QTouchEvent.TouchPoint.InfoFlags.enum_type f2)/+noexcept+/{return QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type) operator |(QTouchEvent.TouchPoint.InfoFlags.enum_type f1, QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QTouchEvent.TouchPoint.InfoFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type) operator |(QTouchEvent.TouchPoint.InfoFlags.enum_type f1, QTouchEvent.TouchPoint.InfoFlags.enum_type f2)nothrow{return QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type) operator |(QTouchEvent.TouchPoint.InfoFlags.enum_type f1, QFlags!(QTouchEvent.TouchPoint.InfoFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QTouchEvent.TouchPoint.InfoFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 /+ Q_DECLARE_TYPEINFO(QTouchEvent::TouchPoint, Q_MOVABLE_TYPE);
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTouchEvent::TouchPoint::InfoFlags)
 #ifndef QT_NO_DEBUG_STREAM

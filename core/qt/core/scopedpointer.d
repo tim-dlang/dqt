@@ -86,7 +86,7 @@ private:
 
     alias RestrictedBool = P/+ QScopedPointer:: * +/*;
 public:
-    /+ explicit +/this(P p/+ = null+/)/+ noexcept+/
+    /+ explicit +/this(P p/+ = null+/) nothrow
     {
         this.d = p;
     }
@@ -106,12 +106,12 @@ public:
         return *d;
     }
 
-    /+P operator ->() const/+ noexcept+/
+    /+P operator ->() const nothrow
     {
         return d;
     }+/
 
-    /+bool operator !() const/+ noexcept+/
+    /+bool operator !() const nothrow
     {
         return !d;
     }+/
@@ -122,25 +122,25 @@ public:
         return isNull() ? nullptr : &QScopedPointer::d;
     }
 #else +/
-    /+auto opCast(T : RestrictedBool)() const/+ noexcept+/
+    /+auto opCast(T : RestrictedBool)() const nothrow
     {
         return isNull() ? null : &QScopedPointer.d;
     }+/
 /+ #endif +/
 
-    P data() const/+ noexcept+/
+    P data() const nothrow
     {
         return cast(P)d;
     }
     
     alias data this;
 
-    P get() const/+ noexcept+/
+    P get() const nothrow
     {
         return cast(P)d;
     }
 
-    bool isNull() const/+ noexcept+/
+    bool isNull() const nothrow
     {
         return !d;
     }
@@ -154,7 +154,7 @@ public:
         Cleanup.cleanup(oldD);
     }+/
 
-  /+  P take()/+ noexcept+/
+  /+  P take() nothrow
     {
         P oldD = d;
         d = null;
@@ -176,32 +176,32 @@ private:
 @disable this(this);
 /+@disable this(ref const(QScopedPointer));+/@disable ref QScopedPointer opAssign(ref const(QScopedPointer));}
 
-/+pragma(inline, true) bool operator ==(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, ref const(QScopedPointer!(T, Cleanup)) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, ref const(QScopedPointer!(T, Cleanup)) rhs) nothrow
 {
     return lhs.data() == rhs.data();
 }+/
 
-/+pragma(inline, true) bool operator !=(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, ref const(QScopedPointer!(T, Cleanup)) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, ref const(QScopedPointer!(T, Cleanup)) rhs) nothrow
 {
     return lhs.data() != rhs.data();
 }+/
 
-/+pragma(inline, true) bool operator ==(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, /+ std:: +/nullptr_t)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, /+ std:: +/nullptr_t) nothrow
 {
     return lhs.isNull();
 }+/
 
-/+pragma(inline, true) bool operator ==(T, Cleanup)(/+ std:: +/nullptr_t, ref const(QScopedPointer!(T, Cleanup)) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(T, Cleanup)(/+ std:: +/nullptr_t, ref const(QScopedPointer!(T, Cleanup)) rhs) nothrow
 {
     return rhs.isNull();
 }+/
 
-/+pragma(inline, true) bool operator !=(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, /+ std:: +/nullptr_t)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(T, Cleanup)(ref const(QScopedPointer!(T, Cleanup)) lhs, /+ std:: +/nullptr_t) nothrow
 {
     return !lhs.isNull();
 }+/
 
-/+pragma(inline, true) bool operator !=(T, Cleanup)(/+ std:: +/nullptr_t, ref const(QScopedPointer!(T, Cleanup)) rhs)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(T, Cleanup)(/+ std:: +/nullptr_t, ref const(QScopedPointer!(T, Cleanup)) rhs) nothrow
 {
     return !rhs.isNull();
 }+/

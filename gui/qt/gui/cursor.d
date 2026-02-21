@@ -129,8 +129,8 @@ private:
 }
 /+ Q_DECLARE_SHARED_NOT_MOVABLE_UNTIL_QT6(QCursor) +/
 
-/+/+ Q_GUI_EXPORT +/ bool operator ==(ref const(QCursor) lhs, ref const(QCursor) rhs)/+ noexcept+/;+/
-/+pragma(inline, true) bool operator !=(ref const(QCursor) lhs, ref const(QCursor) rhs)/+ noexcept+/ { return !(lhs == rhs); }+/
+/+/+ Q_GUI_EXPORT +/ bool operator ==(ref const(QCursor) lhs, ref const(QCursor) rhs) nothrow;+/
+/+pragma(inline, true) bool operator !=(ref const(QCursor) lhs, ref const(QCursor) rhs) nothrow { return !(lhs == rhs); }+/
 
 /*****************************************************************************
   QCursor stream functions

@@ -213,9 +213,9 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_layoutChanged(const QList<QPersistentModelIndex> &parents = QList<QPersistentModelIndex>(), QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoHint)) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)/+noexcept+/{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QItemSelectionModel.SelectionFlags.enum_type f2)nothrow{return QFlags!(QItemSelectionModel.SelectionFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QItemSelectionModel.SelectionFlags.enum_type) operator |(QItemSelectionModel.SelectionFlags.enum_type f1, QFlags!(QItemSelectionModel.SelectionFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QItemSelectionModel.SelectionFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QItemSelectionModel::SelectionFlags)
 // dummy implentation of qHash() necessary for instantiating QList<QItemSelectionRange>::toSet() with MSVC

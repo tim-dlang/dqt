@@ -42,9 +42,9 @@ class /+ Q_CORE_EXPORT +/ QThread : QObject
 {
     mixin(Q_OBJECT);
 public:
-    static /+ Qt:: +/qt.core.namespace.HANDLE currentThreadId()/+ noexcept /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
+    static /+ Qt:: +/qt.core.namespace.HANDLE currentThreadId() nothrow/+ /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
     static QThread currentThread();
-    static int idealThreadCount()/+ noexcept+/;
+    static int idealThreadCount() nothrow;
     static void yieldCurrentThread();
 
     /+ explicit +/this(QObject parent = null);

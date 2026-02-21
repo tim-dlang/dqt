@@ -139,8 +139,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void _q_handleButtonDestroyed()) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator |(QDialogButtonBox.StandardButtons.enum_type f1, QDialogButtonBox.StandardButtons.enum_type f2)/+noexcept+/{return QFlags!(QDialogButtonBox.StandardButtons.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator |(QDialogButtonBox.StandardButtons.enum_type f1, QFlags!(QDialogButtonBox.StandardButtons.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QDialogButtonBox.StandardButtons.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator |(QDialogButtonBox.StandardButtons.enum_type f1, QDialogButtonBox.StandardButtons.enum_type f2)nothrow{return QFlags!(QDialogButtonBox.StandardButtons.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QDialogButtonBox.StandardButtons.enum_type) operator |(QDialogButtonBox.StandardButtons.enum_type f1, QFlags!(QDialogButtonBox.StandardButtons.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QDialogButtonBox.StandardButtons.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QDialogButtonBox::StandardButtons) +/

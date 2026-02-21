@@ -618,7 +618,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 
 } //namespace QAlgorithmsPrivate
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint32 v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint32 v) nothrow
 {
 /+ #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT +/
     return popcnt(v);
@@ -631,7 +631,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #endif +/
 }
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint8 v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint8 v) nothrow
 {
 /+ #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT +/
     return popcnt(v);
@@ -641,7 +641,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #endif +/
 }
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint16 v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint16 v) nothrow
 {
 /+ #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNT +/
     return popcnt(v);
@@ -652,7 +652,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #endif +/
 }
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint64 v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(quint64 v) nothrow
 {
 /+ #ifdef QALGORITHMS_USE_BUILTIN_POPCOUNTLL +/
     return popcnt(v);
@@ -667,7 +667,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #endif +/
 }
 
-/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(cpp_ulong   v)/+ noexcept+/
+/+ Q_DECL_CONST_FUNCTION +/ pragma(inline, true) uint qPopulationCount(cpp_ulong   v) nothrow
 {
     return qPopulationCount(static_cast!(quint64)(v));
 }
@@ -677,7 +677,7 @@ Q_ALWAYS_INLINE uint qt_builtin_popcountll(quint64 v) noexcept
 #endif
 #undef QT_POPCOUNT_CONSTEXPR +/
 
-pragma(inline, true) uint qCountTrailingZeroBits(quint32 v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(quint32 v) nothrow
 {
 /+ #if defined(QT_HAS_BUILTIN_CTZ) +/
     return v ? bsf(v) : 32U;
@@ -695,7 +695,7 @@ pragma(inline, true) uint qCountTrailingZeroBits(quint32 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountTrailingZeroBits(quint8 v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(quint8 v) nothrow
 {
 /+ #if defined(QT_HAS_BUILTIN_CTZ) +/
     return v ? bsf(v) : 8U;
@@ -710,7 +710,7 @@ pragma(inline, true) uint qCountTrailingZeroBits(quint8 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountTrailingZeroBits(quint16 v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(quint16 v) nothrow
 {
 /+ #if defined(QT_HAS_BUILTIN_CTZS) +/
     return v ? bsf(v) : 16U;
@@ -726,7 +726,7 @@ pragma(inline, true) uint qCountTrailingZeroBits(quint16 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountTrailingZeroBits(quint64 v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(quint64 v) nothrow
 {
 /+ #if defined(QT_HAS_BUILTIN_CTZLL) +/
     return v ? bsf(v) : 64;
@@ -737,12 +737,12 @@ pragma(inline, true) uint qCountTrailingZeroBits(quint64 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountTrailingZeroBits(cpp_ulong  v)/+ noexcept+/
+pragma(inline, true) uint qCountTrailingZeroBits(cpp_ulong  v) nothrow
 {
     return qCountTrailingZeroBits(QIntegerForSizeof!(cpp_long).Unsigned(v));
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(quint32 v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(quint32 v) nothrow
 {
 /+ #if defined(QT_HAS_BUILTIN_CLZ) +/
     return v ? 31U - bsr(v) : 32U;
@@ -757,7 +757,7 @@ pragma(inline, true) uint qCountLeadingZeroBits(quint32 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(quint8 v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(quint8 v) nothrow
 {
 /+ #if defined(QT_HAS_BUILTIN_CLZ) +/
     return v ? 7U - bsr(v) : 8U;
@@ -769,7 +769,7 @@ pragma(inline, true) uint qCountLeadingZeroBits(quint8 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(quint16 v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(quint16 v) nothrow
 {
 /+ #if defined(QT_HAS_BUILTIN_CLZS) +/
     return v ? 15U - bsr(v) : 16U;
@@ -782,7 +782,7 @@ pragma(inline, true) uint qCountLeadingZeroBits(quint16 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(quint64 v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(quint64 v) nothrow
 {
 /+ #if defined(QT_HAS_BUILTIN_CLZLL) +/
     return v ? 63U - bsr(v) : 64U;
@@ -797,7 +797,7 @@ pragma(inline, true) uint qCountLeadingZeroBits(quint64 v)/+ noexcept+/
 #endif +/
 }
 
-pragma(inline, true) uint qCountLeadingZeroBits(cpp_ulong  v)/+ noexcept+/
+pragma(inline, true) uint qCountLeadingZeroBits(cpp_ulong  v) nothrow
 {
     return qCountLeadingZeroBits(QIntegerForSizeof!(cpp_long).Unsigned(v));
 }

@@ -24,21 +24,21 @@ struct /+ Q_CORE_EXPORT +/ QArrayData
     int size;
     /+ uint alloc : 31; +/
     uint bitfieldData_alloc;
-    uint alloc() const
+    uint alloc() const nothrow
     {
         return (bitfieldData_alloc >> 0) & 0x7fffffff;
     }
-    uint alloc(uint value)
+    uint alloc(uint value) nothrow
     {
         bitfieldData_alloc = (bitfieldData_alloc & ~0x7fffffff) | ((value & 0x7fffffff) << 0);
         return value;
     }
     /+ uint capacityReserved : 1; +/
-    uint capacityReserved() const
+    uint capacityReserved() const nothrow
     {
         return (bitfieldData_alloc >> 31) & 0x1;
     }
-    uint capacityReserved(uint value)
+    uint capacityReserved(uint value) nothrow
     {
         bitfieldData_alloc = (bitfieldData_alloc & ~0x80000000) | ((value & 0x1) << 31);
         return value;
@@ -46,14 +46,14 @@ struct /+ Q_CORE_EXPORT +/ QArrayData
 
     qptrdiff offset; // in bytes from beginning of header
 
-    void* data()
+    void* data() nothrow
     {
         (mixin(Q_ASSERT(q{QArrayData.size == 0
                     || QArrayData.offset < 0 || size_t(QArrayData.offset) >= QArrayData.sizeof})));
         return reinterpret_cast!(char*)(&this) + offset;
     }
 
-    const(void)* data() const
+    const(void)* data() const nothrow
     {
         (mixin(Q_ASSERT(q{QArrayData.size == 0
                     || QArrayData.offset < 0 || size_t(QArrayData.offset) >= QArrayData.sizeof})));
@@ -112,20 +112,20 @@ alias AllocationOptions = QFlags!(AllocationOption);
     }
 
     /+ Q_REQUIRED_RESULT +/ static QArrayData* allocate(size_t objectSize, size_t alignment,
-                size_t capacity, AllocationOptions options = AllocationOptions.Default)/+ noexcept+/;
+                size_t capacity, AllocationOptions options = AllocationOptions.Default) nothrow;
     /+ Q_REQUIRED_RESULT +/ static QArrayData* reallocateUnaligned(QArrayData* data, size_t objectSize,
-                size_t newCapacity, AllocationOptions newOptions = AllocationOption.Default)/+ noexcept+/;
+                size_t newCapacity, AllocationOptions newOptions = AllocationOption.Default) nothrow;
     static void deallocate(QArrayData* data, size_t objectSize,
-                size_t alignment)/+ noexcept+/;
+                size_t alignment) nothrow;
 
     mixin(mangleWindows("?shared_null@QArrayData@@2QBU1@B", exportOnWindows ~ q{
     extern static __gshared const(const(QArrayData)[2]) shared_null;
     }));
-    static QArrayData* sharedNull()/+ noexcept+/ { return const_cast!(QArrayData*)(shared_null.ptr); }
+    static QArrayData* sharedNull() nothrow { return const_cast!(QArrayData*)(shared_null.ptr); }
 }
-/+pragma(inline, true) QFlags!(QArrayData.AllocationOptions.enum_type) operator |(QArrayData.AllocationOptions.enum_type f1, QArrayData.AllocationOptions.enum_type f2)/+noexcept+/{return QFlags!(QArrayData.AllocationOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QArrayData.AllocationOptions.enum_type) operator |(QArrayData.AllocationOptions.enum_type f1, QFlags!(QArrayData.AllocationOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QArrayData.AllocationOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QArrayData.AllocationOptions.enum_type) operator |(QArrayData.AllocationOptions.enum_type f1, QArrayData.AllocationOptions.enum_type f2)nothrow{return QFlags!(QArrayData.AllocationOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QArrayData.AllocationOptions.enum_type) operator |(QArrayData.AllocationOptions.enum_type f1, QFlags!(QArrayData.AllocationOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QArrayData.AllocationOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QArrayData::AllocationOptions) +/
 struct QTypedArrayData(T)
@@ -212,15 +212,15 @@ struct QTypedArrayData(T)
     alias const_iterator = const(T)*;
 /+ #endif +/
 
-    T* data() { return static_cast!(T*)(base0.data()); }
-    const(T)* data() const { return static_cast!(const(T)*)(base0.data()); }
+    T* data() nothrow { return static_cast!(T*)(base0.data()); }
+    const(T)* data() const nothrow { return static_cast!(const(T)*)(base0.data()); }
 
-    iterator begin(/+iterator  = iterator() +/) { return data(); }
-    iterator end(/+iterator  = iterator() +/) { return data() + size; }
-    const_iterator begin(/+const_iterator  = const_iterator() +/) const { return data(); }
-    const_iterator end(/+const_iterator  = const_iterator() +/) const { return data() + size; }
-    const_iterator constBegin(/+const_iterator  = const_iterator() +/) const { return data(); }
-    const_iterator constEnd(/+ const_iterator = const_iterator() +/) const { return data() + size; }
+    iterator begin(/+iterator  = iterator() +/) nothrow { return data(); }
+    iterator end(/+iterator  = iterator() +/) nothrow { return data() + size; }
+    const_iterator begin(/+const_iterator  = const_iterator() +/) const nothrow { return data(); }
+    const_iterator end(/+const_iterator  = const_iterator() +/) const nothrow { return data() + size; }
+    const_iterator constBegin(/+const_iterator  = const_iterator() +/) const nothrow { return data(); }
+    const_iterator constEnd(/+ const_iterator = const_iterator() +/) const nothrow { return data() + size; }
 
     extern(C++, class) struct AlignmentDummy {
     private:
@@ -268,7 +268,7 @@ struct QTypedArrayData(T)
         return result;
     }
 
-    static QTypedArrayData* sharedNull()/+ noexcept+/
+    static QTypedArrayData* sharedNull() nothrow
     {
         mixin(Q_STATIC_ASSERT(q{QTypedArrayData.sizeof == QArrayData.sizeof}));
         return static_cast!(QTypedArrayData*)(QArrayData.sharedNull());

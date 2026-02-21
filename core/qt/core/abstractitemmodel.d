@@ -41,7 +41,7 @@ import qt.helpers;
 private:
     /+ friend class QAbstractItemModel; +/
 public:
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.r = -1;
         this.c = -1;
@@ -49,10 +49,10 @@ public:
         this.m = null;
     }+/
     // compiler-generated copy/move ctors/assignment operators are fine!
-    pragma(inline, true) int row() const/+ noexcept+/ { return r; }
-    pragma(inline, true) int column() const/+ noexcept+/ { return c; }
-    pragma(inline, true) quintptr internalId() const/+ noexcept+/ { return i; }
-    pragma(inline, true) void* internalPointer() const/+ noexcept+/ { return reinterpret_cast!(void*)(i); }
+    pragma(inline, true) int row() const nothrow { return r; }
+    pragma(inline, true) int column() const nothrow { return c; }
+    pragma(inline, true) quintptr internalId() const nothrow { return i; }
+    pragma(inline, true) void* internalPointer() const nothrow { return reinterpret_cast!(void*)(i); }
     pragma(inline, true) QModelIndex parent() const
     { return m ? m.parent(this) : QModelIndex(); }
     pragma(inline, true) QModelIndex sibling(int arow, int acolumn) const
@@ -69,13 +69,13 @@ public:
     { return m ? m.data(this, arole) : QVariant(); }
     pragma(inline, true) /+ Qt:: +/qt.core.namespace.ItemFlags flags() const
     { return m ? m.flags(this) : /+ Qt:: +/qt.core.namespace.ItemFlags(); }
-    pragma(inline, true) const(QAbstractItemModel) model() const/+ noexcept+/ { return m; }
-    pragma(inline, true) bool isValid() const/+ noexcept+/ { return (r >= 0) && (c >= 0) && (m !is null); }
-    /+pragma(inline, true) bool operator ==(ref const(QModelIndex) other) const/+ noexcept+/
+    pragma(inline, true) const(QAbstractItemModel) model() const nothrow { return m; }
+    pragma(inline, true) bool isValid() const nothrow { return (r >= 0) && (c >= 0) && (m !is null); }
+    /+pragma(inline, true) bool operator ==(ref const(QModelIndex) other) const nothrow
         { return (other.r == r) && (other.i == i) && (other.c == c) && (other.m == m); }+/
-    /+pragma(inline, true) bool operator !=(ref const(QModelIndex) other) const/+ noexcept+/
+    /+pragma(inline, true) bool operator !=(ref const(QModelIndex) other) const nothrow
         { return !(this == other); }+/
-    /+pragma(inline, true) bool operator <(ref const(QModelIndex) other) const/+ noexcept+/
+    /+pragma(inline, true) bool operator <(ref const(QModelIndex) other) const nothrow
         {
             return  r <  other.r
                 || (r == other.r && (c <  other.c
@@ -83,14 +83,14 @@ public:
                                                   || (i == other.i && /+ std:: +/less!(const(QAbstractItemModel))()(m, other.m))))));
         }+/
 private:
-    pragma(inline, true) this(int arow, int acolumn, void* ptr, const(QAbstractItemModel) amodel)/+ noexcept+/
+    pragma(inline, true) this(int arow, int acolumn, void* ptr, const(QAbstractItemModel) amodel) nothrow
     {
         this.r = arow;
         this.c = acolumn;
         this.i = reinterpret_cast!(quintptr)(ptr);
         this.m = *cast(QAbstractItemModel*)&amodel;
     }
-    pragma(inline, true) this(int arow, int acolumn, quintptr id, const(QAbstractItemModel) amodel)/+ noexcept+/
+    pragma(inline, true) this(int arow, int acolumn, quintptr id, const(QAbstractItemModel) amodel) nothrow
     {
         this.r = arow;
         this.c = acolumn;
@@ -390,9 +390,9 @@ private:
     /+ Q_DISABLE_COPY(QAbstractItemModel) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)/+noexcept+/{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QAbstractItemModel.CheckIndexOptions.enum_type f2)nothrow{return QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, QFlags!(QAbstractItemModel.CheckIndexOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QAbstractItemModel.CheckIndexOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractItemModel::CheckIndexOptions) +/
 /// Binding for C++ class [QAbstractTableModel](https://doc.qt.io/qt-5/qabstracttablemodel.html).

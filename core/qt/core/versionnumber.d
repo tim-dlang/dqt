@@ -60,7 +60,7 @@ private:
         }
 
         // set the InlineSegmentMarker and set length to zero
-        /+this()/+ noexcept+/
+        /+this() nothrow
         {
             this.dummy = 1;
         }+/
@@ -135,10 +135,10 @@ private:
             if (isUsingPointer()) cpp_delete(pointer_segments);
         }
 
-        bool isUsingPointer() const/+ noexcept+/
+        bool isUsingPointer() const nothrow
         { return (inline_segments[InlineSegmentMarker] & 1) == 0; }
 
-        int size() const/+ noexcept+/
+        int size() const nothrow
         { return isUsingPointer() ? pointer_segments.size() : (inline_segments[InlineSegmentMarker] >> 1); }
 
         void setInlineSize(int len)
@@ -206,7 +206,7 @@ private:
 
 public:
     @disable this();
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.m_segments = typeof(this.m_segments)();
     }+/
@@ -234,34 +234,34 @@ public:
     /+ explicit +/pragma(inline, true) this(int maj, int min, int mic)
     { m_segments.setSegments(3, maj, min, mic); }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool isNull() const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool isNull() const nothrow
     { return segmentCount() == 0; }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool isNormalized() const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool isNormalized() const /*nothrow*/
     { return isNull() || segmentAt(segmentCount() - 1) != 0; }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int majorVersion() const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int majorVersion() const /*nothrow*/
     { return segmentAt(0); }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int minorVersion() const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int minorVersion() const /*nothrow*/
     { return segmentAt(1); }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int microVersion() const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int microVersion() const /*nothrow*/
     { return segmentAt(2); }
 
     /+ Q_REQUIRED_RESULT +/ /+ Q_CORE_EXPORT +/ QVersionNumber normalized() const;
 
     /+ Q_REQUIRED_RESULT +/ /+ Q_CORE_EXPORT +/ QVector!(int) segments() const;
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int segmentAt(int index) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int segmentAt(int index) const /*nothrow*/
     { return (m_segments.size() > index) ? m_segments.at(index) : 0; }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int segmentCount() const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) int segmentCount() const nothrow
     { return m_segments.size(); }
 
-    /+ Q_REQUIRED_RESULT +/ /+ Q_CORE_EXPORT +/ bool isPrefixOf(ref const(QVersionNumber) other) const/+ noexcept+/;
+    /+ Q_REQUIRED_RESULT +/ /+ Q_CORE_EXPORT +/ bool isPrefixOf(ref const(QVersionNumber) other) const nothrow;
 
-    /+ Q_REQUIRED_RESULT +/ /+ Q_CORE_EXPORT +/ static int compare(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2)/+ noexcept+/;
+    /+ Q_REQUIRED_RESULT +/ /+ Q_CORE_EXPORT +/ static int compare(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2) nothrow;
 
     /+ Q_REQUIRED_RESULT +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ static QVersionNumber commonPrefix(ref const(QVersionNumber) v1, ref const(QVersionNumber) v2);
 
@@ -288,22 +288,22 @@ private:
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVersionNumber &version);
 #endif +/
 
-/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator > (ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs)/+ noexcept+/
+/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator > (ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs) nothrow
 { return QVersionNumber.compare(lhs, rhs) > 0; }+/
 
-/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator >=(ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs)/+ noexcept+/
+/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator >=(ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs) nothrow
 { return QVersionNumber.compare(lhs, rhs) >= 0; }+/
 
-/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator < (ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs)/+ noexcept+/
+/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator < (ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs) nothrow
 { return QVersionNumber.compare(lhs, rhs) < 0; }+/
 
-/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator <=(ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs)/+ noexcept+/
+/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator <=(ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs) nothrow
 { return QVersionNumber.compare(lhs, rhs) <= 0; }+/
 
-/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator ==(ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs)/+ noexcept+/
+/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator ==(ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs) nothrow
 { return QVersionNumber.compare(lhs, rhs) == 0; }+/
 
-/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator !=(ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs)/+ noexcept+/
+/+/+ Q_REQUIRED_RESULT +/ pragma(inline, true) bool operator !=(ref const(QVersionNumber) lhs, ref const(QVersionNumber) rhs) nothrow
 { return QVersionNumber.compare(lhs, rhs) != 0; }+/
 
 

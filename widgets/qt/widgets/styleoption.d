@@ -178,9 +178,9 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QStyleOptionFrame.FrameFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionFrame.FrameFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, QFlags!(QStyleOptionFrame.FrameFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionFrame.FrameFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionFrame::FrameFeatures) +/
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionFrameV2 = QStyleOptionFrame;
@@ -366,9 +366,9 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QStyleOptionButton.ButtonFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionButton.ButtonFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, QFlags!(QStyleOptionButton.ButtonFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionButton.ButtonFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionButton::ButtonFeatures)
 #if QT_CONFIG(tabbar) +/
@@ -447,9 +447,9 @@ public:
     int tabIndex = -1;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QStyleOptionTab.CornerWidgets.enum_type f2)nothrow{return QFlags!(QStyleOptionTab.CornerWidgets.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionTab.CornerWidgets.enum_type) operator |(QStyleOptionTab.CornerWidgets.enum_type f1, QFlags!(QStyleOptionTab.CornerWidgets.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionTab.CornerWidgets.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionTab::CornerWidgets) +/
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionTabV2 = QStyleOptionTab;
@@ -499,9 +499,9 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QStyleOptionToolBar.ToolBarFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, QFlags!(QStyleOptionToolBar.ToolBarFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolBar.ToolBarFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionToolBar::ToolBarFeatures) +/
 /+ #endif +/ // QT_CONFIG(toolbar)
@@ -716,9 +716,9 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QStyleOptionViewItem.ViewItemFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, QFlags!(QStyleOptionViewItem.ViewItemFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionViewItem.ViewItemFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionViewItem::ViewItemFeatures) +/
 /+ Q_DECL_DEPRECATED +/ alias QStyleOptionViewItemV2 = QStyleOptionViewItem;
@@ -970,9 +970,9 @@ protected:
     this(int version_);
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)/+noexcept+/{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QStyleOptionToolButton.ToolButtonFeatures.enum_type f2)nothrow{return QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, QFlags!(QStyleOptionToolButton.ToolButtonFeatures.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QStyleOptionToolButton.ToolButtonFeatures.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QStyleOptionToolButton::ToolButtonFeatures) +/
 /// Binding for C++ class [QStyleOptionComboBox](https://doc.qt.io/qt-5/qstyleoptioncombobox.html).

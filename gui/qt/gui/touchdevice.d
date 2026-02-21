@@ -74,9 +74,9 @@ private:
     /+ friend class QTouchDevicePrivate; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QTouchDevice.Capabilities.enum_type) operator |(QTouchDevice.Capabilities.enum_type f1, QTouchDevice.Capabilities.enum_type f2)/+noexcept+/{return QFlags!(QTouchDevice.Capabilities.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QTouchDevice.Capabilities.enum_type) operator |(QTouchDevice.Capabilities.enum_type f1, QFlags!(QTouchDevice.Capabilities.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QTouchDevice.Capabilities.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QTouchDevice.Capabilities.enum_type) operator |(QTouchDevice.Capabilities.enum_type f1, QTouchDevice.Capabilities.enum_type f2)nothrow{return QFlags!(QTouchDevice.Capabilities.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QTouchDevice.Capabilities.enum_type) operator |(QTouchDevice.Capabilities.enum_type f1, QFlags!(QTouchDevice.Capabilities.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QTouchDevice.Capabilities.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTouchDevice::Capabilities)
 #ifndef QT_NO_DEBUG_STREAM

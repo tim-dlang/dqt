@@ -31,12 +31,12 @@ QSharedData
 public:
     /+ mutable +/ QAtomicInt ref_/* = 0*/;
 
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.ref_ = 0;
     }+/
     @disable this(this);
-    /*pragma(inline, true) this(ref const(QSharedData) )/+ noexcept+/
+    /*pragma(inline, true) this(ref const(QSharedData) ) nothrow
     {
         this.ref_ = 0;
     }*/
@@ -79,7 +79,7 @@ public:
             assert(false);
     }
 
-/+    /+ explicit +/pragma(inline, true) this(T* adata)/+ noexcept+/
+/+    /+ explicit +/pragma(inline, true) this(T* adata) nothrow
     {
         this.d = adata;
         if (d) d.ref_.ref_();
@@ -211,7 +211,7 @@ public:
             assert(false);
     }
 
-/+    /+ explicit +/pragma(inline, true) this(T* adata)/+ noexcept+/
+/+    /+ explicit +/pragma(inline, true) this(T* adata) nothrow
     {
         this.d = adata;
         if (d) d.ref_.ref_();

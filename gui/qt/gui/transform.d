@@ -59,12 +59,12 @@ public:
     // ### Qt 6: remove; the compiler-generated ones are fine!
     /+ QTransform &operator=(QTransform &&other) noexcept // = default
     { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(QTransform)); return *this; } +/
-    /+ref QTransform opAssign(ref const(QTransform) )/+ noexcept+/;+/ // = default
+    /+ref QTransform opAssign(ref const(QTransform) ) nothrow;+/ // = default
     /+ QTransform(QTransform &&other) noexcept // = default
         : affine(Qt::Uninitialized)
     { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(QTransform)); } +/
     @disable this(this);
-    this(ref const(QTransform) other)/+ noexcept+/// = default
+    this(ref const(QTransform) other) /*nothrow*/// = default
 {
     import core.stdc.string;
     this.affine = /+ Qt:: +/qt.core.namespace.Initialization.Uninitialized;
@@ -303,21 +303,21 @@ private:
 
     /+ mutable uint m_type : 5; +/
     ushort bitfieldData_m_type;
-    uint m_type() const
+    uint m_type() const nothrow
     {
         return (bitfieldData_m_type >> 0) & 0x1f;
     }
-    uint m_type(uint value)
+    uint m_type(uint value) nothrow
     {
         bitfieldData_m_type = (bitfieldData_m_type & ~0x1f) | ((value & 0x1f) << 0);
         return value;
     }
     /+ mutable uint m_dirty : 5; +/
-    uint m_dirty() const
+    uint m_dirty() const nothrow
     {
         return (bitfieldData_m_type >> 5) & 0x1f;
     }
-    uint m_dirty(uint value)
+    uint m_dirty(uint value) nothrow
     {
         bitfieldData_m_type = (bitfieldData_m_type & ~0x3e0) | ((value & 0x1f) << 5);
         return value;

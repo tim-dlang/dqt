@@ -286,9 +286,9 @@ private:
     /+ Q_DECLARE_PRIVATE(QMessageBox) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator |(QMessageBox.StandardButtons.enum_type f1, QMessageBox.StandardButtons.enum_type f2)/+noexcept+/{return QFlags!(QMessageBox.StandardButtons.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator |(QMessageBox.StandardButtons.enum_type f1, QFlags!(QMessageBox.StandardButtons.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QMessageBox.StandardButtons.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator |(QMessageBox.StandardButtons.enum_type f1, QMessageBox.StandardButtons.enum_type f2)nothrow{return QFlags!(QMessageBox.StandardButtons.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QMessageBox.StandardButtons.enum_type) operator |(QMessageBox.StandardButtons.enum_type f1, QFlags!(QMessageBox.StandardButtons.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QMessageBox.StandardButtons.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QMessageBox::StandardButtons)
 #define QT_REQUIRE_VERSION(argc, argv, str) { QString s = QString::fromLatin1(str);\

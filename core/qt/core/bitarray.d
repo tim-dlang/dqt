@@ -29,7 +29,7 @@ private:
 
 public:
     @disable this();
-    /+pragma(inline, true) this()/+ noexcept+/ {}+/
+    /+pragma(inline, true) this() nothrow {}+/
     /+ explicit +/this(int size, bool val = false);
     @disable this(this);
     this(ref const(QBitArray) other)

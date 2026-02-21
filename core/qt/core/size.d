@@ -29,68 +29,68 @@ struct CGSize;
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QSize
 {
 public:
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.wd = -1;
         this.ht = -1;
     }+/
-    pragma(inline, true) this(int w, int h)/+ noexcept+/
+    pragma(inline, true) this(int w, int h) nothrow
     {
         this.wd = w;
         this.ht = h;
     }
 
-    pragma(inline, true) bool isNull() const/+ noexcept+/
+    pragma(inline, true) bool isNull() const nothrow
     { return wd==0 && ht==0; }
-    pragma(inline, true) bool isEmpty() const/+ noexcept+/
+    pragma(inline, true) bool isEmpty() const nothrow
     { return wd<1 || ht<1; }
-    pragma(inline, true) bool isValid() const/+ noexcept+/
+    pragma(inline, true) bool isValid() const nothrow
     { return wd>=0 && ht>=0; }
 
-    pragma(inline, true) int width() const/+ noexcept+/
+    pragma(inline, true) int width() const nothrow
     { return wd; }
-    pragma(inline, true) int height() const/+ noexcept+/
+    pragma(inline, true) int height() const nothrow
     { return ht; }
-    pragma(inline, true) void setWidth(int w)/+ noexcept+/
+    pragma(inline, true) void setWidth(int w) nothrow
     { wd = w; }
-    pragma(inline, true) void setHeight(int h)/+ noexcept+/
+    pragma(inline, true) void setHeight(int h) nothrow
     { ht = h; }
-    void transpose()/+ noexcept+/;
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSize transposed() const/+ noexcept+/
+    void transpose() nothrow;
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSize transposed() const nothrow
     { return QSize(ht, wd); }
 
-    pragma(inline, true) void scale(int w, int h, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode)/+ noexcept+/
+    pragma(inline, true) void scale(int w, int h, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) nothrow
     { auto tmp = QSize(w, h); scale(tmp, mode); }
-    pragma(inline, true) void scale(ref const(QSize) s, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode)/+ noexcept+/
+    pragma(inline, true) void scale(ref const(QSize) s, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) nothrow
     { this = scaled(s, mode); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSize scaled(int w, int h, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSize scaled(int w, int h, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) const nothrow
     { auto tmp = QSize(w, h); return scaled(tmp, mode); }
-    /+ Q_REQUIRED_RESULT +/ QSize scaled(ref const(QSize) s, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) const/+ noexcept+/;
+    /+ Q_REQUIRED_RESULT +/ QSize scaled(ref const(QSize) s, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) const nothrow;
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSize expandedTo(ref const(QSize) otherSize) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSize expandedTo(ref const(QSize) otherSize) const nothrow
     {
         return QSize(qMax(wd,otherSize.wd), qMax(ht,otherSize.ht));
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSize boundedTo(ref const(QSize) otherSize) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSize boundedTo(ref const(QSize) otherSize) const nothrow
     {
         return QSize(qMin(wd,otherSize.wd), qMin(ht,otherSize.ht));
     }
 
-    /+ Q_REQUIRED_RESULT +/ QSize grownBy(QMargins m) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ QSize grownBy(QMargins m) const nothrow
     { return QSize(width() + m.left() + m.right(), height() + m.top() + m.bottom()); }
-    /+ Q_REQUIRED_RESULT +/ QSize shrunkBy(QMargins m) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ QSize shrunkBy(QMargins m) const nothrow
     { return QSize(width() - m.left() - m.right(), height() - m.top() - m.bottom()); }
 
-    pragma(inline, true) ref int rwidth()/+ noexcept+/ return
+    pragma(inline, true) ref int rwidth() nothrow return
     { return wd; }
-    pragma(inline, true) ref int rheight()/+ noexcept+/ return
+    pragma(inline, true) ref int rheight() nothrow return
     { return ht; }
 
-    pragma(inline, true) ref QSize opOpAssign(string op)(ref const(QSize) s)/+ noexcept+/ if (op == "+")
+    pragma(inline, true) ref QSize opOpAssign(string op)(ref const(QSize) s) nothrow if (op == "+")
     { wd+=s.wd; ht+=s.ht; return this; }
-    pragma(inline, true) ref QSize opOpAssign(string op)(ref const(QSize) s)/+ noexcept+/ if (op == "-")
+    pragma(inline, true) ref QSize opOpAssign(string op)(ref const(QSize) s) nothrow if (op == "-")
     { wd-=s.wd; ht-=s.ht; return this; }
-    /+pragma(inline, true) ref QSize operator *=(qreal c)/+ noexcept+/
+    /+pragma(inline, true) ref QSize operator *=(qreal c) nothrow
     { wd = qRound(wd*c); ht = qRound(ht*c); return this; }+/
     /+pragma(inline, true) ref QSize operator /=(qreal c)
     {
@@ -133,22 +133,22 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSize &);
   QSize inline functions
  *****************************************************************************/
 
-/+pragma(inline, true) bool operator ==(ref const(QSize) s1, ref const(QSize) s2)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(ref const(QSize) s1, ref const(QSize) s2) nothrow
 { return s1.wd == s2.wd && s1.ht == s2.ht; }+/
 
-/+pragma(inline, true) bool operator !=(ref const(QSize) s1, ref const(QSize) s2)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(ref const(QSize) s1, ref const(QSize) s2) nothrow
 { return s1.wd != s2.wd || s1.ht != s2.ht; }+/
 
-/+pragma(inline, true) const(QSize) operator +(ref const(QSize)  s1, ref const(QSize)  s2)/+ noexcept+/
+/+pragma(inline, true) const(QSize) operator +(ref const(QSize)  s1, ref const(QSize)  s2) nothrow
 { return QSize(s1.wd+s2.wd, s1.ht+s2.ht); }+/
 
-/+pragma(inline, true) const(QSize) operator -(ref const(QSize) s1, ref const(QSize) s2)/+ noexcept+/
+/+pragma(inline, true) const(QSize) operator -(ref const(QSize) s1, ref const(QSize) s2) nothrow
 { return QSize(s1.wd-s2.wd, s1.ht-s2.ht); }+/
 
-/+pragma(inline, true) const(QSize) operator *(ref const(QSize) s, qreal c)/+ noexcept+/
+/+pragma(inline, true) const(QSize) operator *(ref const(QSize) s, qreal c) nothrow
 { return QSize(qRound(s.wd*c), qRound(s.ht*c)); }+/
 
-/+pragma(inline, true) const(QSize) operator *(qreal c, ref const(QSize) s)/+ noexcept+/
+/+pragma(inline, true) const(QSize) operator *(qreal c, ref const(QSize) s) nothrow
 { return QSize(qRound(s.wd*c), qRound(s.ht*c)); }+/
 
 /+pragma(inline, true) const(QSize) operator /(ref const(QSize) s, qreal c)
@@ -167,73 +167,73 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QSize &);
 {
 public:
     @disable this();
-    /+pragma(inline, true) this()/+ noexcept+/
+    /+pragma(inline, true) this() nothrow
     {
         this.wd = -1.;
         this.ht = -1.;
     }+/
-    pragma(inline, true) this(ref const(QSize) sz)/+ noexcept+/
+    pragma(inline, true) this(ref const(QSize) sz) nothrow
     {
         this.wd = sz.width();
         this.ht = sz.height();
     }
-    pragma(inline, true) this(qreal w, qreal h)/+ noexcept+/
+    pragma(inline, true) this(qreal w, qreal h) nothrow
     {
         this.wd = w;
         this.ht = h;
     }
 
-    pragma(inline, true) bool isNull() const/+ noexcept+/
+    pragma(inline, true) bool isNull() const nothrow
     { return qIsNull(wd) && qIsNull(ht); }
-    pragma(inline, true) bool isEmpty() const/+ noexcept+/
+    pragma(inline, true) bool isEmpty() const nothrow
     { return wd <= 0. || ht <= 0.; }
-    pragma(inline, true) bool isValid() const/+ noexcept+/
+    pragma(inline, true) bool isValid() const nothrow
     { return wd >= 0. && ht >= 0.; }
 
-    pragma(inline, true) qreal width() const/+ noexcept+/
+    pragma(inline, true) qreal width() const nothrow
     { return wd; }
-    pragma(inline, true) qreal height() const/+ noexcept+/
+    pragma(inline, true) qreal height() const nothrow
     { return ht; }
-    pragma(inline, true) void setWidth(qreal w)/+ noexcept+/
+    pragma(inline, true) void setWidth(qreal w) nothrow
     { wd = w; }
-    pragma(inline, true) void setHeight(qreal h)/+ noexcept+/
+    pragma(inline, true) void setHeight(qreal h) nothrow
     { ht = h; }
-    void transpose()/+ noexcept+/;
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSizeF transposed() const/+ noexcept+/
+    void transpose() nothrow;
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSizeF transposed() const nothrow
     { return QSizeF(ht, wd); }
 
-    pragma(inline, true) void scale(qreal w, qreal h, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode)/+ noexcept+/
+    pragma(inline, true) void scale(qreal w, qreal h, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) nothrow
     { auto tmp = QSizeF(w, h); scale(tmp, mode); }
-    pragma(inline, true) void scale(ref const(QSizeF) s, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode)/+ noexcept+/
+    pragma(inline, true) void scale(ref const(QSizeF) s, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) nothrow
     { this = scaled(s, mode); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSizeF scaled(qreal w, qreal h, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSizeF scaled(qreal w, qreal h, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) const nothrow
     { auto tmp = QSizeF(w, h); return scaled(tmp, mode); }
-    /+ Q_REQUIRED_RESULT +/ QSizeF scaled(ref const(QSizeF) s, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) const/+ noexcept+/;
+    /+ Q_REQUIRED_RESULT +/ QSizeF scaled(ref const(QSizeF) s, /+ Qt:: +/qt.core.namespace.AspectRatioMode mode) const nothrow;
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSizeF expandedTo(ref const(QSizeF) otherSize) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSizeF expandedTo(ref const(QSizeF) otherSize) const nothrow
     {
         return QSizeF(qMax(wd,otherSize.wd), qMax(ht,otherSize.ht));
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSizeF boundedTo(ref const(QSizeF) otherSize) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QSizeF boundedTo(ref const(QSizeF) otherSize) const nothrow
     {
         return QSizeF(qMin(wd,otherSize.wd), qMin(ht,otherSize.ht));
     }
 
-    /+ Q_REQUIRED_RESULT +/ QSizeF grownBy(QMarginsF m) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ QSizeF grownBy(QMarginsF m) const nothrow
     { return QSizeF(width() + m.left() + m.right(), height() + m.top() + m.bottom()); }
-    /+ Q_REQUIRED_RESULT +/ QSizeF shrunkBy(QMarginsF m) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ QSizeF shrunkBy(QMarginsF m) const nothrow
     { return QSizeF(width() - m.left() - m.right(), height() - m.top() - m.bottom()); }
 
-    pragma(inline, true) ref qreal rwidth()/+ noexcept+/ return
+    pragma(inline, true) ref qreal rwidth() nothrow return
     { return wd; }
-    pragma(inline, true) ref qreal rheight()/+ noexcept+/ return
+    pragma(inline, true) ref qreal rheight() nothrow return
     { return ht; }
 
-    pragma(inline, true) ref QSizeF opOpAssign(string op)(ref const(QSizeF) s)/+ noexcept+/ if (op == "+")
+    pragma(inline, true) ref QSizeF opOpAssign(string op)(ref const(QSizeF) s) nothrow if (op == "+")
     { wd += s.wd; ht += s.ht; return this; }
-    pragma(inline, true) ref QSizeF opOpAssign(string op)(ref const(QSizeF) s)/+ noexcept+/ if (op == "-")
+    pragma(inline, true) ref QSizeF opOpAssign(string op)(ref const(QSizeF) s) nothrow if (op == "-")
     { wd -= s.wd; ht -= s.ht; return this; }
-    /+pragma(inline, true) ref QSizeF operator *=(qreal c)/+ noexcept+/
+    /+pragma(inline, true) ref QSizeF operator *=(qreal c) nothrow
     { wd *= c; ht *= c; return this; }+/
     /+pragma(inline, true) ref QSizeF operator /=(qreal c)
     {
@@ -250,7 +250,7 @@ public:
     /+ friend inline const QSizeF operator*(qreal, const QSizeF &) noexcept; +/
     /+ friend inline const QSizeF operator/(const QSizeF &, qreal); +/
 
-    pragma(inline, true) QSize toSize() const/+ noexcept+/
+    pragma(inline, true) QSize toSize() const nothrow
     {
         return QSize(qRound(wd), qRound(ht));
     }
@@ -283,22 +283,22 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QSizeF &);
   QSizeF inline functions
  *****************************************************************************/
 
-/+pragma(inline, true) bool operator ==(ref const(QSizeF) s1, ref const(QSizeF) s2)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(ref const(QSizeF) s1, ref const(QSizeF) s2) nothrow
 { return qFuzzyCompare(s1.wd, s2.wd) && qFuzzyCompare(s1.ht, s2.ht); }+/
 
-/+pragma(inline, true) bool operator !=(ref const(QSizeF) s1, ref const(QSizeF) s2)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(ref const(QSizeF) s1, ref const(QSizeF) s2) nothrow
 { return !qFuzzyCompare(s1.wd, s2.wd) || !qFuzzyCompare(s1.ht, s2.ht); }+/
 
-/+pragma(inline, true) const(QSizeF) operator +(ref const(QSizeF)  s1, ref const(QSizeF)  s2)/+ noexcept+/
+/+pragma(inline, true) const(QSizeF) operator +(ref const(QSizeF)  s1, ref const(QSizeF)  s2) nothrow
 { return QSizeF(s1.wd+s2.wd, s1.ht+s2.ht); }+/
 
-/+pragma(inline, true) const(QSizeF) operator -(ref const(QSizeF) s1, ref const(QSizeF) s2)/+ noexcept+/
+/+pragma(inline, true) const(QSizeF) operator -(ref const(QSizeF) s1, ref const(QSizeF) s2) nothrow
 { return QSizeF(s1.wd-s2.wd, s1.ht-s2.ht); }+/
 
-/+pragma(inline, true) const(QSizeF) operator *(ref const(QSizeF) s, qreal c)/+ noexcept+/
+/+pragma(inline, true) const(QSizeF) operator *(ref const(QSizeF) s, qreal c) nothrow
 { return QSizeF(s.wd*c, s.ht*c); }+/
 
-/+pragma(inline, true) const(QSizeF) operator *(qreal c, ref const(QSizeF) s)/+ noexcept+/
+/+pragma(inline, true) const(QSizeF) operator *(qreal c, ref const(QSizeF) s) nothrow
 { return QSizeF(s.wd*c, s.ht*c); }+/
 
 /+pragma(inline, true) const(QSizeF) operator /(ref const(QSizeF) s, qreal c)

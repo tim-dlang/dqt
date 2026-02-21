@@ -94,7 +94,7 @@ private:
 public:
     version (Windows)
         @disable this();
-    /+pragma(inline, true) this()/+ noexcept+/ { }+/
+    /+pragma(inline, true) this() nothrow { }+/
 
     static QStringList create()
     {

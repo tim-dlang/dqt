@@ -37,7 +37,7 @@ public:
 
 public:
     @disable this();
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.id = {0};
     }+/
@@ -55,8 +55,8 @@ public:
 
     /+ void swap(QBasicTimer &other) noexcept { qSwap(id, other.id); } +/
 
-    bool isActive() const/+ noexcept+/ { return id != 0; }
-    int timerId() const/+ noexcept+/ { return id; }
+    bool isActive() const nothrow { return id != 0; }
+    int timerId() const nothrow { return id; }
 
     void start(int msec, QObject obj);
     void start(int msec, /+ Qt:: +/qt.core.namespace.TimerType timerType, QObject obj);

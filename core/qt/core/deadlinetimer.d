@@ -36,45 +36,45 @@ public:
     enum ForeverConstant { Forever }
 
     @disable this();
-    this(/+ Qt:: +/qt.core.namespace.TimerType type_/+ = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer+/)/+ noexcept+/
+    this(/+ Qt:: +/qt.core.namespace.TimerType type_/+ = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer+/) nothrow
     {
         this.t1 = 0;
         this.t2 = 0;
         this.type = type_;
     }
-    this(ForeverConstant, /+ Qt:: +/qt.core.namespace.TimerType type_ = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer)/+ noexcept+/
+    this(ForeverConstant, /+ Qt:: +/qt.core.namespace.TimerType type_ = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer) nothrow
     {
         this.t1 = qint64.max;
         this.t2 = 0;
         this.type = type_;
     }
-    /+ explicit +/this(qint64 msecs, /+ Qt:: +/qt.core.namespace.TimerType type = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer)/+ noexcept+/;
+    /+ explicit +/this(qint64 msecs, /+ Qt:: +/qt.core.namespace.TimerType type = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer) nothrow;
 
     /+ void swap(QDeadlineTimer &other) noexcept
     { qSwap(t1, other.t1); qSwap(t2, other.t2); qSwap(type, other.type); } +/
 
-    bool isForever() const/+ noexcept+/
+    bool isForever() const nothrow
     { return t1 == qint64.max; }
-    bool hasExpired() const/+ noexcept+/;
+    bool hasExpired() const nothrow;
 
-    /+ Qt:: +/qt.core.namespace.TimerType timerType() const/+ noexcept+/
+    /+ Qt:: +/qt.core.namespace.TimerType timerType() const nothrow
     { return cast(/+ Qt:: +/qt.core.namespace.TimerType) (type & 0xff); }
     void setTimerType(/+ Qt:: +/qt.core.namespace.TimerType type);
 
-    qint64 remainingTime() const/+ noexcept+/;
-    qint64 remainingTimeNSecs() const/+ noexcept+/;
-    void setRemainingTime(qint64 msecs, /+ Qt:: +/qt.core.namespace.TimerType type = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer)/+ noexcept+/;
+    qint64 remainingTime() const nothrow;
+    qint64 remainingTimeNSecs() const nothrow;
+    void setRemainingTime(qint64 msecs, /+ Qt:: +/qt.core.namespace.TimerType type = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer) nothrow;
     void setPreciseRemainingTime(qint64 secs, qint64 nsecs = 0,
-                                     /+ Qt:: +/qt.core.namespace.TimerType type = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer)/+ noexcept+/;
+                                     /+ Qt:: +/qt.core.namespace.TimerType type = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer) nothrow;
 
-    qint64 deadline() const/+ noexcept /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
-    qint64 deadlineNSecs() const/+ noexcept /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
-    void setDeadline(qint64 msecs, /+ Qt:: +/qt.core.namespace.TimerType timerType = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer)/+ noexcept+/;
+    qint64 deadline() const nothrow/+ /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
+    qint64 deadlineNSecs() const nothrow/+ /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
+    void setDeadline(qint64 msecs, /+ Qt:: +/qt.core.namespace.TimerType timerType = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer) nothrow;
     void setPreciseDeadline(qint64 secs, qint64 nsecs = 0,
-                                /+ Qt:: +/qt.core.namespace.TimerType type = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer)/+ noexcept+/;
+                                /+ Qt:: +/qt.core.namespace.TimerType type = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer) nothrow;
 
-    static QDeadlineTimer addNSecs(QDeadlineTimer dt, qint64 nsecs)/+ noexcept /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
-    static QDeadlineTimer current(/+ Qt:: +/qt.core.namespace.TimerType timerType = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer)/+ noexcept+/;
+    static QDeadlineTimer addNSecs(QDeadlineTimer dt, qint64 nsecs) nothrow/+ /+ Q_DECL_PURE_FUNCTION +/__attribute__((pure))+/;
+    static QDeadlineTimer current(/+ Qt:: +/qt.core.namespace.TimerType timerType = /+ Qt:: +/qt.core.namespace.TimerType.CoarseTimer) nothrow;
 
     /+ friend bool operator==(QDeadlineTimer d1, QDeadlineTimer d2) noexcept
     { return d1.t1 == d2.t1 && d1.t2 == d2.t2; } +/
@@ -166,7 +166,7 @@ private:
     uint t2;
     uint type;
 
-    qint64 rawRemainingTimeNSecs() const/+ noexcept+/;
+    qint64 rawRemainingTimeNSecs() const nothrow;
 
 public:
     // This is not a public function, it's here only for Qt's internal convenience...

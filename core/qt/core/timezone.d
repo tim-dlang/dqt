@@ -83,7 +83,7 @@ public:
 
     @disable this();
     pragma(mangle, defaultConstructorMangling(__traits(identifier, typeof(this))))
-    ref typeof(this) rawConstructor()/+ noexcept+/;
+    ref typeof(this) rawConstructor() nothrow;
     static typeof(this) create()
     {
         typeof(this) r = typeof(this).init;

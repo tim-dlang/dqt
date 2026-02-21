@@ -299,8 +299,8 @@ private:
     /+ friend class QTextObjectPrivate; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator |(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)/+noexcept+/{return QFlags!(QTextDocument.FindFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator |(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QTextDocument.FindFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator |(QTextDocument.FindFlags.enum_type f1, QTextDocument.FindFlags.enum_type f2)nothrow{return QFlags!(QTextDocument.FindFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QTextDocument.FindFlags.enum_type) operator |(QTextDocument.FindFlags.enum_type f1, QFlags!(QTextDocument.FindFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QTextDocument.FindFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextDocument::FindFlags) +/

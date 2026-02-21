@@ -1064,7 +1064,7 @@ package string changeCppMangling(bool debugHere = false)(string changeFuncs,
     while (parts.length >= 2)
     {
         string part = declaration[parts[0].start .. parts[0].end];
-        assert(part.among("const", "immutable", "shared"));
+        assert(part.among("const", "immutable", "shared", "nothrow"));
         attributesUsedAfter ~= part ~ " ";
         parts = parts[1 .. $];
     }

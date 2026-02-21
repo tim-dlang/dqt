@@ -190,7 +190,7 @@ struct /+ Q_CORE_EXPORT +/ QMetaObject
 /+    pragma(inline, true) const(QMetaObject)* superClass() const
     { return cast(const(QMetaObject)*) (d.superdata); }+/
 
-    bool inherits(const(QMetaObject)* metaObject) const/+ noexcept+/;
+    bool inherits(const(QMetaObject)* metaObject) const nothrow;
     mixin(mangleWindows("?cast@QMetaObject@@QEBAPEAVQObject@@PEAV2@@Z", q{
     mixin(mangleItanium("_ZNK11QMetaObject4castEP7QObject", q{
     QObject cast_(QObject obj) const;

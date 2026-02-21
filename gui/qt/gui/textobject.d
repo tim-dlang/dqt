@@ -135,8 +135,8 @@ public:
  // ### Qt 6: inline
 /+ #if QT_VERSION < QT_VERSION_CHECK(6,0,0) +/
         @disable this(this);
-        this(ref const(iterator) o)/+ noexcept+/; // = default
-        /+ref iterator opAssign(ref const(iterator) o)/+ noexcept+/;+/ // = default
+        this(ref const(iterator) o) nothrow; // = default
+        /+ref iterator opAssign(ref const(iterator) o) nothrow;+/ // = default
         /+ iterator(iterator &&other) noexcept // = default
         { memcpy(static_cast<void *>(this), static_cast<void *>(&other), sizeof(iterator)); } +/
         /+ iterator &operator=(iterator &&other) noexcept // = default

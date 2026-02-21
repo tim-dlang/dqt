@@ -1190,9 +1190,9 @@ private:
     QSharedDataPointer!(QLocalePrivate) d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)/+noexcept+/{return QFlags!(QLocale.NumberOptions.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QLocale.NumberOptions.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QLocale.NumberOptions.enum_type f2)nothrow{return QFlags!(QLocale.NumberOptions.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QLocale.NumberOptions.enum_type) operator |(QLocale.NumberOptions.enum_type f1, QFlags!(QLocale.NumberOptions.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QLocale.NumberOptions.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 /+ Q_DECLARE_SHARED(QLocale)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QLocale::NumberOptions)
 #ifndef QT_NO_DATASTREAM

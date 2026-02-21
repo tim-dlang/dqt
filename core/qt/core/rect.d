@@ -33,28 +33,28 @@ struct CGRect;
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRect
 {
 public:
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.x1 = 0;
         this.y1 = 0;
         this.x2 = -1;
         this.y2 = -1;
     }+/
-    pragma(inline, true) this(ref const(QPoint) atopLeft, ref const(QPoint) abottomRight)/+ noexcept+/
+    pragma(inline, true) this(ref const(QPoint) atopLeft, ref const(QPoint) abottomRight) nothrow
     {
         this.x1 = atopLeft.x();
         this.y1 = atopLeft.y();
         this.x2 = abottomRight.x();
         this.y2 = abottomRight.y();
     }
-    pragma(inline, true) this(ref const(QPoint) atopLeft, ref const(QSize) asize)/+ noexcept+/
+    pragma(inline, true) this(ref const(QPoint) atopLeft, ref const(QSize) asize) nothrow
     {
         this.x1 = atopLeft.x();
         this.y1 = atopLeft.y();
         this.x2 = atopLeft.x()+asize.width() - 1;
         this.y2 = atopLeft.y()+asize.height() - 1;
     }
-    pragma(inline, true) this(int aleft, int atop, int awidth, int aheight)/+ noexcept+/
+    pragma(inline, true) this(int aleft, int atop, int awidth, int aheight) nothrow
     {
         this.x1 = aleft;
         this.y1 = atop;
@@ -62,96 +62,96 @@ public:
         this.y2 = atop + aheight - 1;
     }
 
-    pragma(inline, true) bool isNull() const/+ noexcept+/
+    pragma(inline, true) bool isNull() const nothrow
     { return x2 == x1 - 1 && y2 == y1 - 1; }
-    pragma(inline, true) bool isEmpty() const/+ noexcept+/
+    pragma(inline, true) bool isEmpty() const nothrow
     { return x1 > x2 || y1 > y2; }
-    pragma(inline, true) bool isValid() const/+ noexcept+/
+    pragma(inline, true) bool isValid() const nothrow
     { return x1 <= x2 && y1 <= y2; }
 
-    pragma(inline, true) int left() const/+ noexcept+/
+    pragma(inline, true) int left() const nothrow
     { return x1; }
-    pragma(inline, true) int top() const/+ noexcept+/
+    pragma(inline, true) int top() const nothrow
     { return y1; }
-    pragma(inline, true) int right() const/+ noexcept+/
+    pragma(inline, true) int right() const nothrow
     { return x2; }
-    pragma(inline, true) int bottom() const/+ noexcept+/
+    pragma(inline, true) int bottom() const nothrow
     { return y2; }
-    /+ Q_REQUIRED_RESULT +/ QRect normalized() const/+ noexcept+/;
+    /+ Q_REQUIRED_RESULT +/ QRect normalized() const nothrow;
 
-    pragma(inline, true) int x() const/+ noexcept+/
+    pragma(inline, true) int x() const nothrow
     { return x1; }
-    pragma(inline, true) int y() const/+ noexcept+/
+    pragma(inline, true) int y() const nothrow
     { return y1; }
-    pragma(inline, true) void setLeft(int pos)/+ noexcept+/
+    pragma(inline, true) void setLeft(int pos) nothrow
     { x1 = pos; }
-    pragma(inline, true) void setTop(int pos)/+ noexcept+/
+    pragma(inline, true) void setTop(int pos) nothrow
     { y1 = pos; }
-    pragma(inline, true) void setRight(int pos)/+ noexcept+/
+    pragma(inline, true) void setRight(int pos) nothrow
     { x2 = pos; }
-    pragma(inline, true) void setBottom(int pos)/+ noexcept+/
+    pragma(inline, true) void setBottom(int pos) nothrow
     { y2 = pos; }
-    pragma(inline, true) void setX(int ax)/+ noexcept+/
+    pragma(inline, true) void setX(int ax) nothrow
     { x1 = ax; }
-    pragma(inline, true) void setY(int ay)/+ noexcept+/
+    pragma(inline, true) void setY(int ay) nothrow
     { y1 = ay; }
 
-    pragma(inline, true) void setTopLeft(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void setTopLeft(ref const(QPoint) p) nothrow
     { x1 = p.x(); y1 = p.y(); }
-    pragma(inline, true) void setBottomRight(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void setBottomRight(ref const(QPoint) p) nothrow
     { x2 = p.x(); y2 = p.y(); }
-    pragma(inline, true) void setTopRight(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void setTopRight(ref const(QPoint) p) nothrow
     { x2 = p.x(); y1 = p.y(); }
-    pragma(inline, true) void setBottomLeft(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void setBottomLeft(ref const(QPoint) p) nothrow
     { x1 = p.x(); y2 = p.y(); }
 
-    pragma(inline, true) QPoint topLeft() const/+ noexcept+/
+    pragma(inline, true) QPoint topLeft() const nothrow
     { return QPoint(x1, y1); }
-    pragma(inline, true) QPoint bottomRight() const/+ noexcept+/
+    pragma(inline, true) QPoint bottomRight() const nothrow
     { return QPoint(x2, y2); }
-    pragma(inline, true) QPoint topRight() const/+ noexcept+/
+    pragma(inline, true) QPoint topRight() const nothrow
     { return QPoint(x2, y1); }
-    pragma(inline, true) QPoint bottomLeft() const/+ noexcept+/
+    pragma(inline, true) QPoint bottomLeft() const nothrow
     { return QPoint(x1, y2); }
-    pragma(inline, true) QPoint center() const/+ noexcept+/
+    pragma(inline, true) QPoint center() const nothrow
     { return QPoint(cast(int) ((qint64(x1)+x2)/2), cast(int) ((qint64(y1)+y2)/2)); } // cast avoids overflow on addition
 
 
-    pragma(inline, true) void moveLeft(int pos)/+ noexcept+/
+    pragma(inline, true) void moveLeft(int pos) nothrow
     { x2 += (pos - x1); x1 = pos; }
-    pragma(inline, true) void moveTop(int pos)/+ noexcept+/
+    pragma(inline, true) void moveTop(int pos) nothrow
     { y2 += (pos - y1); y1 = pos; }
-    pragma(inline, true) void moveRight(int pos)/+ noexcept+/
+    pragma(inline, true) void moveRight(int pos) nothrow
     {
         x1 += (pos - x2);
         x2 = pos;
     }
-    pragma(inline, true) void moveBottom(int pos)/+ noexcept+/
+    pragma(inline, true) void moveBottom(int pos) nothrow
     {
         y1 += (pos - y2);
         y2 = pos;
     }
-    pragma(inline, true) void moveTopLeft(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void moveTopLeft(ref const(QPoint) p) nothrow
     {
         moveLeft(p.x());
         moveTop(p.y());
     }
-    pragma(inline, true) void moveBottomRight(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void moveBottomRight(ref const(QPoint) p) nothrow
     {
         moveRight(p.x());
         moveBottom(p.y());
     }
-    pragma(inline, true) void moveTopRight(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void moveTopRight(ref const(QPoint) p) nothrow
     {
         moveRight(p.x());
         moveTop(p.y());
     }
-    pragma(inline, true) void moveBottomLeft(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void moveBottomLeft(ref const(QPoint) p) nothrow
     {
         moveLeft(p.x());
         moveBottom(p.y());
     }
-    pragma(inline, true) void moveCenter(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void moveCenter(ref const(QPoint) p) nothrow
     {
         int w = x2 - x1;
         int h = y2 - y1;
@@ -161,35 +161,35 @@ public:
         y2 = y1 + h;
     }
 
-    pragma(inline, true) void translate(int dx, int dy)/+ noexcept+/
+    pragma(inline, true) void translate(int dx, int dy) nothrow
     {
         x1 += dx;
         y1 += dy;
         x2 += dx;
         y2 += dy;
     }
-    pragma(inline, true) void translate(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void translate(ref const(QPoint) p) nothrow
     {
         x1 += p.x();
         y1 += p.y();
         x2 += p.x();
         y2 += p.y();
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect translated(int dx, int dy) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect translated(int dx, int dy) const nothrow
     { auto tmp = QPoint(x1 + dx, y1 + dy); auto tmp__1 = QPoint(x2 + dx, y2 + dy); return QRect(tmp, tmp__1); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect translated(ref const(QPoint) p) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect translated(ref const(QPoint) p) const nothrow
     { auto tmp = QPoint(x1 + p.x(), y1 + p.y()); auto tmp__1 = QPoint(x2 + p.x(), y2 + p.y()); return QRect(tmp, tmp__1); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect transposed() const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect transposed() const nothrow
     { auto tmp = topLeft(); auto tmp__1 = size().transposed(); return QRect(tmp, tmp__1); }
 
-    pragma(inline, true) void moveTo(int ax, int ay)/+ noexcept+/
+    pragma(inline, true) void moveTo(int ax, int ay) nothrow
     {
         x2 += ax - x1;
         y2 += ay - y1;
         x1 = ax;
         y1 = ay;
     }
-    pragma(inline, true) void moveTo(ref const(QPoint) p)/+ noexcept+/
+    pragma(inline, true) void moveTo(ref const(QPoint) p) nothrow
     {
         x2 += p.x() - x1;
         y2 += p.y() - y1;
@@ -197,7 +197,7 @@ public:
         y1 = p.y();
     }
 
-    pragma(inline, true) void setRect(int ax, int ay, int aw, int ah)/+ noexcept+/
+    pragma(inline, true) void setRect(int ax, int ay, int aw, int ah) nothrow
     {
         x1 = ax;
         y1 = ay;
@@ -212,7 +212,7 @@ public:
         *ah = y2 - y1 + 1;
     }
 
-    pragma(inline, true) void setCoords(int xp1, int yp1, int xp2, int yp2)/+ noexcept+/
+    pragma(inline, true) void setCoords(int xp1, int yp1, int xp2, int yp2) nothrow
     {
         x1 = xp1;
         y1 = yp1;
@@ -227,81 +227,81 @@ public:
         *yp2 = y2;
     }
 
-    pragma(inline, true) void adjust(int dx1, int dy1, int dx2, int dy2)/+ noexcept+/
+    pragma(inline, true) void adjust(int dx1, int dy1, int dx2, int dy2) nothrow
     {
         x1 += dx1;
         y1 += dy1;
         x2 += dx2;
         y2 += dy2;
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect adjusted(int xp1, int yp1, int xp2, int yp2) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect adjusted(int xp1, int yp1, int xp2, int yp2) const nothrow
     { auto tmp = QPoint(x1 + xp1, y1 + yp1); auto tmp__1 = QPoint(x2 + xp2, y2 + yp2); return QRect(tmp, tmp__1); }
 
-    pragma(inline, true) QSize size() const/+ noexcept+/
+    pragma(inline, true) QSize size() const nothrow
     { return QSize(width(), height()); }
-    pragma(inline, true) int width() const/+ noexcept+/
+    pragma(inline, true) int width() const nothrow
     { return  x2 - x1 + 1; }
-    pragma(inline, true) int height() const/+ noexcept+/
+    pragma(inline, true) int height() const nothrow
     { return  y2 - y1 + 1; }
-    pragma(inline, true) void setWidth(int w)/+ noexcept+/
+    pragma(inline, true) void setWidth(int w) nothrow
     { x2 = (x1 + w - 1); }
-    pragma(inline, true) void setHeight(int h)/+ noexcept+/
+    pragma(inline, true) void setHeight(int h) nothrow
     { y2 = (y1 + h - 1); }
-    pragma(inline, true) void setSize(ref const(QSize) s)/+ noexcept+/
+    pragma(inline, true) void setSize(ref const(QSize) s) nothrow
     {
         x2 = (s.width()  + x1 - 1);
         y2 = (s.height() + y1 - 1);
     }
 
-    QRect opBinary(string op)(ref const(QRect) r) const/+ noexcept+/ if (op == "|");
-    QRect opBinary(string op)(ref const(QRect) r) const/+ noexcept+/ if (op == "&");
-    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QRect) r)/+ noexcept+/ if (op == "|")
+    QRect opBinary(string op)(ref const(QRect) r) const nothrow if (op == "|");
+    QRect opBinary(string op)(ref const(QRect) r) const nothrow if (op == "&");
+    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QRect) r) nothrow if (op == "|")
     {
         this = this | r;
         return this;
     }
-    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QRect) r)/+ noexcept+/ if (op == "&")
+    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QRect) r) nothrow if (op == "&")
     {
         this = this & r;
         return this;
     }
 
-    bool contains(ref const(QRect) r, bool proper = false) const/+ noexcept+/;
-    bool contains(ref const(QPoint) p, bool proper=false) const/+ noexcept+/;
-    pragma(inline, true) bool contains(int ax, int ay) const/+ noexcept+/
+    bool contains(ref const(QRect) r, bool proper = false) const nothrow;
+    bool contains(ref const(QPoint) p, bool proper=false) const nothrow;
+    pragma(inline, true) bool contains(int ax, int ay) const nothrow
     {
         auto tmp = QPoint(ax, ay); return contains(tmp, false);
     }
-    pragma(inline, true) bool contains(int ax, int ay, bool aproper) const/+ noexcept+/
+    pragma(inline, true) bool contains(int ax, int ay, bool aproper) const nothrow
     {
         auto tmp = QPoint(ax, ay); return contains(tmp, aproper);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect united(ref const(QRect) r) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect united(ref const(QRect) r) const nothrow
     {
         return this | r;
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect intersected(ref const(QRect) other) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect intersected(ref const(QRect) other) const nothrow
     {
         return this & other;
     }
-    bool intersects(ref const(QRect) r) const/+ noexcept+/;
+    bool intersects(ref const(QRect) r) const nothrow;
 
-    pragma(inline, true) QRect marginsAdded(ref const(QMargins) margins) const/+ noexcept+/
+    pragma(inline, true) QRect marginsAdded(ref const(QMargins) margins) const nothrow
     {
         auto tmp = QPoint(x1 - margins.left(), y1 - margins.top()); auto tmp__1 = QPoint(x2 + margins.right(), y2 + margins.bottom()); return QRect(tmp,
                      tmp__1);
     }
-    pragma(inline, true) QRect marginsRemoved(ref const(QMargins) margins) const/+ noexcept+/
+    pragma(inline, true) QRect marginsRemoved(ref const(QMargins) margins) const nothrow
     {
         auto tmp = QPoint(x1 + margins.left(), y1 + margins.top()); auto tmp__1 = QPoint(x2 - margins.right(), y2 - margins.bottom()); return QRect(tmp,
                      tmp__1);
     }
-    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if (op == "+")
+    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QMargins) margins) nothrow if (op == "+")
     {
         this = marginsAdded(margins);
         return this;
     }
-    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QMargins) margins)/+ noexcept+/ if (op == "-")
+    pragma(inline, true) ref QRect opOpAssign(string op)(ref const(QMargins) margins) nothrow if (op == "-")
     {
         this = marginsRemoved(margins);
         return this;
@@ -345,29 +345,29 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &, QRect &);
   QRect inline member functions
  *****************************************************************************/
 
-/+pragma(inline, true) bool operator ==(ref const(QRect) r1, ref const(QRect) r2)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(ref const(QRect) r1, ref const(QRect) r2) nothrow
 {
     return r1.x1==r2.x1 && r1.x2==r2.x2 && r1.y1==r2.y1 && r1.y2==r2.y2;
 }+/
 
-/+pragma(inline, true) bool operator !=(ref const(QRect) r1, ref const(QRect) r2)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(ref const(QRect) r1, ref const(QRect) r2) nothrow
 {
     return r1.x1!=r2.x1 || r1.x2!=r2.x2 || r1.y1!=r2.y1 || r1.y2!=r2.y2;
 }+/
 
-/+pragma(inline, true) QRect operator +(ref const(QRect) rectangle, ref const(QMargins) margins)/+ noexcept+/
+/+pragma(inline, true) QRect operator +(ref const(QRect) rectangle, ref const(QMargins) margins) nothrow
 {
     auto tmp = QPoint(rectangle.left() - margins.left(), rectangle.top() - margins.top()); auto tmp__1 = QPoint(rectangle.right() + margins.right(), rectangle.bottom() + margins.bottom()); return QRect(tmp,
                  tmp__1);
 }+/
 
-/+pragma(inline, true) QRect operator +(ref const(QMargins) margins, ref const(QRect) rectangle)/+ noexcept+/
+/+pragma(inline, true) QRect operator +(ref const(QMargins) margins, ref const(QRect) rectangle) nothrow
 {
     auto tmp = QPoint(rectangle.left() - margins.left(), rectangle.top() - margins.top()); auto tmp__1 = QPoint(rectangle.right() + margins.right(), rectangle.bottom() + margins.bottom()); return QRect(tmp,
                  tmp__1);
 }+/
 
-/+pragma(inline, true) QRect operator -(ref const(QRect) lhs, ref const(QMargins) rhs)/+ noexcept+/
+/+pragma(inline, true) QRect operator -(ref const(QRect) lhs, ref const(QMargins) rhs) nothrow
 {
     auto tmp = QPoint(lhs.left() + rhs.left(), lhs.top() + rhs.top()); auto tmp__1 = QPoint(lhs.right() - rhs.right(), lhs.bottom() - rhs.bottom()); return QRect(tmp,
                  tmp__1);
@@ -382,35 +382,35 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const QRect &);
 @Q_MOVABLE_TYPE extern(C++, class) struct /+ Q_CORE_EXPORT +/ QRectF
 {
 public:
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.xp = 0.;
         this.yp = 0.;
         this.w = 0.;
         this.h = 0.;
     }+/
-    pragma(inline, true) this(ref const(QPointF) atopLeft, ref const(QSizeF) asize)/+ noexcept+/
+    pragma(inline, true) this(ref const(QPointF) atopLeft, ref const(QSizeF) asize) nothrow
     {
         this.xp = atopLeft.x();
         this.yp = atopLeft.y();
         this.w = asize.width();
         this.h = asize.height();
     }
-    pragma(inline, true) this(ref const(QPointF) atopLeft, ref const(QPointF) abottomRight)/+ noexcept+/
+    pragma(inline, true) this(ref const(QPointF) atopLeft, ref const(QPointF) abottomRight) nothrow
     {
         this.xp = atopLeft.x();
         this.yp = atopLeft.y();
         this.w = abottomRight.x() - atopLeft.x();
         this.h = abottomRight.y() - atopLeft.y();
     }
-    pragma(inline, true) this(qreal aleft, qreal atop, qreal awidth, qreal aheight)/+ noexcept+/
+    pragma(inline, true) this(qreal aleft, qreal atop, qreal awidth, qreal aheight) nothrow
     {
         this.xp = aleft;
         this.yp = atop;
         this.w = awidth;
         this.h = aheight;
     }
-    pragma(inline, true) this(ref const(QRect) r)/+ noexcept+/
+    pragma(inline, true) this(ref const(QRect) r) nothrow
     {
         this.xp = r.x();
         this.yp = r.y();
@@ -418,100 +418,100 @@ public:
         this.h = r.height();
     }
 
-    pragma(inline, true) bool isNull() const/+ noexcept+/
+    pragma(inline, true) bool isNull() const nothrow
     { return w == 0. && h == 0.; }
-    pragma(inline, true) bool isEmpty() const/+ noexcept+/
+    pragma(inline, true) bool isEmpty() const nothrow
     { return w <= 0. || h <= 0.; }
-    pragma(inline, true) bool isValid() const/+ noexcept+/
+    pragma(inline, true) bool isValid() const nothrow
     { return w > 0. && h > 0.; }
-    /+ Q_REQUIRED_RESULT +/ QRectF normalized() const/+ noexcept+/;
+    /+ Q_REQUIRED_RESULT +/ QRectF normalized() const nothrow;
 
-    pragma(inline, true) qreal left() const/+ noexcept+/ { return xp; }
-    pragma(inline, true) qreal top() const/+ noexcept+/ { return yp; }
-    pragma(inline, true) qreal right() const/+ noexcept+/ { return xp + w; }
-    pragma(inline, true) qreal bottom() const/+ noexcept+/ { return yp + h; }
+    pragma(inline, true) qreal left() const nothrow { return xp; }
+    pragma(inline, true) qreal top() const nothrow { return yp; }
+    pragma(inline, true) qreal right() const nothrow { return xp + w; }
+    pragma(inline, true) qreal bottom() const nothrow { return yp + h; }
 
-    pragma(inline, true) qreal x() const/+ noexcept+/
+    pragma(inline, true) qreal x() const nothrow
     { return xp; }
-    pragma(inline, true) qreal y() const/+ noexcept+/
+    pragma(inline, true) qreal y() const nothrow
     { return yp; }
-    pragma(inline, true) void setLeft(qreal pos)/+ noexcept+/
+    pragma(inline, true) void setLeft(qreal pos) nothrow
     { qreal diff = pos - xp; xp += diff; w -= diff; }
-    pragma(inline, true) void setTop(qreal pos)/+ noexcept+/
+    pragma(inline, true) void setTop(qreal pos) nothrow
     { qreal diff = pos - yp; yp += diff; h -= diff; }
-    pragma(inline, true) void setRight(qreal pos)/+ noexcept+/
+    pragma(inline, true) void setRight(qreal pos) nothrow
     { w = pos - xp; }
-    pragma(inline, true) void setBottom(qreal pos)/+ noexcept+/
+    pragma(inline, true) void setBottom(qreal pos) nothrow
     { h = pos - yp; }
-    pragma(inline, true) void setX(qreal pos)/+ noexcept+/ { setLeft(pos); }
-    pragma(inline, true) void setY(qreal pos)/+ noexcept+/ { setTop(pos); }
+    pragma(inline, true) void setX(qreal pos) nothrow { setLeft(pos); }
+    pragma(inline, true) void setY(qreal pos) nothrow { setTop(pos); }
 
-    pragma(inline, true) QPointF topLeft() const/+ noexcept+/ { return QPointF(xp, yp); }
-    pragma(inline, true) QPointF bottomRight() const/+ noexcept+/ { return QPointF(xp+w, yp+h); }
-    pragma(inline, true) QPointF topRight() const/+ noexcept+/ { return QPointF(xp+w, yp); }
-    pragma(inline, true) QPointF bottomLeft() const/+ noexcept+/ { return QPointF(xp, yp+h); }
-    pragma(inline, true) QPointF center() const/+ noexcept+/
+    pragma(inline, true) QPointF topLeft() const nothrow { return QPointF(xp, yp); }
+    pragma(inline, true) QPointF bottomRight() const nothrow { return QPointF(xp+w, yp+h); }
+    pragma(inline, true) QPointF topRight() const nothrow { return QPointF(xp+w, yp); }
+    pragma(inline, true) QPointF bottomLeft() const nothrow { return QPointF(xp, yp+h); }
+    pragma(inline, true) QPointF center() const nothrow
     { return QPointF(xp + w/2, yp + h/2); }
 
-    pragma(inline, true) void setTopLeft(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void setTopLeft(ref const(QPointF) p) nothrow
     { setLeft(p.x()); setTop(p.y()); }
-    pragma(inline, true) void setBottomRight(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void setBottomRight(ref const(QPointF) p) nothrow
     { setRight(p.x()); setBottom(p.y()); }
-    pragma(inline, true) void setTopRight(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void setTopRight(ref const(QPointF) p) nothrow
     { setRight(p.x()); setTop(p.y()); }
-    pragma(inline, true) void setBottomLeft(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void setBottomLeft(ref const(QPointF) p) nothrow
     { setLeft(p.x()); setBottom(p.y()); }
 
-    pragma(inline, true) void moveLeft(qreal pos)/+ noexcept+/
+    pragma(inline, true) void moveLeft(qreal pos) nothrow
     { xp = pos; }
-    pragma(inline, true) void moveTop(qreal pos)/+ noexcept+/
+    pragma(inline, true) void moveTop(qreal pos) nothrow
     { yp = pos; }
-    pragma(inline, true) void moveRight(qreal pos)/+ noexcept+/
+    pragma(inline, true) void moveRight(qreal pos) nothrow
     { xp = pos - w; }
-    pragma(inline, true) void moveBottom(qreal pos)/+ noexcept+/
+    pragma(inline, true) void moveBottom(qreal pos) nothrow
     { yp = pos - h; }
-    pragma(inline, true) void moveTopLeft(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void moveTopLeft(ref const(QPointF) p) nothrow
     { moveLeft(p.x()); moveTop(p.y()); }
-    pragma(inline, true) void moveBottomRight(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void moveBottomRight(ref const(QPointF) p) nothrow
     { moveRight(p.x()); moveBottom(p.y()); }
-    pragma(inline, true) void moveTopRight(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void moveTopRight(ref const(QPointF) p) nothrow
     { moveRight(p.x()); moveTop(p.y()); }
-    pragma(inline, true) void moveBottomLeft(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void moveBottomLeft(ref const(QPointF) p) nothrow
     { moveLeft(p.x()); moveBottom(p.y()); }
-    pragma(inline, true) void moveCenter(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void moveCenter(ref const(QPointF) p) nothrow
     { xp = p.x() - w/2; yp = p.y() - h/2; }
 
-    pragma(inline, true) void translate(qreal dx, qreal dy)/+ noexcept+/
+    pragma(inline, true) void translate(qreal dx, qreal dy) nothrow
     {
         xp += dx;
         yp += dy;
     }
-    pragma(inline, true) void translate(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void translate(ref const(QPointF) p) nothrow
     {
         xp += p.x();
         yp += p.y();
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF translated(qreal dx, qreal dy) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF translated(qreal dx, qreal dy) const nothrow
     { return QRectF(xp + dx, yp + dy, w, h); }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF translated(ref const(QPointF) p) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF translated(ref const(QPointF) p) const nothrow
     { return QRectF(xp + p.x(), yp + p.y(), w, h); }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF transposed() const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF transposed() const nothrow
     { auto tmp = topLeft(); auto tmp__1 = size().transposed(); return QRectF(tmp, tmp__1); }
 
-    pragma(inline, true) void moveTo(qreal ax, qreal ay)/+ noexcept+/
+    pragma(inline, true) void moveTo(qreal ax, qreal ay) nothrow
     {
         xp = ax;
         yp = ay;
     }
-    pragma(inline, true) void moveTo(ref const(QPointF) p)/+ noexcept+/
+    pragma(inline, true) void moveTo(ref const(QPointF) p) nothrow
     {
         xp = p.x();
         yp = p.y();
     }
 
-    pragma(inline, true) void setRect(qreal ax, qreal ay, qreal aaw, qreal aah)/+ noexcept+/
+    pragma(inline, true) void setRect(qreal ax, qreal ay, qreal aaw, qreal aah) nothrow
     {
         this.xp = ax;
         this.yp = ay;
@@ -526,7 +526,7 @@ public:
         *aah = this.h;
     }
 
-    pragma(inline, true) void setCoords(qreal xp1, qreal yp1, qreal xp2, qreal yp2)/+ noexcept+/
+    pragma(inline, true) void setCoords(qreal xp1, qreal yp1, qreal xp2, qreal yp2) nothrow
     {
         xp = xp1;
         yp = yp1;
@@ -541,72 +541,72 @@ public:
         *yp2 = yp + h;
     }
 
-    pragma(inline, true) void adjust(qreal xp1, qreal yp1, qreal xp2, qreal yp2)/+ noexcept+/
+    pragma(inline, true) void adjust(qreal xp1, qreal yp1, qreal xp2, qreal yp2) nothrow
     { xp += xp1; yp += yp1; w += xp2 - xp1; h += yp2 - yp1; }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF adjusted(qreal xp1, qreal yp1, qreal xp2, qreal yp2) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF adjusted(qreal xp1, qreal yp1, qreal xp2, qreal yp2) const nothrow
     { return QRectF(xp + xp1, yp + yp1, w + xp2 - xp1, h + yp2 - yp1); }
 
-    pragma(inline, true) QSizeF size() const/+ noexcept+/
+    pragma(inline, true) QSizeF size() const nothrow
     { return QSizeF(w, h); }
-    pragma(inline, true) qreal width() const/+ noexcept+/
+    pragma(inline, true) qreal width() const nothrow
     { return w; }
-    pragma(inline, true) qreal height() const/+ noexcept+/
+    pragma(inline, true) qreal height() const nothrow
     { return h; }
-    pragma(inline, true) void setWidth(qreal aw)/+ noexcept+/
+    pragma(inline, true) void setWidth(qreal aw) nothrow
     { this.w = aw; }
-    pragma(inline, true) void setHeight(qreal ah)/+ noexcept+/
+    pragma(inline, true) void setHeight(qreal ah) nothrow
     { this.h = ah; }
-    pragma(inline, true) void setSize(ref const(QSizeF) s)/+ noexcept+/
+    pragma(inline, true) void setSize(ref const(QSizeF) s) nothrow
     {
         w = s.width();
         h = s.height();
     }
 
-    QRectF opBinary(string op)(ref const(QRectF) r) const/+ noexcept+/ if (op == "|");
-    QRectF opBinary(string op)(ref const(QRectF) r) const/+ noexcept+/ if (op == "&");
-    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QRectF) r)/+ noexcept+/ if (op == "|")
+    QRectF opBinary(string op)(ref const(QRectF) r) const nothrow if (op == "|");
+    QRectF opBinary(string op)(ref const(QRectF) r) const nothrow if (op == "&");
+    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QRectF) r) nothrow if (op == "|")
     {
         this = this | r;
         return this;
     }
-    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QRectF) r)/+ noexcept+/ if (op == "&")
+    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QRectF) r) nothrow if (op == "&")
     {
         this = this & r;
         return this;
     }
 
-    bool contains(ref const(QRectF) r) const/+ noexcept+/;
-    bool contains(ref const(QPointF) p) const/+ noexcept+/;
-    pragma(inline, true) bool contains(qreal ax, qreal ay) const/+ noexcept+/
+    bool contains(ref const(QRectF) r) const nothrow;
+    bool contains(ref const(QPointF) p) const nothrow;
+    pragma(inline, true) bool contains(qreal ax, qreal ay) const nothrow
     {
         auto tmp = QPointF(ax, ay); return contains(tmp);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF united(ref const(QRectF) r) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF united(ref const(QRectF) r) const nothrow
     {
         return this | r;
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF intersected(ref const(QRectF) r) const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRectF intersected(ref const(QRectF) r) const nothrow
     {
         return this & r;
     }
-    bool intersects(ref const(QRectF) r) const/+ noexcept+/;
+    bool intersects(ref const(QRectF) r) const nothrow;
 
-    pragma(inline, true) QRectF marginsAdded(ref const(QMarginsF) margins) const/+ noexcept+/
+    pragma(inline, true) QRectF marginsAdded(ref const(QMarginsF) margins) const nothrow
     {
         auto tmp = QPointF(xp - margins.left(), yp - margins.top()); auto tmp__1 = QSizeF(w + margins.left() + margins.right(), h + margins.top() + margins.bottom()); return QRectF(tmp,
                       tmp__1);
     }
-    pragma(inline, true) QRectF marginsRemoved(ref const(QMarginsF) margins) const/+ noexcept+/
+    pragma(inline, true) QRectF marginsRemoved(ref const(QMarginsF) margins) const nothrow
     {
         auto tmp = QPointF(xp + margins.left(), yp + margins.top()); auto tmp__1 = QSizeF(w - margins.left() - margins.right(), h - margins.top() - margins.bottom()); return QRectF(tmp,
                       tmp__1);
     }
-    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if (op == "+")
+    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QMarginsF) margins) nothrow if (op == "+")
     {
         this = marginsAdded(margins);
         return this;
     }
-    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QMarginsF) margins)/+ noexcept+/ if (op == "-")
+    pragma(inline, true) ref QRectF opOpAssign(string op)(ref const(QMarginsF) margins) nothrow if (op == "-")
     {
         this = marginsRemoved(margins);
         return this;
@@ -620,11 +620,11 @@ public:
     /+ friend inline bool operator==(const QRectF &, const QRectF &) noexcept; +/
     /+ friend inline bool operator!=(const QRectF &, const QRectF &) noexcept; +/
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect toRect() const/+ noexcept+/
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QRect toRect() const nothrow
     {
         auto tmp = QPoint(qRound(xp), qRound(yp)); auto tmp__1 = QPoint(qRound(xp + w) - 1, qRound(yp + h) - 1); return QRect(tmp, tmp__1);
     }
-    /+ Q_REQUIRED_RESULT +/ QRect toAlignedRect() const/+ noexcept+/;
+    /+ Q_REQUIRED_RESULT +/ QRect toAlignedRect() const nothrow;
 
     static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
     {
@@ -665,31 +665,31 @@ QT_WARNING_DISABLE_INTEL(1572)
 
 QT_WARNING_POP +/
 
-/+pragma(inline, true) bool operator ==(ref const(QRectF) r1, ref const(QRectF) r2)/+ noexcept+/
+/+pragma(inline, true) bool operator ==(ref const(QRectF) r1, ref const(QRectF) r2) nothrow
 {
     return qFuzzyCompare(r1.xp, r2.xp) && qFuzzyCompare(r1.yp, r2.yp)
            && qFuzzyCompare(r1.w, r2.w) && qFuzzyCompare(r1.h, r2.h);
 }+/
 
-/+pragma(inline, true) bool operator !=(ref const(QRectF) r1, ref const(QRectF) r2)/+ noexcept+/
+/+pragma(inline, true) bool operator !=(ref const(QRectF) r1, ref const(QRectF) r2) nothrow
 {
     return !qFuzzyCompare(r1.xp, r2.xp) || !qFuzzyCompare(r1.yp, r2.yp)
            || !qFuzzyCompare(r1.w, r2.w) || !qFuzzyCompare(r1.h, r2.h);
 }+/
 
-/+pragma(inline, true) QRectF operator +(ref const(QRectF) lhs, ref const(QMarginsF) rhs)/+ noexcept+/
+/+pragma(inline, true) QRectF operator +(ref const(QRectF) lhs, ref const(QMarginsF) rhs) nothrow
 {
     auto tmp = QPointF(lhs.left() - rhs.left(), lhs.top() - rhs.top()); auto tmp__1 = QSizeF(lhs.width() + rhs.left() + rhs.right(), lhs.height() + rhs.top() + rhs.bottom()); return QRectF(tmp,
                   tmp__1);
 }+/
 
-/+pragma(inline, true) QRectF operator +(ref const(QMarginsF) lhs, ref const(QRectF) rhs)/+ noexcept+/
+/+pragma(inline, true) QRectF operator +(ref const(QMarginsF) lhs, ref const(QRectF) rhs) nothrow
 {
     auto tmp = QPointF(rhs.left() - lhs.left(), rhs.top() - lhs.top()); auto tmp__1 = QSizeF(rhs.width() + lhs.left() + lhs.right(), rhs.height() + lhs.top() + lhs.bottom()); return QRectF(tmp,
                   tmp__1);
 }+/
 
-/+pragma(inline, true) QRectF operator -(ref const(QRectF) lhs, ref const(QMarginsF) rhs)/+ noexcept+/
+/+pragma(inline, true) QRectF operator -(ref const(QRectF) lhs, ref const(QMarginsF) rhs) nothrow
 {
     auto tmp = QPointF(lhs.left() + rhs.left(), lhs.top() + rhs.top()); auto tmp__1 = QSizeF(lhs.width() - rhs.left() - rhs.right(), lhs.height() - rhs.top() - rhs.bottom()); return QRectF(tmp,
                   tmp__1);

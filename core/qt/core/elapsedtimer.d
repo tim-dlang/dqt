@@ -35,25 +35,25 @@ public:
         this.t2 = 0x8000000000000000L;
     }+/
 
-    static ClockType clockType()/+ noexcept+/;
-    static bool isMonotonic()/+ noexcept+/;
+    static ClockType clockType() nothrow;
+    static bool isMonotonic() nothrow;
 
-    void start()/+ noexcept+/;
-    qint64 restart()/+ noexcept+/;
-    void invalidate()/+ noexcept+/;
-    bool isValid() const/+ noexcept+/;
+    void start() nothrow;
+    qint64 restart() nothrow;
+    void invalidate() nothrow;
+    bool isValid() const nothrow;
 
-    qint64 nsecsElapsed() const/+ noexcept+/;
-    qint64 elapsed() const/+ noexcept+/;
-    bool hasExpired(qint64 timeout) const/+ noexcept+/;
+    qint64 nsecsElapsed() const nothrow;
+    qint64 elapsed() const nothrow;
+    bool hasExpired(qint64 timeout) const nothrow;
 
-    qint64 msecsSinceReference() const/+ noexcept+/;
-    qint64 msecsTo(ref const(QElapsedTimer) other) const/+ noexcept+/;
-    qint64 secsTo(ref const(QElapsedTimer) other) const/+ noexcept+/;
+    qint64 msecsSinceReference() const nothrow;
+    qint64 msecsTo(ref const(QElapsedTimer) other) const nothrow;
+    qint64 secsTo(ref const(QElapsedTimer) other) const nothrow;
 
-    /+bool operator ==(ref const(QElapsedTimer) other) const/+ noexcept+/
+    /+bool operator ==(ref const(QElapsedTimer) other) const nothrow
     { return t1 == other.t1 && t2 == other.t2; }+/
-    /+bool operator !=(ref const(QElapsedTimer) other) const/+ noexcept+/
+    /+bool operator !=(ref const(QElapsedTimer) other) const nothrow
     { return !(this == other); }+/
 
     /+ friend bool Q_CORE_EXPORT operator<(const QElapsedTimer &v1, const QElapsedTimer &v2) noexcept; +/

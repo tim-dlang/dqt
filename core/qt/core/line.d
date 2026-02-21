@@ -27,96 +27,96 @@ import qt.helpers;
 {
 public:
     /+pragma(inline, true) this() { }+/
-    pragma(inline, true) this(const(QPoint) pt1_, const(QPoint) pt2_)
+    pragma(inline, true) this(const(QPoint) pt1_, const(QPoint) pt2_) nothrow
     {
         this.pt1 = pt1_;
         this.pt2 = pt2_;
     }
-    pragma(inline, true) this(int x1pos, int y1pos, int x2pos, int y2pos)
+    pragma(inline, true) this(int x1pos, int y1pos, int x2pos, int y2pos) nothrow
     {
         this.pt1 = QPoint(x1pos, y1pos);
         this.pt2 = QPoint(x2pos, y2pos);
     }
 
-    pragma(inline, true) bool isNull() const
+    pragma(inline, true) bool isNull() const nothrow
     {
         return pt1 == pt2;
     }
 
-    pragma(inline, true) QPoint p1() const
+    pragma(inline, true) QPoint p1() const nothrow
     {
         return pt1;
     }
-    pragma(inline, true) QPoint p2() const
+    pragma(inline, true) QPoint p2() const nothrow
     {
         return pt2;
     }
 
-    pragma(inline, true) int x1() const
+    pragma(inline, true) int x1() const nothrow
     {
         return pt1.x();
     }
-    pragma(inline, true) int y1() const
+    pragma(inline, true) int y1() const nothrow
     {
         return pt1.y();
     }
 
-    pragma(inline, true) int x2() const
+    pragma(inline, true) int x2() const nothrow
     {
         return pt2.x();
     }
-    pragma(inline, true) int y2() const
+    pragma(inline, true) int y2() const nothrow
     {
         return pt2.y();
     }
 
-    pragma(inline, true) int dx() const
+    pragma(inline, true) int dx() const nothrow
     {
         return pt2.x() - pt1.x();
     }
-    pragma(inline, true) int dy() const
+    pragma(inline, true) int dy() const nothrow
     {
         return pt2.y() - pt1.y();
     }
 
-    pragma(inline, true) void translate(ref const(QPoint) point)
+    pragma(inline, true) void translate(ref const(QPoint) point) nothrow
     {
         pt1 += point;
         pt2 += point;
     }
-    pragma(inline, true) void translate(int adx, int ady)
+    pragma(inline, true) void translate(int adx, int ady) nothrow
     {
         auto tmp=QPoint(adx, ady); this.translate(tmp);
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLine translated(ref const(QPoint) p) const
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLine translated(ref const(QPoint) p) const nothrow
     {
         return QLine(pt1 + p, pt2 + p);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLine translated(int adx, int ady) const
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLine translated(int adx, int ady) const nothrow
     {
         auto tmp = QPoint(adx, ady); return translated(tmp);
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QPoint center() const
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QPoint center() const nothrow
     {
         return QPoint(cast(int) ((qint64(pt1.x()) + pt2.x()) / 2), cast(int) ((qint64(pt1.y()) + pt2.y()) / 2));
     }
 
-    pragma(inline, true) void setP1(ref const(QPoint) aP1)
+    pragma(inline, true) void setP1(ref const(QPoint) aP1) nothrow
     {
         pt1 = aP1;
     }
-    pragma(inline, true) void setP2(ref const(QPoint) aP2)
+    pragma(inline, true) void setP2(ref const(QPoint) aP2) nothrow
     {
         pt2 = aP2;
     }
-    pragma(inline, true) void setPoints(ref const(QPoint) aP1, ref const(QPoint) aP2)
+    pragma(inline, true) void setPoints(ref const(QPoint) aP1, ref const(QPoint) aP2) nothrow
     {
         pt1 = aP1;
         pt2 = aP2;
     }
-    pragma(inline, true) void setLine(int aX1, int aY1, int aX2, int aY2)
+    pragma(inline, true) void setLine(int aX1, int aY1, int aX2, int aY2) nothrow
     {
         pt1 = QPoint(aX1, aY1);
         pt2 = QPoint(aX2, aY2);
@@ -160,12 +160,12 @@ public:
     /+pragma(inline, true) this()
     {
     }+/
-    pragma(inline, true) this(const(QPointF) apt1, const(QPointF) apt2)
+    pragma(inline, true) this(const(QPointF) apt1, const(QPointF) apt2) nothrow
     {
         this.pt1 = apt1;
         this.pt2 = apt2;
     }
-    pragma(inline, true) this(qreal x1pos, qreal y1pos, qreal x2pos, qreal y2pos)
+    pragma(inline, true) this(qreal x1pos, qreal y1pos, qreal x2pos, qreal y2pos) nothrow
     {
         this.pt1 = typeof(this.pt1)(x1pos, y1pos);
         this.pt2 = typeof(this.pt2)(x2pos, y2pos);
@@ -178,43 +178,43 @@ public:
 
     /+ Q_REQUIRED_RESULT +/ static QLineF fromPolar(qreal length, qreal angle);
 
-    pragma(inline, true) bool isNull() const
+    pragma(inline, true) bool isNull() const nothrow
     {
         return qFuzzyCompare(pt1.x(), pt2.x()) && qFuzzyCompare(pt1.y(), pt2.y());
     }
 
-    pragma(inline, true) QPointF p1() const
+    pragma(inline, true) QPointF p1() const nothrow
     {
         return pt1;
     }
-    pragma(inline, true) QPointF p2() const
+    pragma(inline, true) QPointF p2() const nothrow
     {
         return pt2;
     }
 
-    pragma(inline, true) qreal x1() const
+    pragma(inline, true) qreal x1() const nothrow
     {
         return pt1.x();
     }
-    pragma(inline, true) qreal y1() const
+    pragma(inline, true) qreal y1() const nothrow
     {
         return pt1.y();
     }
 
-    pragma(inline, true) qreal x2() const
+    pragma(inline, true) qreal x2() const nothrow
     {
         return pt2.x();
     }
-    pragma(inline, true) qreal y2() const
+    pragma(inline, true) qreal y2() const nothrow
     {
         return pt2.y();
     }
 
-    pragma(inline, true) qreal dx() const
+    pragma(inline, true) qreal dx() const nothrow
     {
         return pt2.x() - pt1.x();
     }
-    pragma(inline, true) qreal dy() const
+    pragma(inline, true) qreal dy() const nothrow
     {
         return pt2.y() - pt1.y();
     }
@@ -236,7 +236,7 @@ public:
     qreal angleTo(ref const(QLineF) l) const;
 
     /+ Q_REQUIRED_RESULT +/ QLineF unitVector() const;
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLineF normalVector() const
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLineF normalVector() const nothrow
     {
         auto tmp = p1(); return QLineF(tmp, p1() + QPointF(dy(), -dx()));
     }
@@ -250,48 +250,48 @@ public:
         qreal angle(ref const(QLineF) l) const;
 /+ #endif +/
 
-    pragma(inline, true) QPointF pointAt(qreal t) const
+    pragma(inline, true) QPointF pointAt(qreal t) const nothrow
     {
         return QPointF(pt1.x() + (pt2.x() - pt1.x()) * t, pt1.y() + (pt2.y() - pt1.y()) * t);
     }
-    pragma(inline, true) void translate(ref const(QPointF) point)
+    pragma(inline, true) void translate(ref const(QPointF) point) nothrow
     {
         pt1 += point;
         pt2 += point;
     }
-    pragma(inline, true) void translate(qreal adx, qreal ady)
+    pragma(inline, true) void translate(qreal adx, qreal ady) nothrow
     {
         auto tmp = QPointF(adx, ady); this.translate(tmp);
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLineF translated(ref const(QPointF) p) const
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLineF translated(ref const(QPointF) p) const nothrow
     {
         return QLineF(pt1 + p, pt2 + p);
     }
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLineF translated(qreal adx, qreal ady) const
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QLineF translated(qreal adx, qreal ady) const nothrow
     {
         auto tmp = QPointF(adx, ady); return translated(tmp);
     }
 
-    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QPointF center() const
+    /+ Q_REQUIRED_RESULT +/ pragma(inline, true) QPointF center() const nothrow
     {
         return QPointF(0.5 * pt1.x() + 0.5 * pt2.x(), 0.5 * pt1.y() + 0.5 * pt2.y());
     }
 
-    pragma(inline, true) void setP1(ref const(QPointF) aP1)
+    pragma(inline, true) void setP1(ref const(QPointF) aP1) nothrow
     {
         pt1 = aP1;
     }
-    pragma(inline, true) void setP2(ref const(QPointF) aP2)
+    pragma(inline, true) void setP2(ref const(QPointF) aP2) nothrow
     {
         pt2 = aP2;
     }
-    pragma(inline, true) void setPoints(ref const(QPointF) aP1, ref const(QPointF) aP2)
+    pragma(inline, true) void setPoints(ref const(QPointF) aP1, ref const(QPointF) aP2) nothrow
     {
         pt1 = aP1;
         pt2 = aP2;
     }
-    pragma(inline, true) void setLine(qreal aX1, qreal aY1, qreal aX2, qreal aY2)
+    pragma(inline, true) void setLine(qreal aX1, qreal aY1, qreal aX2, qreal aY2) nothrow
     {
         pt1 = QPointF(aX1, aY1);
         pt2 = QPointF(aX2, aY2);
@@ -303,7 +303,7 @@ public:
     }+/
     /+pragma(inline, true) bool operator !=(ref const(QLineF) d) const { return !(this == d); }+/
 
-    pragma(inline, true) QLine toLine() const
+    pragma(inline, true) QLine toLine() const nothrow
     {
         auto tmp = pt1.toPoint(); auto tmp__1 = pt2.toPoint(); return QLine(tmp, tmp__1);
     }

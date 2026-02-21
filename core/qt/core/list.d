@@ -84,11 +84,11 @@ struct /+ Q_CORE_EXPORT +/ QListData {
     void remove(int i);
     void remove(int i, int n);
     void move(int from, int to);
-    pragma(inline, true) int size() const/+ noexcept+/ { return int(d.end - d.begin); }   // q6sizetype
-    pragma(inline, true) bool isEmpty() const/+ noexcept+/ { return d.end  == d.begin; }
-    pragma(inline, true) void** at(int i) const/+ noexcept+/ { return cast(void**)(d.array.ptr + d.begin + i); }
-    pragma(inline, true) void** begin() const/+ noexcept+/ { return cast(void**)(d.array.ptr + d.begin); }
-    pragma(inline, true) void** end() const/+ noexcept+/ { return cast(void**)(d.array.ptr + d.end); }
+    pragma(inline, true) int size() const nothrow { return int(d.end - d.begin); }   // q6sizetype
+    pragma(inline, true) bool isEmpty() const nothrow { return d.end  == d.begin; }
+    pragma(inline, true) void** at(int i) const nothrow { return cast(void**)(d.array.ptr + d.begin + i); }
+    pragma(inline, true) void** begin() const nothrow { return cast(void**)(d.array.ptr + d.begin); }
+    pragma(inline, true) void** end() const nothrow { return cast(void**)(d.array.ptr + d.end); }
 }
 
 extern(C++, "QtPrivate") {
@@ -138,7 +138,7 @@ public:
     version (Windows)
     {
         @disable this();
-        pragma(inline, true) void rawConstructor()/+ noexcept+/
+        pragma(inline, true) void rawConstructor() nothrow
         {
             this.d = const_cast!(QListData.Data*)(&QListData.shared_null);
         }
@@ -212,7 +212,7 @@ public:
     }+/
     /+pragma(inline, true) bool operator !=(ref const(QList!(T)) l) const { return !(this == l); }+/
 
-    pragma(inline, true) int size() const/+ noexcept+/ { return p.size(); }
+    pragma(inline, true) int size() const nothrow { return p.size(); }
 
     pragma(inline, true) void detach() { if (d.ref_.isShared()) detach_helper(); }
 
@@ -236,9 +236,9 @@ public:
                 d.ref_.setSharable(sharable);
         }
     }
-    pragma(inline, true) bool isSharedWith(ref const(QList!(T)) other) const/+ noexcept+/ { return d == other.d; }
+    pragma(inline, true) bool isSharedWith(ref const(QList!(T)) other) const nothrow { return d == other.d; }
 
-    pragma(inline, true) bool isEmpty() const/+ noexcept+/ { return p.isEmpty(); }
+    pragma(inline, true) bool isEmpty() const nothrow { return p.isEmpty(); }
 
     void clear()
     {
@@ -492,11 +492,11 @@ public:
         /+ typedef T &reference; +/
 
         //@disable this();
-        /+pragma(inline, true) this()/+ noexcept+/
+        /+pragma(inline, true) this() nothrow
         {
             this.i = null;
         }+/
-        pragma(inline, true) this(Node* n)/+ noexcept+/
+        pragma(inline, true) this(Node* n) nothrow
         {
             this.i = n;
         }
@@ -504,34 +504,34 @@ public:
         // can't remove it in Qt 5, since doing so would make the type trivial,
         // which changes the way it's passed to functions by value.
         //@disable this(this);
-        pragma(inline, true) this(ref const(iterator) o)/+ noexcept+/
+        pragma(inline, true) this(ref const(iterator) o) nothrow
         {
             this.i = cast(Node*)o.i;
         }
-        /+pragma(inline, true) ref iterator opAssign(ref const(iterator) o)/+ noexcept+/
+        /+pragma(inline, true) ref iterator opAssign(ref const(iterator) o) nothrow
         { i = o.i; return this; }+/
 /+ #endif +/
         pragma(inline, true) ref T opUnary(string op)() const if (op == "*") { return (cast(Node*) i).t(); }
         /+pragma(inline, true) T* operator ->() const { return &i.t(); }+/
         pragma(inline, true) ref T opIndex(difference_type j) const { return (cast(Node*)i).t(); }
-        /+pragma(inline, true) bool operator ==(ref const(iterator) o) const/+ noexcept+/ { return i == o.i; }+/
-        /+pragma(inline, true) bool operator !=(ref const(iterator) o) const/+ noexcept+/ { return i != o.i; }+/
-        /+pragma(inline, true) bool operator <(ref const(iterator) other) const/+ noexcept+/ { return i < other.i; }+/
-        /+pragma(inline, true) bool operator <=(ref const(iterator) other) const/+ noexcept+/ { return i <= other.i; }+/
-        /+pragma(inline, true) bool operator >(ref const(iterator) other) const/+ noexcept+/ { return i > other.i; }+/
-        /+pragma(inline, true) bool operator >=(ref const(iterator) other) const/+ noexcept+/ { return i >= other.i; }+/
+        /+pragma(inline, true) bool operator ==(ref const(iterator) o) const nothrow { return i == o.i; }+/
+        /+pragma(inline, true) bool operator !=(ref const(iterator) o) const nothrow { return i != o.i; }+/
+        /+pragma(inline, true) bool operator <(ref const(iterator) other) const nothrow { return i < other.i; }+/
+        /+pragma(inline, true) bool operator <=(ref const(iterator) other) const nothrow { return i <= other.i; }+/
+        /+pragma(inline, true) bool operator >(ref const(iterator) other) const nothrow { return i > other.i; }+/
+        /+pragma(inline, true) bool operator >=(ref const(iterator) other) const nothrow { return i >= other.i; }+/
 /+ #ifndef QT_STRICT_ITERATORS +/
-        /+pragma(inline, true) bool operator ==(ref const(const_iterator) o) const/+ noexcept+/
+        /+pragma(inline, true) bool operator ==(ref const(const_iterator) o) const nothrow
             { return i == o.i; }+/
-        /+pragma(inline, true) bool operator !=(ref const(const_iterator) o) const/+ noexcept+/
+        /+pragma(inline, true) bool operator !=(ref const(const_iterator) o) const nothrow
             { return i != o.i; }+/
-        /+pragma(inline, true) bool operator <(ref const(const_iterator) other) const/+ noexcept+/
+        /+pragma(inline, true) bool operator <(ref const(const_iterator) other) const nothrow
             { return i < other.i; }+/
-        /+pragma(inline, true) bool operator <=(ref const(const_iterator) other) const/+ noexcept+/
+        /+pragma(inline, true) bool operator <=(ref const(const_iterator) other) const nothrow
             { return i <= other.i; }+/
-        /+pragma(inline, true) bool operator >(ref const(const_iterator) other) const/+ noexcept+/
+        /+pragma(inline, true) bool operator >(ref const(const_iterator) other) const nothrow
             { return i > other.i; }+/
-        /+pragma(inline, true) bool operator >=(ref const(const_iterator) other) const/+ noexcept+/
+        /+pragma(inline, true) bool operator >=(ref const(const_iterator) other) const nothrow
             { return i >= other.i; }+/
 /+ #endif +/
         pragma(inline, true) ref iterator opUnary(string op)() if (op == "++") { ++i; return this; }
@@ -559,11 +559,11 @@ public:
         /+ typedef const T &reference; +/
 
         //@disable this();
-        /+pragma(inline, true) this()/+ noexcept+/
+        /+pragma(inline, true) this() nothrow
         {
             this.i = null;
         }+/
-        pragma(inline, true) this(Node* n)/+ noexcept+/
+        pragma(inline, true) this(Node* n) nothrow
         {
             this.i = n;
         }
@@ -571,21 +571,21 @@ public:
         // can't remove it in Qt 5, since doing so would make the type trivial,
         // which changes the way it's passed to functions by value.
         //@disable this(this);
-        pragma(inline, true) this(ref const(const_iterator) o)/+ noexcept+/
+        pragma(inline, true) this(ref const(const_iterator) o) nothrow
         {
             this.i = cast(Node*)o.i;
         }
-        /+pragma(inline, true) ref const_iterator opAssign(ref const(const_iterator) o)/+ noexcept+/
+        /+pragma(inline, true) ref const_iterator opAssign(ref const(const_iterator) o) nothrow
         { i = o.i; return this; }+/
 /+ #endif
 #ifdef QT_STRICT_ITERATORS
         inline explicit const_iterator(const iterator &o) noexcept : i(o.i) {}
 #else +/
-        pragma(inline, true) this(ref const(iterator) o)/+ noexcept+/
+        pragma(inline, true) this(ref const(iterator) o) nothrow
         {
             this.i = cast(Node*)o.i;
         }
-        pragma(inline, true) this(const(iterator) o)/+ noexcept+/
+        pragma(inline, true) this(const(iterator) o) nothrow
         {
             this.i = cast(Node*)o.i;
         }
@@ -593,12 +593,12 @@ public:
         pragma(inline, true) ref const(T) opUnary(string op)() const if (op == "*") { return i.t(); }
         /+pragma(inline, true) const(T)* operator ->() const { return &i.t(); }+/
         pragma(inline, true) ref const(T) opIndex(difference_type j) const { return (cast(Node*)i)[j].t(); }
-        /+pragma(inline, true) bool operator ==(ref const(const_iterator) o) const/+ noexcept+/ { return i == o.i; }+/
-        /+pragma(inline, true) bool operator !=(ref const(const_iterator) o) const/+ noexcept+/ { return i != o.i; }+/
-        /+pragma(inline, true) bool operator <(ref const(const_iterator) other) const/+ noexcept+/ { return i < other.i; }+/
-        /+pragma(inline, true) bool operator <=(ref const(const_iterator) other) const/+ noexcept+/ { return i <= other.i; }+/
-        /+pragma(inline, true) bool operator >(ref const(const_iterator) other) const/+ noexcept+/ { return i > other.i; }+/
-        /+pragma(inline, true) bool operator >=(ref const(const_iterator) other) const/+ noexcept+/ { return i >= other.i; }+/
+        /+pragma(inline, true) bool operator ==(ref const(const_iterator) o) const nothrow { return i == o.i; }+/
+        /+pragma(inline, true) bool operator !=(ref const(const_iterator) o) const nothrow { return i != o.i; }+/
+        /+pragma(inline, true) bool operator <(ref const(const_iterator) other) const nothrow { return i < other.i; }+/
+        /+pragma(inline, true) bool operator <=(ref const(const_iterator) other) const nothrow { return i <= other.i; }+/
+        /+pragma(inline, true) bool operator >(ref const(const_iterator) other) const nothrow { return i > other.i; }+/
+        /+pragma(inline, true) bool operator >=(ref const(const_iterator) other) const nothrow { return i >= other.i; }+/
         pragma(inline, true) ref const_iterator opUnary(string op)() if (op == "++") { ++i; return this; }
         /+pragma(inline, true) const_iterator operator ++(int) { Node* n = i; ++i; return cast(const_iterator) (n); }+/
         pragma(inline, true) ref const_iterator opUnary(string op)() if (op == "--") { i--; return this; }
@@ -616,13 +616,13 @@ public:
     /+ typedef std::reverse_iterator<iterator> reverse_iterator; +/
     /+ typedef std::reverse_iterator<const_iterator> const_reverse_iterator; +/
     pragma(inline, true) iterator begin() { detach(); return iterator(reinterpret_cast!(Node*)(p.begin())); }
-    pragma(inline, true) const_iterator begin() const/+ noexcept+/ { return const_iterator(reinterpret_cast!(Node*)(p.begin())); }
-    pragma(inline, true) const_iterator cbegin() const/+ noexcept+/ { return const_iterator(reinterpret_cast!(Node*)(p.begin())); }
-    pragma(inline, true) const_iterator constBegin() const/+ noexcept+/ { return const_iterator(reinterpret_cast!(Node*)(p.begin())); }
+    pragma(inline, true) const_iterator begin() const nothrow { return const_iterator(reinterpret_cast!(Node*)(p.begin())); }
+    pragma(inline, true) const_iterator cbegin() const nothrow { return const_iterator(reinterpret_cast!(Node*)(p.begin())); }
+    pragma(inline, true) const_iterator constBegin() const nothrow { return const_iterator(reinterpret_cast!(Node*)(p.begin())); }
     pragma(inline, true) iterator end() { detach(); return iterator(reinterpret_cast!(Node*)(p.end())); }
-    pragma(inline, true) const_iterator end() const/+ noexcept+/ { return const_iterator(reinterpret_cast!(Node*)(p.end())); }
-    pragma(inline, true) const_iterator cend() const/+ noexcept+/ { return const_iterator(reinterpret_cast!(Node*)(p.end())); }
-    pragma(inline, true) const_iterator constEnd() const/+ noexcept+/ { return const_iterator(reinterpret_cast!(Node*)(p.end())); }
+    pragma(inline, true) const_iterator end() const nothrow { return const_iterator(reinterpret_cast!(Node*)(p.end())); }
+    pragma(inline, true) const_iterator cend() const nothrow { return const_iterator(reinterpret_cast!(Node*)(p.end())); }
+    pragma(inline, true) const_iterator constEnd() const nothrow { return const_iterator(reinterpret_cast!(Node*)(p.end())); }
     /+ reverse_iterator rbegin() { return reverse_iterator(end()); } +/
     /+ reverse_iterator rend() { return reverse_iterator(begin()); } +/
     /+ const_reverse_iterator rbegin() const noexcept { return const_reverse_iterator(end()); } +/
@@ -989,7 +989,7 @@ private:
             }
     }
 
-    bool isValidIterator(ref const(iterator) i) const/+ noexcept+/
+    bool isValidIterator(ref const(iterator) i) const nothrow
     {
         return !(i.i < cbegin().i) && !(end().i < i.i);
     }

@@ -133,51 +133,51 @@ alias Flags = QFlags!(Flag);    pragma(inline, true) void setFlags(Flags aflags)
 private:
     /+ uint align : 8; +/
     uint bitfieldData_align = (WrapMode.WordWrap << 8) | (AlignmentFlag.AlignLeft);
-    uint align_() const
+    uint align_() const nothrow
     {
         return (bitfieldData_align >> 0) & 0xff;
     }
-    uint align_(uint value)
+    uint align_(uint value) nothrow
     {
         bitfieldData_align = (bitfieldData_align & ~0xff) | ((value & 0xff) << 0);
         return value;
     }
     /+ uint wordWrap : 4; +/
-    uint wordWrap() const
+    uint wordWrap() const nothrow
     {
         return (bitfieldData_align >> 8) & 0xf;
     }
-    uint wordWrap(uint value)
+    uint wordWrap(uint value) nothrow
     {
         bitfieldData_align = (bitfieldData_align & ~0xf00) | ((value & 0xf) << 8);
         return value;
     }
     /+ uint design : 1; +/
-    uint design() const
+    uint design() const nothrow
     {
         return (bitfieldData_align >> 12) & 0x1;
     }
-    uint design(uint value)
+    uint design(uint value) nothrow
     {
         bitfieldData_align = (bitfieldData_align & ~0x1000) | ((value & 0x1) << 12);
         return value;
     }
     /+ uint direction : 2; +/
-    uint direction() const
+    uint direction() const nothrow
     {
         return (bitfieldData_align >> 13) & 0x3;
     }
-    uint direction(uint value)
+    uint direction(uint value) nothrow
     {
         bitfieldData_align = (bitfieldData_align & ~0x6000) | ((value & 0x3) << 13);
         return value;
     }
     /+ uint unused : 17; +/
-    uint unused() const
+    uint unused() const nothrow
     {
         return (bitfieldData_align >> 15) & 0x1ffff;
     }
-    uint unused(uint value)
+    uint unused(uint value) nothrow
     {
         bitfieldData_align = (bitfieldData_align & ~0xffff8000) | ((value & 0x1ffff) << 15);
         return value;
@@ -188,9 +188,9 @@ private:
     QTextOptionPrivate* d;
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator |(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)/+noexcept+/{return QFlags!(QTextOption.Flags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator |(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QTextOption.Flags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator |(QTextOption.Flags.enum_type f1, QTextOption.Flags.enum_type f2)nothrow{return QFlags!(QTextOption.Flags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QTextOption.Flags.enum_type) operator |(QTextOption.Flags.enum_type f1, QFlags!(QTextOption.Flags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QTextOption.Flags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QTextOption::Flags)
 #if QT_DEPRECATED_SINCE(5, 10)

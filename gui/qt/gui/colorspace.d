@@ -87,9 +87,9 @@ public:
     /+ void swap(QColorSpace &colorSpace) noexcept
     { qSwap(d_ptr, colorSpace.d_ptr); } +/
 
-    Primaries primaries() const/+ noexcept+/;
-    TransferFunction transferFunction() const/+ noexcept+/;
-    float gamma() const/+ noexcept+/;
+    Primaries primaries() const nothrow;
+    TransferFunction transferFunction() const nothrow;
+    float gamma() const nothrow;
 
     void setTransferFunction(TransferFunction transferFunction, float gamma = 0.0f);
     QColorSpace withTransferFunction(TransferFunction transferFunction, float gamma = 0.0f) const;
@@ -98,7 +98,7 @@ public:
     void setPrimaries(ref const(QPointF) whitePoint, ref const(QPointF) redPoint,
                           ref const(QPointF) greenPoint, ref const(QPointF) bluePoint);
 
-    bool isValid() const/+ noexcept+/;
+    bool isValid() const nothrow;
 
     /+ friend Q_GUI_EXPORT bool operator==(const QColorSpace &colorSpace1, const QColorSpace &colorSpace2); +/
     /+ friend inline bool operator!=(const QColorSpace &colorSpace1, const QColorSpace &colorSpace2); +/

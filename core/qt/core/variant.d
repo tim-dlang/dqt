@@ -177,7 +177,7 @@ extern(C++, "QtPrivate") {
 //        LastType = 0xffffffff // need this so that gcc >= 3.4 allocates 32 bits for Type
     }
 
-    /+this()/+ noexcept+/
+    /+this() nothrow
     {
         this.d = typeof(this.d)();
     }+/
@@ -411,7 +411,7 @@ extern(C++, "QtPrivate") {
     }
     struct Private
     {
-        /+pragma(inline, true) this()/+ noexcept+/
+        /+pragma(inline, true) this() nothrow
         {
             this.type = Type.Invalid;
             this.is_shared = false;
@@ -420,7 +420,7 @@ extern(C++, "QtPrivate") {
         }+/
 
         // Internal constructor for initialized variants.
-        /+ explicit +/ pragma(inline, true) this(uint variantType)/+ noexcept+/
+        /+ explicit +/ pragma(inline, true) this(uint variantType) nothrow
         {
             this.type = variantType;
             this.is_shared = false;
@@ -429,7 +429,7 @@ extern(C++, "QtPrivate") {
 
 /+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) +/
         @disable this(this);
-        this(ref const(Private) other)/+ noexcept+/
+        this(ref const(Private) other) nothrow
         {
             this.data = *cast(Data*)&other.data;
             this.type = other.type;
@@ -461,31 +461,31 @@ extern(C++, "QtPrivate") {
         }Data data;
         /+ uint type : 30; +/
         uint bitfieldData_type = Type.Invalid | (uint(1) << 31);
-        uint type() const
+        uint type() const nothrow
         {
             return (bitfieldData_type >> 0) & 0x3fffffff;
         }
-        uint type(uint value)
+        uint type(uint value) nothrow
         {
             bitfieldData_type = (bitfieldData_type & ~0x3fffffff) | ((value & 0x3fffffff) << 0);
             return value;
         }
         /+ uint is_shared : 1; +/
-        uint is_shared() const
+        uint is_shared() const nothrow
         {
             return (bitfieldData_type >> 30) & 0x1;
         }
-        uint is_shared(uint value)
+        uint is_shared(uint value) nothrow
         {
             bitfieldData_type = (bitfieldData_type & ~0x40000000) | ((value & 0x1) << 30);
             return value;
         }
         /+ uint is_null : 1; +/
-        uint is_null() const
+        uint is_null() const nothrow
         {
             return (bitfieldData_type >> 31) & 0x1;
         }
-        uint is_null(uint value)
+        uint is_null(uint value) nothrow
         {
             bitfieldData_type = (bitfieldData_type & ~0x80000000) | ((value & 0x1) << 31);
             return value;

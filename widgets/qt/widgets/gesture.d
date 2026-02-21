@@ -179,9 +179,9 @@ public:
     /+ friend class QPinchGestureRecognizer; +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);
 }
-/+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator |(QPinchGesture.ChangeFlags.enum_type f1, QPinchGesture.ChangeFlags.enum_type f2)/+noexcept+/{return QFlags!(QPinchGesture.ChangeFlags.enum_type)(f1)|f2;}+/
-/+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator |(QPinchGesture.ChangeFlags.enum_type f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)/+noexcept+/{return f2|f1;}+/
-/+pragma(inline, true) QIncompatibleFlag operator |(QPinchGesture.ChangeFlags.enum_type f1, int f2)/+noexcept+/{return QIncompatibleFlag(int(f1)|f2);}+/
+/+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator |(QPinchGesture.ChangeFlags.enum_type f1, QPinchGesture.ChangeFlags.enum_type f2)nothrow{return QFlags!(QPinchGesture.ChangeFlags.enum_type)(f1)|f2;}+/
+/+pragma(inline, true) QFlags!(QPinchGesture.ChangeFlags.enum_type) operator |(QPinchGesture.ChangeFlags.enum_type f1, QFlags!(QPinchGesture.ChangeFlags.enum_type) f2)nothrow{return f2|f1;}+/
+/+pragma(inline, true) QIncompatibleFlag operator |(QPinchGesture.ChangeFlags.enum_type f1, int f2)nothrow{return QIncompatibleFlag(int(f1)|f2);}+/
 
 /+ Q_DECLARE_OPERATORS_FOR_FLAGS(QPinchGesture::ChangeFlags)
 
