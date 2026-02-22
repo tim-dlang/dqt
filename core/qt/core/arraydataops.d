@@ -292,7 +292,7 @@ public:
         (mixin(Q_ASSERT(q{newSize > this_.size})));
         (mixin(Q_ASSERT(q{newSize - this_.size <= this_.freeSpaceAtEnd()})));
 
-        T*/+ const +/  b = this_.begin();
+        const(T* ) b = this_.begin();
         do {
             core.lifetime.emplace!T(b + this_.size);
         } while (++this_.size != newSize);
@@ -622,7 +622,7 @@ public:
         if (b == this_.begin() && e != this_.end()) {
             this_.ptr = e;
         } else {
-            const(T)*/+ const +/  end = this_.end();
+            const(T* ) end = this_.end();
 
             // move (by assignment) the elements from e to end
             // onto b to the new end
