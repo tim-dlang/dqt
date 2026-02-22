@@ -984,7 +984,7 @@ struct IteratorOwnerCommon(const_iterator)
 
         *ptr = cpp_new!const_iterator(iterator);
     }
-    static void assign(void** ptr, void* /+ const +/ *  src)
+    static void assign(void** ptr, const(void * )*  src)
     {
         import core.stdcpp.new_;
 
@@ -1004,7 +1004,7 @@ struct IteratorOwnerCommon(const_iterator)
         cpp_delete(static_cast!(const_iterator*)(*ptr));
     }
 
-    static bool equal(void* /+ const +/ * it, void* /+ const +/ * other)
+    static bool equal(const(void * )* it, const(void * )* other)
     {
         return *static_cast!(const_iterator*)(*it) == *static_cast!(const_iterator*)(*other);
     }
@@ -1014,7 +1014,7 @@ struct IteratorOwner(const_iterator)
 {
     IteratorOwnerCommon!(const_iterator) base0;
     alias base0 this;
-    static const(void)* getData(void* /+ const +/ * iterator)
+    static const(void)* getData(const(void * )* iterator)
     {
         return &**static_cast!(const_iterator*)(*iterator);
     }

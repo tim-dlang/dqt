@@ -455,7 +455,7 @@ public:
         if (from == to) // don't detach when no-op
             return;
         detach();
-        T* /+ const +/  b = d.begin();
+        const(T * ) b = d.begin();
         if (from < to)
             /+ std:: +/rotate(b + from, b + from + 1, b + to + 1);
         else
