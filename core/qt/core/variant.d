@@ -501,11 +501,11 @@ public:
         /+ quintptr packedType : sizeof(QMetaType) * 8 - 2; +/
         quintptr packedType() const nothrow
         {
-            return (bitfield >> 2) & 0x1;
+            return bitfield >> 2;
         }
         quintptr packedType(quintptr value) nothrow
         {
-            bitfield = (bitfield & ~0x4) | ((value & 0x1) << 2);
+            bitfield = (bitfield & 0x3) | (value << 2);
             return value;
         }
 
