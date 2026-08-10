@@ -25,7 +25,6 @@ jobs:
 
         exclude:
           - { platform: win32, dc: ldc-latest }
-          - { platform: debian32, dc: ldc-latest }
           - { platform: osx64, dc: dmd-2.103.1 }
           - { platform: osx64, dc: dmd-latest }
 
@@ -119,9 +118,9 @@ jobs:
           dpkg --add-architecture i386
           echo "deb http://deb.debian.org/debian bookworm-backports main contrib non-free" >> /etc/apt/sources.list
           echo "deb-src http://deb.debian.org/debian bookworm-backports main contrib non-free" >> /etc/apt/sources.list
-          apt-get -qq update
-          apt-get -qq install -y gpg xz-utils 7zip
-          apt-get -qq install -y libc6-dev:i386 libstdc++6:i386 g++:i386 qtbase5-dev:i386 qtwebengine5-dev:i386 qtquickcontrols2-5-dev:i386
+          apt-get update
+          apt-get install -y gpg xz-utils 7zip
+          apt-get install -y g++-multilib libc6-dev:i386 libstdc++6:i386 qtbase5-dev:i386 qtwebengine5-dev:i386 qtquickcontrols2-5-dev:i386
 
       - name: Install D compiler
         uses: dlang-community/setup-dlang@v2
@@ -131,7 +130,7 @@ jobs:
       - name: Change env vars to 32-bit
         if: ${{ matrix.platform == 'debian32' }}
         run: |
-          echo "LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | sed "s|dmd2/linux/lib64|dmd2/linux/lib32|g")" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | sed "s|dmd2/linux/lib64|dmd2/linux/lib32|g" | sed "s|ldc.*/lib$|\032|g")" >> "$GITHUB_ENV"
           echo "DC=$(echo "$DC" | sed "s|dmd2/linux/bin64|dmd2/linux/bin32|g")" >> "$GITHUB_ENV"
           echo "DMD=$(echo "$DMD" | sed "s|dmd2/linux/bin64|dmd2/linux/bin32|g")" >> "$GITHUB_ENV"
           echo "$(echo "$PATH" | grep -o "[^:]*dmd2/linux/bin[^:]*" | sed "s|dmd2/linux/bin64|dmd2/linux/bin32|g")" >> "$GITHUB_PATH"
@@ -207,6 +206,10 @@ jobs:
         if: ${{ (matrix.platform == 'win64' || matrix.platform == 'win32' || steps.cache-qt.outputs.cache-hit != 'true') && matrix.platform != 'debian32' }}
         run: |
           ${{ env.DC }} -Idxml/source -i -run ci/downloadqt.d -v"${{ matrix.qt_version }}" -a${{ matrix.qt_arch }} -u${{ matrix.qt_arch_url }} -p${{ matrix.qt_platform }}
+
+      - name: Print env
+        run: |
+          env
 
       - name: 'Build & Test'
         timeout-minutes: 5
