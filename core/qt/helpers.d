@@ -1520,3 +1520,47 @@ T cpp_new_copy(T, S)(S source) if (is(T == class))
     copyEmplace(source, mem);
     return mem;
 }
+
+// Mixins for adding functions as replacement for a destructor in interfaces.
+version (CppRuntime_Microsoft)
+{
+    extern(C++) interface QObjectMsvcVtblStart
+    {
+        void slot0(); void slot1(); void slot2();
+        void* vectorDeletingDtor(uint flags);
+    }
+
+    enum DECLARE_FAKE_INTERFACE_DESTRUCTOR = q{
+        void fakeDestructor(uint del);
+    };
+    enum IMPLEMENT_FAKE_INTERFACE_DESTRUCTOR = q{
+        final void fakeDestructor(uint del)
+        {
+            static import core.stdcpp.new_;
+
+            this.__xdtor();
+            if (del)
+                core.stdcpp.new_.__cpp_delete(cast(void*) this);
+        }
+    };
+}
+else
+{
+    enum DECLARE_FAKE_INTERFACE_DESTRUCTOR = q{
+        void fakeDestructor1();
+        void fakeDestructor2();
+    };
+    enum IMPLEMENT_FAKE_INTERFACE_DESTRUCTOR = q{
+        final void fakeDestructor1()
+        {
+            this.__xdtor();
+        }
+        final void fakeDestructor2()
+        {
+            static import core.stdcpp.new_;
+
+            this.__xdtor();
+            core.stdcpp.new_.__cpp_delete(cast(void*) this);
+        }
+    };
+}

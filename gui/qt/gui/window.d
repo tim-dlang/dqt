@@ -326,6 +326,8 @@ public /+ Q_SLOTS +/:
 
     /+ Q_REVISION(2, 13) +/ @QSignal final void transientParentChanged(QWindow transientParent);
 
+    mixin(IMPLEMENT_FAKE_INTERFACE_DESTRUCTOR);
+
 protected:
     /+ virtual +/ void exposeEvent(QExposeEvent );
     /+ virtual +/ void resizeEvent(QResizeEvent );

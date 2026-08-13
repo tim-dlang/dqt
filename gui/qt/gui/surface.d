@@ -26,6 +26,8 @@ interface QSurfaceInterface
 {
     alias SurfaceType = QSurface.SurfaceType;
 
+    mixin(DECLARE_FAKE_INTERFACE_DESTRUCTOR);
+
     /+ virtual +/ QSurfaceFormat format() const;
     /+ virtual +/ QPlatformSurface* surfaceHandle() const;
 

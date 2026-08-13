@@ -24,7 +24,7 @@ interface QPaintDeviceInterface
 {
     alias PaintDeviceMetric = QPaintDevice.PaintDeviceMetric;
 
-  //  /+ virtual +/~this();
+    mixin(DECLARE_FAKE_INTERFACE_DESTRUCTOR);
     /+ virtual +/ int devType() const;
     /+ virtual +/ QPaintEngine paintEngine() const /+ = 0 +/;
 protected:

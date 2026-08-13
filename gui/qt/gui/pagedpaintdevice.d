@@ -30,7 +30,7 @@ interface QPagedPaintDeviceInterface : QPaintDeviceInterface
 {
     alias PdfVersion = QPagedPaintDevice.PdfVersion;
 
-    /+ virtual +/ abstract bool newPage();
+    /+ virtual +/ bool newPage();
     /+ virtual +/ bool setPageLayout(ref const(QPageLayout) pageLayout);
     /+ virtual +/ bool setPageSize(ref const(QPageSize) pageSize);
     /+ virtual +/ bool setPageOrientation(QPageLayout.Orientation orientation);

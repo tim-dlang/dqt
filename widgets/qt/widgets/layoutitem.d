@@ -26,7 +26,7 @@ extern(D) immutable int QLAYOUTSIZE_MAX = int.max/256/16;
 
 interface QLayoutItemInterface
 {
-//    ~this();
+    mixin(DECLARE_FAKE_INTERFACE_DESTRUCTOR);
     /+ virtual +/ QSize sizeHint() const;
     /+ virtual +/ QSize minimumSize() const;
     /+ virtual +/ QSize maximumSize() const;

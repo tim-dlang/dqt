@@ -114,6 +114,8 @@ public:
         QPagedPaintDeviceInterface dev = this;
         return dev.setPageMargins(margins, units);
     }
+
+    mixin(IMPLEMENT_FAKE_INTERFACE_DESTRUCTOR);
 }
 
 
