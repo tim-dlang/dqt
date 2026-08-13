@@ -100,7 +100,7 @@ shared static ~this()
 }
 /+ Q_DECLARE_METATYPE(CustomStruct1); +/
 
-class TestObject : QObject
+extern(C++) class TestObject : QObject
 {
     mixin(Q_OBJECT_D);
 public:

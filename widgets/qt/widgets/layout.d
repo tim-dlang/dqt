@@ -124,30 +124,7 @@ public:
     static QSize closestAcceptableSize(const(QWidget) w, ref const(QSize) s);
     }));
 
-    override QSize sizeHint() const
-    {
-        assert(0);
-    }
-    override bool hasHeightForWidth() const
-    {
-        assert(0);
-    }
-    override int heightForWidth(int w) const
-    {
-        assert(0);
-    }
-    override int minimumHeightForWidth(int w) const
-    {
-        assert(0);
-    }
-    override QWidget widget()
-    {
-        assert(0);
-    }
-    override QSpacerItem spacerItem()
-    {
-        assert(0);
-    }
+    mixin(IMPLEMENT_FAKE_INTERFACE_DESTRUCTOR);
 
 protected:
     final void widgetEvent(QEvent );

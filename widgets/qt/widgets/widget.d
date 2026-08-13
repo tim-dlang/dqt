@@ -841,6 +841,8 @@ protected:
     pragma(inline, true) final bool focusNextChild() { return focusNextPrevChild(true); }
     pragma(inline, true) final bool focusPreviousChild() { return focusNextPrevChild(false); }
 
+    mixin(IMPLEMENT_FAKE_INTERFACE_DESTRUCTOR);
+
 protected:
     this(ref QWidgetPrivate d, QWidget parent, /+ Qt:: +/qt.core.namespace.WindowFlags f);
 private:

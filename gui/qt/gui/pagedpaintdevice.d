@@ -33,7 +33,7 @@ interface QPagedPaintDeviceInterface : QPaintDeviceInterface
     alias Margins = QPagedPaintDevice.Margins;
     alias PdfVersion = QPagedPaintDevice.PdfVersion;
 
-    /+ virtual +/ abstract bool newPage();
+    /+ virtual +/ bool newPage();
     /+ QT_DEPRECATED_VERSION_X_5_15("Use setPageSize(QPageSize) instead.") +/
         /+ virtual +/ void setPageSize(PageSize size);
     /+ QT_DEPRECATED_VERSION_X_5_15("Use setPageSize(QPageSize) instead.") +/

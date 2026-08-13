@@ -95,6 +95,15 @@ public:
     final void setDefaultPositioning(int n, /+ Qt:: +/qt.core.namespace.Orientation orient);
     final void getItemPosition(int idx, int* row, int* column, int* rowSpan, int* columnSpan) const;
 
+    final QWidget widget()
+    {
+        return null;
+    }
+    final QSpacerItem spacerItem()
+    {
+        return null;
+    }
+
 protected:
     override void addItem(QLayoutItem );
 

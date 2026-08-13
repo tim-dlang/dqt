@@ -17,7 +17,7 @@ import qt.helpers;
 
 interface QQmlParserStatusInterface
 {
-    // /+ virtual +/~this();
+    mixin(DECLARE_FAKE_INTERFACE_DESTRUCTOR);
 
     /+ virtual +/ abstract void classBegin();
     /+ virtual +/ abstract void componentComplete();

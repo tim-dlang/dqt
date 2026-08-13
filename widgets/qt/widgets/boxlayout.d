@@ -82,6 +82,15 @@ public:
     override int count() const;
     override void setGeometry(ref const(QRect));
 
+    final QWidget widget()
+    {
+        return null;
+    }
+    final QSpacerItem spacerItem()
+    {
+        return null;
+    }
+
 private:
     /+ Q_DISABLE_COPY(QBoxLayout) +/
     mixin(CREATE_CONVENIENCE_WRAPPERS);

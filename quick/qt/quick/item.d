@@ -474,6 +474,8 @@ protected:
 protected:
     this(ref QQuickItemPrivate dd, QQuickItem parent = null);
 
+    mixin(IMPLEMENT_FAKE_INTERFACE_DESTRUCTOR);
+
 private:
     /+ Q_PRIVATE_SLOT(d_func(), void _q_resourceObjectDeleted(QObject *))
     Q_PRIVATE_SLOT(d_func(), quint64 _q_createJSWrapper(QV4::ExecutionEngine *)) +/

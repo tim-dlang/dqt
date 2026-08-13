@@ -26,7 +26,7 @@ import qt.widgets.widget;
 
 interface QLayoutItemInterface
 {
-//    ~this();
+    mixin(DECLARE_FAKE_INTERFACE_DESTRUCTOR);
     /+ virtual +/ QSize sizeHint() const;
     /+ virtual +/ QSize minimumSize() const;
     /+ virtual +/ QSize maximumSize() const;

@@ -110,6 +110,9 @@ protected:
     {
         assert(false);
     }
+
+public:
+    mixin(IMPLEMENT_FAKE_INTERFACE_DESTRUCTOR);
 }
 
 

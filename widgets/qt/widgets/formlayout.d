@@ -141,6 +141,19 @@ public:
     void dump() const;
 #endif +/
 
+    final int minimumHeightForWidth(int w) const
+    {
+        return heightForWidth(w);
+    }
+    final QWidget widget()
+    {
+        return null;
+    }
+    final QSpacerItem spacerItem()
+    {
+        return null;
+    }
+
 private:
     final void resetFieldGrowthPolicy();
     final void resetRowWrapPolicy();
