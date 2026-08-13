@@ -1,5 +1,5 @@
 // QT_MODULES: qml
-// EXTRA_ARGS: -version=DQT_NO_CONVENIENCE_WRAPPERS
+// EXTRA_ARGS: -version=DQT_NO_CONVENIENCE_WRAPPERS -allinst
 // BUILD_ONLY
 import imports.linkall;
 import imports.qtmodules;
