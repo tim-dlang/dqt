@@ -122,7 +122,7 @@ jobs:
           echo "deb-src http://deb.debian.org/debian bookworm-backports main contrib non-free" >> /etc/apt/sources.list
           apt-get update
           apt-get install -y gpg xz-utils 7zip
-          apt-get install -y g++-multilib libc6-dev:i386 libstdc++6:i386 qt6-base-dev:i386 qt6-webengine-dev:i386 qt6-multimedia-dev:i386 qt6-pdf-dev:i386
+          apt-get install -y g++-multilib libc6-dev:i386 libstdc++6:i386 qt6-base-dev:i386 qt6-webengine-dev:i386 qt6-multimedia-dev:i386 qt6-pdf-dev:i386 qt6-svg-dev:i386
 
       - name: Install D compiler
         uses: dlang-community/setup-dlang@v2

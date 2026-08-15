@@ -195,6 +195,8 @@ int main(string[] args)
     moduleDependencies["multimediawidgets"] = ["multimedia", "widgets"];
     moduleDependencies["pdf"] = ["gui"];
     moduleDependencies["pdfwidgets"] = ["pdf", "widgets"];
+    moduleDependencies["svg"] = ["gui"];
+    moduleDependencies["svgwidgets"] = ["svg", "widgets"];
     moduleDependencies["test"] = ["gui"];
 
     immutable allQtModules = [
@@ -203,6 +205,7 @@ int main(string[] args)
         "WebEngineCore", "WebEngineWidgets",
         "Multimedia", "MultimediaWidgets",
         "Pdf", "PdfWidgets",
+        "Svg", "SvgWidgets",
         "Test"
     ];
     string getCapitalizedModuleName(string m)
@@ -264,6 +267,8 @@ int main(string[] args)
             ["-Iexamples", "-J" ~ buildPath("examples", "mediaplayer")], true);
     tests ~= Test(buildPath("examples", "pdfreader", "main.d"), ["pdfwidgets"],
             ["-Iexamples", "-J" ~ buildPath("examples", "pdfreader")], true);
+    tests ~= Test(buildPath("examples", "svgviewer", "main.d"), ["svgwidgets"],
+            ["-Iexamples", "-J" ~ buildPath("examples", "svgviewer")], true);
 
     foreach (ref test; tests)
         test.qtModules = dependencyClosure(test.qtModules, moduleDependencies);
@@ -286,6 +291,8 @@ int main(string[] args)
                 path = buildPath(toLower(m), "qt", "multimedia");
             else if (m.startsWith("Pdf"))
                 path = buildPath(toLower(m), "qt", "pdf");
+            else if (m.startsWith("Svg"))
+                path = buildPath(toLower(m), "qt", "svg");
             else
                 path = buildPath(toLower(m), "qt", toLower(m));
             foreach (DirEntry e; dirEntries(path, "*.d", SpanMode.depth))
@@ -338,6 +345,8 @@ int main(string[] args)
             path = buildPath(toLower(m), "qt", "multimedia");
         else if (m.startsWith("Pdf"))
             path = buildPath(toLower(m), "qt", "pdf");
+        else if (m.startsWith("Svg"))
+            path = buildPath(toLower(m), "qt", "svg");
         else
             path = buildPath(toLower(m), "qt", toLower(m));
         foreach (DirEntry e; dirEntries(path, "*.d", SpanMode.depth))

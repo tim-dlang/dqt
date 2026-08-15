@@ -151,6 +151,26 @@
 			"lflags-osx": ["-framework", "QtPdfWidgets"],
 			"dependencies": {"dqt:widgets":"*", "dqt:pdf":"*"}
 		},
+		{
+			"name": "svg",
+			"targetType": "library",
+			"sourcePaths": ["svg"],
+			"importPaths": ["svg"],
+			"libs-linux": ["Qt6Svg"],
+			"libs-windows": ["Qt6Svg"],
+			"lflags-osx": ["-framework", "QtSvg"],
+			"dependencies": {"dqt:gui":"*"}
+		},
+		{
+			"name": "svgwidgets",
+			"targetType": "library",
+			"sourcePaths": ["svgwidgets"],
+			"importPaths": ["svgwidgets"],
+			"libs-linux": ["Qt6SvgWidgets"],
+			"libs-windows": ["Qt6SvgWidgets"],
+			"lflags-osx": ["-framework", "QtSvgWidgets"],
+			"dependencies": {"dqt:widgets":"*", "dqt:svg":"*"}
+		},
 
 		{
 			"name": "helloworld",
@@ -206,6 +226,14 @@
 			"importPaths": ["examples/pdfreader"],
 			"stringImportPaths": ["examples/pdfreader"],
 			"dependencies": {"dqt:pdfwidgets":"*"}
+		},
+		{
+			"name": "svgviewer",
+			"targetType": "executable",
+			"sourcePaths": ["examples/svgviewer"],
+			"importPaths": ["examples/svgviewer"],
+			"stringImportPaths": ["examples/svgviewer"],
+			"dependencies": {"dqt:svgwidgets":"*"}
 		}
 	]
 }

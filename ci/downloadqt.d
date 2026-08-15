@@ -245,6 +245,7 @@ int main(string[] args)
     }
     else if (qtVersion.startsWith("6."))
     {
+        downloadArchive("qtsvg");
         downloadArchive("addons.qtpositioning.qtpositioning");
         downloadArchive("addons.qtwebchannel.qtwebchannel");
         if (!qtArch.startsWith("android") && qtArch != "gcc_arm64")

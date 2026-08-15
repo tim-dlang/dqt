@@ -4,7 +4,7 @@ DQt contains bindings for using a subset of [Qt](https://www.qt.io/)
 with the [D Programming Language](https://dlang.org/). Qt is a library for writing
 cross-platform graphical user interfaces. Currently bindings exist for
 the Qt modules core, gui, widgets, qml, webenginewidgets, multimediawidgets,
-pdfwidgets and dependencies.
+pdfwidgets, svgwidgets and dependencies.
 
 ![Screenshot of DQt example examplewidgets](docs/screenshot-examplewidgets.png)
 
@@ -65,6 +65,7 @@ The following examples show how to use DQt:
 * examples/exampleqml: Example for using QML.
 * examples/mediaplayer: Example for showing a video with QtMultimediaWidgets.
 * examples/pdfreader: Example for showing a PDF document with QtPdf.
+* examples/svgviewer: Example for showing an SVG file with QtSvg.
 
 ### Linux
 
@@ -80,6 +81,7 @@ dub run :examplebrowser
 dub run :exampleqml
 dub run :mediaplayer
 dub run :pdfreader
+dub run :svgviewer
 ```
 
 Alternatively dmd can be used directly:
@@ -105,6 +107,7 @@ dub run --compiler=dmd --arch=x86_64 :examplebrowser --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :exampleqml --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :mediaplayer --build-mode=allAtOnce
 dub run --compiler=dmd --arch=x86_64 :pdfreader --build-mode=allAtOnce
+dub run --compiler=dmd --arch=x86_64 :svgviewer --build-mode=allAtOnce
 ```
 
 Alternatively dmd can be used directly:

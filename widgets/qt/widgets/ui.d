@@ -119,6 +119,8 @@ private struct UICodeWriter()
             return "qt.multimedia.videowidget";
         if (name == "QPdfView")
             return "qt.pdf.view";
+        if (name == "QSvgWidget")
+            return "qt.svg.widget";
 
         if (name.startsWith("Q"))
             return "qt.widgets." ~ std.uni.toLower(name[1..$]);
