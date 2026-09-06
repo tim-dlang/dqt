@@ -562,6 +562,7 @@ unittest
     assert(method.name().toConstCharArray() == "signalVoid");
     assert(method.methodSignature().toConstCharArray() == "signalVoid()");
     assert(method.parameterCount() == 0);
+    assert(method.methodType() == QMetaMethod.MethodType.Signal);
 
     method = mo.method(mo.methodOffset() + 1);
     assert(method.name().toConstCharArray() == "signalInt");
@@ -631,6 +632,18 @@ unittest
     assert(method.name().toConstCharArray() == "signalCustomFlags");
     assert(method.methodSignature().toConstCharArray() == "signalCustomFlags(CustomFlags)");
     assert(method.parameterCount() == 1);
+
+    method = mo.method(mo.indexOfMethod("emitSignalVoid()"));
+    assert(method.name() == "emitSignalVoid");
+    assert(method.methodSignature() == "emitSignalVoid()");
+    assert(method.parameterCount() == 0);
+    assert(method.methodType() == QMetaMethod.MethodType.Method);
+
+    method = mo.method(mo.indexOfMethod("onSignalVoid()"));
+    assert(method.name() == "onSignalVoid");
+    assert(method.methodSignature() == "onSignalVoid()");
+    assert(method.parameterCount() == 0);
+    assert(method.methodType() == QMetaMethod.MethodType.Slot);
 
     method = mo.method(mo.methodOffset() + numSignalSlotTests * 3 + 4);
     assert(method.name().toConstCharArray() == "toUpper");
