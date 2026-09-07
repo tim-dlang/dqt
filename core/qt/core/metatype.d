@@ -520,7 +520,7 @@ alias TypeFlags = QFlags!(TypeFlag);
 /+ #endif
 #endif +/
 
-    static QMetaType fromType(T)()
+    extern(D) static QMetaType fromType(T)()
     {
         return QMetaType(qMetaTypeInterfaceForType!(T)());
     }
@@ -1047,7 +1047,8 @@ extern(C++, "QtPrivate")
         }
         else
         {
-            static const(QMetaObject)* value() { return null; }
+            pragma(mangle, MetaObjectForType!T.mangleof ~ "__value")
+            extern(C++) static const(QMetaObject)* value() { return null; }
             alias MetaObjectFn = const(QMetaObject)* function(const(QMetaTypeInterface)*);
             extern(D) static immutable MetaObjectFn metaObjectFunction = null;
         }
@@ -1377,7 +1378,7 @@ extern(C++, "QtPrivate") {
 
 }
 
-int qRegisterNormalizedMetaTypeImplementation(T)(/+ QT_PREPEND_NAMESPACE(QByteArray) +/ ref const(QByteArray) normalizedTypeName)
+extern(D) int qRegisterNormalizedMetaTypeImplementation(T)(/+ QT_PREPEND_NAMESPACE(QByteArray) +/ ref const(QByteArray) normalizedTypeName)
 {
 /+ #ifndef QT_NO_QOBJECT +/
     (mixin(Q_ASSERT_X(q{normalizedTypeName == QMetaObject.normalizedType(normalizedTypeName.constData())},q{
@@ -1415,7 +1416,7 @@ int qRegisterNormalizedMetaTypeImplementation(T)(/+ QT_PREPEND_NAMESPACE(QByteAr
 //     (QT_IMPL_METATYPE_EXTERN{,_TAGGED})
 // The _TAGGED variants let you choose a tag (must be a C identifier) to disambiguate
 // the out-of-line function; the non-_TAGGED variants use the passed class name as tag.
-int qRegisterNormalizedMetaType(T)(/+ QT_PREPEND_NAMESPACE(QByteArray) +/ ref const(QByteArray) normalizedTypeName)
+extern(D) int qRegisterNormalizedMetaType(T)(/+ QT_PREPEND_NAMESPACE(QByteArray) +/ ref const(QByteArray) normalizedTypeName)
 {
     return qRegisterNormalizedMetaTypeImplementation!(T)(normalizedTypeName);
 }
@@ -1437,7 +1438,7 @@ int qRegisterNormalizedMetaType(T)(/+ QT_PREPEND_NAMESPACE(QByteArray) +/ ref co
 #define QT_IMPL_METATYPE_EXTERN(TYPE) \
     QT_IMPL_METATYPE_EXTERN_TAGGED(TYPE, TYPE) +/
 
-int qRegisterMetaType(T)(const(char)* typeName)
+extern(D) int qRegisterMetaType(T)(const(char)* typeName)
 {
 /+ #ifdef QT_NO_QOBJECT
     QT_PREPEND_NAMESPACE(QByteArray) normalizedTypeName = typeName;
@@ -2540,55 +2541,60 @@ struct QDataStreamOperatorForType <T, false>
 #  pragma GCC visibility push(hidden)
 #endif +/
 
-extern(C++, class) struct QMetaTypeForType(S)
+extern(D) struct QMetaTypeForType(S)
 {
 public:
     extern(D) static immutable name = typenameHelper!(S)();
 
+    static if (is(S == class) || __traits(compiles, {S s;}) || __traits(hasMember, S, "rawConstructor"))
+    {
+        pragma(mangle, QMetaTypeForType!S.mangleof ~ "__defaultCtrFunc")
+        extern(C++) static void defaultCtrFunc(const QMetaTypeInterface *, void *addr)
+        {
+            import core.lifetime;
+
+            static if (is(S == class)) {
+                *cast(S*) addr = null;
+            } else static if (is(S == struct) && __traits(hasMember, S, "rawConstructor")) {
+                (cast(S*) addr).rawConstructor();
+            } else {
+                emplace!S(cast(S*) addr);
+            }
+        }
+    }
+
     static QMetaTypeInterface.DefaultCtrFn getDefaultCtr()
     {
-        import core.lifetime;
-
-        static if (is(S == class))
-        {
-            return (const QMetaTypeInterface *, void *addr) {
-                *cast(S*) addr = null;
-            };
-        }
-        else static if (__traits(compiles, {S s;}) || __traits(hasMember, S, "rawConstructor")) {
-            return (const QMetaTypeInterface *, void *addr) {
-                static if (is(S == struct) && __traits(hasMember, S, "rawConstructor")) {
-                    (cast(S*) addr).rawConstructor();
-                } else {
-                    emplace!S(cast(S*) addr);
-                }
-            };
+        static if (is(S == class) || __traits(compiles, {S s;}) || __traits(hasMember, S, "rawConstructor")) {
+            return &defaultCtrFunc;
         } else {
             return null;
         }
     }
 
+    static if (is(S == class) || __traits(compiles, (ref S other){S s = other;})) {
+        pragma(mangle, QMetaTypeForType!S.mangleof ~ "__copyCtorFunc")
+        extern(C++) static void copyCtorFunc(const QMetaTypeInterface *, void *addr, const void *other)
+        {
+            import core.lifetime;
+
+            static if (is(S == class)) {
+                *cast(S*) addr = *cast(S*) other;
+            } else static if (is(S == struct) && __traits(hasCopyConstructor, S)) {
+                // Workaround for https://issues.dlang.org/show_bug.cgi?id=22766
+                import core.stdc.string;
+                memset(addr, 0, S.sizeof);
+                (*cast(S*) addr).__ctor(*cast(S*) other);
+            } else {
+                copyEmplace!S(*cast(S*) other, *cast(S*) addr);
+            }
+        }
+    }
+
     static QMetaTypeInterface.CopyCtrFn getCopyCtr()
     {
-        import core.lifetime;
-
-        static if (is(S == class))
-        {
-            return (const QMetaTypeInterface *, void *addr, const void *other) {
-                *cast(S*) addr = *cast(S*) other;
-            };
-        }
-        else static if (__traits(compiles, (ref S other){S s = other;})) {
-            return (const QMetaTypeInterface *, void *addr, const void *other) {
-                static if (is(S == struct) && __traits(hasCopyConstructor, S)) {
-                    // Workaround for https://issues.dlang.org/show_bug.cgi?id=22766
-                    import core.stdc.string;
-                    memset(addr, 0, S.sizeof);
-                    (*cast(S*) addr).__ctor(*cast(S*) other);
-                } else {
-                    copyEmplace!S(*cast(S*) other, *cast(S*) addr);
-                }
-            };
+        static if (is(S == class) || __traits(compiles, (ref S other){S s = other;})) {
+            return &copyCtorFunc;
         } else {
             return null;
         }
@@ -2607,22 +2613,40 @@ public:
         }
     }
 
+    static if (!is(S == class))
+    {
+        pragma(mangle, QMetaTypeForType!S.mangleof ~ "__dtorFunc")
+        extern(C++) static void dtorFunc(const QMetaTypeInterface *, void *addr)
+        {
+            destroy!false(*reinterpret_cast!(S*)(addr));
+        }
+    }
+
     static QMetaTypeInterface.DtorFn getDtor()
     {
         static if (is(S == class))
             return null;
         else static if (1 /*/+ std:: +/is_destructible_v!(S) && !/+ std:: +/is_trivially_destructible_v!(S)*/)
-            return (const QMetaTypeInterface *, void *addr) {
-                destroy!false(*reinterpret_cast!(S*)(addr));
-            };
+        {
+            return &dtorFunc;
+        }
         else
             return null;
+    }
+
+    static if (QMetaTypeId2!(S).Defined && !QMetaTypeId2!(S).IsBuiltIn)
+    {
+        pragma(mangle, QMetaTypeForType!S.mangleof ~ "__legacyRegisterFunc")
+        extern(C++) static void legacyRegisterFunc()
+        {
+            QMetaTypeId2!(S).qt_metatype_id();
+        }
     }
 
     static QMetaTypeInterface.LegacyRegisterOp getLegacyRegister()
     {
         static if (QMetaTypeId2!(S).Defined && !QMetaTypeId2!(S).IsBuiltIn) {
-            return () { QMetaTypeId2!(S).qt_metatype_id(); };
+            return &legacyRegisterFunc;
         } else {
             return null;
         }
@@ -2740,7 +2764,7 @@ struct TypeAndForceComplete(T, ForceComplete_)
     alias ForceComplete = ForceComplete_;
 }
 
-const(QMetaTypeInterface)* qMetaTypeInterfaceForType(T)()
+extern(D) const(QMetaTypeInterface)* qMetaTypeInterfaceForType(T)()
 {
     alias Ty = MetatypeDecay!(T).type;
     return &QMetaTypeInterfaceWrapper!(Ty).metaType;
