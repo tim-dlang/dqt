@@ -882,8 +882,9 @@ namespace QtPrivate {
     namespace QtMetaTypePrivate { +/
 
 extern(C++, "QtMetaTypePrivate") {
-struct QMetaTypeFunctionHelper(T, bool Accepted=true) {
-    static void Destruct(void* t)
+extern(D) struct QMetaTypeFunctionHelper(T, bool Accepted=true) {
+    pragma(mangle, QMetaTypeFunctionHelper!(T, Accepted).mangleof ~ "__Destruct")
+    extern(C++) static void Destruct(void* t)
     {
         /+ Q_UNUSED(t) +/ // Silence MSVC that warns for POD types.
         static if (is(T == class))
@@ -892,7 +893,8 @@ struct QMetaTypeFunctionHelper(T, bool Accepted=true) {
             destroy!false(*static_cast!(T*)(t));
     }
 
-    static void* Construct(void* where, const(void)* t)
+    pragma(mangle, QMetaTypeFunctionHelper!(T, Accepted).mangleof ~ "__Construct")
+    extern(C++) static void* Construct(void* where, const(void)* t)
     {
         import core.lifetime;
 
@@ -1683,7 +1685,8 @@ extern(C++, "QtPrivate")
 
     struct MetaObjectForType(T)
     {
-        static const(QMetaObject) *value()
+        pragma(mangle, MetaObjectForType!T.mangleof ~ "__value")
+        extern(C++) static const(QMetaObject) *value()
         {
             static if (is(T == void))
                 return null;
@@ -1930,13 +1933,15 @@ template <typename T>
 struct QMetaTypeId2<T&> { enum {Defined = false }; }; +/
 
 extern(C++, "QtPrivate") {
-    struct QMetaTypeIdHelper(T) {
-        static if (QMetaTypeId2!(T).Defined)
-            pragma(inline, true) static int qt_metatype_id()
-            { return QMetaTypeId2!(T).qt_metatype_id(); }
-        else
-            pragma(inline, true) static int qt_metatype_id()
-            { return -1; }
+    extern(D) struct QMetaTypeIdHelper(T) {
+        pragma(mangle, QMetaTypeIdHelper!T.mangleof ~ "__qt_metatype_id")
+        extern(C++) pragma(inline, true) static int qt_metatype_id()
+        {
+            static if (QMetaTypeId2!(T).Defined)
+                return QMetaTypeId2!(T).qt_metatype_id();
+            else
+                return -1;
+        }
     }
     // Function pointers don't derive from QObject
     /+ template <typename Result, typename... Args>

@@ -6,6 +6,7 @@ import qt.core.abstractitemmodel;
 import qt.core.coreapplication;
 import qt.core.logging;
 import qt.core.namespace;
+import qt.core.object;
 import qt.core.string;
 import qt.core.variant;
 import qt.helpers;
@@ -15,6 +16,9 @@ shared static this()
 {
     import core.runtime;
     import core.stdcpp.new_;
+    import qt.core.metatype;
+
+    qRegisterMetaType!(char[])("char[]");
 
     version (Android)
     {
@@ -34,6 +38,7 @@ shared static ~this()
     cpp_delete(app);
     app = null;
 }
+
 class TestModel : QAbstractItemModel
 {
 public:
@@ -79,6 +84,20 @@ public:
     }
 
     bool simulateWrongRowCount = false;
+}
+
+class TestSignalsObject : QObject
+{
+    mixin(Q_OBJECT_D);
+public:
+
+    final void emitSignalDString(string s)
+    {
+        /+ emit +/ signalDString(s);
+    }
+
+/+ signals +/public:
+    @QSignal final void signalDString(string s) {mixin(Q_SIGNAL_IMPL_D);}
 }
 
 __gshared uint messageCount;
@@ -149,7 +168,6 @@ unittest
 
 unittest
 {
-    import qt.core.object;
     import qt.core.timer;
     import qt.test.testeventloop;
 
@@ -226,4 +244,19 @@ unittest
 
     cpp_delete(model);
     model = null;
+}
+
+unittest
+{
+    import core.stdc.string;
+    import qt.test.signalspy;
+
+    scope obj = new TestSignalsObject;
+    scope spy = new QSignalSpy(obj.signal!"signalDString");
+    assert(spy.isValid());
+    assert(spy.collectedSignals.count() == 0);
+
+    obj.emitSignalDString("test");
+
+    assert(spy.collectedSignals.count() == 1);
 }
