@@ -1306,13 +1306,15 @@ struct QMetaTypeId2<T&>
 }; +/
 
 extern(C++, "QtPrivate") {
-    struct QMetaTypeIdHelper(T) {
-        static if (QMetaTypeId2!(T).Defined)
-            pragma(inline, true) static int qt_metatype_id()
-            { return QMetaTypeId2!(T).qt_metatype_id(); }
-        else
-            pragma(inline, true) static int qt_metatype_id()
-            { return -1; }
+    extern(D) struct QMetaTypeIdHelper(T) {
+        pragma(mangle, QMetaTypeIdHelper!T.mangleof ~ "__qt_metatype_id")
+        extern(C++) pragma(inline, true) static int qt_metatype_id()
+        {
+            static if (QMetaTypeId2!(T).Defined)
+                return QMetaTypeId2!(T).qt_metatype_id();
+            else
+                return -1;
+        }
     }
     // Function pointers don't derive from QObject
     /+ template <typename Result, typename... Args>
