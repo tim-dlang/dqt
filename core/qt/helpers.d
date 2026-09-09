@@ -1373,7 +1373,7 @@ template isAnyWrapperCallable(This, bool isStaticFunction, Overloads...)
     }();
 }
 
-template generateWrapperCode(string member, bool isStaticFunction, alias Overload)
+template generateWrapperCode(string member, bool isStaticFunction, bool inClass, alias Overload)
 {
     enum impl(Params...) = () {
         string code;
@@ -1389,7 +1389,15 @@ template generateWrapperCode(string member, bool isStaticFunction, alias Overloa
             else
                 paramsCode ~= text("params[", i, "], ");
         }
-        if (member != "__ctor")
+        static if (member == "__ctor")
+        {
+            // Struct constructors assign the converted temporary; class
+            // constructors cannot delegate and are never wrapped (see
+            // isAllowedWrapperNameImpl).
+            static assert(!inClass);
+            code ~= "this = ";
+        }
+        else
             code ~= "return ";
         code ~= "Overload(" ~ paramsCode ~ ");\n";
         return code;
@@ -1398,6 +1406,14 @@ template generateWrapperCode(string member, bool isStaticFunction, alias Overloa
 
 private bool isAllowedWrapperNameImpl(string member)
 {
+    // Note: __ctor is deliberately excluded for classes. The generated
+    // wrapper is a variadic template constructor whose body cannot chain
+    // to the real C++ constructor it shadows (same-class delegation
+    // would recurse), so any class with a wrapped constructor becomes
+    // unconstructible ("no match for implicit super() call"). Struct
+    // constructors are still wrapped (they assign the converted
+    // temporary to `this`); classes keep using their declared
+    // constructors directly.
     return (!(member.length >= 2 && member[0 .. 2] == "__") || member == "__ctor")
         && !(member.length >= 32 && member[0 .. 32] == "dummyFunctionForChangingMangling")
         && member != "rawConstructor";
@@ -1431,6 +1447,9 @@ template anyOverloadNeedsWrapper(bool isStaticFunction, alias Overload0, Overloa
 
 string buildWrapperMixin(string member, bool isStaticFunction, bool inClass)
 {
+    // Class constructors cannot be wrapped (see isAllowedWrapperNameImpl).
+    if (member == "__ctor" && inClass)
+        return "";
     string code;
     code ~= "public extern(D) pragma(inline, true) ";
     if (member == "__ctor")
@@ -1443,6 +1462,9 @@ string buildWrapperMixin(string member, bool isStaticFunction, bool inClass)
             code ~= "final ";
         code ~= "auto " ~ member;
     }
+    // Note: `member` and `isStaticFunction` below resolve against the
+    // static foreach variables at the mixin site; `inClass` is baked in
+    // as a literal because no such symbol exists there.
     code ~= q{(Params...)(auto ref Params params)
         if (isAnyWrapperCallable!(typeof(this), isStaticFunction, __traits(getOverloads, typeof(this), member)).impl!(Params))
         {
@@ -1452,12 +1474,17 @@ string buildWrapperMixin(string member, bool isStaticFunction, bool inClass)
                 {
                     static if (isWrapperCallable!(typeof(this), Overload, Params) == 2)
                     {
-                        mixin(generateWrapperCode!(member, isStaticFunction, Overload).impl!(Params));
+                        mixin(generateWrapperCode!(member, isStaticFunction, INCLASSLIT, Overload).impl!(Params));
                     }
                 }
             }
         }
     };
+    // Splice the inClass literal into the template instantiation above.
+    {
+        import std.array : replace;
+        code = code.replace("INCLASSLIT", inClass ? "true" : "false");
+    }
     return code;
 }
 

@@ -47,6 +47,42 @@ struct QDynamicMetaObjectData;
 
 alias QObjectList = QList!(QObject);
 
+// ---------------------------------------------------------------------------
+// D object keep-alive
+// ---------------------------------------------------------------------------
+
+// The D GC cannot see raw pointers held on the C++ side (a parent's
+// child list, Qt's connection lists, QML context properties), so a
+// D-defined QObject which is only referenced from C++ can be collected
+// while Qt still calls into it. The resulting use-after-free is the
+// crash class isolated by examples/expandable_list_test (a dropped
+// `new ClickBot(...)` reference used to abort with
+// "double free or corruption" while the timer kept ticking).
+//
+// Every QObject which Qt may call back into is therefore additionally
+// referenced from this registry, which lives in the (GC-scanned) static
+// data segment. Entries live for the process lifetime - the same
+// lifetime Qt's own parent/ownership machinery would give them.
+extern(D) private __gshared void*[] dqtKeepAliveSet;
+
+/// Adds `o` to the D Qt keep-alive registry (idempotent).
+/// Called automatically by `connect`, and when exposing objects to QML;
+/// D-defined QObjects that Qt can invoke must not be collected while
+/// C++ still holds raw pointers to them.
+extern(D) public void dqtKeepAlive(QObject o)
+{
+    if (o is null)
+        return;
+    import std.algorithm.searching : canFind;
+    synchronized
+    {
+        auto p = cast(void*) o;
+        if (canFind(dqtKeepAliveSet, p))
+            return;
+        dqtKeepAliveSet ~= p;
+    }
+}
+
 /+ Q_CORE_EXPORT void qt_qFindChildren_helper(const QObject *parent, const QString &name,
                                            const QMetaObject &mo, QList<void *> *list, Qt::FindChildOptions options);
 Q_CORE_EXPORT void qt_qFindChildren_helper(const QObject *parent, const QMetaObject &mo,
@@ -691,6 +727,13 @@ public:
 
         auto mo = &Signal.Type.staticMetaObject;
 
+        // The delegate's context object (typically a D QObject) is only
+        // referenced from C++ after this - keep it visible to the D GC.
+        import core.memory : GC;
+        if (dg.ptr !is null)
+            GC.addRoot(dg.ptr);
+        dqtKeepAlive(context);
+
         // TODO: ABI for virtual functions is different.
         CPPMemberFunctionPointer!(Signal.Type) memberFunction = CPPMemberFunctionPointer!(Signal.Type)(signal);
 
@@ -795,6 +838,10 @@ public:
         auto slotObj = cpp_new!(DQtMemberSlotObject!(typeof(Slot.obj), Slot.Members[overloadIndices[1]], UsedParams))(0);
 
         auto mo = &Signal.Type.staticMetaObject;
+
+        // Qt will invoke the receiver through C++ connection data that the
+        // D GC cannot see - keep the receiver alive (cf. dqtKeepAlive).
+        dqtKeepAlive(receiver.obj);
 
         // TODO: ABI for virtual functions is different.
         CPPMemberFunctionPointer!(Signal.Type) memberFunction = CPPMemberFunctionPointer!(Signal.Type)(signal);

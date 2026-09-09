@@ -58,18 +58,19 @@ enum Q_DECL_EVENT_COMMON = q{
         }
         //this(typeof(this) &&) = delete;
         //Class &operator=(const typeof(this) &other) = default;
-        //Class &operator=(typeof(this) &&) = delete;
+        //Class &operator=(Class &&) = delete;
     public:
-        override typeof(this) clone() const
-        {
-            import core.stdcpp.new_;
-            import std.traits;
-            auto c = cpp_new_copy!(Unqual!(typeof(this)))(cast() this);
-            QEvent e = c;
-            /* check that covariant return is safe to add */
-            assert(cast(quintptr)cast(void*)c == cast(quintptr)cast(void*)e);
-            return c;
-        }
+        // NOTE: deliberately declared WITHOUT a D body. A D body would be
+        // emitted with C++ mangling and global visibility, and the dynamic
+        // linker would resolve Qt's own vtable clone() slots to it
+        // (symbol interposition): Qt would then "clone" its events with
+        // cpp_new_copy sized by __traits(classInstanceSize) of the
+        // memberless binding (16 bytes for a real 80-byte QMouseEvent),
+        // corrupting the heap - the crash class isolated by
+        // examples/expandable_list_test (presses into a Flickable died in
+        // QQuickFlickable::filterPointerEvent). The bodyless declaration
+        // binds Qt's real implementation instead.
+        override typeof(this) clone() const;
         ~this();
     private:
 };
