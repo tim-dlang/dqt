@@ -171,10 +171,10 @@ public:
     /+pragma(inline, true) bool operator !() const nothrow { return !i; }+/
 
     pragma(inline, true) bool testFlag(Enum flag) const nothrow { return (i & Int(flag)) == Int(flag) && (Int(flag) != 0 || i == Int(flag) ); }
-    /+ inline QFlags &setFlag(Enum flag, bool on = true) noexcept
+    pragma(inline, true) ref QFlags setFlag(Enum flag, bool on = true) nothrow
     {
-        return on ? (*this |= flag) : (*this &= ~Int(flag));
-    } +/
+        return on ? (this |= flag) : (this &= ~Int(flag));
+    }
 
     template opDispatch(string name) if(__traits(hasMember, Enum, name))
     {
