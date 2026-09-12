@@ -52,6 +52,9 @@ public:
     extern(D) final void setContextProperty(string name, QObject o)
     {
         QString n = QString(name);
+        // QML holds the object via raw C++ pointers and may call into it
+        // at any time - the D GC must not collect it meanwhile.
+        dqtKeepAlive(o);
         setContextProperty(n, o);
     }
     final void setContextProperty(ref const(QString) , ref const(QVariant) );

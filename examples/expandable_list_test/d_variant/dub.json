@@ -1,0 +1,11 @@
+{
+	"name": "expandable_list_test",
+	"description": "D twin of the C++ control: same QML, same input injection, dqt glue - isolates the crash to the D bindings",
+	"targetType": "executable",
+	"mainSourceFile": "source/main.d",
+	"dependencies": {
+		"dqt:quickcontrols2": {
+			"path": "../../.."
+		}
+	}
+}

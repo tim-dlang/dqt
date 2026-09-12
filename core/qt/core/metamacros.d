@@ -513,7 +513,10 @@ template MetaObjectImpl(T)
                 enum size_t parameterCount = Parameters!(M[i]).length;
                 uint flags;
                 flags |= 2; // Public // TODO
-                flags |= type;
+                if(typename == "signals")
+                    flags |= 4;
+                if(typename == "slots")
+                    flags |= 8;
                 metaDataCode ~= mixin(interpolateMixin(q{
                        $(text(nameId)),    $(text(parameterCount)),   $(text(currentOutputIndex)),    2, $(text(flags)), $(text(initialMetatypeOffsets)), $("// " ~ __traits(identifier, M[i]))
                 }));
