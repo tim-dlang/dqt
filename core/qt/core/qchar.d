@@ -530,7 +530,7 @@ public:
     pragma(inline, true) wchar unicode() const nothrow { return ucs; }
     pragma(inline, true) ref wchar unicode() return  nothrow { return ucs; }
 
-    //static QChar fromLatin1(char c) nothrow { return QLatin1Char(c); }
+    static QChar fromLatin1(char c) nothrow { return QChar(QLatin1Char(c)); }
 
     pragma(inline, true) bool isNull() const nothrow { return ucs == 0; }
 

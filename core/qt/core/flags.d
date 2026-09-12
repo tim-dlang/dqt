@@ -182,10 +182,10 @@ public:
     pragma(inline, true) bool testFlags(QFlags flags) const nothrow { return flags.i ? ((i & flags.i) == flags.i) : i == Int(0); }
     pragma(inline, true) bool testAnyFlag(Enum flag) const nothrow { return testAnyFlags(QFlags(flag)); }
     pragma(inline, true) bool testAnyFlags(QFlags flags) const nothrow { return (i & flags.i) != Int(0); }
-    /+ constexpr inline QFlags &setFlag(Enum flag, bool on = true) noexcept
+    pragma(inline, true) ref QFlags setFlag(Enum flag, bool on = true) nothrow
     {
-        return on ? (*this |= flag) : (*this &= ~QFlags(flag));
-    } +/
+        return on ? (this |= flag) : (this &= ~QFlags(flag));
+    }
 
     /+ friend constexpr inline bool operator==(QFlags lhs, QFlags rhs) noexcept
     { return lhs.i == rhs.i; } +/
