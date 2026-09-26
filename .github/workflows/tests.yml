@@ -141,7 +141,7 @@ jobs:
           sudo apt-get -qq update
           sudo apt-get -qq install -y llvm
           sudo ln -sf "$(ls /usr/bin/llvm-symbolizer-* | sort -V | tail -1)" /usr/local/bin/llvm-symbolizer
-          echo "ASAN_OPTIONS=symbolize=1:external_symbolizer_path=/usr/local/bin/llvm-symbolizer" >> "$GITHUB_ENV"
+          echo "ASAN_OPTIONS=symbolize=1:external_symbolizer_path=/usr/local/bin/llvm-symbolizer:fast_unwind_on_malloc=0" >> "$GITHUB_ENV"
           echo "LSAN_OPTIONS=suppressions=${GITHUB_WORKSPACE}/tests/lsan.supp" >> "$GITHUB_ENV"
 
       - name: Install Android LDC libraries
