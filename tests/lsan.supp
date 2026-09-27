@@ -4,3 +4,6 @@ leak:FcFontRenderPrepare
 leak:QGtk3Theme::QGtk3Theme
 leak:libfontconfig.so
 leak:QGuiApplicationPrivate::createPlatformIntegration
+leak:libQt6WebEngineCore.so
+leak:libudev.so
+leak:libGLX_mesa.so
