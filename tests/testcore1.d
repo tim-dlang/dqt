@@ -845,6 +845,7 @@ void testSignals(TestObject a, void delegate(string) check)
     QObject o1 = cpp_new!QTimer(a);
     o1.setObjectName("obj1");
     TestObject o2 = cpp_new!TestObject(a);
+    fixDeletingDestructor(o2);
     o2.setObjectName("obj2");
     a.emitSignalObjects(o1, o2);
     check(format("objects obj1 QTimer 0x%x obj2 TestObject 0x%x", cast(ulong) cast(void*) o1, cast(ulong) cast(void*) o2));

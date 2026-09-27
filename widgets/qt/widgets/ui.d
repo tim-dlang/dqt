@@ -793,6 +793,10 @@ private struct UICodeWriter()
             else
                 enforce(false);
             codeSetup.put(");\n");
+            // The constructor of QSpacerItem is implemented in D, see fixDeletingDestructor.
+            codeSetup.put("        dqtimported!q{qt.helpers}.fixDeletingDestructor(");
+            codeSetup.put(info.name);
+            codeSetup.put(");\n");
             return info;
         }
 
