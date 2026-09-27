@@ -370,8 +370,11 @@ public:
 
     void opAssign(const QString s)
     {
-        d = (cast(QString*) &s).d;
-        d.ref_.ref_();
+        Data* x = (cast(QString*) &s).d;
+        x.ref_.ref_();
+        if (!d.ref_.deref())
+            Data.deallocate(d);
+        d = x;
     }
 
     //
