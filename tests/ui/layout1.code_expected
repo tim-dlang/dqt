@@ -50,6 +50,7 @@
         verticalLayout_2.addWidget(pushButton);
 
         verticalSpacer = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(20, 40, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding);
+        dqtimported!q{qt.helpers}.fixDeletingDestructor(verticalSpacer);
 
         verticalLayout_2.addItem(verticalSpacer);
 
@@ -70,6 +71,7 @@
         horizontalLayout.setObjectName("horizontalLayout");
         horizontalLayout.setSpacing(11);
         horizontalSpacer_2 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
+        dqtimported!q{qt.helpers}.fixDeletingDestructor(horizontalSpacer_2);
 
         horizontalLayout.addItem(horizontalSpacer_2);
 
@@ -121,6 +123,7 @@
         formLayout.setWidget(2, dqtimported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, lineEdit_2);
 
         horizontalSpacer = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
+        dqtimported!q{qt.helpers}.fixDeletingDestructor(horizontalSpacer);
 
         formLayout.setItem(1, dqtimported!q{qt.widgets.formlayout}.QFormLayout.ItemRole.FieldRole, horizontalSpacer);
 
@@ -131,14 +134,17 @@
         gridLayout.setVerticalSpacing(2);
         gridLayout.setContentsMargins(2, 3, 0, 5);
         verticalSpacer_2 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(20, 40, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding);
+        dqtimported!q{qt.helpers}.fixDeletingDestructor(verticalSpacer_2);
 
         gridLayout.addItem(verticalSpacer_2, 0, 1, 1, 1);
 
         horizontalSpacer_3 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
+        dqtimported!q{qt.helpers}.fixDeletingDestructor(horizontalSpacer_3);
 
         gridLayout.addItem(horizontalSpacer_3, 1, 0, 1, 1);
 
         horizontalSpacer_4 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(40, 20, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum);
+        dqtimported!q{qt.helpers}.fixDeletingDestructor(horizontalSpacer_4);
 
         gridLayout.addItem(horizontalSpacer_4, 1, 2, 1, 1);
 
@@ -148,6 +154,7 @@
         gridLayout.addWidget(pushButton_4, 1, 1, 1, 1);
 
         verticalSpacer_3 = cpp_new!(dqtimported!q{qt.widgets.layoutitem}.QSpacerItem)(20, 40, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Minimum, dqtimported!q{qt.widgets.sizepolicy}.QSizePolicy.Policy.Expanding);
+        dqtimported!q{qt.helpers}.fixDeletingDestructor(verticalSpacer_3);
 
         gridLayout.addItem(verticalSpacer_3, 2, 1, 1, 1);
 

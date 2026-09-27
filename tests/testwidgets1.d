@@ -193,6 +193,7 @@ unittest
     window.show();
 
     TestLayout layout1 = cpp_new!TestLayout();
+    fixDeletingDestructor(layout1);
     window.setLayout(layout1);
 
     TestLayout layout2 = cpp_new!TestLayout();

@@ -190,8 +190,16 @@ Objects can be created using normal new or cpp_new from core.stdcpp.new_.
 Qt will sometimes automatically delete objects. Those objects have to be
 created with cpp_new.
 
+Classes implemented in D and created with cpp_new, but deleted from C++,
+currently don't have the memory freed by default, see
+https://github.com/dlang/dmd/issues/23458. This can be prevented by
+deleting them from D. Function fixDeletingDestructor in qt.helpers
+can also be used to replace the vtbl pointer of objects, so the
+deleting destructor frees the memory.
+
 Objects created with new are freed by the GC, but the GC can not see
-references managed by Qt.
+references managed by Qt. The user is responsible that these objects
+have references visible by the GC as long as they may be used from C++.
 
 ## Qt Designer
 

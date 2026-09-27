@@ -1561,3 +1561,88 @@ else
         }
     };
 }
+
+private ptrdiff_t cppDtorVtblIndex(T)()
+{
+    ptrdiff_t r = -1;
+    static foreach (C; AliasSeq!(T, BaseClassesTuple!T))
+        static if (__traits(hasMember, C, "__xdtor"))
+            if (r < 0 && __traits(getVirtualIndex, C.__xdtor) >= 0)
+                r = __traits(getVirtualIndex, C.__xdtor);
+    return r;
+}
+
+private size_t cppVtblLength(T)()
+{
+    size_t n = cppDtorVtblIndex!T() + 1;
+    version (CppRuntime_Microsoft) {} else
+        n++; // Deleting destructor
+    static foreach (C; AliasSeq!(T, BaseClassesTuple!T))
+        static foreach (m; __traits(derivedMembers, C))
+            static if (__traits(compiles, __traits(getVirtualMethods, C, m)))
+                static foreach (f; __traits(getVirtualMethods, C, m))
+                    if (__traits(getVirtualIndex, f) + 1 > n)
+                        n = __traits(getVirtualIndex, f) + 1;
+    return n;
+}
+
+private extern(C++) struct CppDeletingDtorImpl(T)
+{
+    enum dtorIndex = cppDtorVtblIndex!T();
+    static assert(dtorIndex >= 0, T.stringof ~ " has no virtual destructor");
+
+    version (CppRuntime_Microsoft)
+    {
+        void* deletingDtor(uint flags)
+        {
+            static import core.stdcpp.new_;
+
+            T obj = cast(T) cast(void*) &this;
+            typeof(&obj.__xdtor) dtor;
+            dtor.ptr = cast(void*) obj;
+            dtor.funcptr = &T.__xdtor;
+            dtor();
+            if (flags & 1)
+                core.stdcpp.new_.__cpp_delete(&this);
+            return &this;
+        }
+    }
+    else
+    {
+        void deletingDtor()
+        {
+            static import core.stdcpp.new_;
+
+            (cast(T) cast(void*) &this).__xdtor();
+            core.stdcpp.new_.__cpp_delete(&this);
+        }
+    }
+
+    __gshared void*[cppVtblLength!T()] patchedVtbl;
+    __gshared bool initialized;
+}
+
+// Replace vtbl pointer with one containing a real deleting destructor
+// as a workaround for https://github.com/dlang/dmd/issues/23458.
+void fixDeletingDestructor(T)(T obj) if (is(T == class) && __traits(getLinkage, T) == "C++")
+{
+    alias Impl = CppDeletingDtorImpl!T;
+    void*** vptr = cast(void***) obj;
+    if (*vptr is Impl.patchedVtbl.ptr)
+        return;
+    auto origVtbl = *cast(void***) __traits(initSymbol, T).ptr;
+    assert(*vptr is origVtbl, "Dynamic type of object is not " ~ T.stringof);
+    synchronized
+    {
+        if (!Impl.initialized)
+        {
+            Impl.patchedVtbl[] = origVtbl[0 .. Impl.patchedVtbl.length];
+            version (CppRuntime_Microsoft)
+                Impl.patchedVtbl[Impl.dtorIndex] = cast(void*) &Impl.deletingDtor;
+            else
+                Impl.patchedVtbl[Impl.dtorIndex + 1] = cast(void*) &Impl.deletingDtor;
+            Impl.initialized = true;
+        }
+    }
+    *vptr = Impl.patchedVtbl.ptr;
+}
