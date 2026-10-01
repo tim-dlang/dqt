@@ -218,8 +218,12 @@ int main(string[] args)
 
     // Collect tests
     Test[] tests;
-    foreach (DirEntry e; dirEntries("tests", "*.d", SpanMode.shallow))
+    foreach (DirEntry e; dirEntries("tests", "*.d", SpanMode.depth))
     {
+        // tests/imports contains helper modules, not tests.
+        if (baseName(dirName(e.name)) == "imports")
+            continue;
+
         tests ~= Test(e.name, [], [
             "-main", "-unittest", "-Itests",
             "-I" ~ buildPath(resultsDir, "tests"), "-Jtests"
