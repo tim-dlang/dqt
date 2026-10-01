@@ -127,6 +127,10 @@ public:
     {
         return pt1 == d.pt1 && pt2 == d.pt2;
     }+/
+    pragma(inline, true) bool opEquals(const(QLine) d) const nothrow
+    {
+        return pt1 == d.pt1 && pt2 == d.pt2;
+    }
     /+pragma(inline, true) bool operator !=(ref const(QLine) d) const nothrow { return !(this == d); }+/
 
     /+ [[nodiscard]] +/ pragma(inline, true) QLineF toLineF() const nothrow { return QLineF(this); }
@@ -226,7 +230,7 @@ public:
     }
 
     qreal length() const;
-/+    void setLength(qreal len) nothrow
+    void setLength(qreal len)
     {
         import qt.core.numeric;
 
@@ -237,7 +241,7 @@ public:
         // rather than scaling dx() and dy() by len / length(), which might overflow.
         if (oldLength > 0)
             pt2 = QPointF(pt1.x() + len * (dx() / oldLength), pt1.y() + len * (dy() / oldLength));
-    }+/
+    }
 
     qreal angle() const;
     void setAngle(qreal angle);
@@ -303,6 +307,10 @@ public:
     {
         return pt1 == d.pt1 && pt2 == d.pt2;
     }+/
+    pragma(inline, true) bool opEquals(const(QLineF) d) const nothrow
+    {
+        return pt1 == d.pt1 && pt2 == d.pt2;
+    }
     /+pragma(inline, true) bool operator !=(ref const(QLineF) d) const { return !(this == d); }+/
 
     pragma(inline, true) QLine toLine() const nothrow
