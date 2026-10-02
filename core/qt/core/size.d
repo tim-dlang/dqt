@@ -114,18 +114,33 @@ public:
 
     /+ friend inline constexpr bool operator==(const QSize &s1, const QSize &s2) noexcept
     { return s1.wd == s2.wd && s1.ht == s2.ht; } +/
+    pragma(inline, true) bool opEquals(const(QSize) s2) const nothrow
+    { return wd == s2.wd && ht == s2.ht; }
     /+ friend inline constexpr bool operator!=(const QSize &s1, const QSize &s2) noexcept
     { return s1.wd != s2.wd || s1.ht != s2.ht; } +/
     /+ friend inline constexpr QSize operator+(const QSize &s1, const QSize &s2) noexcept
     { return QSize(s1.wd + s2.wd, s1.ht + s2.ht); } +/
+    pragma(inline, true) const(QSize) opBinary(string op)(const(QSize) s2) const nothrow if (op == "+")
+    { return QSize(wd + s2.wd, ht + s2.ht); }
     /+ friend inline constexpr QSize operator-(const QSize &s1, const QSize &s2) noexcept
     { return QSize(s1.wd - s2.wd, s1.ht - s2.ht); } +/
+    pragma(inline, true) const(QSize) opBinary(string op)(const(QSize) s2) const nothrow if (op == "-")
+    { return QSize(wd - s2.wd, ht - s2.ht); }
     /+ friend inline constexpr QSize operator*(const QSize &s, qreal c) noexcept
     { return QSize(qRound(s.wd * c), qRound(s.ht * c)); } +/
+    pragma(inline, true) const(QSize) opBinary(string op)(qreal c) const nothrow if (op == "*")
+    { return QSize(qRound(wd * c), qRound(ht * c)); }
     /+ friend inline constexpr QSize operator*(qreal c, const QSize &s) noexcept
     { return s * c; } +/
+    extern(D) pragma(inline, true) const(QSize) opBinaryRight(string op)(qreal c) const nothrow if (op == "*")
+    { return QSize(qRound(wd * c), qRound(ht * c)); }
     /+ friend inline QSize operator/(const QSize &s, qreal c)
     { Q_ASSERT(!qFuzzyIsNull(c)); return QSize(qRound(s.wd / c), qRound(s.ht / c)); } +/
+    pragma(inline, true) const(QSize) opBinary(string op)(qreal c) const nothrow if (op == "/")
+    {
+        (mixin(Q_ASSERT(q{!qFuzzyIsNull(c)})));
+        return QSize(qRound(wd / c), qRound(ht / c));
+    }
     /+ friend inline constexpr size_t qHash(const QSize &, size_t) noexcept; +/
 
     static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))
@@ -261,7 +276,7 @@ public:
         ht *= c;
         return this;
     }
-    /*pragma(inline, true) ref QSizeF opOpAssign(string op)(qreal c) if (op == "/")
+    pragma(inline, true) ref QSizeF opOpAssign(string op)(qreal c) if (op == "/")
     {
         import qt.core.numeric;
 
@@ -269,7 +284,7 @@ public:
         wd = wd / c;
         ht = ht / c;
         return this;
-    }*/
+    }
 
     /+ QT_WARNING_PUSH
     QT_WARNING_DISABLE_FLOAT_COMPARE +/
@@ -278,19 +293,37 @@ public:
         return ((!s1.wd || !s2.wd) ? qFuzzyIsNull(s1.wd - s2.wd) : qFuzzyCompare(s1.wd, s2.wd))
             && ((!s1.ht || !s2.ht) ? qFuzzyIsNull(s1.ht - s2.ht) : qFuzzyCompare(s1.ht, s2.ht));
     } +/
+    pragma(inline, true) bool opEquals(const(QSizeF) s2) const nothrow
+    {
+        return ((!wd || !s2.wd) ? qFuzzyIsNull(wd - s2.wd) : qFuzzyCompare(wd, s2.wd))
+            && ((!ht || !s2.ht) ? qFuzzyIsNull(ht - s2.ht) : qFuzzyCompare(ht, s2.ht));
+    }
     /+ QT_WARNING_POP +/
     /+ friend constexpr inline bool operator!=(const QSizeF &s1, const QSizeF &s2)
     { return !(s1 == s2); } +/
     /+ friend constexpr inline QSizeF operator+(const QSizeF &s1, const QSizeF &s2) noexcept
     { return QSizeF(s1.wd + s2.wd, s1.ht + s2.ht); } +/
+    pragma(inline, true) const(QSizeF) opBinary(string op)(const(QSizeF) s2) const nothrow if (op == "+")
+    { return QSizeF(wd + s2.wd, ht + s2.ht); }
     /+ friend constexpr inline QSizeF operator-(const QSizeF &s1, const QSizeF &s2) noexcept
     { return QSizeF(s1.wd - s2.wd, s1.ht - s2.ht); } +/
+    pragma(inline, true) const(QSizeF) opBinary(string op)(const(QSizeF) s2) const nothrow if (op == "-")
+    { return QSizeF(wd - s2.wd, ht - s2.ht); }
     /+ friend constexpr inline QSizeF operator*(const QSizeF &s, qreal c) noexcept
     { return QSizeF(s.wd * c, s.ht * c); } +/
+    pragma(inline, true) const(QSizeF) opBinary(string op)(qreal c) const nothrow if (op == "*")
+    { return QSizeF(wd * c, ht * c); }
     /+ friend constexpr inline QSizeF operator*(qreal c, const QSizeF &s) noexcept
     { return s * c; } +/
+    extern(D) pragma(inline, true) const(QSizeF) opBinaryRight(string op)(qreal c) const nothrow if (op == "*")
+    { return QSizeF(wd * c, ht * c); }
     /+ friend inline QSizeF operator/(const QSizeF &s, qreal c)
     { Q_ASSERT(!qFuzzyIsNull(c)); return QSizeF(s.wd / c, s.ht / c); } +/
+    pragma(inline, true) const(QSizeF) opBinary(string op)(qreal c) const nothrow if (op == "/")
+    {
+        (mixin(Q_ASSERT(q{!qFuzzyIsNull(c)})));
+        return QSizeF(wd / c, ht / c);
+    }
 
     pragma(inline, true) QSize toSize() const nothrow
     {
