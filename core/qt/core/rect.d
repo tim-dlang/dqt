@@ -308,6 +308,19 @@ public:
         return this;
     }
 
+    pragma(inline, true) const(QRect) opBinary(string op)(const(QMargins) margins) const nothrow if (op == "+")
+    {
+        return marginsAdded(margins);
+    }
+    extern(D) pragma(inline, true) const(QRect) opBinaryRight(string op)(const(QMargins) margins) const nothrow if (op == "+")
+    {
+        return marginsAdded(margins);
+    }
+    pragma(inline, true) const(QRect) opBinary(string op)(const(QMargins) margins) const nothrow if (op == "-")
+    {
+        return marginsRemoved(margins);
+    }
+
     /+ [[nodiscard]] +/ pragma(inline, true) static QRect span(ref const(QPoint) p1, ref const(QPoint) p2) nothrow
     {
         auto tmp = QPoint(qMin(p1.x(), p2.x()), qMin(p1.y(), p2.y())); auto tmp__1 = QPoint(qMax(p1.x(), p2.x()), qMax(p1.y(), p2.y())); return QRect(tmp,
@@ -316,6 +329,8 @@ public:
 
     /+ friend constexpr inline bool operator==(const QRect &r1, const QRect &r2) noexcept
     { return r1.x1==r2.x1 && r1.x2==r2.x2 && r1.y1==r2.y1 && r1.y2==r2.y2; } +/
+    pragma(inline, true) bool opEquals(const(QRect) r2) const nothrow
+    { return x1 == r2.x1 && x2 == r2.x2 && y1 == r2.y1 && y2 == r2.y2; }
     /+ friend constexpr inline bool operator!=(const QRect &r1, const QRect &r2) noexcept
     { return r1.x1!=r2.x1 || r1.x2!=r2.x2 || r1.y1!=r2.y1 || r1.y2!=r2.y2; } +/
     /+ friend constexpr inline size_t qHash(const QRect &, size_t) noexcept; +/
@@ -619,11 +634,28 @@ public:
         return this;
     }
 
+    pragma(inline, true) const(QRectF) opBinary(string op)(const(QMarginsF) margins) const nothrow if (op == "+")
+    {
+        return marginsAdded(margins);
+    }
+    extern(D) pragma(inline, true) const(QRectF) opBinaryRight(string op)(const(QMarginsF) margins) const nothrow if (op == "+")
+    {
+        return marginsAdded(margins);
+    }
+    pragma(inline, true) const(QRectF) opBinary(string op)(const(QMarginsF) margins) const nothrow if (op == "-")
+    {
+        return marginsRemoved(margins);
+    }
+
     /+ friend constexpr inline bool operator==(const QRectF &r1, const QRectF &r2) noexcept
     {
         return r1.topLeft() == r2.topLeft()
             && r1.size() == r2.size();
     } +/
+    pragma(inline, true) bool opEquals(const(QRectF) r2) const nothrow
+    {
+        return topLeft() == r2.topLeft() && size() == r2.size();
+    }
     /+ friend constexpr inline bool operator!=(const QRectF &r1, const QRectF &r2) noexcept
     {
         return r1.topLeft() != r2.topLeft()
