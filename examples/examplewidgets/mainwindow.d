@@ -4,9 +4,12 @@ import qt.config;
 import qt.core.coreevent;
 import qt.core.string;
 import qt.core.translator;
+import qt.gui.event;
 import qt.helpers;
 import qt.widgets.action;
 import qt.widgets.mainwindow;
+import qt.widgets.menu;
+import qt.widgets.systemtrayicon;
 import qt.widgets.ui;
 import qt.widgets.widget;
 
@@ -115,6 +118,69 @@ private /+ slots +/:
         translator.load(filename, dir);
     }
 
+    @QSlot final void on_actionTray_Icon_changed()
+    {
+        import core.stdcpp.new_;
+        import qt.widgets.application;
+        import qt.widgets.messagebox;
+
+        if (ui.actionTray_Icon.isChecked() && !trayIcon)
+        {
+            if (!QSystemTrayIcon.isSystemTrayAvailable())
+            {
+                QMessageBox.warning(this, QString.create(), "No system tray available");
+                ui.actionTray_Icon.setChecked(false);
+                return;
+            }
+
+            if (!trayMenu)
+            {
+                trayMenu = cpp_new!QMenu(this);
+                auto actionShow = trayMenu.addAction("Show");
+                auto actionQuit = trayMenu.addAction("Quit");
+                connect(actionShow.signal!"triggered", this.slot!"onTrayMenuShowTriggered");
+                connect(actionQuit.signal!"triggered", this.slot!"close");
+            }
+
+            trayIcon = cpp_new!QSystemTrayIcon(this);
+            trayIcon.setIcon(windowIcon());
+            trayIcon.setToolTip("DQt example tray icon");
+            trayIcon.setContextMenu(trayMenu);
+            connect(trayIcon.signal!"activated", this.slot!"onTrayIconActivated");
+            trayIcon.show();
+        }
+        if (!ui.actionTray_Icon.isChecked() && trayIcon)
+        {
+            cpp_delete(trayIcon);
+            trayIcon = null;
+        }
+    }
+
+    @QSlot final void onTrayIconActivated(QSystemTrayIcon.ActivationReason reason)
+    {
+        if (reason == QSystemTrayIcon.ActivationReason.Trigger
+            || reason == QSystemTrayIcon.ActivationReason.DoubleClick)
+        {
+            if (isVisible() && isActiveWindow())
+            {
+                hide();
+            }
+            else
+            {
+                show();
+                raise();
+                activateWindow();
+            }
+        }
+    }
+
+    @QSlot final void onTrayMenuShowTriggered()
+    {
+        show();
+        raise();
+        activateWindow();
+    }
+
 protected:
     override extern(C++) void changeEvent(QEvent event)
     {
@@ -122,8 +188,21 @@ protected:
             ui.retranslateUi(this);
         QMainWindow.changeEvent(event);
     }
+    extern(C++) override void closeEvent(QCloseEvent event)
+    {
+        if (trayIcon && event.spontaneous())
+        {
+            hide();
+            event.ignore();
+            trayIcon.showMessage(QString.create(), "Window closed");
+            return;
+        }
+        event.accept();
+    }
 
 private:
     MainWindowUI* ui;
     QTranslator translator;
+    QSystemTrayIcon trayIcon = null;
+    QMenu trayMenu = null;
 }

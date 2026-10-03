@@ -75,6 +75,10 @@
         <source>toolBar</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Tray-Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TabDialogs</name>
