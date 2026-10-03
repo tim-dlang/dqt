@@ -952,18 +952,18 @@ public:
     } +/
 
     /+ template <typename AT = T> +/
-    qsizetype indexOf(AT)(ref const(AT) t, qsizetype from = 0) const nothrow
+    qsizetype indexOf(AT)(ref const(AT) t, qsizetype from = 0) const
     {
         return /+ QtPrivate:: +/.indexOf(this, t, from);
     }
     /+ template <typename AT = T> +/
-    qsizetype lastIndexOf(AT)(ref const(AT) t, qsizetype from = -1) const nothrow
+    qsizetype lastIndexOf(AT)(ref const(AT) t, qsizetype from = -1) const
     {
         return /+ QtPrivate:: +/.lastIndexOf(this, t, from);
     }
 
     /+ template <typename AT = T> +/
-    bool contains(AT)(ref const(AT) t) const nothrow
+    bool contains(AT)(ref const(AT) t) const
     {
         return this.indexOf(t) != -1;
     }
@@ -992,7 +992,7 @@ inline void QList<T>::append(QList<T> &&other)
 
 
 extern(C++, "QtPrivate") {
-qsizetype indexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype from) nothrow
+qsizetype indexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype from)
 {
     if (from < 0)
         from = qMax(from + vector.size(), qsizetype(0));
@@ -1006,7 +1006,7 @@ qsizetype indexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype f
     return -1;
 }
 
-qsizetype lastIndexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype from) nothrow
+qsizetype lastIndexOf(T, U)(ref const(QList!(T)) vector, ref const(U) u, qsizetype from)
 {
     if (from < 0)
         from += vector.d.size;
