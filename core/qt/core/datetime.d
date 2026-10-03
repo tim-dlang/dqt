@@ -172,6 +172,16 @@ public:
     { return jd_ >= minJd() && jd_ <= maxJd() ? QDate(jd_) : QDate() ; }
     pragma(inline, true) qint64 toJulianDay() const { return jd; }
 
+    // Qt compares QDate by its Julian day; the invalid (null) date is the
+    // smallest value, so it orders before any valid date.
+    bool opEquals(QDate other) const { return jd == other.jd; }
+    int opCmp(QDate other) const
+    {
+        auto a = jd;
+        auto b = other.jd;
+        return a < b ? -1 : (a > b ? 1 : 0);
+    }
+
 private:
     // using extra parentheses around min to avoid expanding it if it is a macro
     pragma(inline, true) static qint64 nullJd() { return qint64.min; }
@@ -208,7 +218,7 @@ private:
         this.mds = ms;
     }
 public:
-    @disable this();
+    //@disable this();
     /+this()
     {
         this.mds = TimeFlag.NullTime;
@@ -250,6 +260,16 @@ public:
     { return fromString(string, qToStringViewIgnoringNull(format)); }
 /+ #endif +/
     static bool isValid(int h, int m, int s, int ms = 0);
+
+    // Mirrors qtime.h: comparisons use the raw mds, so the invalid time
+    // (NullTime = -1) sorts before any valid time.
+    bool opEquals(QTime other) const { return mds == other.mds; }
+    int opCmp(QTime other) const
+    {
+        auto a = mds;
+        auto b = other.mds;
+        return a < b ? -1 : (a > b ? 1 : 0);
+    }
 
 private:
     enum TimeFlag { NullTime = -1 }
@@ -472,6 +492,18 @@ public:
 
     static qint64 currentMSecsSinceEpoch() nothrow;
     static qint64 currentSecsSinceEpoch() nothrow;
+
+    // Mirrors QDateTime::equals()/precedes(): two invalid values compare equal,
+    // an invalid value precedes a valid one, otherwise compare absolute instants.
+    bool opEquals(ref const(QDateTime) other) const { return equals(other); }
+    int opCmp(ref const(QDateTime) other) const
+    {
+        if (precedes(other))
+            return -1;
+        if (other.precedes(this))
+            return 1;
+        return 0;
+    }
 
 /+ #if defined(Q_OS_DARWIN) || defined(Q_QDOC) +/
     static if ((versionIsSet!("OSX") || versionIsSet!("iOS") || versionIsSet!("TVOS") || versionIsSet!("WatchOS")))

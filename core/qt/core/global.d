@@ -1403,6 +1403,7 @@ template <typename... Args> constexpr inline QNonConstOverload<Args...> qNonCons
 /+ Q_CORE_EXPORT +/ QString qEnvironmentVariable(const(char)* varName, ref const(QString) defaultValue);
 /+ Q_CORE_EXPORT +/ bool qputenv(const(char)* varName, ref const(QByteArray) value);
 /+ Q_CORE_EXPORT +/ bool qunsetenv(const(char)* varName);
+/+ Q_CORE_EXPORT +/ void qTzSet();
 
 /+ Q_CORE_EXPORT +/ bool qEnvironmentVariableIsEmpty(const(char)* varName) nothrow;
 /+ Q_CORE_EXPORT +/ bool qEnvironmentVariableIsSet(const(char)* varName) nothrow;
