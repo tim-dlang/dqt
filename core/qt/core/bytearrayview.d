@@ -416,6 +416,11 @@ public:
 
     /+ friend inline bool operator==(QByteArrayView lhs, QByteArrayView rhs) noexcept
     { return lhs.size() == rhs.size() && QtPrivate::compareMemory(lhs, rhs) == 0; } +/
+    bool opEquals(const QByteArrayView rhs) const nothrow
+    {
+        import qt.core.bytearrayalgorithms;
+        return this.size() == rhs.size() && compareMemory(this, rhs) == 0;
+    }
     /+ friend inline bool operator!=(QByteArrayView lhs, QByteArrayView rhs) noexcept
     { return !(lhs == rhs); } +/
     /+ friend inline bool operator< (QByteArrayView lhs, QByteArrayView rhs) noexcept
@@ -426,12 +431,6 @@ public:
     { return !(lhs <= rhs); } +/
     /+ friend inline bool operator>=(QByteArrayView lhs, QByteArrayView rhs) noexcept
     { return !(lhs < rhs); } +/
-
-    bool opEquals(const QByteArrayView rhs) const
-    {
-        import qt.core.bytearrayalgorithms;
-        return this.size() == rhs.size() && compareMemory(this, rhs) == 0;
-    }
     int opCmp(const QByteArrayView rhs) const
     {
         import qt.core.bytearrayalgorithms;
