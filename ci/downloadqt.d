@@ -86,7 +86,7 @@ int main(string[] args)
 
     string urlPrefix = text("https://download.qt.io/online/qtsdkrepository/",
             qtPlatform, "/qt", qtVersion[0], "_", qtVersion.replace(".", ""), qtArch2, "/");
-    if (versionParts[0] * 100 + versionParts[2] >= 608)
+    if (versionParts[0] * 100 + versionParts[1] >= 608)
         urlPrefix ~= text("qt", qtVersion[0], "_", qtVersion.replace(".", ""), "/");
     string packageNamePrefix = text("qt.qt", qtVersion[0], ".", qtVersion.replace(".", ""), ".");
     string updatesFile = text("Qt-Updates-", qtPlatform.replace("/", "-"), "-", qtVersion, qtArch2, ".xml");
@@ -225,7 +225,7 @@ int main(string[] args)
         if (extractFull)
             extractPaths = [];
         runCommand([
-            "7z", "x", archive.version_ ~ archive.archiveName,
+            "7z", "x", /*"-snld20",*/ archive.version_ ~ archive.archiveName,
             ] ~ extractPaths ~ [
             "-oqt-lib/" ~ extractPrefix
         ]);
@@ -248,11 +248,12 @@ int main(string[] args)
         downloadArchive("qtsvg");
         downloadArchive("addons.qtpositioning.qtpositioning");
         downloadArchive("addons.qtwebchannel.qtwebchannel");
-        if (!qtArch.startsWith("android") && qtArch != "gcc_arm64")
-            downloadArchive("addons.qtwebengine.qtwebengine");
         downloadArchive("addons.qtmultimedia.qtmultimedia");
-        if (!qtArch.startsWith("android") && qtArch != "gcc_arm64")
+        if (!qtArch.startsWith("android") && qtArch != "gcc_arm64" && versionParts[0] * 100 + versionParts[1] < 608)
+        {
+            downloadArchive("addons.qtwebengine.qtwebengine");
             downloadArchive("addons.qtpdf.qtpdf");
+        }
     }
 
     return anyFailure;

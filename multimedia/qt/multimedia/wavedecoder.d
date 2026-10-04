@@ -60,9 +60,9 @@ private:
 
     final bool writeHeader();
     final bool writeDataLength();
-    final bool enoughDataAvailable();
-    final bool findChunk(const(char)* chunkId);
-    final void discardBytes(qint64 numBytes);
+    //final bool enoughDataAvailable();
+    //final bool findChunk(const(char)* chunkId);
+    //final void discardBytes(qint64 numBytes);
     final void parsingFailed();
 
     enum State {
@@ -76,7 +76,7 @@ private:
         char[4]        id;
         quint32     size;
     }
-    final bool peekChunk(chunk* pChunk, bool handleEndianness = true);
+    //final bool peekChunk(chunk* pChunk, bool handleEndianness = true);
 
     struct RIFFHeader
     {

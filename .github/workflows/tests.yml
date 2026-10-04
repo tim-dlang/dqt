@@ -56,6 +56,15 @@ jobs:
             container: debian:12
             model: 32
 
+          - platform: linux_qt6.12
+            os: ubuntu-24.04
+            model: 64
+            qt_version: 6.12.0
+            qt_arch: gcc_64
+            qt_arch_url: linux_gcc_64
+            qt_platform: linux_x64/desktop
+            runtest_args: --skip-webengine --skip-pdf
+
           - platform: linux64_asan
             os: ubuntu-24.04
             model: 64
