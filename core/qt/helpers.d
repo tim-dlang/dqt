@@ -709,6 +709,23 @@ alias mangleOpLess = function string(string name)
         return text("_ZNK", name.length, name, "ltERKS_");
 };
 
+// Mangled name of Qt's non-virtual member `bool operator==(const T &) const`.
+// Used for classes whose `operator==` is a member rather than a friend (e.g.
+// QTimeZone). The Itanium form is verified against libQt6Core.so
+// (`_ZNK9QTimeZoneeqERKS_`). The 64-bit MSVC form is verified against the
+// 6.4.2 msvc2019_64 Qt6Core.dll (`??8QTimeZone@@QEBA_NAEBV0@@Z`); the 32-bit
+// form is derived (non-virtual public const member) but unverified.
+alias mangleOpEquals = function string(string name)
+{
+    version (Windows)
+        static if (size_t.sizeof == 8)
+            return "??8" ~ name ~ "@@QEBA_NAEBV0@@Z";
+        else
+            return "??8" ~ name ~ "@@QBE_NABV0@@Z";
+    else
+        return text("_ZNK", name.length, name, "eqERKS_");
+};
+
 package FunctionManglingCpp splitCppMangling(bool isClass, string attributes, string attributes2,
         string name, string dummyFunctionName, size_t numParameters, string variadicStyle, string mangling)
 {
