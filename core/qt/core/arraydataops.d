@@ -368,7 +368,7 @@ public:
         (mixin(Q_ASSERT(q{newSize < size_t(this_.size)})));
 
         for (auto it = this_.begin() + newSize; it != this_.end(); it++)
-            destroy(*it);
+            destroyNoInit(*it);
         this_.size = newSize;
     }
 
@@ -381,7 +381,7 @@ public:
         (mixin(Q_ASSERT(q{this_.d.ref__.loadRelaxed() == 0})));
 
         for (auto it = this_.begin(); it != this_.end(); it++)
-            destroy(*it);
+            destroyNoInit(*it);
     }
 
     struct Inserter
@@ -637,14 +637,14 @@ public:
         }
         this_.size -= n;
         for (auto it = b; it != e; it++)
-            destroy(*it);
+            destroyNoInit(*it);
     }
 
     void eraseFirst()(ref QArrayDataPointer!T this_) nothrow
     {
         (mixin(Q_ASSERT(q{this_.isMutable()})));
         (mixin(Q_ASSERT(q{this_.size})));
-        destroy!false(*this_.begin());
+        destroyNoInit(*this_.begin());
         ++this_.ptr;
         --this_.size;
     }
@@ -653,7 +653,7 @@ public:
     {
         (mixin(Q_ASSERT(q{this_.isMutable()})));
         (mixin(Q_ASSERT(q{this_.size})));
-        destroy!false(*this_.end() - 1);
+        destroyNoInit(*this_.end() - 1);
         --this_.size;
     }
 
@@ -888,7 +888,7 @@ public:
         // erase by moving towards the end.
 
         for (auto it = b; it != e; it++)
-            destroy(*it);
+            destroyNoInit(*it);
         if (b == this_.begin() && e != this_.end()) {
             this_.ptr = e;
         } else if (e != this_.end()) {

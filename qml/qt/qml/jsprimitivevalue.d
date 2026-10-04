@@ -801,7 +801,7 @@ private:
         ~this()
         {
             if (m_type == Type.String)
-                destroy!false(m_string);
+                destroyNoInit(m_string);
         }
 
         Type type() const nothrow { return m_type; }

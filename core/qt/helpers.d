@@ -1643,3 +1643,44 @@ void fixDeletingDestructor(T)(T obj) if (is(T == class) && __traits(getLinkage, 
     }
     *vptr = Impl.patchedVtbl.ptr;
 }
+
+// Like destroy!false, but also works if instantiated before T.__xdtor exists
+// as a workaround for https://github.com/dlang/dmd/issues/18028.
+void destroyNoInit(T)(ref T obj)
+{
+    enum hasUsableDtor(S, string name) = __traits(hasMember, S, name)
+        && __traits(isSame, S, __traits(parent, __traits(getMember, S, name)))
+        && !__traits(isDisabled, __traits(getMember, S, name));
+
+    static if (is(T == struct))
+    {
+        static if (hasUsableDtor!(T, "__xdtor"))
+            obj.__xdtor();
+        else
+        {
+            static if (hasUsableDtor!(T, "__dtor"))
+                obj.__dtor();
+            static foreach_reverse (i; 0 .. obj.tupleof.length)
+            {{
+                alias F = typeof(obj.tupleof[i]);
+                static if (is(F == struct))
+                {
+                    static if (hasUsableDtor!(F, "__xdtor"))
+                        obj.tupleof[i].__xdtor();
+                }
+                else static if (is(F == E[n], E, size_t n) && is(E == struct))
+                {
+                    static if (hasUsableDtor!(E, "__xdtor"))
+                        foreach_reverse (ref e; obj.tupleof[i])
+                            e.__xdtor();
+                }
+            }}
+        }
+    }
+    else static if (is(T == E[n], E, size_t n) && is(E == struct))
+    {
+        static if (hasUsableDtor!(E, "__xdtor"))
+            foreach_reverse (ref e; obj)
+                e.__xdtor();
+    }
+}

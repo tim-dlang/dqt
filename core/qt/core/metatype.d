@@ -2620,7 +2620,7 @@ public:
         pragma(mangle, QMetaTypeForType!S.mangleof ~ "__dtorFunc")
         extern(C++) static void dtorFunc(const QMetaTypeInterface *, void *addr)
         {
-            destroy!false(*reinterpret_cast!(S*)(addr));
+            destroyNoInit(*reinterpret_cast!(S*)(addr));
         }
     }
 
