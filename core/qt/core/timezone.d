@@ -106,6 +106,7 @@ public:
     { d.swap(other.d); } +/
 
     /+bool operator ==(ref const(QTimeZone) other) const;+/
+    bool opEquals(ref const(QTimeZone) other) const;
     /+bool operator !=(ref const(QTimeZone) other) const;+/
 
     bool isValid() const;
@@ -178,6 +179,7 @@ public:
         return QTimeZone(QByteArrayView(timeZoneName).toByteArray());
     }
 #endif +/
+
 
 private:
     this(ref QTimeZonePrivate dd);

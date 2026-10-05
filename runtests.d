@@ -90,6 +90,57 @@ string translateCompileArg(string compiler, string arg)
     return arg;
 }
 
+// Asks the configured Qt (qmake/qtpaths under qtPath, then whatever is on PATH)
+// for its version. `qt_version.d` reads the result at compile time via
+// `import(".qt_version.txt")` to gate release-dependent test behaviour; if none
+// of the tools answer, "unknown" makes those checks skip.
+string detectQtVersion(string qtPath)
+{
+    string[] candidates;
+    version (Windows)
+    {
+        foreach (tool; ["qmake", "qmake6", "qtpaths", "qtpaths6"])
+        {
+            if (qtPath.length)
+                candidates ~= buildPath(qtPath, "bin", tool ~ ".exe");
+            candidates ~= tool ~ ".exe";
+        }
+    }
+    else
+    {
+        foreach (tool; ["qmake", "qmake6", "qtpaths", "qtpaths6"])
+        {
+            if (qtPath.length)
+                candidates ~= buildPath(qtPath, "bin", tool);
+            candidates ~= tool;
+        }
+    }
+
+    foreach (tool; candidates)
+    {
+        foreach (flag; ["-query", "--query"])
+        {
+            string output;
+            try
+            {
+                auto res = execute([tool, flag, "QT_VERSION"]);
+                if (res.status != 0)
+                    continue;
+                output = res.output;
+            }
+            catch (ProcessException)
+            {
+                continue;
+            }
+
+            auto qtVersion = output.strip();
+            if (qtVersion.length)
+                return qtVersion;
+        }
+    }
+    return "unknown";
+}
+
 int main(string[] args)
 {
     bool anyFailure;
@@ -111,6 +162,7 @@ int main(string[] args)
     bool github;
     bool skipWebEngine;
     bool skipPdf;
+    bool noTzData;
 
     for (size_t i = 1; i < args.length; i++)
     {
@@ -150,6 +202,10 @@ int main(string[] args)
         {
             skipPdf = true;
         }
+        else if (args[i] == "--no-tz")
+        {
+            noTzData = true;
+        }
         else if (args[i] == "-fsanitize=address")
         {
             extraCompilerArgs ~= args[i];
@@ -179,6 +235,11 @@ int main(string[] args)
         uint dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
         SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
     }
+
+    // Record the Qt version the tests are built/run against, before compiling
+    // them (see qt_version.d). It lives under tests/, which is already on the
+    // tests' string-import search path (`-Jtests`).
+    std.file.write(buildPath("tests", ".qt_version.txt"), detectQtVersion(qtPath) ~ "\n");
 
     string resultsDir = buildPath("test_results", os ~ model.replace("triple=", "-"));
 
@@ -450,6 +511,11 @@ int main(string[] args)
         env["QT_QPA_PLATFORM"] = "offscreen";
         //env["QT_DEBUG_PLUGINS"] = "1";
         dmdArgs ~= "-i=-qt";
+        // Compile in the zone-dependent tests (`version (TzData)`) unless the
+        // caller says the target has no timezone database (`--no-tz`, e.g. the
+        // Android qemu chroot).
+        if (!noTzData)
+            dmdArgs ~= translateCompileArg(compiler, "-version=TzData");
         dmdArgs ~= "-g";
         dmdArgs ~= "-w";
         dmdArgs ~= "-m" ~ model;

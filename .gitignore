@@ -1,0 +1,4 @@
+/tests/.qt_version.txt
+/test_results/
+*.a
+*.o

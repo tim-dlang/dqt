@@ -600,6 +600,10 @@ alias Base64Options = QFlags!(Base64Option);
 /+ #endif +/
     /+ explicit inline QByteArray(DataPointer &&dd) : d(std::move(dd)) {} +/
 
+    bool opEquals(ref const(QByteArray) a2) const nothrow
+    {
+        return QByteArrayView(this) == QByteArrayView(a2);
+    }
     bool opEquals(const QByteArray a2) const
     {
         return QByteArrayView(this) == QByteArrayView(a2);
