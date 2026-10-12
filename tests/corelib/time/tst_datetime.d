@@ -1094,7 +1094,11 @@ private IsoRow[8] toString_isoDate_data()
 // toString_isoDate
 unittest
 {
-    foreach (i, ref r; toString_isoDate_data())
+    // Bind the fixture to a variable: a static array returned by value and
+    // iterated directly (`foreach (i, ref r; toString_isoDate_data())`) is not
+    // destroyed by the front end, which leaks the Qt value types in its rows.
+    auto rows = toString_isoDate_data();
+    foreach (i, ref r; rows)
     {
         string ctx = "toString_isoDate row " ~ i.to!string;
 
@@ -1188,7 +1192,11 @@ private TextRow[5] toString_textDate_data()
 // toString_textDate
 unittest
 {
-    foreach (i, ref r; toString_textDate_data())
+    // Bind the fixture to a variable: a static array returned by value and
+    // iterated directly (`foreach (i, ref r; toString_textDate_data())`) is not
+    // destroyed by the front end, which leaks the Qt value types in its rows.
+    auto rows = toString_textDate_data();
+    foreach (i, ref r; rows)
     {
         string ctx = "toString_textDate row " ~ i.to!string;
 
