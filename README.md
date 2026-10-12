@@ -70,7 +70,7 @@ The following examples show how to use DQt:
 ### Linux
 
 Install the libraries for Qt 6.4.2 using the package manager of the distribution
-or the installer from https://www.qt.io/. It was tested with dmd v2.103.1.
+or the installer from https://www.qt.io/. It was tested with dmd v2.110.0.
 
 You can build and run the example programs using dub:
 ```
@@ -94,7 +94,7 @@ dmd -i -Icore -Igui -Iwidgets \
 ### Windows
 
 Install Qt 6.4.2 for MSVC 2019 64-bit (and not MinGW) using
-the installer from https://www.qt.io/. It was tested with dmd v2.103.1.
+the installer from https://www.qt.io/. It was tested with dmd v2.110.0.
 
 You can build and run the example programs using dub:
 ```
