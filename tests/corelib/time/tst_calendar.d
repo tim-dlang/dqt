@@ -372,26 +372,28 @@ unittest
 {
     foreach (i, system; daily_data())
     {
-        string ctx = "daily system " ~ i.to!string;
+        const string ctx = "daily system " ~ i.to!string;
         QCalendar calendar = QCalendar(system);
         const ulong startJDN = 0, endJDN = 2_488_070;
-        // Iterate from -4713-01-01 (Julian calendar) to 2100-01-01.
+
+        // Iterate from -4713-01-01 (Julian calendar) to 2100-01-01, checking
+        // `partsFromDate()` against QDate's per-calendar accessors.
+
         for (ulong expect = startJDN; expect <= endJDN; ++expect)
         {
-            const string c = ctx ~ ", jdn " ~ expect.to!string;
-            QDate date = QDate.fromJulianDay(expect);
-            QCalendar.YearMonthDay parts = calendar.partsFromDate(date);
+            const QDate date = QDate.fromJulianDay(expect);
+            const QCalendar.YearMonthDay parts = calendar.partsFromDate(date);
             if (!parts.isValid())
                 continue;
 
             const int year = date.year(calendar);
-            assert(year == parts.year, c);
+            assert(year == parts.year, ctx ~ ", jdn " ~ expect.to!string);
             const int month = date.month(calendar);
-            assert(month == parts.month, c);
+            assert(month == parts.month, ctx ~ ", jdn " ~ expect.to!string);
             const int day = date.day(calendar);
-            assert(day == parts.day, c);
+            assert(day == parts.day, ctx ~ ", jdn " ~ expect.to!string);
             const ulong actual = cast(ulong) QDate(year, month, day, calendar).toJulianDay();
-            assert(actual == expect, c);
+            assert(actual == expect, ctx ~ ", jdn " ~ expect.to!string);
         }
     }
 }
