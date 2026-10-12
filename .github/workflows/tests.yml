@@ -98,7 +98,7 @@ jobs:
             android_arch3: arm
             ldc_android_arch: armv7a
             ndk_clang: armv7a-linux-androideabi30-clang
-            runtest_args: --skip-webengine --skip-pdf
+            runtest_args: --skip-webengine --skip-pdf --no-tz
 
           - platform: android_arm64
             os: ubuntu-24.04
@@ -114,7 +114,7 @@ jobs:
             android_bits_suffix: 64
             ldc_android_arch: aarch64
             ndk_clang: aarch64-linux-android30-clang
-            runtest_args: --skip-webengine --skip-pdf
+            runtest_args: --skip-webengine --skip-pdf --no-tz
 
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental == true }}

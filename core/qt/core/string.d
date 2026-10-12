@@ -1295,7 +1295,7 @@ public:
     {
         return (cast(wchar*)constData())[0..size()] == s;
     }
-    extern(D) bool opEquals(const ref QString s) const
+    extern(D) bool opEquals(const ref QString s) const nothrow
     {
         return compare_helper(constData(), size(), s.constData, s.size()) == 0;
     }

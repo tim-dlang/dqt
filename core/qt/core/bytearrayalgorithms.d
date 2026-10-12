@@ -42,7 +42,7 @@ qsizetype lastIndexOf(QByteArrayView haystack, qsizetype from, QByteArrayView ne
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/
 qsizetype count(QByteArrayView haystack, QByteArrayView needle) nothrow;
 
-/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ int compareMemory(QByteArrayView lhs, QByteArrayView rhs);
+/+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ int compareMemory(QByteArrayView lhs, QByteArrayView rhs) nothrow;
 
 /+ [[nodiscard]] +/ /+ Q_CORE_EXPORT +/ /+ Q_DECL_PURE_FUNCTION +/ QByteArrayView trimmed(QByteArrayView s) nothrow;
 
