@@ -13,6 +13,32 @@ private void gate(string name, string reason)
     writeln("SKIP ", name, " - ", reason);
 }
 
+// `fromStringFormat` exercises `QTime::fromString(string, format)`, which runs a
+// `QDateTimeParser`. Parsing unconditionally fetches the parser's limits through
+// `getMinimum()`/`getMaximum()` (qdatetimeparser.cpp), which memoize
+// `QDate(100, 1, 1).startOfDay(Qt::LocalTime)` and
+// `QDate(9999, 12, 31).endOfDay(Qt::LocalTime)` (QDATETIMEEDIT_DATE_MIN/MAX in
+// qdatetimeparser_p.h).
+//
+// Building a LocalTime QDateTime converts local <-> UTC and is bounded by the
+// width of `time_t`: the 32-bit Android ABI (`armv7`, run under
+// `qemu-arm-static`) only covers 1901-12-13..2038-01-19, so years 100 and 9999
+// fall outside it and Qt falls back to `QTimeZone::systemTimeZone()`, which on
+// Android resolves the zone through JNI (`QJniObject` -> `QJniEnvironment`) and
+// needs a `JavaVM`; the qemu chroot has none, so that fallback null-derefs into
+// a SIGSEGV. The 64-bit Android ABI (`arm64`) has 64-bit `time_t`, keeps those
+// years in range, so mktime() succeeds. Thus `fromStringFormat` is compiled out
+// only for Android + ARM, kept everywhere else.
+version (Android)
+{
+    version (ARM)
+        private enum skip32BitTime = true;
+    else
+        private enum skip32BitTime = false;
+}
+else
+    private enum skip32BitTime = false;
+
 /*
  * Port of qtbase/tests/auto/corelib/time/qtime/tst_qtime.cpp.
  *
@@ -655,6 +681,7 @@ private FromFormatRow[] fromStringFormat_data()
 }
 
 // fromStringFormat
+static if (!skip32BitTime)
 unittest
 {
     foreach (i, ref r; fromStringFormat_data())

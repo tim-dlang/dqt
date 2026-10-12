@@ -161,6 +161,49 @@ private int preZoneFix;
 private enum LocalTimeType { LocalTimeIsUtc = 0, LocalTimeAheadOfUtc = 1, LocalTimeBehindUtc = -1}
 private LocalTimeType localTimeType;
 
+// Whether a timezone database (hence a resolvable local time zone) is available.
+// Qt's Android build resolves zones through JNI (`QJniObject` ->
+// `QJniEnvironment`) and needs a `JavaVM`; the qemu chroot has none, so without
+// `TzData` zone-dependent work is skipped: the setup uses neutral defaults (see
+// `initLocalZoneInfo`) and the zone-parsing rows below are dropped.
+version (Android)
+{
+    version (TzData)
+        private enum probeLocalZone = true;
+    else
+        private enum probeLocalZone = false;
+}
+else
+    private enum probeLocalZone = true;
+
+// Tests that build or convert `TimeSpec.LocalTime` QDateTime values need Qt's
+// local <-> UTC conversion, whose range is bounded by the width of `time_t`.
+// In Qt 6.4 the `QDateTime(date, time, LocalTime)` constructor goes
+// `refreshZonedDateTime()` -> `QDateTimePrivate::localStateAtMillis()`
+// (qdatetime.cpp), which calls `QLocalTime::mapLocalTime()`/`callMkTime()` ->
+// `qMkTime()` -> `mktime()` (qlocaltime.cpp, qglobal.cpp) only while the instant
+// is inside `computeSystemMillisRange()` (qlocaltime.cpp, derived from `time_t`).
+// Outside that range (or when mktime() fails) it falls back to
+// `QTimeZone::systemTimeZone()`, which on Android resolves the zone through JNI
+// (`QJniObject` -> `QJniEnvironment`) and needs a `JavaVM`; the qemu chroot has
+// none, so that fallback null-derefs into a SIGSEGV.
+//
+// The 32-bit Android ABI (`armv7`, run under `qemu-arm-static`) has 32-bit
+// `time_t`, so its range is only 1901-12-13..2038-01-19; local dates outside it
+// (e.g. 1760, 4004, or 2038-01-19 04:14:07) reach that fallback and abort. The
+// 64-bit Android ABI (`arm64`) has 64-bit `time_t`, keeps those instants inside
+// the range, so mktime() succeeds and the JNI fallback is never reached. These
+// tests are therefore compiled out only for Android + ARM, kept everywhere else.
+version (Android)
+{
+    version (ARM)
+        private enum skip32BitTime = true;
+    else
+        private enum skip32BitTime = false;
+}
+else
+    private enum skip32BitTime = false;
+
 private QByteArray qba(string s)
 {
     return QByteArray(s.ptr, cast(qsizetype) s.length);
@@ -187,6 +230,23 @@ private QDateTime invalidQ() { return QDateTime.create(); }
 
 
 shared static this()
+{
+    static if (probeLocalZone)
+        initLocalZoneInfo();
+    else
+    {
+        //   Qt's Android build resolves the time zone through JNI
+        //   (QJniObject -> QJniEnvironment), which needs a JavaVM; without a
+        //   timezone database (no TzData) the qemu chroot has none, so the
+        //   local-zone probes below would abort with SIGSEGV. Use neutral
+        //   defaults instead.
+        zoneIsCET = false;
+        preZoneFix = 0;
+        localTimeType = LocalTimeType.LocalTimeIsUtc;
+    }
+}
+
+private void initLocalZoneInfo()
 {
     
     //   Due to some jurisdictions changing their zones and rules, it's possible
@@ -453,6 +513,7 @@ unittest
 }
 
 // setDate
+static if (!skip32BitTime)
 unittest
 {
     const string ctx = "setDate";
@@ -521,6 +582,7 @@ private TestRows!SetTimeRow setTime_data()
 }
 
 // setTime
+static if (!skip32BitTime)
 unittest
 {
     foreach (i, ref r; setTime_data())
@@ -726,6 +788,7 @@ private TestRows!MsecsRow setMSecsSinceEpoch_data()
 }
 
 // setMSecsSinceEpoch
+static if (!skip32BitTime)
 unittest
 {
     foreach (i, ref r; setMSecsSinceEpoch_data())
@@ -847,6 +910,7 @@ private TestRows!MsecsRow fromMSecsSinceEpoch_data()
 }
 
 // fromMSecsSinceEpoch
+static if (!skip32BitTime)
 unittest
 {
     foreach (i, ref r; fromMSecsSinceEpoch_data())
@@ -925,6 +989,7 @@ unittest
 }
 
 // fromSecsSinceEpoch
+static if (!skip32BitTime)
 unittest
 {
     const string ctx = "fromSecsSinceEpoch";
@@ -1290,6 +1355,7 @@ unittest
 /+ #endif +/
 
 // addDays
+static if (!skip32BitTime)
 unittest
 {
     const string ctx = "addDays";
@@ -1556,6 +1622,7 @@ private AddYearsRow[] addYears_data()
 }
 
 // addYears
+static if (!skip32BitTime)
 unittest
 {
     foreach (i, ref r; addYears_data())
@@ -1917,6 +1984,7 @@ unittest
 }
 
 // daysTo
+static if (!skip32BitTime)
 unittest
 {
     const string ctx = "daysTo";
@@ -2147,6 +2215,7 @@ private QDate[] toSecsSinceEpoch_data()
 }
 
 // toSecsSinceEpoch
+static if (!skip32BitTime)
 unittest
 {
     const QTime noon = QTime(12, 0);
@@ -2963,20 +3032,38 @@ private TestRows!FssRow fromStringStringFormat_data()
     rows.add("2001-09-15T09:33:01.001+11:570", "yyyy-MM-ddThh:mm:ss.zt", invalidQ());
     rows.add("2001-09-15T09:33:01.001+11:5", "yyyy-MM-ddThh:mm:ss.zt", invalidQ());
     rows.add("2001-09-15T09:33:01.001 ~11:30", "yyyy-MM-ddThh:mm:ss.z t", invalidQ());
-    rows.add("2001-09-15T09:33:01.001 UTC+o8:30", "yyyy-MM-ddThh:mm:ss.z t", invalidQ());
+    // This row's timezone token makes Qt resolve the system time zone. Qt's
+    // Android build does that through JNI (QJniObject -> QJniEnvironment),
+    // which needs a JavaVM; the qemu chroot has no ART/JVM, so the parse
+    // aborts with SIGSEGV (null deref). So on Android only run it when a
+    // timezone database is available; it should work on other platforms.
+    static if (probeLocalZone)
+        rows.add("2001-09-15T09:33:01.001 UTC+o8:30", "yyyy-MM-ddThh:mm:ss.z t", invalidQ());
     rows.add("2001-09-15T09:33:01.001 UTC+08:3i", "yyyy-MM-ddThh:mm:ss.z t", invalidQ());
     rows.add("2001-09-15T09:33:01.001 UTC+123", "yyyy-MM-ddThh:mm:ss.z t", invalidQ());
     rows.add("2001-09-15T09:33:01.001 UTC+00005", "yyyy-MM-ddThh:mm:ss.z t", invalidQ());
-    rows.add("2008-10-13 +123:11.50", "yyyy-MM-dd t:hh.mm", invalidQ());
+    // Timezone-token parse: on Android this needs a timezone database (Qt
+    // resolves the zone via JNI, see the note above); elsewhere always safe.
+    static if (probeLocalZone)
+        rows.add("2008-10-13 +123:11.50", "yyyy-MM-dd t:hh.mm", invalidQ());
     rows.add("2008-10-13 UTC+12::11.50", "yyyy-MM-dd thh.mm", invalidQ());
     rows.add("2008-10-13 UTC+12::11.50", "yyyy-MM-dd t:hh.mm", invalidQ());
-    rows.add("2008-10-13 UTC+:59 11.50", "yyyy-MM-dd t hh.mm", invalidQ());
-    rows.add("2008-10-13 UTC+ 11.50", "yyyy-MM-dd t hh.mm", invalidQ());
+    // Timezone-token parse: on Android this needs a timezone database (Qt
+    // resolves the zone via JNI, see the note above); elsewhere always safe.
+    static if (probeLocalZone)
+        rows.add("2008-10-13 UTC+:59 11.50", "yyyy-MM-dd t hh.mm", invalidQ());
+    // Timezone-token parse: on Android this needs a timezone database (Qt
+    // resolves the zone via JNI, see the note above); elsewhere always safe.
+    static if (probeLocalZone)
+        rows.add("2008-10-13 UTC+ 11.50", "yyyy-MM-dd t hh.mm", invalidQ());
     rows.add("2008-10-13 UTC+11.50", "yyyy-MM-dd thh.mm", invalidQ());
     rows.add("2008-10-13 +05: 11.50", "yyyy-MM-dd t hh.mm", invalidQ());
     rows.add("2008-10-13 UTC+05:1 11.50", "yyyy-MM-dd t hh.mm", invalidQ());
     rows.add("2001-09-15T09:33:01.001 $", "yyyy-MM-ddThh:mm:ss.z t", invalidQ());
-    rows.add("2001-09-15T09:33:01.001 1", "yyyy-MM-ddThh:mm:ss.z t", invalidQ());
+    // Timezone-token parse: on Android this needs a timezone database (Qt
+    // resolves the zone via JNI, see the note above); elsewhere always safe.
+    static if (probeLocalZone)
+        rows.add("2001-09-15T09:33:01.001 1", "yyyy-MM-ddThh:mm:ss.z t", invalidQ());
     // Qt 6.12 restrains the offset field's greed: "UTC+0111.50" now parses as
     // UTC+01:00 with time 11:50 instead of failing (OffsetFromUTC, as above).
     static if (Qt6_Unknown)
@@ -3023,7 +3110,10 @@ private TestRows!FssRow fromStringStringFormat_data()
                 utcQ(2005, 6, 28, 7, 57, 30, 1));
     rows.add("22+221102233Z", "yyMMddHHmmsst", invalidQ());
     rows.add("9922+221102233Z", "yyyyMMddHHmmsst", invalidQ());
-    rows.add("EEE1200000MUB", "t", invalidQ());
+    // Timezone-token parse: on Android this needs a timezone database (Qt
+    // resolves the zone via JNI, see the note above); elsewhere always safe.
+    static if (probeLocalZone)
+        rows.add("EEE1200000MUB", "t", invalidQ());
 
     return rows;
 }
@@ -3053,6 +3143,7 @@ private void runFromStringStringFormat()
 }
 
 // fromStringStringFormat
+static if (!skip32BitTime)
 unittest
 {
     runFromStringStringFormat();
@@ -3480,6 +3571,7 @@ unittest
 }
 
 // fewDigitsInYear
+static if (!skip32BitTime)
 unittest
 {
     const string ctx = "fewDigitsInYear";
@@ -3501,6 +3593,7 @@ unittest
 }
 
 // printNegativeYear
+static if (!skip32BitTime)
 unittest
 {
     const string ctx = "printNegativeYear";
